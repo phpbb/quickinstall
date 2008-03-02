@@ -1,0 +1,45 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_ABOUT_QUICKINSTALL}</h1>
+
+<!-- IF S_ALLOW_VERSION_CHECK -->
+	<h3>{L_VERSION_CHECK}</h3>
+	<!-- IF UP_TO_DATE -->
+	<p class="successbox">{L_UP_TO_DATE}</p>
+	<!-- ELSEIF L_UPDATE -->
+	<p class="errorbox">{L_UP_TO_DATE_NOT}<br /><br />{L_UPDATE}</p>
+	<!-- ELSE -->
+	<p class="errorbox">{L_UPDATE_CHECK_FAILED}</p>
+	<!-- ENDIF -->
+<!-- ENDIF -->
+
+<h3>{L_WHAT}</h3>
+<p>{L_WHAT_EXPLAIN}</p>
+
+<h3>{L_WHO_WHEN}</h3>
+<p>{L_WHO_WHEN_EXPLAIN}</p>
+
+<h3>{L_WHO_ELSE}</h3>
+{L_WHO_ELSE_EXPLAIN}
+
+<h3>{L_WHY}</h3>
+<p>{L_WHY_EXPLAIN}</p>
+
+<h3>{L_LICENSE}</h3>
+<p>{L_LICENSE_EXPLAIN}</p>
+
+<!-- IF S_ALLOW_CHANGELOG -->
+<h3>{L_CHANGELOG}</h3>
+<!-- BEGIN history -->
+	<p>
+		<em>{history.DATE}</em> - {history.VERSION}
+		<ul>
+		<!-- BEGIN changelog -->
+		<li>{history.changelog.CHANGE}</li>
+		<!-- END changelog -->
+		</ul>
+	</p>
+<!-- END history -->
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

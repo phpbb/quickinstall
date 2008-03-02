@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<history>
+	<entry>
+		<date>2007-07-12</date>
+		<version>0.1.0</version>
+		<changelog lang="en">
+			<change>Initial release.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-07-22</date>
+		<version>1.0.0</version>
+		<changelog lang="en">
+			<change>[Feature] Added a changelog to the about page.</change>
+			<change>[Feature] Added possibility of a database prefix. This also keeps the databases more organised.</change>
+			<change>[Fix] Adjusted some of the language.</change>
+			<change>[Fix] Copying from sources/mods/ works now.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-07-30</date>
+		<version>1.0.1</version>
+		<changelog lang="en">
+			<change>[Change] Updated for phpBB 3.0.RC4.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-08-04</date>
+		<version>1.0.2</version>
+		<changelog lang="en">
+			<change>[Fix] Fixed language string.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-08-30</date>
+		<version>1.0.3</version>
+		<changelog lang="en">
+			<change>[Change] Updated for phpBB 3.0.RC5.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-10-14</date>
+		<version>1.0.4</version>
+		<changelog lang="en">
+			<change>[Fix] Fixed bug in about_body.html.</change>
+			<change>[Fix] Fixed some other minon stuff.</change>
+			<change>[Change] Added SQLite support.</change>
+			<change>[Change] Updated for phpBB 3.0.RC6.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-10-15</date>
+		<version>1.0.5</version>
+		<changelog lang="en">
+			<change>[Change] Updated for phpBB 3.0.RC7.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-12-15</date>
+		<version>1.0.6</version>
+		<changelog lang="en">
+			<change>[Change] Added hook functionality (auto include files).</change>
+			<change>[Change] Updated for phpBB 3.0.0 (Gold).</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2007-12-15</date>
+		<version>1.0.7</version>
+		<changelog lang="en">
+			<change>[Fix] Updated version number in footer.</change>
+			<change>[Fix] Added some more security.</change>
+		</changelog>
+	</entry>
+</history>

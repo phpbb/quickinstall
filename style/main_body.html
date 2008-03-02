@@ -1,0 +1,95 @@
+<!-- INCLUDE overall_header.html -->
+
+<script type="text/javascript">
+<!--
+function toggle_advanced()
+{
+	if (document.getElementById('options_advanced'))
+	{
+		document.getElementById('options_advanced').style.display = (document.getElementById('options_advanced').style.display == 'none') ? 'block' : 'none';
+	}
+}
+
+if (document.addEventListener)
+{
+	document.addEventListener('DOMContentLoaded', toggle_advanced, false);
+}
+else
+{
+	window.onload = toggle_advanced;
+}
+//-->
+</script>
+
+<h1>{L_INSTALL_BOARD}</h1>
+
+<p class="errorbox">{L_MIGHT_TAKE_LONG}</p>
+
+<form method="post" action="{U_CREATE}">
+
+<fieldset>
+	<legend>{L_OPTIONS}</legend>
+	<dl>
+		<dt><label for="site_name">{L_BOARD_NAME}:</label></dt>
+		<dd><input class="text medium" type="text" id="site_name" name="site_name" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="site_desc">{L_BOARD_DESC}:</label></dt>
+		<dd><input class="text medium" type="text" id="site_desc" name="site_desc" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="dbname">{L_BOARD_DBNAME}*:</label></dt>
+		<dd><input class="text medium" type="text" id="dbname" name="dbname" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="redirect">{L_REDIRECT}:</label></dt>
+		<dd><label><input type="checkbox" class="radio" id="redirect" name="redirect" checked="checked" /> {L_ENABLED}</label></dd>
+	</dl>
+	
+	<p class="quick">
+		<input type="submit" name="submituser" value="{L_SUBMIT}" class="button1" />
+	</p>
+</fieldset>
+
+<fieldset>
+	<legend><a href="javascript:toggle_advanced();">{L_OPTIONS_ADVANCED}</a></legend>
+	<div id="options_advanced">
+	<dl>
+		<dt><label for="admin_name">{L_ADMIN_NAME}:</label></dt>
+		<dd><input class="text medium" type="text" id="admin_name" name="admin_name" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="admin_pass">{L_ADMIN_PASS}:</label></dt>
+		<dd><input class="text medium" type="text" id="admin_pass" name="admin_pass" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="table_prefix">{L_DB_PREFIX}:</label></dt>
+		<dd><input class="text medium" type="text" id="table_prefix" name="table_prefix" value="{TABLE_PREFIX}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="drop_db">{L_DROP_DB_IF_EXISTS}:</label></dt>
+		<dd><label><input type="checkbox" class="radio" id="drop_db" name="drop_db" /> {L_ENABLED}</label></dd>
+	</dl>
+	<dl>
+		<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
+		<dd><label><input type="checkbox" class="radio" id="delete_files" name="delete_files" /> {L_ENABLED}</label></dd>
+	</dl>
+	<dl>
+		<dt><label for="include_mods">{L_INCLUDE_MODS}:</label><br /><span>{L_INCLUDE_MODS_EXPLAIN}</span></dt>
+		<dd>
+			<select multiple="multiple" name="include_mods[]" id="include_mods">
+			<option>None</option>
+			<!-- BEGIN mods -->
+			<option value="{mods.MOD_NAME}">{mods.MOD_NAME}</option>
+			<!-- END mods -->
+			</select>
+		</dd>
+	</dl>
+	</div>
+</fieldset>
+
+<p>{L_STAR_MANDATORY}</p>
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->
