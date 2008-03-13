@@ -39,12 +39,6 @@ else
 {
 	set_magic_quotes_runtime(0);
 
-	// Be paranoid with passed vars
-	if (@ini_get('register_globals') == '1' || strtolower(@ini_get('register_globals')) == 'on')
-	{
-		deregister_globals();
-	}
-
 	define('STRIP', (get_magic_quotes_gpc()) ? true : false);
 }
 
