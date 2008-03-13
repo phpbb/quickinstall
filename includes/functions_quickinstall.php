@@ -1,10 +1,10 @@
 <?php
-/** 
+/**
 *
 * @package quickinstall
 * @version $Id$
-* @copyright (c) 2007 eviL3
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+* @copyright (c) 2007, 2008 eviL3
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -17,106 +17,6 @@ if (!defined('IN_QUICKINSTALL'))
 }
 
 /**
-* Error and message handler, call with trigger_error if reqd
-*/
-function msg_handler_qi($errno, $msg_text, $errfile, $errline)
-{
-	global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path;
-	global $user;
-
-	// Message handler is stripping text. In case we need it, we are possible to define long text...
-	if (isset($msg_long_text) && $msg_long_text && !$msg_text)
-	{
-		$msg_text = $msg_long_text;
-	}
-	
-	switch ($errno)
-	{
-		case E_NOTICE:
-		case E_WARNING:
-
-			// Check the error reporting level and return if the error level does not match
-			// Additionally do not display notices if we suppress them via @
-			// If DEBUG is defined the default level is E_ALL
-			if (($errno & ((defined('DEBUG') && error_reporting()) ? E_ALL : error_reporting())) == 0)
-			{
-				return;
-			}
-			
-			// remove complete path to installation, with the risk of changing backslashes meant to be there
-			$errfile = str_replace(array(phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $errfile);
-			$msg_text = str_replace(array(phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $msg_text);
-
-			echo '<b>[phpBB Debug] PHP Notice</b>: in file <b>' . $errfile . '</b> on line <b>' . $errline . '</b>: <b>' . $msg_text . '</b><br />' . "\n";
-
-			return;
-
-		break;
-
-		case E_USER_ERROR:
-		case E_USER_WARNING:
-		case E_USER_NOTICE:
-
-			$msg_title = (isset($msg_title)) ? (isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : $msg_title) : (isset($user->lang['GENERAL_ERROR']) ? $user->lang['GENERAL_ERROR'] : 'General Error');
-			$msg_text = (isset($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
-			$l_return_index = '<a href="' . qi::url('main') . '">Return to quickinstall main page</a>';
-
-			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-			echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
-			echo '<head>';
-			echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
-			echo '<title>' . $msg_title . '</title>';
-			echo '<link href="' . $quickinstall_path . 'style/style.css" rel="stylesheet" type="text/css" media="screen" />';
-			echo '</head>';
-			echo '<body id="errorpage">';
-			echo '<div id="wrap">';
-			echo '	<div id="page-header">';
-			echo '		' . $l_return_index;
-			echo '	</div>';
-			echo '	<div id="page-body">';
-			echo '		<div id="acp">';
-			echo '		<div class="panel">';
-			echo '			<span class="corners-top"><span></span></span>';
-			echo '			<div id="content">';
-			
-			echo '			<h1>' . $msg_title . '</h1>';
-			echo '			<div>' . $msg_text . '</div>';
-			
-			echo '			</div>';
-			echo '			<span class="corners-bottom"><span></span></span>';
-			echo '		</div>';
-			echo '		</div>';
-			echo '	</div>';
-			echo '	<div id="page-footer">';
-			echo '		Powered by phpBB &copy; 2000, 2002, 2005, 2007 <a href="http://www.phpbb.com/">phpBB Group</a>';
-			echo '	</div>';
-			echo '</div>';
-			echo '</body>';
-			echo '</html>';
-			
-			exit;
-		break;
-	}
-
-	// If we notice an error not handled here we pass this back to PHP by returning false
-	// This may not work for all php versions
-	return false;
-}
-
-/**
-* For replacing {L_*} strings with preg_replace_callback (taken from functions_install.php)
-*/
-function adjust_language_keys_callback_qi($matches)
-{
-	if (!empty($matches[1]))
-	{
-		global $user, $db;
-		
-		return (!empty($user->lang[$matches[1]])) ? $db->sql_escape($user->lang[$matches[1]]) : $db->sql_escape($matches[1]);
-	}
-}
-
-/**
  * Class with functions usefull for qi. Some stuff is from the install functions, this class is to be used statically.
  */
 class qi
@@ -124,7 +24,7 @@ class qi
 	/**
 	* Output the standard page header
 	*/
-	function page_header($page_title = '', $page_about = '')
+	public static function page_header($page_title = '', $page_about = '')
 	{
 		if (defined('HEADER_INC'))
 		{
@@ -139,15 +39,15 @@ class qi
 			'PAGE_ABOUT'			=> $page_about,
 			'T_THEME_PATH'			=> 'style',
 			'T_IMAGE_PATH'			=> $quickinstall_path . 'style/images/',
-			
-			'U_ABOUT'				=> qi::url('about'),
-			'U_MANAGE'				=> qi::url('manage'),
-			'U_MAIN'				=> qi::url('main'),
+
+			'U_ABOUT'				=> self::url('about'),
+			'U_MANAGE'				=> self::url('manage'),
+			'U_MAIN'				=> self::url('main'),
 
 			'S_CONTENT_DIRECTION' 	=> $user->lang['DIRECTION'],
 			'S_CONTENT_ENCODING' 	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
-			
+
 			'TRANSLATION_INFO'		=> $user->lang['TRANSLATION_INFO'],
 			'QI_VERSION'			=> $qi_config['qi_version'],
 			'PHPBB_VERSION'			=> $qi_config['phpbb_version'],
@@ -160,16 +60,16 @@ class qi
 
 		return;
 	}
-	
+
 	/**
 	* Output the standard page footer
 	*/
-	function page_footer()
+	public static function page_footer()
 	{
 		global $db, $template;
 
 		$template->display('body');
-	
+
 		// Close our DB connection.
 		if (!empty($db) && is_object($db))
 		{
@@ -178,13 +78,13 @@ class qi
 
 		exit;
 	}
-	
+
 	/**
 	* Generate an HTTP/1.1 header to redirect the user to another page
 	* This is used during the installation when we do not have a database available to call the normal redirect function
 	* @param string $page The page to redirect to relative to the qi root path
 	*/
-	function redirect($page)
+	public static function redirect($page)
 	{
 		$server_name = (!empty($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : getenv('SERVER_NAME');
 		$server_port = (!empty($_SERVER['SERVER_PORT'])) ? (int) $_SERVER['SERVER_PORT'] : (int) getenv('SERVER_PORT');
@@ -211,13 +111,13 @@ class qi
 		header('Location: ' . $url);
 		exit;
 	}
-	
+
 	/**
 	* Add Language Items
 	*
 	* @param mixed $lang_set specifies the language entries to include
 	*/
-	function add_lang($lang_set)
+	public static function add_lang($lang_set)
 	{
 		global $user;
 
@@ -231,36 +131,36 @@ class qi
 
 				if (!is_array($lang_file))
 				{
-					qi::set_lang($user->lang, $lang_file);
+					self::set_lang($user->lang, $lang_file);
 				}
 				else
 				{
-					qi::add_lang($lang_file);
+					self::add_lang($lang_file);
 				}
 			}
 			unset($lang_set);
 		}
 		else if ($lang_set)
 		{
-			qi::set_lang($user->lang, $lang_set);
+			self::set_lang($user->lang, $lang_set);
 		}
 	}
-	
+
 	/**
 	* Set language entry (called by add_lang)
 	* @access private
 	*/
-	function set_lang(&$lang, $lang_file)
+	public static function set_lang(&$lang, $lang_file)
 	{
 		global $phpEx, $qi_config, $quickinstall_path;
 
 		$lang_path = $quickinstall_path . 'language/' . basename($qi_config['qi_lang']) . '/';
-		
+
 		if (!file_exists($lang_path) || !is_dir($lang_path))
 		{
 			trigger_error("Could not find language $lang_path", E_USER_ERROR);
 		}
-		
+
 		$language_filename = $lang_path . $lang_file . '.' . $phpEx;
 
 		if ((include($language_filename)) === false)
@@ -268,11 +168,11 @@ class qi
 			trigger_error("Language file $language_filename couldn't be opened.", E_USER_ERROR);
 		}
 	}
-	
+
 	/**
 	* Format user date
 	*/
-	function format_date($gmepoch, $format = false, $forcedate = false)
+	public static function format_date($gmepoch, $format = false, $forcedate = false)
 	{
 		global $user, $qi_config;
 		static $midnight;
@@ -317,11 +217,11 @@ class qi
 
 		return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $qi_config['qi_tz'] + $qi_config['qi_dst']), $lang_dates);
 	}
-	
-	function url($mode, $params = false)
+
+	public static function url($mode, $params = false)
 	{
 		global $quickinstall_path, $phpEx;
-		
+
 		if (is_array($params))
 		{
 			$_params = '';
@@ -331,47 +231,98 @@ class qi
 			}
 			$params = &$_params;
 		}
-		
+
 		return $quickinstall_path . 'index.' . $phpEx . '?mode=' . $mode . ($params ? ('&amp;' . $params) : '');
 	}
-}
 
-if (!function_exists('file_put_contents'))
-{
-	if (!defined('FILE_APPEND'))
-	{
-		/**
-		 * @ignore
-		 */
-		define('FILE_APPEND', 1);
-	}
-	
 	/**
-	 * File get contents for PHP4
-	 *
-	 * @param string $filename
-	 * @param mixed $data
-	 * @param mixed $flag
-	 * @return mixed Bytes written
-	 */
-	function file_put_contents($filename, $data, $flag = false)
+	* Error and message handler, call with trigger_error if reqd
+	*/
+	public static function msg_handler($errno, $msg_text, $errfile, $errline)
 	{
-		$mode = ($flag == FILE_APPEND || strtoupper($flag) == 'FILE_APPEND') ? 'a' : 'w';
-		$f = @fopen($filename, $mode);
-		
-		if ($f === false)
+		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path;
+		global $user;
+
+		// Message handler is stripping text. In case we need it, we are possible to define long text...
+		if (isset($msg_long_text) && $msg_long_text && !$msg_text)
 		{
-			return false;
+			$msg_text = $msg_long_text;
 		}
-		
-		if (is_array($data))
+
+		switch ($errno)
 		{
-			$data = implode('', $data);
+			case E_NOTICE:
+			case E_WARNING:
+
+				// Check the error reporting level and return if the error level does not match
+				// Additionally do not display notices if we suppress them via @
+				// If DEBUG is defined the default level is E_ALL
+				if (($errno & ((defined('DEBUG') && error_reporting()) ? E_ALL : error_reporting())) == 0)
+				{
+					return;
+				}
+
+				// remove complete path to installation, with the risk of changing backslashes meant to be there
+				$errfile = str_replace(array(phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $errfile);
+				$msg_text = str_replace(array(phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $msg_text);
+
+				echo '<b>[phpBB Debug] PHP Notice</b>: in file <b>' . $errfile . '</b> on line <b>' . $errline . '</b>: <b>' . $msg_text . '</b><br />' . "\n";
+
+				return;
+
+			break;
+
+			case E_USER_ERROR:
+			case E_USER_WARNING:
+			case E_USER_NOTICE:
+
+				// uncomment for debug
+				//echo "$errfile:$errline";
+
+				$msg_title = (isset($msg_title)) ? (isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : $msg_title) : (isset($user->lang['GENERAL_ERROR']) ? $user->lang['GENERAL_ERROR'] : 'General Error');
+				$msg_text = (isset($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
+				$l_return_index = '<a href="' . qi::url('main') . '">Return to quickinstall main page</a>';
+
+				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+				echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
+				echo '<head>';
+				echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
+				echo '<title>' . $msg_title . '</title>';
+				echo '<link href="' . $quickinstall_path . 'style/style.css" rel="stylesheet" type="text/css" media="screen" />';
+				echo '</head>';
+				echo '<body id="errorpage">';
+				echo '<div id="wrap">';
+				echo '	<div id="page-header">';
+				echo '		' . $l_return_index;
+				echo '	</div>';
+				echo '	<div id="page-body">';
+				echo '		<div id="acp">';
+				echo '		<div class="panel">';
+				echo '			<span class="corners-top"><span></span></span>';
+				echo '			<div id="content">';
+
+				echo '			<h1>' . $msg_title . '</h1>';
+				echo '			<div>' . $msg_text . '</div>';
+
+				echo '			</div>';
+				echo '			<span class="corners-bottom"><span></span></span>';
+				echo '		</div>';
+				echo '		</div>';
+				echo '	</div>';
+				echo '	<div id="page-footer">';
+				echo '		Powered by phpBB &copy; 2000, 2002, 2005, 2007 <a href="http://www.phpbb.com/">phpBB Group</a>';
+				echo '	</div>';
+				echo '</div>';
+				echo '</body>';
+				echo '</html>';
+
+				exit;
+			break;
 		}
-		
-		$bytes_written = fwrite($f, $data);
-		fclose($f);
-		return $bytes_written;
+
+		// If we notice an error not handled here we pass this back to PHP by returning false
+		// This may not work for all php versions
+		return false;
 	}
 }
 

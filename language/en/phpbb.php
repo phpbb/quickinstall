@@ -5,8 +5,8 @@
 *
 * @package quickinstall
 * @version $Id$
-* @copyright (c) 2007 eviL3
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+* @copyright (c) 2007, 2008 eviL3
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -31,7 +31,7 @@ $lang = array_merge($lang, array(
 	'DIRECTION'			=> 'ltr',
 	'DATE_FORMAT'		=> '|d M Y|',	// 01 Jan 2007
 	'USER_LANG'			=> 'en-gb',
-	
+
 	'datetime'			=> array(
 		'TODAY'		=> 'Today',
 		'TOMORROW'	=> 'Tomorrow',

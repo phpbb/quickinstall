@@ -1,10 +1,10 @@
 <?php
-/** 
+/**
 *
 * @package quickinstall
 * @version $Id$
-* @copyright (c) 2007 eviL3
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+* @copyright (c) 2007, 2008 eviL3
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -18,47 +18,45 @@ if (!defined('IN_QUICKINSTALL'))
 
 /**
  * Useful class for directory and file actions
- * Can't use self because that's php5 only
  */
 class file_functions
 {
-	function delete_file($file)
+	public static function delete_file($file)
 	{
 		return unlink($file);
 	}
-	
-	function copy_file($src_file, $dst_file)
+
+	public static function copy_file($src_file, $dst_file)
 	{
 		return copy($src_file, $dst_file);
 	}
-	
-	function move_file($src_file, $dst_file)
+
+	public static function move_file($src_file, $dst_file)
 	{
-		file_functions::copy_file($src_file, $dst_file);
-		file_functions::delete_file($src_file);
+		self::copy_file($src_file, $dst_file);
+		self::delete_file($src_file);
 	}
-	
-	function copy_dir($src_dir, $dst_dir)
+
+	public static function copy_dir($src_dir, $dst_dir)
 	{
-		file_functions::dir_slash($src_dir);
-		file_functions::dir_slash($dst_dir);
-		
+		self::append_slash($src_dir);
+		self::append_slash($dst_dir);
+
 		if (!is_dir($dst_dir))
 		{
 			mkdir($dst_dir);
 		}
-		
-		$d = dir($src_dir);
-		while (false !== ($file = $d->read()))
+
+		foreach (scandir($src_dir) as $file)
 		{
-			if (in_array($file, array('.', '..')))
+			if (in_array($file, array('.', '..'), true))
 			{
 				continue;
 			}
-			
+
 			$src_file = $src_dir . $file;
 			$dst_file = $dst_dir . $file;
-			
+
 			if (is_file($src_file))
 			{
 				if (is_file($dst_file))
@@ -69,7 +67,7 @@ class file_functions
 				{
 					$ow = 1;
 				}
-				
+
 				if ($ow > 0)
 				{
 					if (copy($src_file, $dst_file))
@@ -80,82 +78,77 @@ class file_functions
 			}
 			else if (is_dir($src_file))
 			{
-				file_functions::copy_dir($src_file, $dst_file);
+				self::copy_dir($src_file, $dst_file);
 			}
 		}
-		$d->close();
 	}
-	
-	function delete_dir($dir, $empty = false)
+
+	public static function delete_dir($dir, $empty = false)
 	{
-		file_functions::dir_slash($dir);
-		
+		self::append_slash($dir);
+
 		if (!file_exists($dir) || !is_dir($dir) || !is_readable($dir))
 		{
 			return false;
 		}
-		
-		$d = dir($dir);
-		while (false !== ($file = $d->read()))
+
+		foreach (scandir($dir) as $file)
 		{
-			if (in_array($file, array('.', '..')))
+			if (in_array($file, array('.', '..'), true))
 			{
 				continue;
 			}
-			
-			if (is_dir($dir . $file)) 
+
+			if (is_dir($dir . $file))
 			{
-				file_functions::delete_dir($dir . $file);
+				self::delete_dir($dir . $file);
 			}
 			else
 			{
-				file_functions::delete_file($dir . $file);
+				self::delete_file($dir . $file);
 			}
 		}
-		$d->close();
-		
+
 		if (!$empty)
 		{
 			@rmdir($dir);
 		}
 	}
-	
-	function delete_files($dir, $files_ary, $recursive = true)
+
+	public static function delete_files($dir, $files_ary, $recursive = true)
 	{
-		file_functions::dir_slash($dir);
-		
-		$d = dir($dir);
-		while (false !== ($file = $d->read()))
+		self::append_slash($dir);
+
+		foreach (scandir($dir) as $file)
 		{
-			if (in_array($file, array('.', '..')))
+			if (in_array($file, array('.', '..'), true))
 			{
 				continue;
 			}
-			
+
 			if (is_dir($dir . $file))
 			{
 				if ($recursive)
 				{
-					file_functions::delete_files($dir . $file, $files_ary, true);
+					self::delete_files($dir . $file, $files_ary, true);
 				}
 			}
-			
-			if (in_array($file, $files_ary))
+
+			if (in_array($file, $files_ary, true))
 			{
 				if (is_dir($dir . $file))
 				{
-					file_functions::delete_dir($dir . $file);
+					self::delete_dir($dir . $file);
 				}
 				else
 				{
-					file_functions::delete_file($dir . $file);
+					self::delete_file($dir . $file);
 				}
 			}
 		}
-		$d->close();
 	}
-	
-	function dir_slash(&$dir)
+
+	public static function append_slash(&$dir)
 	{
 		if ($dir[strlen($dir) - 1] != '/')
 		{

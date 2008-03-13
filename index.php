@@ -1,10 +1,10 @@
 <?php
-/** 
+/**
 *
 * @package quickinstall
 * @version $Id$
-* @copyright (c) 2007 eviL3
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+* @copyright (c) 2007, 2008 eviL3
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
 
@@ -22,63 +22,9 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 //error_reporting(E_ALL);
 error_reporting(E_ALL ^ E_NOTICE);
 
-if (version_compare(PHP_VERSION, '4.3.3') < 0)
+if (version_compare(PHP_VERSION, '5.1.0') < 0)
 {
-	die('You are running an unsupported PHP version. Please upgrade to PHP 4.3.3 or higher before trying to do anything with phpBB 3.0');
-}
-
-/*
-* Remove variables created by register_globals from the global scope
-* Thanks to Matt Kavanagh
-*/
-function deregister_globals()
-{
-	$not_unset = array(
-		'GLOBALS' => true,
-		'_GET' => true,
-		'_POST' => true,
-		'_COOKIE' => true,
-		'_REQUEST' => true,
-		'_SERVER' => true,
-		'_SESSION' => true,
-		'_ENV' => true,
-		'_FILES' => true,
-		'phpEx' => true,
-		'phpbb_root_path' => true
-	);
-
-	// Not only will array_merge and array_keys give a warning if
-	// a parameter is not an array, array_merge will actually fail.
-	// So we check if _SESSION has been initialised.
-	if (!isset($_SESSION) || !is_array($_SESSION))
-	{
-		$_SESSION = array();
-	}
-
-	// Merge all into one extremely huge array; unset
-	// this later
-	$input = array_merge(
-		array_keys($_GET),
-		array_keys($_POST),
-		array_keys($_COOKIE),
-		array_keys($_SERVER),
-		array_keys($_SESSION),
-		array_keys($_ENV),
-		array_keys($_FILES)
-	);
-
-	foreach ($input as $varname)
-	{
-		if (isset($not_unset[$varname]))
-		{
-			// Hacking attempt. No point in continuing.
-			exit;
-		}
-
-		unset($GLOBALS[$varname]);
-	}
-
-	unset($input);
+	die('You are running an unsupported PHP version. Please upgrade to PHP 5.1.0 or higher before trying to do anything with phpBB 3.0');
 }
 
 // If we are on PHP >= 6.0.0 we do not need some code
@@ -118,7 +64,7 @@ foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport', 'table_prefix')
 }
 
 // Set PHP error handler to ours
-set_error_handler('msg_handler_qi');
+set_error_handler(array('qi', 'msg_handler'));
 
 if (!defined('QI_INSTALLED'))
 {
@@ -144,7 +90,7 @@ $available_dbms = get_available_dbms($dbms);
 
 if (!isset($available_dbms[$dbms]['DRIVER']))
 {
-	trigger_error('The ' . $dbms . ' dbms is either not supported, or the php extension for it could not be loaded.', E_USER_ERROR);
+	trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
 }
 
 // Load the appropriate database class if not already loaded
@@ -164,7 +110,7 @@ $user		= new user();
 $auth		= new auth();
 $cache		= new cache();
 $template	= new template();
-$module		= new module_handler($quickinstall_path . 'modules/');
+$module		= new module_handler($quickinstall_path . 'modules/', 'qi_');
 
 // Set some standard variables we want to force
 $config = array(
@@ -182,6 +128,6 @@ $template->cachepath = $quickinstall_path . 'cache/tpl_qi_';
 qi::add_lang(array('qi', 'phpbb'));
 
 // Load the main module
-$module->load('qi_' . request_var('mode', 'main'), 'qi_main');
+$module->load(request_var('mode', 'main'), 'qi_main');
 
 ?>

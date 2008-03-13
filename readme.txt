@@ -13,7 +13,7 @@ browser and it should work. If it does not, find support here:
 http://phpbbmodders.net/goto/quickinstall_3.0.x
 
 phpBB3 QuickInstall is distributed under the terms of the GNU General Public
-License 2 (GPL). A copy has been included in the package (gpl.txt).
+License 2 (GPL). A copy has been included in the package (license.txt).
 
 I will not be held responsible for any damage caused by this script. Use it at
 your own risk.

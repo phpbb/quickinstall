@@ -3,7 +3,7 @@
 *
 * @package quickinstall
 * @version $Id$
-* @copyright (c) 2007 eviL3
+* @copyright (c) 2007, 2008 eviL3
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -30,8 +30,8 @@ $qi_config = array(
 	'dbhost'			=> '',
 	'dbport'			=> '',
 //	'dbname'			=> '',
-	'dbuser'			=> '',
-	'dbpasswd'			=> '',
+	'dbuser'			=> 'root',
+	'dbpasswd'			=> 'pass',
 
 	'table_prefix'		=> 'phpbb_',
 
@@ -39,7 +39,7 @@ $qi_config = array(
 	 * do not modify this line!
 	 */
 	'qi_version'		=> '1.0.7-dev',
-	
+
 	/**
 	 * this is for lazy me who forgets to change it in the footer
 	 */
@@ -98,6 +98,7 @@ $qi_config = array(
  * you have to remove // from the line below, so it should look like this:
  * @define('QI_INSTALLED', true);
  */
-//@define('QI_INSTALLED', true);
+@define('QI_INSTALLED', true);
+@define('DEBUG', true);
 
 ?>

@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 
 <script type="text/javascript">
-<!--
+// <![CDATA[
 function toggle_advanced()
 {
 	if (document.getElementById('options_advanced'))
@@ -18,7 +18,7 @@ else
 {
 	window.onload = toggle_advanced;
 }
-//-->
+// ]]>
 </script>
 
 <h1>{L_INSTALL_BOARD}</h1>
@@ -43,9 +43,13 @@ else
 	</dl>
 	<dl>
 		<dt><label for="redirect">{L_REDIRECT}:</label></dt>
-		<dd><label><input type="checkbox" class="radio" id="redirect" name="redirect" checked="checked" /> {L_ENABLED}</label></dd>
+		<dd><label><input type="checkbox" class="radio" id="redirect" name="redirect" checked="checked" value="1" /> {L_ENABLED}</label></dd>
 	</dl>
-	
+	<dl>
+		<dt><label for="redirect">{L_BLINKY}:</label></dt>
+		<dd><label><input type="checkbox" class="radio" id="blinky" name="blinky" checked="checked" value="1" /> {L_ENABLED}</label></dd>
+	</dl>
+
 	<p class="quick">
 		<input type="submit" name="submituser" value="{L_SUBMIT}" class="button1" />
 	</p>
@@ -73,17 +77,6 @@ else
 	<dl>
 		<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
 		<dd><label><input type="checkbox" class="radio" id="delete_files" name="delete_files" /> {L_ENABLED}</label></dd>
-	</dl>
-	<dl>
-		<dt><label for="include_mods">{L_INCLUDE_MODS}:</label><br /><span>{L_INCLUDE_MODS_EXPLAIN}</span></dt>
-		<dd>
-			<select multiple="multiple" name="include_mods[]" id="include_mods">
-			<option>None</option>
-			<!-- BEGIN mods -->
-			<option value="{mods.MOD_NAME}">{mods.MOD_NAME}</option>
-			<!-- END mods -->
-			</select>
-		</dd>
 	</dl>
 	</div>
 </fieldset>

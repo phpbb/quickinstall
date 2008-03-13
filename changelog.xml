@@ -69,6 +69,8 @@
 		<changelog lang="en">
 			<change>[Fix] Updated version number in footer.</change>
 			<change>[Fix] Added some more security.</change>
+			<change>[Change] Partial rewrite.</change>
+			<change>[Change] Blinky (easymod) support.</change>
 		</changelog>
 	</entry>
 </history>
