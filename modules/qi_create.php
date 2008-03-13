@@ -335,7 +335,11 @@ class qi_create
 			require("{$phpbb_root_path}includes/functions_mods.$phpEx");
 			require("{$phpbb_root_path}includes/functions_transfer.$phpEx");
 
-			$user->lang['FILE_EDITS'] = '';
+			// add some language entries to prevent notices
+			$user->lang += array(
+				'FILE_EDITS'	=> '',
+				'NEXT_STEP'		=> '',
+			);
 
 			$install = new install_mod_qi($p_master = new p_master_dummy());
 			$install->set_data(array(
