@@ -63,6 +63,11 @@ class qi_create
 		// smaller ^^
 		list($dbms, $table_prefix) = array(&$qi_config['dbms'], &$qi_config['table_prefix']);
 
+		// check if we have a board db (and folder) name
+		if (!$dbname)
+		{
+			trigger_error('NO_DB');
+		}
 
 		// copy all of our files
 		$board_dir = $quickinstall_path . $qi_config['boards_dir'] . $dbname . '/';
@@ -127,12 +132,6 @@ class qi_create
 
 		// update phpbb_root_path
 		$phpbb_root_path = $board_dir;
-
-		// start with db installation
-		if (!$dbname)
-		{
-			trigger_error('NO_DB');
-		}
 
 		if ($drop_db)
 		{
