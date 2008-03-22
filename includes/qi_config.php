@@ -29,9 +29,8 @@ $qi_config = array(
 	'dbms'				=> 'mysqli',
 	'dbhost'			=> '',
 	'dbport'			=> '',
-//	'dbname'			=> '',
-	'dbuser'			=> 'root',
-	'dbpasswd'			=> 'pass',
+	'dbuser'			=> '',
+	'dbpasswd'			=> '',
 
 	'table_prefix'		=> 'phpbb_',
 
@@ -98,7 +97,7 @@ $qi_config = array(
  * you have to remove // from the line below, so it should look like this:
  * @define('QI_INSTALLED', true);
  */
-@define('QI_INSTALLED', true);
+//@define('QI_INSTALLED', true);
 @define('DEBUG', true);
 
 ?>
