@@ -13,6 +13,7 @@
 */
 define('IN_PHPBB', true);
 define('IN_QUICKINSTALL', true);
+define('IN_INSTALL', true);
 
 $quickinstall_path = './';
 $phpbb_root_path = $quickinstall_path . 'sources/phpBB3/';

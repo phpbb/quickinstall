@@ -35,10 +35,12 @@ class qi_create
 		));
 
 		// load installer lang
-		qi::add_lang(array('install', 'phpbb'));
+		qi::add_lang('phpbb');
 
 		// phpbb's install uses $lang instead of $user->lang
+		// need to use $GLOBALS here
 		$GLOBALS['lang'] = &$user->lang;
+		global $lang;
 
 		// request variables
 		$dbname			= htmlspecialchars_decode(request_var('dbname', '', true));
@@ -149,13 +151,16 @@ class qi_create
 			$db->sql_select_db($qi_config['database_prefix'] . $dbname);
 		}
 
+		// include install lang fom phpbb
+		qi::add_lang('install', $phpbb_root_path . 'language/' . $qi_config['default_lang'] . '/');
+
 		// perform sql
 		load_schema($phpbb_root_path . 'install/schemas/', $dbms);
 
 		$current_time = time();
 		$user_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
 
-		$script_name = (!empty($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : getenv('PHP_SELF');
+		$script_name = (!empty($_SERVER['SCRIPT_NAME'])) ? $_SERVER['SCRIPT_NAME'] : getenv('SCRIPT_NAME');
 		if (!$script_name)
 		{
 			$script_name = (!empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : getenv('REQUEST_URI');
@@ -180,6 +185,9 @@ class qi_create
 				$script_path = '/' . $script_path;
 			}
 		}
+
+		// add the dbname to script path
+		$script_path .= '/boards/' . $dbname;
 
 		$config_ary = array(
 			'board_startdate'	=> $current_time,
@@ -273,8 +281,7 @@ class qi_create
 		// build search index
 		include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
 
-		$error = false;
-		$search = new fulltext_native($error);
+		$search = new fulltext_native($error = false);
 
 		$sql = 'SELECT post_id, post_subject, post_text, poster_id, forum_id
 			FROM ' . POSTS_TABLE;
@@ -286,8 +293,7 @@ class qi_create
 		}
 		$db->sql_freeresult($result);
 
-		// include install_install.php
-		define('IN_INSTALL', true);
+		// extended phpbb install script
 		include($phpbb_root_path . 'install/install_install.' . $phpEx);
 		include($quickinstall_path . 'includes/install_install_qi.' . $phpEx);
 
@@ -373,8 +379,9 @@ class qi_create
 		// clean up
 		file_functions::delete_files($board_dir, array('Thumbs.db', 'DS_Store', 'CVS', '.svn'));
 
-		// remove install dir
+		// remove install dir and develop
 		file_functions::delete_dir($board_dir . 'install/');
+		file_functions::delete_dir($board_dir . 'develop/');
 
 		// purge cache
 		$cache->purge();

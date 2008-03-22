@@ -117,7 +117,7 @@ class qi
 	*
 	* @param mixed $lang_set specifies the language entries to include
 	*/
-	public static function add_lang($lang_set)
+	public static function add_lang($lang_set, $lang_path = false)
 	{
 		global $user;
 
@@ -131,18 +131,18 @@ class qi
 
 				if (!is_array($lang_file))
 				{
-					self::set_lang($user->lang, $lang_file);
+					self::set_lang($user->lang, $lang_file, $lang_path);
 				}
 				else
 				{
-					self::add_lang($lang_file);
+					self::add_lang($lang_file, $lang_path);
 				}
 			}
 			unset($lang_set);
 		}
 		else if ($lang_set)
 		{
-			self::set_lang($user->lang, $lang_set);
+			self::set_lang($user->lang, $lang_set, $lang_path);
 		}
 	}
 
@@ -150,11 +150,14 @@ class qi
 	* Set language entry (called by add_lang)
 	* @access private
 	*/
-	public static function set_lang(&$lang, $lang_file)
+	protected static function set_lang(&$lang, $lang_file, $lang_path = false)
 	{
 		global $phpEx, $qi_config, $quickinstall_path;
 
-		$lang_path = $quickinstall_path . 'language/' . basename($qi_config['qi_lang']) . '/';
+		if ($lang_path === false)
+		{
+			$lang_path = $quickinstall_path . 'language/' . basename($qi_config['qi_lang']) . '/';
+		}
 
 		if (!file_exists($lang_path) || !is_dir($lang_path))
 		{
