@@ -160,31 +160,15 @@ class qi_create
 		$current_time = time();
 		$user_ip = (!empty($_SERVER['REMOTE_ADDR'])) ? htmlspecialchars($_SERVER['REMOTE_ADDR']) : '';
 
-		$script_name = (!empty($_SERVER['SCRIPT_NAME'])) ? $_SERVER['SCRIPT_NAME'] : getenv('SCRIPT_NAME');
-		if (!$script_name)
+		$script_path = (!empty($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : getenv('PHP_SELF');
+		if (!$script_path)
 		{
-			$script_name = (!empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : getenv('REQUEST_URI');
+			$script_path = (!empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : getenv('REQUEST_URI');
 		}
 
 		// Replace backslashes and doubled slashes (could happen on some proxy setups)
-		$script_name = str_replace(array('\\', '//'), '/', $script_name);
-		$script_path = trim(dirname($script_name));
-
-		if ($script_path !== '/')
-		{
-			// Adjust destination path (no trailing slash)
-			if (substr($script_path, -1) == '/')
-			{
-				$script_path = substr($script_path, 0, -1);
-			}
-
-			$script_path = str_replace(array('../', './'), '', $script_path);
-
-			if ($script_path[0] != '/')
-			{
-				$script_path = '/' . $script_path;
-			}
-		}
+		$script_path = str_replace(array('\\', '//'), '/', $script_path);
+		$script_path = trim(dirname($script_path));
 
 		// add the dbname to script path
 		$script_path .= '/boards/' . $dbname;
@@ -356,7 +340,6 @@ class qi_create
 				'timeout'	=> 10,
 			));
 			$install->add_config(false, false);
-			$install->perform_edits(false, false);
 			load_schema($phpbb_root_path . 'install/schemas/mods_manager/', $dbms);
 			$install->add_modules(false, false);
 		}
