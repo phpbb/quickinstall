@@ -42,7 +42,7 @@ $qi_config = array(
 	/**
 	 * this is for lazy me who forgets to change it in the footer
 	 */
-	'phpbb_version'		=> '3.0.0',
+	'phpbb_version'		=> '3.0.1',
 
 	/**
 	 * boards_dir is the folder where your boards are saved in
