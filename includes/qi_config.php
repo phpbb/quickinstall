@@ -37,7 +37,7 @@ $qi_config = array(
 	/**
 	 * do not modify this line!
 	 */
-	'qi_version'		=> '1.0.7-dev',
+	'qi_version'		=> '1.0.8',
 
 	/**
 	 * this is for lazy me who forgets to change it in the footer
