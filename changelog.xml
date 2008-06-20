@@ -73,4 +73,11 @@
 			<change>[Change] Blinky (easymod) support.</change>
 		</changelog>
 	</entry>
+	<entry>
+		<date>2008-06-20</date>
+		<version>1.0.8</version>
+		<changelog lang="en">
+			<change>[Change] Updating for phpBB 3.0.1</change>
+		</changelog>
+	</entry>
 </history>
