@@ -1,2 +1,2 @@
-1.0.7
+1.0.8
 http://phpbbmodders.net/goto/quickinstall_3.0.x
