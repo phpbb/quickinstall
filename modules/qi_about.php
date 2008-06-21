@@ -35,7 +35,7 @@ class qi_about
 			$errstr = '';
 			$errno = 0;
 
-			$info = get_remote_file('phpbbmodders.net', '/mods/phpbb_quickinstall_3.0.x', 'updatecheck.txt', $errstr, $errno);
+			$info = get_remote_file('phpbbmodders.net', '/files/updatecheck', 'quickinstall.txt', $errstr, $errno);
 
 			if ($info !== false)
 			{
