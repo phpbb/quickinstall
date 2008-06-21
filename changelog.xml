@@ -80,4 +80,11 @@
 			<change>[Change] Updating for phpBB 3.0.1</change>
 		</changelog>
 	</entry>
+	<entry>
+		<date>2008-xx-xx</date>
+		<version>1.0.9</version>
+		<changelog lang="en">
+			<change>[Change] Put default site_name and site_desc on main page (thanks exreaction)</change>
+		</changelog>
+	</entry>
 </history>

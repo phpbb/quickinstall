@@ -31,6 +31,8 @@ class qi_main
 			'U_CREATE'		=> qi::url('create'),
 
 			'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
+			'SITE_NAME'		=> $qi_config['site_name'],
+			'SITE_DESC'		=> $qi_config['site_desc'],
 		));
 
 		// Output page
