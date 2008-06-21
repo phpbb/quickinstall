@@ -56,6 +56,7 @@ $lang = array_merge($lang, array(
 	'BOARD_NAME'			=> 'Board name',
 	'BOARDS_DELETED'		=> 'The boards were deleted successfully.',
 	'BOARDS_DELETED_TITLE'	=> 'Boards deleted',
+	'BOARDS_LIST'           => 'List of boards',
 
 	'CHANGELOG'				=> 'Changelog',
 

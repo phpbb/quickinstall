@@ -98,6 +98,6 @@ $qi_config = array(
  * @define('QI_INSTALLED', true);
  */
 //@define('QI_INSTALLED', true);
-@define('DEBUG', true);
+//@define('DEBUG', true);
 
 ?>

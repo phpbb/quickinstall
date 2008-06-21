@@ -30,12 +30,11 @@
 				<div id="content">
 					<div id="menu">
 						<p><!-- IF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
-						<!-- IF PAGE_MAIN -->
-						<p>
+						<!-- IF PAGE_MAIN and .row -->
+						    <h5>{L_BOARDS_LIST}</h5>
 							<!-- BEGIN row -->
 							<a href="{row.BOARD_URL}">{row.BOARD_NAME}</a><br />
 							<!-- END row -->
-						</p>
 						<!-- ENDIF -->
 					</div>
 	
