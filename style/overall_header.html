@@ -30,6 +30,13 @@
 				<div id="content">
 					<div id="menu">
 						<p><!-- IF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
+						<!-- IF PAGE_MAIN -->
+						<p>
+							<!-- BEGIN row -->
+							<a href="{row.BOARD_URL}">{row.BOARD_NAME}</a><br />
+							<!-- END row -->
+						</p>
+						<!-- ENDIF -->
 					</div>
 	
 					<div id="main">
