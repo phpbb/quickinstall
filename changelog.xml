@@ -85,6 +85,7 @@
 		<version>1.0.9</version>
 		<changelog lang="en">
 			<change>[Change] Put default site_name and site_desc on main page (thanks exreaction)</change>
+			<change>[Change] Updating for phpBB 3.0.2</change>
 		</changelog>
 	</entry>
 </history>
