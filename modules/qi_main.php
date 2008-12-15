@@ -27,18 +27,32 @@ class qi_main
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		// list of boards
-		$d = dir($qi_config['boards_dir']);
+		$d = dir($quickinstall_path . 'boards');
 		while (false !== ($file = $d->read()))
 		{
-			if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($qi_config['boards_dir'] . $file))
+			if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($quickinstall_path . 'boards/' . $file))
 			{
 				continue;
 			}
 
 			$template->assign_block_vars('row', array(
 				'BOARD_NAME'	=> htmlspecialchars($file),
-				'BOARD_URL'		=> $qi_config['boards_dir'] . urlencode($file),
+				'BOARD_URL'		=> $quickinstall_path . 'boards/' . urlencode($file),
 			));
+		}
+		$d->close();
+
+		// list of alternate enviroments
+		$alt_env = '<option value="">' . $user->lang['DEFAULT_ENV'] . '</option>';
+		$d = dir($quickinstall_path . 'sources/phpBB3_alt');
+		while (false !== ($file = $d->read()))
+		{
+			if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($quickinstall_path . 'sources/phpBB3_alt/' . $file))
+			{
+				continue;
+			}
+
+			$alt_env .= '<option>' . htmlspecialchars($file) . '</option>';
 		}
 		$d->close();
 
@@ -49,6 +63,8 @@ class qi_main
 			'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
 			'SITE_NAME'		=> $qi_config['site_name'],
 			'SITE_DESC'		=> $qi_config['site_desc'],
+
+			'ALT_ENV'		=> $alt_env,
 
 			'PAGE_MAIN'		=> true,
 		));

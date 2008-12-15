@@ -48,12 +48,18 @@ class qi_create
 		$drop_db		= request_var('drop_db', false);
 		$delete_files	= request_var('delete_files', false);
 		$blinky			= request_var('blinky', false);
+		$alt_env		= request_var('alt_env', '');
 		foreach (array('site_name', 'site_desc', 'table_prefix', 'admin_name', 'admin_pass') as $r)
 		{
 			if ($_r = request_var($r, '', true))
 			{
 				$qi_config[$r] = $_r;
 			}
+		}
+		
+		if ($alt_env !== '' && !file_exists($quickinstall_path . 'sources/phpBB3_alt/' . $alt_env))
+		{
+			trigger_error('NO_ALT_ENV');
 		}
 
 		// overwrite some of them ;)
@@ -72,7 +78,7 @@ class qi_create
 		}
 
 		// copy all of our files
-		$board_dir = $quickinstall_path . $qi_config['boards_dir'] . $dbname . '/';
+		$board_dir = $quickinstall_path . 'boards/' . $dbname . '/';
 
 		if (file_exists($board_dir))
 		{
@@ -86,7 +92,7 @@ class qi_create
 			}
 		}
 
-		file_functions::copy_dir($quickinstall_path . 'sources/phpBB3/', $board_dir);
+		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 
 		// copy extra files
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);

@@ -37,12 +37,12 @@ $qi_config = array(
 	/**
 	 * do not modify this line!
 	 */
-	'qi_version'		=> '1.0.9',
+	'qi_version'		=> '1.0.10-dev',
 
 	/**
 	 * this is for lazy me who forgets to change it in the footer
 	 */
-	'phpbb_version'		=> '3.0.2',
+	'phpbb_version'		=> '3.0.4',
 
 	/**
 	 * boards_dir is the folder where your boards are saved in
@@ -60,7 +60,6 @@ $qi_config = array(
 	 * database_prefix is added before all the databases to prevent overwriting
 	 * databases not used by qi.
 	 */
-	'boards_dir'		=> 'boards/',
 	'qi_lang'			=> 'en',
 	'qi_tz'				=> '0',
 	'qi_dst'			=> '0',

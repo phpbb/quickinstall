@@ -42,7 +42,7 @@ class qi_manage
 
 				foreach ($select as $item)
 				{
-					$current_item = $qi_config['boards_dir'] . $item;
+					$current_item = $quickinstall_path . 'boards/' . $item;
 
 					$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['database_prefix'] . $item);
 
@@ -63,23 +63,20 @@ class qi_manage
 
 				// list of boards
 
-				$d = dir($qi_config['boards_dir']);
+				$d = dir($quickinstall_path . 'boards');
 				while (false !== ($file = $d->read()))
 				{
-					if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($qi_config['boards_dir'] . $file))
+					if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($quickinstall_path . 'boards/' . $file))
 					{
 						continue;
 					}
 
 					$template->assign_block_vars('row', array(
 						'BOARD_NAME'	=> htmlspecialchars($file),
-						'BOARD_URL'		=> $qi_config['boards_dir'] . urlencode($file),
+						'BOARD_URL'		=> $quickinstall_path . 'boards/' . urlencode($file),
 					));
 				}
 				$d->close();
-
-				$template->assign_vars(array(
-				));
 
 				// Output page
 				qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);

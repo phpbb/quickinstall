@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'ABOUT_QUICKINSTALL'	=> 'About phpBB3 QuickInstall',
 	'ADMIN_NAME'			=> 'Administrator username',
 	'ADMIN_PASS'			=> 'Administrator password',
+	'ALT_ENV'				=> 'Alternate envorment',
 
 	'BACK_TO_MAIN'			=> '<a href="%s">Return back to the main page</a>',
 	'BACK_TO_MANAGE'		=> '<a href="%s">Return back to the management page</a>',
@@ -61,6 +62,7 @@ $lang = array_merge($lang, array(
 	'CHANGELOG'				=> 'Changelog',
 
 	'DB_PREFIX'				=> 'Database table prefix',
+	'DEFAULT_ENV'			=> 'Default envoronment (latest phpBB)',
 	'DELETE'				=> 'Delete',
 	'DELETE_FILES_IF_EXIST'	=> 'Delete files if they exist',
 	'DIR_EXISTS'			=> 'The directory %s already exists.',
@@ -80,6 +82,7 @@ $lang = array_merge($lang, array(
 	'MANAGE_BOARDS'		=> 'Manage boards',
 	'MIGHT_TAKE_LONG'	=> '<strong>Please note:</strong> Creation of the board can take a while, perhaps even a minute or longer, so don’t submit the form twice.',
 
+	'NO_ALT_ENV'		=> 'The specified alternatie enviroment doesn´t exist.',
 	'NO_BOARDS'			=> 'You have no boards.',
 	'NO_DB'				=> 'No database selected.',
 	'NO_MODULE'			=> 'The module %s could not be loaded.',
