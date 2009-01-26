@@ -324,11 +324,15 @@ class qi_create
 			// todo: add blinky code
 			file_functions::copy_dir($quickinstall_path . 'sources/blinky/', $board_dir);
 
-			require("{$phpbb_root_path}install/install_mod.$phpEx");
-			require("{$quickinstall_path}includes/install_mod_qi.$phpEx");
+			require("{$phpbb_root_path}install/install_automod.$phpEx");
+			require("{$quickinstall_path}includes/install_automod_qi.$phpEx");
 			require("{$phpbb_root_path}includes/functions_convert.$phpEx");
 			require("{$phpbb_root_path}includes/functions_mods.$phpEx");
 			require("{$phpbb_root_path}includes/functions_transfer.$phpEx");
+			
+			// some stuff josh added... >_<
+			global $current_version;
+			$current_version = $qi_config['automod_version'];
 
 			// add some language entries to prevent notices
 			$user->lang += array(
@@ -336,7 +340,7 @@ class qi_create
 				'NEXT_STEP'		=> '',
 			);
 
-			$install = new install_mod_qi($p_master = new p_master_dummy());
+			$install = new install_automod_qi($p_master = new p_master_dummy());
 			$install->set_data(array(
 				'method'	=> '',
 				'host'		=> '',
@@ -346,7 +350,7 @@ class qi_create
 				'timeout'	=> 10,
 			));
 			$install->add_config(false, false);
-			load_schema($phpbb_root_path . 'install/schemas/mods_manager/', $dbms);
+			load_schema($phpbb_root_path . 'install/schemas/automod/', $dbms);
 			$install->add_modules(false, false);
 		}
 

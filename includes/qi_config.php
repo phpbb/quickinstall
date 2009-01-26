@@ -43,6 +43,7 @@ $qi_config = array(
 	 * this is for lazy me who forgets to change it in the footer
 	 */
 	'phpbb_version'		=> '3.0.4',
+	'automod_version'	=> '1.0.0-b2',
 
 	/**
 	 * boards_dir is the folder where your boards are saved in
@@ -97,6 +98,5 @@ $qi_config = array(
  * @define('QI_INSTALLED', true);
  */
 //@define('QI_INSTALLED', true);
-//@define('DEBUG', true);
 
 ?>
