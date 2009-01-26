@@ -19,7 +19,7 @@ if (!defined('IN_QUICKINSTALL'))
 /**
  * Our extension to install_install
  */
-class install_mod_qi extends install_mod
+class install_automod_qi extends install_automod
 {
 	protected $data = array();
 
