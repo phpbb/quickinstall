@@ -89,10 +89,11 @@
 		</changelog>
 	</entry>
 	<entry>
-		<date>2008-12-15</date>
+		<date>2009-01-26</date>
 		<version>1.0.10</version>
 		<changelog lang="en">
 			<change>[Change] Updating for phpBB 3.0.4</change>
+			<change>[Change] Updating for AutoMOD 1.0.0-b2</change>
 			<change>[Feature] Allow users to choose an alternate enviroment</change>
 		</changelog>
 	</entry>
