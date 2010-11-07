@@ -4,6 +4,7 @@
 * @package quickinstall
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
+* @copyright (c) 2010 Jari Kanerva (tumba25)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -27,20 +28,19 @@ class qi_main
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		// list of boards
-		$d = dir($quickinstall_path . 'boards');
-		while (false !== ($file = $d->read()))
+		$boards_arr = scandir($quickinstall_path . $qi_config['boards_dir']);
+		foreach ($boards_arr as $board)
 		{
-			if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($quickinstall_path . 'boards/' . $file))
+			if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($quickinstall_path . 'boards/' . $board))
 			{
 				continue;
 			}
 
 			$template->assign_block_vars('row', array(
-				'BOARD_NAME'	=> htmlspecialchars($file),
-				'BOARD_URL'		=> $quickinstall_path . 'boards/' . urlencode($file),
+				'BOARD_NAME'	=> htmlspecialchars($board),
+				'BOARD_URL'		=> $quickinstall_path . $qi_config['boards_dir'] . urlencode($board),
 			));
 		}
-		$d->close();
 
 		// list of alternate enviroments
 		$alt_env = '<option value="">' . $user->lang['DEFAULT_ENV'] . '</option>';
@@ -63,6 +63,12 @@ class qi_main
 			'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
 			'SITE_NAME'		=> $qi_config['site_name'],
 			'SITE_DESC'		=> $qi_config['site_desc'],
+
+			'S_AUTOMOD' => (empty($qi_config['automod'])) ? false : true,
+			'S_MAKE_WRITABLE' => (empty($qi_config['make_writable'])) ? false : true,
+			'S_POPULATE' => (empty($qi_config['populate'])) ? false : true,
+			'S_REDIRECT' => (empty($qi_config['redirect'])) ? false : true,
+			'S_SUBSILVER' => (empty($qi_config['subsilver'])) ? false : $qi_config['subsilver'],
 
 			'ALT_ENV'		=> $alt_env,
 

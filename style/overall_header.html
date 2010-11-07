@@ -11,6 +11,39 @@
 
 <link href="{T_THEME_PATH}/style.css" rel="stylesheet" type="text/css" media="screen" />
 
+<script type="text/javascript">
+// <![CDATA[
+/**
+* Mark/unmark checklist
+* id = ID of parent container, name = name prefix, state = state [true/false]
+* From phpBB
+*/
+function marklist(id, name, state)
+{
+	var parent = document.getElementById(id);
+	if (!parent)
+	{
+		eval('parent = document.' + id);
+	}
+
+	if (!parent)
+	{
+		return;
+	}
+
+	var rb = parent.getElementsByTagName('input');
+
+	for (var r = 0; r < rb.length; r++)
+	{
+		if (rb[r].name.substr(0, name.length) == name)
+		{
+			rb[r].checked = state;
+		}
+	}
+}
+// ]]>
+</script>
+
 </head>
 
 <body class="{S_CONTENT_DIRECTION}">
@@ -18,18 +51,29 @@
 <div id="wrap">
 	<div id="page-header">
 		<h1>{L_QUICKINSTALL}</h1>
-		<p><a href="{U_MAIN}">{L_QI_MAIN}</a> &bull; <a href="{U_MANAGE}">{L_QI_MANAGE}</a> &bull; <a href="{U_ABOUT}">{L_QI_ABOUT}</a></p>
 	</div>
-	
+
 	<div id="page-body">
-		<div id="tabs"><ul></ul></div>
+
+		<!-- IF not S_IN_INSTALL -->
+		<div id="tabs">
+			<ul>
+				<li<!-- IF S_ABOUT --> id="activetab"<!-- ENDIF -->><a href="{U_ABOUT}"><span>{L_QI_ABOUT}</span></a></li>
+				<li<!-- IF S_IN_SETTINGS --> id="activetab"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_SETTINGS}</span></a></li>
+				<li<!-- IF S_MANAGE --> id="activetab"<!-- ENDIF -->><a href="{U_MANAGE}"><span>{L_QI_MANAGE}</span></a></li>
+				<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_QI_MAIN}</span></a></li>
+			</ul>
+		</div>
+		<!-- ENDIF -->
 
 		<div id="acp">
 		<div class="panel">
 			<span class="corners-top"><span></span></span>
+
 				<div id="content">
+
 					<div id="menu">
-						<p><!-- IF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
+						<p><!-- IF S_IN_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
 						<!-- IF PAGE_MAIN and .row -->
 						    <h5>{L_BOARDS_LIST}</h5>
 							<!-- BEGIN row -->
@@ -37,5 +81,5 @@
 							<!-- END row -->
 						<!-- ENDIF -->
 					</div>
-	
+
 					<div id="main">

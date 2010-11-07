@@ -30,7 +30,8 @@ $lang = array_merge($lang, array(
 	'TRANSLATION_INFO'	=> '',
 	'DIRECTION'			=> 'ltr',
 	'DATE_FORMAT'		=> '|d M Y|',	// 01 Jan 2007
-	'USER_LANG'			=> 'en-gb',
+	'USER_LANG'			=> 'en',
+	'USER_LANG_LONG'	=> 'English',
 
 	'datetime'			=> array(
 		'TODAY'		=> 'Today',

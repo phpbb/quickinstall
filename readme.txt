@@ -7,10 +7,11 @@ can install a phpBB3 board with one single mouseclick. Now this is useful for
 developing modifications, as you won't have any conflicts of differen't mods.
 
 Installation:
-Copy the quickinstall_3.0.x folder to your local webspace and change some
-settings in /includes/qi_config.php. Then call the file (index.php) in your
-browser and it should work. If it does not, find support here:
-http://phpbbmodders.net/goto/quickinstall_3.0.x
+Copy the quickinstall_3.0.x folder to your local webspace. Make sure boards/,
+cache/ and qi_config.cfg is writable. Then point your browser to
+quickinstall/index.php. You should be taken to the settings page.
+After that call index.php in your browser and it should work. If it does not,
+find support here: http://codepail.net/
 
 phpBB3 QuickInstall is distributed under the terms of the GNU General Public
 License 2 (GPL). A copy has been included in the package (license.txt).

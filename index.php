@@ -4,6 +4,7 @@
 * @package quickinstall
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
+* @copyright (c) 2010 Jari Kanerva (tumba25)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -23,9 +24,9 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 //error_reporting(E_ALL);
 error_reporting(E_ALL ^ E_NOTICE);
 
-if (version_compare(PHP_VERSION, '5.1.0') < 0)
+if (version_compare(PHP_VERSION, '5.2.0') < 0)
 {
-	die('You are running an unsupported PHP version. Please upgrade to PHP 5.1.0 or higher before trying to do anything with phpBB 3.0');
+	die('You are running an unsupported PHP version. Please upgrade to PHP 5.2.0 or higher before trying to do anything with phpBB 3.0');
 }
 
 // If we are on PHP >= 6.0.0 we do not need some code
@@ -38,8 +39,6 @@ if (version_compare(PHP_VERSION, '6.0.0-dev', '>='))
 }
 else
 {
-	set_magic_quotes_runtime(0);
-
 	define('STRIP', (get_magic_quotes_gpc()) ? true : false);
 }
 
@@ -48,37 +47,60 @@ else
 @ini_set('memory_limit', '128M');
 
 // Include scripts for quickinstall
-require($quickinstall_path . 'includes/qi_config.' . $phpEx);
+//require($quickinstall_path . 'qi_config.' . $phpEx);
+require($quickinstall_path . 'includes/qi_constants.' . $phpEx);
 require($quickinstall_path . 'includes/functions_quickinstall.' . $phpEx);
+require($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 require($quickinstall_path . 'includes/functions_files.' . $phpEx);
 require($quickinstall_path . 'includes/functions_module.' . $phpEx);
+require($quickinstall_path . 'includes/template.' . $phpEx);
+
+// Let's get the config.
+$qi_config = get_settings();
 
 foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport', 'table_prefix') as $var)
 {
-	$$var = &$qi_config[$var];
+	$$var = $qi_config[$var];
 }
 
-// Set PHP error handler to ours
-set_error_handler(array('qi', 'msg_handler'));
-
-if (!defined('QI_INSTALLED'))
-{
-	// quickinstall isn't installed yet
-	$msg_title = 'Z0MG! qi is not installed yet :O';
-	trigger_error('You have not modified the configuration of phpBB QuickInstall yet, go to includes/qi_config.php and adjust the settings, then uncomment the QI_INSTALLED line as explained.', E_USER_ERROR);
-}
-
-// Include essential scripts
+// We need some phpBB functions to.
+require($phpbb_root_path . 'includes/functions.' . $phpEx);
+require($phpbb_root_path . 'includes/constants.' . $phpEx);
 include($phpbb_root_path . 'includes/auth.' . $phpEx);
 include($phpbb_root_path . 'includes/acm/acm_file.' . $phpEx);
 include($phpbb_root_path . 'includes/cache.' . $phpEx);
-require($phpbb_root_path . 'includes/constants.' . $phpEx);
-require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
-require($phpbb_root_path . 'includes/functions_template.' . $phpEx);
+//require($phpbb_root_path . 'includes/functions_template.' . $phpEx);
 include($phpbb_root_path . 'includes/session.' . $phpEx);
-include($phpbb_root_path . 'includes/template.' . $phpEx);
+//include($phpbb_root_path . 'includes/template.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
+
+// Set PHP error handler to ours
+set_error_handler(array('qi', 'msg_handler'), E_ALL);
+
+$mode = request_var('mode', 'main');
+$qi_install = (empty($qi_config)) ? true : false;
+
+// We need to set the template here.
+$template = new template();
+$template->set_custom_template('style', 'qi');
+
+qi::add_lang(array('qi', 'phpbb'));
+
+// Probably best place to validate the settings
+$error = validate_settings($qi_config);
+$mode = (empty($error)) ? $mode : (($mode == 'update_settings') ? 'update_settings' : 'settings');
+
+if ($qi_install || $mode == 'update_settings' || $mode == 'settings')
+{
+	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
+}
+
+// Just put these here temporary. I'll change to use the constants later... Maybe tomorrow or so...
+$qi_config['version_check'] = false;
+$qi_config['qi_version'] = QI_VERSION;
+$qi_config['phpbb_version'] = PHPBB_VERSION;
+$qi_config['automod_version'] = AUTOMOD_VERSION;
 
 // If we get here and the extension isn't loaded it should be safe to just go ahead and load it
 $available_dbms = get_available_dbms($dbms);
@@ -104,16 +126,12 @@ $db->sql_return_on_error(true);
 $user		= new user();
 $auth		= new auth();
 $cache		= new cache();
-$template	= new template();
 $module		= new module_handler($quickinstall_path . 'modules/', 'qi_');
 
 // Set some standard variables we want to force
 $config = array(
 	'load_tplcompile'	=> '1',
 );
-
-// change tpl path
-$template->set_custom_template('style', 'qi');
 
 // overwrite
 $cache->cache_dir = $quickinstall_path . 'cache/';
@@ -123,6 +141,6 @@ $template->cachepath = $quickinstall_path . 'cache/tpl_qi_';
 qi::add_lang(array('qi', 'phpbb'));
 
 // Load the main module
-$module->load(request_var('mode', 'main'), 'qi_main');
+$module->load($mode, 'qi_main');
 
 ?>

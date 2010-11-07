@@ -21,7 +21,7 @@
 		<date>2007-07-30</date>
 		<version>1.0.1</version>
 		<changelog lang="en">
-			<change>[Change] Updated for phpBB 3.0.RC4.</change>
+			<change>[Change] Updated for phpBB 3.0.RC4. </change>
 		</changelog>
 	</entry>
 	<entry>
@@ -95,6 +95,81 @@
 			<change>[Change] Updating for phpBB 3.0.4</change>
 			<change>[Change] Updating for AutoMOD 1.0.0-b2</change>
 			<change>[Feature] Allow users to choose an alternate enviroment</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-03-14</date>
+		<version>1.1.0-b1</version>
+		<changelog lang="en">
+			<change>[Change] Updated for phpBB 3.0.7-PL1</change>
+			<change>[Change] The Redirect option now works as intended</change>
+			<change>[Change] Updated for phpBB 3.0.7-PL1</change>
+			<change>[Change] Updated AutoMOD (Blinky) to rev 227</change>
+			<change>[Change] Board list is now in alphabetical order</change>
+			<change>[Change] Board listing takes the boards dir value from the config</change>
+			<change>[Change] Redirect and AutoMOD values are taken from the config</change>
+			<change>[Change] Uses tabs instead of links to navigate</change>
+			<change>[Change] Replaced qi_config.php with qi_config.cfg to avoid php errors in config strings</change>
+			<change>[Change] Added link to settings from the error page.</change>
+			<change>[Change] Added checkbox for not using a db password.</change>
+			<change>[Change] Added information about successfull or unsuccessfull settings update.</change>
+			<change>[Change] Removed set_magic_quotes_runtime()</change>
+			<change>[Feature] Added installation/settings page</change>
+			<change>[Feature] Validates the settings on page load.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-05-25</date>
+		<version>1.1.0-b2</version>
+		<changelog lang="en">
+			<change>Updated to AutoMOD 1.0.0-RC4</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-05-28</date>
+		<version>1.1.0</version>
+		<changelog lang="en">
+			<change>[FEATURE] Option to make files writable.</change>
+			<change>[FEATURE] Option to populate forum with users and posts.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-05-28</date>
+		<version>1.1.1</version>
+		<changelog lang="en">
+			<change>[FEATURE] Option to install Subsilver2.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-05-28</date>
+		<version>1.1.2</version>
+		<changelog lang="en">
+			<change>[FIX] If installed, Subsilver2 was always made the default style.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-05-30</date>
+		<version>1.1.3</version>
+		<changelog lang="en">
+			<change>[FIX] Restore the admin after making all posts and users to get the logs correct.</change>
+			<change>[FIX] Reset the admin in umil_auto.php for the logs.</change>
+			<change>[FEATURE] Added French.</change>
+			<change>[CHANGE] Replaced the language text input with a select.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-05-30</date>
+		<version>1.1.4</version>
+		<changelog lang="en">
+			<change>[CHANGE] Updated to AutoMOD 1.0.0.</change>
+			<change>[FEATURE] AutoMOD setting "Preview changes" is on as default.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2010-07-12</date>
+		<version>1.1.4</version>
+		<changelog lang="en">
+			<change>[CHANGE] Finally moved to MOD Teams repo.</change>
 		</changelog>
 	</entry>
 </history>

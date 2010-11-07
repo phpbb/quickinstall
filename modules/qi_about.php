@@ -53,10 +53,10 @@ class qi_about
 		if ($use_changelog = file_exists($changelog_file))
 		{
 			// let's get the changelog :)
-			include($quickinstall_path . 'sources/blinky/includes/mod_parser.' . $phpEx);
+			include($quickinstall_path . 'sources/automod/includes/mod_parser.' . $phpEx);
 
 			$xml_parser = new xml_array();
-			$data = $xml_parser->parse(file_get_contents($changelog_file));
+			$data = $xml_parser->parse($changelog_file, file_get_contents($changelog_file));
 
 			foreach ($data[0]['children']['ENTRY'] as &$entry)
 			{

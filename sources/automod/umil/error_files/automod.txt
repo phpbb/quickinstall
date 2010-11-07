@@ -1,0 +1,11 @@
+AutoMOD
+
+Adding new config variable: preview_changes
+ERROR: Config variable preview_changes already exists.
+
+Adding new config variable: am_file_perms
+ERROR: Config variable am_file_perms already exists.
+
+Adding new config variable: am_dir_perms
+ERROR: Config variable am_dir_perms already exists.
+

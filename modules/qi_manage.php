@@ -4,6 +4,7 @@
 * @package quickinstall
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
+* @copyright (c) 2010 Jari Kanerva (tumba25)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -44,7 +45,7 @@ class qi_manage
 				{
 					$current_item = $quickinstall_path . 'boards/' . $item;
 
-					$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['database_prefix'] . $item);
+					$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['db_prefix'] . $item);
 
 					if (!file_exists($current_item) || !is_dir($current_item))
 					{
@@ -54,29 +55,26 @@ class qi_manage
 					file_functions::delete_dir($current_item);
 				}
 
-				$msg_title = 'BOARDS_DELETED_TITLE';
-				trigger_error($user->lang['BOARDS_DELETED'] . '<br /><br />' . sprintf($user->lang['BACK_TO_MANAGE'], qi::url('manage')));
-
-				break;
+				// Just return to main page after succesfull deletion.
+				qi::redirect('index.' . $phpEx);
+			break;
 
 			default:
 
 				// list of boards
-
-				$d = dir($quickinstall_path . 'boards');
-				while (false !== ($file = $d->read()))
+				$boards_arr = scandir($quickinstall_path . $qi_config['boards_dir']);
+				foreach ($boards_arr as $board)
 				{
-					if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($quickinstall_path . 'boards/' . $file))
+					if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($quickinstall_path . 'boards/' . $board))
 					{
 						continue;
 					}
 
 					$template->assign_block_vars('row', array(
-						'BOARD_NAME'	=> htmlspecialchars($file),
-						'BOARD_URL'		=> $quickinstall_path . 'boards/' . urlencode($file),
+						'BOARD_NAME'	=> htmlspecialchars($board),
+						'BOARD_URL'		=> $quickinstall_path . $qi_config['boards_dir'] . urlencode($board),
 					));
 				}
-				$d->close();
 
 				// Output page
 				qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
@@ -87,7 +85,7 @@ class qi_manage
 
 				qi::page_footer();
 
-				break;
+			break;
 		}
 	}
 }

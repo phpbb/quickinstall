@@ -4,6 +4,7 @@
 * @package quickinstall
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
+* @copyright (c) 2010 Jari Kanerva (tumba25)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -32,7 +33,7 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user, $phpbb_root_path, $quickinstall_path, $qi_config;
+		global $template, $user, $phpbb_root_path, $quickinstall_path, $qi_config, $mode;
 
 		$template->assign_vars(array(
 			'PAGE_TITLE'			=> $page_title,
@@ -43,6 +44,11 @@ class qi
 			'U_ABOUT'				=> self::url('about'),
 			'U_MANAGE'				=> self::url('manage'),
 			'U_MAIN'				=> self::url('main'),
+			'U_SETTINGS'				=> self::url('settings'),
+
+			'S_ABOUT' => ($mode == 'about') ? true : false,
+			'S_MANAGE' => ($mode == 'manage') ? true : false,
+			'S_MAIN' => ($mode == 'main') ? true : false,
 
 			'S_CONTENT_DIRECTION' 	=> $user->lang['DIRECTION'],
 			'S_CONTENT_ENCODING' 	=> 'UTF-8',
@@ -121,6 +127,7 @@ class qi
 	{
 		global $user;
 
+		$user->lang = (!empty($user->lang)) ? $user->lang : 'en';
 		if (is_array($lang_set))
 		{
 			foreach ($lang_set as $key => $lang_file)
@@ -154,9 +161,9 @@ class qi
 	{
 		global $phpEx, $qi_config, $quickinstall_path;
 
-		if ($lang_path === false)
+		if (empty($lang_path))
 		{
-			$lang_path = $quickinstall_path . 'language/' . basename($qi_config['qi_lang']) . '/';
+			$lang_path = $quickinstall_path . 'language/' . ((!empty($qi_config['qi_lang'])) ? basename($qi_config['qi_lang']) : 'en') . '/';
 		}
 
 		if (!file_exists($lang_path) || !is_dir($lang_path))
@@ -166,7 +173,7 @@ class qi
 
 		$language_filename = $lang_path . $lang_file . '.' . $phpEx;
 
-		if ((include($language_filename)) === false)
+		if ((@include($language_filename)) === false)
 		{
 			trigger_error("Language file $language_filename couldn't be opened.", E_USER_ERROR);
 		}
@@ -284,7 +291,8 @@ class qi
 
 				$msg_title = (isset($msg_title)) ? (isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : $msg_title) : (isset($user->lang['GENERAL_ERROR']) ? $user->lang['GENERAL_ERROR'] : 'General Error');
 				$msg_text = (isset($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
-				$l_return_index = '<a href="' . qi::url('main') . '">Return to quickinstall main page</a>';
+				$l_return_index = '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+				$l_return_index .= '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a>';
 
 				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 				echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
@@ -307,6 +315,9 @@ class qi
 				echo '			<h1>' . $msg_title . '</h1>';
 				echo '			<div>' . $msg_text . '</div>';
 
+				echo '			</div>';
+				echo '			<div style="padding-left: 10px;">';
+				echo '		' . $l_return_index;
 				echo '			</div>';
 				echo '			<span class="corners-bottom"><span></span></span>';
 				echo '		</div>';

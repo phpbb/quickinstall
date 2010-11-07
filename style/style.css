@@ -29,8 +29,8 @@ html {
 	color: #536482;
 	background: #DBD7D1;
 	/* Always show a scrollbar for short pages - stops the jump when the scrollbar appears. non-ie browsers */
-	height: 100%;
-	margin-bottom: 1px;
+	height: 101%;
+/*	margin-bottom: 1px;*/
 }
 
 body {
@@ -69,8 +69,8 @@ h2, caption {
 h3, h4 {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	font-size: 1.20em;
-	text-decoration: none; 
-	line-height: 1.20em; 
+	text-decoration: none;
+	line-height: 1.20em;
 	margin-top: 25px;
 }
 
@@ -97,8 +97,8 @@ hr {
 	height: 1px;
 }
 
-.small { 
-	font-size: 0.85em; 
+.small {
+	font-size: 0.85em;
 }
 
 /* General links  */
@@ -187,8 +187,8 @@ a:active {
 	margin: 0 3% 0 0;
 }
 
-* html #main { 
-	height: 350px; 
+* html #main {
+	height: 350px;
 }
 
 #page-body.simple-page-body {
@@ -202,8 +202,10 @@ a:active {
 ----------------------------------------*/
 #tabs {
 	line-height: normal;
-	margin: 0 0 -6px 7px;
+/*	margin: 0 0 -6px 7px;*/
 	min-width: 600px;
+
+	margin: -15px 7px -6px 0;
 }
 
 .rtl #tabs {
@@ -225,12 +227,14 @@ a:active {
 }
 
 #tabs a {
-	float: left;
+/*	float: left;*/
 	background:url("./images/bg_tabs1.gif") no-repeat 0% -34px;
 	margin: 0 1px 0 0;
 	padding: 0 0 0 7px;
 	text-decoration: none;
 	position: relative;
+
+	float: right;
 }
 
 .rtl #tabs a {
@@ -238,15 +242,17 @@ a:active {
 }
 
 #tabs a span {
-	float: left;
+/*	float: left;*/
 	display: block;
 	background: url("./images/bg_tabs2.gif") no-repeat 100% -34px;
 	padding: 7px 10px 4px 4px;
-	color: #767676;
+	color: #656565;
 	white-space: nowrap;
 	font-family: Arial, Helvetica, sans-serif;
 	text-transform: uppercase;
 	font-weight: bold;
+
+	float: right;
 }
 
 .rtl #tabs a span {
@@ -300,7 +306,7 @@ a:active {
 	padding: 0;
 }
 
-span.corners-top, span.corners-bottom, 
+span.corners-top, span.corners-bottom,
 span.corners-top span, span.corners-bottom span {
 	font-size: 1px;
 	line-height: 1px;
@@ -421,7 +427,7 @@ span.corners-bottom span {
 #menu li a:hover, #menu li a:hover span {
 	text-decoration: none;
 	background-color: #FFFFFF;
-	
+
 	color: #BC2A4D;
 }
 
@@ -703,7 +709,7 @@ input:hover, textarea:hover {
 	border-top: 1px solid #AFAEAA;
 	border-right: 1px solid #AFAEAA;
 	border-bottom: 1px solid #AFAEAA;
-	background-color: #E9E9E2; 
+	background-color: #E9E9E2;
 }
 
 input.langvalue, textarea.langvalue {
@@ -775,7 +781,7 @@ label img {
 
 fieldset.quick, p.quick {
 	margin: 0 0 5px;
-	padding: 5px 0 0; 
+	padding: 5px 0 0;
 	border: none;
 	background-color: transparent;
 	text-align: right;
@@ -828,7 +834,7 @@ select option.disabled {
 }
 
 /* Special case inputs */
-select#board_timezone, 
+select#board_timezone,
 select#full_folder_action {
 	width: 95%;
 }
@@ -951,6 +957,10 @@ fieldset dl:hover dt, fieldset dl:hover dd {
 	border-color: #666666;
 }
 
+fieldset dl:hover {
+	background-color: #f5f5f5;
+}
+
 fieldset dl:hover dt label {
 	color: #000000;
 }
@@ -993,7 +1003,6 @@ fieldset.submit-buttons legend {
 
 /* Input field styles
 ---------------------------------------- */
-
 input.radio, input.permissions-checkbox {
 	width: auto !important;
 	background-color: transparent;
@@ -1113,7 +1122,6 @@ input.disabled {
 	vertical-align: middle;
 }
 
-
 /* Action Highlighting
 ---------------------------------------- */
 .successbox, .errorbox {
@@ -1121,6 +1129,10 @@ input.disabled {
 	margin: 10px 0;
 	color: #FFFFFF;
 	text-align: center;
+}
+
+.large {
+	font-size: 1.2em;
 }
 
 .success {
@@ -1223,10 +1235,10 @@ input.disabled {
 /* Nice method for clearing floated blocks without having to insert any extra markup
 	From http://www.positioniseverything.net/easyclearing.html */
 .clearfix:after, #tabs:after, .row:after, #content:after, fieldset dl:after, #page-body:after {
-	content: "."; 
-	display: block; 
-	height: 0; 
-	clear: both; 
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
 	visibility: hidden;
 }
 
@@ -1294,7 +1306,7 @@ fieldset.permissions legend input{
 	height: 1.1em;
 }
 
-/* Permission sections */ 
+/* Permission sections */
 fieldset.permissions .permissions-simple {
 	text-align: left;
 	padding-top: 3px;
@@ -1490,7 +1502,7 @@ fieldset.permissions .permissions-switch {
 	background-image: url("./images/corners_right2.gif");
 }
 
-.permissions-panel span.corners-top, .permissions-panel span.corners-bottom, 
+.permissions-panel span.corners-top, .permissions-panel span.corners-bottom,
 .permissions-panel span.corners-top span, .permissions-panel span.corners-bottom span {
 	font-size: 1px;
 	line-height: 1px;
@@ -1568,7 +1580,7 @@ fieldset.permissions .permissions-switch {
 }
 
 .permissions-panel th.row4 {
-	background-image: none;	
+	background-image: none;
 	background-color: #E4E8EB;
 	color: #536482;
 	border: none;
@@ -1576,8 +1588,8 @@ fieldset.permissions .permissions-switch {
 
 .permissions-panel th a:link, .permissions-panel th a:hover, .permissions-panel th a:visited {
 	display: block;
-	color: #FFFFFF; 
-	text-decoration: underline; 
+	color: #FFFFFF;
+	text-decoration: underline;
 }
 
 .permissions-panel td.permissions-yes label:hover {
@@ -1602,4 +1614,17 @@ fieldset.permissions .permissions-switch {
 	display: block;
 	margin: 0;
 	padding: 0;
+}
+
+.settings-result {
+	margin-top: 2px;
+	font-size: 1.7em;
+}
+
+.greenish {
+	color: green;
+}
+
+.redish {
+	color: red;
 }

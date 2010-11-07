@@ -1,0 +1,222 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{L_SETTINGS}</h1>
+<!-- IF S_SETTINGS_SUCCESS --><h2 class="settings-result greenish">{L_SETTINGS_SUCCESS}</h2><!-- ELSEIF S_SETTINGS_FAILURE --><h2 class="settings-result redish">{L_SETTINGS_FAILURE}</h2><!-- ENDIF -->
+<!-- IF S_IN_INSTALL --><p class="errorbox large">{L_ONLY_LOCAL}</p><!-- ENDIF -->
+
+<!-- IF not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE --><div class="errorbox"><!-- ENDIF -->
+	<!-- IF not S_BOARDS_WRITABLE --><p>{L_BOARDS_NOT_WRITABLE}</p><!-- ENDIF -->
+	<!-- IF not S_CACHE_WRITABLE --><p>{L_CACHE_NOT_WRITABLE}</p><!-- ENDIF -->
+	<!-- IF not S_CONFIG_WRITABLE --><p>{L_CONFIG_NOT_WRITABLE}</p><!-- ENDIF -->
+<!-- IF not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE --><p>{L_NEED_WRITABLE}</p></div><!-- ENDIF -->
+
+<!-- IF ERROR --><div class="errorbox">{ERROR}</div><!-- ENDIF -->
+
+<!-- IF S_BOARDS_WRITABLE and S_CACHE_WRITABLE and S_CONFIG_WRITABLE -->
+<form method="post" action="{U_UPDATE_SETTINGS}">
+
+<fieldset>
+	<legend>{L_SETTINGS}</legend>
+	<dl>
+		<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
+		<dd>
+			<select name="qi_config[dbms]" id="dbms">
+				<option value="firebird"<!-- IF CONFIG_DBMS == firebird --> selected="selected"<!-- ENDIF -->>Firebird</option>
+				<option value="mysqli"<!-- IF CONFIG_DBMS == mysqli --> selected="selected"<!-- ENDIF -->>MySQLi</option>
+				<option value="mysql"<!-- IF CONFIG_DBMS == mysql --> selected="selected"<!-- ENDIF -->>MySQL</option>
+				<option value="mssql"<!-- IF CONFIG_DBMS == mssql --> selected="selected"<!-- ENDIF -->>MSSQL</option>
+				<option value="oracle"<!-- IF CONFIG_DBMS == oracle --> selected="selected"<!-- ENDIF -->>Oracle</option>
+				<option value="postgres"<!-- IF CONFIG_DBMS == postgres --> selected="selected"<!-- ENDIF -->>Postgres</option>
+				<option value="sqlite"<!-- IF CONFIG_DBMS == sqlite --> selected="selected"<!-- ENDIF -->>SQLite</option>
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="dbhost">{L_DBHOST}:*</label><br />{L_DBHOST_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="dbhost" name="qi_config[dbhost]" value="{CONFIG_DBHOST}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="dbport">{L_DBPORT}:</label><br />{L_DBPORT_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="dbport" name="qi_config[dbport]" value="{CONFIG_DBPORT}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="dbuser">{L_DBUSER}:*</label><br />{L_DBUSER_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="dbuser" name="qi_config[dbuser]" value="{CONFIG_DBUSER}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="dbpasswd">{L_DBPASSWD}:*</label><br />{L_DBPASSWD_EXPLAIN}</dt>
+		<dd>
+			<input class="text medium" type="text" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
+			<label><input type="checkbox" id="no_dbpasswd" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF --> /> {L_NO_PASSWORD}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="table_prefix">{L_TABLE_PREFIX}:*</label><br />{L_TABLE_PREFIX_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="boards_dir">{L_BOARDS_DIR}:*</label><br />{L_BOARDS_DIR_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="qi_lang">{L_QI_LANG}:*</label><br />{L_QI_LANG_EXPLAIN}</dt>
+		<dd>
+			<select id="qi_lang" name="qi_config[qi_lang]">
+				<!-- BEGIN lang_row -->
+					<option value="{lang_row.LANG_CODE}"<!-- IF lang_row.S_SELECTED --> selected="selected"<!-- ENDIF -->>{lang_row.LANG_NAME}</option>
+				<!-- END lang_row -->
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="qi_tz">{L_QI_TZ}:*</label><br />{L_QI_TZ_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="qi_tz" name="qi_config[qi_tz]" value="{CONFIG_QI_TZ}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_QI_DST}:</label><br />{L_QI_DST_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" name="qi_config[qi_dst]" value="1"<!-- IF CONFIG_QI_DST == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" name="qi_config[qi_dst]" value="0"<!-- IF CONFIG_QI_DST == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="db_prefix">{L_DB_PREFIX}:*</label><br />{L_DB_PREFIX_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="admin_name">{L_ADMIN_NAME}:*</label><br />{L_ADMIN_NAME_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="admin_pass">{L_ADMIN_PASS}:*</label><br />{L_ADMIN_PASS_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="admin_email">{L_ADMIN_EMAIL}:*</label><br />{L_ADMIN_EMAIL_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="admin_email" name="qi_config[admin_email]" value="{CONFIG_ADMIN_EMAIL}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="site_name">{L_SITE_NAME}:*</label><br />{L_SITE_NAME_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="site_desc">{L_SITE_DESC}:</label><br />{L_SITE_DESC_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="default_lang">{L_DEFAULT_LANG}:*</label><br />{L_DEFAULT_LANG_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="default_lang" name="qi_config[default_lang]" value="{CONFIG_DEFAULT_LANG}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="server_name">{L_SERVER_NAME}:*</label><br />{L_SERVER_NAME_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="server_port">{L_SERVER_PORT}:*</label><br />{L_SERVER_PORT_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="server_port" name="qi_config[server_port]" value="{CONFIG_SERVER_PORT}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="cookie_domain">{L_COOKIE_DOMAIN}:*</label><br />{L_COOKIE_DOMAIN_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{CONFIG_COOKIE_DOMAIN}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_COOKIE_SECURE}:</label><br />{L_COOKIE_SECURE_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" name="qi_config[cookie_secure]" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+			<label><input type="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="board_email">{L_BOARD_EMAIL}:*</label><br />{L_BOARD_EMAIL_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_EMAIL_ENABLE}:</label><br />{L_EMAIL_ENABLE_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" name="qi_config[email_enable]" value="1"<!-- IF CONFIG_EMAIL_ENABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+			<label><input type="radio" name="qi_config[email_enable]" value="0"<!-- IF CONFIG_EMAIL_ENABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_SMTP_DELIVERY}:</label><br />{L_SMTP_DELIVERY_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" name="qi_config[smtp_delivery]" value="1"<!-- IF CONFIG_SMTP_DELIVERY == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" name="qi_config[smtp_delivery]" value="0"<!-- IF CONFIG_SMTP_DELIVERY == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="smtp_host">{L_SMTP_HOST}:</label><br />{L_SMTP_HOST_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="smtp_host" name="qi_config[smtp_host]" value="{CONFIG_SMTP_HOST}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="smtp_port">{L_SMTP_PORT}:</label><br />{L_SMTP_PORT_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="3" maxlength="5" id="smtp_port" name="qi_config[smtp_port]" value="{CONFIG_SMTP_PORT}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="smtp_auth">{L_SMTP_AUTH}:</label><br />{L_SMTP_AUTH_EXPLAIN}</dt>
+		<dd>
+			<select name="qi_config[smtp_auth]" id="smtp_auth">
+				<option value="PLAIN"<!-- IF CONFIG_SMTP_AUTH == PLAIN --> selected="selected"<!-- ENDIF -->>PLAIN</option>
+				<option value="LOGIN"<!-- IF CONFIG_SMTP_AUTH == LOGIN --> selected="selected"<!-- ENDIF -->>LOGIN</option>
+				<option value="CRAM-MD5"<!-- IF CONFIG_SMTP_AUTH == CRAM-MD5 --> selected="selected"<!-- ENDIF -->>CRAM-MD5</option>
+				<option value="DIGEST-MD5"<!-- IF CONFIG_SMTP_AUTH == DIGEST-MD5 --> selected="selected"<!-- ENDIF -->>DIGEST-MD5</option>
+				<option value="POP-BEFORE-SMTP"<!-- IF CONFIG_SMTP_AUTH == POP-BEFORE-SMTP --> selected="selected"<!-- ENDIF -->>POP-BEFORE-SMTP</option>
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="smtp_user">{L_SMTP_USER}:</label><br />{L_SMTP_USER_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="smtp_user" name="qi_config[smtp_user]" value="{CONFIG_SMTP_USER}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="smtp_pass">{L_SMTP_PASS}:</label><br />{L_SMTP_PASS_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AUTOMOD}:</label><br />{L_AUTOMOD_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_POPULATE}:</label><br />{L_POPULATE_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[populate]" value="1"<!-- IF CONFIG_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[populate]" value="0"<!-- IF CONFIG_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_SUBSILVER}:</label><br />{L_SUBSILVER_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[subsilver]" value="1"<!-- IF CONFIG_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[subsilver]" value="2"<!-- IF CONFIG_SUBSILVER == 2 --> checked="checked"<!-- ENDIF --> /> {L_YES}, {L_DEFAULT}</label>
+			<label><input type="radio" class="radio" name="qi_config[subsilver]" value="0"<!-- IF CONFIG_SUBSILVER == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+
+	<p class="submit-buttons">
+		<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp;
+		<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+	</p>
+</fieldset>
+
+<p>{L_STAR_MANDATORY}</p>
+
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE overall_footer.html -->

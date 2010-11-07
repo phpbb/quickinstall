@@ -1,0 +1,452 @@
+<!-- INCLUDE overall_header.html -->
+
+<a name="maincontent"></a>
+
+<!-- IF S_WRITABLE_WARN -->
+	<p class="errorbox">{L_STORE_NOT_WRITABLE}</p>
+<!-- ENDIF -->
+
+<!-- IF S_FRONTEND -->
+
+	<h1>{L_ACP_MODS}</h1>
+
+	<p>{L_MODS_EXPLAIN}</p>
+
+	<table cellspacing="1">
+		<col class="row1" /><col class="row2" /><col class="row2" />
+	<thead>
+	<tr>
+		<th>{L_NAME}</th>
+		<th>{L_OPTIONS}</th>
+		<th>{L_ACTIONS}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td class="row3" colspan="3"><strong>{L_INSTALLED_MODS}</strong></td>
+	</tr>
+	<!-- IF not .installed -->
+		<tr>
+			<td class="row1" colspan="3" style="text-align: center;">{L_NO_INSTALLED_MODS}</td>
+		</tr>
+	<!-- ENDIF -->
+	<!-- BEGIN installed -->
+	<tr>
+		<td><strong>{installed.MOD_NAME}</strong></a></td>
+		<td style="text-align: center;"><a href="{installed.U_DETAILS}">{L_DETAILS}</a></td>
+		<td style="text-align: center;"><a href="{installed.U_UNINSTALL}">{L_UNINSTALL}</a></td>
+	</tr>
+	<!-- END installed -->
+	<tr>
+		<td class="row3" colspan="3"><strong>{L_UNINSTALLED_MODS}</strong></td>
+	</tr>
+	<!-- IF not .uninstalled -->
+	<tr>
+		<td class="row1" colspan="3" style="text-align: center;">{L_NO_UNINSTALLED_MODS}</td>
+	</tr>
+	<!-- ENDIF -->
+	<!-- BEGIN uninstalled -->
+	<tr>
+		<td><strong>{uninstalled.MOD_NAME}</strong></a></td>
+		<td style="text-align: center;"><a href="{uninstalled.U_DETAILS}">{L_DETAILS}</a></td>
+		<td style="text-align: center;"><a href="{uninstalled.U_INSTALL}">{L_INSTALL}</a>&nbsp;|&nbsp;<a href="{uninstalled.U_DELETE}">{L_DELETE}</a></td>
+	</tr>
+	<!-- END uninstalled -->
+	</tbody>
+	</table>
+	
+	<!-- IF S_MOD_UPLOAD -->
+	<br />
+	
+	<form action="{U_UPLOAD}" method="post" id="mod_upload"{S_FORM_ENCTYPE}>
+	<fieldset>
+		<legend>{L_MOD_UPLOAD}</legend>
+		<dl>
+			<p>{L_MOD_UPLOAD_EXPLAIN}</p>
+			<input type="file" name="modupload" id="modupload" value="" style="width:50%" />
+			{S_FORM_TOKEN}
+			<br /><br /><input type="submit" name="submit" value="{L_UPLOAD}" id="submit" class="button1" />
+		</dl>
+	</fieldset>
+	</form>
+	<!-- ENDIF -->
+	
+<!-- ELSEIF S_MOD_SUCCESSBOX -->
+
+	<div class="successbox">
+		<p>{MESSAGE}</p>
+		<br />
+		<p><a href="{U_RETURN}">{L_RETURN_MODS}</a></p>
+	</div>
+
+<!-- ELSEIF S_DETAILS -->
+
+	<a href="{U_BACK}" style="float: right">&laquo; {L_BACK}</a>
+
+	<h1>{L_MOD_DETAILS}</h1>
+
+	<p>{L_MOD_DETAILS_EXPLAIN}</p>
+
+	<fieldset>
+		<legend>{L_MOD_DETAILS}</legend>
+		<dl>
+			<dt><label for="name">{L_NAME}:</label></dt>
+			<dd><strong id="name">{MOD_NAME}</strong></dd>
+		</dl>
+		<dl>
+			<dt><label for="version">{L_VERSION}:</label></dt>
+			<dd><p id="version">{MOD_VERSION}</p></dd>
+		</dl>
+		<dl>
+			<dt><label for="path">{L_PATH}:</label></dt>
+			<dd><p id="path">{MOD_PATH}</p></dd>
+		</dl>
+		<!-- IF S_INSTALL_TIME -->
+		<dl>
+			<dt><label for="install_time">{L_INSTALL_TIME}:</label></dt>
+			<dd><p id="install_time">{MOD_INSTALL_TIME}</p></dd>
+		</dl>
+		<!-- ENDIF -->
+		<dl>
+			<dt><label for="description">{L_DESCRIPTION}:</label></dt>
+			<dd><p id="description">{MOD_DESCRIPTION}</p></dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{L_AUTHOR_INFORMATION}</legend>
+		<!-- BEGIN author_list -->
+		<dl>
+			<dt><label for="author_name">{L_AUTHOR_NAME}:</label></dt>
+			<dd><strong id="author_name">{author_list.AUTHOR_NAME}</strong></dd>
+		</dl>
+		<!-- IF author_list.AUTHOR_EMAIL -->
+		<dl>
+			<dt><label for="author_email">{L_AUTHOR_EMAIL}:</label></dt>
+			<dd><strong id="author_email"><a href="mailto:{author_list.AUTHOR_EMAIL}">{author_list.AUTHOR_EMAIL}</a></strong></dd>
+		</dl>
+		<!-- ENDIF -->
+		<!-- IF author_list.AUTHOR_WEBSITE -->
+		<dl>
+			<dt><label for="author_url">{L_AUTHOR_URL}:</label></dt>
+			<dd><strong id="author_url"><a href="{author_list.AUTHOR_WEBSITE}">{author_list.AUTHOR_WEBSITE}</a></strong></dd>
+		</dl>
+		<!-- ENDIF -->
+		<!-- END author_list -->
+	</fieldset>
+
+	<!-- IF S_AUTHOR_NOTES -->
+	<fieldset>
+		<legend>{L_AUTHOR_NOTES}</legend>
+		{AUTHOR_NOTES}
+	</fieldset>
+	<!-- ENDIF -->
+
+	<!-- IF S_CONTRIB_AVAILABLE or S_UNKNOWN_LANGUAGES or S_UNKNOWN_TEMPLATES or (.board_templates and .avail_templates) -->
+	<fieldset>
+		<legend>{L_ADDITIONAL_CHANGES}</legend>
+		<!-- BEGIN contrib -->
+		<dl>
+			<dt><label>{L_MOD_NAME}:</label></dt>
+			<dd><strong>{contrib.MOD_NAME}</strong> <!-- IF contrib.U_INSTALL -->(<a href="{contrib.U_INSTALL}">{L_INSTALL_MOD}</a>)<!-- ENDIF --></dd>
+		</dl>
+		<!-- END contrib -->
+		<!-- BEGIN unknown_templates -->
+		<dl>
+			<dt><label>{L_STYLE_NAME}:</label></dt>
+			<dd><strong>{unknown_templates.TEMPLATE_NAME}</strong> <!-- IF unknown_templates.U_INSTALL -->(<a href="{unknown_templates.U_INSTALL}">{L_INSTALL_MOD}</a>)<!-- ENDIF --></dd>
+		</dl>
+		<!-- END unknown_templates -->
+		<!-- BEGIN unknown_lang -->
+		<dl>
+			<dt><label>{L_LANGUAGE_NAME}:</label></dt>
+			<dd><strong>{unknown_lang.ENGLISH_NAME}</strong> &ndash; {unknown_lang.LOCAL_NAME} <!-- IF unknown_lang.U_INSTALL -->(<a href="{unknown_lang.U_INSTALL}">{L_INSTALL_MOD}</a>)<!-- ENDIF --></dd>
+		</dl>
+		<!-- END unknown_lang -->
+
+		<!-- IF .board_templates and .avail_templates -->
+		<form action="{S_FORM_ACTION}" method="post">
+		<!-- IF .unknown_templates or .unknown_lang or .contrib -->
+		<br /><hr /><br />
+		<!-- ENDIF -->
+		<div>{L_APPLY_THESE_CHANGES}
+		<select name="source">
+		<!-- BEGIN avail_templates -->
+			<option value="{avail_templates.XML_FILE}">{avail_templates.TEMPLATE_NAME}</option>
+		<!-- END avail_templates -->
+		</select>
+
+		{L_APPLY_TEMPLATESET}
+		<select name="dest">
+		<!-- BEGIN board_templates -->
+			<option value="{board_templates.TEMPLATE_NAME}">{board_templates.TEMPLATE_NAME}</option>
+		<!-- END board_templates -->
+		</select>
+		{S_FORM_TOKEN}
+		{S_HIDDEN_FIELDS}
+		<br />
+		<input type="submit" name="template_submit" class="button1" value="{L_SUBMIT}" />
+		</div>
+		</form>
+		<!-- ENDIF -->
+	</fieldset>
+	<!-- ENDIF -->
+
+	<!-- IF S_CHANGELOG -->
+	<fieldset>
+		<legend>{L_MOD_CHANGELOG}</legend>
+		<!-- BEGIN changelog -->
+		<dl>
+			<dt><label for="change_date">{L_CHANGE_DATE}</label></dt>
+			<dt><strong id="change_date">{changelog.DATE}</strong></dt>
+		</dl>
+		<dl>
+			<dt><label for="change_version">{L_CHANGE_VERSION}</label></dt>
+			<dt><strong id="change_version">{changelog.VERSION}</strong></dt>
+		</dl>
+		<dl>
+			<dt><label for="changes">{L_CHANGES}</label></dt>
+			<dt id="changes">
+				<ul>
+					<!-- BEGIN changes -->
+					<li>{changelog.changes.CHANGE}</li>
+					<!-- END changes -->
+				</ul>
+			</dt>
+		</dl>
+		<!-- END changelog -->
+	</fieldset>
+	<!-- ENDIF -->
+
+	<a href="{U_BACK}" style="float: right">&laquo; {L_BACK}</a>
+
+<!-- ELSEIF S_PRE_INSTALL -->
+
+	<a href="{U_BACK}" style="float: right">&laquo; {L_BACK}</a>
+
+	<h1>{L_PRE_INSTALL}</h1>
+
+	<p>{L_PRE_INSTALL_EXPLAIN}</p>
+
+	<!-- IF S_AUTHOR_NOTES -->
+	<fieldset>
+		<legend>{L_AUTHOR_NOTES}</legend>
+		{AUTHOR_NOTES}
+	</fieldset>
+	<!-- ENDIF -->
+
+	<form id="acp_mods" method="post" action="{U_INSTALL}">
+<!-- IF .data -->
+	<!-- IF S_CONNECTION_SUCCESS -->
+		<div class="successbox">
+			<p>{L_CONNECTION_SUCCESS}</p>
+		</div>
+	<!-- ELSEIF S_CONNECTION_FAILED -->
+		<div class="errorbox">
+			<p>{L_CONNECTION_FAILED}<br />{ERROR_MSG}</p>
+		</div>
+	<!-- ENDIF -->
+
+	<!-- INCLUDE acp_mods_ftp.html -->
+<!-- ENDIF -->
+	<fieldset class="submit-buttons">
+		<legend>{L_INSTALL}</legend>
+		{S_HIDDEN_FIELDS}
+		<input type="hidden" name="mod_path" value="{MOD_PATH}" />
+		<!-- IF .data -->
+		<input class="button1" type="submit" name="test_connection" value="{L_TEST_CONNECTION}" />
+		<!-- ENDIF -->
+		<input class="button1" type="submit" name="install" value="{L_INSTALL}" />
+	</fieldset>
+
+	<!-- INCLUDE acp_mods_actions.html -->
+
+	<!-- IF S_NEW_FILES or S_EDITS or S_SQL -->
+	<fieldset class="submit-buttons">
+		<legend>{L_INSTALL}</legend>
+		<input type="hidden" name="mod_path" value="{MOD_PATH}" />
+		<input class="button1" type="submit" name="install" value="{L_INSTALL}" />
+	</fieldset>
+	<!-- ENDIF -->
+	</form>
+
+	<br />
+
+	<a href="{U_BACK}" style="float: right">&laquo; {L_BACK}</a>
+
+<!-- ELSEIF S_INSTALL or S_UNINSTALL -->
+
+	<!-- IF not S_ERROR -->
+	<!-- IF S_UNINSTALL -->
+	<h1>{L_UNINSTALLED}</h1>
+
+	<p>{L_UNINSTALLED_EXPLAIN}</p>
+	<!-- ELSE -->
+	<h1>{L_INSTALLED}</h1>
+
+	<p>{L_INSTALLED_EXPLAIN}</p>
+	<!-- ENDIF -->
+	<!-- ENDIF -->
+	<!-- IF S_MANUAL_INSTRUCTIONS --><p>{L_AM_MANUAL_INSTRUCTIONS}</p><!-- ENDIF -->
+
+	<!-- IF S_ERROR or .error -->
+	<div class="errorbox">
+		<p>{L_INSTALL_ERROR}</p>
+
+		<!-- BEGIN error -->
+		<span>{error.ERROR}</span><br />
+		<!-- END error -->
+		<br />
+
+		<form id="acp_mods_err" method="post" action="{U_RETRY}">
+		<fieldset class="submit-buttons">
+			<legend>{L_RETRY}</legend>
+			<input class="button1" type="submit" name="retry" value="{L_RETRY}" />
+			<input class="button2" type="submit" name="force" value="{L_FORCE_INSTALL}" onclick="javascript:return confirm('{LA_FORCE_CONFIRM}'); " />
+			{S_FORM_TOKEN}
+			{S_HIDDEN_FIELDS}
+		</fieldset>
+		</form>
+	</div>
+	<!-- ELSE -->
+	<div class="successbox">
+		<p><!-- IF S_INSTALL -->{L_INSTALLED}<!-- ELSE -->{L_UNINSTALLED}<!-- ENDIF --></p>
+
+		<!-- IF S_FORCE -->
+		<p><strong>{L_INSTALL_FORCED}</strong></p>
+		<!-- ENDIF -->
+
+		<!-- IF U_PHP_INSTALLER -->
+		<p class="errorbox notice"><a href="{U_PHP_INSTALLER}">{L_GO_PHP_INSTALLER}</a></p>
+		<!-- ENDIF -->
+
+		<p><a href="{U_RETURN}">{L_RETURN_MODS}</a></p>
+	</div>
+	<!-- ENDIF -->
+
+	<!-- IF S_DIY and (not S_ERROR or S_FORCE) -->
+	<fieldset>
+		<legend>{L_DIY_INSTRUCTIONS}</legend>
+		<!-- BEGIN diy_instructions -->
+		<div>{diy_instructions.DIY_INSTRUCTION}</div>
+		<!-- END diy_instructions -->
+	</fieldset>
+	<!-- ENDIF -->
+
+	<!-- INCLUDE acp_mods_actions.html -->
+
+	<form id="acp_mods" method="post" action="{U_RETURN}">
+	<fieldset class="submit-buttons">
+		<legend>{L_RETURN_MODS}</legend>
+		<input class="button1" type="submit" name="return" value="{L_RETURN_MODS}" />
+	</fieldset>
+	</form>
+
+<!-- ELSEIF S_PRE_UNINSTALL -->
+
+	<a href="{U_BACK}" style="float: right">&laquo; {L_BACK}</a>
+
+	<h1>{L_PRE_UNINSTALL}</h1>
+
+	<p>{L_PRE_UNINSTALL_EXPLAIN}</p>
+
+	<!-- IF S_AUTHOR_NOTES -->
+	<fieldset>
+		<legend>{L_AUTHOR_NOTES}</legend>
+		{AUTHOR_NOTES}
+	</fieldset>
+	<!-- ENDIF -->
+
+	<form id="acp_mods" method="post" action="{U_UNINSTALL}">
+<!-- IF .data -->
+	<!-- IF S_CONNECTION_SUCCESS -->
+		<div class="successbox">
+			<p>{L_CONNECTION_SUCCESS}</p>
+		</div>
+	<!-- ELSEIF S_CONNECTION_FAILED -->
+		<div class="errorbox">
+			<p>{L_CONNECTION_FAILED}<br />{ERROR_MSG}</p>
+		</div>
+	<!-- ENDIF -->
+
+	<!-- INCLUDE acp_mods_ftp.html -->
+<!-- ENDIF -->
+	<fieldset class="submit-buttons">
+		<legend>{L_UNINSTALL}</legend>
+		<input type="hidden" name="mod_id" value="{MOD_ID}" />
+		<input class="button1" type="submit" name="uninstall" value="{L_UNINSTALL}" />
+	</fieldset>
+
+	<!-- INCLUDE acp_mods_actions.html -->
+
+	<fieldset class="submit-buttons">
+		<legend>{L_UNINSTALL}</legend>
+		<input type="hidden" name="mod_id" value="{MOD_ID}" />
+		<input class="button1" type="submit" name="uninstall" value="{L_UNINSTALL}" />
+	</fieldset>
+	</form>
+
+	<br />
+
+	<a href="{U_BACK}" style="float: right">&laquo; {L_BACK}</a>
+
+<!-- ENDIF -->
+
+<!-- IF S_CONFIG -->
+	<h1>{L_ACP_AUTOMOD_CONFIG}</h1>
+
+	<!-- IF ERROR -->
+	<div class="errorbox">
+		<p>{ERROR}</p>
+	</div>
+	<!-- ENDIF -->
+
+	<p>{L_MODS_CONFIG_EXPLAIN}</p>
+	<form action="{U_CONFIG}" method="post" id="automod_config">
+	<fieldset>
+		<legend>{L_VERSION}</legend>
+		<dl>
+			<dt>{L_AUTOMOD_VERSION}</dt>
+			<dd>{AUTOMOD_VERSION}</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{L_MOD_CONFIG}</legend>
+		<dl>
+			<dt><label for="write_method">{L_WRITE_METHOD}:</label><br /><span>{L_WRITE_METHOD_EXPLAIN}</span></dt>
+			<dd><label><input type="radio" class="radio" name="write_method" value="{WRITE_METHOD_DIRECT}"{WRITE_DIRECT} onclick="dE('ftp_details', -1, 'block');" /> {L_WRITE_METHOD_DIRECT}</label>
+				<label><input type="radio" class="radio" name="write_method" value="{WRITE_METHOD_FTP}"{WRITE_FTP} onclick="dE('ftp_details', 1, 'block');" /> {L_WRITE_METHOD_FTP}</label>
+				<label><input type="radio" class="radio" name="write_method" value="{WRITE_METHOD_MANUAL}"{WRITE_MANUAL} onclick="dE('ftp_details', -1, 'block');" /> {L_WRITE_METHOD_MANUAL}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="compress_method">{L_FILE_TYPE}:</label><br /><span>{L_FILE_TYPE_EXPLAIN}</span></dt>
+			<dd><!-- BEGIN compress --><label><input type="radio" class="radio" name="compress_method"<!-- IF compress.METHOD eq COMPRESS_METHOD --> id="method" checked="checked"<!-- ENDIF --> value="{compress.METHOD}" /> {compress.METHOD}</label><!-- END compress --></dd>
+		</dl>
+		<dl>
+			<dt><label for="file_perms">{L_FILE_PERMS}:</label><br /><span>{L_FILE_PERMS_EXPLAIN}</span></dt>
+			<dd><input type="text" class="input" name="file_perms" value="{FILE_PERMS}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="file_perms">{L_DIR_PERMS}:</label><br /><span>{L_DIR_PERMS_EXPLAIN}</span></dt>
+			<dd><input type="text" class="input" name="dir_perms" value="{DIR_PERMS}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="preview_changes">{L_PREVIEW_CHANGES}:</label><br /><span>{L_PREVIEW_CHANGES_EXPLAIN}</span></dt>
+			<dd><label><input type="radio" class="radio" name="preview_changes" value="1"{PREVIEW_CHANGES_YES} /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="preview_changes" value="0"{PREVIEW_CHANGES_NO} /> {L_NO}</label>
+			</dd>
+		</dl>
+	</fieldset>
+
+	<!-- INCLUDE acp_mods_ftp.html -->
+
+	<fieldset class="submit-buttons">
+		{S_FORM_TOKEN}
+		<input type="submit" name="submit" value="{L_SUBMIT}" id="submit" class="button1" />
+	</fieldset>
+	</form>
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

@@ -38,20 +38,48 @@ else
 		<dd><input class="text medium" type="text" id="site_desc" name="site_desc" value="{SITE_DESC}" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="dbname">{L_BOARD_DBNAME}*:</label></dt>
+		<dt><label for="dbname">{L_BOARD_DBNAME}:*</label></dt>
 		<dd><input class="text medium" type="text" id="dbname" name="dbname" /></dd>
 	</dl>
 	<dl>
-		<dt><label for="redirect">{L_REDIRECT}:</label></dt>
-		<dd><label><input type="checkbox" class="radio" id="redirect" name="redirect" checked="checked" value="1" /> {L_ENABLED}</label></dd>
+		<dt><label>{L_REDIRECT_BOARD}:</label></dt>
+		<dd>
+			<label><input type="radio" class="radio" name="redirect" value="1"<!-- IF S_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="redirect" value="0"<!-- IF S_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
 	</dl>
 	<dl>
-		<dt><label for="blinky">{L_BLINKY}:</label></dt>
-		<dd><label><input type="checkbox" class="radio" id="blinky" name="blinky" checked="checked" value="1" /> {L_ENABLED}</label></dd>
+		<dt><label for="automod">{L_AUTOMOD_INSTALL}:</label></dt>
+		<dd>
+			<label><input type="radio" class="radio" name="automod" value="1"<!-- IF S_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="automod" value="0"<!-- IF S_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="make_writable">{L_MAKE_WRITABLE}:</label><br />{L_NO_IMPACT_WIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="make_writable" value="1"<!-- IF S_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="make_writable" value="0"<!-- IF S_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="populate">{L_POPULATE}:</label><br />{L_POPULATE_MAIN_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="populate" value="1"<!-- IF S_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="populate" value="0"<!-- IF S_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="populate">{L_SUBSILVER}:</label></dt>
+		<dd>
+			<label><input type="radio" class="radio" name="subsilver" value="1"<!-- IF S_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="subsilver" value="2"<!-- IF S_SUBSILVER == 2 --> checked="checked"<!-- ENDIF --> /> {L_YES}, {L_DEFAULT}</label>
+			<label><input type="radio" class="radio" name="subsilver" value="0"<!-- IF S_SUBSILVER == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
 	</dl>
 
 	<p class="quick">
-		<input type="submit" name="submituser" value="{L_SUBMIT}" class="button1" />
+		<input type="submit" name="submituser" id="submituser" value="{L_SUBMIT}" class="button1" onclick="document.getElementById('submituser').style.display='none';" />
 	</p>
 </fieldset>
 

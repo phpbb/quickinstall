@@ -4,6 +4,7 @@
 * @package quickinstall
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
+* @copyright (c) 2010 Jari Kanerva (tumba25)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -154,6 +155,44 @@ class file_functions
 		{
 			$dir .= '/';
 		}
+	}
+
+	/**
+	 * Recursive make all files and directories world writable.
+	 */
+	public static function make_writable($dir, $root = true)
+	{
+		global $phpEx;
+
+		$file_arr = scandir($dir);
+		$dir .= '/';
+
+		foreach ($file_arr as $file)
+		{
+			if ($file == '.' || $file == '..')
+			{
+				continue;
+			}
+
+			if ($root && $file == 'config.' . $phpEx)
+			{
+				chmod($dir . $file, 0644);
+				continue;
+			}
+
+			$file = $dir . $file;
+
+			if (is_file($file))
+			{
+				chmod($file, 0666);
+			}
+			else
+			{
+				chmod($file, 0777);
+				self::make_writable($file, false);
+			}
+		}
+
 	}
 }
 
