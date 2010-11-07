@@ -76,6 +76,11 @@ class qi_manage
 					));
 				}
 
+				$template->assign_vars(array(
+					'S_IN_INSTALL' => false,
+					'S_IN_SETTINGS' => false,
+					'PAGE_MAIN'		=> false,
+				));
 				// Output page
 				qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
 

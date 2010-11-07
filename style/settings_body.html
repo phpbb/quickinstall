@@ -21,13 +21,12 @@
 		<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
 		<dd>
 			<select name="qi_config[dbms]" id="dbms">
-				<option value="firebird"<!-- IF CONFIG_DBMS == firebird --> selected="selected"<!-- ENDIF -->>Firebird</option>
-				<option value="mysqli"<!-- IF CONFIG_DBMS == mysqli --> selected="selected"<!-- ENDIF -->>MySQLi</option>
-				<option value="mysql"<!-- IF CONFIG_DBMS == mysql --> selected="selected"<!-- ENDIF -->>MySQL</option>
-				<option value="mssql"<!-- IF CONFIG_DBMS == mssql --> selected="selected"<!-- ENDIF -->>MSSQL</option>
-				<option value="oracle"<!-- IF CONFIG_DBMS == oracle --> selected="selected"<!-- ENDIF -->>Oracle</option>
-				<option value="postgres"<!-- IF CONFIG_DBMS == postgres --> selected="selected"<!-- ENDIF -->>Postgres</option>
-				<option value="sqlite"<!-- IF CONFIG_DBMS == sqlite --> selected="selected"<!-- ENDIF -->>SQLite</option>
+				<option value="firebird"<!-- IF CONFIG_DBMS == 'firebird' --> selected="selected"<!-- ENDIF -->>Firebird</option>
+				<option value="mysql"<!-- IF CONFIG_DBMS == 'mysql' --> selected="selected"<!-- ENDIF -->>MySQL</option>
+				<option value="mssql"<!-- IF CONFIG_DBMS == 'mssql' --> selected="selected"<!-- ENDIF -->>MSSQL</option>
+				<option value="oracle"<!-- IF CONFIG_DBMS == 'oracle' --> selected="selected"<!-- ENDIF -->>Oracle</option>
+				<option value="postgres"<!-- IF CONFIG_DBMS == 'postgres' --> selected="selected"<!-- ENDIF -->>Postgres</option>
+				<option value="sqlite"<!-- IF CONFIG_DBMS == 'sqlite' --> selected="selected"<!-- ENDIF -->>SQLite</option>
 			</select>
 		</dd>
 	</dl>
@@ -156,11 +155,11 @@
 		<dt><label for="smtp_auth">{L_SMTP_AUTH}:</label><br />{L_SMTP_AUTH_EXPLAIN}</dt>
 		<dd>
 			<select name="qi_config[smtp_auth]" id="smtp_auth">
-				<option value="PLAIN"<!-- IF CONFIG_SMTP_AUTH == PLAIN --> selected="selected"<!-- ENDIF -->>PLAIN</option>
-				<option value="LOGIN"<!-- IF CONFIG_SMTP_AUTH == LOGIN --> selected="selected"<!-- ENDIF -->>LOGIN</option>
-				<option value="CRAM-MD5"<!-- IF CONFIG_SMTP_AUTH == CRAM-MD5 --> selected="selected"<!-- ENDIF -->>CRAM-MD5</option>
-				<option value="DIGEST-MD5"<!-- IF CONFIG_SMTP_AUTH == DIGEST-MD5 --> selected="selected"<!-- ENDIF -->>DIGEST-MD5</option>
-				<option value="POP-BEFORE-SMTP"<!-- IF CONFIG_SMTP_AUTH == POP-BEFORE-SMTP --> selected="selected"<!-- ENDIF -->>POP-BEFORE-SMTP</option>
+				<option value="PLAIN"<!-- IF CONFIG_SMTP_AUTH == 'PLAIN' --> selected="selected"<!-- ENDIF -->>PLAIN</option>
+				<option value="LOGIN"<!-- IF CONFIG_SMTP_AUTH == 'LOGIN' --> selected="selected"<!-- ENDIF -->>LOGIN</option>
+				<option value="CRAM-MD5"<!-- IF CONFIG_SMTP_AUTH == 'CRAM-MD5' --> selected="selected"<!-- ENDIF -->>CRAM-MD5</option>
+				<option value="DIGEST-MD5"<!-- IF CONFIG_SMTP_AUTH == 'DIGEST-MD5' --> selected="selected"<!-- ENDIF -->>DIGEST-MD5</option>
+				<option value="POP-BEFORE-SMTP"<!-- IF CONFIG_SMTP_AUTH == 'POP-BEFORE-SMTP' --> selected="selected"<!-- ENDIF -->>POP-BEFORE-SMTP</option>
 			</select>
 		</dd>
 	</dl>

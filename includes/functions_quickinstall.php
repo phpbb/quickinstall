@@ -55,8 +55,8 @@ class qi
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
 			'TRANSLATION_INFO'		=> $user->lang['TRANSLATION_INFO'],
-			'QI_VERSION'			=> $qi_config['qi_version'],
-			'PHPBB_VERSION'			=> $qi_config['phpbb_version'],
+			'QI_VERSION'			=> QI_VERSION,
+			'PHPBB_VERSION'			=> QI_PHPBB_VERSION,
 		));
 
 		header('Content-type: text/html; charset=UTF-8');

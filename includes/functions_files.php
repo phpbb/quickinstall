@@ -174,11 +174,11 @@ class file_functions
 				continue;
 			}
 
-			if ($root && $file == 'config.' . $phpEx)
-			{
-				chmod($dir . $file, 0644);
-				continue;
-			}
+			//if ($root && $file == 'config.' . $phpEx)
+			//{
+			//	chmod($dir . $file, 0666);
+			//	continue;
+			//}
 
 			$file = $dir . $file;
 

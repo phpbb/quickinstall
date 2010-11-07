@@ -74,7 +74,7 @@ function marklist(id, name, state)
 
 					<div id="menu">
 						<p><!-- IF S_IN_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
-						<!-- IF PAGE_MAIN and .row -->
+						<!-- IF PAGE_MAIN and S_HAS_FORUMS -->
 						    <h5>{L_BOARDS_LIST}</h5>
 							<!-- BEGIN row -->
 							<a href="{row.BOARD_URL}">{row.BOARD_NAME}</a><br />

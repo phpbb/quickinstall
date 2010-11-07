@@ -108,6 +108,11 @@ class qi_create
 
 		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 
+		if ($make_writable)
+		{
+			chmod($board_dir, 0777);
+		}
+
 		// copy extra files
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 
@@ -227,7 +232,7 @@ class qi_create
 			'smtp_password'		=> $qi_config['smtp_pass'],
 			'cookie_secure'		=> $qi_config['cookie_secure'],
 			'script_path'		=> $script_path,
-			'server_protocol'	=> $qi_config['server_protocol'],
+			'server_protocol'	=> (!empty($qi_config['server_protocol'])) ? $qi_config['server_protocol'] : 'http://',
 			'newest_username'	=> $qi_config['admin_name'],
 			'avatar_salt'		=> md5(mt_rand()),
 			'cookie_name'		=> 'phpbb3_' . strtolower(gen_rand_string(5)),
@@ -353,7 +358,7 @@ class qi_create
 			'smtp_user'			=> $qi_config['smtp_user'],
 			'smtp_pass'			=> $qi_config['smtp_pass'],
 			'cookie_secure'		=> $qi_config['cookie_secure'],
-			'server_protocol'	=> $qi_config['server_protocol'],
+			'server_protocol'	=> (!empty($qi_config['server_protocol'])) ? $qi_config['server_protocol'] : 'http://',
 			'server_name'		=> $qi_config['server_name'],
 			'server_port'		=> $qi_config['server_port'],
 			'script_path'		=> $script_path,

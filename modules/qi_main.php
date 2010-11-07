@@ -29,12 +29,15 @@ class qi_main
 
 		// list of boards
 		$boards_arr = scandir($quickinstall_path . $qi_config['boards_dir']);
+		$s_has_forums = false;
 		foreach ($boards_arr as $board)
 		{
 			if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($quickinstall_path . 'boards/' . $board))
 			{
 				continue;
 			}
+
+			$s_has_forums = true;
 
 			$template->assign_block_vars('row', array(
 				'BOARD_NAME'	=> htmlspecialchars($board),
@@ -59,6 +62,9 @@ class qi_main
 		// Assign index specific vars
 		$template->assign_vars(array(
 			'U_CREATE'		=> qi::url('create'),
+			'S_IN_INSTALL' => false,
+			'S_IN_SETTINGS' => false,
+			'S_HAS_FORUMS' => $s_has_forums,
 
 			'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
 			'SITE_NAME'		=> $qi_config['site_name'],

@@ -77,8 +77,11 @@ class qi_about
 		}
 
 		$template->assign_vars(array(
+			'S_IN_INSTALL' => false,
+			'S_IN_SETTINGS' => false,
 			'S_ALLOW_VERSION_CHECK'	=> $qi_config['version_check'],
 			'S_ALLOW_CHANGELOG'		=> $use_changelog,
+			'PAGE_MAIN'		=> false,
 		));
 
 		// Output page

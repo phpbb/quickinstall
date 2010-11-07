@@ -96,8 +96,11 @@ $lang = array_merge($lang, array(
 	'FTP_METHOD_FTP'	=> 'FTP',
 	'FTP_METHOD_FSOCK'	=> 'Simple Socket',
 
+	'GO_PHP_INSTALLER'  => 'The MOD requires an external installer to finish installation.  Click here to continue to that step.',
+
 	'INHERIT_NO_CHANGE'	=> 'No changes can be made to this file because the template %1$s depends on %2$s.',
 	'INLINE_FIND_MISSING'=> 'The In-Line Find specified by the MOD could not be found.',
+	'INLINE_EDIT_ERROR'	=> 'Error, an inline edit in the MODX install file is missing all the required elements',
 	'INSTALL_AUTOMOD'	=> 'AutoMOD Installation',
 	'INSTALL_AUTOMOD_CONFIRM'	=> 'Are you sure you want to install AutoMOD?',
 	'INSTALL_TIME'		=> 'Installation time',
@@ -109,6 +112,8 @@ $lang = array_merge($lang, array(
 	'INSTALLED_MODS'	=> 'Installed MODs',
 	'INSTALLATION_SUCCESSFUL'	=> 'AutoMOD installed successfully.  You can now manage phpBB MODifications through the AutoMOD tab in the Administration Control Panel.',
 	'INVALID_MOD_INSTRUCTION'	=> 'This MOD has an invalid instruction, or an in-line find operation failed.',
+	'INVALID_MOD_NO_FIND'       => 'The MOD is missing a find matching the action ‘%s’',
+	'INVALID_MOD_NO_ACTION'     => 'The MOD is missing an action matching the find ‘%s’',
 
 	'LANGUAGE_NAME'		=> 'Language Name',
 
@@ -185,6 +190,7 @@ $lang = array_merge($lang, array(
 	'UNINSTALLED'			=> 'MOD uninstalled',
 	'UNINSTALLED_MODS'		=> 'Uninstalled MODs',
 	'UNINSTALLED_EXPLAIN'	=> 'Your MOD has been uninstalled! Here you can view some of the results from the uninstallation. Please note any errors, and seek support at <a href="http://www.phpbb.com">phpBB.com</a>.',
+	'UNRECOGNISED_COMMAND'	=> 'Error, unrecognised command %s',
 	'UPDATE_AUTOMOD'		=> 'Update AutoMOD',
 	'UPDATE_AUTOMOD_CONFIRM'=> 'Please confirm you want to update AutoMOD.',
 

@@ -25,11 +25,11 @@ if (!defined('IN_QUICKINSTALL'))
  * @param array settings
  * @return string $error
  */
-function validate_settings($config)
+function validate_settings(&$config)
 {
 	global $user;
 
-	$config['no_dbpasswd'] = ($config['no_dbpasswd'] != 1) ? 0 : 1;
+	$config['no_dbpasswd'] = (empty($config['no_dbpasswd']) || $config['no_dbpasswd'] != 1) ? 0 : 1;
 	// Lets check the required settings...
 	$error = '';
 	$error .= ($config['dbms'] == '') ? $user->lang['DBMS'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
@@ -99,6 +99,9 @@ function get_settings()
 		// Assume English exists.
 		$qi_config['qi_lang'] = 'en';
 	}
+
+	// Temporary fix for the MySQLi error.
+	$qi_config['dbms'] = ($qi_config['dbms'] == 'mysqli') ? 'mysql' : $qi_config['dbms'];
 
 	return($qi_config);
 }

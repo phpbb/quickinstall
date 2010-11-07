@@ -29,19 +29,25 @@ if ($mode == 'update_settings')
 
 	if (empty($error))
 	{
-		$template->assign_var('S_SETTINGS_SUCCESS', true);
+		$s_settings_success = true;
 		$qi_install = false;
 	}
 	else
 	{
-		$template->assign_var('S_SETTINGS_FAILURE', true);
+		$s_settings_failure = true;
 	}
 }
 
 // Temporary store our language.
-$store_lang = $lang;
-unset($lang);
-
+if (!empty($lang))
+{
+	$store_lang = $lang;
+	unset($lang);
+}
+else
+{
+	$store_lang = '';
+}
 // Generate the language select.
 $lang_dir = scandir($quickinstall_path . 'language');
 $lang_arr = array();
@@ -84,6 +90,8 @@ $template->assign_vars(array(
 	'S_CONFIG_WRITABLE' => is_writable($quickinstall_path . 'qi_config.cfg'),
 	'S_IN_INSTALL' => $qi_install,
 	'S_IN_SETTINGS' => true,
+	'S_SETTINGS_SUCCESS' => (!empty($s_settings_success)) ? true : false,
+	'S_SETTINGS_FAILURE' => (!empty($s_settings_failure)) ? true : false,
 
 	'ERROR' => (!empty($error)) ? ((!$qi_install) ? $error : '') : '',
 
@@ -92,8 +100,8 @@ $template->assign_vars(array(
 	'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
 	'SITE_NAME'		=> $qi_config['site_name'],
 	'SITE_DESC'		=> $qi_config['site_desc'],
-	'ALT_ENV'		=> $alt_env,
-	'PAGE_MAIN'		=> true,
+	'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
+	'PAGE_MAIN'		=> false,
 
 	// Config settings
 	'CONFIG_ADMIN_EMAIL' => (!empty($qi_config['admin_email'])) ? $qi_config['admin_email'] : '',

@@ -12,8 +12,14 @@
 * @ignore
 */
 define('UMIL_AUTO', true);
-define('IN_PHPBB', true);
-define('IN_INSTALL', true);
+if (!defined('IN_PHPBB'))
+{
+	define('IN_PHPBB', true);
+}
+if (!defined('IN_INSTALL'))
+{
+	define('IN_INSTALL', true);
+}
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : '../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 //include($phpbb_root_path . 'common.' . $phpEx);
@@ -175,6 +181,5 @@ include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
 // clear cache
 //cache_purge('', 0);
 //cache_purge('auth', 0);
-
 
 ?>

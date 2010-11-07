@@ -229,7 +229,7 @@ class template
 		else if ($config['load_tplcompile'])
 		{
 			// No way around it: we need to check inheritance here
-			if ($user->theme['template_inherits_id'] && !file_exists($this->files[$handle]))
+			if (!empty($user->theme['template_inherits_id']) && !file_exists($this->files[$handle]))
 			{
 				$this->files[$handle] = $this->files_inherit[$handle];
 				$this->files_template[$handle] = $user->theme['template_inherits_id'];
