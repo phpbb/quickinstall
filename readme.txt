@@ -10,8 +10,8 @@ Installation:
 Copy the quickinstall_3.0.x folder to your local webspace. Make sure boards/,
 cache/ and qi_config.cfg is writable.
 
-Download the latest phpBB from http://www.phpbb.com/downloads/, unzip it and
-copy the phpBB3 directory to sources/
+Download the latest phpBB version from http://www.phpbb.com/downloads/, unzip it
+and copy the phpBB3 directory to sources/
 
 Then point your browser to
 quickinstall/index.php. You should be taken to the settings page.
