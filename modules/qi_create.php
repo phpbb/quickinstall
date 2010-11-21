@@ -67,10 +67,10 @@ class qi_create
 			trigger_error('NO_ALT_ENV');
 		}
 
-			// Set up our basic founder.
-			$user->data['user_id'] = 2; //
-			$user->data['username'] = $qi_config['admin_name'];
-			$user->data['user_colour'] = 'AA0000';
+		// Set up our basic founder.
+		$user->data['user_id'] = 2; //
+		$user->data['username'] = $qi_config['admin_name'];
+		$user->data['user_colour'] = 'AA0000';
 
 		// overwrite some of them ;)
 		$user->lang = array_merge($user->lang, array(
@@ -87,8 +87,9 @@ class qi_create
 			trigger_error('NO_DB');
 		}
 
-		// copy all of our files
+		// Set the new board as root path.
 		$board_dir = $quickinstall_path . 'boards/' . $dbname . '/';
+		$phpbb_root_path = $board_dir;
 		if (!defined('PHPBB_ROOT_PATH'))
 		{
 			define('PHPBB_ROOT_PATH', $board_dir);
@@ -106,6 +107,7 @@ class qi_create
 			}
 		}
 
+		// copy all of our files
 		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 
 		if ($make_writable)
@@ -123,6 +125,9 @@ class qi_create
 			// temp remove some
 			list($qi_config['db_prefix'], $dbname, $temp1, $temp2) = array('', '', &$qi_config['db_prefix'], &$dbname);
 		}
+
+		// Set the new board as language path to get language files from outside phpBB
+		$user->set_custom_lang_path($phpbb_root_path . 'language/');
 
 		// Write to config.php ;)
 		$config_data = "<?php\n";
