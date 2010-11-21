@@ -172,4 +172,13 @@
 			<change>[CHANGE] Finally moved to MOD Teams repo.</change>
 		</changelog>
 	</entry>
+	<entry>
+		<date>2010-11-21</date>
+		<version>1.1.5</version>
+		<changelog lang="en">
+			<change>[FIX] Set the new boards language directory as custom language path.</change>
+			<change>[CHANGE] Moved to github.</change>
+			<change>[CHANGE] Deleted phpBB from the sources/ dir. I now needs to be downloaded from http://www.phpbb.com/.</change>
+		</changelog>
+	</entry>
 </history>
