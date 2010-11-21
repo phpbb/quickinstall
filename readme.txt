@@ -8,7 +8,12 @@ developing modifications, as you won't have any conflicts of differen't mods.
 
 Installation:
 Copy the quickinstall_3.0.x folder to your local webspace. Make sure boards/,
-cache/ and qi_config.cfg is writable. Then point your browser to
+cache/ and qi_config.cfg is writable.
+
+Download the latest phpBB from http://www.phpbb.com/downloads/, unzip it and
+copy the phpBB3 directory to sources/
+
+Then point your browser to
 quickinstall/index.php. You should be taken to the settings page.
 After that call index.php in your browser and it should work. If it does not,
 find support here: http://codepail.net/
