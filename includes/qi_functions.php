@@ -83,14 +83,28 @@ function get_settings()
 			continue;
 		}
 
-		$row = rtrim($row);
+		$row = trim($row);
+		$cfg_row = explode('=', $row);
 
-		// I'm to tired for regexp right now..
-		$i = strpos($row, '=');
-		$key = substr($row, 0, $i);
-		$value = substr($row, $i + 1);
+		if (empty($cfg_row[0]))
+		{
+			continue;
+		}
 
-		$qi_config = array_merge($qi_config, array($key => $value));
+		$key = trim($cfg_row[0]);
+
+		// Handle config values containing a = char.
+		if (sizeof($cfg_row) > 2)
+		{
+			unset($cfg_row[0]);
+			$value = implode('=', $cfg_row);
+		}
+		else
+		{
+			$value = (isset($cfg_row[1])) ? $cfg_row[1] : '';
+		}
+
+		$qi_config[$key] = $value;
 	}
 
 	// Make sure the selected language exists.

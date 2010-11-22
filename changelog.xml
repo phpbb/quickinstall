@@ -181,4 +181,11 @@
 			<change>[CHANGE] Deleted phpBB from the sources/ dir. I now needs to be downloaded from http://www.phpbb.com/.</change>
 		</changelog>
 	</entry>
+	<entry>
+		<date>2010-11-22</date>
+		<version>1.1.6-dev</version>
+		<changelog lang="en">
+			<change>[FIX] Rewrote some of the config handling, at least it looks nicer now. :)</change>
+		</changelog>
+	</entry>
 </history>
