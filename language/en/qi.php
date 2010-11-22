@@ -80,6 +80,8 @@ $lang = array_merge($lang, array(
 	'COOKIE_DOMAIN_EXPLAIN' => 'This should typically be localhost.',
 	'COOKIE_SECURE' => 'Cookie secure',
 	'COOKIE_SECURE_EXPLAIN' => 'If your server is running via SSL set this to enabled else leave as disabled. Having this enabled and not running via SSL will result in server errors during redirects.',
+	'CREATE_MOD' => 'Create moderator',
+	'CREATE_MOD_EXPLAIN' => 'Set to yes if you want one global moderator created. That will be tester_1.',
 
 	'DB_EXISTS' => 'The database %s already exists.',
 	'DB_PREFIX' => 'Database table prefix',
@@ -135,6 +137,18 @@ $lang = array_merge($lang, array(
 	'NO_PASSWORD' => 'No password',
 	'NO_DBPASSWD_ERR' => 'You have set a db password and checked no password. You can’t both <strong>have</strong> and <strong>not have</strong> a password',
 	'NONE' => 'None',
+	'NUM_CATS' => 'Number of categories',
+	'NUM_CATS_EXPLAIN' => 'The number of forum categories to create.',
+	'NUM_FORUMS' => 'Number of forums',
+	'NUM_FORUMS_EXPLAIN' => 'The number of forums to create, they will be spread evenly over the created categories.',
+	'NUM_NEW_GROUP' => 'Newly registered',
+	'NUM_NEW_GROUP_EXPLAIN' => 'The number of users to place in the newly registered group.<br />If this number is larger thant the number of users, all new users will be in the newly registered group.',
+	'NUM_REPLIES' => 'Number of replies',
+	'NUM_REPLIES_EXPLAIN' => 'The number of replies in each topic.',
+	'NUM_TOPICS' => 'Number of topics',
+	'NUM_TOPICS_EXPLAIN' => 'The number of topics to create in each forum.',
+	'NUM_USERS' => 'Number of users',
+	'NUM_USERS_EXPLAIN' => 'The number of users to populate your new board with.<br />They will get the username Tester_x with e-mail tester_x@[your-boards-domain] (x is 1 to num_users). They will all get the password "123456"',
 
 	'ONLY_LOCAL' => 'Please note: QuickInstall is only intended to be used locally.<br />It should not be used on a web server accessible via the internet.',
 	'OPTIONS' => 'Options',
@@ -142,7 +156,9 @@ $lang = array_merge($lang, array(
 
 	'POPULATE' => 'Populate board',
 	'POPULATE_MAIN_EXPLAIN' => 'Users: tester x, Password: 123456',
-	'POPULATE_EXPLAIN' => 'Populates the board with 5 users (tester 1 - 5), some topics and posts. The users will get password 123456 and email username@your-boards-domain. This can be changed when you create a forum.',
+	'POPULATE_EXPLAIN' => 'Populates the board with the number of users, forums, posts and topics you specify below. Do note that the more users, forums, posts and topics you want, the longer time the forum creation will take.<br />All these settings can be changed when you create a forum.',
+
+//	5 users (tester 1 - 5), some topics and posts. The users will get password 123456 and email username@your-boards-domain. This can be changed when you create a forum.',
 
 	'QI_ABOUT' => 'About',
 	'QI_ABOUT_ABOUT' => 'Big brother loves you and wants you to be happy.',
@@ -223,5 +239,3 @@ $lang = array_merge($lang, array(
 	'WHY' => 'Why?',
 	'WHY_EXPLAIN' => 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
 ));
-
-?>

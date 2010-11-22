@@ -157,5 +157,4 @@ function update_settings(&$config)
 	file_put_contents($quickinstall_path . 'qi_config.cfg', $cfg_string);
 }
 
-
 ?>

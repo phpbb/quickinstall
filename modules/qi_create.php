@@ -53,6 +53,7 @@ class qi_create
 		$populate = request_var('populate', false);
 		$subsilver = request_var('subsilver', 0);
 		$alt_env = request_var('alt_env', '');
+		$pop_data = request_var('pop_data', array('' => ''));
 
 		foreach (array('site_name', 'site_desc', 'table_prefix', 'admin_name', 'admin_pass') as $r)
 		{
@@ -486,6 +487,10 @@ class qi_create
 		// Add some random users and posts.
 		if ($populate)
 		{
+			include($quickinstall_path . 'includes/functions_populate.' . $phpEx);
+			$pop = new populate($pop_data);
+
+
 			include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
 			if (!class_exists('bitfield'))
 			{

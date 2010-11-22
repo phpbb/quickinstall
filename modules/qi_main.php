@@ -79,6 +79,15 @@ class qi_main
 			'ALT_ENV'		=> $alt_env,
 
 			'PAGE_MAIN'		=> true,
+
+			// Populate settings.
+			'NUM_USERS' => (!empty($qi_config['num_users'])) ? $qi_config['num_users'] : 0,
+			'NUM_NEW_GROUP' => (!empty($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 0,
+			'CREATE_MOD' => (!empty($qi_config['create_mod'])) ? 1 : 0,
+			'NUM_CATS' => (!empty($qi_config['num_cats'])) ? $qi_config['num_cats'] : 0,
+			'NUM_FORUMS' => (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
+			'NUM_TOPICS' => (!empty($qi_config['num_topics'])) ? $qi_config['num_topics'] : 0,
+			'NUM_REPLIES' => (!empty($qi_config['num_replies'])) ? $qi_config['num_replies'] : 0,
 		));
 
 		// Output page

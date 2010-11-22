@@ -193,13 +193,6 @@
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_POPULATE}:</label><br />{L_POPULATE_EXPLAIN}</dt>
-		<dd>
-			<label><input type="radio" class="radio" name="qi_config[populate]" value="1"<!-- IF CONFIG_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-			<label><input type="radio" class="radio" name="qi_config[populate]" value="0"<!-- IF CONFIG_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-		</dd>
-	</dl>
-	<dl>
 		<dt><label>{L_SUBSILVER}:</label><br />{L_SUBSILVER_EXPLAIN}</dt>
 		<dd>
 			<label><input type="radio" class="radio" name="qi_config[subsilver]" value="1"<!-- IF CONFIG_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
@@ -208,13 +201,57 @@
 		</dd>
 	</dl>
 
+</fieldset>
+<fieldset>
+	<legend>{L_POPULATE}</legend>
+	<dl>
+		<dt><label>{L_POPULATE}:</label><br />{L_POPULATE_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[populate]" value="1"<!-- IF CONFIG_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[populate]" value="0"<!-- IF CONFIG_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="num_users">{L_NUM_USERS}:</label><br />{L_NUM_USERS_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="4" maxlength="5" id="num_users" name="qi_config[num_users]" value="{CONFIG_NUM_USERS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="num_new_group">{L_NUM_NEW_GROUP}:</label><br />{L_NUM_NEW_GROUP_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="4" maxlength="5" id="num_new_group" name="qi_config[num_new_group]" value="{CONFIG_NUM_NEW_GROUP}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_CREATE_MOD}:</label><br />{L_CREATE_MOD_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[create_mod]" value="1"<!-- IF CONFIG_CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[create_mod]" value="0"<!-- IF CONFIG_CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="num_cats">{L_NUM_CATS}:</label><br />{L_NUM_CATS_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="4" maxlength="5" id="num_cats" name="qi_config[num_cats]" value="{CONFIG_NUM_CATS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="num_forums">{L_NUM_FORUMS}:</label><br />{L_NUM_FORUMS_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="4" maxlength="5" id="num_forums" name="qi_config[num_forums]" value="{CONFIG_NUM_FORUMS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="num_topics">{L_NUM_TOPICS}:</label><br />{L_NUM_TOPICS_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="4" maxlength="5" id="num_topics" name="qi_config[num_topics]" value="{CONFIG_NUM_TOPICS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="num_replies">{L_NUM_REPLIES}:</label><br />{L_NUM_REPLIES_EXPLAIN}</dt>
+		<dd><input class="text" type="text" size="4" maxlength="5" id="num_replies" name="qi_config[num_replies]" value="{CONFIG_NUM_REPLIES}" /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
 	<p class="submit-buttons">
 		<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp;
 		<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
 	</p>
 </fieldset>
 
-<p>{L_STAR_MANDATORY}</p>
+<p>{L_STAR_MANDATORY}aaa</p>
 
 </form>
 <!-- ENDIF -->
