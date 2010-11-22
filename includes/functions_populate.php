@@ -74,7 +74,7 @@ class populate
 	public function populate($data)
 	{
 		global $db, $user, $auth, $cache;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		// Initiate this thing.
 		$this->create_mod = (!empty($data['create_mod'])) ? true : false;
@@ -85,6 +85,52 @@ class populate
 		$this->num_topics = (!empty($data['num_topics'])) ? (int) $data['num_topics'] : 0;
 		$this->num_replies = (!empty($data['num_replies'])) ? (int) $data['num_replies'] : 0;
 
-		var_dump($data);
+		if ($this->num_users)
+		{
+			$this->create_users();
+		}
+	}
+
+	/**
+	 * Creates users and put's them in the right groups.
+	 * Also populates the users array.
+	 */
+	private function create_users()
+	{
+		global $db, $user, $auth, $cache;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+
+		// We are the only ones messing with this database so far.
+		// So the latest user_id + 1 should be the user id for the first user.
+		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
+			ORDER BY user_id DESC';
+		$result = $db->sql_query_limit($sql, 1);
+		$first_user_id = (int) $db->sql_fetchfield('user_id') + 1;
+		$db->sql_freeresult($result);
+
+		// Hash the password.
+		$password = phpbb_hash('123456');
+
+		// Get the group id for registered users and newly registered.
+		$registered_group = $newly_registered_group = 0;
+		$sql = 'SELECT group_id, group_name FROM ' . GROUPS_TABLE . '
+			WHERE group_name = \'REGISTERED\'
+			OR group_name = \'NEWLY_REGISTERED\'';
+		$result = $db->sql_query($sql);
+
+		while ($row = $db->sql_fetchrow($result))
+		{
+			if ($row['group_name'] == 'REGISTERED')
+			{
+				$registered_group = (int) $row['group_id'];
+			}
+			else
+			{
+				$newly_registered_group = (int) $row['group_id'];
+			}
+		}
+		$db->sql_freeresult($result);
+
+
 	}
 }
