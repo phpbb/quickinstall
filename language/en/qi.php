@@ -106,6 +106,8 @@ $lang = array_merge($lang, array(
 	'DISABLED' => 'Disabled',
 	'DROP_DB_IF_EXISTS' => 'Drop database if it exists',
 
+	'EMAIL_DOMAIN' => 'Email domain',
+	'EMAIL_DOMAIN_EXPLAIN' => 'The email domain to use for the testers. Their email will be tester_x@&lt;domain.com&gt;.',
 	'EMAIL_ENABLE' => 'Enable email',
 	'EMAIL_ENABLE_EXPLAIN' => 'Enable board wide emails. For a local test forum this would typically be off, unless you test the emails.',
 	'ENABLED' => 'Enabled',
@@ -148,7 +150,7 @@ $lang = array_merge($lang, array(
 	'NUM_TOPICS' => 'Number of topics',
 	'NUM_TOPICS_EXPLAIN' => 'The number of topics to create in each forum.',
 	'NUM_USERS' => 'Number of users',
-	'NUM_USERS_EXPLAIN' => 'The number of users to populate your new board with.<br />They will get the username Tester_x with e-mail tester_x@[your-boards-domain] (x is 1 to num_users). They will all get the password "123456"',
+	'NUM_USERS_EXPLAIN' => 'The number of users to populate your new board with.<br />They will get the username Tester_x (x is 1 to num_users). They will all get the password "123456"',
 
 	'ONLY_LOCAL' => 'Please note: QuickInstall is only intended to be used locally.<br />It should not be used on a web server accessible via the internet.',
 	'OPTIONS' => 'Options',
@@ -239,3 +241,5 @@ $lang = array_merge($lang, array(
 	'WHY' => 'Why?',
 	'WHY_EXPLAIN' => 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
 ));
+
+?>

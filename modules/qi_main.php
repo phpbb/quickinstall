@@ -88,6 +88,7 @@ class qi_main
 			'NUM_FORUMS' => (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
 			'NUM_TOPICS' => (!empty($qi_config['num_topics'])) ? $qi_config['num_topics'] : 0,
 			'NUM_REPLIES' => (!empty($qi_config['num_replies'])) ? $qi_config['num_replies'] : 0,
+			'EMAIL_DOMAIN' => (!empty($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
 		));
 
 		// Output page
