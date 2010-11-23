@@ -55,6 +55,20 @@ class qi_create
 		$alt_env = request_var('alt_env', '');
 		$pop_data = request_var('pop_data', array('' => ''));
 
+		// Some populate checking
+		if ($populate)
+		{
+			if (empty($pop['num_users']) && empty($pop['num_cats']) && empty($pop['num_forums']) && empty($pop['num_topics']) && empty($pop['num_replies']))
+			{
+				// populate with nothing?
+				$populate = false;
+			}
+			else if (!empty($pop['num_users']) && empty($pop['email_domain']))
+			{
+				trigger_error($user->lang['NEED_EMAIL_DOMAIN'], E_USER_ERROR);
+			}
+		}
+
 		foreach (array('site_name', 'site_desc', 'table_prefix', 'admin_name', 'admin_pass') as $r)
 		{
 			if ($_r = request_var($r, '', true))
