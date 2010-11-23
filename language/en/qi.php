@@ -127,8 +127,11 @@ $lang = array_merge($lang, array(
 	'MAKE_WRITABLE' => 'Make files world writable',
 	'MAKE_WRITABLE_EXPLAIN' => 'Set files, config.php, and directories world writable by default. This can be changed when you create a forum.',
 	'MANAGE_BOARDS' => 'Manage boards',
+	'MAX' => 'Max',
 	'MIGHT_TAKE_LONG' => '<strong>Please note:</strong> Creation of the board can take a while, perhaps even a minute or longer, so <strong>don’t</strong> submit the form twice.',
+	'MIN' => 'Min',
 
+	'NEED_EMAIL_DOMAIN' => 'A e-mail domain is needed to create test users',
 	'NEED_WRITABLE' => 'QuickInstall needs the boards and cache directories to be writable all the time.<br />The qi_config.php only needs to be writable for the installation of QuickInstall.',
 	'NO' => 'No',
 	'NO_ALT_ENV' => 'The specified alternative environment doesn’t exist.',
@@ -146,9 +149,9 @@ $lang = array_merge($lang, array(
 	'NUM_NEW_GROUP' => 'Newly registered',
 	'NUM_NEW_GROUP_EXPLAIN' => 'The number of users to place in the newly registered group.<br />If this number is larger thant the number of users, all new users will be in the newly registered group.',
 	'NUM_REPLIES' => 'Number of replies',
-	'NUM_REPLIES_EXPLAIN' => 'The number of replies in each topic.',
+	'NUM_REPLIES_EXPLAIN' => 'The number of replies. Each topic will receive a random number between these max and min values of replyes.',
 	'NUM_TOPICS' => 'Number of topics',
-	'NUM_TOPICS_EXPLAIN' => 'The number of topics to create in each forum.',
+	'NUM_TOPICS_EXPLAIN' => 'The number of topics to create in each forum. Each forum will get a random number of topics between these max and min values.',
 	'NUM_USERS' => 'Number of users',
 	'NUM_USERS_EXPLAIN' => 'The number of users to populate your new board with.<br />They will get the username Tester_x (x is 1 to num_users). They will all get the password "123456"',
 

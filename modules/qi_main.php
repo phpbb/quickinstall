@@ -86,8 +86,10 @@ class qi_main
 			'CREATE_MOD' => (!empty($qi_config['create_mod'])) ? 1 : 0,
 			'NUM_CATS' => (!empty($qi_config['num_cats'])) ? $qi_config['num_cats'] : 0,
 			'NUM_FORUMS' => (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
-			'NUM_TOPICS' => (!empty($qi_config['num_topics'])) ? $qi_config['num_topics'] : 0,
-			'NUM_REPLIES' => (!empty($qi_config['num_replies'])) ? $qi_config['num_replies'] : 0,
+			'NUM_TOPICS_MIN' => (!empty($qi_config['num_topics_min'])) ? $qi_config['num_topics_min'] : 0,
+			'NUM_TOPICS_MAX' => (!empty($qi_config['num_topics_max'])) ? $qi_config['num_topics_max'] : 0,
+			'NUM_REPLIES_MIN' => (!empty($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 0,
+			'NUM_REPLIES_MAX' => (!empty($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 0,
 			'EMAIL_DOMAIN' => (!empty($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
 		));
 

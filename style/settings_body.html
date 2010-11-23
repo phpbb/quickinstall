@@ -240,11 +240,17 @@
 	</dl>
 	<dl>
 		<dt><label for="num_topics">{L_NUM_TOPICS}:</label><br />{L_NUM_TOPICS_EXPLAIN}</dt>
-		<dd><input class="text" type="text" size="4" maxlength="5" id="num_topics" name="qi_config[num_topics]" value="{CONFIG_NUM_TOPICS}" /></dd>
+		<dd>
+			<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" id="num_topics" name="qi_config[num_topics_min]" value="{CONFIG_NUM_TOPICS_MIN}" /></label>
+			<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" name="qi_config[num_topics_max]" value="{CONFIG_NUM_TOPICS_MAX}" /></label>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label for="num_replies">{L_NUM_REPLIES}:</label><br />{L_NUM_REPLIES_EXPLAIN}</dt>
-		<dd><input class="text" type="text" size="4" maxlength="5" id="num_replies" name="qi_config[num_replies]" value="{CONFIG_NUM_REPLIES}" /></dd>
+		<dd>
+			<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" id="num_replies" name="qi_config[num_replies_min]" value="{CONFIG_NUM_REPLIES_MIN}" /></label>
+			<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" name="qi_config[num_replies_max]" value="{CONFIG_NUM_REPLIES_MAX}" /></label>
+		</dd>
 	</dl>
 </fieldset>
 

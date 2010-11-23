@@ -84,6 +84,11 @@ foreach ($lang_dir as $language)
 $lang = $store_lang;
 unset($store_lang);
 
+if ($qi_install)
+{
+	// Fill some default vaues.
+}
+
 $template->assign_vars(array(
 	'S_BOARDS_WRITABLE' => is_writable($quickinstall_path . 'boards'),
 	'S_CACHE_WRITABLE' => is_writable($quickinstall_path . 'cache'),
@@ -138,14 +143,16 @@ $template->assign_vars(array(
 	'CONFIG_SMTP_USER' => (!empty($qi_config['smtp_user'])) ? $qi_config['smtp_user'] : '',
 	'CONFIG_SUBSILVER' => (isset($qi_config['subsilver'])) ? $qi_config['subsilver'] : 0,
 	'CONFIG_TABLE_PREFIX' => (!empty($qi_config['table_prefix'])) ? $qi_config['table_prefix'] : 'phpbb_',
-	'CONFIG_NUM_USERS' => (!empty($qi_config['num_users'])) ? $qi_config['num_users'] : 0,
-	'CONFIG_NUM_NEW_GROUP' => (!empty($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 0,
+	'CONFIG_NUM_USERS' => (isset($qi_config['num_users'])) ? $qi_config['num_users'] : 150,
+	'CONFIG_NUM_NEW_GROUP' => (isset($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 50,
 	'CONFIG_CREATE_MOD' => (!empty($qi_config['create_mod'])) ? 1 : 0,
-	'CONFIG_NUM_CATS' => (!empty($qi_config['num_cats'])) ? $qi_config['num_cats'] : 0,
-	'CONFIG_NUM_FORUMS' => (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
-	'CONFIG_NUM_TOPICS' => (!empty($qi_config['num_topics'])) ? $qi_config['num_topics'] : 0,
-	'CONFIG_NUM_REPLIES' => (!empty($qi_config['num_replies'])) ? $qi_config['num_replies'] : 0,
-	'CONFIG_EMAIL_DOMAIN' => (!empty($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
+	'CONFIG_NUM_CATS' => (isset($qi_config['num_cats'])) ? $qi_config['num_cats'] : 2,
+	'CONFIG_NUM_FORUMS' => (isset($qi_config['num_forums'])) ? $qi_config['num_forums'] : 10,
+	'CONFIG_NUM_TOPICS_MIN' => (isset($qi_config['num_topics_min'])) ? $qi_config['num_topics_min'] : 1,
+	'CONFIG_NUM_TOPICS_MAX' => (isset($qi_config['num_topics_max'])) ? $qi_config['num_topics_max'] : 25,
+	'CONFIG_NUM_REPLIES_MIN' => (isset($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 1,
+	'CONFIG_NUM_REPLIES_MAX' => (isset($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 15,
+	'CONFIG_EMAIL_DOMAIN' => (isset($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
 ));
 
 // Output page
