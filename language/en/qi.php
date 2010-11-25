@@ -123,6 +123,7 @@ $lang = array_merge($lang, array(
 	'LICENSE' => 'License?',
 	'LICENSE_EXPLAIN' => 'This script is released under the terms of the <a href="license.txt">GNU General Public License version 2</a>. This is mainly because it uses large portions of phpBB’s code, which is also released under this license, and requires any modifications to use it too. But also because it’s a great license that keeps free software free :).',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',
+	'LOREM_IMPSUM' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
 	'MAKE_WRITABLE' => 'Make files world writable',
 	'MAKE_WRITABLE_EXPLAIN' => 'Set files, config.php, and directories world writable by default. This can be changed when you create a forum.',
@@ -162,8 +163,6 @@ $lang = array_merge($lang, array(
 	'POPULATE' => 'Populate board',
 	'POPULATE_MAIN_EXPLAIN' => 'Users: tester x, Password: 123456',
 	'POPULATE_EXPLAIN' => 'Populates the board with the number of users, forums, posts and topics you specify below. Do note that the more users, forums, posts and topics you want, the longer time the forum creation will take.<br />All these settings can be changed when you create a forum.',
-
-//	5 users (tester 1 - 5), some topics and posts. The users will get password 123456 and email username@your-boards-domain. This can be changed when you create a forum.',
 
 	'QI_ABOUT' => 'About',
 	'QI_ABOUT_ABOUT' => 'Big brother loves you and wants you to be happy.',
@@ -217,6 +216,8 @@ $lang = array_merge($lang, array(
 
 	'TABLE_PREFIX' => 'Table prefix',
 	'TABLE_PREFIX_EXPLAIN' => 'The table prefix that will be used for your forums. You can change this in the advanced options when you create new forums.',
+	'TEST_CAT_NAME' => 'Test category %d',
+	'TEST_FORUM_NAME' => 'Test forum %d',
 
 	'UNCHECK_ALL' => 'Uncheck all',
 	'UP_TO_DATE' => 'Big brother says you are up to date.',
