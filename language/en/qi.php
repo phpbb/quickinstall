@@ -218,6 +218,8 @@ $lang = array_merge($lang, array(
 	'TABLE_PREFIX_EXPLAIN' => 'The table prefix that will be used for your forums. You can change this in the advanced options when you create new forums.',
 	'TEST_CAT_NAME' => 'Test category %d',
 	'TEST_FORUM_NAME' => 'Test forum %d',
+	'TEST_POST_START' => 'Test post %d', // This will be on the first line in each post and then filled with lorem ipsum.
+	'TEST_TOPIC_TITLE' => 'Test topic %d',
 
 	'UNCHECK_ALL' => 'Uncheck all',
 	'UP_TO_DATE' => 'Big brother says you are up to date.',
