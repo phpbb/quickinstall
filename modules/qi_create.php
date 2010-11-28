@@ -58,14 +58,18 @@ class qi_create
 		// Some populate checking
 		if ($populate)
 		{
-			if (empty($pop['num_users']) && empty($pop['num_cats']) && empty($pop['num_forums']) && empty($pop['num_topics']) && empty($pop['num_replies']))
+			if (empty($pop_data['num_users']) && empty($pop_data['num_cats']) && empty($pop_data['num_forums']) && empty($pop_data['num_topics']) && empty($pop_data['num_replies']))
 			{
 				// populate with nothing?
 				$populate = false;
 			}
-			else if (!empty($pop['num_users']) && empty($pop['email_domain']))
+			else
 			{
-				trigger_error($user->lang['NEED_EMAIL_DOMAIN'], E_USER_ERROR);
+				$pop_data['email_domain'] = trim($pop_data['email_domain']);
+				if (!empty($pop_data['num_users']) && empty($pop_data['email_domain']))
+				{
+					trigger_error($user->lang['NEED_EMAIL_DOMAIN'], E_USER_ERROR);
+				}
 			}
 		}
 
@@ -504,6 +508,8 @@ class qi_create
 			include($quickinstall_path . 'includes/functions_populate.' . $phpEx);
 			$pop = new populate($pop_data);
 
+/**
+// * Just commented out for now. Will remove later.
 
 			include($phpbb_root_path . 'includes/functions_posting.' . $phpEx);
 			if (!class_exists('bitfield'))
@@ -666,6 +672,7 @@ class qi_create
 					exit;
 				}
 			}
+*/
 		}
 
 		// purge cache
