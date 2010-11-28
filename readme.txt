@@ -16,7 +16,7 @@ and copy the phpBB3 directory to sources/
 Then point your browser to
 quickinstall/index.php. You should be taken to the settings page.
 After that call index.php in your browser and it should work. If it does not,
-find support here: http://codepail.net/
+find support here: http://www.phpbb.com/community/viewforum.php?f=71
 
 phpBB3 QuickInstall is distributed under the terms of the GNU General Public
 License 2 (GPL). A copy has been included in the package (license.txt).
