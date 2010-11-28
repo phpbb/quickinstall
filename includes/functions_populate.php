@@ -557,6 +557,10 @@ class populate
 		// Put them in groups.
 		$chunk_cnt = $newly_registered = 0;
 
+		// Don't add the first user to the newly registered group.
+		// He might be a global moderator later.
+		$first = true;
+
 		// First the registered group.
 		foreach ($this->user_arr as $user)
 		{
@@ -567,7 +571,7 @@ class populate
 				'user_pending' => 0, // User is not pending.
 			);
 
-			if ($newly_registered < $this->num_new_group)
+			if ($newly_registered < $this->num_new_group && !$first)
 			{
 				$sql_ary[] = array(
 					'user_id' => (int) $user['user_id'],
@@ -575,7 +579,11 @@ class populate
 					'group_leader' => 0, // No group leaders.
 					'user_pending' => 0, // User is not pending.
 				);
+
+				$newly_registered++;
 			}
+
+			$first = false;
 
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
 			{
