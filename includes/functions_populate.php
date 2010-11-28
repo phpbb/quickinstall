@@ -347,6 +347,10 @@ class populate
 		$acp_forums = new acp_forums();
 
 		$parent_arr = array();
+
+		// The first category to
+		$parent_arr[] = $this->def_cat_id;
+
 		for ($i = 0; $i < $this->num_cats; $i++)
 		{
 			// Create catergories and fill a array with parent ids.
