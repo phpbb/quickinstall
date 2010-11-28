@@ -84,6 +84,7 @@ class qi_main
 			'NUM_USERS' => (!empty($qi_config['num_users'])) ? $qi_config['num_users'] : 0,
 			'NUM_NEW_GROUP' => (!empty($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 0,
 			'CREATE_MOD' => (!empty($qi_config['create_mod'])) ? 1 : 0,
+			'CREATE_ADMIN' => (!empty($qi_config['create_admin'])) ? 1 : 0,
 			'NUM_CATS' => (!empty($qi_config['num_cats'])) ? $qi_config['num_cats'] : 0,
 			'NUM_FORUMS' => (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
 			'NUM_TOPICS_MIN' => (!empty($qi_config['num_topics_min'])) ? $qi_config['num_topics_min'] : 0,

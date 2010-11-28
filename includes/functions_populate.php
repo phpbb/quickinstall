@@ -42,6 +42,7 @@ class populate
 {
 	// Populate settings
 	private $create_mod = false;
+	private $create_admin = false;
 	private $num_users = 0;
 	private $num_new_group = 0;
 	private $num_cats = 0;
@@ -122,6 +123,7 @@ class populate
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		// Initiate this thing.
+		$this->create_admin			= (!empty($data['create_admin'])) ? true : false;
 		$this->create_mod				= (!empty($data['create_mod'])) ? true : false;
 		$this->num_users				= (!empty($data['num_users'])) ? (int) $data['num_users'] : 0;
 		$this->num_new_group		= (!empty($data['num_new_group'])) ? (int) $data['num_new_group'] : 0;
@@ -167,28 +169,64 @@ class populate
 
 			$this->save_users();
 
-			if ($this->create_mod)
+			if ($this->create_mod || $this->create_admin)
 			{
-				$this->make_moderator();
+				$this->create_management();
 			}
 		}
 	}
 
 	/**
-	 * Make the first user a global moderator.
+	 * Make the first two users a admin and a global moderator.
 	 */
-	private function make_moderator()
+	private function create_management()
 	{
 		global $db;
 
-		$sql = 'SELECT group_id, group_name
-			FROM ' . GROUPS_TABLE . "
-			WHERE group_name = 'GLOBAL_MODERATORS'";
-		$result = $db->sql_query($sql);
+		// Don't do anything if there is not enough users.
+		$users_needed = 0;
+		$users_needed = ($this->create_mod) ? $users_needed + 1 : $users_needed;
+		$users_needed = ($this->create_admin) ? $users_needed + 1 : $users_needed;
 
-		if ($mod_group = $db->sql_fetchfield('group_id'))
+		if (sizeof($this->user_arr) < $users_needed)
+		{
+			return;
+		}
+
+		$admin_group = $mod_group = 0;
+
+		// Get group id for admins and moderators.
+		$sql = 'SELECT group_id, group_name
+				FROM ' . GROUPS_TABLE . "
+				WHERE group_name = 'ADMINISTRATORS'
+				OR group_name = 'GLOBAL_MODERATORS'";
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			if ($row['group_name'] == 'ADMINISTRATORS')
+			{
+				$admin_group = (int) $row['group_id'];
+			}
+			else if ($row['group_name'] == 'GLOBAL_MODERATORS')
+			{
+				$mod_group = (int) $row['group_id'];
+			}
+		}
+		$db->sql_freeresult($result);
+
+		if (!empty($admin_group) && $this->create_admin)
 		{
 			reset($this->user_arr);
+			$user = current($this->user_arr);
+			if (!empty($user['user_id']))
+			{
+				group_user_add($admin_group, $user['user_id'], false, false, true, 0);
+			}
+		}
+
+		if (!empty($mod_group) && $this->create_mod)
+		{
+			next($this->user_arr);
 
 			$user = current($this->user_arr);
 			if (!empty($user['user_id']))
@@ -196,7 +234,6 @@ class populate
 				group_user_add($mod_group, $user['user_id'], false, false, true, 1);
 			}
 		}
-		$db->sql_freeresult($result);
 	}
 
 	/**
@@ -586,10 +623,11 @@ class populate
 		unset($sql_ary);
 
 		// Put them in groups.
-		$chunk_cnt = $newly_registered = 0;
+		$chunk_cnt = $newly_registered = $skip = 0;
 
-		// Don't add the first user to the newly registered group if he is to be a moderator.
-		$first = ($this->create_mod) ? true : false;
+		// Don't add the first users to the newly registered group if a moderator and/or a admin is needed.
+		$skip = ($this->create_mod) ? $skip + 1 : $skip;
+		$skip = ($this->create_admin) ? $skip + 1 : $skip;
 
 		// First the registered group.
 		foreach ($this->user_arr as $user)
@@ -601,7 +639,7 @@ class populate
 				'user_pending' => 0, // User is not pending.
 			);
 
-			if ($newly_registered < $this->num_new_group && !$first)
+			if ($newly_registered < $this->num_new_group && $skip < 1)
 			{
 				$sql_ary[] = array(
 					'user_id' => (int) $user['user_id'],
@@ -613,7 +651,7 @@ class populate
 				$newly_registered++;
 			}
 
-			$first = false;
+			$skip--;
 
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
 			{

@@ -224,6 +224,13 @@
 		<dd><input class="text medium" type="text" id="email_domain" name="qi_config[email_domain]" value="{CONFIG_EMAIL_DOMAIN}" /></dd>
 	</dl>
 	<dl>
+		<dt><label>{L_CREATE_ADMIN}:</label><br />{L_CREATE_ADMIN_EXPLAIN}</dt>
+		<dd>
+			<label><input type="radio" class="radio" name="qi_config[create_admin]" value="1"<!-- IF CONFIG_CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label><input type="radio" class="radio" name="qi_config[create_admin]" value="0"<!-- IF CONFIG_CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<dl>
 		<dt><label>{L_CREATE_MOD}:</label><br />{L_CREATE_MOD_EXPLAIN}</dt>
 		<dd>
 			<label><input type="radio" class="radio" name="qi_config[create_mod]" value="1"<!-- IF CONFIG_CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>

@@ -145,6 +145,7 @@ $template->assign_vars(array(
 	'CONFIG_TABLE_PREFIX' => (!empty($qi_config['table_prefix'])) ? $qi_config['table_prefix'] : 'phpbb_',
 	'CONFIG_NUM_USERS' => (isset($qi_config['num_users'])) ? $qi_config['num_users'] : 150,
 	'CONFIG_NUM_NEW_GROUP' => (isset($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 50,
+	'CONFIG_CREATE_ADMIN' => (!empty($qi_config['create_admin'])) ? 1 : 0,
 	'CONFIG_CREATE_MOD' => (!empty($qi_config['create_mod'])) ? 1 : 0,
 	'CONFIG_NUM_CATS' => (isset($qi_config['num_cats'])) ? $qi_config['num_cats'] : 2,
 	'CONFIG_NUM_FORUMS' => (isset($qi_config['num_forums'])) ? $qi_config['num_forums'] : 10,

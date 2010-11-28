@@ -80,8 +80,10 @@ $lang = array_merge($lang, array(
 	'COOKIE_DOMAIN_EXPLAIN' => 'This should typically be localhost.',
 	'COOKIE_SECURE' => 'Cookie secure',
 	'COOKIE_SECURE_EXPLAIN' => 'If your server is running via SSL set this to enabled else leave as disabled. Having this enabled and not running via SSL will result in server errors during redirects.',
+	'CREATE_ADMIN' => 'Create admin',
+	'CREATE_ADMIN_EXPLAIN' => 'Set to yes if you want one admin created, this will not be a founder. This will be tester_1.',
 	'CREATE_MOD' => 'Create moderator',
-	'CREATE_MOD_EXPLAIN' => 'Set to yes if you want one global moderator created. That will be tester_1.',
+	'CREATE_MOD_EXPLAIN' => 'Set to yes if you want one global moderator created. This will be tester_1 or tester_2 if a admin is selected.',
 
 	'DB_EXISTS' => 'The database %s already exists.',
 	'DB_PREFIX' => 'Database table prefix',
