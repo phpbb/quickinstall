@@ -16,28 +16,6 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
-if (!function_exists('gen_sort_selects'))
-{
-	include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
-}
-
-if (!class_exists('acp_forums'))
-{
-	include($phpbb_root_path . 'includes/acp/acp_forums.' . $phpEx);
-}
-
-if (!function_exists('recalc_nested_sets'))
-{
-	include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
-}
-
-if (!class_exists('acp_permissions'))
-{
-	include($phpbb_root_path . 'includes/acp/acp_permissions.' . $phpEx);
-}
-
-include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
-
 class populate
 {
 	// Populate settings
@@ -119,8 +97,30 @@ class populate
 
 	public function populate($data)
 	{
-		global $db, $user, $auth, $cache;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+		global $quickinstall_path, $phpbb_root_path, $phpEx;
+
+		// Need to include some files.
+		if (!function_exists('gen_sort_selects'))
+		{
+			include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
+		}
+
+		if (!class_exists('acp_forums'))
+		{
+			include($phpbb_root_path . 'includes/acp/acp_forums.' . $phpEx);
+		}
+
+		if (!function_exists('recalc_nested_sets'))
+		{
+			include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
+		}
+
+		if (!class_exists('acp_permissions'))
+		{
+			include($phpbb_root_path . 'includes/acp/acp_permissions.' . $phpEx);
+		}
+
+		include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
 
 		// Initiate this thing.
 		$this->create_admin			= (!empty($data['create_admin'])) ? true : false;
@@ -241,8 +241,7 @@ class populate
 	 */
 	private function fill_forums()
 	{
-		global $db, $user, $auth, $cache;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+		global $db, $user;
 
 		// Statistics
 		$topic_cnt = $post_cnt = 0;
@@ -409,9 +408,6 @@ class populate
 	 */
 	private function create_forums()
 	{
-		global $db, $user, $auth, $cache;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
-
 		$acp_forums = new acp_forums();
 
 		$parent_arr = array();
@@ -445,8 +441,7 @@ class populate
 	 */
 	private function _create_forums($forum_type, $cnt, $acp_forums, $parent_id = 0)
 	{
-		global $db, $user, $auth, $cache;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+		global $user, $auth;
 
 		$forum_name = ($forum_type == FORUM_CAT) ? sprintf($user->lang['TEST_CAT_NAME'], $cnt) : sprintf($user->lang['TEST_FORUM_NAME'], $cnt);
 		$forum_desc = ($forum_type == FORUM_CAT) ? sprintf($user->lang['TEST_FORUM_NAME'], $cnt) : '';
@@ -545,8 +540,7 @@ class populate
 	 */
 	private function save_users()
 	{
-		global $db, $auth, $cache;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+		global $db, $config, $qi_config;
 
 		// Hash the password.
 		$password = phpbb_hash('123456');
