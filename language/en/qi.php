@@ -163,6 +163,7 @@ $lang = array_merge($lang, array(
 	'OPTIONS_ADVANCED' => 'Advanced options',
 
 	'POPULATE' => 'Populate board',
+	'POPULATE_OPTIONS' => 'Populate options',
 	'POPULATE_MAIN_EXPLAIN' => 'Users: tester x, Password: 123456',
 	'POPULATE_EXPLAIN' => 'Populates the board with the number of users, forums, posts and topics you specify below. Do note that the more users, forums, posts and topics you want, the longer time the forum creation will take.<br />All these settings can be changed when you create a forum.',
 
