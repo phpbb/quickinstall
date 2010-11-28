@@ -166,7 +166,37 @@ class populate
 			$this->email_domain = strtolower($this->email_domain);
 
 			$this->save_users();
+
+			if ($this->create_mod)
+			{
+				$this->make_moderator();
+			}
 		}
+	}
+
+	/**
+	 * Make the first user a global moderator.
+	 */
+	private function make_moderator()
+	{
+		global $db;
+
+		$sql = 'SELECT group_id, group_name
+			FROM ' . GROUPS_TABLE . "
+			WHERE group_name = 'GLOBAL_MODERATORS'";
+		$result = $db->sql_query($sql);
+
+		if ($mod_group = $db->sql_fetchfield('group_id'))
+		{
+			reset($this->user_arr);
+
+			$user = current($this->user_arr);
+			if (!empty($user['user_id']))
+			{
+				group_user_add($mod_group, $user['user_id'], false, false, true, 1);
+			}
+		}
+		$db->sql_freeresult($result);
 	}
 
 	/**
@@ -307,6 +337,7 @@ class populate
 				'forum_last_post_subject'	=> $forum['forum_last_post_subject'],
 				'forum_last_post_time'		=> $forum['forum_last_post_time'],
 				'forum_last_poster_name'	=> $forum['forum_last_poster_name'],
+				'forum_last_poster_colour'	=> '',
 			);
 
 			$sql = 'UPDATE ' . FORUMS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_ary);
@@ -557,9 +588,8 @@ class populate
 		// Put them in groups.
 		$chunk_cnt = $newly_registered = 0;
 
-		// Don't add the first user to the newly registered group.
-		// He might be a global moderator later.
-		$first = true;
+		// Don't add the first user to the newly registered group if he is to be a moderator.
+		$first = ($this->create_mod) ? true : false;
 
 		// First the registered group.
 		foreach ($this->user_arr as $user)
