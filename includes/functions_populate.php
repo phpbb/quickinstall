@@ -51,19 +51,6 @@ class populate
 	private $user_arr = array();
 
 	/**
-	 * Not sure if this really is needed.
-	 * Would save memory to remove it...
-	 * $cat_arr = array(
-	 *   (int) $cat_id => array(
-	 *     'cat_id' => (int) $cat_id,
-	 *     'forum_posts' => (int) $forum_posts_cnt,
-	 *     'forum_topics' => (int) $forum_topics_cnt,
-	 *   ),
-	 * );
-	 */
-	private $cat_arr = array();
-
-	/**
 	 * $forum_arr = array(
 	 *     'forum_id' => (int) $forum_id,
 	 *     'parent_id' => (int) $cat_id,
@@ -81,7 +68,6 @@ class populate
 	private $forum_arr = array();
 
 	/**
-	 *
 	 * $topc_arr = array(
 	 *   (int) $topic_id => array(
 	 *     'topic_id' => (int) $topic_id,
@@ -502,19 +488,7 @@ class populate
 		copy_forum_permissions($this->def_cat_id, $forum_data['forum_id']);
 		$auth->acl_clear_prefetch();
 
-		if ($forum_type == FORUM_CAT)
-		{
-			// This is a category
-			$this->cat_arr[$forum_data['forum_id']] = array(
-				'forum_id'			=> $forum_data['forum_id'],
-
-				// These two are filled for the default cat when installing phpBB.
-				// But not when posting...
-				'forum_posts'		=> 0,
-				'forum_topics'	=> 0,
-			);
-		}
-		else
+		if ($forum_type == FORUM_POST)
 		{
 			// A normal forum. There is no link type forums installed with phpBB.
 			$this->forum_arr[$forum_data['forum_id']] = array(
@@ -685,16 +659,6 @@ class populate
 		{
 			if ($row['forum_type'] == FORUM_CAT)
 			{
-				// This is a category
-				$this->cat_arr[$row['forum_id']] = array(
-					'forum_id' => $row['forum_id'],
-
-					// These two are filled for the default cat when installing phpBB.
-					// But not when posting...
-					'forum_posts'		=> $row['forum_posts'],
-					'forum_topics'	=> $row['forum_topics'],
-				);
-
 				$this->def_cat_id = (int) $row['forum_id'];
 			}
 			else
