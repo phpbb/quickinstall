@@ -32,7 +32,9 @@ class populate
 
 	// How many of each type to send to the db each run
 	// Might be better to add some memory checking later.
-	private $chunks = 5000;
+	private $user_chunks = 5000;
+	private $post_chunks = 1000;
+	private $topic_chunks = 2000;
 
 	/**
 	 * $user_arr = array(
@@ -62,11 +64,11 @@ class populate
 
 	/**
 	 * $forum_arr = array(
-	 *   (int) $forum_id => array(
 	 *     'forum_id' => (int) $forum_id,
 	 *     'parent_id' => (int) $cat_id,
 	 *     'forum_posts' => (int) $forum_posts_cnt,
 	 *     'forum_topics' => (int) $forum_topics_cnt,
+	 *     'forum_topics_real' => (int) $forum_topics_real_cnt,
 	 *     'forum_last_post_id' => (int) $forum_last_post_id,
 	 *     'forum_last_poster_id' => (int) $forum_last_poster_id,
 	 *     'forum_last_post_subject' => (string) $forum_last_post_subject,
@@ -98,15 +100,15 @@ class populate
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		// Initiate this thing.
-		$this->create_mod = (!empty($data['create_mod'])) ? true : false;
-		$this->num_users = (!empty($data['num_users'])) ? (int) $data['num_users'] : 0;
-		$this->num_new_group = (!empty($data['num_new_group'])) ? (int) $data['num_new_group'] : 0;
-		$this->num_cats = (!empty($data['num_cats'])) ? (int) $data['num_cats'] : 0;
-		$this->num_forums = (!empty($data['num_forums'])) ? (int) $data['num_forums'] : 0;
-		$this->num_topics_min = (!empty($data['num_topics_min'])) ? (int) $data['num_topics_min'] : 0;
-		$this->num_topics_max = (!empty($data['num_topics_max'])) ? (int) $data['num_topics_max'] : 0;
-		$this->num_replies_min = (!empty($data['num_replies_min'])) ? (int) $data['num_replies_min'] : 0;
-		$this->num_replies_max = (!empty($data['num_replies_max'])) ? (int) $data['num_replies_max'] : 0;
+		$this->create_mod				= (!empty($data['create_mod'])) ? true : false;
+		$this->num_users				= (!empty($data['num_users'])) ? (int) $data['num_users'] : 0;
+		$this->num_new_group		= (!empty($data['num_new_group'])) ? (int) $data['num_new_group'] : 0;
+		$this->num_cats					= (!empty($data['num_cats'])) ? (int) $data['num_cats'] : 0;
+		$this->num_forums				= (!empty($data['num_forums'])) ? (int) $data['num_forums'] : 0;
+		$this->num_topics_min		= (!empty($data['num_topics_min'])) ? (int) $data['num_topics_min'] : 0;
+		$this->num_topics_max		= (!empty($data['num_topics_max'])) ? (int) $data['num_topics_max'] : 0;
+		$this->num_replies_min	= (!empty($data['num_replies_min'])) ? (int) $data['num_replies_min'] : 0;
+		$this->num_replies_max	= (!empty($data['num_replies_max'])) ? (int) $data['num_replies_max'] : 0;
 
 		// Populate the users array with some initial data.
 		$this->pop_user_arr();
@@ -125,8 +127,15 @@ class populate
 			$this->create_forums();
 		}
 
-		// And now those plesky posts.
+		// Don't try to fool us.
+		$this->num_replies_max	= ($this->num_replies_max >= $this->num_replies_min) ? $this->num_replies_max : $this->num_replies_min;
+		$this->num_topics_max		= ($this->num_topics_max >= $this->num_topics_min) ? $this->num_topics_max : $this->num_topics_min;
 
+		// And now those plesky posts.
+		if ($this->num_replies_max || $this->num_topics_max)
+		{
+			$this->fill_forums();
+		}
 
 		if ($this->num_users)
 		{
@@ -134,10 +143,178 @@ class populate
 			$this->email_domain = ((strpos($data['email_domain'], '@') === false) ? '@' : '') . $data['email_domain'];
 			$this->email_domain = strtolower($this->email_domain);
 
-			$this->create_users();
+			$this->save_users();
+		}
+	}
+
+	/**
+	 * Create topics and posts in them.
+	 */
+	private function fill_forums()
+	{
+		global $db, $user, $auth, $cache;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+
+		if (!function_exists('gen_sort_selects'))
+		{
+			include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
 		}
 
-//		var_dump($this->cat_arr, $this->forum_arr);
+		// Statistics
+		$topic_cnt = $post_cnt = 0;
+
+		// There is at least one topic with one post already created.
+		$sql = 'SELECT t.topic_id AS t_topic_id, p.post_id FROM ' . TOPICS_TABLE . ' t, ' . POSTS_TABLE . ' p
+			ORDER BY t.topic_id DESC, p.post_id DESC';
+		$result = $db->sql_query_limit($sql, 1);
+		$row = $db->sql_fetchrow($result);
+		$topic_id = (int) $row['t_topic_id'];
+		$post_id = (int) $row['post_id'];
+		$db->sql_freeresult($result);
+
+		// Put topics and posts in their arrays so they can be sent to the database when the limit is reached.
+		$sql_topics = $sql_posts = array();
+
+		// Flags for BBCodes.
+		$flags = 7;
+		foreach ($this->forum_arr as &$forum)
+		{
+			// How many topics in this forum?
+			$topics = ($this->num_topics_min == $this->num_topics_max) ? $this->num_topics_max : rand($this->num_topics_min, $this->num_topics_max);
+
+			for ($i = 0; $i < $topics; $i++)
+			{
+				// Increase this here so we get the number for the topic title.
+				$topic_cnt++;
+
+				$topic_arr = array(
+					'topic_id' => (int) ++$topic_id,
+					'forum_id' => (int) $forum['forum_id'],
+					'topic_title' => sprintf($user->lang['TEST_TOPIC_TITLE'], $topic_cnt),
+					'topic_replies' => 0,
+					'topic_replies_real' => 0,
+				);
+
+				$forum['forum_topics']++;
+				$forum['forum_topics_real']++;
+
+				$replies = ($this->num_replies_min == $this->num_replies_max) ? $this->num_replies_max : rand($this->num_replies_min, $this->num_replies_max);
+				// The first topic post also needs to be posted.
+				$replies++;
+
+				// Generate the posts.
+				for ($j = 0; $j < $replies; $j++)
+				{
+					$post_cnt++;
+
+					$poster_id = array_rand($this->user_arr);
+					$poster_arr = $this->user_arr[$poster_id];
+					$post_time = time();
+					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $user->lang['LOREM_IPSUM'];
+					$subject = (($j > 0) ? 'Re: ' : '') . $topic_arr['topic_title'];
+
+					$bbcode_uid = $bbcode_bitfield = '';
+					generate_text_for_storage($post_text, $bbcode_uid, $bbcode_bitfield, $flags, TRUE, TRUE, TRUE);
+
+					$sql_posts[] = array(
+						'post_id' => ++$post_id,
+						'topic_id' => $topic_id,
+						'forum_id' => $forum['forum_id'],
+						'poster_id' => $poster_arr['user_id'],
+						'post_time' => $post_time,
+						'post_username' => $poster_arr['username'],
+						'post_subject' => $subject,
+						'post_text' => $post_text,
+						'post_checksum' => md5($post_text),
+						'bbcode_bitfield' => $bbcode_bitfield,
+						'bbcode_uid' => $bbcode_uid,
+					);
+
+					if ($j == 0)
+					{
+						// Put some first post info to the topic array.
+						$topic_arr['topic_first_post_id'] = $post_id;
+						$topic_arr['topic_first_poster_name'] = $poster_arr['username'];
+						$topic_arr['topic_time'] = $post_time;
+						$topic_arr['topic_poster'] = $poster_arr['user_id'];
+					}
+					else
+					{
+						$topic_arr['topic_replies']++;
+						$topic_arr['topic_replies_real']++;
+					}
+
+					$forum['forum_posts']++;
+					$forum['forum_last_post_id'] = $post_id;
+					$forum['forum_last_poster_id'] = $poster_arr['user_id'];
+					$forum['forum_last_post_subject'] = $subject;
+					$forum['forum_last_post_time'] = $post_time;
+					$forum['forum_last_poster_name'] = $poster_arr['username'];
+
+					$this->user_arr[$poster_arr['user_id']]['user_posts']++;
+					$this->user_arr[$poster_arr['user_id']]['user_lastpost_time'] = $post_time;
+					$this->user_arr[$poster_arr['user_id']]['user_lastmark'] = $post_time;
+
+					if (sizeof($sql_posts) >= $this->post_chunks)
+					{
+						// Save the array to the posts table
+						$db->sql_multi_insert(POSTS_TABLE, $sql_posts);
+						unset($sql_posts);
+						$sql_posts = array();
+					}
+				}
+
+				$topic_arr['topic_last_post_id'] = $post_id;
+				$topic_arr['topic_last_poster_id'] = $poster_arr['user_id'];
+				$topic_arr['topic_last_poster_name'] = $poster_arr['username'];
+				$topic_arr['topic_last_post_subject'] = $subject;
+				$topic_arr['topic_last_post_time'] = $post_time;
+
+				$sql_topics[] = $topic_arr;
+
+				if (sizeof($sql_topics) >= $this->topic_chunks)
+				{
+					// Save the array to the topics table
+					$db->sql_multi_insert(TOPICS_TABLE, $sql_topics);
+					unset($sql_topics);
+					$sql_topics = array();
+				}
+			}
+
+			$sql_ary = array(
+				'forum_posts'							=> $forum['forum_posts'],
+				'forum_topics'						=> $forum['forum_topics'],
+				'forum_topics_real'				=> $forum['forum_topics_real'],
+				'forum_last_post_id'			=> $forum['forum_last_post_id'],
+				'forum_last_poster_id'		=> $forum['forum_last_poster_id'],
+				'forum_last_post_subject'	=> $forum['forum_last_post_subject'],
+				'forum_last_post_time'		=> $forum['forum_last_post_time'],
+				'forum_last_poster_name'	=> $forum['forum_last_poster_name'],
+			);
+
+			$sql = 'UPDATE ' . FORUMS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_ary);
+			$sql .= ' WHERE forum_id = ' . (int) $forum['forum_id'];
+			$db->sql_query($sql);
+		}
+
+		if (sizeof($sql_posts))
+		{
+			// Save the array to the posts table
+			$db->sql_multi_insert(POSTS_TABLE, $sql_posts);
+			unset($sql_posts);
+		}
+
+		if (sizeof($sql_topics))
+		{
+			// Save the array to the topics table
+			$db->sql_multi_insert(TOPICS_TABLE, $sql_topics);
+			unset($sql_topics);
+			$sql_topics = array();
+		}
+
+		// phpBB installs the forum with one topic and one post.
+		set_config('num_topics', $topic_cnt + 1);
+		set_config('num_posts', $post_cnt + 1);
 	}
 
 	/**
@@ -169,15 +346,13 @@ class populate
 
 		$acp_forums = new acp_forums();
 
+		$parent_arr = array();
 		for ($i = 0; $i < $this->num_cats; $i++)
 		{
-			$this->_create_forums(FORUM_CAT, $i + 1, $acp_forums);
+			// Create catergories and fill a array with parent ids.
+			$parent_arr[] = $this->_create_forums(FORUM_CAT, $i + 1, $acp_forums);
 		}
 
-		foreach ($this->cat_arr as $key => $value)
-		{
-			$parent_arr[] = $key;
-		}
 		$parent_size = sizeof($parent_arr);
 
 		// If we have more than one cat, let's start with the second.
@@ -198,7 +373,7 @@ class populate
 	 */
 	private function _create_forums($forum_type, $cnt, $acp_forums, $parent_id = 0)
 	{
-		global $db, $user, $auth, $cache; //, $acp_forums;
+		global $db, $user, $auth, $cache;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		$forum_name = ($forum_type == FORUM_CAT) ? sprintf($user->lang['TEST_CAT_NAME'], $cnt) : sprintf($user->lang['TEST_FORUM_NAME'], $cnt);
@@ -206,43 +381,43 @@ class populate
 
 		// Setting up the data to be used
 		$forum_data = array(
-			'parent_id'				=> $parent_id,
-			'forum_type'			=> $forum_type,
-			'forum_status'			=> ITEM_UNLOCKED,
-			'forum_parents'			=> '',
-			'forum_options'			=> 0,
-			'forum_name'			=> utf8_normalize_nfc($forum_name),
-			'forum_link'			=> '',
-			'forum_link_track'		=> false,
-			'forum_desc'			=> utf8_normalize_nfc($forum_desc),
-			'forum_desc_uid'		=> '',
-			'forum_desc_options'	=> 7,
-			'forum_desc_bitfield'	=> '',
-			'forum_rules'			=> '',
-			'forum_rules_uid'		=> '',
-			'forum_rules_options'	=> 7,
-			'forum_rules_bitfield'	=> '',
-			'forum_rules_link'		=> '',
-			'forum_image'			=> '',
-			'forum_style'			=> 0,
-			'forum_password'		=> '',
-			'forum_password_confirm'=> '',
-			'display_subforum_list'	=> true,
-			'display_on_index'		=> true,
-			'forum_topics_per_page'	=> 0,
-			'enable_indexing'		=> true,
-			'enable_icons'			=> false,
-			'enable_prune'			=> false,
-			'enable_post_review'	=> true,
-			'enable_quick_reply'	=> false,
-			'prune_days'			=> 7,
-			'prune_viewed'			=> 7,
-			'prune_freq'			=> 1,
-			'prune_old_polls'		=> false,
-			'prune_announce'		=> false,
-			'prune_sticky'			=> false,
-			'forum_password_unset'	=> false,
-			'show_active'			=> 1,
+			'parent_id'								=> $parent_id,
+			'forum_type'							=> $forum_type,
+			'forum_status'						=> ITEM_UNLOCKED,
+			'forum_parents'						=> '',
+			'forum_options'						=> 0,
+			'forum_name'							=> utf8_normalize_nfc($forum_name),
+			'forum_link'							=> '',
+			'forum_link_track'				=> false,
+			'forum_desc'							=> utf8_normalize_nfc($forum_desc),
+			'forum_desc_uid'					=> '',
+			'forum_desc_options'			=> 7,
+			'forum_desc_bitfield'			=> '',
+			'forum_rules'							=> '',
+			'forum_rules_uid'					=> '',
+			'forum_rules_options'			=> 7,
+			'forum_rules_bitfield'		=> '',
+			'forum_rules_link'				=> '',
+			'forum_image'							=> '',
+			'forum_style'							=> 0,
+			'forum_password'					=> '',
+			'forum_password_confirm'	=> '',
+			'display_subforum_list'		=> true,
+			'display_on_index'				=> true,
+			'forum_topics_per_page'		=> 0,
+			'enable_indexing'					=> true,
+			'enable_icons'						=> false,
+			'enable_prune'						=> false,
+			'enable_post_review'			=> true,
+			'enable_quick_reply'			=> false,
+			'prune_days'							=> 7,
+			'prune_viewed'						=> 7,
+			'prune_freq'							=> 1,
+			'prune_old_polls'					=> false,
+			'prune_announce'					=> false,
+			'prune_sticky'						=> false,
+			'forum_password_unset'		=> false,
+			'show_active'							=> 1,
 		);
 
 		// The description should not need this, but who knows what people will come up with.
@@ -264,48 +439,42 @@ class populate
 		{
 			// This is a category
 			$this->cat_arr[$forum_data['forum_id']] = array(
-				'forum_id' => $forum_data['forum_id'],
+				'forum_id'			=> $forum_data['forum_id'],
 
 				// These two are filled for the default cat when installing phpBB.
 				// But not when posting...
-				'forum_posts' => 0,
-				'forum_topics' => 0,
+				'forum_posts'		=> 0,
+				'forum_topics'	=> 0,
 			);
 		}
 		else
 		{
 			// A normal forum. There is no link type forums installed with phpBB.
 			$this->forum_arr[$forum_data['forum_id']] = array(
-				'forum_id' => $forum_data['forum_id'],
-				'parent_id' => $forum_data['parent_id'],
-				'forum_posts' => 0,
-				'forum_topics' => 0,
-				'forum_last_post_id' => 0,
-				'forum_last_poster_id' => 0,
-				'forum_last_post_subject' => '',
-				'forum_last_post_time' => 0,
-				'forum_last_poster_name' => '',
+				'forum_id'								=> $forum_data['forum_id'],
+				'parent_id'								=> $forum_data['parent_id'],
+				'forum_posts'							=> 0,
+				'forum_topics'						=> 0,
+				'forum_topics_real'				=> 0,
+				'forum_last_post_id'			=> 0,
+				'forum_last_poster_id'		=> 0,
+				'forum_last_post_subject'	=> '',
+				'forum_last_post_time'		=> 0,
+				'forum_last_poster_name'	=> '',
 			);
 		}
+
+		return($forum_data['forum_id']);
 	}
 
 	/**
 	 * Creates users and put's them in the right groups.
 	 * Also populates the users array.
 	 */
-	private function create_users()
+	private function save_users()
 	{
-		global $db, $user, $auth, $cache;
+		global $db, $auth, $cache;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
-
-		// We are the only ones messing with this database so far.
-		// So the latest user_id + 1 should be the user id for the first user.
-		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-			ORDER BY user_id DESC';
-		$result = $db->sql_query_limit($sql, 1);
-		$first_user_id = (int) $db->sql_fetchfield('user_id') + 1;
-		$db->sql_freeresult($result);
-		$last_user_id = $first_user_id + $this->num_users - 1;
 
 		// Hash the password.
 		$password = phpbb_hash('123456');
@@ -330,38 +499,42 @@ class populate
 		}
 		$db->sql_freeresult($result);
 
-		$s_chunks = ($this->num_users > $this->chunks) ? true : false;
+		$s_chunks = ($this->num_users > $this->user_chunks) ? true : false;
 		$end = $this->num_users + 1;
-		$new_cnt = $chunk_cnt = 0;
+		$chunk_cnt = 0;
 		$sql_ary = array();
-		for ($i = 1; $i < $end; $i++)
-		{
-			$email = 'tester_' . $i . $this->email_domain;
 
+		foreach ($this->user_arr as $user)
+		{
+			$email = $user['username_clean'] . $this->email_domain;
 			$sql_ary[] = array(
-				'username'					=> 'tester_' . $i,
-				'username_clean'		=> 'tester_' . $i,
-				'user_password'			=> $password,
-				'user_pass_convert'	=> 0,
-				'user_email'				=> $email,
-				'user_email_hash'		=> phpbb_email_hash($email),
-				'group_id'					=> $registered_group,
-				'user_type'					=> USER_NORMAL,
-				'user_permissions'	=> '',
-				'user_timezone'			=> $qi_config['qi_tz'],
-				'user_lang'					=> $qi_config['qi_lang'],
-				'user_dst'					=> (int) $qi_config['qi_dst'],
-				'user_form_salt'		=> unique_id(),
-				'user_style'				=> (int) $config['default_style'],
-				'user_regdate'			=> time(),
-				'user_passchg'			=> time(),
-				'user_options'			=> 230271,
-				'user_full_folder'	=> PRIVMSGS_NO_BOX,
-				'user_notify_type'	=> NOTIFY_EMAIL,
+				'user_id'							=> $user['user_id'],
+				'username'						=> $user['username'],
+				'username_clean'			=> $user['username_clean'],
+				'user_lastpost_time'	=> $user['user_lastpost_time'],
+				'user_lastmark'				=> $user['user_lastmark'],
+				'user_posts'					=> $user['user_posts'],
+				'user_password'				=> $password,
+				'user_pass_convert'		=> 0,
+				'user_email'					=> $email,
+				'user_email_hash'			=> phpbb_email_hash($email),
+				'group_id'						=> $registered_group,
+				'user_type'						=> USER_NORMAL,
+				'user_permissions'		=> '',
+				'user_timezone'				=> $qi_config['qi_tz'],
+				'user_lang'						=> $qi_config['qi_lang'],
+				'user_dst'						=> (int) $qi_config['qi_dst'],
+				'user_form_salt'			=> unique_id(),
+				'user_style'					=> (int) $config['default_style'],
+				'user_regdate'				=> $user['user_regdate'],
+				'user_passchg'				=> $user['user_passchg'],
+				'user_options'				=> 230271,
+				'user_full_folder'		=> PRIVMSGS_NO_BOX,
+				'user_notify_type'		=> NOTIFY_EMAIL,
 			);
 
 			$chunk_cnt++;
-			if ($s_chunks && $chunk_cnt >= $this->chunks)
+			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
 			{
 				// throw the array to the users table
 				$db->sql_multi_insert(USERS_TABLE, $sql_ary);
@@ -375,8 +548,50 @@ class populate
 		{
 			$db->sql_multi_insert(USERS_TABLE, $sql_ary);
 		}
-
 		unset($sql_ary);
+
+		// Put them in groups.
+		$chunk_cnt = $newly_registered = 0;
+
+		// First the registered group.
+		foreach ($this->user_arr as $user)
+		{
+			$sql_ary[] = array(
+				'user_id' => (int) $user['user_id'],
+				'group_id' => (int) $registered_group,
+				'group_leader' => 0, // No group leaders.
+				'user_pending' => 0, // User is not pending.
+			);
+
+			if ($newly_registered < $this->num_new_group)
+			{
+				$sql_ary[] = array(
+					'user_id' => (int) $user['user_id'],
+					'group_id' => (int) $newly_registered_group,
+					'group_leader' => 0, // No group leaders.
+					'user_pending' => 0, // User is not pending.
+				);
+			}
+
+			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
+			{
+				// throw the array to the users table
+				$db->sql_multi_insert(USER_GROUP_TABLE, $sql_ary);
+				unset($sql_ary);
+				$sql_ary = array();
+				$chunk_cnt = 0;
+			}
+		}
+		$db->sql_multi_insert(USER_GROUP_TABLE, $sql_ary);
+
+		// Get the last user
+		$user = end($this->user_arr);
+		set_config('newest_user_id', $user['user_id']);
+		set_config('newest_username', $user['username']);
+		set_config('newest_user_colour', '');
+
+		// phpBB installs the forum with one user.
+		set_config('num_users', $this->num_users + 1);
 	}
 
 	/**
@@ -389,7 +604,7 @@ class populate
 
 		// We are the only ones messing with this database so far.
 		// So the latest user_id + 1 should be the user id for the first user.
-		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts, forum_topics, forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
+		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts, forum_topics, forum_topics_real, forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
 		$result = $db->sql_query($sql);
 
 		while ($row = $db->sql_fetchrow($result))
@@ -402,8 +617,8 @@ class populate
 
 					// These two are filled for the default cat when installing phpBB.
 					// But not when posting...
-					'forum_posts' => $row['forum_posts'],
-					'forum_topics' => $row['forum_topics'],
+					'forum_posts'		=> $row['forum_posts'],
+					'forum_topics'	=> $row['forum_topics'],
 				);
 
 				$this->def_cat_id = (int) $row['forum_id'];
@@ -412,15 +627,16 @@ class populate
 			{
 				// A normal forum. There is no link type forums installed with phpBB.
 				$this->forum_arr[$row['forum_id']] = array(
-					'forum_id' => $row['forum_id'],
-					'parent_id' => $row['parent_id'],
-					'forum_posts' => $row['forum_posts'],
-					'forum_topics' => $row['forum_topics'],
-					'forum_last_post_id' => $row['forum_last_post_id'],
-					'forum_last_poster_id' => $row['forum_last_poster_id'],
-					'forum_last_post_subject' => $row['forum_last_post_subject'],
-					'forum_last_post_time' => $row['forum_last_post_time'],
-					'forum_last_poster_name' => $row['forum_last_poster_name'],
+					'forum_id'								=> $row['forum_id'],
+					'parent_id'								=> $row['parent_id'],
+					'forum_posts'							=> $row['forum_posts'],
+					'forum_topics'						=> $row['forum_topics'],
+					'forum_topics_real'				=> $row['forum_topics_real'],
+					'forum_last_post_id'			=> $row['forum_last_post_id'],
+					'forum_last_poster_id'		=> $row['forum_last_poster_id'],
+					'forum_last_post_subject'	=> $row['forum_last_post_subject'],
+					'forum_last_post_time'		=> $row['forum_last_post_time'],
+					'forum_last_poster_name'	=> $row['forum_last_poster_name'],
 				);
 
 				$this->def_forum_id = (int) $row['forum_id'];
@@ -445,15 +661,23 @@ class populate
 		$db->sql_freeresult($result);
 		$last_user_id = $first_user_id + $this->num_users - 1;
 
+		$cnt = 1;
 		for ($i = $first_user_id; $i <= $last_user_id; $i++)
 		{
+			$time = time();
 			$this->user_arr[$i] = array(
-				'user_ud' => $i,
-				'user_lastpost_time' => 0,
-				'user_lastmark' => 0,
-				'user_lastvisit' => 0,
-				'user_posts' => 0,
+				'user_id'							=> $i,
+				'username'						=> 'tester_' . $cnt,
+				'username_clean'			=> 'tester_' . $cnt,
+				'user_lastpost_time'	=> 0,
+				'user_lastmark'				=> 0,
+				'user_lastvisit'			=> 0,
+				'user_posts'					=> 0,
+				'user_regdate'				=> $time,
+				'user_passchg'				=> $time,
 			);
+
+			$cnt++;
 		}
 	}
 }
