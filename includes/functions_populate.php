@@ -16,6 +16,28 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
+if (!function_exists('gen_sort_selects'))
+{
+	include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
+}
+
+if (!class_exists('acp_forums'))
+{
+	include($phpbb_root_path . 'includes/acp/acp_forums.' . $phpEx);
+}
+
+if (!function_exists('recalc_nested_sets'))
+{
+	include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
+}
+
+if (!class_exists('acp_permissions'))
+{
+	include($phpbb_root_path . 'includes/acp/acp_permissions.' . $phpEx);
+}
+
+include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
+
 class populate
 {
 	// Populate settings
@@ -154,11 +176,6 @@ class populate
 	{
 		global $db, $user, $auth, $cache;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
-
-		if (!function_exists('gen_sort_selects'))
-		{
-			include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
-		}
 
 		// Statistics
 		$topic_cnt = $post_cnt = 0;
@@ -326,23 +343,6 @@ class populate
 	{
 		global $db, $user, $auth, $cache;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
-
-		if (!class_exists('acp_forums'))
-		{
-			include($phpbb_root_path . 'includes/acp/acp_forums.' . $phpEx);
-		}
-
-		if (!function_exists('recalc_nested_sets'))
-		{
-			include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
-		}
-
-		if (!class_exists('acp_permissions'))
-		{
-			include($phpbb_root_path . 'includes/acp/acp_permissions.' . $phpEx);
-		}
-
-		include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
 
 		$acp_forums = new acp_forums();
 
