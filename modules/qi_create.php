@@ -29,6 +29,7 @@ class qi_create
 
 		// include installation functions
 		include($quickinstall_path . 'includes/functions_install.' . $phpEx);
+//		include($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 
 		$config = array_merge($config, array(
 			'rand_seed'				=> md5(mt_rand()),
@@ -133,6 +134,10 @@ class qi_create
 		{
 			chmod($board_dir, 0777);
 		}
+
+		// Now make sure we have a valid db-name and prefix
+		$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
+		$dbname = validate_dbname($dbname);
 
 		// copy extra files
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);

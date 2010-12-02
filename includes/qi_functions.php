@@ -18,6 +18,37 @@ if (!defined('IN_QUICKINSTALL'))
 }
 
 /**
+ * Validates the db name to not contain any unwanted chars.
+ * @param string $dbname, string to validate.
+ * @return string $dbname, validated name.
+ */
+function validate_dbname($dbname, $first_char = false)
+{
+	if (empty($dbname))
+	{
+		// Nothing to validate, this should already have been catched.
+		return('');
+	}
+
+	// Try to replace some chars whit their valid equivalents
+	$chars_int_src  = array('å', 'ä', 'ö', 'š', 'ž', 'Ÿ', 'à', 'á', 'â', 'ã', 'ä', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Š', 'Ž', 'Ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý');
+	$chars_int_dest = array('a', 'a', 'o', 's', 'z', 'y', 'a', 'a', 'a', 'a', 'a', 'e', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'e', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'S', 'Z', 'Y', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'E', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y');
+	$dbname = str_replace($chars_int_src, $chars_int_dest, $dbname);
+
+	// Replace these with a underscore.
+	$chars_replace = array(' ', '&', '/', '–', '-', '.');
+	$dbname = str_replace($chars_replace, '_', $dbname);
+
+	// Just drop remaining non valid chars.
+	$dbname = preg_replace('/[^A-Za-z0-9_]*/', '', $dbname);
+
+	// make sure that the first char is not a underscore if set.
+	$prefix = ($first_char && $dbname[0] == '_') ? 'qi' : '';
+
+	return($prefix . $dbname);
+}
+
+/**
  * validate_settings()
  * Some nubs might edit the settings manually.
  * We need to make sure they are ok.
@@ -51,6 +82,8 @@ function validate_settings(&$config)
 	$error .= ($config['cookie_domain'] == '') ? $user->lang['COOKIE_DOMAIN'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 	$error .= ($config['board_email'] == '') ? $user->lang['BOARD_EMAIL'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 	$error .= ($config['default_lang'] == '') ? $user->lang['DEFAULT_LANG'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
+
+	$error .= ($config['db_prefix'] != validate_dbname($config['db_prefix'], true)) ? $user->lang['DB_PREFIX'] . ' ' . $user->lang['IS_NOT_VALID'] . '<br />' : '';
 
 	return($error);
 }

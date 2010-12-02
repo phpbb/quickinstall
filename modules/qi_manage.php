@@ -38,12 +38,16 @@ class qi_manage
 		switch ($action)
 		{
 			case 'delete':
-
-				$select = request_var('select', array(0 => ''));
+				$select = request_var('select', array(0 => ''), true);
 
 				foreach ($select as $item)
 				{
+
 					$current_item = $quickinstall_path . 'boards/' . $item;
+
+					// Make sure we have a valid db-name and prefix
+					$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
+					$item = validate_dbname($item);
 
 					$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['db_prefix'] . $item);
 

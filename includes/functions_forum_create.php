@@ -21,10 +21,13 @@ if (!defined('IN_QUICKINSTALL'))
 }
 
 /**
-* Checks whatever or not a variable is OK for use in the Database
-* param mixed $value_ary An array of the form array(array('lang' => ..., 'value' => ..., 'column_type' =>))'
-* param mixed $error The error array
-*/
+ * Checks whatever or not a variable is OK for use in the Database
+ *
+ * Copied from adm/index.php, since we do not want to include that file.
+ *
+ * param mixed $value_ary An array of the form array(array('lang' => ..., 'value' => ..., 'column_type' =>))'
+ * param mixed $error The error array
+ */
 function validate_range($value_ary, &$error)
 {
 	global $user;

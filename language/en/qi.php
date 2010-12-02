@@ -121,6 +121,7 @@ $lang = array_merge($lang, array(
 	'INCLUDE_MODS_EXPLAIN' => 'Select folders from the sources/mods/ folder in this list, those files will then be copied to your new board’s root dir, also overwriting old files (so you can have premodded boards in here for example). If you select “None”, it will not be used (because it’s a pain to deselect items).',
 	'INSTALL_BOARD' => 'Install a board',
 	'INSTALL_QI' => 'Install QuickInstall',
+	'IS_NOT_VALID' => 'Is not valid.',
 
 	'LICENSE' => 'License?',
 	'LICENSE_EXPLAIN' => 'This script is released under the terms of the <a href="license.txt">GNU General Public License version 2</a>. This is mainly because it uses large portions of phpBB’s code, which is also released under this license, and requires any modifications to use it too. But also because it’s a great license that keeps free software free :).',
