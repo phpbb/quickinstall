@@ -532,54 +532,6 @@ class qi_create
 		// On succces just return to main page.
 		qi::redirect('index.' . $phpEx);
 	}
-
-	// Fills the post data array.
-	private function post_data($mode, $message, $topic_id, $post_id, $user_row, $forum_row, $message_parser)
-	{
-		$message .= "\n" . 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-		$message_parser->message = $message;
-		$message_parser->parse(true, true, true);
-
-		// 'reply' 'post'
-		$data = array(
-			'topic_title'			=>  '',
-			'topic_first_post_id'	=> 0,
-			'topic_last_post_id'	=> 0,
-			'topic_time_limit'		=> 0,
-			'topic_attachment'		=> 0,
-			'post_id'				=> $post_id,
-			'topic_id'				=> $topic_id,
-			'forum_id'				=> (int) $forum_row['forum_id'],
-			'icon_id'				=> 0,
-			'poster_id'				=> $user_row['user_id'],
-			'enable_sig'			=> true,
-			'enable_bbcode'			=> true,
-			'enable_smilies'		=> true,
-			'enable_urls'			=> true,
-			'enable_indexing'		=> true,
-			'message_md5'			=> (string) md5($message),
-			'post_time'				=> time(),
-			'post_checksum'			=> '',
-			'post_edit_reason'		=> '',
-			'post_edit_user'		=> 0,
-			'forum_parents'			=> $forum_row['forum_parents'],
-			'forum_name'			=> $forum_row['forum_name'],
-			'notify'				=> false,
-			'notify_set'			=> 0,
-			'poster_ip'				=> '0.0.0.0',
-			'post_edit_locked'		=> 0,
-			'bbcode_bitfield'		=> $message_parser->bbcode_bitfield,
-			'bbcode_uid'			=> $message_parser->bbcode_uid,
-			'message'				=> $message_parser->message,
-			'attachment_data'		=> $message_parser->attachment_data,
-			'filename_data'			=> $message_parser->filename_data,
-
-			'topic_approved'		=> 1,
-			'post_approved'			=> 1,
-		);
-
-		return($data);
-	}
 }
 
 ?>
