@@ -139,8 +139,8 @@ class qi_create
 		$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
 		$dbname = validate_dbname($dbname);
 
-		// copy extra files
-		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+		// copy qi extra lang files
+		file_functions::copy_dir($quickinstall_path . 'sources/extra/language', $board_dir . 'language/');
 
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
@@ -435,10 +435,6 @@ class qi_create
 		$user->session_begin();
 		$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
 
-		// add log entry :D
-		$user->ip = &$user_ip;
-		add_log('admin', 'LOG_INSTALL_INSTALLED_QI', $qi_config['qi_version']);
-
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
 			// copy the temp db over
@@ -453,6 +449,9 @@ class qi_create
 		file_functions::delete_dir($board_dir . 'install/');
 		file_functions::delete_dir($board_dir . 'develop/');
 		file_functions::delete_dir($board_dir . 'umil/');
+
+		// copy extra user added files
+		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 
 		// Install Subsilver2
 		if ($subsilver)
@@ -513,6 +512,10 @@ class qi_create
 			include($quickinstall_path . 'includes/functions_populate.' . $phpEx);
 			new populate($pop_data);
 		}
+
+		// add log entry :D
+		$user->ip = &$user_ip;
+		add_log('admin', 'LOG_INSTALL_INSTALLED_QI', $qi_config['qi_version']);
 
 		// purge cache
 		$cache->purge();
