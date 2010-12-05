@@ -2,7 +2,7 @@
 /**
 *
 * This file is part of French QuickInstall translation.
-* Copyright (c) 2010 Maël Soucaze.
+* Copyright (c) 2010 MaÃ«l Soucaze.
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 * phpbb [French]
 *
 * @package   quickinstall
-* @author    Maël Soucaze <maelsoucaze@gmail.com> (Maël Soucaze) http://mael.soucaze.com/
+* @author    MaÃ«l Soucaze <maelsoucaze@gmail.com> (MaÃ«l Soucaze) http://mael.soucaze.com/
 * @copyright (c) 2007, 2008 eviL3
 * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License
 * @version   $Id$
@@ -48,10 +48,10 @@ $lang = array_merge($lang, array(
 	'DIRECTION'			=> 'ltr',
 	'DATE_FORMAT'		=> '|d F Y|',	// 01 January 2007
 	'USER_LANG'			=> 'fr',
-	'USER_LANG_LONG'	=> 'Français',
+	'USER_LANG_LONG'	=> 'FranÃ§ais',
 
 	'datetime'			=> array(
-		'TODAY'		=> 'Aujourd’hui',
+		'TODAY'		=> 'Aujourdâ€™hui',
 		'TOMORROW'	=> 'Demain',
 		'YESTERDAY'	=> 'Hier',
 
@@ -72,30 +72,30 @@ $lang = array_merge($lang, array(
 		'Sat'		=> 'Sam',
 
 		'January'	=> 'Janvier',
-		'February'	=> 'Février',
+		'February'	=> 'FÃ©vrier',
 		'March'		=> 'Mars',
 		'April'		=> 'Avril',
 		'May'		=> 'Mai',
 		'June'		=> 'Juin',
 		'July'		=> 'Juillet',
-		'August'	=> 'Août',
+		'August'	=> 'AoÃ»t',
 		'September' => 'Septembre',
 		'October'	=> 'Octobre',
 		'November'	=> 'Novembre',
-		'December'	=> 'Décembre',
+		'December'	=> 'DÃ©cembre',
 
 		'Jan'		=> 'Jan',
-		'Feb'		=> 'Fév',
+		'Feb'		=> 'FÃ©v',
 		'Mar'		=> 'Mars',
 		'Apr'		=> 'Avr',
 		'May_short'	=> 'Mai',	// Short representation of "May". May_short used because in English the short and long date are the same for May.
 		'Jun'		=> 'Juin',
 		'Jul'		=> 'Juil',
-		'Aug'		=> 'Août',
+		'Aug'		=> 'AoÃ»t',
 		'Sep'		=> 'Sep',
 		'Oct'		=> 'Oct',
 		'Nov'		=> 'Nov',
-		'Dec'		=> 'Déc',
+		'Dec'		=> 'DÃ©c',
 	),
 
 	// The default dateformat which will be used on new installs in this language
