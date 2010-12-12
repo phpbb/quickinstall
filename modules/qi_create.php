@@ -140,7 +140,7 @@ class qi_create
 		$dbname = validate_dbname($dbname);
 
 		// copy qi's lang file for the log
-		file_functions::copy_dir($quickinstall_path . 'sources/language', $board_dir . 'language/');
+		file_functions::copy_dir($quickinstall_path . 'language/to_phpbb/', $board_dir . 'language/');
 
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
