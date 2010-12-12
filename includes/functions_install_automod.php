@@ -42,6 +42,11 @@ class automod_installer
 			// They copied to complete root to automod instead of its contents.
 			$automod_path = $quickinstall_path . 'sources/automod/root/';
 		}
+		else if (file_exists($quickinstall_path . 'sources/automod/upload/includes'))
+		{
+			// They copied to complete upload directory to automod instead of its contents.
+			$automod_path = $quickinstall_path . 'sources/automod/upload/';
+		}
 		else
 		{
 			trigger_error($user->lang['NO_AUTOMOD']);
