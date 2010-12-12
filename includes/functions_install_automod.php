@@ -37,7 +37,7 @@ class automod_installer
 			// They copied to complete root to automod instead of its contents.
 			$automod_path = $quickinstall_path . 'sources/automod/root/';
 		}
-		else if (file_exists($quickinstall_path . 'sources/automod/inclues'))
+		else if (file_exists($quickinstall_path . 'sources/automod/includes'))
 		{
 			// Let's assume they copied the contents.
 			$automod_path = $quickinstall_path . 'sources/automod/';
