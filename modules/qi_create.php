@@ -139,8 +139,8 @@ class qi_create
 		$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
 		$dbname = validate_dbname($dbname);
 
-		// copy qi extra lang files
-		file_functions::copy_dir($quickinstall_path . 'sources/extra/language', $board_dir . 'language/');
+		// copy qi's lang file for the log
+		file_functions::copy_dir($quickinstall_path . 'sources/language', $board_dir . 'language/');
 
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
