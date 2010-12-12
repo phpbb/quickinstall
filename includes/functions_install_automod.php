@@ -30,7 +30,24 @@ class automod_installer
 		$mod_name = 'AUTOMOD';
 		$version_config_name = 'automod_version';
 
-		file_functions::copy_dir($quickinstall_path . 'sources/automod/', $board_dir);
+		// Since AutoMOD is no longer shipped with QI we need to do some checking...
+		$automod_path = '';
+		if (file_exists($quickinstall_path . 'sources/automod/root'))
+		{
+			// They copied to complete root to automod instead of its contents.
+			$automod_path = $quickinstall_path . 'sources/automod/root/';
+		}
+		else if (file_exists($quickinstall_path . 'sources/automod/inclues'))
+		{
+			// Let's assume they copied the contents.
+			$automod_path = $quickinstall_path . 'sources/automod/';
+		}
+		else
+		{
+			trigger_error($user->lang['NO_AUTOMOD']);
+		}
+
+		file_functions::copy_dir($automod_path, $board_dir);
 
 		// include AutoMOD lanugage files.
 		if (file_exists($phpbb_root_path . 'language/' . $user->lang . '/mods/info_acp_modman.' . $phpEx))
