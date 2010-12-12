@@ -139,6 +139,7 @@ $lang = array_merge($lang, array(
 	'NEED_WRITABLE' => 'QuickInstall needs the boards and cache directories to be writable all the time.<br />The qi_config.php only needs to be writable for the installation of QuickInstall.',
 	'NO' => 'No',
 	'NO_ALT_ENV' => 'The specified alternative environment doesn’t exist.',
+	'NO_AUTOMOD' => 'AutoMOD not found in the sources directory. You need to download AutoMOD and copy the root directory to sources/automod, then rename root to automod.',
 	'NO_BOARDS' => 'You have no boards.',
 	'NO_DB' => 'No database selected.',
 	'NO_IMPACT_WIN' => 'This setting has no impact on Windows systems older than Win7.',
