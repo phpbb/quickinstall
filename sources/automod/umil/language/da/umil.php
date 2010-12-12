@@ -94,7 +94,7 @@ $lang = array_merge($lang, array(
 	'PERMISSION_UNSET_GROUP'		=> 'Fjerner tilladelser for gruppen %s.',
 	'PERMISSION_UNSET_ROLE'			=> 'Fjerner tilladelser for rollen %s.',
 
-	'ROLE_ALREADY_EXISTS' => 'Tilladelserolle eksisterer allerede.'
+	'ROLE_ALREADY_EXISTS' => 'Tilladelserolle eksisterer allerede.',
 	'ROLE_NOT_EXIST'				=> 'Tilladelserolle eksisterer ikke.',
 
 	'SUCCESS'						=> 'Udført',

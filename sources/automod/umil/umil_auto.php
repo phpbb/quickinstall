@@ -63,12 +63,17 @@ if (!isset($user->lang[$mod_name]))
 	$user->lang[$mod_name] = $mod_name;
 }
 
-// Reset our basic founder for the logs.
-$user->data['user_id'] = 2; //
-$user->data['username'] = $qi_config['admin_name'];
-$user->data['user_colour'] = 'AA0000';
+// Use the Mod's logo if one was specified
+if (isset($logo_img))
+{
+	$template->assign_var('LOGO_IMG', $phpbb_root_path . $logo_img);
+}
 
-//var_dump($user->lang);
+// Display a login box if they are not logged in
+if (!$user->data['is_registered'])
+{
+	login_box();
+}
 
 if (!class_exists('umil_frontend'))
 {
@@ -80,8 +85,14 @@ if (!class_exists('umil_frontend'))
 	include($phpbb_root_path . 'umil/umil_frontend.' . $phpEx);
 }
 
-$force_display_results = false;
-$umil = new umil_frontend($mod_name);
+$force_display_results = false; // request_var('display_results', (defined('DEBUG') ? true : false));
+$umil = new umil_frontend($mod_name, true, $force_display_results);
+
+// Check after initiating UMIL.
+if ($user->data['user_type'] != USER_FOUNDER)
+{
+	trigger_error('FOUNDERS_ONLY');
+}
 
 // We will sort the actions to prevent issues from mod authors incorrectly listing the version numbers
 uksort($versions, 'version_compare');
@@ -93,13 +104,89 @@ foreach ($versions as $version => $actions)
 	$current_version = $version;
 }
 
-//$template->assign_var('L_TITLE_EXPLAIN', ((isset($user->lang[$mod_name . '_EXPLAIN'])) ? $user->lang[$mod_name . '_EXPLAIN'] . '<br /><br />' : '') . sprintf($user->lang['VERSIONS'], $current_version, ((isset($config[$version_config_name])) ? $config[$version_config_name] : $user->lang['NONE'])));
+$template->assign_var('L_TITLE_EXPLAIN', ((isset($user->lang[$mod_name . '_EXPLAIN'])) ? $user->lang[$mod_name . '_EXPLAIN'] . '<br /><br />' : '') . sprintf($user->lang['VERSIONS'], $current_version, ((isset($config[$version_config_name])) ? $config[$version_config_name] : $user->lang['NONE'])));
 
-$submit = true;
-$action = 'install';
-$version_select = '1.0.0';
+$submit = (isset($_POST['submit'])) ? true : false;
+$action = request_var('action', '');
+$version_select = request_var('version_select', '');
 
-$umil->run_actions($action, $versions, $version_config_name, $version_select);
+$current_page = (strpos($user->page['page'], '?') !== false) ? substr($user->page['page'], 0, strpos($user->page['page'], '?')) : $user->page['page'];
+
+$stages = array(
+	'CONFIGURE'	=> array('url' => append_sid($phpbb_root_path . $current_page)),
+	'CONFIRM',
+	'ACTION',
+);
+
+if (!isset($options) || !is_array($options))
+{
+	$options = array();
+}
+
+$options = array(
+	'legend1'			=> 'OPTIONS',
+	'action'			=> array('lang' => 'ACTION', 'type' => 'custom', 'function' => 'umil_install_update_uninstall_select', 'explain' => false),
+	'version_select'	=> array('lang' => 'VERSION_SELECT', 'type' => 'custom', 'function' => 'umil_version_select', 'explain' => true),
+	'display_results'	=> array('lang' => 'DISPLAY_RESULTS', 'type' => 'radio:yes_no', 'explain' => true, 'default' => $force_display_results),
+) + $options;
+
+if (!$submit && !$umil->confirm_box(true))
+{
+	$umil->display_stages($stages);
+
+	$umil->display_options($options);
+	$umil->done();
+}
+else if (!$umil->confirm_box(true))
+{
+	$umil->display_stages($stages, 2);
+
+	$hidden = array();
+	foreach ($options as $key => $data)
+	{
+		$hidden[$key] = request_var($key, '', true);
+	}
+
+	switch ($action)
+	{
+		case 'install' :
+			if (!isset($user->lang['INSTALL_' . $mod_name]))
+			{
+				$user->lang['INSTALL_' . $mod_name] = sprintf($user->lang['INSTALL_MOD'], $user->lang[$mod_name]);
+				$user->lang['INSTALL_' . $mod_name . '_CONFIRM'] = sprintf($user->lang['INSTALL_MOD_CONFIRM'], $user->lang[$mod_name]);
+			}
+			$umil->confirm_box(false, 'INSTALL_' . $mod_name, $hidden);
+		break;
+
+		case 'update' :
+			if (!isset($user->lang['UPDATE_' . $mod_name]))
+			{
+				$user->lang['UPDATE_' . $mod_name] = sprintf($user->lang['UPDATE_MOD'], $user->lang[$mod_name]);
+				$user->lang['UPDATE_' . $mod_name . '_CONFIRM'] = sprintf($user->lang['UPDATE_MOD_CONFIRM'], $user->lang[$mod_name]);
+			}
+			$umil->confirm_box(false, 'UPDATE_' . $mod_name, $hidden);
+		break;
+
+		case 'uninstall' :
+			if (!isset($user->lang['UNINSTALL_' . $mod_name]))
+			{
+				$user->lang['UNINSTALL_' . $mod_name] = sprintf($user->lang['UNINSTALL_MOD'], $user->lang[$mod_name]);
+				$user->lang['UNINSTALL_' . $mod_name . '_CONFIRM'] = sprintf($user->lang['UNINSTALL_MOD_CONFIRM'], $user->lang[$mod_name]);
+			}
+			$umil->confirm_box(false, 'UNINSTALL_' . $mod_name, $hidden);
+		break;
+	}
+}
+else if ($umil->confirm_box(true))
+{
+	$umil->display_stages($stages, 3);
+
+	$umil->run_actions($action, $versions, $version_config_name, $version_select);
+	$umil->done();
+}
+
+// Shouldn't get here.
+redirect($phpbb_root_path . $current_page);
 
 function umil_install_update_uninstall_select($value, $key)
 {
@@ -143,7 +230,6 @@ function umil_version_select($value, $key)
 
 	$cnt = 0;
 	$output .= '<table id="version_select_advanced" style="display: none;" cellspacing="0" cellpadding="0"><tr>';
-
 	foreach ($versions as $version => $actions)
 	{
 		$cnt++;

@@ -122,7 +122,7 @@ $lang = array_merge($lang, array(
 	'UNKNOWN'						=> 'Unknown',
 	'UPDATE_MOD'					=> 'Update %s',
 	'UPDATE_MOD_CONFIRM'			=> 'Are you ready to update %s?',
-	'UPDATE_UMIL'					=> 'This version of UMIL is outdated.<br /><br />Please download the latest UMIL (Unified MOD Install Library) from: <a href="%1$s">%1$s</a>',
+	'UPDATE_UMIL'					=> 'This version of UMIL is outdated.<br /><br />Please download the latest UMIL (Unified MOD Install Library) from: <a href="%1$s" target="_blank">%1$s</a>',
 
 	'VERSIONS'						=> 'Mod Version: <strong>%1$s</strong><br />Currently Installed: <strong>%2$s</strong>',
 	'VERSION_SELECT'				=> 'Version Select',

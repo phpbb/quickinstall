@@ -4,12 +4,10 @@
  * @author Nathan Guse (EXreaction) http://lithiumstudios.org
  * @author David Lewis (Highway of Life) highwayoflife@gmail.com
  * @package umil
- * @version $Id$
+ * @version $Id: umil.php 228 2010-06-29 19:43:25Z SyntaxError90 $
  * @copyright (c) 2008 phpBB Group
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- *
  * Translated By: casper™ from http://phpbbportugal.com/
- *
  */
 
 /**
@@ -54,7 +52,7 @@ $lang = array_merge($lang, array(
 	'CONFIG_REMOVE'					=> 'A remover configuração varável: %s',
 	'CONFIG_UPDATE'					=> 'A actualizar configuração variável: %s',
 
-	'DISPLAY_RESULTS'				=> 'Mostar os resultados completos',
+	'DISPLAY_RESULTS'				=> 'Mostrar os resultados completos',
 	'DISPLAY_RESULTS_EXPLAIN'		=> 'Seleccione Sim para mostrar todas as acções e resultados durante a acção solicitada.',
 
 	'ERROR_NOTICE'					=> 'Ocorreram um ou mais erros durante a acção solicitada.  Por favor faça o download <a href="%1$s">deste ficheiro</a> com os erros listados e peça assistência ao autor da modificação.<br /><br />Se tiver algum problema no download do ficheiro pode aceder directamentete com um navegador FTP para o seguinte endereço: %2$s',
@@ -86,12 +84,16 @@ $lang = array_merge($lang, array(
 	'PERMISSION_ALREADY_EXISTS'		=> 'ERRO: Opção de permissão %s já existente.',
 	'PERMISSION_NOT_EXIST'			=> 'ERRO: Opção de permissão %s não existe.',
 	'PERMISSION_REMOVE'				=> 'Removendo opções de permissões: %s',
+	'PERMISSION_ROLE_ADD'			=> 'Adicionando nova Permissão: %s',
+	'PERMISSION_ROLE_UPDATE'		=> 'Actualizando nova Permissão: %s',
+	'PERMISSION_ROLE_REMOVE'		=> 'Removendo Permissão: %s',
 	'PERMISSION_SET_GROUP'			=> 'Configurar permissões para este %s grupo.',
 	'PERMISSION_SET_ROLE'			=> 'Configurar permissões para a %s função.',
 	'PERMISSION_UNSET_GROUP'		=> 'A desconfigurar permissões para o %s grupo.',
 	'PERMISSION_UNSET_ROLE'			=> 'A desconfigurar permissões para esta %s função.',
 
-	'ROLE_NOT_EXIST'				=> 'Esta função não existe',
+	'ROLE_ALREADY_EXISTS'			=> 'Permissão já existe.',
+	'ROLE_NOT_EXIST'				=> 'Permissão não',
 
 	'SUCCESS'						=> 'Sucesso',
 
@@ -124,7 +126,7 @@ $lang = array_merge($lang, array(
 
 	'VERSIONS'						=> 'Versão da modificação: <strong>%1$s</strong><br />Actualmente Instalada: <strong>%2$s</strong>',
 	'VERSION_SELECT'				=> 'Seleccione a versão',
-	'VERSION_SELECT_EXPLAIN'		=> 'Não seleccione “Ignorar” a menos que você saiba o que irá fazer ou que foi aconselhado a fazer.',
+	'VERSION_SELECT_EXPLAIN'		=> 'Só seleccione <strong>Ignorar</strong> se sabe o que fazer ou que foi aconselhado a fazer.',
 ));
 
 ?>

@@ -8,8 +8,6 @@
  * @copyright (c) 2008 phpBB Group
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  *
- * Translated By:
- *
  */
 
 /**
@@ -86,12 +84,16 @@ $lang = array_merge($lang, array(
 	'PERMISSION_ALREADY_EXISTS'		=> 'EROARE: Opţiunea de permisiune %s există deja.',
 	'PERMISSION_NOT_EXIST'			=> 'EROARE: Opţiunea de permisiune %s nu există.',
 	'PERMISSION_REMOVE'				=> 'Şterge opţiunea de permisiune: %s',
+	'PERMISSION_ROLE_ADD'			=> 'Adaugă permisiunea pentru noul rol: %s',
+	'PERMISSION_ROLE_UPDATE'		=> 'Actualizează permisiunea pentru rol: %s',
+	'PERMISSION_ROLE_REMOVE'		=> 'Elimină permisiunea pentru rol: %s',
 	'PERMISSION_SET_GROUP'			=> 'Specifică permisiuniile pentru grupul %s.',
 	'PERMISSION_SET_ROLE'			=> 'Specifică permisiuniile pentru rolul %s.',
 	'PERMISSION_UNSET_GROUP'		=> 'Elimină permisiuniile pentru grupul %s.',
 	'PERMISSION_UNSET_ROLE'			=> 'Elimină permisiuniile pentru rolul %s.',
 
-	'ROLE_NOT_EXIST'				=> 'Rolul nu există',
+	'ROLE_ALREADY_EXISTS'			=> 'Permisiunile pentru rol deja există.',
+	'ROLE_NOT_EXIST'				=> 'Permisiunea pentru rol nu există',
 
 	'SUCCESS'						=> 'Succes',
 

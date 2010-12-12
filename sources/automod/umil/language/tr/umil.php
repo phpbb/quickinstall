@@ -86,12 +86,16 @@ $lang = array_merge($lang, array(
 	'PERMISSION_ALREADY_EXISTS'		=> 'HATA: %s izin seçeneği zaten mevcut.',
 	'PERMISSION_NOT_EXIST'			=> 'HATA: %s izin seçeneği mevcut değil.',
 	'PERMISSION_REMOVE'				=> 'İzin seçeneği kaldırılıyor: %s',
+	'PERMISSION_ROLE_ADD'			=> 'Yeni izin rolü ekleniyor: %s',
+	'PERMISSION_ROLE_UPDATE'		=> 'İzin rolü güncelleniyor: %s',
+	'PERMISSION_ROLE_REMOVE'		=> 'İzin rolü kaldırılıyor: %s',	
 	'PERMISSION_SET_GROUP'			=> '%s grubu için izinler ayarlanıyor.',
 	'PERMISSION_SET_ROLE'			=> '%s rolü için izinler ayarlanıyor.',
 	'PERMISSION_UNSET_GROUP'		=> '%s grubu için izin ayarları kaldırılıyor.',
 	'PERMISSION_UNSET_ROLE'			=> '%s rolü için izin ayarları kaldırılıyor.',
 
-	'ROLE_NOT_EXIST'				=> 'Rol mevcut değil',
+	'ROLE_ALREADY_EXISTS'			=> 'İzin rolü zaten var.',
+	'ROLE_NOT_EXIST'				=> 'İzin rolü mevcut değil',
 
 	'SUCCESS'						=> 'Başarılı',
 

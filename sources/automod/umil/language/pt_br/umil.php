@@ -1,18 +1,19 @@
 <?php
 /**
-*
-* umil.php [Brazilian Portuguese]
-*
-* @author Nathan Guse (EXreaction) http://lithiumstudios.org
-* @package phpBB3 UMIL - Unified MOD Install File
-* @version $Id$
-* @copyright (c) 2009 Suporte phpBB
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @Traduzido por: Seiken <seiken@suportephpbb.org>
-*                        http://www.suportephpbb.org/
-*
-*/
+ *
+ * @author Nathan Guse (EXreaction) http://lithiumstudios.org
+ * @author David Lewis (Highway of Life) highwayoflife@gmail.com
+ * @package umil
+ * @version $Id$
+ * @copyright (c) 2008 phpBB Group
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ *
+ * @translation: http://www.phpbbrasil.com.br
+ */
 
+/**
+ * @ignore
+ */
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -42,87 +43,91 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ACTION'						=> 'Ação',
 	'ADVANCED'						=> 'Avançado',
-	'AUTH_CACHE_PURGE'				=> 'Limpando o cache de permissões',
+	'AUTH_CACHE_PURGE'				=> 'Removendo o Cache de Autorização',
 
-	'CACHE_PURGE'					=> 'Limpando o cache de seus fóruns',
-	'CONFIGURE'						=> 'Configurar',
+	'CACHE_PURGE'					=> 'Removendo o cache do fórum',
+	'CONFIGURE'						=> 'Configuração',
 	'CONFIG_ADD'					=> 'Adicionando nova variável de configuração: %s',
-	'CONFIG_ALREADY_EXISTS'			=> 'ERRO: A variável de configuração %s já existe.',
-	'CONFIG_NOT_EXIST'				=> 'ERRO: A variável de configuração %s não existe.',
+	'CONFIG_ALREADY_EXISTS'			=> 'ERRO: Variável de configuração %s já existe.',
+	'CONFIG_NOT_EXIST'				=> 'ERRO: Variável de configuração %s não existe.',
 	'CONFIG_REMOVE'					=> 'Removendo variável de configuração: %s',
 	'CONFIG_UPDATE'					=> 'Atualizando variável de configuração: %s',
 
-	'DISPLAY_RESULTS'				=> 'Exibir resultados completos',
-	'DISPLAY_RESULTS_EXPLAIN'		=> 'Selecione sim para exibir todas as ações e resultados durante a ação solicitada.',
+	'DISPLAY_RESULTS'				=> 'Mostrar resultados completos',
+	'DISPLAY_RESULTS_EXPLAIN'		=> 'Selecione sim para mostrar todas as ações e resultados durante a ação requisitada.',
 
-	'ERROR_NOTICE'					=> 'Um ou mais erros ocorreram durante a ação solicitada.  Por favor, baixe <a href="%1$s">este arquivo</a> com os erros listados e solicite assistência ao autor da mod.<br /><br />Caso ocorra qualquer problema ao baixar o arquivo, você pode acessá-lo diretamente com um navegador FTP através do seguinte endereço: %2$s',
-	'ERROR_NOTICE_NO_FILE'			=> 'Um ou mais erros ocorreram durante a ação solicitada.  Por favor, faça um registro completo de quaisquer erros que ocorram e solicite assistência ao autor da mod.',
+	'ERROR_NOTICE'					=> 'Um ou mais erros ocorreram durante a ação requerida. Favor fazer download <a href="%1$s">este arquivo</a> com os erros listados e pedir ao autor do MOD por assist&ecirc;ncia.<br /><br />Se você tiver qualquer problema fazendo o download, você pode acessar diretamente o arquivo com um navegador FTP no seguinte local: %2$s',
+	'ERROR_NOTICE_NO_FILE'			=> 'Um ou mais erros ocorreram durante a ação de pedido. Favor fazer um registro completo de qualquer erros e pedir ao autor do MOD por assit&ecirc;ncia.',
 
 	'FAIL'							=> 'Falha',
 	'FILE_COULD_NOT_READ'			=> 'ERRO: Não foi possível abrir o arquivo %s para leitura.',
-	'FOUNDERS_ONLY'					=> 'Você deve estar logado como um fundador para acessar esta página.',
+	'FOUNDERS_ONLY'					=> 'Você deve ser um fundador da comunidade para ver esta página.',
 
-	'GROUP_NOT_EXIST'				=> 'O grupo não existe',
+	'GROUP_NOT_EXIST'				=> 'Grupo não existe',
 
 	'IGNORE'						=> 'Ignorar',
-	'IMAGESET_CACHE_PURGE'			=> 'Atualizando o imageset %s',
+	'IMAGESET_CACHE_PURGE'			=> 'Atualizando o %s imageset',
 	'INSTALL'						=> 'Instalar',
 	'INSTALL_MOD'					=> 'Instalar %s',
-	'INSTALL_MOD_CONFIRM'			=> 'Você deseja realmente instalar %s?',
+	'INSTALL_MOD_CONFIRM'			=> 'Você está pronto para instalar %s?',
 
 	'MODULE_ADD'					=> 'Adicionando %1$s módulo: %2$s',
-	'MODULE_ALREADY_EXIST'			=> 'ERRO: O módulo selecionado já existe.',
-	'MODULE_NOT_EXIST'				=> 'ERRO: O módulo selecionado não existe.',
+	'MODULE_ALREADY_EXIST'			=> 'ERRO: Módulo já existe.',
+	'MODULE_NOT_EXIST'				=> 'ERRO: Módulo não existe.',
 	'MODULE_REMOVE'					=> 'Removendo %1$s módulo: %2$s',
 
 	'NONE'							=> 'Nenhum',
-	'NO_TABLE_DATA'					=> 'ERRO: Nenhuma tabela foi especificada',
+	'NO_TABLE_DATA'					=> 'ERRO: Nenhum conteúdo de tabela especificado',
 
 	'PARENT_NOT_EXIST'				=> 'ERRO: A categoria pai especificada para este módulo não existe.',
-	'PERMISSIONS_WARNING'			=> 'Novas permissões foram adicionadas.  Cheque suas permissões e veja se elas estão de acordo como gostaria que estivessem.',
-	'PERMISSION_ADD'				=> 'Adicionando nova opção de permissão: %s',
-	'PERMISSION_ALREADY_EXISTS'		=> 'ERRO: A opção de permissão %s já existe.',
-	'PERMISSION_NOT_EXIST'			=> 'ERRO: A opção de permissão %s não existe.',
-	'PERMISSION_REMOVE'				=> 'Removendo opção de permissão: %s',
-	'PERMISSION_SET_GROUP'			=> 'Permissões configuradas para o grupo %s.',
-	'PERMISSION_SET_ROLE'			=> 'Permissões configuradas para a tarefa %s.',
-	'PERMISSION_UNSET_GROUP'		=> 'Permissões não configuradas para o grupo %s.',
-	'PERMISSION_UNSET_ROLE'			=> 'Permissões não configuradas para a tarefa %s.',
+	'PERMISSIONS_WARNING'			=> 'Novas propriedades de permissão foram adicionadas. Tenha certeza de checar suas propriedades de permissão e ver que elas estão como você queira.',
+	'PERMISSION_ADD'				=> 'Adicionando novas propriedades de permissão: %s',
+	'PERMISSION_ALREADY_EXISTS'		=> 'ERRO: Propriedade de permissão %s já existe.',
+	'PERMISSION_NOT_EXIST'			=> 'ERRO: Propriedade de permissão %s não existe.',
+	'PERMISSION_REMOVE'				=> 'Removendo propriedade de permissão: %s',
+	'PERMISSION_ROLE_ADD'			=> 'Adicionando nova regra de permissão: %s',
+	'PERMISSION_ROLE_UPDATE'		=> 'Atualizando regra de permissão: %s',
+	'PERMISSION_ROLE_REMOVE'		=> 'Removendo regra de permissão: %s',
+	'PERMISSION_SET_GROUP'			=> 'Definindo permissão para o grupo %s.',
+	'PERMISSION_SET_ROLE'			=> 'Propriedades de permissão para a regra %s.',
+	'PERMISSION_UNSET_GROUP'		=> 'Removendo propriedades de permissões para o grupo %s.',
+	'PERMISSION_UNSET_ROLE'			=> 'Removendo propriedades de permissões para a regra %s.',
 
-	'ROLE_NOT_EXIST'				=> 'Tarefa não existente',
+	'ROLE_ALREADY_EXISTS'			=> 'Regra de permissão já existe.',
+	'ROLE_NOT_EXIST'				=> 'Regra de permissão não existe',
 
 	'SUCCESS'						=> 'Sucesso',
 
-	'TABLE_ADD'						=> 'Adicionando nova tabela no banco de dados: %s',
-	'TABLE_ALREADY_EXISTS'			=> 'ERRO: A tabela %s já existe no banco de dados.',
-	'TABLE_COLUMN_ADD'				=> 'Adicionando uma nova coluna nomeada %2$s na tabela %1$s',
+	'TABLE_ADD'						=> 'Adicionando uma nova tabela do banco de dados: %s',
+	'TABLE_ALREADY_EXISTS'			=> 'ERRO: Tabela do banco de dados %s já existe.',
+	'TABLE_COLUMN_ADD'				=> 'Adicionando uma nova coluna chamada %2$s para tabela %1$s',
 	'TABLE_COLUMN_ALREADY_EXISTS'	=> 'ERRO: A coluna %2$s já existe na tabela %1$s.',
 	'TABLE_COLUMN_NOT_EXIST'		=> 'ERRO: A coluna %2$s não existe na tabela %1$s.',
-	'TABLE_COLUMN_REMOVE'			=> 'Removendo a coluna nomeada %2$s da tabela %1$s',
-	'TABLE_COLUMN_UPDATE'			=> 'Atualizando a coluna nomeada %2$s da tabela %1$s',
-	'TABLE_ROW_INSERT_DATA'			=> 'Inserindo linhas na tabela %s do banco de dados.',
-	'TABLE_ROW_REMOVE_DATA'			=> 'Removendo linhas na tabela %s do banco de dados.',
-	'TABLE_ROW_UPDATE_DATA'			=> 'Atualizando linhas na tabela %s do banco de dados.',
-	'TABLE_KEY_ADD'					=> 'Adicionando uma chave nomeada %2$s na tabela %1$s',
+	'TABLE_COLUMN_REMOVE'			=> 'Removendo a coluna denominada %2$s da tabela %1$s',
+	'TABLE_COLUMN_UPDATE'			=> 'Atualizando uma coluna chamada %2$s da tabela %1$s',
+	'TABLE_KEY_ADD'					=> 'Adicionando uma chave chamada %2$s para tabela %1$s',
 	'TABLE_KEY_ALREADY_EXIST'		=> 'ERRO: O índice %2$s já existe na tabela %1$s.',
 	'TABLE_KEY_NOT_EXIST'			=> 'ERRO: O índice %2$s não existe na tabela %1$s.',
-	'TABLE_KEY_REMOVE'				=> 'Removendo uma chave nomeada %2$s da tabela %1$s',
-	'TABLE_NOT_EXIST'				=> 'ERRO: A tabela %s não existe no banco de dados.',
+	'TABLE_KEY_REMOVE'				=> 'Removendo uma chave chamada %2$s da tabela %1$s',
+	'TABLE_NOT_EXIST'				=> 'ERRO: Tabela do banco de dados %s não existe.',
 	'TABLE_REMOVE'					=> 'Removendo tabela do banco de dados: %s',
-	'TEMPLATE_CACHE_PURGE'			=> 'Atualizando o template %s',
-	'THEME_CACHE_PURGE'				=> 'Atualizando o tema %s',
+	'TABLE_ROW_INSERT_DATA'			=> 'Inserindo dados na tabela do banco de dados em %s.',
+	'TABLE_ROW_REMOVE_DATA'			=> 'Removendo um registro da tabela %s do banco de dados',
+	'TABLE_ROW_UPDATE_DATA'			=> 'Atualizando um registro na tabela do banco de dados %s.',
+	'TEMPLATE_CACHE_PURGE'			=> 'Atualizando o %s template',
+	'THEME_CACHE_PURGE'				=> 'Atualizando o %s theme',
 
 	'UNINSTALL'						=> 'Desinstalar',
 	'UNINSTALL_MOD'					=> 'Desinstalar %s',
-	'UNINSTALL_MOD_CONFIRM'			=> 'Você deseja realmente desinstalar %s?  Todos os dados e configurações salvos por este mod serão removidos!',
+	'UNINSTALL_MOD_CONFIRM'			=> 'Você está pronto para desinstalar %s? Todas propriedades e dados salvos por esta modificação será removido!',
 	'UNKNOWN'						=> 'Desconhecido',
 	'UPDATE_MOD'					=> 'Atualizar %s',
-	'UPDATE_MOD_CONFIRM'			=> 'Você deseja realmente atualizar %s?',
-	'UPDATE_UMIL'					=> 'Esta versão do UMIL está desatualizada.<br /><br />Por favor, baixe a mais nova versão do UMIL (Unified MOD Install Library) a seguir: <a href="%1$s">%1$s</a>',
+	'UPDATE_MOD_CONFIRM'			=> 'Você está pronto para atualizar %s?',
+	'UPDATE_UMIL'					=> 'Esta versão do UMIL está fora de data.<br /><br />Favor fazer download da última versão do UMIL (Unified MOD Install Library) em: <a href="%1$s">%1$s</a>',
 
-	'VERSIONS'						=> 'Versão da Mod: <strong>%1$s</strong><br />Versão atualmente instalada: <strong>%2$s</strong>',
-	'VERSION_SELECT'				=> 'Seleção de Versão',
-	'VERSION_SELECT_EXPLAIN'		=> 'Não modifique a opção "Ignorar" a menos que você saiba o que está fazendo ou o que lhe foi dito.',
+	'VERSIONS'						=> 'Mod Versão: <strong>%1$s</strong><br />Atualmente instalada: <strong>%2$s</strong>',
+	'VERSION_SELECT'				=> 'Versão selecionada',
+	'VERSION_SELECT_EXPLAIN'		=> 'Não mude de “Ignorar” ao menos que você saiba o que está sendo feito ou que foi dito para fazer.',
 ));
 
 ?>

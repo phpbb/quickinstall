@@ -6,9 +6,8 @@
  * @package umil
  * @version $Id$
  * @copyright (c) 2008 phpBB Group
+ * @copyright (c) 2010 phpBB.it - upgrade translation on 2010/08/19
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- *
- * Translated By: phpBB.it
  *
  */
 
@@ -124,7 +123,8 @@ $lang = array_merge($lang, array(
 	'UNKNOWN'						=> 'Sconosciuto',
 	'UPDATE_MOD'					=> 'Aggiorna %s',
 	'UPDATE_MOD_CONFIRM'			=> 'Sei pronto per l’aggiornamento %s?',
-	'UPDATE_UMIL'					=> 'Questa versione di UMIL è obsoleta.<br /><br />Scarica l’ultima versione di UMIL (Unified MOD Install Library) da: <a href="%1$s">%1$s</a>',
+	'UPDATE_UMIL'					=> 'Questa versione di UMIL è obsoleta.<br /><br />Scarica l’ultima versione di UMIL (Unified MOD Install Library) da: <a href="%1$s" target="_blank">%1$s</a>',
+
 
 	'VERSIONS'						=> 'Versione Mod: <strong>%1$s</strong><br />Attualmente installata: <strong>%2$s</strong>',
 	'VERSION_SELECT'				=> 'Seleziona versione',
