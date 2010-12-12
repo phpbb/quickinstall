@@ -63,10 +63,13 @@ class automod_installer
 		$GLOBALS['lang'] = &$user->lang;
 		global $lang;
 
-		require("{$phpbb_root_path}install/install_versions.$phpEx");
-		require("{$phpbb_root_path}includes/functions_convert.$phpEx");
-		require("{$phpbb_root_path}includes/functions_transfer.$phpEx");
-		include($phpbb_root_path . 'umil/umil_frontend.' . $phpEx);
+		require($phpbb_root_path . 'includes/functions_mods.' . $phpEx);
+		require($phpbb_root_path . 'install/install_versions.' . $phpEx);
+
+		require($phpbb_root_path . 'includes/functions_convert.' . $phpEx);
+		require($phpbb_root_path . 'includes/functions_transfer.' . $phpEx);
+
+		require($phpbb_root_path . 'umil/umil_frontend.' . $phpEx);
 
 		global $current_version;
 		$current_version = $qi_config['automod_version'];
