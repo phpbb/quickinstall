@@ -32,15 +32,15 @@ class automod_installer
 
 		// Since AutoMOD is no longer shipped with QI we need to do some checking...
 		$automod_path = '';
-		if (file_exists($quickinstall_path . 'sources/automod/root'))
-		{
-			// They copied to complete root to automod instead of its contents.
-			$automod_path = $quickinstall_path . 'sources/automod/root/';
-		}
-		else if (file_exists($quickinstall_path . 'sources/automod/includes'))
+		if (file_exists($quickinstall_path . 'sources/automod/includes'))
 		{
 			// Let's assume they copied the contents.
 			$automod_path = $quickinstall_path . 'sources/automod/';
+		}
+		else if (file_exists($quickinstall_path . 'sources/automod/root/includes'))
+		{
+			// They copied to complete root to automod instead of its contents.
+			$automod_path = $quickinstall_path . 'sources/automod/root/';
 		}
 		else
 		{
