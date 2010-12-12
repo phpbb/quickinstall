@@ -396,44 +396,16 @@ class qi_create
 		$install->add_language(false, false);
 		$install->add_bots(false, false);
 
-		// now automod (easymod)
-		if ($automod)
-		{
-			// todo: add automod code
-			file_functions::copy_dir($quickinstall_path . 'sources/automod/', $board_dir);
-
-			// include AutoMOD lanugage files.
-			if (file_exists($phpbb_root_path . 'language/' . $user->lang . '/mods/info_acp_modman.' . $phpEx))
-			{
-				include($phpbb_root_path . 'language/' . $user->lang . '/mods/info_acp_modman.' . $phpEx);
-			}
-			else
-			{
-				include("{$phpbb_root_path}language/en/mods/info_acp_modman.$phpEx");
-			}
-
-			unset($GLOBALS['lang']);
-			$GLOBALS['lang'] = &$user->lang;
-			global $lang;
-
-			require("{$phpbb_root_path}install/install_automod.$phpEx");
-			require("{$phpbb_root_path}includes/functions_convert.$phpEx");
-			require("{$phpbb_root_path}includes/functions_transfer.$phpEx");
-
-			// some stuff josh added... >_<
-			global $current_version;
-			$current_version = $qi_config['automod_version'];
-
-			// add some language entries to prevent notices
-			$user->lang += array(
-				'FILE_EDITS'	=> '',
-				'NEXT_STEP'		=> '',
-			);
-		}
-
 		// login
 		$user->session_begin();
 		$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
+
+		// now automod (easymod)
+		if ($automod)
+		{
+			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
+			automod_installer::install_automod($board_dir, $make_writable);
+		}
 
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
