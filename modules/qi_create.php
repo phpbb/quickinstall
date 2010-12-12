@@ -140,7 +140,14 @@ class qi_create
 		$dbname = validate_dbname($dbname);
 
 		// copy qi's lang file for the log
-		file_functions::copy_dir($quickinstall_path . 'language/to_phpbb/', $board_dir . 'language/');
+		if (file_exists("{$quickinstall_path}language/{$qi_config['qi_lang']}/info_acp_qi.$phpEx") && file_exists($board_dir . 'language/' . $qi_config['qi_lang']))
+		{
+			copy("{$quickinstall_path}language/{$qi_config['qi_lang']}/info_acp_qi.$phpEx", "{$board_dir}language/{$qi_config['qi_lang']}/mods/info_acp_qi.$phpEx");
+		}
+		else
+		{
+			copy("{$quickinstall_path}language/en/info_acp_qi.$phpEx", "{$board_dir}language/en/mods/info_acp_qi.$phpEx");
+		}
 
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
