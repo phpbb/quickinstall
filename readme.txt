@@ -3,15 +3,20 @@ phpBB3 QuickInstall ReadMe
 About:
 phpBB3 QuickInstall is tool used to manage many installations of phpBB3. It is
 not meant to be used on a remote server, it should be used only locally. You
-can install a phpBB3 board with one single mouseclick. Now this is useful for
-developing modifications, as you won't have any conflicts of differen't mods.
+can install a phpBB3 board with one single mouse click. Now this is useful for
+developing modifications, as you won't have any conflicts of different mods.
 
 Installation:
-Copy the quickinstall_3.0.x folder to your local webspace. Make sure boards/,
+Copy the quickinstall_3.0.x folder to your local web space. Make sure boards/,
 cache/ and qi_config.cfg is writable.
 
 Download the latest phpBB version from http://www.phpbb.com/downloads/, unzip it
 and copy the phpBB3 directory to sources/
+
+Download AutoMOD from http://www.phpbb.com/mods/automod/ or from the AutoMOD repo
+https://github.com/phpbb/automod depending on what version you want. Unzip the
+package and copy the contents of the root, or upload depending on AutoMOD version,
+directory to sources/automod/.
 
 Then point your browser to
 quickinstall/index.php. You should be taken to the settings page.
