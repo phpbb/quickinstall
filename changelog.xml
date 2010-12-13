@@ -182,10 +182,17 @@
 		</changelog>
 	</entry>
 	<entry>
-		<date>2010-11-22</date>
-		<version>1.1.6-dev</version>
+		<date>2010-12-13</date>
+		<version>1.1.6-RC1</version>
 		<changelog lang="en">
 			<change>[FIX] Rewrote some of the config handling, at least it looks nicer now. :)</change>
+			<change>[FIX] Updated the install instructions.</change>
+			<change>[FIX] Checks for the config file and gives a proper slap if it's missing.</change>
+			<change>[FIX] Tries to correctly handle non valid chars in db names.</change>
+			<change>[CHANGE] Removed AutoMOD from the QI package.</change>
+			<change>[CHANGE] Moved QI's language file for phpBB.</change>
+			<change>[CHANGE] Moved some AutoMOD installation to QI instead of MODding UMIL or AutoMOD.</change>
+			<change>[FEATURE] Added option so set how many users, forums, topics and posts that will be created.</change>
 		</changelog>
 	</entry>
 </history>
