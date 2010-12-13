@@ -57,6 +57,12 @@ require($quickinstall_path . 'includes/template.' . $phpEx);
 // Set PHP error handler to ours
 set_error_handler(array('qi', 'msg_handler'), E_ALL);
 
+// Make sure we have phpBB.
+if (!file_exists($quickinstall_path . 'sources/phpBB3'))
+{
+	trigger_error('phpBB not found. You need to download phpBB3 and extract it in sources/');
+}
+
 // Let's get the config.
 $qi_config = get_settings();
 
