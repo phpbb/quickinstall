@@ -47,13 +47,15 @@ else
 @ini_set('memory_limit', '128M');
 
 // Include scripts for quickinstall
-//require($quickinstall_path . 'qi_config.' . $phpEx);
 require($quickinstall_path . 'includes/qi_constants.' . $phpEx);
 require($quickinstall_path . 'includes/functions_quickinstall.' . $phpEx);
 require($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 require($quickinstall_path . 'includes/functions_files.' . $phpEx);
 require($quickinstall_path . 'includes/functions_module.' . $phpEx);
 require($quickinstall_path . 'includes/template.' . $phpEx);
+
+// Set PHP error handler to ours
+set_error_handler(array('qi', 'msg_handler'), E_ALL);
 
 // Let's get the config.
 $qi_config = get_settings();
@@ -66,17 +68,12 @@ foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport', 'table_prefix')
 // We need some phpBB functions to.
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
-include($phpbb_root_path . 'includes/auth.' . $phpEx);
-include($phpbb_root_path . 'includes/acm/acm_file.' . $phpEx);
-include($phpbb_root_path . 'includes/cache.' . $phpEx);
+require($phpbb_root_path . 'includes/auth.' . $phpEx);
+require($phpbb_root_path . 'includes/acm/acm_file.' . $phpEx);
+require($phpbb_root_path . 'includes/cache.' . $phpEx);
 require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
-//require($phpbb_root_path . 'includes/functions_template.' . $phpEx);
-include($phpbb_root_path . 'includes/session.' . $phpEx);
-//include($phpbb_root_path . 'includes/template.' . $phpEx);
+require($phpbb_root_path . 'includes/session.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
-
-// Set PHP error handler to ours
-set_error_handler(array('qi', 'msg_handler'), E_ALL);
 
 $mode = request_var('mode', 'main');
 $qi_install = (empty($qi_config)) ? true : false;

@@ -97,7 +97,12 @@ function validate_settings(&$config)
  */
 function get_settings()
 {
-	global $quickinstall_path, $phpEx;
+	global $quickinstall_path, $phpEx, $user;
+
+	if (!file_exists($quickinstall_path . 'qi_config.cfg'))
+	{
+		trigger_error('qi_config.cfg not found. Make sure that you have renamed qi_config_sample.cfg to qi_config.cfg.');
+	}
 
 	$config = file($quickinstall_path . 'qi_config.cfg');
 
