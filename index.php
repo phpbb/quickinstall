@@ -96,7 +96,7 @@ $language = (!empty($qi_config['qi_lang'])) ? $qi_config['qi_lang'] : 'en';
 $language = request_var('lang', $language);
 
 $user->lang = (file_exists($quickinstall_path . 'language/' . $language)) ? $language : 'en';
-qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $language . '/');
+qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $user->lang . '/');
 
 // Probably best place to validate the settings
 $error = validate_settings($qi_config);
