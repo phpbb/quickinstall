@@ -126,6 +126,8 @@ $lang = array_merge($lang, array(
 	'LICENSE' => 'License?',
 	'LICENSE_EXPLAIN' => 'This script is released under the terms of the <a href="license.txt">GNU General Public License version 2</a>. This is mainly because it uses large portions of phpBB’s code, which is also released under this license, and requires any modifications to use it too. But also because it’s a great license that keeps free software free :).',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',
+
+	// To translators: Lorem Ipsum is a dummy placeholder string. Do not translate this string.
 	'LOREM_IPSUM' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
 	'MAKE_WRITABLE' => 'Make files world writable',
