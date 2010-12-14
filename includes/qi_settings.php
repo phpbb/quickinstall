@@ -31,6 +31,7 @@ if ($mode == 'update_settings')
 	{
 		$s_settings_success = true;
 		$qi_install = false;
+		$language = $qi_config['qi_lang'];
 	}
 	else
 	{
@@ -38,51 +39,7 @@ if ($mode == 'update_settings')
 	}
 }
 
-// Temporary store our language.
-if (!empty($lang))
-{
-	$store_lang = $lang;
-	unset($lang);
-}
-else
-{
-	$store_lang = '';
-}
-// Generate the language select.
-$lang_dir = scandir($quickinstall_path . 'language');
-$lang_arr = array();
-$s_selected = false;
-foreach ($lang_dir as $language)
-{
-	if (file_exists($quickinstall_path . 'language/' . $language . '/phpbb.' . $phpEx))
-	{
-		include($quickinstall_path . 'language/' . $language . '/phpbb.' . $phpEx);
-
-		// Default this to English
-		if (empty($qi_config['qi_lang']) && $lang['USER_LANG'] == 'en')
-		{
-			$s_selected = true;
-		}
-		else if ($lang['USER_LANG'] == $qi_config['qi_lang'])
-		{
-			$s_selected = true;
-		}
-		else
-		{
-			$s_selected = false;
-		}
-
-		$template->assign_block_vars('lang_row', array(
-			'LANG_CODE' => $lang['USER_LANG'],
-			'LANG_NAME' => $lang['USER_LANG_LONG'],
-			'S_SELECTED' => $s_selected,
-		));
-		unset($lang);
-	}
-}
-// And restore our language
-$lang = $store_lang;
-unset($store_lang);
+gen_lang_select($language);
 
 if ($qi_install)
 {

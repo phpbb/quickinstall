@@ -18,6 +18,17 @@
 <fieldset>
 	<legend>{L_SETTINGS}</legend>
 	<dl>
+		<dt><label for="qi_lang">{L_QI_LANG}:*</label><br />{L_QI_LANG_EXPLAIN}</dt>
+		<dd>
+			<select id="qi_lang" name="qi_config[qi_lang]" onchange="window.location.href='index.php?mode=settings&amp;lang='+this.options[this.selectedIndex].value;">
+				<!-- BEGIN lang_row -->
+					<option value="{lang_row.LANG_CODE}"<!-- IF lang_row.S_SELECTED --> selected="selected"<!-- ENDIF -->>{lang_row.LANG_NAME}</option>
+				<!-- END lang_row -->
+			</select>
+		</dd>
+	</dl>
+	<hr />
+	<dl>
 		<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
 		<dd>
 			<select name="qi_config[dbms]" id="dbms">
@@ -57,19 +68,10 @@
 		<dt><label for="table_prefix">{L_TABLE_PREFIX}:*</label><br />{L_TABLE_PREFIX_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></dd>
 	</dl>
+	<hr />
 	<dl>
 		<dt><label for="boards_dir">{L_BOARDS_DIR}:*</label><br />{L_BOARDS_DIR_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="qi_lang">{L_QI_LANG}:*</label><br />{L_QI_LANG_EXPLAIN}</dt>
-		<dd>
-			<select id="qi_lang" name="qi_config[qi_lang]">
-				<!-- BEGIN lang_row -->
-					<option value="{lang_row.LANG_CODE}"<!-- IF lang_row.S_SELECTED --> selected="selected"<!-- ENDIF -->>{lang_row.LANG_NAME}</option>
-				<!-- END lang_row -->
-			</select>
-		</dd>
 	</dl>
 	<dl>
 		<dt><label for="qi_tz">{L_QI_TZ}:*</label><br />{L_QI_TZ_EXPLAIN}</dt>
@@ -106,6 +108,7 @@
 		<dt><label for="default_lang">{L_DEFAULT_LANG}:*</label><br />{L_DEFAULT_LANG_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="default_lang" name="qi_config[default_lang]" value="{CONFIG_DEFAULT_LANG}" /></dd>
 	</dl>
+	<hr />
 	<dl>
 		<dt><label for="server_name">{L_SERVER_NAME}:*</label><br />{L_SERVER_NAME_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /></dd>
@@ -125,6 +128,7 @@
 			<label><input type="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label>
 		</dd>
 	</dl>
+	<hr />
 	<dl>
 		<dt><label for="board_email">{L_BOARD_EMAIL}:*</label><br />{L_BOARD_EMAIL_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /></dd>
@@ -171,6 +175,7 @@
 		<dt><label for="smtp_pass">{L_SMTP_PASS}:</label><br />{L_SMTP_PASS_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></dd>
 	</dl>
+	<hr />
 	<dl>
 		<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}</dt>
 		<dd>

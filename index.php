@@ -88,7 +88,15 @@ $qi_install = (empty($qi_config)) ? true : false;
 $template = new template();
 $template->set_custom_template('style', 'qi');
 
-qi::add_lang(array('qi', 'phpbb'));
+// Create the user.
+$user = new user();
+
+// Get and set the language.
+$language = (!empty($qi_config['qi_lang'])) ? $qi_config['qi_lang'] : 'en';
+$language = request_var('lang', $language);
+
+$user->lang = (file_exists($quickinstall_path . 'language/' . $language)) ? $language : 'en';
+qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $language . '/');
 
 // Probably best place to validate the settings
 $error = validate_settings($qi_config);
@@ -126,7 +134,6 @@ $db->sql_connect($dbhost, $dbuser, $dbpasswd, false, $dbport, false, false);
 $db->sql_return_on_error(true);
 
 // now create a module_handler object
-$user		= new user();
 $auth		= new auth();
 $cache		= new cache();
 $module		= new module_handler($quickinstall_path . 'modules/', 'qi_');

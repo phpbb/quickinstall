@@ -192,8 +192,51 @@ function update_settings(&$config)
 		$cfg_string .= $key . '=' . $value . "\n";
 	}
 
+	if (!empty($config['qi_lang']) && $config['qi_lang'] != $user->lang['USER_LANG'])
+	{
+		if (file_exists($quickinstall_path . 'language/' . $config['qi_lang']))
+		{
+			$user->lang = $config['qi_lang'];
+			qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $config['qi_lang'] . '/');
+		}
+	}
+
 	file_put_contents($quickinstall_path . 'qi_config.cfg', $cfg_string);
 }
 
+/**
+ * Generate a lang select for the settings page.
+ */
+function gen_lang_select($language = '')
+{
+	global $quickinstall_path, $phpEx, $user, $template;
+
+	$lang_dir = scandir($quickinstall_path . 'language');
+	$lang_arr = array();
+
+	foreach ($lang_dir as $lang_path)
+	{
+		if (file_exists($quickinstall_path . 'language/' . $lang_path . '/phpbb.' . $phpEx))
+		{
+			include($quickinstall_path . 'language/' . $lang_path . '/phpbb.' . $phpEx);
+
+			if (!empty($language) && $language == $lang['USER_LANG'])
+			{
+				$s_selected = true;
+			}
+			else
+			{
+				$s_selected = false;
+			}
+
+			$template->assign_block_vars('lang_row', array(
+				'LANG_CODE' => $lang['USER_LANG'],
+				'LANG_NAME' => $lang['USER_LANG_LONG'],
+				'S_SELECTED' => $s_selected,
+			));
+			unset($lang);
+		}
+	}
+}
 
 ?>
