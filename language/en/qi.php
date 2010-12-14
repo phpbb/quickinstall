@@ -86,7 +86,7 @@ $lang = array_merge($lang, array(
 	'CREATE_MOD_EXPLAIN' => 'Set to yes if you want one global moderator created. This will be tester_1 or tester_2 if a admin is selected.',
 
 	'DB_EXISTS' => 'The database %s already exists.',
-	'DB_PREFIX' => 'Database table prefix',
+	'DB_PREFIX' => 'Database prefix',
 	'DB_PREFIX_EXPLAIN' => 'This is added before all database names to avoid overwriting databases not used by QuickInstall.',
 	'DBHOST' => 'Database server',
 	'DBHOST_EXPLAIN' => 'Usually localhost.',

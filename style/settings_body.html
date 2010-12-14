@@ -50,6 +50,10 @@
 		</dd>
 	</dl>
 	<dl>
+		<dt><label for="db_prefix">{L_DB_PREFIX}:*</label><br />{L_DB_PREFIX_EXPLAIN}</dt>
+		<dd><input class="text medium" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /></dd>
+	</dl>
+	<dl>
 		<dt><label for="table_prefix">{L_TABLE_PREFIX}:*</label><br />{L_TABLE_PREFIX_EXPLAIN}</dt>
 		<dd><input class="text medium" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></dd>
 	</dl>
@@ -77,10 +81,6 @@
 			<label><input type="radio" name="qi_config[qi_dst]" value="1"<!-- IF CONFIG_QI_DST == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 			<label><input type="radio" name="qi_config[qi_dst]" value="0"<!-- IF CONFIG_QI_DST == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 		</dd>
-	</dl>
-	<dl>
-		<dt><label for="db_prefix">{L_DB_PREFIX}:*</label><br />{L_DB_PREFIX_EXPLAIN}</dt>
-		<dd><input class="text medium" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /></dd>
 	</dl>
 	<dl>
 		<dt><label for="admin_name">{L_ADMIN_NAME}:*</label><br />{L_ADMIN_NAME_EXPLAIN}</dt>
