@@ -97,15 +97,10 @@ $lang = array_merge($lang, array(
 	'COOKIE_DOMAIN_EXPLAIN' => 'Cela correspond généralement à localhost.',
 	'COOKIE_SECURE' => 'Cookie sécurisé',
 	'COOKIE_SECURE_EXPLAIN' => 'Si votre serveur fonctionne par l’intermédiaire d’SSL, activez ceci, sinon laissez cela vide afin que cette fonctionnalité soit désactivée. Si ceci est activé alors que votre serveur ne fonctionne pas par l’intermédiaire d’SSL, votre serveur sera victime d’erreurs durant les redirections.',
-<<<<<<< HEAD
 	'CREATE_ADMIN' => 'Créer un administrateur',
 	'CREATE_ADMIN_EXPLAIN' => 'Réglez ce réglage sur “Oui” si vous souhaitez créer un administrateur qui ne sera pas fondateur. Il portera le nom de tester_1.',
 	'CREATE_MOD' => 'Créer un modérateur',
 	'CREATE_MOD_EXPLAIN' => 'Réglez ce réglage sur “Oui” si vous souhaitez créer un modérateur global. Il portera le nom de tester_1 (ou tester_2 si un administrateur a déjà été créé).',
-=======
-	'CREATE_MOD' => 'Créer un modérateur',
-	'CREATE_MOD_EXPLAIN' => 'Réglez ce réglage sur “Oui” si vous souhaitez créer un modérateur global. Il portera le nom de tester_1.',
->>>>>>> e9b88d739922b41c6a1c4984a5446e8ef800a79b
 
 	'DB_EXISTS' => 'La base de données %s existe déjà.',
 	'DB_PREFIX' => 'Préfixe de la base de données',
@@ -149,15 +144,8 @@ $lang = array_merge($lang, array(
 	'LICENSE_EXPLAIN' => 'Ce script est sous <a href="license.txt">Licence Publique Générale GNU version 2</a>. C’est principalement dû au fait qu’il utilise une grande partie du code de phpBB, qui est également sous cette licence obligeant que toute modification effectuée hérite également de la même licence. Mais aussi parce qu’il s’agit d’une superbe licence qui fait qu’un logiciel libre soit et continue de rester libre :).',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installé par Quickinstall %s</strong>',
 
-<<<<<<< HEAD
 	// To translators: Lorem Ipsum is a dummy place holder string. Do not translate this string.
 	'LOREM_IPSUM' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-=======
-	'LICENSE' => 'Licence ?',
-	'LICENSE_EXPLAIN' => 'Ce script est sous <a href="license.txt">Licence Publique Générale GNU version 2</a>. C’est principalement dû au fait qu’il utilise une grande partie du code de phpBB, qui est également sous cette licence obligeant que toute modification effectuée hérite également de la même licence. Mais aussi parce qu’il s’agit d’une superbe licence qui fait qu’un logiciel libre soit et continue de rester libre :).',
-	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installé par Quickinstall %s</strong>',
-	'LOREM_IMPSUM' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
->>>>>>> e9b88d739922b41c6a1c4984a5446e8ef800a79b
 
 	'MAKE_WRITABLE' => 'Rendre les fichiers inscriptibles',
 	'MAKE_WRITABLE_EXPLAIN' => 'Rendre les fichiers, config.php et les répertoires inscriptibles par défaut. Ceci peut être modifié lorsque vous créez un forum.',
@@ -170,10 +158,7 @@ $lang = array_merge($lang, array(
 	'NEED_WRITABLE' => 'QuickInstall a besoin que les forums et que les répertoires caches soient inscriptibles de manière permanente.<br />Seul le fichier qi_config.php a besoin d’être inscriptible afin de pouvoir installer QuickInstall.',
 	'NO' => 'Non',
 	'NO_ALT_ENV' => 'L’environnement alternatif que vous avez spécifié n’existe pas.',
-<<<<<<< HEAD
 	'NO_AUTOMOD' => 'AutoMOD est introuvable dans le répertoire des sources. Vous devez télécharger AutoMOD, copier le répertoire racine dans le répertoire sources/automod, puis renommer “root” en “automod”.',
-=======
->>>>>>> e9b88d739922b41c6a1c4984a5446e8ef800a79b
 	'NO_BOARDS' => 'Vous n’avez aucun forum.',
 	'NO_DB' => 'Aucune base de données n’a été sélectionnée.',
 	'NO_IMPACT_WIN' => 'Ce réglage n’a aucun impact sur les systèmes Windows antérieurs à Windows 7.',
@@ -199,10 +184,7 @@ $lang = array_merge($lang, array(
 	'OPTIONS_ADVANCED' => 'Options avancées',
 
 	'POPULATE' => 'Peupler le forum',
-<<<<<<< HEAD
 	'POPULATE_OPTIONS' => 'Options de population',
-=======
->>>>>>> e9b88d739922b41c6a1c4984a5446e8ef800a79b
 	'POPULATE_MAIN_EXPLAIN' => 'Noms d’utilisateurs : Tester_x. Mots de passe : 123456',
 	'POPULATE_EXPLAIN' => 'Peupler le forum avec le nombre d’utilisateurs, de catégories, de forums, de sujets et de messages que vous avez spécifié ci-dessous. Plus ces nombres sont élevés, plus le temps de création du forum sera important.<br />Tous ces réglages peuvent être modifiés lorsque vous créez un forum.',
 
@@ -260,11 +242,8 @@ $lang = array_merge($lang, array(
 	'TABLE_PREFIX_EXPLAIN' => 'Le préfixe de table qui sera utilisé pour vos forums. Vous pouvez modifier cela dans les options avancées lorsque vous créez de nouveaux forums.',
 	'TEST_CAT_NAME' => 'Catégorie de test %d',
 	'TEST_FORUM_NAME' => 'Forum de test %d',
-<<<<<<< HEAD
 	'TEST_POST_START' => 'Message de test %d', // This will be on the first line in each post and then filled with lorem ipsum.
 	'TEST_TOPIC_TITLE' => 'Sujet de test %d',
-=======
->>>>>>> e9b88d739922b41c6a1c4984a5446e8ef800a79b
 
 	'UNCHECK_ALL' => 'Tout désélectionner',
 	'UP_TO_DATE' => 'Big Brother vous annonce que vous êtes à jour.',
