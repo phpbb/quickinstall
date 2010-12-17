@@ -19,7 +19,7 @@ if (!defined('IN_QUICKINSTALL'))
 if ($mode == 'update_settings')
 {
 	// Time to save some settings.
-	$qi_config = request_var('qi_config', array('' => ''));
+	$qi_config = utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
 
 	// make sure qi_config.php is writable
 	if (is_writable($quickinstall_path . 'qi_config.cfg'))
