@@ -8,7 +8,7 @@
 *
 */
 
-define('QI_VERSION', '1.1.6-dev');
+define('QI_VERSION', '1.1.6-RC2');
 
 define('QI_PHPBB_VERSION', '3.0.8'); // Version for the latest phpBB
-define('AUTOMOD_VERSION', '1.0.0'); // Version for the included AutoMOD
+define('AUTOMOD_VERSION', '1.0.0'); // Version for the latest AutoMOD

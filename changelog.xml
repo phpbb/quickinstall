@@ -195,4 +195,14 @@
 			<change>[FEATURE] Added option so set how many users, forums, topics and posts that will be created.</change>
 		</changelog>
 	</entry>
+	<entry>
+		<date>2010-12-20</date>
+		<version>1.1.6-RC2</version>
+		<changelog lang="en">
+			<change>[FIX] Make sure phpBB exists before trying to load it.</change>
+			<change>[FIX] Allow localized usernames. Bug #62563</change>
+			<change>[FIX] Added gitattributes to not export all .gitkeep files.</change>
+			<change>[CHANGE] Moved things in the settings and slightly changed the layout.</change>
+		</changelog>
+	</entry>
 </history>
