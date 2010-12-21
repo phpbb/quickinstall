@@ -89,7 +89,7 @@ $lang = array_merge($lang, array(
 	'CREATE_MOD_EXPLAIN' => 'Pilih menjadi ya jika anda menginginkan satu global moderator dibuat. Ini akan menjadi tester_1 atau tester_2 jika admin dipilih.',
 
 	'DB_EXISTS' => 'Database %s sudah ada.',
-	'DB_PREFIX' => 'Awalan prefik database',
+	'DB_PREFIX' => 'Awalan atau prefik database',
 	'DB_PREFIX_EXPLAIN' => 'Ini ditambahkan sebelum semua nama database untuk menghindari penimpaan database yang tidak digunakan oleh QuickInstall.',
 	'DBHOST' => 'Server database',
 	'DBHOST_EXPLAIN' => 'Biasanya localhost.',
@@ -131,7 +131,7 @@ $lang = array_merge($lang, array(
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Diinstal oleh Quickinstall phpBB versi %s</strong>',
 	'LOREM_IPSUM' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
-	'MAKE_WRITABLE' => 'Buat file bisa ditulisi',
+	'MAKE_WRITABLE' => 'Buat berkas bisa ditulisi',
 	'MAKE_WRITABLE_EXPLAIN' => 'Buat berkas, config.php, dan direktori bisa ditulisi secara bawaannya. Bagian ini bisa diganti pada saat anda membuat forum.',
 	'MANAGE_BOARDS' => 'Atur papan',
 	'MAX' => 'Max',
@@ -145,7 +145,7 @@ $lang = array_merge($lang, array(
 	'NO_AUTOMOD' => 'AutoMOD tidak ditemukan di direktori sumber. Anda harus mengunduh AutoMOD dan salinlah ke direktori induk ke sources/automod, kemudian ganti nama direktori menjadi automod.',
 	'NO_BOARDS' => 'Anda tidak memiliki papan apapun.',
 	'NO_DB' => 'Tidak ada database dipilih.',
-	'NO_IMPACT_WIN' => 'Pengaturan tidak memiliki dampak pada sistem Windows systems yang lebih rendah dari Win7.',
+	'NO_IMPACT_WIN' => 'Pengaturan tidak memiliki dampak pada sistem Windows yang lebih rendah dari Win7.',
 	'NO_MODULE' => 'Modul %s tidak bisa dimunculkan.',
 	'NO_PASSWORD' => 'Tidak ada kata sandi',
 	'NO_DBPASSWD_ERR' => 'Anda harus mengatur sebuah kata sandi db dan cek tanpa kata sandi. Anda tidak bisa memilih kedua <strong>punya</strong> dan <strong>tidak punya</strong> kata sandi',
