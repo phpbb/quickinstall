@@ -27,63 +27,63 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'TRANSLATION_INFO'	=> '',
+	'TRANSLATION_INFO'	=> 'Danish Translation by Jan Skovsgaard &copy; 2010',
 	'DIRECTION'			=> 'ltr',
-	'DATE_FORMAT'		=> '|d M Y|',	// 01 Jan 2007
-	'USER_LANG'			=> 'en',
-	'USER_LANG_LONG'	=> 'English',
+	'DATE_FORMAT'		=> '|j. M Y|',	// 01 Jan 2007
+	'USER_LANG'			=> 'da',
+	'USER_LANG_LONG'	=> 'Dansk',
 
 	'datetime'			=> array(
-		'TODAY'		=> 'Today',
-		'TOMORROW'	=> 'Tomorrow',
-		'YESTERDAY'	=> 'Yesterday',
+		'TODAY'		=> 'i dag',
+		'TOMORROW'	=> 'i morgen',
+		'YESTERDAY'	=> 'i går',
 
-		'Sunday'	=> 'Sunday',
-		'Monday'	=> 'Monday',
-		'Tuesday'	=> 'Tuesday',
-		'Wednesday'	=> 'Wednesday',
-		'Thursday'	=> 'Thursday',
-		'Friday'	=> 'Friday',
-		'Saturday'	=> 'Saturday',
+		'Sunday'	=> 'søndag',
+		'Monday'	=> 'mandag',
+		'Tuesday'	=> 'tirsdag',
+		'Wednesday'	=> 'onsdag',
+		'Thursday'	=> 'torsdag',
+		'Friday'	=> 'fredag',
+		'Saturday'	=> 'lørdag',
 
-		'Sun'		=> 'Sun',
-		'Mon'		=> 'Mon',
-		'Tue'		=> 'Tue',
-		'Wed'		=> 'Wed',
-		'Thu'		=> 'Thu',
-		'Fri'		=> 'Fri',
-		'Sat'		=> 'Sat',
+		'Sun'	=> 'søn',
+		'Mon'	=> 'man',
+		'Tue'	=> 'tirs',
+		'Wed'	=> 'ons',
+		'Thu'	=> 'tors',
+		'Fri'	=> 'fre',
+		'Sat'	=> 'lør',
 
-		'January'	=> 'January',
-		'February'	=> 'February',
-		'March'		=> 'March',
-		'April'		=> 'April',
-		'May'		=> 'May',
-		'June'		=> 'June',
-		'July'		=> 'July',
-		'August'	=> 'August',
-		'September' => 'September',
-		'October'	=> 'October',
-		'November'	=> 'November',
-		'December'	=> 'December',
+		'January'	=> 'januar',
+		'February'	=> 'februar',
+		'March'	=> 'marts',
+		'April'	=> 'april',
+		'May'	=> 'maj',
+		'June'	=> 'juni',
+		'July'	=> 'juli',
+		'August'	=> 'august',
+		'September'	=> 'september',
+		'October'	=> 'oktober',
+		'November'	=> 'november',
+		'December'	=> 'december',
 
-		'Jan'		=> 'Jan',
-		'Feb'		=> 'Feb',
-		'Mar'		=> 'Mar',
-		'Apr'		=> 'Apr',
-		'May_short'	=> 'May',	// Short representation of "May". May_short used because in English the short and long date are the same for May.
-		'Jun'		=> 'Jun',
-		'Jul'		=> 'Jul',
-		'Aug'		=> 'Aug',
-		'Sep'		=> 'Sep',
-		'Oct'		=> 'Oct',
-		'Nov'		=> 'Nov',
-		'Dec'		=> 'Dec',
+		'Jan'		=> 'jan',
+		'Feb'		=> 'feb',
+		'Mar'		=> 'mar',
+		'Apr'		=> 'apr',
+		'May_short'	=> 'maj',	// Short representation of "May". May_short used because in English the short and long date are the same for May.
+		'Jun'		=> 'jun',
+		'Jul'		=> 'jul',
+		'Aug'		=> 'aug',
+		'Sep'		=> 'sep',
+		'Oct'		=> 'okt',
+		'Nov'		=> 'nov',
+		'Dec'		=> 'dec',
 	),
 
 	// The default dateformat which will be used on new installs in this language
 	// Translators should change this if a the usual date format is different
-	'default_dateformat'	=> 'D M d, Y g:i a', // Mon Jan 01, 2007 1:37 pm
+	'default_dateformat'	=> 'j. M Y, H:i', // Mon Jan 01, 2007 1:37 pm
 
 ));
 
