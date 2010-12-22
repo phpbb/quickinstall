@@ -38,6 +38,11 @@ class populate
 	private $topic_chunks = 2000;
 
 	/**
+	 * Lorem ipsum, a placeholder for the posts.
+	 */
+	private $lorem_ipsum = '';
+
+	/**
 	 * $user_arr = array(
 	 *   (int) $user_id => array(
 	 *     'user_ud' => (int) $user_id,
@@ -144,6 +149,10 @@ class populate
 		// And now those plesky posts.
 		if ($this->num_replies_max || $this->num_topics_max)
 		{
+			include($quickinstall_path . 'includes/lorem_ipsum.' . $phpEx);
+			$this->lorem_ipsum = $lorem_ipsum;
+			unset($lorem_impsum);
+
 			$this->fill_forums();
 		}
 
@@ -279,7 +288,7 @@ class populate
 					$poster_id = array_rand($this->user_arr);
 					$poster_arr = $this->user_arr[$poster_id];
 					$post_time = time();
-					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $user->lang['LOREM_IPSUM'];
+					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $this->lorem_ipsum;
 					$subject = (($j > 0) ? 'Re: ' : '') . $topic_arr['topic_title'];
 
 					$bbcode_uid = $bbcode_bitfield = '';
