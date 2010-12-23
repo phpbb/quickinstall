@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* info_acp_qi [English]
+* info_acp_qi [Danish]
 *
 * @package language
 * @version $Id$

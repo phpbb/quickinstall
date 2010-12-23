@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* phpbb [English]
+* phpbb [Danish]
 *
 * @package quickinstall
 * @version $Id$
