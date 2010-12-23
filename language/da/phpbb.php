@@ -6,6 +6,7 @@
 * @package quickinstall
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
+* @translated by jask
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */

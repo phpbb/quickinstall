@@ -7,6 +7,7 @@
 * @version $Id$
 * @copyright (c) 2007, 2008 eviL3
 * @copyright (c) 2010 Jari Kanerva (tumba25)
+* @translated by jask
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -112,13 +113,13 @@ $lang = array_merge($lang, array(
 	'EMAIL_DOMAIN_EXPLAIN' => 'Det emaildomæne der anvendes af testere. Deres emailadresse vil være tester_x@&lt;domain.com&gt;.',
 	'EMAIL_ENABLE' => 'Aktiver email',
 	'EMAIL_ENABLE_EXPLAIN' => 'Aktiver emails for hele boardet. For et lokalt testboard vil indstillingen normalt være inaktiv, med mindre du vil teste emails.',
-	'ENABLED' => 'Aktiveret',
+	'ENABLED' => 'Aktiv',
 
 	'GENERAL_ERROR' => 'Generel Fejl',
 
 	'IN_SETTINGS' => 'Indstillinger for QuickInstall.',
 	'INCLUDE_MODS' => 'Inkluder MODs',
-	'INCLUDE_MODS_EXPLAIN' => 'Vælg mapper fra sources/mods/-mappen i denne liste. Disse filer vil blive kopieret til dit nye boards rod, hvorved eksisterende og gamle filer overskrives (du kan altså have  premodded boards her for eksempel). Vælger du “Ingen”, kopieres intet (fordi det er besværligt at fravælge elementer).',
+	'INCLUDE_MODS_EXPLAIN' => 'Vælg mapper fra sources/mods/-mappen i denne liste. Disse filer vil blive kopieret til dit nye boards rod, hvorved eksisterende og gamle filer overskrives (du kan altså for eksempel have premodded boards her). Vælger du “Ingen”, kopieres intet (fordi det er besværligt at fravælge elementer).',
 	'INSTALL_BOARD' => 'Installer et board',
 	'INSTALL_QI' => 'Installer QuickInstall',
 	'IS_NOT_VALID' => 'Det er ikke gyldigt.',
@@ -138,7 +139,7 @@ $lang = array_merge($lang, array(
 	'NEED_WRITABLE' => 'For at QuickInstall skal fungerer skal board- og cache-mapper være skrivbare.<br />Filen qi_config.php behøver kun at være skrivbar under installationen af QuickInstall.',
 	'NO' => 'Nej',
 	'NO_ALT_ENV' => 'Angivne alternative installation eksisterer ikke.',
-	'NO_AUTOMOD' => 'AutoMOD er ikke tilstede i sources-mappen. Du skal downloade AutoMOD og koipere rod-mappen til sources/automod, og omdøbe root ti automod.',
+	'NO_AUTOMOD' => 'AutoMOD er ikke tilstede i sources-mappen. Du skal downloade AutoMOD og kopiere rod-mappen til sources/automod, og omdøbe root ti automod.',
 	'NO_BOARDS' => 'Ingen boards installeret.',
 	'NO_DB' => 'Ingen database valgt.',
 	'NO_IMPACT_WIN' => 'Indstillingen har ingen indflydelse på Windows-systemer ældre end Win7.',
@@ -149,7 +150,7 @@ $lang = array_merge($lang, array(
 	'NUM_CATS' => 'Antal kategorier',
 	'NUM_CATS_EXPLAIN' => 'Det antal boardkategorier der skal oprettes.',
 	'NUM_FORUMS' => 'Antal fora',
-	'NUM_FORUMS_EXPLAIN' => 'Det antal fora der skal oprettes. Det fordeles ligeligt i de oprettede kategorier.',
+	'NUM_FORUMS_EXPLAIN' => 'Det antal fora der skal oprettes. De fordeles ligeligt i de oprettede kategorier.',
 	'NUM_NEW_GROUP' => 'Nye brugere',
 	'NUM_NEW_GROUP_EXPLAIN' => 'Det antal brugere der skal tilknyttes gruppen Nye brugere.<br />Er antallet højere end det samlede antal brugere, tilknyttes alle brugere denne gruppe.',
 	'NUM_REPLIES' => 'Antal svar',
@@ -157,7 +158,7 @@ $lang = array_merge($lang, array(
 	'NUM_TOPICS' => 'Antal emner',
 	'NUM_TOPICS_EXPLAIN' => 'Antallet af emner i hvert forum. Der oprette et vilkårligt antal emner indenfor angivne værdier af min og max.',
 	'NUM_USERS' => 'Antal brugere',
-	'NUM_USERS_EXPLAIN' => 'Det antal brugere der skal befolke dit nye board.<br />Brugere tildeles brugernavnet Tester_x (hvor x er lig med num_users). Alle tildeles kodeordet "123456"',
+	'NUM_USERS_EXPLAIN' => 'Det antal brugere der skal befolke dit nye board.<br />Brugere tildeles brugernavnet Tester_x (hvor x er lig med num_users). Alle tildeles kodeordet "123456".',
 
 	'ONLY_LOCAL' => 'Bemærk at QuickInstall kun er udviklet til lokalt brug.<br />Quickinstall bør ikke installeres og anvendes på en server tilgængelig via Internet.',
 	'OPTIONS' => 'Indstillinger',
@@ -249,7 +250,7 @@ $lang = array_merge($lang, array(
 	'WHO_WHEN' => 'Hvem? Hvornår?',
 	'WHO_WHEN_EXPLAIN' => 'phpBB3 QuickInstall blev udviklet af Igor “eviL&lt;3” Wiedler i sommeren 2007. Igor omskrev softwaren delvist i marts 2008.<br />Siden marts 2010 vedligeholdes projektet af Jari “Tumba25” Kanerva.',
 	'WHY' => 'Hvorfor?',
-	'WHY_EXPLAIN' => 'Hvis du eksperimenterer meget med modding (eller udvikler Mods), er det, som i phpBB2, ikke praktisk at indeholde alle MODs i en enkelt phpBB-installation. Det giver det bedste overblik at have separate installationer til hvert MOD. Det er imidlertid tidskrævende og for besværligt at skulle hele operationen igennem med filkopiering og installation for hvert eksperiment. QuickInstall blev skabt for at forenkle denne process.',
+	'WHY_EXPLAIN' => 'Hvis du eksperimenterer meget med modding (eller udvikler Mods), har du sikkert også erfaret at det ikke er særlig praktisk at indeholde alle MODs i en enkelt phpBB-installation. Det giver det bedste overblik at have separate installationer til hvert MOD. Det er imidlertid tidskrævende og noget besværligt at skulle hele processen igennem, med filkopiering og installation for hvert eksperiment. QuickInstall blev skabt for at forenkle dette.',
 ));
 
 ?>
