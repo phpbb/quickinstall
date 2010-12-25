@@ -41,6 +41,60 @@ function marklist(id, name, state)
 		}
 	}
 }
+
+<!-- IF S_IN_SETTINGS -->
+/**
+* Bind the correct event handlers to a given input field
+* Bug #62574
+*/
+var labels = document.getElementsByTagName('label');
+function bind_62574_handlers(fieldname)
+{
+	// The password fields can be accessed directly
+	var inputfield = document.getElementById(fieldname);
+
+	// Bind the handler on the inputfield
+	inputfield.onmouseover = function(e)
+	{
+		this.type = 'text';
+	};
+	inputfield.onmouseout = function(e)
+	{
+		this.type = 'password';
+	}
+
+	// Find the labels for this field
+	for (var j in labels)
+	{
+		if (labels[j].htmlFor == fieldname)
+		{
+			labels[j].onmouseover = function(e)
+			{
+				inputfield.type = 'text';
+			};
+			labels[j].onmouseout = function(e)
+			{
+				inputfield.type = 'password';
+			}
+		}
+	}
+}
+<!-- ENDIF -->
+
+
+// Run some stuff when the page is loading
+window.onload = function() {
+<!-- IF S_IN_SETTINGS -->
+	// Bind some event handler to the password fields
+	// if a user hovers over the password field we'll
+	// show the password.
+	var identifiers = new Array('admin_pass', 'dbpasswd', 'smtp_pass');
+	for (var k in identifiers)
+	{
+		bind_62574_handlers(identifiers[k]);
+	}
+<!-- ENDIF -->
+};
 // ]]>
 </script>
 
@@ -75,7 +129,7 @@ function marklist(id, name, state)
 					<div id="menu">
 						<p><!-- IF S_IN_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
 						<!-- IF PAGE_MAIN and S_HAS_FORUMS -->
-						    <h5>{L_BOARDS_LIST}</h5>
+						<h5>{L_BOARDS_LIST}</h5>
 							<!-- BEGIN row -->
 							<a href="{row.BOARD_URL}">{row.BOARD_NAME}</a><br />
 							<!-- END row -->
