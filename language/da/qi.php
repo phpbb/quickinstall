@@ -241,8 +241,8 @@ $lang = array_merge($lang, array(
 	'WHAT_EXPLAIN' => 'phpBB3 QuickInstall er et script beregnet til hurtig installallation af phpBB. Ret indlysende.. ;-)',
 	'WHO_ELSE' => 'Hvem ellers?',
 	'WHO_ELSE_EXPLAIN' => '<ul><li>' . implode('</li><li>', array(
-		'Credits til phpBB-teamet, specielt udviklerteamet, som skabte sådan et vidunderligt stykke software.',
-		'Tak til phpBB.com MOD team (specielt Josh, aka “A_Jelly_Doughnut”) for AutoMOD, som er inkluderet i denne pakke.',
+		'Credits til phpBB-teamet, specielt udviklerteamet, som skabte denne vidunderlige software.',
+		'Tak til phpBB.com MOD team (specielt Josh, aka “A_Jelly_Doughnut”) for AutoMOD.',
 		'Tak til Mike TUMS for det flotte logo!',
 		'Tak til betatesterne!',
 		'Tak til phpBB-communitiet, phpBB.com, startrekguide.com og phpBBModders.net!',
