@@ -56,7 +56,7 @@
 	<dl>
 		<dt><label for="dbpasswd">{L_DBPASSWD}:*</label><br />{L_DBPASSWD_EXPLAIN}</dt>
 		<dd>
-			<input class="text medium" type="text" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
+			<input class="text medium" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
 			<label><input type="checkbox" id="no_dbpasswd" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF --> /> {L_NO_PASSWORD}</label>
 		</dd>
 	</dl>
@@ -90,7 +90,7 @@
 	</dl>
 	<dl>
 		<dt><label for="admin_pass">{L_ADMIN_PASS}:*</label><br />{L_ADMIN_PASS_EXPLAIN}</dt>
-		<dd><input class="text medium" type="text" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></dd>
+		<dd><input class="text medium" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></dd>
 	</dl>
 	<dl>
 		<dt><label for="admin_email">{L_ADMIN_EMAIL}:*</label><br />{L_ADMIN_EMAIL_EXPLAIN}</dt>
@@ -173,7 +173,7 @@
 	</dl>
 	<dl>
 		<dt><label for="smtp_pass">{L_SMTP_PASS}:</label><br />{L_SMTP_PASS_EXPLAIN}</dt>
-		<dd><input class="text medium" type="text" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></dd>
+		<dd><input class="text medium" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></dd>
 	</dl>
 	<hr />
 	<dl>

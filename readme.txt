@@ -31,3 +31,8 @@ License 2 (GPL). A copy has been included in the package (license.txt).
 
 I will not be held responsible for any damage caused by this script. Use it at
 your own risk.
+
+Password notice:
+The passwords that you enter in the "settings" page are stored in plain text,
+these passwords however are hidden in the user interface, but can be revealed
+by hovering over the password field.
