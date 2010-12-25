@@ -1,0 +1,8 @@
+qi_config.cfg
+boards/*
+cache/*.php
+sources/automod/*
+sources/extra/*
+sources/phpBB3_alt/*
+sources/phpBB3
+*~

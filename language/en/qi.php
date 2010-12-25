@@ -241,7 +241,7 @@ $lang = array_merge($lang, array(
 	'WHO_ELSE' => 'Who else?',
 	'WHO_ELSE_EXPLAIN' => '<ul><li>' . implode('</li><li>', array(
 		'Credits go to the phpBB team, especially the development team which created such a wonderful piece of software.',
-		'Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD, which is included in this package.',
+		'Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD.',
 		'Thanks to Mike TUMS for the nice logo!',
 		'Thanks to the beta testers!',
 		'Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!',
