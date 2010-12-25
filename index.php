@@ -93,7 +93,16 @@ $user = new user();
 
 // Get and set the language.
 $language = (!empty($qi_config['qi_lang'])) ? $qi_config['qi_lang'] : 'en';
-$language = request_var('lang', $language);
+
+// If there is a language selected in the dropdown menu it's sent as GET, then igonre the hidden POST field.
+if (isset($_GET['lang']))
+{
+	$language = request_var('lang', $language);
+}
+else if (!empty($_POST['sel_lang']))
+{
+	$language = request_var('sel_lang', $language);
+}
 
 $user->lang = (file_exists($quickinstall_path . 'language/' . $language)) ? $language : 'en';
 qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $user->lang . '/');

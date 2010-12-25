@@ -111,6 +111,7 @@ $template->assign_vars(array(
 	'CONFIG_NUM_REPLIES_MIN' => (isset($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 1,
 	'CONFIG_NUM_REPLIES_MAX' => (isset($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 15,
 	'CONFIG_EMAIL_DOMAIN' => (isset($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
+	'SEL_LANG' => (!empty($language)) ? $language : '',
 ));
 
 // Output page
