@@ -53,7 +53,28 @@ class qi_about
 		if ($use_changelog = file_exists($changelog_file))
 		{
 			// let's get the changelog :)
-			include($quickinstall_path . 'sources/automod/includes/mod_parser.' . $phpEx);
+			$automod_path = '';
+			if (file_exists($quickinstall_path . 'sources/automod/includes'))
+			{
+				// Let's assume they copied the contents.
+				$automod_path = $quickinstall_path . 'sources/automod/';
+			}
+			else if (file_exists($quickinstall_path . 'sources/automod/root/includes'))
+			{
+				// They copied to complete root to automod instead of its contents.
+				$automod_path = $quickinstall_path . 'sources/automod/root/';
+			}
+			else if (file_exists($quickinstall_path . 'sources/automod/upload/includes'))
+			{
+				// They copied to complete upload directory to automod instead of its contents.
+				$automod_path = $quickinstall_path . 'sources/automod/upload/';
+			}
+			else
+			{
+				trigger_error($user->lang['NO_AUTOMOD']);
+			}
+
+			include($automod_path . 'includes/mod_parser.' . $phpEx);
 
 			$xml_parser = new xml_array();
 			$data = $xml_parser->parse($changelog_file, file_get_contents($changelog_file));
