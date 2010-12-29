@@ -7,10 +7,10 @@ can install a phpBB3 board with one single mouse click. Now this is useful for
 developing modifications, as you won't have any conflicts of different mods.
 
 Installation:
-Copy the quickinstall_3.0.x folder to your local web space. Make sure boards/ and
+Copy the quickinstall folder to your local web space. Make sure boards/ and
 cache/ are writable by your web server.
 
-Rename qi_config_sample.cfg as qi_config.cfg and make sure it to is writable by
+Rename qi_config_sample.cfg as qi_config.cfg and make sure it is writable by
 your web server.
 
 Download the latest phpBB version from http://www.phpbb.com/downloads/, unzip it
@@ -21,10 +21,9 @@ https://github.com/phpbb/automod depending on what version you want. Unzip the
 package and copy the contents of the root, or upload depending on AutoMOD version,
 directory to sources/automod/.
 
-Then point your browser to
-quickinstall/index.php. You should be taken to the settings page.
-After that call index.php in your browser and it should work. If it does not,
-find support here: http://www.phpbb.com/community/viewforum.php?f=71
+Then point your browser to quickinstall/index.php. You should be taken to the
+settings page. After that open index.php in your browser and it should work. If
+it does not, seek support here: http://www.phpbb.com/community/viewforum.php?f=71
 
 phpBB3 QuickInstall is distributed under the terms of the GNU General Public
 License 2 (GPL). A copy has been included in the package (license.txt).
