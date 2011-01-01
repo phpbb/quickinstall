@@ -58,7 +58,7 @@ function validate_dbname($dbname, $first_char = false)
  */
 function validate_settings(&$config)
 {
-	global $user;
+	global $user, $quickinstall_path;
 
 	$config['no_dbpasswd'] = (empty($config['no_dbpasswd']) || $config['no_dbpasswd'] != 1) ? 0 : 1;
 	// Lets check the required settings...
@@ -69,7 +69,6 @@ function validate_settings(&$config)
 	$error .= ($config['dbpasswd'] == '' && !$config['no_dbpasswd']) ? $user->lang['DBPASSWD'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 	$error .= ($config['dbpasswd'] != '' && $config['no_dbpasswd']) ? $user->lang['NO_DBPASSWD_ERR'] . '<br />' : '';
 	$error .= ($config['table_prefix'] == '') ? $user->lang['TABLE_PREFIX'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
-	$error .= ($config['boards_dir'] == '') ? $user->lang['BOARDS_DIR'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 	$error .= ($config['qi_lang'] == '') ? $user->lang['QI_LANG'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 	$error .= ($config['qi_tz'] == '') ? $user->lang['QI_TZ'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 	$error .= ($config['db_prefix'] == '') ? $user->lang['DB_PREFIX'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
@@ -84,6 +83,17 @@ function validate_settings(&$config)
 	$error .= ($config['default_lang'] == '') ? $user->lang['DEFAULT_LANG'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
 
 	$error .= ($config['db_prefix'] != validate_dbname($config['db_prefix'], true)) ? $user->lang['DB_PREFIX'] . ' ' . $user->lang['IS_NOT_VALID'] . '<br />' : '';
+
+	if ($config['boards_dir'] == '')
+	{
+		$error .= $user->lang['BOARDS_DIR'] . ' ' . $user->lang['REQUIRED'] . '<br />';
+	}
+	else if (!file_exists($quickinstall_path . $config['boards_dir']) || !is_writable($quickinstall_path . $config['boards_dir']))
+	{
+		// The boards dir needs to both exist and be writeable.
+		$boards_dir_error = sprintf($user->lang['BOARDS_DIR_MISSING'], $config['boards_dir']);
+		$error .= $boards_dir_error . '<br />';
+	}
 
 	return($error);
 }

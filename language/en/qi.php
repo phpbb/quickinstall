@@ -68,6 +68,7 @@ $lang = array_merge($lang, array(
 	'BOARDS_DELETED_TITLE' => 'Boards deleted',
 	'BOARDS_DIR' => 'Boards directory',
 	'BOARDS_DIR_EXPLAIN' => 'The directory where your forums will be created. PHP needs to have write permissions to this directory.',
+	'BOARDS_DIR_MISSING' => 'The direcotry %s does not exist or is not writeable.',
 	'BOARDS_LIST' => 'List of boards',
 	'BOARDS_NOT_WRITABLE' => 'The boards directory is not writable.',
 
