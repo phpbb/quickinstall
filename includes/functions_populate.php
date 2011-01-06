@@ -31,6 +31,9 @@ class populate
 	private $num_replies_max = 0;
 	private $email_domain = '';
 
+	// We can't have all posts posted in the same second.
+	private $post_time = 0;
+
 	// How many of each type to send to the db each run
 	// Might be better to add some memory checking later.
 	private $user_chunks = 5000;
@@ -149,6 +152,16 @@ class populate
 		// And now those plesky posts.
 		if ($this->num_replies_max || $this->num_topics_max)
 		{
+			// Estimate the number of posts created.
+			// Or in reality, calculate the highest possible number and convert to seconds in the past.
+			// If one of them is zero this would not be so nice.
+			$replies = ($this->num_replies_max) ? $this->num_replies_max : 1;
+			$topics = ($this->num_topics_max) ? $this->num_topics_max : 1;
+			$forums = ($this->num_forums) ? $this->num_forums : 1;
+
+			$this->post_time = time() - ($topics * $replies * $forums);
+			$this->post_time = ($this->post_time < 0) ? 0 : $this->post_time;
+
 			include($quickinstall_path . 'includes/lorem_ipsum.' . $phpEx);
 			$this->lorem_ipsum = $lorem_ipsum;
 			unset($lorem_impsum);
@@ -287,7 +300,7 @@ class populate
 
 					$poster_id = array_rand($this->user_arr);
 					$poster_arr = $this->user_arr[$poster_id];
-					$post_time = time();
+					$post_time = $this->post_time++;
 					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $this->lorem_ipsum;
 					$subject = (($j > 0) ? 'Re: ' : '') . $topic_arr['topic_title'];
 
@@ -708,10 +721,12 @@ class populate
 		$db->sql_freeresult($result);
 		$last_user_id = $first_user_id + $this->num_users - 1;
 
+		// Do some fancy math so we get one new user per minute.
+		$reg_time = time() - ($this->num_users * 60);
+
 		$cnt = 1;
 		for ($i = $first_user_id; $i <= $last_user_id; $i++)
 		{
-			$time = time();
 			$this->user_arr[$i] = array(
 				'user_id'							=> $i,
 				'username'						=> 'tester_' . $cnt,
@@ -720,10 +735,11 @@ class populate
 				'user_lastmark'				=> 0,
 				'user_lastvisit'			=> 0,
 				'user_posts'					=> 0,
-				'user_regdate'				=> $time,
-				'user_passchg'				=> $time,
+				'user_regdate'				=> $reg_time,
+				'user_passchg'				=> $reg_time,
 			);
 
+			$reg_time += 60;
 			$cnt++;
 		}
 	}
