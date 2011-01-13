@@ -593,6 +593,8 @@ class populate
 				'user_options'				=> 230271,
 				'user_full_folder'		=> PRIVMSGS_NO_BOX,
 				'user_notify_type'		=> NOTIFY_EMAIL,
+
+				'user_sig'					=> '',
 			);
 
 			$chunk_cnt++;
