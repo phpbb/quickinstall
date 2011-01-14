@@ -594,7 +594,9 @@ class populate
 				'user_full_folder'		=> PRIVMSGS_NO_BOX,
 				'user_notify_type'		=> NOTIFY_EMAIL,
 
-				'user_sig'					=> '',
+				'user_sig'						=> '',
+				'user_occ'						=> '',
+				'user_interests'			=> '',
 			);
 
 			$chunk_cnt++;
