@@ -115,6 +115,8 @@ $lang = array_merge($lang, array(
 	'EMAIL_ENABLE_EXPLAIN' => 'Enable board wide emails. For a local test forum this would typically be off, unless you test the emails.',
 	'ENABLED' => 'Enabled',
 
+	'FUNCTIONS_MODS_MISSING' => 'includes/automod/functions_mods.php not found.',
+
 	'GENERAL_ERROR' => 'General Error',
 
 	'IN_SETTINGS' => 'Manage your QuickInstall settings.',
