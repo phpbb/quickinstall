@@ -72,6 +72,7 @@ class automod_installer
 		if (file_exists($phpbb_root_path . 'includes/automod/functions_mods.' . $phpEx))
 		{
 			include($phpbb_root_path . 'includes/automod/functions_mods.' . $phpEx);
+			include($phpbb_root_path . 'includes/automod/constants_automod.' . $phpEx);
 		}
 		else if (file_exists($phpbb_root_path . 'includes/functions_mods.' . $phpEx))
 		{
