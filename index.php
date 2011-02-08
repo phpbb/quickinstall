@@ -71,7 +71,7 @@ foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport', 'table_prefix')
 	$$var = $qi_config[$var];
 }
 
-// We need some phpBB functions to.
+// We need some phpBB functions too.
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 require($phpbb_root_path . 'includes/auth.' . $phpEx);
