@@ -250,7 +250,7 @@ $lang = array_merge($lang, array(
 		'Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!',
 	)) . '</li></ul>',
 	'WHO_WHEN' => 'Who? When?',
-	'WHO_WHEN_EXPLAIN' => 'phpBB3 QuickInstall was originally created by Igor “eviL&lt;3” Wiedler in the summer of 2007. It was partially rewritten by him in march 2008.<br />Since March 2010 this project is mantained by Jari “Tumba25” Kanerva.',
+	'WHO_WHEN_EXPLAIN' => 'phpBB3 QuickInstall was originally created by Igor “eviL&lt;3” Wiedler in the summer of 2007. It was partially rewritten by him in march 2008.<br />Since March 2010 this project is mantained by Jari “tumba25” Kanerva.',
 	'WHY' => 'Why?',
 	'WHY_EXPLAIN' => 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
 ));
