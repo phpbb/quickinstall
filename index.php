@@ -116,7 +116,7 @@ if ($qi_install || $mode == 'update_settings' || $mode == 'settings')
 	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
 }
 
-// Just put these here temporary. I'll change to use the constants later... Maybe tomorrow or so...
+// Just put these here temporarily. I'll change to use the constants later... Maybe tomorrow or so...
 $qi_config['version_check'] = false;
 $qi_config['qi_version'] = QI_VERSION;
 $qi_config['phpbb_version'] = PHPBB_VERSION;

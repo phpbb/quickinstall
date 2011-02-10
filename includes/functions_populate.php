@@ -531,7 +531,7 @@ class populate
 	}
 
 	/**
-	 * Creates users and put's them in the right groups.
+	 * Creates users and puts them in the right groups.
 	 * Also populates the users array.
 	 */
 	private function save_users()
@@ -619,7 +619,7 @@ class populate
 		// Put them in groups.
 		$chunk_cnt = $newly_registered = $skip = 0;
 
-		// Don't add the first users to the newly registered group if a moderator and/or a admin is needed.
+		// Don't add the first users to the newly registered group if a moderator and/or an admin is needed.
 		$skip = ($this->create_mod) ? $skip + 1 : $skip;
 		$skip = ($this->create_admin) ? $skip + 1 : $skip;
 
