@@ -28,11 +28,11 @@ class qi_main
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		// list of boards
-		$boards_arr = scandir($quickinstall_path . $qi_config['boards_dir']);
+		$boards_arr = scandir($settings->get_boards_dir());
 		$s_has_forums = false;
 		foreach ($boards_arr as $board)
 		{
-			if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($quickinstall_path . 'boards/' . $board))
+			if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($settings->get_boards_dir() . $board))
 			{
 				continue;
 			}
@@ -41,7 +41,7 @@ class qi_main
 
 			$template->assign_block_vars('row', array(
 				'BOARD_NAME'	=> htmlspecialchars($board),
-				'BOARD_URL'		=> $quickinstall_path . $qi_config['boards_dir'] . urlencode($board),
+				'BOARD_URL'		=> $settings->get_boards_dir() . urlencode($board),
 			));
 		}
 

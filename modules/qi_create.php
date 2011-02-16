@@ -108,7 +108,7 @@ class qi_create
 		}
 
 		// Set the new board as root path.
-		$board_dir = $quickinstall_path . 'boards/' . $dbname . '/';
+		$board_dir = $settings->get_boards_dir() . $dbname . '/';
 		$phpbb_root_path = $board_dir;
 		if (!defined('PHPBB_ROOT_PATH'))
 		{

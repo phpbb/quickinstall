@@ -102,6 +102,20 @@ class settings
 		return $cache_dir;
 	}
 
+	function get_boards_dir()
+	{
+		global $quickinstall_path;
+		if (empty($this->config['boards_dir']))
+		{
+			$boards_dir = $quickinstall_path . 'boards/';
+		}
+		else
+		{
+			$boards_dir = $this->config['boards_dir'];
+		}
+		return $boards_dir;
+	}
+
 	/**
 	 * Validates settings.
 	 *
@@ -151,10 +165,10 @@ class settings
 		{
 			$error .= $user->lang['BOARDS_DIR'] . ' ' . $user->lang['REQUIRED'] . '<br />';
 		}
-		else if (!file_exists($quickinstall_path . $this->config['boards_dir']) || !is_writable($quickinstall_path . $this->config['boards_dir']))
+		else if (!file_exists($this->get_boards_dir()) || !is_writable($this->get_boards_dir()))
 		{
 			// The boards dir needs to both exist and be writeable.
-			$boards_dir_error = sprintf($user->lang['BOARDS_DIR_MISSING'], $this->config['boards_dir']);
+			$boards_dir_error = sprintf($user->lang['BOARDS_DIR_MISSING'], $this->get_boards_dir());
 			$error .= $boards_dir_error . '<br />';
 		}
 
