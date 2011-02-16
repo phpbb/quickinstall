@@ -23,7 +23,7 @@ class qi_about
 {
 	public function __construct()
 	{
-		global $db, $template, $user;
+		global $db, $template, $user, $settings;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
 
 		if ($qi_config['version_check'])

@@ -24,7 +24,7 @@ class qi_manage
 {
 	public function __construct()
 	{
-		global $db, $template, $user;
+		global $db, $template, $user, $settings;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
 
 		$action = request_var('action', '');
