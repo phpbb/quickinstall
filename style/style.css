@@ -1628,3 +1628,7 @@ fieldset.permissions .permissions-switch {
 .redish {
 	color: red;
 }
+
+.config-text textarea {
+	height: 14em;
+}

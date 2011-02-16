@@ -16,27 +16,58 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
+$attempted = false;
+$config_text = '';
 if ($mode == 'update_settings')
 {
 	// Time to save some settings.
 	$qi_config = utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
 
-	// make sure qi_config.php is writable
-	if (is_writable($quickinstall_path . 'qi_config.cfg'))
+	$settings = new settings($qi_config);
+	$attempted = true;
+	$valid = false;
+	$error = '';
+	$saved = false;
+	if ($settings->validate())
 	{
-		$error = update_settings($qi_config);
+		$valid = true;
+		if (is_writable($quickinstall_path . 'qi_config.cfg'))
+		{
+			if ($settings->update())
+			{
+				$saved = true;
+			}
+			else
+			{
+				$error .= $user->lang['CONFIG_NOT_WRITTEN'] . '<br />';
+				$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
+				$config_text = $settings->get_config_text();
+			}
+		}
+		else
+		{
+			$error .= $user->lang['CONFIG_NOT_WRITABLE'] . '<br />';
+			$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
+			$config_text = $settings->get_config_text();
+		}
 	}
+	else
+	{
+		$error = $settings->error;
+	}
+	// configuration may have been modified by settings.
+	$qi_config = $settings->get_config();
 
 	if (empty($error))
 	{
 		$s_settings_success = true;
-		$qi_install = false;
 		$language = $qi_config['qi_lang'];
 	}
 	else
 	{
 		$s_settings_failure = true;
 	}
+	$qi_install = false;
 }
 
 gen_lang_select($language);
@@ -52,10 +83,11 @@ $template->assign_vars(array(
 	'S_CONFIG_WRITABLE' => is_writable($quickinstall_path . 'qi_config.cfg'),
 	'S_IN_INSTALL' => $qi_install,
 	'S_IN_SETTINGS' => true,
-	'S_SETTINGS_SUCCESS' => (!empty($s_settings_success)) ? true : false,
-	'S_SETTINGS_FAILURE' => (!empty($s_settings_failure)) ? true : false,
+	'S_SETTINGS_SUCCESS' => $attempted && $saved,
+	'S_SETTINGS_FAILURE' => $attempted && !$saved,
 
 	'ERROR' => (!empty($error)) ? ((!$qi_install) ? $error : '') : '',
+	'CONFIG_TEXT' => $config_text,
 
 	'U_UPDATE_SETTINGS'		=> qi::url('update_settings'),
 
@@ -64,6 +96,9 @@ $template->assign_vars(array(
 	'SITE_DESC'		=> $qi_config['site_desc'],
 	'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
 	'PAGE_MAIN'		=> false,
+
+	'CONFIG_SAVED'  => $saved,
+	'CONFIG_TEXT'   => htmlspecialchars($config_text),
 
 	// Config settings
 	'CONFIG_ADMIN_EMAIL' => (!empty($qi_config['admin_email'])) ? $qi_config['admin_email'] : '',

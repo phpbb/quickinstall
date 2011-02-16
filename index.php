@@ -108,7 +108,15 @@ $user->lang = (file_exists($quickinstall_path . 'language/' . $language)) ? $lan
 qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $user->lang . '/');
 
 // Probably best place to validate the settings
-$error = validate_settings($qi_config);
+$settings = new settings($qi_config);
+if ($settings->validate())
+{
+	$error = '';
+}
+else
+{
+	$error = $settings->error;
+}
 $mode = (empty($error)) ? $mode : (($mode == 'update_settings') ? 'update_settings' : 'settings');
 
 if ($qi_install || $mode == 'update_settings' || $mode == 'settings')

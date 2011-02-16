@@ -12,7 +12,33 @@
 
 <!-- IF ERROR --><div class="errorbox">{ERROR}</div><!-- ENDIF -->
 
-<!-- IF S_BOARDS_WRITABLE and S_CACHE_WRITABLE and S_CONFIG_WRITABLE -->
+<!-- IF CONFIG_TEXT -->
+	<div class="errorbox large">
+		<div class='config-text'>
+			<div id='config_text_button' style='display:none'>
+				<p>{L_CONFIG_WARNING}</p>
+				<p>
+					<input type='button' value="{L_CONFIG_BUTTON}" onclick='show_config()' />
+				</p>
+			</div>
+			<textarea id='config_text' readonly='readonly' style='display:none'>{CONFIG_TEXT}</textarea>
+			<noscript>
+				<textarea id='config_text' readonly='readonly'>{CONFIG_TEXT}</textarea>
+			</noscript>
+		</div>
+	</div>
+
+	<script type='text/javascript'>
+		function show_config()
+		{
+			document.getElementById('config_text').style.display = '';
+			document.getElementById('config_text_button').style.display = 'none';
+		}
+		document.getElementById('config_text_button').style.display = '';
+	</script>
+<!-- ENDIF -->
+
+<!-- IF S_BOARDS_WRITABLE and S_CACHE_WRITABLE -->
 <form method="post" action="{U_UPDATE_SETTINGS}">
 
 <fieldset>
