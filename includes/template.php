@@ -49,12 +49,12 @@ class template
 	*/
 	function set_template()
 	{
-		global $phpbb_root_path, $user;
+		global $phpbb_root_path, $user, $settings;
 
 		if (file_exists($phpbb_root_path . 'styles/' . $user->theme['template_path'] . '/template'))
 		{
 			$this->root = $phpbb_root_path . 'styles/' . $user->theme['template_path'] . '/template';
-			$this->cachepath = $phpbb_root_path . 'cache/tpl_' . str_replace('_', '-', $user->theme['template_path']) . '_';
+			$this->cachepath = $settings->get_cache_dir() . 'tpl_' . str_replace('_', '-', $user->theme['template_path']) . '_';
 
 			if ($user->theme['template_inherits_id'])
 			{
@@ -77,10 +77,10 @@ class template
 	*/
 	function set_custom_template($template_path, $template_name)
 	{
-		global $phpbb_root_path;
+		global $phpbb_root_path, $settings;
 
 		$this->root = $template_path;
-		$this->cachepath = $phpbb_root_path . 'cache/ctpl_' . str_replace('_', '-', $template_name) . '_';
+		$this->cachepath = $settings->get_cache_dir() . 'ctpl_' . str_replace('_', '-', $template_name) . '_';
 
 		return true;
 	}

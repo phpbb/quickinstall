@@ -88,6 +88,20 @@ class settings
 		return $this->config;
 	}
 
+	function get_cache_dir()
+	{
+		global $quickinstall_path;
+		if (empty($this->config['cache_dir']))
+		{
+			$cache_dir = $quickinstall_path . 'cache/';
+		}
+		else
+		{
+			$cache_dir = $this->config['cache_dir'];
+		}
+		return $cache_dir;
+	}
+
 	/**
 	 * Validates settings.
 	 *

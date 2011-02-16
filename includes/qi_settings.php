@@ -79,7 +79,7 @@ if ($qi_install)
 
 $template->assign_vars(array(
 	'S_BOARDS_WRITABLE' => is_writable($quickinstall_path . 'boards'),
-	'S_CACHE_WRITABLE' => is_writable($quickinstall_path . 'cache'),
+	'S_CACHE_WRITABLE' => is_writable($settings->get_cache_dir()),
 	'S_CONFIG_WRITABLE' => is_writable($quickinstall_path . 'qi_config.cfg'),
 	'S_IN_INSTALL' => $qi_install,
 	'S_IN_SETTINGS' => true,

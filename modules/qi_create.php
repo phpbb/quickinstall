@@ -24,7 +24,7 @@ class qi_create
 {
 	public function __construct()
 	{
-		global $db, $user, $auth, $cache;
+		global $db, $user, $auth, $cache, $settings;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
 
 		// include installation functions
@@ -205,7 +205,7 @@ class qi_create
 			// Check if the database exists.
 			if ($dbms == 'sqlite' || $dbms == 'firebird')
 			{
-				$db_check = $db->sql_select_db($quickinstall_path . 'cache/' . $qi_config['db_prefix'] . $dbname);
+				$db_check = $db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
 			}
 			else
 			{
@@ -220,8 +220,8 @@ class qi_create
 
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
-			$db->sql_query('CREATE DATABASE ' . $quickinstall_path . 'cache/' . $qi_config['db_prefix'] . $dbname);
-			$db->sql_select_db($quickinstall_path . 'cache/' . $qi_config['db_prefix'] . $dbname);
+			$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
+			$db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
 		}
 		else
 		{
@@ -417,7 +417,7 @@ class qi_create
 		if ($dbms == 'sqlite' || $dbms == 'firebird')
 		{
 			// copy the temp db over
-			file_functions::copy_file($quickinstall_path . 'cache/' . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
+			file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
 			$db->sql_select_db($board_dir . $qi_config['db_prefix'] . $dbname);
 		}
 

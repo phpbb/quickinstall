@@ -84,6 +84,8 @@ require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
 $mode = request_var('mode', 'main');
 $qi_install = (empty($qi_config)) ? true : false;
 
+$settings = new settings($qi_config);
+
 // We need to set the template here.
 $template = new template();
 $template->set_custom_template('style', 'qi');
@@ -108,7 +110,6 @@ $user->lang = (file_exists($quickinstall_path . 'language/' . $language)) ? $lan
 qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $user->lang . '/');
 
 // Probably best place to validate the settings
-$settings = new settings($qi_config);
 if ($settings->validate())
 {
 	$error = '';
@@ -161,8 +162,9 @@ $config = array(
 );
 
 // overwrite
-$cache->cache_dir = $quickinstall_path . 'cache/';
-$template->cachepath = $quickinstall_path . 'cache/tpl_qi_';
+
+$cache->cache_dir = $settings->get_cache_dir();
+$template->cachepath = $cache->cache_dir . 'tpl_qi_';
 
 // load lang
 qi::add_lang(array('qi', 'phpbb'));
