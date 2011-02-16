@@ -161,6 +161,17 @@ class settings
 
 		$error .= ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? $user->lang['DB_PREFIX'] . ' ' . $user->lang['IS_NOT_VALID'] . '<br />' : '';
 
+		if ($this->config['cache_dir'] == '')
+		{
+			$error .= $user->lang['CACHE_DIR'] . ' ' . $user->lang['REQUIRED'] . '<br />';
+		}
+		else if (!file_exists($this->get_cache_dir()) || !is_writable($this->get_cache_dir()))
+		{
+			// The cache dir needs to both exist and be writeable.
+			$cache_dir_error = sprintf($user->lang['CACHE_DIR_MISSING'], $this->get_cache_dir());
+			$error .= $cache_dir_error . '<br />';
+		}
+
 		if ($this->config['boards_dir'] == '')
 		{
 			$error .= $user->lang['BOARDS_DIR'] . ' ' . $user->lang['REQUIRED'] . '<br />';

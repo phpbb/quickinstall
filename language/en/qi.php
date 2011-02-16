@@ -72,6 +72,9 @@ $lang = array_merge($lang, array(
 	'BOARDS_LIST' => 'List of boards',
 	'BOARDS_NOT_WRITABLE' => 'The boards directory is not writable.',
 
+	'CACHE_DIR' => 'Cache directory',
+	'CACHE_DIR_EXPLAIN' => 'The directory where quickinstall stores various files. PHP needs to have write permissions to this directory.',
+	'CACHE_DIR_MISSING' => 'The directory %s does not exist or is not writeable.',
 	'CACHE_NOT_WRITABLE' => 'The cache directory is not writable.',
 	'CHANGELOG' => 'Changelog',
 	'CHECK_ALL' => 'Check all',
