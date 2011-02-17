@@ -169,34 +169,33 @@ class file_functions
 	{
 		global $phpEx;
 
-		$file_arr = scandir($dir);
-		$dir .= '/';
-
-		foreach ($file_arr as $file)
+		$old_perms = fileperms($dir);
+		$new_perms = $old_perms | $add_perms;
+		if ($new_perms != $old_perms)
 		{
-			if ($file == '.' || $file == '..')
-			{
-				continue;
-			}
+			chmod($dir, $new_perms);
+		}
+		
+		if (is_dir($dir))
+		{
+			$file_arr = scandir($dir);
+			$dir .= '/';
 
-			//if ($root && $file == 'config.' . $phpEx)
-			//{
-			//	chmod($dir . $file, 0666);
-			//	continue;
-			//}
-
-			$file = $dir . $file;
-			
-			$old_perms = fileperms($file);
-			$new_perms = $old_perms | $add_perms;
-			if ($new_perms != $old_perms)
+			foreach ($file_arr as $file)
 			{
-				chmod($file, $new_perms);
-			}
+				if ($file == '.' || $file == '..')
+				{
+					continue;
+				}
 
-			if (is_dir($file))
-			{
-				self::grant_permissions($file, false);
+				//if ($root && $file == 'config.' . $phpEx)
+				//{
+				//	chmod($dir . $file, 0666);
+				//	continue;
+				//}
+
+				$file = $dir . $file;
+				self::grant_permissions($file, $add_perms, false);
 			}
 		}
 

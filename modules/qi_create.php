@@ -132,11 +132,6 @@ class qi_create
 		// copy all of our files
 		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 
-		if ($make_writable)
-		{
-			chmod($board_dir, 0777);
-		}
-
 		// Now make sure we have a valid db-name and prefix
 		$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
 		$dbname = validate_dbname($dbname);
