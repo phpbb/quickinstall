@@ -127,6 +127,8 @@ $lang = array_merge($lang, array(
 	'FUNCTIONS_MODS_MISSING' => 'includes/automod/functions_mods.php not found.',
 
 	'GENERAL_ERROR' => 'General Error',
+	'GRANT_PERMS' => 'Grant additional permissions',
+	'GRANT_PERMS_EXPLAIN' => '(e.g. 0060 for group read/write)',
 
 	'IN_SETTINGS' => 'Manage your QuickInstall settings.',
 	'INCLUDE_MODS' => 'Include MODs',
@@ -141,6 +143,8 @@ $lang = array_merge($lang, array(
 
 	'MAKE_WRITABLE' => 'Make files world writable',
 	'MAKE_WRITABLE_EXPLAIN' => 'Set files, config.php, and directories world writable by default. This can be changed when you create a forum.',
+	'MAKE_WRITABLE_BOARD' => 'Make files world writable',
+	'MAKE_WRITABLE_BOARD_EXPLAIN' => '(same as granting permissions of 0666)',
 	'MANAGE_BOARDS' => 'Manage boards',
 	'MAX' => 'Max',
 	'MIGHT_TAKE_LONG' => '<strong>Please note:</strong> Creation of the board can take a while, perhaps even a minute or longer, so <strong>don’t</strong> submit the form twice.',

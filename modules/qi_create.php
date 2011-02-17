@@ -51,6 +51,7 @@ class qi_create
 		$delete_files = request_var('delete_files', false);
 		$automod = request_var('automod', false);
 		$make_writable = request_var('make_writable', false);
+		$grant_perms = octdec(request_var('grant_perms', 0));
 		$populate = request_var('populate', false);
 		$subsilver = request_var('subsilver', 0);
 		$alt_env = request_var('alt_env', '');
@@ -504,6 +505,12 @@ class qi_create
 		if ($make_writable)
 		{
 			file_functions::make_writable($board_dir);
+		}
+
+		// Grant additional permissions
+		if ($grant_perms)
+		{
+			file_functions::grant_permissions($board_dir, $grant_perms);
 		}
 
 		// if he wants to be redirected, redirect him
