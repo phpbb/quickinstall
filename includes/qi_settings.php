@@ -107,6 +107,7 @@ $template->assign_vars(array(
 	'CONFIG_AUTOMOD' => (isset($qi_config['automod'])) ? $qi_config['automod'] : 1,
 	'CONFIG_BOARD_EMAIL' => (!empty($qi_config['board_email'])) ? $qi_config['board_email'] : '',
 	'CONFIG_BOARDS_DIR' => (!empty($qi_config['boards_dir'])) ? $qi_config['boards_dir'] : 'boards/',
+	'CONFIG_BOARDS_URL' => (!empty($qi_config['boards_url'])) ? $qi_config['boards_url'] : 'boards/',
 	'CONFIG_CACHE_DIR' => (!empty($qi_config['cache_dir'])) ? $qi_config['cache_dir'] : 'cache/',
 	'CONFIG_COOKIE_DOMAIN' => (!empty($qi_config['cookie_domain'])) ? $qi_config['cookie_domain'] : 'localhost',
 	'CONFIG_COOKIE_SECURE' => (!empty($qi_config['cookie_secure'])) ? $qi_config['cookie_secure'] : 0,

@@ -71,6 +71,8 @@ $lang = array_merge($lang, array(
 	'BOARDS_DIR_MISSING' => 'The directory %s does not exist or is not writeable.',
 	'BOARDS_LIST' => 'List of boards',
 	'BOARDS_NOT_WRITABLE' => 'The boards directory is not writable.',
+	'BOARDS_URL' => 'Boards URL prefix',
+	'BOARDS_URL_EXPLAIN' => 'URL prefix to the boards directory. If you specify an absolute directory in the boards directory setting above, you may need to provide a domain and/or path here that leads to the boards directory. If boards directory is a relative path, you may just copy it here.',
 
 	'CACHE_DIR' => 'Cache directory',
 	'CACHE_DIR_EXPLAIN' => 'The directory where quickinstall stores various files. PHP needs to have write permissions to this directory.',

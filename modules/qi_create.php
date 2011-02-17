@@ -109,6 +109,7 @@ class qi_create
 
 		// Set the new board as root path.
 		$board_dir = $settings->get_boards_dir() . $dbname . '/';
+		$board_url = $settings->get_boards_url() . $dbname . '/';
 		$phpbb_root_path = $board_dir;
 		if (!defined('PHPBB_ROOT_PATH'))
 		{
@@ -508,7 +509,7 @@ class qi_create
 		// if he wants to be redirected, redirect him
 		if ($redirect)
 		{
-			qi::redirect($board_dir);
+			qi::redirect($board_url);
 		}
 
 		// On succces just return to main page.

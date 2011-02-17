@@ -116,6 +116,26 @@ class settings
 		return $boards_dir;
 	}
 
+	function get_boards_url()
+	{
+		global $quickinstall_path;
+		if (empty($this->config['boards_url']))
+		{
+			$boards_url = $quickinstall_path . 'boards/';
+		}
+		else
+		{
+			$boards_url = $this->config['boards_url'];
+			/*
+			if (!preg_match('|^\w+://|', $boards_url))
+			{
+				$boards_url = $quickinstall_path . $boards_url;
+			}
+			*/
+		}
+		return $boards_url;
+	}
+
 	/**
 	 * Validates settings.
 	 *
@@ -181,6 +201,11 @@ class settings
 			// The boards dir needs to both exist and be writeable.
 			$boards_dir_error = sprintf($user->lang['BOARDS_DIR_MISSING'], $this->get_boards_dir());
 			$error .= $boards_dir_error . '<br />';
+		}
+
+		if ($this->config['boards_url'] == '')
+		{
+			$error .= $user->lang['BOARDS_URL'] . ' ' . $user->lang['REQUIRED'] . '<br />';
 		}
 
 		$this->error = $error;

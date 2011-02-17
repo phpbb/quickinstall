@@ -76,7 +76,7 @@ class qi_manage
 
 					$template->assign_block_vars('row', array(
 						'BOARD_NAME'	=> htmlspecialchars($board),
-						'BOARD_URL'		=> $settings->get_boards_dir() . urlencode($board),
+						'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
 					));
 				}
 
