@@ -119,6 +119,7 @@ $template->assign_vars(array(
 	'CONFIG_DBUSER' => (!empty($qi_config['dbuser'])) ? $qi_config['dbuser'] : '',
 	'CONFIG_DEFAULT_LANG' => (!empty($qi_config['default_lang'])) ? $qi_config['default_lang'] : 'en',
 	'CONFIG_EMAIL_ENABLE' => (!empty($qi_config['email_enable'])) ? $qi_config['email_enable'] : 0,
+	'CONFIG_GRANT_PERMISSIONS' => (!empty($qi_config['grant_permissions'])) ? $qi_config['grant_permissions'] : '',
 	'CONFIG_MAKE_WRITABLE' => (!empty($qi_config['make_writable'])) ? $qi_config['make_writable'] : 0,
 	'CONFIG_NO_PASSWORD' => (isset($qi_config['no_dbpasswd'])) ? $qi_config['no_dbpasswd'] : 0,
 	'CONFIG_POPULATE' => (isset($qi_config['populate'])) ? $qi_config['populate'] : 0,

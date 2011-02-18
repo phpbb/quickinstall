@@ -92,6 +92,7 @@ class qi_main
 			'NUM_REPLIES_MIN' => (!empty($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 0,
 			'NUM_REPLIES_MAX' => (!empty($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 0,
 			'EMAIL_DOMAIN' => (!empty($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
+			'GRANT_PERMISSIONS' => (!empty($qi_config['grant_permissions'])) ? $qi_config['grant_permissions'] : '',
 		));
 
 		// Output page

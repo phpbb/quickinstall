@@ -127,8 +127,8 @@ $lang = array_merge($lang, array(
 	'FUNCTIONS_MODS_MISSING' => 'includes/automod/functions_mods.php not found.',
 
 	'GENERAL_ERROR' => 'General Error',
-	'GRANT_PERMS' => 'Grant additional permissions',
-	'GRANT_PERMS_EXPLAIN' => '(e.g. 0060 for group read/write)',
+	'GRANT_PERMISSIONS' => 'Grant additional permissions',
+	'GRANT_PERMISSIONS_EXPLAIN' => '(e.g. 0060 for group read/write)',
 
 	'IN_SETTINGS' => 'Manage your QuickInstall settings.',
 	'INCLUDE_MODS' => 'Include MODs',
