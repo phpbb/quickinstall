@@ -29,6 +29,8 @@ class qi_create
 
 		// include installation functions
 		include($quickinstall_path . 'includes/functions_install.' . $phpEx);
+		// postgres uses remove_comments function which is defined in functions_admin
+		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
 //		include($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 
 		$config = array_merge($config, array(
