@@ -63,9 +63,9 @@ class dbal_sqlite_qi extends dbal_sqlite
 		{
 			if (empty($dbname))
 			{
-				global $quickinstall_path;
+				global $settings;
 
-				$dbname = $quickinstall_path . 'cache/sqlite_db';
+				$dbname = $settings->get_cache_dir() . 'sqlite_db';
 			}
 
 			// if file doesn't exist, attempt to create it.
