@@ -83,8 +83,8 @@ $template->assign_vars(array(
 	'S_CONFIG_WRITABLE' => is_writable($quickinstall_path . 'qi_config.cfg'),
 	'S_IN_INSTALL' => $qi_install,
 	'S_IN_SETTINGS' => true,
-	'S_SETTINGS_SUCCESS' => $attempted && $saved,
-	'S_SETTINGS_FAILURE' => $attempted && !$saved,
+	'S_SETTINGS_SUCCESS' => ($attempted && $saved) ? true : false,
+	'S_SETTINGS_FAILURE' => ($attempted && !$saved) ? true : false,
 
 	'ERROR' => (!empty($error)) ? ((!$qi_install) ? $error : '') : '',
 	'CONFIG_TEXT' => $config_text,
