@@ -26,7 +26,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 if (version_compare(PHP_VERSION, '5.2.0') < 0)
 {
-	die('You are running an unsupported PHP version. Please upgrade to PHP 5.2.0 or higher before trying to do anything with phpBB 3.0');
+	die('You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.2.0 and newer.');
 }
 
 // If we are on PHP >= 6.0.0 we do not need some code
