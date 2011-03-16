@@ -29,6 +29,8 @@ class qi_create
 
 		// include installation functions
 		include($quickinstall_path . 'includes/functions_install.' . $phpEx);
+		// postgres uses remove_comments function which is defined in functions_admin
+		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
 //		include($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 
 		$config = array_merge($config, array(
@@ -204,6 +206,16 @@ class qi_create
 			{
 				$db_check = $db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
 			}
+			else if ($dbms == 'postgres')
+			{
+				global $sql_db, $dbhost, $dbuser, $dbpasswd, $dbport;
+				$error_collector = new phpbb_error_collector();
+				$error_collector->install();
+				$db_check_conn = new $sql_db();
+				$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $qi_config['db_prefix'] . $dbname, $dbport, false, false);
+				$error_collector->uninstall();
+				$db_check = count($error_collector->errors) == 0;
+			}
 			else
 			{
 				$db_check = $db->sql_select_db($qi_config['db_prefix'] . $dbname);
@@ -219,6 +231,13 @@ class qi_create
 		{
 			$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
 			$db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
+		}
+		else if ($dbms == 'postgres')
+		{
+			$db->sql_query('CREATE DATABASE ' . $qi_config['db_prefix'] . $dbname);
+			$db = new $sql_db();
+			$db->sql_connect($dbhost, $dbuser, $dbpasswd, $qi_config['db_prefix'] . $dbname, $dbport, false, false);
+			$db->sql_return_on_error(true);
 		}
 		else
 		{
