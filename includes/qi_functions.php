@@ -157,7 +157,12 @@ class settings
 			return false;
 		}
 
-		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd']) || $this->config['no_dbpasswd'] != 1) ? 0 : 1;
+		foreach ($this->config as &$value)
+		{
+			$value = htmlspecialchars_decode($value);
+		}
+
+		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
 		$error = '';
 		$error .= ($this->config['dbms'] == '') ? $user->lang['DBMS'] . ' ' . $user->lang['REQUIRED'] . '<br />' : '';
