@@ -1632,3 +1632,5 @@ fieldset.permissions .permissions-switch {
 .config-text textarea {
 	height: 14em;
 }
+
+.manage-row:hover { background-color: #eeeeee; }
