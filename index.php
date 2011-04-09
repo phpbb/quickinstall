@@ -58,7 +58,7 @@ require($quickinstall_path . 'includes/template.' . $phpEx);
 set_error_handler(array('qi', 'msg_handler'), E_ALL);
 
 // Make sure we have phpBB.
-if (!file_exists($quickinstall_path . 'sources/phpBB3'))
+if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 {
 	trigger_error('phpBB not found. You need to download phpBB3 and extract it in sources/');
 }
