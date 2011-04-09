@@ -265,7 +265,7 @@ class qi_create
 		$script_path = trim(dirname($script_path));
 
 		// add the dbname to script path
-		$script_path .= '/boards/' . $dbname;
+		$script_path .= $settings->get_boards_dir() . $dbname . '/';
 
 		$config_ary = array(
 			'board_startdate'	=> $current_time,
