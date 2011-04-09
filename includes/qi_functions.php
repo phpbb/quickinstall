@@ -228,6 +228,7 @@ class settings
 	{
 		// Let's make sure our boards dir ends with a slash.
 		$this->config['boards_dir'] = (substr($this->config['boards_dir'], -1) == '/') ? $this->config['boards_dir'] : $this->config['boards_dir'] . '/';
+		$this->config['boards_url'] = (substr($this->config['boards_url'], -1) == '/') ? $this->config['boards_url'] : $this->config['boards_url'] . '/';
 	}
 
 	/**
