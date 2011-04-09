@@ -42,14 +42,25 @@ class qi_manage
 
 				foreach ($select as $item)
 				{
-
 					$current_item = $settings->get_boards_dir() . $item;
 
 					// Make sure we have a valid db-name and prefix
 					$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
 					$item = validate_dbname($item);
 
-					$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['db_prefix'] . $item);
+					if ($qi_config['dbms'] == 'sqlite')
+					{
+						$db_file = $qi_config['dbhost'] . $qi_config['db_prefix'] . $item;
+
+						if (file_exists($db_file))
+						{
+							unlink($db_file);
+						}
+					}
+					else
+					{
+						$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['db_prefix'] . $item);
+					}
 
 					if (!file_exists($current_item) || !is_dir($current_item))
 					{

@@ -148,7 +148,14 @@ class qi_create
 			copy("{$quickinstall_path}language/en/info_acp_qi.$phpEx", "{$board_dir}language/en/mods/info_acp_qi.$phpEx");
 		}
 
-		if ($dbms == 'sqlite' || $dbms == 'firebird')
+		if ($dbms == 'sqlite')
+		{
+			$qi_config['dbhost'] = $qi_config['dbhost'] . $qi_config['db_prefix'] . $dbname;
+
+			// temp remove some
+//			list($qi_config['db_prefix'], $dbname, $temp1, $temp2) = array('', '', &$qi_config['db_prefix'], &$dbname);
+		}
+		else if ($dbms == 'firebird')
 		{
 			$qi_config['dbhost'] = $qi_config['db_prefix'] . $dbname;
 
@@ -186,7 +193,7 @@ class qi_create
 		$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		file_put_contents($board_dir . 'config.' . $phpEx, $config_data);
 
-		if ($dbms == 'sqlite' || $dbms == 'firebird')
+		if ($dbms == 'firebird')
 		{
 			// and now restore
 			list($qi_config['db_prefix'], $dbname) = array(&$temp1, &$temp2);
@@ -202,7 +209,11 @@ class qi_create
 		else
 		{
 			// Check if the database exists.
-			if ($dbms == 'sqlite' || $dbms == 'firebird')
+			if ($dbms == 'sqlite')
+			{
+				$db_check = $db->sql_select_db($qi_config['dbhost']);
+			}
+			else if ($dbms == 'firebird')
 			{
 				$db_check = $db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
 			}
@@ -227,7 +238,12 @@ class qi_create
 			}
 		}
 
-		if ($dbms == 'sqlite' || $dbms == 'firebird')
+		if ($dbms == 'sqlite')
+		{
+			$db->sql_create_db($qi_config['dbhost']);
+			$db->sql_select_db($qi_config['dbhost']);
+		}
+		else if ($dbms == 'firebird')
 		{
 			$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
 			$db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
@@ -430,7 +446,21 @@ class qi_create
 			automod_installer::install_automod($board_dir, $make_writable);
 		}
 
-		if ($dbms == 'sqlite' || $dbms == 'firebird')
+// $qi_config['dbhost'] = $qi_config['dbhost'] . $dbname;
+		//if ($dbms == 'sqlite')
+		//{
+		//	// copy the temp db over
+		//	file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
+		//	$db->sql_select_db($board_dir . $qi_config['db_prefix'] . $dbname);
+		//}
+		//else if ($dbms == 'firebird')
+		//{
+		//	// copy the temp db over
+		//	file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
+		//	$db->sql_select_db($board_dir . $qi_config['db_prefix'] . $dbname);
+		//}
+
+		if ($dbms == 'firebird')
 		{
 			// copy the temp db over
 			file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);

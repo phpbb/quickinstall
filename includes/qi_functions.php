@@ -208,6 +208,20 @@ class settings
 			$error .= $boards_dir_error . '<br />';
 		}
 
+		// SQLite needs a writable and existing directory
+		if ($this->config['dbms'] == 'sqlite')
+		{
+			if (!file_exists($this->config['dbhost']) || !is_writable($this->config['dbhost']) || !is_dir($this->config['dbhost']))
+			{
+				$error .= $user->lang['SQLITE_PATH_MISSING'] . '<br />';
+			}
+			else
+			{
+				// Make sure the directory ends with a slash if we use SQLite
+				$this->config['dbhost'] = (substr($this->config['dbhost'], -1) == '/') ? $this->config['dbhost'] : $this->config['dbhost'] . '/';
+			}
+		}
+
 		if ($this->config['boards_url'] == '')
 		{
 			$error .= $user->lang['BOARDS_URL'] . ' ' . $user->lang['REQUIRED'] . '<br />';
