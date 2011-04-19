@@ -86,8 +86,8 @@ class populate
 	private $topc_arr = array();
 
 	// The default forums. To copy permissions from.
-	private $def_cat_id = 1;
-	private $def_forum_id = 2;
+	private $def_cat_id = 0;
+	private $def_forum_id = 0;
 
 	public function populate($data)
 	{
@@ -507,7 +507,7 @@ class populate
 		}
 
 		// Copy the permissions from our default forums
-		copy_forum_permissions($this->def_cat_id, $forum_data['forum_id']);
+		copy_forum_permissions($this->def_forum_id, $forum_data['forum_id']);
 		$auth->acl_clear_prefetch();
 
 		if ($forum_type == FORUM_POST)
@@ -677,7 +677,7 @@ class populate
 		global $db;
 
 		// We are the only ones messing with this database so far.
-		// So the latest user_id + 1 should be the user id for the first user.
+		// So the latest user_id + 1 should be the user id for the first test user.
 		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts, forum_topics, forum_topics_real, forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
 		$result = $db->sql_query($sql);
 
