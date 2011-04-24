@@ -264,6 +264,9 @@ class qi_create
 		// include install lang fom phpbb
 		qi::add_lang('install', $phpbb_root_path . 'language/' . $qi_config['default_lang'] . '/');
 
+		// Need to globalize table prefix.
+		global $table_prefix;
+
 		// perform sql
 		load_schema($phpbb_root_path . 'install/schemas/', $dbms);
 
