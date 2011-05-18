@@ -202,6 +202,8 @@ class qi_create
 		// update phpbb_root_path
 		$phpbb_root_path = $board_dir;
 
+		db_connect();
+
 		if ($drop_db)
 		{
 			$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['db_prefix'] . $dbname);
