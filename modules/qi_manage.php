@@ -27,6 +27,8 @@ class qi_manage
 		global $db, $template, $user, $settings;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
 
+		db_connect();
+
 		$action = request_var('action', '');
 		$delete = request_var('delete', false);
 

@@ -136,20 +136,9 @@ $available_dbms = get_available_dbms($dbms);
 
 if (!isset($available_dbms[$dbms]['DRIVER']))
 {
+	// TODO This should be replaced with a warning.
 	trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
 }
-
-// Load the appropriate database class if not already loaded
-include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
-
-// now the quickinstall dbal extension
-include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
-
-// Instantiate the database
-$sql_db = 'dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi';
-$db = new $sql_db();
-$db->sql_connect($dbhost, $dbuser, $dbpasswd, false, $dbport, false, false);
-$db->sql_return_on_error(true);
 
 // now create a module_handler object
 $auth		= new auth();
