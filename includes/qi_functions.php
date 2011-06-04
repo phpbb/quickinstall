@@ -411,4 +411,34 @@ function gen_lang_select($language = '')
 	}
 }
 
+function db_connect()
+{
+	global $qi_config, $phpbb_root_path, $phpEx, $sql_db, $db;
+
+	foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport') as $var)
+	{
+		$$var = $qi_config[$var];
+	}
+
+	// If we get here and the extension isn't loaded it should be safe to just go ahead and load it
+	$available_dbms = get_available_dbms($dbms);
+
+	if (!isset($available_dbms[$dbms]['DRIVER']))
+	{
+		trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
+	}
+
+	// Load the appropriate database class if not already loaded
+	include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+
+	// now the quickinstall dbal extension
+	include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+
+	// Instantiate the database
+	$sql_db = 'dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi';
+	$db = new $sql_db();
+	$db->sql_connect($dbhost, $dbuser, $dbpasswd, false, $dbport, false, false);
+	$db->sql_return_on_error(true);
+}
+
 ?>
