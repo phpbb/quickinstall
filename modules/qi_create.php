@@ -441,8 +441,8 @@ class qi_create
 		$install->add_bots(false, false);
 
 		// login
-		$user->session_begin();
-		$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
+//		$user->session_begin();
+//		$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
 
 		// now automod (easymod)
 		if ($automod)
@@ -563,8 +563,17 @@ class qi_create
 		}
 
 		// if he wants to be redirected, redirect him
-		if ($redirect)
+		if (empty($alt_env) && $redirect)
 		{
+			$user->session_begin();
+			$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
+			qi::redirect($board_url);
+		}
+		else if ($redirect)
+		{
+			// We are redirecting to a alt environment.
+			// We don't know what have been changed there so we can't login without maybe throwing a error.
+			// Just redirect without logging in.
 			qi::redirect($board_url);
 		}
 

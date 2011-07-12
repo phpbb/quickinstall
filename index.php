@@ -24,7 +24,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 //error_reporting(E_ALL);
 error_reporting(E_ALL ^ E_NOTICE);
 
-if (version_compare(PHP_VERSION, '5.2.0') < 0)
+if (version_compare(PHP_VERSION, '5.2.0', '<'))
 {
 	die('You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.2.0 and newer.');
 }
