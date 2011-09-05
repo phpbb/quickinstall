@@ -50,6 +50,14 @@ class dbal_mssql_qi extends dbal_mssql
 	{
 		return @mssql_select_db($dbname, $this->db_connect_id);
 	}
+
+	/**
+	 * Updates value of a sequence.
+	 * Does nothing in this dbal.
+	 */
+	public function update_sequence($sequence_name, $value)
+	{
+	}
 }
 
 ?>

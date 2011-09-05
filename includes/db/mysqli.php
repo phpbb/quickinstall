@@ -54,6 +54,14 @@ class dbal_mysqli_qi extends dbal_mysqli
 	{
 		return @mysqli_select_db($this->db_connect_id, $dbname);
 	}
+
+	/**
+	 * Updates value of a sequence.
+	 * Does nothing in this dbal.
+	 */
+	public function update_sequence($sequence_name, $value)
+	{
+	}
 }
 
 ?>
