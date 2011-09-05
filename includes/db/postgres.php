@@ -31,4 +31,13 @@ class dbal_postgres_qi extends dbal_postgres
 		}
 		return parent::sql_connect($dbhost, $dbuser, $dbpass, $dbname, $dbport, $persistency, $new_link);
 	}
+
+	/**
+	 * Updates value of a sequence.
+	 */
+	public function update_sequence($sequence_name, $value)
+	{
+	      $result = $this->sql_query("select setval('$sequence_name', '$value')");
+	      $this->sql_freeresult($result);
+	}
 }
