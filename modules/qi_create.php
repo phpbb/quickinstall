@@ -269,6 +269,9 @@ class qi_create
 		// Need to globalize table prefix.
 		global $table_prefix;
 
+		// Sometimes $table_prefix gets set to its config value, so make sure it is set correctly.
+		$table_prefix = $qi_config['table_prefix'];
+
 		// perform sql
 		load_schema($phpbb_root_path . 'install/schemas/', $dbms);
 
