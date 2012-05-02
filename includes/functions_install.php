@@ -125,8 +125,7 @@ function load_schema($install_path = '', $install_dbms = false)
 			break;
 		}
 
-		$sql_query = preg_replace('# phpbb_#i', ' ' . $table_prefix, $sql_query);
-//		$sql_query = preg_replace('# phpbb_([^\s]*) #i', ' ' . $table_prefix . '\1 ', $sql_query);
+		$sql_query = preg_replace('# phpbb_([^\s]*) #i', ' ' . $table_prefix . '\1 ', $sql_query);
 		$sql_query = preg_replace_callback('#\{L_([A-Z0-9\-_]*)\}#s', 'adjust_language_keys_callback', $sql_query);
 
 		remove_remarks($sql_query);
