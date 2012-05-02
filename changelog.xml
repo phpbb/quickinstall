@@ -198,11 +198,46 @@
 	<entry>
 		<date>2010-12-20</date>
 		<version>1.1.6-RC2</version>
+		<version>1.1.6</version>
 		<changelog lang="en">
 			<change>[FIX] Make sure phpBB exists before trying to load it.</change>
 			<change>[FIX] Allow localized usernames. Bug #62563</change>
 			<change>[FIX] Added gitattributes to not export all .gitkeep files.</change>
 			<change>[CHANGE] Moved things in the settings and slightly changed the layout.</change>
+		</changelog>
+	</entry>
+	<entry>
+		<date>2012-05-02</date>
+		<version>1.1.7-RC1</version>
+		<changelog lang="en">
+			<change>[FIX] Some language edits and spelling fixes.</change>
+			<change>[FIX] Check that the boards directory exists and is writeable.</change>
+			<change>[FIX] Create one user per minute and one post per second, or actually change the timestamp.</change>
+			<change>[FIX] Set a default value for user_sig, user_occ and user_interests to not error out there.</change>
+			<change>[FIX] Take cache directory from settings if possible.</change>
+			<change>[FIX] Use boards_dir from configuration if it is set.</change>
+			<change>[FIX] Added missing settings globalizations</change>
+			<change>[FIX] Fixes to permission granting.</change>
+			<change>[FIX] Made quickinstall functional on postgres.</change>
+			<change>[FIX] Make sure boards_url ends with a slash.</change>
+			<change>[FIX] Bug #62694 Clarify that it is QI that do not support PHP older than 5.2.0 and not phpBB.</change>
+			<change>[FIX] Bug #62700 Put the config through htmlspecialchars_decode() instead of remove request_var().</change>
+			<change>[FIX] Bug #62704 Mention the upload directory for AutoMOD 1.0.0.</change>
+			<change>[FIX] Bug #62739 Check for phpBB3/common.php instead of the phpBB3 directory.</change>
+			<change>[FIX] Bug #62757 Copy permissions from the default forum instead of from the default category.</change>
+			<change>[FIX] Bug #62765 Need to globalize table prefix.</change>
+			<change>[FIX] Bug #62831 Don't try to login when loading a alternative environment.</change>
+			<change>[FIX] Bug #63111 When setting table prefix, table data containing "phpbb_" was also changed.</change>
+			<change>[CHANGE] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.</change>
+			<change>[CHANGE] Include functions_admin.php for postgres' benefit.</change>
+			<change>[CHANGE] Use get_cache_dir() in sqlite dbal.</change>
+			<change>[CHANGE] Delay database connection until it is necessary.</change>
+			<change>[FEATURE] Made quickinstall not require write access to qi_config.php</change>
+			<change>[FEATURE] Added UI for setting cache directory.</change>
+			<change>[FEATURE] Added a separate notion of boards url.</change>
+			<change>[FEATURE] Added ability to grant specific permissions when creating boards.</change>
+			<change>[FEATURE] Added hover-over on the manage tab.</change>
+			<change>[FEATURE] Added support for PostgreSQL</change>
 		</changelog>
 	</entry>
 </history>
