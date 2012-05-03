@@ -24,7 +24,7 @@ class qi_create
 {
 	public function __construct()
 	{
-		global $db, $user, $auth, $cache, $settings;
+		global $db, $user, $auth, $cache, $settings, $table_prefix;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
 
 		// include installation functions
@@ -77,7 +77,7 @@ class qi_create
 			}
 		}
 
-		foreach (array('site_name', 'site_desc', 'table_prefix', 'admin_name', 'admin_pass') as $r)
+		foreach (array('site_name', 'site_desc', 'admin_name', 'admin_pass') as $r)
 		{
 			if ($_r = request_var($r, '', true))
 			{
@@ -102,7 +102,7 @@ class qi_create
 		));
 
 		// smaller ^^
-		list($dbms, $table_prefix) = array(&$qi_config['dbms'], &$qi_config['table_prefix']);
+		$dbms = $qi_config['dbms'];
 
 		// check if we have a board db (and folder) name
 		if (!$dbname)
@@ -265,12 +265,6 @@ class qi_create
 
 		// include install lang fom phpbb
 		qi::add_lang('install', $phpbb_root_path . 'language/' . $qi_config['default_lang'] . '/');
-
-		// Need to globalize table prefix.
-		global $table_prefix;
-
-		// Sometimes $table_prefix gets set to its config value, so make sure it is set correctly.
-		$table_prefix = $qi_config['table_prefix'];
 
 		// perform sql
 		load_schema($phpbb_root_path . 'install/schemas/', $dbms);

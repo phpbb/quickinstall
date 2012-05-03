@@ -66,13 +66,18 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 // Let's get the config.
 $qi_config = get_settings();
 
-foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport', 'table_prefix') as $var)
+foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport') as $var)
 {
 	$$var = $qi_config[$var];
 }
 
 // We need some phpBB functions too.
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
+
+// Need to set prefix here before constants.php are included.
+// But we need request_var from functions.php if we create a board.
+$table_prefix = request_var('table_prefix', $qi_config['table_prefix']);
+
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 require($phpbb_root_path . 'includes/auth.' . $phpEx);
 require($phpbb_root_path . 'includes/acm/acm_file.' . $phpEx);
