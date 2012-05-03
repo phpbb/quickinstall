@@ -67,6 +67,7 @@ class qi_main
 			'S_HAS_FORUMS' => $s_has_forums,
 
 			'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
+			'DB_PERFIX'		=> htmlspecialchars($qi_config['db_prefix']),
 			'SITE_NAME'		=> $qi_config['site_name'],
 			'SITE_DESC'		=> $qi_config['site_desc'],
 

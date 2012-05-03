@@ -77,7 +77,7 @@ class qi_create
 			}
 		}
 
-		foreach (array('site_name', 'site_desc', 'admin_name', 'admin_pass') as $r)
+		foreach (array('site_name', 'site_desc', 'admin_name', 'admin_pass', 'db_prefix') as $r)
 		{
 			if ($_r = request_var($r, '', true))
 			{
