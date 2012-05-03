@@ -31,7 +31,6 @@ class qi_create
 		include($quickinstall_path . 'includes/functions_install.' . $phpEx);
 		// postgres uses remove_comments function which is defined in functions_admin
 		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
-//		include($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 
 		$config = array_merge($config, array(
 			'rand_seed'				=> md5(mt_rand()),
@@ -151,9 +150,6 @@ class qi_create
 		if ($dbms == 'sqlite')
 		{
 			$qi_config['dbhost'] = $qi_config['dbhost'] . $qi_config['db_prefix'] . $dbname;
-
-			// temp remove some
-//			list($qi_config['db_prefix'], $dbname, $temp1, $temp2) = array('', '', &$qi_config['db_prefix'], &$dbname);
 		}
 		else if ($dbms == 'firebird')
 		{
@@ -437,30 +433,12 @@ class qi_create
 		$install->add_language(false, false);
 		$install->add_bots(false, false);
 
-		// login
-//		$user->session_begin();
-//		$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
-
 		// now automod (easymod)
 		if ($automod)
 		{
 			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
 			automod_installer::install_automod($board_dir, $make_writable);
 		}
-
-// $qi_config['dbhost'] = $qi_config['dbhost'] . $dbname;
-		//if ($dbms == 'sqlite')
-		//{
-		//	// copy the temp db over
-		//	file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
-		//	$db->sql_select_db($board_dir . $qi_config['db_prefix'] . $dbname);
-		//}
-		//else if ($dbms == 'firebird')
-		//{
-		//	// copy the temp db over
-		//	file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
-		//	$db->sql_select_db($board_dir . $qi_config['db_prefix'] . $dbname);
-		//}
 
 		if ($dbms == 'firebird')
 		{
@@ -562,6 +540,7 @@ class qi_create
 		// if he wants to be redirected, redirect him
 		if (empty($alt_env) && $redirect)
 		{
+			// Log him in first.
 			$user->session_begin();
 			$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
 			qi::redirect($board_url);

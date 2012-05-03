@@ -49,12 +49,6 @@ class qi_manage
 					// Need to get the dbname from the board.
 					@include($current_item . '/config.php');
 
-//var_dump($dbname); exit;
-
-					// Make sure we have a valid db-name and prefix
-					//$dbname = validate_dbname($qi_config['db_prefix'], true);
-					//$item = validate_dbname($item);
-
 					if (!empty($dbname))
 					{
 						if ($qi_config['dbms'] == 'sqlite')
