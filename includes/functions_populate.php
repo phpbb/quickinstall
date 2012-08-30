@@ -266,6 +266,12 @@ class populate
 		// Put topics and posts in their arrays so they can be sent to the database when the limit is reached.
 		$sql_topics = $sql_posts = array();
 
+		// Get the min and max for mt_rand.
+		$ary = end($this->user_arr);
+		$mt_max = (int) key($this->user_arr);
+		$ary = reset($this->user_arr);
+		$mt_min = (int) key($this->user_arr);
+
 		// Flags for BBCodes.
 		$flags = 7;
 		foreach ($this->forum_arr as &$forum)
@@ -298,7 +304,7 @@ class populate
 				{
 					$post_cnt++;
 
-					$poster_id = 53 + mt_rand(1, $this->num_users);
+					$poster_id = mt_rand($mt_min, $mt_max);
 					$poster_arr = $this->user_arr[$poster_id];
 					$post_time = $this->post_time++;
 					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $this->lorem_ipsum;
