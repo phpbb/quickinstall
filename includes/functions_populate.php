@@ -298,7 +298,7 @@ class populate
 				{
 					$post_cnt++;
 
-					$poster_id = mt_rand(1, $this->num_users);
+					$poster_id = 53 + mt_rand(1, $this->num_users);
 					$poster_arr = $this->user_arr[$poster_id];
 					$post_time = $this->post_time++;
 					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $this->lorem_ipsum;
