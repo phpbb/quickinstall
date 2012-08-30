@@ -271,7 +271,7 @@ class populate
 		foreach ($this->forum_arr as &$forum)
 		{
 			// How many topics in this forum?
-			$topics = ($this->num_topics_min == $this->num_topics_max) ? $this->num_topics_max : rand($this->num_topics_min, $this->num_topics_max);
+			$topics = ($this->num_topics_min == $this->num_topics_max) ? $this->num_topics_max : mt_rand($this->num_topics_min, $this->num_topics_max);
 
 			for ($i = 0; $i < $topics; $i++)
 			{
@@ -289,7 +289,7 @@ class populate
 				$forum['forum_topics']++;
 				$forum['forum_topics_real']++;
 
-				$replies = ($this->num_replies_min == $this->num_replies_max) ? $this->num_replies_max : rand($this->num_replies_min, $this->num_replies_max);
+				$replies = ($this->num_replies_min == $this->num_replies_max) ? $this->num_replies_max : mt_rand($this->num_replies_min, $this->num_replies_max);
 				// The first topic post also needs to be posted.
 				$replies++;
 
@@ -298,7 +298,7 @@ class populate
 				{
 					$post_cnt++;
 
-					$poster_id = array_rand($this->user_arr);
+					$poster_id = mt_rand(1, $this->num_users);
 					$poster_arr = $this->user_arr[$poster_id];
 					$post_time = $this->post_time++;
 					$post_text = sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $this->lorem_ipsum;
