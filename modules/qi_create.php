@@ -557,5 +557,3 @@ class qi_create
 		qi::redirect('index.' . $phpEx);
 	}
 }
-
-?>
