@@ -33,5 +33,3 @@ class install_automod_qi extends install_automod
 		return $this->data;
 	}
 }
-
-?>

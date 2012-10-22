@@ -181,5 +181,3 @@ qi::add_lang(array('qi', 'phpbb'));
 
 // Load the main module
 $module->load($mode, 'qi_main');
-
-?>

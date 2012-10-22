@@ -440,5 +440,3 @@ function db_connect()
 	$db->sql_connect($dbhost, $dbuser, $dbpasswd, false, $dbport, false, false);
 	$db->sql_return_on_error(true);
 }
-
-?>

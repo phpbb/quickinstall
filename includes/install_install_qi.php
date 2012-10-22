@@ -33,5 +33,3 @@ class install_install_qi extends install_install
 		return $this->data;
 	}
 }
-
-?>

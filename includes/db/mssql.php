@@ -59,5 +59,3 @@ class dbal_mssql_qi extends dbal_mssql
 	{
 	}
 }
-
-?>
