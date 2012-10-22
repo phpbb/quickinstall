@@ -106,5 +106,3 @@ class qi_main
 		qi::page_footer();
 	}
 }
-
-?>

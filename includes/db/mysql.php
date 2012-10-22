@@ -74,5 +74,3 @@ class dbal_mysql_qi extends dbal_mysql
 	{
 	}
 }
-
-?>

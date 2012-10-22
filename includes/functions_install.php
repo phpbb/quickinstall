@@ -139,5 +139,3 @@ function load_schema($install_path = '', $install_dbms = false)
 		unset($sql_query);
 	}
 }
-
-?>

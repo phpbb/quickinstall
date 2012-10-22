@@ -268,5 +268,3 @@ $lang = array_merge($lang, array(
 	'WHY' => 'Why?',
 	'WHY_EXPLAIN' => 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
 ));
-
-?>

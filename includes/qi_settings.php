@@ -160,5 +160,3 @@ $template->set_filenames(array(
 );
 
 qi::page_footer();
-
-?>

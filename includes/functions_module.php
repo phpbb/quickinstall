@@ -53,5 +53,3 @@ class module_handler
 		return new $class_name();
 	}
 }
-
-?>

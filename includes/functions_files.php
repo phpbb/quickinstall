@@ -201,5 +201,3 @@ class file_functions
 
 	}
 }
-
-?>

@@ -116,5 +116,3 @@ class dbal_sqlite_qi extends dbal_sqlite
 	{
 	}
 }
-
-?>
