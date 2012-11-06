@@ -46,9 +46,9 @@
 		<dt><label for="qi_lang">{L_QI_LANG}:*</label><br />{L_QI_LANG_EXPLAIN}</dt>
 		<dd>
 			<select id="qi_lang" name="qi_config[qi_lang]" onchange="window.location.href='index.php?mode=settings&amp;lang='+this.options[this.selectedIndex].value;">
-				<!-- BEGIN lang_row -->
-					<option value="{lang_row.LANG_CODE}"<!-- IF lang_row.S_SELECTED --> selected="selected"<!-- ENDIF -->>{lang_row.LANG_NAME}</option>
-				<!-- END lang_row -->
+				<!-- BEGIN qi_lang_row -->
+					<option value="{qi_lang_row.LANG_CODE}"<!-- IF qi_lang_row.S_SELECTED --> selected="selected"<!-- ENDIF -->>{qi_lang_row.LANG_NAME}</option>
+				<!-- END qi_lang_row -->
 			</select>
 		</dd>
 	</dl>
@@ -139,7 +139,13 @@
 	</dl>
 	<dl>
 		<dt><label for="default_lang">{L_DEFAULT_LANG}:*</label><br />{L_DEFAULT_LANG_EXPLAIN}</dt>
-		<dd><input class="text medium" type="text" id="default_lang" name="qi_config[default_lang]" value="{CONFIG_DEFAULT_LANG}" /></dd>
+		<dd>
+			<select id="default_lang" name="qi_config[default_lang]">
+				<!-- BEGIN phpbb_lang_row -->
+					<option value="{phpbb_lang_row.LANG_CODE}"<!-- IF phpbb_lang_row.S_SELECTED --> selected="selected"<!-- ENDIF -->>{phpbb_lang_row.LANG_NAME}</option>
+				<!-- END phpbb_lang_row -->
+			</select>
+		</dd>
 	</dl>
 	<hr />
 	<dl>

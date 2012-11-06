@@ -117,7 +117,7 @@ $user = new user();
 // Get and set the language.
 $language = (!empty($qi_config['qi_lang'])) ? $qi_config['qi_lang'] : 'en';
 
-// If there is a language selected in the dropdown menu it's sent as GET, then igonre the hidden POST field.
+// If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
 	$language = request_var('lang', $language);

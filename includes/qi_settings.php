@@ -70,11 +70,13 @@ if ($mode == 'update_settings')
 	$qi_install = false;
 }
 
-gen_lang_select($language);
+// Get language selects for both QI and phpBB
+gen_lang_select($language, 'qi');
+gen_lang_select(((!empty($qi_config['default_lang'])) ? $qi_config['default_lang'] : 'en'), 'phpbb');
 
 if ($qi_install)
 {
-	// Fill some default vaues.
+	// Fill some default vaues.phpbb_lang_row
 }
 
 $template->assign_vars(array(
@@ -117,7 +119,6 @@ $template->assign_vars(array(
 	'CONFIG_DBPASSWD' => (!empty($qi_config['dbpasswd'])) ? $qi_config['dbpasswd'] : '',
 	'CONFIG_DBPORT' => (!empty($qi_config['dbport'])) ? $qi_config['dbport'] : '',
 	'CONFIG_DBUSER' => (!empty($qi_config['dbuser'])) ? $qi_config['dbuser'] : '',
-	'CONFIG_DEFAULT_LANG' => (!empty($qi_config['default_lang'])) ? $qi_config['default_lang'] : 'en',
 	'CONFIG_EMAIL_ENABLE' => (!empty($qi_config['email_enable'])) ? $qi_config['email_enable'] : 0,
 	'CONFIG_GRANT_PERMISSIONS' => (!empty($qi_config['grant_permissions'])) ? $qi_config['grant_permissions'] : '',
 	'CONFIG_MAKE_WRITABLE' => (!empty($qi_config['make_writable'])) ? $qi_config['make_writable'] : 0,

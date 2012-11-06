@@ -379,34 +379,33 @@ function get_settings()
 /**
  * Generate a lang select for the settings page.
  */
-function gen_lang_select($language = '')
+function gen_lang_select($selected_lang = 'en', $object = 'qi')
 {
-	global $quickinstall_path, $phpEx, $user, $template;
+	global $quickinstall_path, $template, $qi_config, $language;
 
-	$lang_dir = scandir($quickinstall_path . 'language');
-	$lang_arr = array();
+	$user_lang	= (!empty($qi_config['qi_lang'])) ? $qi_config['qi_lang'] : 'en';
+	$user_lang	= (!empty($language) && $user_lang != $language) ? $language : $user_lang;
+	$lang_path	= ($object == 'qi') ? $quickinstall_path . 'language' : $quickinstall_path . 'sources/phpBB3/language';
 
-	foreach ($lang_dir as $lang_path)
+	$lang_arr = scandir($lang_path);
+
+	foreach ($lang_arr as $lang)
 	{
-		if (file_exists($quickinstall_path . 'language/' . $lang_path . '/phpbb.' . $phpEx))
+		$file = "$lang_path/$lang/iso.txt";
+
+		if (file_exists($file))
 		{
-			include($quickinstall_path . 'language/' . $lang_path . '/phpbb.' . $phpEx);
+			$rows = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-			if (!empty($language) && $language == $lang['USER_LANG'])
-			{
-				$s_selected = true;
-			}
-			else
-			{
-				$s_selected = false;
-			}
+			// Show the English language name if English is selected for QI.
+			$lang_name = ($user_lang == 'en') ? $rows[0] : $rows[1];
+			$s_selected = ($selected_lang == $lang) ? true : false;
 
-			$template->assign_block_vars('lang_row', array(
-				'LANG_CODE' => $lang['USER_LANG'],
-				'LANG_NAME' => $lang['USER_LANG_LONG'],
+			$template->assign_block_vars($object . '_lang_row', array(
+				'LANG_CODE' => $lang,
+				'LANG_NAME' => $lang_name,
 				'S_SELECTED' => $s_selected,
 			));
-			unset($lang);
 		}
 	}
 }
