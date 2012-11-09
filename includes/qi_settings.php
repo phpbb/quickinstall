@@ -21,7 +21,7 @@ $config_text = '';
 if ($mode == 'update_settings')
 {
 	// Time to save some settings.
-	$qi_config = utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
+	$qi_config = @utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
 
 	$settings = new settings($qi_config);
 	$attempted = true;
