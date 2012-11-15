@@ -412,7 +412,7 @@ function gen_lang_select($selected_lang = 'en', $object = 'qi')
 
 function db_connect()
 {
-	global $qi_config, $phpbb_root_path, $phpEx, $sql_db, $db;
+	global $qi_config, $phpbb_root_path, $phpEx, $sql_db, $db, $quickinstall_path;
 
 	foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport') as $var)
 	{
