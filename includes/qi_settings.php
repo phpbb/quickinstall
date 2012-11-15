@@ -16,7 +16,7 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
-$attempted = false;
+$attempted = $saved = false;
 $config_text = '';
 if ($mode == 'update_settings')
 {
@@ -27,7 +27,6 @@ if ($mode == 'update_settings')
 	$attempted = true;
 	$valid = false;
 	$error = '';
-	$saved = false;
 	if ($settings->validate())
 	{
 		$valid = true;
