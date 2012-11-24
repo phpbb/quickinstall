@@ -13,8 +13,8 @@
 </tr>
 <!-- BEGIN row -->
 <tr class="manage-row">
-	<td><a href="{row.BOARD_URL}">{row.BOARD_NAME}</a></td>
-	<td style="width: 40px; text-align: center;"><input type="checkbox" class="radio" name="select[]" value="{row.BOARD_NAME}" /></td>
+	<td><label for="del_board_{row.S_ROW_COUNT}">{row.BOARD_NAME}</label></td>
+	<td style="width: 40px; text-align: center;"><input type="checkbox" class="radio" id="del_board_{row.S_ROW_COUNT}" name="select[]" value="{row.BOARD_NAME}" /></td>
 </tr>
 <!-- BEGINELSE -->
 <tr>
