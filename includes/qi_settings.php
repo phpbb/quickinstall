@@ -128,7 +128,7 @@ $template->assign_vars(array(
 	'CONFIG_REDIRECT' => (isset($qi_config['redirect'])) ? $qi_config['redirect'] : 1,
 	'CONFIG_SERVER_NAME' => (!empty($qi_config['server_name'])) ? $qi_config['server_name'] : 'localhost',
 	'CONFIG_SERVER_PORT' => (!empty($qi_config['server_port'])) ? $qi_config['server_port'] : '80',
-	'CONFIG_SITE_DESC' => (!empty($qi_config['site_desc'])) ? $qi_config['site_desc'] : 'eviLs testing hood',
+	'CONFIG_SITE_DESC' => (!empty($qi_config['site_desc'])) ? $qi_config['site_desc'] : 'Evils testing hood',
 	'CONFIG_SITE_NAME' => (!empty($qi_config['site_name'])) ? $qi_config['site_name'] : 'Testing Board',
 	'CONFIG_SMTP_AUTH' => (!empty($qi_config['smtp_auth'])) ? $qi_config['smtp_auth'] : 'PLAIN',
 	'CONFIG_SMTP_DELIVERY' => (!empty($qi_config['smtp_delivery'])) ? $qi_config['smtp_delivery'] : 0,
