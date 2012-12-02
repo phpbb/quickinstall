@@ -46,17 +46,17 @@ class qi_create
 		global $lang;
 
 		// request variables
-		$dbname = htmlspecialchars_decode(request_var('dbname', '', true));
-		$redirect = request_var('redirect', false);
-		$drop_db = request_var('drop_db', false);
-		$delete_files = request_var('delete_files', false);
-		$automod = request_var('automod', false);
-		$make_writable = request_var('make_writable', false);
-		$grant_permissions = octdec(request_var('grant_permissions', 0));
-		$populate = request_var('populate', false);
-		$subsilver = request_var('subsilver', 0);
-		$alt_env = request_var('alt_env', '');
-		$pop_data = request_var('pop_data', array('' => ''));
+		$dbname			= htmlspecialchars_decode(request_var('dbname', '', true));
+		$redirect		= request_var('redirect', false);
+		$drop_db		= request_var('drop_db', false);
+		$delete_files	= request_var('delete_files', false);
+		$automod		= request_var('automod', false);
+		$make_writable	= request_var('make_writable', false);
+		$grant_permissions	= octdec(request_var('grant_permissions', 0));
+		$populate		= request_var('populate', false);
+		$subsilver		= request_var('subsilver', 0);
+		$alt_env		= request_var('alt_env', '');
+		$pop_data		= request_var('pop_data', array('' => ''));
 
 		// Some populate checking
 		if ($populate)
@@ -379,6 +379,66 @@ class qi_create
 			$config[$row['config_name']] = $row['config_value'];
 		}
 		$db->sql_freeresult($result);
+
+		// Set other optional config data.
+		// Have it here to not having to do a query for each key
+		// to see if it is a update or insert.
+		if (!empty($pop_data['other_config']))
+		{
+			$other_config_ary = explode("\n", $pop_data['other_config']);
+
+			foreach ($other_config_ary as $config_row)
+			{
+				// First check if this is a comment.
+				if (strpos($config_row, '#') === 0)
+				{
+					continue;
+				}
+
+				$row_ary = explode(';', $config_row);
+
+				if (empty($row_ary[0]) || empty($row_ary[1]))
+				{
+					continue;
+				}
+
+				$config_name	= $db->sql_escape(trim($row_ary[0]));
+				$config_value	= $db->sql_escape(trim($row_ary[1]));
+				$is_dynamic		= (!empty($row_ary[2])) ? 1 : 0;
+
+				$sql_ary = array(
+					'config_name'	=> $config_name,
+					'config_value'	=> $config_value,
+					'is_dynamic'	=> $is_dynamic,
+				);
+
+				if (array_key_exists($config_name, $config))
+				{
+					$sql = "UPDATE {$table_prefix}config
+						SET " . $db->sql_build_array('UPDATE', $sql_ary) . "
+						WHERE config_name = '$config_name'";
+
+					if (!$db->sql_query($sql))
+					{
+						$error = $db->sql_error();
+						trigger_error($error['message']);
+					}
+				}
+				else
+				{
+					$sql = "INSERT INTO {$table_prefix}config " . $db->sql_build_array('INSERT', $sql_ary);
+
+					if (!$db->sql_query($sql))
+					{
+						$error = $db->sql_error();
+						trigger_error($error['message']);
+					}
+				}
+
+				// Update the config array.
+				$config[$config_name] = $config_value;
+			}
+		}
 
 		// no templates though :P
 		$config['load_tplcompile'] = '1';

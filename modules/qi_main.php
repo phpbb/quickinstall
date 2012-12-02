@@ -62,38 +62,39 @@ class qi_main
 		// Assign index specific vars
 		$template->assign_vars(array(
 			'U_CREATE'		=> qi::url('create'),
-			'S_IN_INSTALL' => false,
-			'S_IN_SETTINGS' => false,
-			'S_HAS_FORUMS' => $s_has_forums,
+			'S_IN_INSTALL'	=> false,
+			'S_IN_SETTINGS'	=> false,
+			'S_HAS_FORUMS'	=> $s_has_forums,
 
 			'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
 			'DB_PERFIX'		=> htmlspecialchars($qi_config['db_prefix']),
 			'SITE_NAME'		=> $qi_config['site_name'],
 			'SITE_DESC'		=> $qi_config['site_desc'],
 
-			'S_AUTOMOD' => (empty($qi_config['automod'])) ? false : true,
-			'S_MAKE_WRITABLE' => (empty($qi_config['make_writable'])) ? false : true,
-			'S_POPULATE' => (empty($qi_config['populate'])) ? false : true,
-			'S_REDIRECT' => (empty($qi_config['redirect'])) ? false : true,
-			'S_SUBSILVER' => (empty($qi_config['subsilver'])) ? false : $qi_config['subsilver'],
+			'S_AUTOMOD'		=> (empty($qi_config['automod'])) ? false : true,
+			'S_MAKE_WRITABLE'	=> (empty($qi_config['make_writable'])) ? false : true,
+			'S_POPULATE'	=> (empty($qi_config['populate'])) ? false : true,
+			'S_REDIRECT'	=> (empty($qi_config['redirect'])) ? false : true,
+			'S_SUBSILVER'	=> (empty($qi_config['subsilver'])) ? false : $qi_config['subsilver'],
 
 			'ALT_ENV'		=> $alt_env,
 
 			'PAGE_MAIN'		=> true,
 
 			// Populate settings.
-			'NUM_USERS' => (!empty($qi_config['num_users'])) ? $qi_config['num_users'] : 0,
-			'NUM_NEW_GROUP' => (!empty($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 0,
-			'CREATE_MOD' => (!empty($qi_config['create_mod'])) ? 1 : 0,
-			'CREATE_ADMIN' => (!empty($qi_config['create_admin'])) ? 1 : 0,
-			'NUM_CATS' => (!empty($qi_config['num_cats'])) ? $qi_config['num_cats'] : 0,
-			'NUM_FORUMS' => (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
-			'NUM_TOPICS_MIN' => (!empty($qi_config['num_topics_min'])) ? $qi_config['num_topics_min'] : 0,
-			'NUM_TOPICS_MAX' => (!empty($qi_config['num_topics_max'])) ? $qi_config['num_topics_max'] : 0,
-			'NUM_REPLIES_MIN' => (!empty($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 0,
-			'NUM_REPLIES_MAX' => (!empty($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 0,
-			'EMAIL_DOMAIN' => (!empty($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
-			'GRANT_PERMISSIONS' => (!empty($qi_config['grant_permissions'])) ? $qi_config['grant_permissions'] : '',
+			'NUM_USERS'			=> (!empty($qi_config['num_users'])) ? $qi_config['num_users'] : 0,
+			'NUM_NEW_GROUP'		=> (!empty($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 0,
+			'CREATE_MOD'		=> (!empty($qi_config['create_mod'])) ? 1 : 0,
+			'CREATE_ADMIN'		=> (!empty($qi_config['create_admin'])) ? 1 : 0,
+			'NUM_CATS'			=> (!empty($qi_config['num_cats'])) ? $qi_config['num_cats'] : 0,
+			'NUM_FORUMS'		=> (!empty($qi_config['num_forums'])) ? $qi_config['num_forums'] : 0,
+			'NUM_TOPICS_MIN'	=> (!empty($qi_config['num_topics_min'])) ? $qi_config['num_topics_min'] : 0,
+			'NUM_TOPICS_MAX'	=> (!empty($qi_config['num_topics_max'])) ? $qi_config['num_topics_max'] : 0,
+			'NUM_REPLIES_MIN'	=> (!empty($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 0,
+			'NUM_REPLIES_MAX'	=> (!empty($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 0,
+			'EMAIL_DOMAIN'		=> (!empty($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
+			'GRANT_PERMISSIONS'	=> (!empty($qi_config['grant_permissions'])) ? $qi_config['grant_permissions'] : '',
+			'OTHER_CONFIG'		=> (!empty($qi_config['other_config'])) ? implode("\n", unserialize($qi_config['other_config'])) : '',
 		));
 
 		// Output page

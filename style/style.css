@@ -1016,8 +1016,8 @@ textarea.full {
 }
 
 * html input.full, * html textarea.full { width: 95%;}
-input.medium { width: 50%;}
-input.narrow { width: 25%;}
+input.medium textarea.medium { width: 50%;}
+input.narrow textarea.narrow { width: 25%;}
 input.tiny { width: 10%;}
 input.autowidth { width: auto !important;}
 .box2 .inputbox { background-color: #E9E9E9;}
@@ -1638,7 +1638,6 @@ fieldset.permissions .permissions-switch {
 .settings-title {
 	border-top: 1px dashed #999999;
 	border-bottom: 1px dashed #C2C2C2;
-/*	padding-left: 2em;*/
 	font-weight: bold;
 	margin: 0 0 0.9em 0;
 	text-align: center;

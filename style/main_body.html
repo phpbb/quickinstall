@@ -2,31 +2,12 @@
 
 <script type="text/javascript">
 // <![CDATA[
-function toggle_advanced()
+function toggle_div(div_id)
 {
-	if (document.getElementById('options_advanced'))
+	if (document.getElementById(div_id))
 	{
-		document.getElementById('options_advanced').style.display = (document.getElementById('options_advanced').style.display == 'none') ? 'block' : 'none';
+		document.getElementById(div_id).style.display = (document.getElementById(div_id).style.display == 'none') ? 'block' : 'none';
 	}
-}
-
-function toggle_populate()
-{
-	if (document.getElementById('options_populate'))
-	{
-		document.getElementById('options_populate').style.display = (document.getElementById('options_populate').style.display == 'none') ? 'block' : 'none';
-	}
-}
-
-if (document.addEventListener)
-{
-	document.addEventListener('DOMContentLoaded', toggle_advanced, false);
-	document.addEventListener('DOMContentLoaded', toggle_populate, false);
-}
-else
-{
-	window.onload = toggle_advanced;
-	window.onload = toggle_populate;
 }
 // ]]>
 </script>
@@ -100,8 +81,18 @@ else
 </fieldset>
 
 <fieldset>
-	<legend><a href="javascript:toggle_populate();">{L_POPULATE_OPTIONS}</a></legend>
-	<div id="options_populate">
+	<legend><a href="javascript:toggle_div('options_config');">{L_CONFIG_OPTIONS}</a></legend>
+	<div id="options_config" style="display: none;">
+		<dl>
+			<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
+			<dd><textarea name="pop_data[other_config]" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
+		</dl>
+	</div>
+</fieldset>
+
+<fieldset>
+	<legend><a href="javascript:toggle_div('options_populate');">{L_POPULATE_OPTIONS}</a></legend>
+	<div id="options_populate" style="display: none;">
 		<dl>
 			<dt><label for="num_users">{L_NUM_USERS}:</label><br />{L_NUM_USERS_EXPLAIN}</dt>
 			<dd><input class="text" type="text" size="4" maxlength="5" id="num_users" name="pop_data[num_users]" value="{NUM_USERS}" /></dd>
@@ -154,8 +145,8 @@ else
 </fieldset>
 
 <fieldset>
-	<legend><a href="javascript:toggle_advanced();">{L_OPTIONS_ADVANCED}</a></legend>
-	<div id="options_advanced">
+	<legend><a href="javascript:toggle_div('options_advanced');">{L_OPTIONS_ADVANCED}</a></legend>
+	<div id="options_advanced" style="display: none;">
 		<dl>
 			<dt><label for="admin_name">{L_ADMIN_NAME}:</label></dt>
 			<dd><input class="text medium" type="text" id="admin_name" name="admin_name" /></dd>

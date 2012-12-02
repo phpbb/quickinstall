@@ -227,6 +227,13 @@ class settings
 			$error .= $user->lang['BOARDS_URL'] . ' ' . $user->lang['REQUIRED'] . '<br />';
 		}
 
+		// Create a other config array and serialize it to make it fit in the config file.
+		//if (!empty($this->config['other_config']))
+		//{
+		//
+		//	$error .= $user->lang['BOARDS_URL'] . ' ' . $user->lang['REQUIRED'] . '<br />';
+		//}
+
 		$this->error = $error;
 		return empty($error);
 	}
