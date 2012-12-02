@@ -40,7 +40,7 @@ class qi_about
 			if ($info !== false)
 			{
 				list($latest_version, $announcement_url) = explode("\n", $info);
-				$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($qi_config['qi_version'])), str_replace('rc', 'RC', strtolower($latest_version)), '<')) ? false : true;
+				$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower(QI_VERSION)), str_replace('rc', 'RC', strtolower($latest_version)), '<')) ? false : true;
 
 				$template->assign_vars(array(
 					'UP_TO_DATE'	=> $up_to_date,

@@ -580,7 +580,7 @@ class qi_create
 
 		// add log entry :D
 		$user->ip = &$user_ip;
-		add_log('admin', 'LOG_INSTALL_INSTALLED_QI', $qi_config['qi_version']);
+		add_log('admin', 'LOG_INSTALL_INSTALLED_QI', QI_VERSION);
 
 		// purge cache
 		$cache->purge();

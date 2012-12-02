@@ -148,7 +148,6 @@ if ($qi_install || $mode == 'update_settings' || $mode == 'settings')
 
 // Just put these here temporarily. I'll change to use the constants later... Maybe tomorrow or so...
 $qi_config['version_check'] = false;
-$qi_config['qi_version'] = QI_VERSION;
 
 // If we get here and the extension isn't loaded it should be safe to just go ahead and load it
 $available_dbms = get_available_dbms($dbms);
