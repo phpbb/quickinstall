@@ -295,6 +295,7 @@ class qi_create
 			'smtp_host'			=> $qi_config['smtp_host'],
 			'smtp_auth_method'	=> $qi_config['smtp_auth'],
 			'smtp_username'		=> $qi_config['smtp_user'],
+			'smtp_port'			=> $qi_config['smtp_port'],
 			'smtp_password'		=> $qi_config['smtp_pass'],
 			'cookie_secure'		=> $qi_config['cookie_secure'],
 			'script_path'		=> $script_path,
