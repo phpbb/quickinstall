@@ -130,6 +130,9 @@ $lang = array_merge($lang, array(
 	'EMAIL_ENABLE_EXPLAIN'	=> 'Enable board wide emails. For a local test forum this would typically be off, unless you test the emails.',
 	'EMAIL_SETTINGS'		=> 'E-mail settings',
 	'ENABLED'				=> 'Enabled',
+	'ERRORS'				=> 'There where errors',
+	'ERROR_DEL_BOARDS'		=> 'The following boards could not be deleted',
+	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
 
 	'FUNCTIONS_MODS_MISSING'	=> 'includes/automod/functions_mods.php not found.',
 
@@ -213,6 +216,7 @@ $lang = array_merge($lang, array(
 	'REDIRECT_BOARD'	=> 'Redirect to new board',
 	'REQUIRED'			=> 'is required',
 	'RESET'				=> 'Reset',
+	'RETURN_MANAGE'		=> 'Return to the Manage tab',
 
 	'SELECT'			=> 'Select',
 	'SETTINGS'			=> 'Settings',

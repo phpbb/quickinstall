@@ -37,10 +37,18 @@ class qi_manage
 			$action = 'delete';
 		}
 
+		$template->assign_vars(array(
+			'S_IN_INSTALL'	=> false,
+			'S_IN_SETTINGS'	=> false,
+			'PAGE_MAIN'		=> false,
+		));
+
 		switch ($action)
 		{
 			case 'delete':
 				$select = request_var('select', array(0 => ''), true);
+				$boards = sizeof($select);
+				$error = array();
 
 				foreach ($select as $item)
 				{
@@ -57,7 +65,8 @@ class qi_manage
 
 							if (file_exists($db_file))
 							{
-								unlink($db_file);
+								// Assuming the DB file is created by PHP, then PHP should also have permissions to delete it.
+								@unlink($db_file);
 							}
 						}
 						else
@@ -72,14 +81,48 @@ class qi_manage
 					}
 
 					file_functions::delete_dir($current_item);
+
+					if (!empty(file_functions::$error))
+					{
+						if ($boards > 1)
+						{
+							$error[] = $current_item;
+							file_functions::$error = array();
+						}
+						else
+						{
+							$error = file_functions::$error;
+						}
+					}
 				}
 
-				// Just return to main page after succesfull deletion.
-				qi::redirect('index.' . $phpEx);
+				if (empty($error))
+				{
+					// Just return to main page after succesfull deletion.
+					qi::redirect('index.' . $phpEx);
+				}
+				else
+				{
+					foreach ($error as $row)
+					{
+						$template->assign_block_vars('row', array(
+							'ERROR'	=> htmlspecialchars($row),
+						));
+					}
+
+					$template->assign_var('L_THE_ERROR', (($boards > 1) ? $user->lang['ERROR_DEL_BOARDS'] : $user->lang['ERROR_DEL_FILES']));
+
+					qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
+
+					$template->set_filenames(array(
+						'body' => 'errors_body.html'
+					));
+
+					qi::page_footer();
+				}
 			break;
 
 			default:
-
 				// list of boards
 				$boards_arr = scandir($settings->get_boards_dir());
 				foreach ($boards_arr as $board)
@@ -89,17 +132,14 @@ class qi_manage
 						continue;
 					}
 
+					qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
+
 					$template->assign_block_vars('row', array(
 						'BOARD_NAME'	=> htmlspecialchars($board),
 						'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
 					));
 				}
 
-				$template->assign_vars(array(
-					'S_IN_INSTALL' => false,
-					'S_IN_SETTINGS' => false,
-					'PAGE_MAIN'		=> false,
-				));
 				// Output page
 				qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
 
@@ -108,7 +148,6 @@ class qi_manage
 				);
 
 				qi::page_footer();
-
 			break;
 		}
 	}

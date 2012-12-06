@@ -247,6 +247,7 @@
 			<change>[FIX] QI_PHPBB_VERSION and AUTOMOD_VERSION are not used so they got deleted.</change>
 			<change>[FIX] Use the QI_VERSION constant directly instead of copying it to the config array.</change>
 			<change>[FIX] Ticket #63262 SMTP port was not copied from settings to config table.</change>
+			<change>[FIX] Ticket #62767 QI should not crash when it can't delete a board but inform about it.</change>
 			<change>[FEATURE] Added possibility to set phpBB config fields before creating a board.</change>
 			<change>[CHANGE] Cleaned up the JS in the main html file.</change>
 		</changelog>

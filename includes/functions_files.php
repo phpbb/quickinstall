@@ -22,9 +22,18 @@ if (!defined('IN_QUICKINSTALL'))
  */
 class file_functions
 {
+	public static $error = array();
+
 	public static function delete_file($file)
 	{
-		return unlink($file);
+		$success = @unlink($file);
+
+		if (!$success)
+		{
+			self::$error[] = $file;
+		}
+
+		return($success);
 	}
 
 	public static function copy_file($src_file, $dst_file)
@@ -164,7 +173,7 @@ class file_functions
 	{
 		self::grant_permissions($dir, 0666, $root);
 	}
-	
+
 	public static function grant_permissions($dir, $add_perms, $root = true)
 	{
 		global $phpEx;
@@ -175,7 +184,7 @@ class file_functions
 		{
 			chmod($dir, $new_perms);
 		}
-		
+
 		if (is_dir($dir))
 		{
 			$file_arr = scandir($dir);
