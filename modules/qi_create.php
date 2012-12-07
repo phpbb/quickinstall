@@ -57,6 +57,7 @@ class qi_create
 		$subsilver		= request_var('subsilver', 0);
 		$alt_env		= request_var('alt_env', '');
 		$pop_data		= request_var('pop_data', array('' => ''));
+		$other_config	= request_var('other_config', '');
 
 		// Some populate checking
 		if ($populate)
@@ -384,9 +385,9 @@ class qi_create
 		// Set other optional config data.
 		// Have it here to not having to do a query for each key
 		// to see if it is a update or insert.
-		if (!empty($pop_data['other_config']))
+		if (!empty($other_config))
 		{
-			$other_config_ary = explode("\n", $pop_data['other_config']);
+			$other_config_ary = explode("\n", $other_config);
 
 			foreach ($other_config_ary as $config_row)
 			{
@@ -439,6 +440,8 @@ class qi_create
 				// Update the config array.
 				$config[$config_name] = $config_value;
 			}
+
+			unset($other_config, $other_config_ary);
 		}
 
 		// no templates though :P

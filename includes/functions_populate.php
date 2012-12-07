@@ -36,9 +36,9 @@ class populate
 
 	// How many of each type to send to the db each run
 	// Might be better to add some memory checking later.
-	private $user_chunks = 5000;
-	private $post_chunks = 1000;
-	private $topic_chunks = 2000;
+	private $user_chunks = CHUNK_USER;
+	private $post_chunks = CHUNK_POST;
+	private $topic_chunks = CHUNK_TOPIC;
 
 	/**
 	 * Lorem ipsum, a placeholder for the posts.
@@ -92,6 +92,15 @@ class populate
 	public function populate($data)
 	{
 		global $quickinstall_path, $phpbb_root_path, $phpEx;
+
+		// Get the chunk sizes. Make sure they are integers and set to something.
+		$data['chunk_user'] = (int) $data['chunk_user'];
+		$data['chunk_post'] = (int) $data['chunk_post'];
+		$data['chunk_topic'] = (int) $data['chunk_topic'];
+
+		$this->user_chunks = (!empty($data['chunk_user'])) ? $data['chunk_user'] : CHUNK_USER;
+		$this->post_chunks = (!empty($data['chunk_post'])) ? $data['chunk_post'] : CHUNK_POST;
+		$this->topic_chunks = (!empty($data['chunk_topic'])) ? $data['chunk_topic'] : CHUNK_TOPIC;
 
 		// Need to include some files.
 		if (!function_exists('gen_sort_selects'))

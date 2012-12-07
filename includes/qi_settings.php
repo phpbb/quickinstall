@@ -24,7 +24,7 @@ if ($mode == 'update_settings')
 	$qi_config = @utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
 
 	if (!empty($qi_config['other_config']))
-	{	// var_dump($qi_config['other_config']); exit;
+	{
 		// $qi_config['other_config'] can be several lines, needs to be a string for storage.
 		$qi_config['other_config'] = (!empty($qi_config['other_config'])) ? serialize(explode("\n", $qi_config['other_config'])) : '';
 	}
@@ -108,6 +108,9 @@ $template->assign_vars(array(
 	'CONFIG_TEXT'   => htmlspecialchars($config_text),
 
 	// Config settings
+	'CHUNK_POST'			=> (!empty($qi_config['chunk_post'])) ? $qi_config['chunk_post'] : CHUNK_POST,
+	'CHUNK_TOPIC'			=> (!empty($qi_config['chunk_topic'])) ? $qi_config['chunk_topic'] : CHUNK_TOPIC,
+	'CHUNK_USER'			=> (!empty($qi_config['chunk_user'])) ? $qi_config['chunk_user'] : CHUNK_USER,
 	'CONFIG_ADMIN_EMAIL'	=> (!empty($qi_config['admin_email'])) ? $qi_config['admin_email'] : '',
 	'CONFIG_ADMIN_NAME'		=> (!empty($qi_config['admin_name'])) ? $qi_config['admin_name'] : '',
 	'CONFIG_ADMIN_PASS'		=> (!empty($qi_config['admin_pass'])) ? $qi_config['admin_pass'] : '',
@@ -155,7 +158,9 @@ $template->assign_vars(array(
 	'CONFIG_NUM_REPLIES_MIN'	=> (isset($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 1,
 	'CONFIG_NUM_REPLIES_MAX'	=> (isset($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 15,
 	'CONFIG_EMAIL_DOMAIN'	=> (isset($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
+
 	'OTHER_CONFIG'			=> (!empty($qi_config['other_config'])) ? implode("\n", unserialize($qi_config['other_config'])) : '',
+
 	'SEL_LANG'				=> (!empty($language)) ? $language : '',
 ));
 

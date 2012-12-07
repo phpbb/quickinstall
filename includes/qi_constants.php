@@ -9,3 +9,8 @@
 */
 
 define('QI_VERSION', '1.1.8-dev');
+
+// Chunk sizes
+define('CHUNK_POST', 1000);
+define('CHUNK_TOPIC', 2000);
+define('CHUNK_USER', 5000);

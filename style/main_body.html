@@ -85,7 +85,7 @@ function toggle_div(div_id)
 	<div id="options_config" style="display: none;">
 		<dl>
 			<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
-			<dd><textarea name="pop_data[other_config]" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
+			<dd><textarea name="other_config" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
 		</dl>
 	</div>
 </fieldset>
@@ -140,6 +140,20 @@ function toggle_div(div_id)
 				<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="pop_data" name="pop_data[num_replies_min]" value="{NUM_REPLIES_MIN}" /></label>
 				<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="pop_data[num_replies_max]" value="{NUM_REPLIES_MAX}" /></label>
 			</dd>
+		</dl>
+
+		<div class="settings-title">{L_CHUNK_SETTINGS}<br /><div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}</div></div>
+		<dl>
+			<dt><label for="chunk_post">{L_CHUNK_POST}:</label><br />{L_CHUNK_POST_EXPLAIN}</dt>
+			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="pop_data[chunk_post]" value="{CHUNK_POST}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="chunk_topic">{L_CHUNK_TOPIC}:</label><br />{L_CHUNK_TOPIC_EXPLAIN}</dt>
+			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_topic" name="pop_data[chunk_topic]" value="{CHUNK_TOPIC}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="chunk_user">{L_CHUNK_USER}:</label><br />{L_CHUNK_USER_EXPLAIN}</dt>
+			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_user" name="pop_data[chunk_user]" value="{CHUNK_USER}" /></dd>
 		</dl>
 	</div>
 </fieldset>

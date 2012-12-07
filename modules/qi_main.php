@@ -81,6 +81,11 @@ class qi_main
 
 			'PAGE_MAIN'		=> true,
 
+			// Chunk settings
+			'CHUNK_POST'	=> (!empty($qi_config['chunk_post'])) ? $qi_config['chunk_post'] : CHUNK_POST,
+			'CHUNK_TOPIC'	=> (!empty($qi_config['chunk_topic'])) ? $qi_config['chunk_topic'] : CHUNK_TOPIC,
+			'CHUNK_USER'	=> (!empty($qi_config['chunk_user'])) ? $qi_config['chunk_user'] : CHUNK_USER,
+
 			// Populate settings.
 			'NUM_USERS'			=> (!empty($qi_config['num_users'])) ? $qi_config['num_users'] : 0,
 			'NUM_NEW_GROUP'		=> (!empty($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 0,
