@@ -251,6 +251,7 @@
 			<change>[FEATURE] Added possibility to set phpBB config fields before creating a board.</change>
 			<change>[FEATURE] Ticket #62796 Added config settings for chunk sizes when populating a board.</change>
 			<change>[CHANGE] Cleaned up the JS in the main html file.</change>
+			<change>[CHANGE] Ticket #62774 and #62792 Added a settings directory to replace the config file.</change>
 		</changelog>
 	</entry>
 </history>
