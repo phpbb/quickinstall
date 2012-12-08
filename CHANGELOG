@@ -7,6 +7,7 @@ QuickInstall changelog
  + [Fix] Ticket #62767 QI should not crash when it can't delete a board but inform about it.
  + [Change] Cleaned up the JS in the main html file.
  + [Change] Ticket #62774 and #62792 Added a settings directory to replace the config file.
+ + [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with most recent versions at top.
  + [Feature] Added possibility to set phpBB config fields before creating a board.
  + [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
 
