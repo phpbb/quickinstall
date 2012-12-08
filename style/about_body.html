@@ -29,10 +29,10 @@
 <p>{L_LICENSE_EXPLAIN}</p>
 
 <!-- IF S_ALLOW_CHANGELOG -->
-<h3>{L_CHANGELOG}</h3>
+<h3 style="margin-bottom: 5px;">{L_CHANGELOG}</h3>
 <!-- BEGIN history -->
 	<p>
-		<em>{history.DATE}</em> - {history.VERSION}
+		<p style="margin-bottom: 2px;"><em>{history.CHANGES_SINCE}</em></p>
 		<ul>
 		<!-- BEGIN changelog -->
 		<li>{history.changelog.CHANGE}</li>

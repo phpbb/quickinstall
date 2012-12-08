@@ -49,49 +49,42 @@ class qi_about
 			}
 		}
 
-		$changelog_file = $quickinstall_path . 'changelog.xml';
+		$changelog_file = $quickinstall_path . 'CHANGELOG';
 		if ($use_changelog = file_exists($changelog_file))
 		{
 			// let's get the changelog :)
-			$automod_path = '';
-			if (file_exists($quickinstall_path . 'sources/automod/includes'))
+			$data = file($changelog_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+			// We do not want the first line.
+			unset($data[0]);
+
+			$changes_ary = array();
+			$key = 0; // Make sure the key is set to something.
+			foreach ($data as $row)
 			{
-				// Let's assume they copied the contents.
-				$automod_path = $quickinstall_path . 'sources/automod/';
-			}
-			else if (file_exists($quickinstall_path . 'sources/automod/root/includes'))
-			{
-				// They copied to complete root to automod instead of its contents.
-				$automod_path = $quickinstall_path . 'sources/automod/root/';
-			}
-			else if (file_exists($quickinstall_path . 'sources/automod/upload/includes'))
-			{
-				// They copied to complete upload directory to automod instead of its contents.
-				$automod_path = $quickinstall_path . 'sources/automod/upload/';
-			}
-			else
-			{
-				trigger_error($user->lang['NO_AUTOMOD']);
+				$row = ltrim($row);
+
+				if ($row[0] == '-')
+				{
+					$key = substr($row, 2);
+					$changes_ary[$key] = array();
+				}
+				else
+				{
+					$changes_ary[$key][] = substr($row, 2);
+				}
 			}
 
-			include($automod_path . 'includes/mod_parser.' . $phpEx);
-
-			$xml_parser = new xml_array();
-			$data = $xml_parser->parse($changelog_file, file_get_contents($changelog_file));
-
-			foreach ($data[0]['children']['ENTRY'] as &$entry)
+			foreach ($changes_ary as $key => $entry)
 			{
-				list($year, $month, $day) = explode('-', $entry['children']['DATE'][0]['data']);
-
 				$template->assign_block_vars('history', array(
-					'DATE'		=> qi::format_date(mktime(null, null, null, intval($month), intval($day), intval($year)), 'Y-m-d'),
-					'VERSION'	=> $entry['children']['VERSION'][0]['data'],
+					'CHANGES_SINCE'	=> $key,
 				));
 
-				foreach ($entry['children']['CHANGELOG'][0]['children']['CHANGE'] as &$change)
+				foreach ($entry as $change)
 				{
 					$template->assign_block_vars('history.changelog', array(
-						'CHANGE'	=> htmlspecialchars($change['data']),
+						'CHANGE'	=> htmlspecialchars($change),
 					));
 				}
 			}
