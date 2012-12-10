@@ -1,4 +1,4 @@
-QuickInstall changelog
+QuickInstall Changelog
 
 - Changes since 1.1.7
  + [Fix] QI_PHPBB_VERSION and AUTOMOD_VERSION are not used so they got deleted.
@@ -6,10 +6,10 @@ QuickInstall changelog
  + [Fix] Ticket #63262 SMTP port was not copied from settings to config table.
  + [Fix] Ticket #62767 QI should not crash when it can't delete a board but inform about it.
  + [Change] Cleaned up the JS in the main html file.
- + [Change] Ticket #62774 and #62792 Added a settings directory to replace the config file.
  + [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with most recent versions at top.
  + [Feature] Added possibility to set phpBB config fields before creating a board.
  + [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
+ + [Feature] Ticket #62774 and #62792 Added a settings directory to replace the config file.
 
 - Changes since 1.1.6
  + [Fix] Some language edits and spelling fixes.
@@ -42,14 +42,14 @@ QuickInstall changelog
  + [Feature] Added support for PostgreSQL
 
 - Changes since 1.1.5
- + [Fix] Rewrote some of the config handling, at least it looks nicer now. :)
- + [Fix] Updated the install instructions.
- + [Fix] Checks for the config file and gives a proper slap if it's missing.
- + [Fix] Tries to correctly handle non valid chars in db names.
  + [Fix] Make sure phpBB exists before trying to load it.
  + [Fix] Allow localized usernames. Bug #62563
  + [Fix] Added gitattributes to not export all .gitkeep files.
  + [Change] Moved things in the settings and slightly changed the layout.
+ + [Fix] Rewrote some of the config handling, at least it looks nicer now. :)
+ + [Fix] Updated the install instructions.
+ + [Fix] Checks for the config file and gives a proper slap if it's missing.
+ + [Fix] Tries to correctly handle non valid chars in db names.
  + [Change] Removed AutoMOD from the QI package.
  + [Change] Moved QI's language file for phpBB.
  + [Change] Moved some AutoMOD installation to QI instead of MODding UMIL or AutoMOD.
@@ -61,15 +61,15 @@ QuickInstall changelog
  + [Change] Deleted phpBB from the sources/ dir. I now needs to be downloaded from http://www.phpbb.com/.
 
 - Changes since 1.1.3
- + [Change] Updated to AutoMOD 1.0.0.
  + [Change] Finally moved to MOD Teams repo.
+ + [Change] Updated to AutoMOD 1.0.0.
  + [Feature] AutoMOD setting "Preview changes" is on as default.
 
 - Changes since 1.1.2
  + [Fix] Restore the admin after making all posts and users to get the logs correct.
  + [Fix] Reset the admin in umil_auto.php for the logs.
- + [Change] Replaced the language text input with a select.
  + [Feature] Added French.
+ + [Change] Replaced the language text input with a select.
 
 - Changes since 1.1.1
  + [Fix] If installed, Subsilver2 was always made the default style.
@@ -78,6 +78,9 @@ QuickInstall changelog
  + [Feature] Option to install Subsilver2.
 
 - Changes since 1.0.10
+ + [Feature] Option to make files writable.
+ + [Feature] Option to populate forum with users and posts.
+ + Updated to AutoMOD 1.0.0-RC4
  + [Change] Updated for phpBB 3.0.7-PL1
  + [Change] The Redirect option now works as intended
  + [Change] Updated for phpBB 3.0.7-PL1
@@ -91,11 +94,8 @@ QuickInstall changelog
  + [Change] Added checkbox for not using a db password.
  + [Change] Added information about successfull or unsuccessfull settings update.
  + [Change] Removed set_magic_quotes_runtime()
- + [Change] Updated to AutoMOD 1.0.0-RC4
  + [Feature] Added installation/settings page
  + [Feature] Validates the settings on page load.
- + [Feature] Option to make files writable.
- + [Feature] Option to populate forum with users and posts.
 
 - Changes since 1.0.9
  + [Change] Updating for phpBB 3.0.4
@@ -138,7 +138,10 @@ QuickInstall changelog
  + [Change] Updated for phpBB 3.0.RC4.
 
 - Changes since 0.1.0
- + [Fix] Adjusted some of the language.
- + [Fix] Copying from sources/mods/ works now.
  + [Feature] Added a changelog to the about page.
  + [Feature] Added possibility of a database prefix. This also keeps the databases more organised.
+ + [Fix] Adjusted some of the language.
+ + [Fix] Copying from sources/mods/ works now.
+
+Version 0.1.0
+Initial release 2007-07-12
