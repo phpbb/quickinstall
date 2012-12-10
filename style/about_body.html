@@ -2,17 +2,6 @@
 
 <h1>{L_ABOUT_QUICKINSTALL}</h1>
 
-<!-- IF S_ALLOW_VERSION_CHECK -->
-	<h3>{L_VERSION_CHECK}</h3>
-	<!-- IF UP_TO_DATE -->
-	<p class="successbox">{L_UP_TO_DATE}</p>
-	<!-- ELSEIF L_UPDATE -->
-	<p class="errorbox">{L_UP_TO_DATE_NOT}<br /><br />{L_UPDATE}</p>
-	<!-- ELSE -->
-	<p class="errorbox">{L_UPDATE_CHECK_FAILED}</p>
-	<!-- ENDIF -->
-<!-- ENDIF -->
-
 <h3>{L_WHAT}</h3>
 <p>{L_WHAT_EXPLAIN}</p>
 
@@ -28,7 +17,6 @@
 <h3>{L_LICENSE}</h3>
 <p>{L_LICENSE_EXPLAIN}</p>
 
-<!-- IF S_ALLOW_CHANGELOG -->
 <h3 style="margin-bottom: 5px;">{L_CHANGELOG}</h3>
 <!-- BEGIN history -->
 	<p>
@@ -40,6 +28,5 @@
 		</ul>
 	</p>
 <!-- END history -->
-<!-- ENDIF -->
 
 <!-- INCLUDE overall_footer.html -->
