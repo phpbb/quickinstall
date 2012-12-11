@@ -23,10 +23,12 @@
 <!-- END row -->
 </table>
 
+<!-- IF .row -->
 <div style="text-align: right;"><a href="#" onclick="marklist('acp_bbcodes', 'select', true); return false;">{L_CHECK_ALL}</a> &bull; <a href="#" onclick="marklist('acp_bbcodes', 'select', false); return false;">{L_UNCHECK_ALL}</a></div>
 <p class="quick">
-	<input class="button2" name="delete" type="submit" value="{L_DELETE}" />
+	<input class="button2" name="delete" type="submit" value="{L_DELETE}" onclick="if(!confirm('{L_SURE_DELETE_BOARDS}')){return(false);}" />
 </p>
+<!-- ENDIF -->
 </fieldset>
 
 </form>
