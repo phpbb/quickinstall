@@ -79,8 +79,6 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 	trigger_error('phpBB not found. You need to download phpBB3 and extract it in sources/');
 }
 
-//list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $settings->get_db_vars();
-
 // We need some phpBB functions too.
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
@@ -90,25 +88,11 @@ $mode		= request_var('mode', '');
 $profile	= request_var('qi_profile', '');
 $delete_profile = (isset($_POST['delete-profile'])) ? true : false;
 
-/*
-if ($mode == 'change_profile')
-{
-	$profile = request_var('qi_profile', '');
-	$settings->settings($profile);
-}
-*/
-
 // Let's get the config.
 $settings = new settings($profile);
 
-//exit;
-// Just for now, delete later.
-$qi_config = $settings->get_config_ary();
-
 // Need to set prefix here before constants.php are included.
 $table_prefix = $settings->get_config('table_prefix');
-
-//var_dump($table_prefix); exit;
 
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 require($phpbb_root_path . 'includes/auth.' . $phpEx);
@@ -116,10 +100,6 @@ require($phpbb_root_path . 'includes/acm/acm_file.' . $phpEx);
 require($phpbb_root_path . 'includes/cache.' . $phpEx);
 require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 require($phpbb_root_path . 'includes/session.' . $phpEx);
-
-//$qi_convert = (!empty($qi_config['convert'])) ? true : false;
-
-//$settings = new settings($qi_config);
 
 // We need to set the template here.
 $template = new template();
@@ -156,15 +136,6 @@ if ($qi_install || $qi_convert || $mode == 'update_settings' || $page == 'settin
 {
 	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
 }
-
-// If we get here and the extension isn't loaded it should be safe to just go ahead and load it
-//$available_dbms = get_available_dbms($dbms);
-
-//if (!isset($available_dbms[$dbms]['DRIVER']))
-//{
-//	// TODO This should be replaced with a warning.
-//	trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
-//}
 
 // now create a module_handler object
 $auth		= new auth();

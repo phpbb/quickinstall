@@ -105,7 +105,7 @@ class qi_main
 			'OTHER_CONFIG'		=> $settings->get_other_config(),
 		));
 
-		// Output page  $settings->get_config_part('', )
+		// Output page 
 		qi::page_header($user->lang['QI_MAIN'], $user->lang['QI_MAIN_ABOUT']);
 
 		$template->set_filenames(array(

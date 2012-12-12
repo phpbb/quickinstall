@@ -59,7 +59,6 @@ class settings
 	 * @private
 	 */
 	var $config = array();
-//	var $config_text = array();
 
 	/**
 	 * Holds errors.
@@ -371,32 +370,6 @@ class settings
 	}
 
 	/**
-	 * This function will most likely be removed in the future.
-	 */
-	function get_config_ary()
-	{
-		return $this->config;
-	}
-
-	// Revisit
-	function get_config_part($config_part = '', $default = '')
-	{
-		if ($config_part == '')
-		{
-			return('');
-		}
-
-		if (empty($this->config[$config_part]))
-		{
-			return($default);
-		}
-		else
-		{
-			return($this->config[$config_part]);
-		}
-	}
-
-	/**
 	 * Serializes configuration settings into a string suitable for
 	 * writing to the configuration file.
 	 */
@@ -419,9 +392,11 @@ class settings
 	 */
 	function get_db_vars()
 	{
-		// The order in this array is important, don't change it.
-		// The calling functions uses list() to set its DB vars.
-		// list() only works with numerical arrays.
+		/**
+		 * The order in this array is important, don't change it.
+		 * The callers uses list() to set its DB vars.
+		 * list() only works with numerical arrays.
+		 */
 		$db_vars = array(
 			$this->config['dbms'],
 			$this->config['dbhost'],
@@ -596,8 +571,12 @@ class settings
 	 */
 	function get_server_protocol()
 	{
+		/*
 		$server_protocol = (!empty($this->config['server_protocol'])) ? $this->config['server_protocol'] : 'http://';
 		return($server_protocol);
+		*/
+
+		return('http://');
 	}
 
 	/**
@@ -743,46 +722,46 @@ class settings
 
 		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
-		$error = '';
-		$error .= ($this->config['dbms'] == '') ? "DBMS|REQUIRED\n" : '';
-		$error .= ($this->config['dbhost'] == '') ? "DBHOST|REQUIRED\n" : '';
-		$error .= ($this->config['dbuser'] == '') ? "DBUSER|REQUIRED\n" : '';
-		$error .= ($this->config['dbpasswd'] == '' && !$this->config['no_dbpasswd']) ? "DBPASSWD|REQUIRED\n" : '';
-		$error .= ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? "NO_DBPASSWD_ERR\n" : '';
-		$error .= ($this->config['table_prefix'] == '') ? "TABLE_PREFIX|REQUIRED\n" : '';
-		$error .= ($this->config['qi_lang'] == '') ? "QI_LANG|REQUIRED\n" : '';
-		$error .= ($this->config['qi_tz'] == '') ? "QI_TZ|REQUIRED\n" : '';
-		$error .= ($this->config['db_prefix'] == '') ? "DB_PREFIX|REQUIRED\n" : '';
-		$error .= ($this->config['admin_name'] == '') ? "ADMIN_NAME|REQUIRED\n" : '';
-		$error .= ($this->config['admin_pass'] == '') ? "ADMIN_PASS|REQUIRED\n" : '';
-		$error .= ($this->config['admin_email'] == '') ? "ADMIN_EMAIL|REQUIRED\n" : '';
-		$error .= ($this->config['site_name'] == '') ? "SITE_NAME|REQUIRED\n" : '';
-		$error .= ($this->config['server_name'] == '') ? "SERVER_NAME|REQUIRED\n" : '';
-		$error .= ($this->config['server_port'] == '') ? "SERVER_PORT|REQUIRED\n" : '';
-		$error .= ($this->config['cookie_domain'] == '') ? "COOKIE_DOMAIN|REQUIRED\n" : '';
-		$error .= ($this->config['board_email'] == '') ? "BOARD_EMAIL|REQUIRED\n" : '';
-		$error .= ($this->config['default_lang'] == '') ? "DEFAULT_LANG|REQUIRED\n" : '';
+		$error = array();
+		$error[] = ($this->config['dbms'] == '') ? 'DBMS|REQUIRED' : '';
+		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|REQUIRED' : '';
+		$error[] = ($this->config['dbuser'] == '') ? 'DBUSER|REQUIRED' : '';
+		$error[] = ($this->config['dbpasswd'] == '' && !$this->config['no_dbpasswd']) ? 'DBPASSWD|REQUIRED' : '';
+		$error[] = ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
+		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|REQUIRED' : '';
+		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|REQUIRED' : '';
+		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|REQUIRED' : '';
+		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|REQUIRED' : '';
+		$error[] = ($this->config['admin_name'] == '') ? 'ADMIN_NAME|REQUIRED' : '';
+		$error[] = ($this->config['admin_pass'] == '') ? 'ADMIN_PASS|REQUIRED' : '';
+		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|REQUIRED' : '';
+		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|REQUIRED' : '';
+		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|REQUIRED' : '';
+		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|REQUIRED' : '';
+		$error[] = ($this->config['cookie_domain'] == '') ? 'COOKIE_DOMAIN|REQUIRED' : '';
+		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|REQUIRED' : '';
+		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|REQUIRED' : '';
 
-		$error .= ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? "DB_PREFIX'|'IS_NOT_VALID\n" : '';
+		$error[] = ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
 
 		if ($this->config['cache_dir'] == '')
 		{
-			$error .= "CACHE_DIR|REQUIRED\n";
+			$error[] = 'CACHE_DIR|REQUIRED';
 		}
 		else if (!file_exists($this->get_cache_dir()) || !is_writable($this->get_cache_dir()))
 		{
 			// The cache dir needs to both exist and be writeable.
-			$error .= 'CACHE_DIR_MISSING|' . $this->get_cache_dir() . "\n";
+			$error[] = 'CACHE_DIR_MISSING|' . $this->get_cache_dir();
 		}
 
 		if ($this->config['boards_dir'] == '')
 		{
-			$error .= "BOARDS_DIR|REQUIRED\n";
+			$error[] = 'BOARDS_DIR|REQUIRED';
 		}
 		else if (!file_exists($this->get_boards_dir()) || !is_writable($this->get_boards_dir()))
 		{
 			// The boards dir needs to both exist and be writeable.
-			$error .= 'BOARDS_DIR_MISSING|' . $this->get_boards_dir() . "\n";
+			$error[] = 'BOARDS_DIR_MISSING|' . $this->get_boards_dir();
 		}
 
 		// SQLite needs a writable and existing directory
@@ -790,7 +769,7 @@ class settings
 		{
 			if (!file_exists($this->config['dbhost']) || !is_writable($this->config['dbhost']) || !is_dir($this->config['dbhost']))
 			{
-				$error .= "SQLITE_PATH_MISSING\n";
+				$error[] = 'SQLITE_PATH_MISSING';
 			}
 			else
 			{
@@ -801,10 +780,16 @@ class settings
 
 		if ($this->config['boards_url'] == '')
 		{
-			$error .= "BOARDS_URL|REQUIRED\n";
+			$error[] = 'BOARDS_URL|REQUIRED';
 		}
 
-//var_dump($error, empty($error));exit;
+		foreach ($error as $key => $value)
+		{
+			if (empty($value))
+			{
+				unset($error[$key]);
+			}
+		}
 
 		if (empty($error))
 		{
@@ -812,7 +797,6 @@ class settings
 		}
 		else
 		{
-			$error = explode("\n", $error);
 			$this->error = array_merge($this->error, $error);
 
 			return(false);

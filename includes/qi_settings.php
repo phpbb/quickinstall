@@ -62,8 +62,6 @@ if ($mode == 'update_settings')
 	{
 		$error = $settings->get_error();
 	}
-	// configuration may have been modified by settings.
-	$qi_config = $settings->get_config_ary(); // Revisit
 
 	if (empty($error))
 	{
