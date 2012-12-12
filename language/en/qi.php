@@ -164,6 +164,7 @@ $lang = array_merge($lang, array(
 	'INSTALL_QI'			=> 'Install QuickInstall',
 	'IS_NOT_VALID'			=> 'Is not valid.',
 
+	'LANG_SELECT'		=> 'Language select',
 	'LICENSE'			=> 'License?',
 	'LICENSE_EXPLAIN'	=> 'This script is released under the terms of the <a href="license.txt">GNU General Public License version 2</a>. This is mainly because it uses large portions of phpBB’s code, which is also released under this license, and requires any modifications to use it too. But also because it’s a great license that keeps free software free :).',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',

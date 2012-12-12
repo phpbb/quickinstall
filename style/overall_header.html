@@ -130,7 +130,10 @@ window.onload = function() {
 						<p><!-- IF S_IN_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
 
 						<!-- IF S_IN_SETTINGS -->
+						<div style="position: fixed;">
 						<h5>{L_SETTINGS_SECTIONS}</h5>
+						<a href="#profiles">{L_PROFILES}</a><br />
+						<a href="#lang-select">{L_LANG_SELECT}</a><br />
 						<a href="#db-settings">{L_DB_SETTINGS}</a><br />
 						<a href="#dir-settings">{L_DIR_URL_SETTINGS}</a><br />
 						<a href="#time-settings">{L_TIME_SETTINGS}</a><br />
@@ -141,6 +144,7 @@ window.onload = function() {
 						<a href="#chunk-settings">{L_CHUNK_SETTINGS}</a><br />
 						<a href="#other-settings">{L_OTHER_SETTINGS}</a><br />
 						<a href="#populate-settings">{L_POPULATE_SETTINGS}</a><br />
+						</div>
 						<!-- ENDIF -->
 
 						<!-- IF PAGE_MAIN and S_HAS_FORUMS -->
