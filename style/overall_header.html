@@ -101,7 +101,7 @@ window.onload = function() {
 </head>
 
 <body class="{S_CONTENT_DIRECTION}">
-
+<a id="back-top"></a>
 <div id="wrap">
 	<div id="page-header">
 		<h1>{L_QUICKINSTALL}</h1>
@@ -128,6 +128,21 @@ window.onload = function() {
 
 					<div id="menu">
 						<p><!-- IF S_IN_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
+
+						<!-- IF S_IN_SETTINGS -->
+						<h5>{L_SETTINGS_SECTIONS}</h5>
+						<a href="#db-settings">{L_DB_SETTINGS}</a><br />
+						<a href="#dir-settings">{L_DIR_URL_SETTINGS}</a><br />
+						<a href="#time-settings">{L_TIME_SETTINGS}</a><br />
+						<a href="#admin-settings">{L_ADMIN_SETTINGS}</a><br />
+						<a href="#server-settings">{L_SERVER_COOKIE_SETTINGS}</a><br />
+						<a href="#email-settings">{L_EMAIL_SETTINGS}</a><br />
+						<a href="#config-settings">{L_CONFIG_SETTINGS}</a><br />
+						<a href="#chunk-settings">{L_CHUNK_SETTINGS}</a><br />
+						<a href="#other-settings">{L_OTHER_SETTINGS}</a><br />
+						<a href="#populate-settings">{L_POPULATE_SETTINGS}</a><br />
+						<!-- ENDIF -->
+
 						<!-- IF PAGE_MAIN and S_HAS_FORUMS -->
 						<h5>{L_BOARDS_LIST}</h5>
 							<!-- BEGIN row -->
@@ -137,3 +152,18 @@ window.onload = function() {
 					</div>
 
 					<div id="main">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					<!-- comment -->

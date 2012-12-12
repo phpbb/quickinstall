@@ -59,6 +59,7 @@ $lang = array_merge($lang, array(
 
 	'BACK_TO_MAIN'			=> '<a href="%s">Return back to the main page</a>',
 	'BACK_TO_MANAGE'		=> '<a href="%s">Return back to the management page</a>',
+	'BACK_TOP'				=> 'Back to the top',
 	'BOARD_CREATED'			=> 'Board created successfully!',
 	'BOARD_DBNAME'			=> 'Board database and directory name',
 	'BOARD_DESC'			=> 'Board description',
@@ -210,9 +211,10 @@ $lang = array_merge($lang, array(
 	'OTHER_SETTINGS'		=> 'Other settings',
 
 	'POPULATE'			=> 'Populate board',
-	'POPULATE_OPTIONS'	=> 'Populate options',
-	'POPULATE_MAIN_EXPLAIN'	=> 'Users: tester x, Password: 123456',
 	'POPULATE_EXPLAIN'	=> 'Populates the board with the number of users, forums, posts and topics you specify below. Do note that the more users, forums, posts and topics you want, the longer time the forum creation will take.<br />All these settings can be changed when you create a forum.',
+	'POPULATE_MAIN_EXPLAIN'	=> 'Users: tester x, Password: 123456',
+	'POPULATE_OPTIONS'	=> 'Populate options',
+	'POPULATE_SETTINGS'	=> 'Populate settings',
 	'PROFILE'			=> 'Profile',
 	'PROFILES'			=> 'Profiles',
 
@@ -243,6 +245,7 @@ $lang = array_merge($lang, array(
 	'SETTINGS'			=> 'Settings',
 	'SETTINGS_FAILURE'	=> 'There were errors, take a look in the box below.',
 	'SETTINGS_NOT_WRITABLE'	=> 'The settings directory do not exist, is not a directory or is not writable.',
+	'SETTINGS_SECTIONS'	=> 'Settings sections',
 	'SETTINGS_SUCCESS'	=> 'Your settings were successfully saved.',
 	'SERVER_COOKIE_SETTINGS'	=> 'Server and cookie settings',
 	'SERVER_NAME'		=> 'Server name',
@@ -288,14 +291,14 @@ $lang = array_merge($lang, array(
 	'UPDATE_CHECK_FAILED'	=> 'Big brother’s version check failed.',
 	'UPDATE_TO'			=> '<a href="%1$s">Update to version %2$s.</a>',
 
-	'YES'		=> 'Yes',
+	'YES'	=> 'Yes',
 
-	'VERSION_CHECK'		=> 'Big brother version check',
-	'VISIT_BOARD'		=> '<a href="%s">Visit the board</a>',
+	'VERSION_CHECK'	=> 'Big brother version check',
+	'VISIT_BOARD'	=> '<a href="%s">Visit the board</a>',
 
-	'WHAT'			=> 'What?',
-	'WHAT_EXPLAIN'	=> 'phpBB3 QuickInstall is a script to quickly install phpBB. Pretty obvious... ;-)',
-	'WHO_ELSE'		=> 'Who else?',
+	'WHAT'				=> 'What?',
+	'WHAT_EXPLAIN'		=> 'phpBB3 QuickInstall is a script to quickly install phpBB. Pretty obvious... ;-)',
+	'WHO_ELSE'			=> 'Who else?',
 	'WHO_ELSE_EXPLAIN'	=> '<ul><li>' . implode('</li><li>', array(
 		'Credits go to the phpBB team, especially the development team which created such a wonderful piece of software.',
 		'Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD.',
@@ -303,8 +306,8 @@ $lang = array_merge($lang, array(
 		'Thanks to the beta testers!',
 		'Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!',
 	)) . '</li></ul>',
-	'WHO_WHEN'		=> 'Who? When?',
+	'WHO_WHEN'			=> 'Who? When?',
 	'WHO_WHEN_EXPLAIN'	=> 'phpBB3 QuickInstall was originally created by Igor “eviL&lt;3” Wiedler in the summer of 2007. It was partially rewritten by him in march 2008.<br />Since March 2010 this project is mantained by Jari “tumba25” Kanerva.',
-	'WHY'			=> 'Why?',
-	'WHY_EXPLAIN'	=> 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
+	'WHY'				=> 'Why?',
+	'WHY_EXPLAIN'		=> 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
 ));

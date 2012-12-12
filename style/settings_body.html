@@ -69,7 +69,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_DB_SETTINGS}</div>
+		<div class="settings-title"><a id="db-settings"></a>{L_DB_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
 			<dd>
@@ -118,7 +118,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_DIR_URL_SETTINGS}</div>
+		<div class="settings-title"><a id="dir-settings"></a>{L_DIR_URL_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label for="boards_dir">{L_CACHE_DIR}:*</label><br />{L_CACHE_DIR_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /></dd>
@@ -152,7 +152,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_TIME_SETTINGS}</div>
+		<div class="settings-title"><a id="time-settings"></a>{L_TIME_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label for="qi_tz">{L_QI_TZ}:*</label><br />{L_QI_TZ_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="qi_tz" name="qi_config[qi_tz]" value="{CONFIG_QI_TZ}" /></dd>
@@ -172,7 +172,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_ADMIN_SETTINGS}</div>
+		<div class="settings-title"><a id="admin-settings"></a>{L_ADMIN_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label for="admin_name">{L_ADMIN_NAME}:*</label><br />{L_ADMIN_NAME_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></dd>
@@ -193,7 +193,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_SERVER_COOKIE_SETTINGS}</div>
+		<div class="settings-title"><a id="server-settings"></a>{L_SERVER_COOKIE_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label for="server_name">{L_SERVER_NAME}:*</label><br />{L_SERVER_NAME_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /></dd>
@@ -221,7 +221,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_EMAIL_SETTINGS}</div>
+		<div class="settings-title"><a id="email-settings"></a>{L_EMAIL_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label for="board_email">{L_BOARD_EMAIL}:*</label><br />{L_BOARD_EMAIL_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /></dd>
@@ -276,7 +276,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_CONFIG_SETTINGS}<br /><div class="settings-explain">{L_CONFIG_SETTINGS_EXPLAIN}</div></div>
+		<div class="settings-title"><a id="config-settings"></a>{L_CONFIG_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div><br /><div class="settings-explain">{L_CONFIG_SETTINGS_EXPLAIN}</div></div>
 		<dl>
 			<dt><label for="site_name">{L_SITE_NAME}:*</label><br />{L_SITE_NAME_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /></dd>
@@ -301,7 +301,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_CHUNK_SETTINGS}<br /><div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}<br />{L_CAN_BE_CHANGED}</div></div>
+		<div class="settings-title"><a id="chunk-settings"></a>{L_CHUNK_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div><br /><div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}<br />{L_CAN_BE_CHANGED}</div></div>
 		<dl>
 			<dt><label for="chunk_post">{L_CHUNK_POST}:</label><br />{L_CHUNK_POST_EXPLAIN}</dt>
 			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="qi_config[chunk_post]" value="{CHUNK_POST}" /></dd>
@@ -322,7 +322,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title">{L_OTHER_SETTINGS}</div>
+		<div class="settings-title"><a id="other-settings"></a>{L_OTHER_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
 		<dl>
 			<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}</dt>
 			<dd>
@@ -355,7 +355,8 @@
 	</fieldset>
 
 	<fieldset>
-		<legend>{L_POPULATE}</legend>
+		<legend><a id="populate-settings"></a>{L_POPULATE}</legend>
+		<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div>
 		<dl>
 			<dt><label>{L_POPULATE}:</label><br />{L_POPULATE_EXPLAIN}</dt>
 			<dd>
@@ -414,6 +415,7 @@
 	</fieldset>
 
 	<fieldset>
+		<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div>
 		<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
 		<p class="submit-buttons">
 			<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp;

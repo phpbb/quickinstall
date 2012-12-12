@@ -18,6 +18,7 @@ QuickInstall Changelog
  + [Feature] Ticket #62774 and #62792 Added profiles with config files in a directory instead of one configuration file.
  + [Feature] Added confirm to the delete button. And don't show it if there is no boards to delete.
  + [Feature] Added save/reset buttons after each section on the settings page. For convenience.
+ + [Feature] Added anchors and internal links to the settings tab.
 
  + [Fix]
  + [Change]
