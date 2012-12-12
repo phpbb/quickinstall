@@ -237,6 +237,8 @@ $lang = array_merge($lang, array(
 	'RESET'				=> 'Reset',
 	'RETURN_MANAGE'		=> 'Return to the Manage tab',
 
+	'SAVE_PROFILE'		=> 'Save as new profile',
+	'SAVE_PROFILE_EXPLAIN'	=> 'Write the name for a new profile for these settings. Allowed chars are A-Z, a-z, 0-9, &quot;-&quot; (miuns sign), &quot;_&quot; (underscore) and &quot;.&quot; (dot)<br /><strong>Note: If a profile with the name you write already exists it will be overwritten.</strong>',
 	'SELECT'			=> 'Select',
 	'SETTINGS'			=> 'Settings',
 	'SETTINGS_FAILURE'	=> 'There were errors, take a look in the box below.',
