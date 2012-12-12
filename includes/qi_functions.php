@@ -139,6 +139,7 @@ class settings
 
 					$cfg_file = "{$quickinstall_path}settings/$file";
 					$this->profile = str_replace('.cfg', '', $file);
+					break;
 				}
 
 				if (!empty($cfg_file))
