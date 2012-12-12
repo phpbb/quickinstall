@@ -24,7 +24,7 @@ class automod_installer
 	public static function install_automod($board_dir, $make_writable)
 	{
 		global $quickinstall_path, $phpbb_root_path, $phpEx;
-		global $qi_config, $user, $db;
+		global $settings, $user, $db;
 
 		// The name of the mod to be displayed during installation.
 		$mod_name = 'AUTOMOD';
@@ -91,7 +91,7 @@ class automod_installer
 		require($phpbb_root_path . 'umil/umil_frontend.' . $phpEx);
 
 		global $current_version;
-		$current_version = $qi_config['automod_version'];
+		$current_version = $settings->get_config('automod_version');
 
 		// add some language entries to prevent notices
 		$user->lang += array(

@@ -7,9 +7,20 @@ QuickInstall Changelog
  + [Fix] Ticket #62767 QI should not crash when it can't delete a board but inform about it.
  + [Change] Cleaned up the JS in the main html file.
  + [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with most recent versions at top.
+ + [Change] QI pages are now in $page instead of $mode, need $mode for settings and it got kind of crowded.
+ + [Change] Only try to connect to DB when saving settings or creating/deleting a board.
+ + [Change] Removed version check from the About page and moved the changelog stuff a bit.
+ + [Change] Errors are stored as a array and imploded to a string on demand.
+ + [Change] The global $qi_config has been removed and all setting/config are now handled by $settings.
  + [Feature] Added possibility to set phpBB config fields before creating a board.
  + [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
  + [Feature] Ticket #62774 and #62792 Added a settings directory to replace the config file.
+ + [Feature] Ticket #62774 and #62792 Added profiles with config files in a directory instead of one configuration file.
+ + [Feature] Added confirm to the delete button. And don't show it if there is no boards to delete.
+
+ + [Fix]
+ + [Change]
+ + [Feature]
 
 - Changes since 1.1.6
  + [Fix] Some language edits and spelling fixes.

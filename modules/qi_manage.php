@@ -24,10 +24,8 @@ class qi_manage
 {
 	public function __construct()
 	{
-		global $db, $template, $user, $settings;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
-
-		db_connect();
+		global $template, $user, $settings;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $msg_title;
 
 		$action = request_var('action', '');
 		$delete = request_var('delete', false);
@@ -59,9 +57,9 @@ class qi_manage
 
 					if (!empty($dbname))
 					{
-						if ($qi_config['dbms'] == 'sqlite')
+						if ($dbms == 'sqlite')
 						{
-							$db_file = $qi_config['dbhost'] . $dbname;
+							$db_file = $dbhost . $dbname;
 
 							if (file_exists($db_file))
 							{
@@ -71,7 +69,17 @@ class qi_manage
 						}
 						else
 						{
+							// The order here is important, don't change it.
+							$db_vars = array(
+								$dbms,
+								$dbhost,
+								$dbuser,
+								$dbpasswd,
+								$dbport,
+							);
+							$db = db_connect($db_vars); // Needs to be moved.
 							$db->sql_query('DROP DATABASE IF EXISTS ' . $dbname);
+							db_close($db); // Might give a error since the DB it deleted, needs to be tested.
 						}
 					}
 

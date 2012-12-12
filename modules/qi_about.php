@@ -24,7 +24,7 @@ class qi_about
 	public function __construct()
 	{
 		global $db, $template, $user, $settings;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
 
 		$changelog_file = $quickinstall_path . 'CHANGELOG';
 		if (file_exists($changelog_file))

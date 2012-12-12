@@ -33,29 +33,29 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user, $phpbb_root_path, $quickinstall_path, $qi_config, $mode;
+		global $template, $user, $phpbb_root_path, $quickinstall_path, $settings, $page, $mode;
 
 		$template->assign_vars(array(
-			'PAGE_TITLE'			=> $page_title,
-			'PAGE_ABOUT'			=> $page_about,
-			'T_THEME_PATH'			=> 'style',
-			'T_IMAGE_PATH'			=> $quickinstall_path . 'style/images/',
+			'PAGE_TITLE'	=> $page_title,
+			'PAGE_ABOUT'	=> $page_about,
+			'T_THEME_PATH'	=> 'style',
+			'T_IMAGE_PATH'	=> $quickinstall_path . 'style/images/',
 
-			'U_ABOUT'				=> self::url('about'),
-			'U_MANAGE'				=> self::url('manage'),
-			'U_MAIN'				=> self::url('main'),
-			'U_SETTINGS'				=> self::url('settings'),
+			'U_ABOUT'		=> self::url('about'),
+			'U_MANAGE'		=> self::url('manage'),
+			'U_MAIN'		=> self::url('main'),
+			'U_SETTINGS'	=> self::url('settings'),
 
-			'S_ABOUT' => ($mode == 'about') ? true : false,
-			'S_MANAGE' => ($mode == 'manage') ? true : false,
-			'S_MAIN' => ($mode == 'main') ? true : false,
+			'S_ABOUT'	=> ($page == 'about') ? true : false,
+			'S_MANAGE'	=> ($page == 'manage') ? true : false,
+			'S_MAIN'	=> ($page == 'main') ? true : false,
 
-			'S_CONTENT_DIRECTION' 	=> $user->lang['DIRECTION'],
-			'S_CONTENT_ENCODING' 	=> 'UTF-8',
+			'S_CONTENT_DIRECTION'	=> $user->lang['DIRECTION'],
+			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
-			'TRANSLATION_INFO'		=> $user->lang['TRANSLATION_INFO'],
-			'QI_VERSION'			=> QI_VERSION,
+			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
+			'QI_VERSION'		=> QI_VERSION,
 		));
 
 		header('Content-type: text/html; charset=UTF-8');
@@ -158,11 +158,12 @@ class qi
 	*/
 	protected static function set_lang(&$lang, $lang_file, $lang_path = false)
 	{
-		global $phpEx, $qi_config, $quickinstall_path;
+		global $phpEx, $settings, $quickinstall_path;
 
 		if (empty($lang_path))
 		{
-			$lang_path = $quickinstall_path . 'language/' . ((!empty($qi_config['qi_lang'])) ? basename($qi_config['qi_lang']) : 'en') . '/';
+			$lang = $settings->get_config('qi_lang', 'en');
+			$lang_path = "{$quickinstall_path}language/$lang/";
 		}
 
 		if (!file_exists($lang_path) || !is_dir($lang_path))
@@ -170,7 +171,7 @@ class qi
 			trigger_error("Could not find language $lang_path", E_USER_ERROR);
 		}
 
-		$language_filename = $lang_path . $lang_file . '.' . $phpEx;
+		$language_filename = "{$lang_path}$lang_file.$phpEx";
 
 		if ((@include($language_filename)) === false)
 		{
@@ -183,7 +184,7 @@ class qi
 	*/
 	public static function format_date($gmepoch, $format = false, $forcedate = false)
 	{
-		global $user, $qi_config;
+		global $user, $settings;
 		static $midnight;
 
 		$lang_dates = $user->lang['datetime'];
@@ -199,35 +200,35 @@ class qi
 
 		if (!$midnight)
 		{
-			list($d, $m, $y) = explode(' ', gmdate('j n Y', time() + $qi_config['qi_tz'] + $qi_config['qi_dst']));
-			$midnight = gmmktime(0, 0, 0, $m, $d, $y) - $qi_config['qi_tz'] - $qi_config['qi_dst'];
+			list($d, $m, $y) = explode(' ', gmdate('j n Y', time() + $settings->get_config('qi_tz', 0) + $settings->get_config('qi_dst', 0)));
+			$midnight = gmmktime(0, 0, 0, $m, $d, $y) - $settings->get_config('qi_tz', 0) - $settings->get_config('qi_dst', 0);
 		}
 
 		if (strpos($format, '|') === false || ($gmepoch < $midnight - 86400 && !$forcedate) || ($gmepoch > $midnight + 172800 && !$forcedate))
 		{
-			return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $qi_config['qi_tz'] + $qi_config['qi_dst']), $lang_dates);
+			return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $settings->get_config('qi_tz', 0) + $settings->get_config('qi_dst', 0)), $lang_dates);
 		}
 
 		if ($gmepoch > $midnight + 86400 && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['TOMORROW'], strtr(@gmdate($format, $gmepoch + $qi_config['qi_tz'] + $qi_config['qi_dst']), $lang_dates));
+			return str_replace('||', $user->lang['datetime']['TOMORROW'], strtr(@gmdate($format, $gmepoch + $settings->get_config('qi_tz', 0) + $settings->get_config('qi_dst', 0)), $lang_dates));
 		}
 		else if ($gmepoch > $midnight && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['TODAY'], strtr(@gmdate($format, $gmepoch + $qi_config['qi_tz'] + $qi_config['qi_dst']), $lang_dates));
+			return str_replace('||', $user->lang['datetime']['TODAY'], strtr(@gmdate($format, $gmepoch + $settings->get_config('qi_tz', 0) + $settings->get_config('qi_dst', 0)), $lang_dates));
 		}
 		else if ($gmepoch > $midnight - 86400 && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['YESTERDAY'], strtr(@gmdate($format, $gmepoch + $qi_config['qi_tz'] + $qi_config['qi_dst']), $lang_dates));
+			return str_replace('||', $user->lang['datetime']['YESTERDAY'], strtr(@gmdate($format, $gmepoch + $settings->get_config('qi_tz', 0) + $settings->get_config('qi_dst', 0)), $lang_dates));
 		}
 
-		return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $qi_config['qi_tz'] + $qi_config['qi_dst']), $lang_dates);
+		return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $settings->get_config('qi_tz', 0) + $settings->get_config('qi_dst', 0)), $lang_dates);
 	}
 
-	public static function url($mode, $params = false)
+	public static function url($page, $params = false)
 	{
 		global $quickinstall_path, $phpEx;
 
@@ -241,7 +242,7 @@ class qi
 			$params = &$_params;
 		}
 
-		return $quickinstall_path . 'index.' . $phpEx . '?mode=' . $mode . ($params ? ('&amp;' . $params) : '');
+		return $quickinstall_path . 'index.' . $phpEx . '?page=' . $page . ($params ? ('&amp;' . $params) : '');
 	}
 
 	/**

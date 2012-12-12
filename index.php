@@ -79,20 +79,36 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 	trigger_error('phpBB not found. You need to download phpBB3 and extract it in sources/');
 }
 
-// Let's get the config.
-$qi_config = get_settings();
-
-foreach (array('dbms', 'dbhost', 'dbuser', 'dbpasswd', 'dbport') as $var)
-{
-	$$var = $qi_config[$var];
-}
+//list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $settings->get_db_vars();
 
 // We need some phpBB functions too.
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
+require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
+
+$page		= request_var('page', 'main');
+$mode		= request_var('mode', '');
+$profile	= request_var('qi_profile', '');
+$delete_profile = (isset($_POST['delete-profile'])) ? true : false;
+
+/*
+if ($mode == 'change_profile')
+{
+	$profile = request_var('qi_profile', '');
+	$settings->settings($profile);
+}
+*/
+
+// Let's get the config.
+$settings = new settings($profile);
+
+//exit;
+// Just for now, delete later.
+$qi_config = $settings->get_config_ary();
 
 // Need to set prefix here before constants.php are included.
-// But we need request_var from functions.php if we create a board.
-$table_prefix = request_var('table_prefix', $qi_config['table_prefix']);
+$table_prefix = $settings->get_config('table_prefix');
+
+//var_dump($table_prefix); exit;
 
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 require($phpbb_root_path . 'includes/auth.' . $phpEx);
@@ -100,12 +116,10 @@ require($phpbb_root_path . 'includes/acm/acm_file.' . $phpEx);
 require($phpbb_root_path . 'includes/cache.' . $phpEx);
 require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 require($phpbb_root_path . 'includes/session.' . $phpEx);
-require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
 
-$mode = request_var('mode', 'main');
-$qi_install = (empty($qi_config)) ? true : false;
+//$qi_convert = (!empty($qi_config['convert'])) ? true : false;
 
-$settings = new settings($qi_config);
+//$settings = new settings($qi_config);
 
 // We need to set the template here.
 $template = new template();
@@ -113,9 +127,6 @@ $template->set_custom_template('style', 'qi');
 
 // Create the user.
 $user = new user();
-
-// Get and set the language.
-$language = (!empty($qi_config['qi_lang'])) ? $qi_config['qi_lang'] : 'en';
 
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
@@ -126,37 +137,34 @@ else if (!empty($_POST['sel_lang']))
 {
 	$language = request_var('sel_lang', $language);
 }
-
-$user->lang = (file_exists($quickinstall_path . 'language/' . $language)) ? $language : 'en';
-qi::add_lang(array('qi', 'phpbb'), $quickinstall_path . 'language/' . $user->lang . '/');
-
-// Probably best place to validate the settings
-if ($settings->validate())
-{
-	$error = '';
-}
 else
 {
-	$error = $settings->error;
+	$language = '';
 }
-$mode = (empty($error)) ? $mode : (($mode == 'update_settings') ? 'update_settings' : 'settings');
 
-if ($qi_install || $mode == 'update_settings' || $mode == 'settings')
+$settings->apply_language($language);
+
+// Probably best place to validate the settings
+$settings->validate();
+$error = $settings->get_error();
+
+$page = (empty($error)) ? $page : 'settings';
+$mode = (empty($qi_convert)) ? $mode : 'convert';
+$page = (empty($qi_convert)) ? $page : 'settings';
+
+if ($qi_install || $qi_convert || $mode == 'update_settings' || $page == 'settings')
 {
 	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
 }
 
-// Just put these here temporarily. I'll change to use the constants later... Maybe tomorrow or so...
-$qi_config['version_check'] = false;
-
 // If we get here and the extension isn't loaded it should be safe to just go ahead and load it
-$available_dbms = get_available_dbms($dbms);
+//$available_dbms = get_available_dbms($dbms);
 
-if (!isset($available_dbms[$dbms]['DRIVER']))
-{
-	// TODO This should be replaced with a warning.
-	trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
-}
+//if (!isset($available_dbms[$dbms]['DRIVER']))
+//{
+//	// TODO This should be replaced with a warning.
+//	trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
+//}
 
 // now create a module_handler object
 $auth		= new auth();
@@ -177,4 +185,4 @@ $template->cachepath = $cache->cache_dir . 'tpl_qi_';
 qi::add_lang(array('qi', 'phpbb'));
 
 // Load the main module
-$module->load($mode, 'qi_main');
+$module->load($page, 'qi_main');

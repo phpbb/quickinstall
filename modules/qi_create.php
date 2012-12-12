@@ -25,7 +25,7 @@ class qi_create
 	public function __construct()
 	{
 		global $db, $user, $auth, $cache, $settings, $table_prefix;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $qi_config, $msg_title;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $msg_title;
 
 		// include installation functions
 		include($quickinstall_path . 'includes/functions_install.' . $phpEx);
@@ -46,18 +46,18 @@ class qi_create
 		global $lang;
 
 		// request variables
-		$dbname			= htmlspecialchars_decode(request_var('dbname', '', true));
-		$redirect		= request_var('redirect', false);
-		$drop_db		= request_var('drop_db', false);
-		$delete_files	= request_var('delete_files', false);
-		$automod		= request_var('automod', false);
-		$make_writable	= request_var('make_writable', false);
-		$grant_permissions	= octdec(request_var('grant_permissions', 0));
-		$populate		= request_var('populate', false);
-		$subsilver		= request_var('subsilver', 0);
-		$alt_env		= request_var('alt_env', '');
-		$pop_data		= request_var('pop_data', array('' => ''));
-		$other_config	= request_var('other_config', '');
+		$dbname			= htmlspecialchars_decode($settings->get_config('dbname', '', true));
+		$redirect		= $settings->get_config('redirect', false);
+		$drop_db		= $settings->get_config('drop_db', false);
+		$delete_files	= $settings->get_config('delete_files', false);
+		$automod		= $settings->get_config('automod', false);
+		$make_writable	= $settings->get_config('make_writable', false);
+		$grant_permissions	= octdec($settings->get_config('grant_permissions', 0));
+		$populate		= $settings->get_config('populate', false);
+		$subsilver		= $settings->get_config('subsilver', 0);
+		$alt_env		= $settings->get_config('alt_env', '');
+		$pop_data		= $settings->get_config('pop_data', array('' => ''));
+		$other_config	= request_var('other_config', ''); // Revisit
 
 		// Some populate checking
 		if ($populate)
@@ -77,13 +77,14 @@ class qi_create
 			}
 		}
 
-		foreach (array('site_name', 'site_desc', 'admin_name', 'admin_pass', 'db_prefix') as $r)
-		{
-			if ($_r = request_var($r, '', true))
-			{
-				$qi_config[$r] = $_r;
-			}
-		}
+		// Revisit
+		//foreach (array('site_name', 'site_desc', 'admin_name', 'admin_pass', 'db_prefix') as $r)
+		//{
+		//	if ($_r = request_var($r, '', true))
+		//	{
+		//		$qi_config[$r] = $_r;
+		//	}
+		//}
 
 		if ($alt_env !== '' && !file_exists($quickinstall_path . 'sources/phpBB3_alt/' . $alt_env))
 		{
@@ -92,17 +93,17 @@ class qi_create
 
 		// Set up our basic founder.
 		$user->data['user_id'] = 2; //
-		$user->data['username'] = $qi_config['admin_name'];
+		$user->data['username'] = $settings->get_config('admin_name');
 		$user->data['user_colour'] = 'AA0000';
 
 		// overwrite some of them ;)
 		$user->lang = array_merge($user->lang, array(
-			'CONFIG_SITE_DESC'	=> $qi_config['site_desc'],
-			'CONFIG_SITENAME'	=> $qi_config['site_name'],
+			'CONFIG_SITE_DESC'	=> $settings->get_config('site_desc'),
+			'CONFIG_SITENAME'	=> $settings->get_config('site_name'),
 		));
 
 		// smaller ^^
-		$dbms = $qi_config['dbms'];
+		$dbms = $settings->get_config('dbms');
 
 		// check if we have a board db (and folder) name
 		if (!$dbname)
@@ -135,13 +136,13 @@ class qi_create
 		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 
 		// Now make sure we have a valid db-name and prefix
-		$qi_config['db_prefix'] = validate_dbname($qi_config['db_prefix'], true);
+		$db_prefix = validate_dbname($settings->get_config('db_prefix'), true);
 		$dbname = validate_dbname($dbname);
 
 		// copy qi's lang file for the log
-		if (file_exists("{$quickinstall_path}language/{$qi_config['qi_lang']}/info_acp_qi.$phpEx") && file_exists($board_dir . 'language/' . $qi_config['qi_lang']))
+		if (file_exists("{$quickinstall_path}language/" . $settings->get_config('qi_lang') . "/info_acp_qi.$phpEx") && file_exists("{$board_dir}language/" . $settings->get_config('qi_lang')))
 		{
-			copy("{$quickinstall_path}language/{$qi_config['qi_lang']}/info_acp_qi.$phpEx", "{$board_dir}language/{$qi_config['qi_lang']}/mods/info_acp_qi.$phpEx");
+			copy("{$quickinstall_path}language/" . $settings->get_config('qi_lang') . "/info_acp_qi.$phpEx", "{$board_dir}language/" . $settings->get_config('qi_lang') . "/mods/info_acp_qi.$phpEx");
 		}
 		else
 		{
@@ -150,14 +151,18 @@ class qi_create
 
 		if ($dbms == 'sqlite')
 		{
-			$qi_config['dbhost'] = $qi_config['dbhost'] . $qi_config['db_prefix'] . $dbname;
+			$dbhost = $settings->get_config('dbhost') . $settings->get_config('db_prefix') . $dbname;
 		}
 		else if ($dbms == 'firebird')
 		{
-			$qi_config['dbhost'] = $qi_config['db_prefix'] . $dbname;
+			$dbhost = $settings->get_config('db_prefix') . $dbname;
 
 			// temp remove some
-			list($qi_config['db_prefix'], $dbname, $temp1, $temp2) = array('', '', &$qi_config['db_prefix'], &$dbname);
+			list($db_prefix, $dbname, $temp1, $temp2) = array('', '', &$db_prefix, &$dbname);
+		}
+		else
+		{
+			$dbhost = $settings->get_config('dbhost');
 		}
 
 		// Set the new board as language path to get language files from outside phpBB
@@ -168,11 +173,11 @@ class qi_create
 		$config_data .= "// phpBB 3.0.x auto-generated configuration file\n// Do not change anything in this file!\n";
 		$config_data_array = array(
 			'dbms'				=> $dbms,
-			'dbhost'			=> $qi_config['dbhost'],
-			'dbport'			=> $qi_config['dbport'],
-			'dbname'			=> $qi_config['db_prefix'] . $dbname,
-			'dbuser'			=> $qi_config['dbuser'],
-			'dbpasswd'			=> htmlspecialchars_decode($qi_config['dbpasswd']),
+			'dbhost'			=> $dbhost,
+			'dbport'			=> $settings->get_config('dbport'),
+			'dbname'			=> $settings->get_config('db_prefix') . $dbname,
+			'dbuser'			=> $settings->get_config('dbuser'),
+			'dbpasswd'			=> htmlspecialchars_decode($settings->get_config('dbpasswd')),
 			'table_prefix'		=> $table_prefix,
 			'acm_type'			=> 'file',
 			'load_extensions'	=> '',
@@ -193,28 +198,28 @@ class qi_create
 		if ($dbms == 'firebird')
 		{
 			// and now restore
-			list($qi_config['db_prefix'], $dbname) = array(&$temp1, &$temp2);
+			list($db_prefix, $dbname) = array($temp1, $temp2);
 		}
 
 		// update phpbb_root_path
 		$phpbb_root_path = $board_dir;
 
-		db_connect();
+		$db = db_connect();
 
 		if ($drop_db)
 		{
-			$db->sql_query('DROP DATABASE IF EXISTS ' . $qi_config['db_prefix'] . $dbname);
+			$db->sql_query('DROP DATABASE IF EXISTS ' . $settings->get_config('db_prefix') . $dbname);
 		}
 		else
 		{
 			// Check if the database exists.
 			if ($dbms == 'sqlite')
 			{
-				$db_check = $db->sql_select_db($qi_config['dbhost']);
+				$db_check = $db->sql_select_db($settings->get_config('dbhost'));
 			}
 			else if ($dbms == 'firebird')
 			{
-				$db_check = $db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
+				$db_check = $db->sql_select_db($settings->get_cache_dir() . $settings->get_config('db_prefix') . $dbname);
 			}
 			else if ($dbms == 'postgres')
 			{
@@ -222,46 +227,46 @@ class qi_create
 				$error_collector = new phpbb_error_collector();
 				$error_collector->install();
 				$db_check_conn = new $sql_db();
-				$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $qi_config['db_prefix'] . $dbname, $dbport, false, false);
+				$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $settings->get_config('db_prefix') . $dbname, $dbport, false, false);
 				$error_collector->uninstall();
 				$db_check = count($error_collector->errors) == 0;
 			}
 			else
 			{
-				$db_check = $db->sql_select_db($qi_config['db_prefix'] . $dbname);
+				$db_check = $db->sql_select_db($settings->get_config('db_prefix') . $dbname);
 			}
 
 			if ($db_check)
 			{
-				trigger_error(sprintf($user->lang['DB_EXISTS'], $qi_config['db_prefix'] . $dbname));
+				trigger_error(sprintf($user->lang['DB_EXISTS'], $settings->get_config('db_prefix') . $dbname));
 			}
 		}
 
 		if ($dbms == 'sqlite')
 		{
-			$db->sql_create_db($qi_config['dbhost']);
-			$db->sql_select_db($qi_config['dbhost']);
+			$db->sql_create_db($settings->get_config('dbhost'));
+			$db->sql_select_db($settings->get_config('dbhost'));
 		}
 		else if ($dbms == 'firebird')
 		{
-			$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
-			$db->sql_select_db($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname);
+			$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $settings->get_config('db_prefix') . $dbname);
+			$db->sql_select_db($settings->get_cache_dir() . $settings->get_config('db_prefix') . $dbname);
 		}
 		else if ($dbms == 'postgres')
 		{
-			$db->sql_query('CREATE DATABASE ' . $qi_config['db_prefix'] . $dbname);
+			$db->sql_query('CREATE DATABASE ' . $settings->get_config('db_prefix') . $dbname);
 			$db = new $sql_db();
-			$db->sql_connect($dbhost, $dbuser, $dbpasswd, $qi_config['db_prefix'] . $dbname, $dbport, false, false);
+			$db->sql_connect($dbhost, $dbuser, $dbpasswd, $settings->get_config('db_prefix') . $dbname, $dbport, false, false);
 			$db->sql_return_on_error(true);
 		}
 		else
 		{
-			$db->sql_query('CREATE DATABASE ' . $qi_config['db_prefix'] . $dbname);
-			$db->sql_select_db($qi_config['db_prefix'] . $dbname);
+			$db->sql_query('CREATE DATABASE ' . $settings->get_config('db_prefix') . $dbname);
+			$db->sql_select_db($settings->get_config('db_prefix') . $dbname);
 		}
 
 		// include install lang fom phpbb
-		qi::add_lang('install', $phpbb_root_path . 'language/' . $qi_config['default_lang'] . '/');
+		qi::add_lang('install', $phpbb_root_path . 'language/' . $settings->get_config('default_lang') . '/');
 
 		// perform sql
 		load_schema($phpbb_root_path . 'install/schemas/', $dbms);
@@ -284,24 +289,24 @@ class qi_create
 
 		$config_ary = array(
 			'board_startdate'	=> $current_time,
-			'default_lang'		=> $qi_config['default_lang'],
-			'server_name'		=> $qi_config['server_name'],
-			'server_port'		=> $qi_config['server_port'],
-			'board_email'		=> $qi_config['board_email'],
-			'board_contact'		=> $qi_config['board_email'],
-			'cookie_domain'		=> $qi_config['cookie_domain'],
+			'default_lang'		=> $settings->get_config('default_lang'),
+			'server_name'		=> $settings->get_config('server_name'),
+			'server_port'		=> $settings->get_config('server_port', 0),
+			'board_email'		=> $settings->get_config('board_email'),
+			'board_contact'		=> $settings->get_config('board_email'),
+			'cookie_domain'		=> $settings->get_config('cookie_domain'),
 			'default_dateformat'=> $user->lang['default_dateformat'],
-			'email_enable'		=> $qi_config['email_enable'],
-			'smtp_delivery'		=> $qi_config['smtp_delivery'],
-			'smtp_host'			=> $qi_config['smtp_host'],
-			'smtp_auth_method'	=> $qi_config['smtp_auth'],
-			'smtp_username'		=> $qi_config['smtp_user'],
-			'smtp_port'			=> $qi_config['smtp_port'],
-			'smtp_password'		=> $qi_config['smtp_pass'],
-			'cookie_secure'		=> $qi_config['cookie_secure'],
+			'email_enable'		=> $settings->get_config('email_enable', 0),
+			'smtp_delivery'		=> $settings->get_config('smtp_delivery', 0),
+			'smtp_host'			=> $settings->get_config('smtp_host'),
+			'smtp_auth_method'	=> $settings->get_config('smtp_auth'),
+			'smtp_username'		=> $settings->get_config('smtp_user'),
+			'smtp_port'			=> $settings->get_config('smtp_port', 0),
+			'smtp_password'		=> $settings->get_config('smtp_pass'),
+			'cookie_secure'		=> $settings->get_config('cookie_secure', 0),
 			'script_path'		=> $script_path,
-			'server_protocol'	=> (!empty($qi_config['server_protocol'])) ? $qi_config['server_protocol'] : 'http://',
-			'newest_username'	=> $qi_config['admin_name'],
+			'server_protocol'	=> $settings->get_server_protocol(),
+			'newest_username'	=> $settings->get_config('admin_name'),
 			'avatar_salt'		=> md5(mt_rand()),
 			'cookie_name'		=> 'phpbb3_' . strtolower(gen_rand_string(5)),
 		);
@@ -319,19 +324,19 @@ class qi_create
 		// Set default config and post data, this applies to all DB's
 		$sql_ary = array(
 			"UPDATE {$table_prefix}users
-				SET username = '" . $db->sql_escape($qi_config['admin_name']) . "', user_password='" . $db->sql_escape(md5($qi_config['admin_pass'])) . "', user_ip = '" . $db->sql_escape($user_ip) . "', user_lang = '" . $db->sql_escape($qi_config['default_lang']) . "', user_email='" . $db->sql_escape($qi_config['board_email']) . "', user_dateformat='" . $db->sql_escape($user->lang['default_dateformat']) . "', user_email_hash = " . (crc32($qi_config['board_email']) . strlen($qi_config['board_email'])) . ", username_clean = '" . $db->sql_escape(utf8_clean_string($qi_config['admin_name'])) . "'
+				SET username = '" . $db->sql_escape($settings->get_config('admin_name')) . "', user_password='" . $db->sql_escape(md5($settings->get_config('admin_pass'))) . "', user_ip = '" . $db->sql_escape($user_ip) . "', user_lang = '" . $db->sql_escape($settings->get_config('default_lang')) . "', user_email='" . $db->sql_escape($settings->get_config('board_email')) . "', user_dateformat='" . $db->sql_escape($user->lang['default_dateformat']) . "', user_email_hash = " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ", username_clean = '" . $db->sql_escape(utf8_clean_string($settings->get_config('admin_name'))) . "'
 				WHERE username = 'Admin'",
 
 			"UPDATE {$table_prefix}moderator_cache
-				SET username = '" . $db->sql_escape($qi_config['admin_name']) . "'
+				SET username = '" . $db->sql_escape($settings->get_config('admin_name')) . "'
 				WHERE username = 'Admin'",
 
 			"UPDATE {$table_prefix}forums
-				SET forum_last_poster_name = '" . $db->sql_escape($qi_config['admin_name']) . "'
+				SET forum_last_poster_name = '" . $db->sql_escape($settings->get_config('admin_name')) . "'
 				WHERE forum_last_poster_name = 'Admin'",
 
 			"UPDATE {$table_prefix}topics
-				SET topic_first_poster_name = '" . $db->sql_escape($qi_config['admin_name']) . "', topic_last_poster_name = '" . $db->sql_escape($qi_config['admin_name']) . "'
+				SET topic_first_poster_name = '" . $db->sql_escape($settings->get_config('admin_name')) . "', topic_last_poster_name = '" . $db->sql_escape($settings->get_config('admin_name')) . "'
 				WHERE topic_first_poster_name = 'Admin'
 					OR topic_last_poster_name = 'Admin'",
 
@@ -348,11 +353,11 @@ class qi_create
 				SET forum_last_post_time = $current_time",
 
 			"UPDATE {$table_prefix}config
-				SET config_value = '" . $db->sql_escape($qi_config['site_name']) . "'
+				SET config_value = '" . $db->sql_escape($settings->get_config('site_name')) . "'
 				WHERE config_name = 'sitename'",
 
 			"UPDATE {$table_prefix}config
-				SET config_value = '" . $db->sql_escape($qi_config['site_desc']) . "'
+				SET config_value = '" . $db->sql_escape($settings->get_config('site_desc')) . "'
 				WHERE config_name = 'site_desc'",
 
 			// Recompile stale style components needs to be on. This is a testing board.
@@ -469,28 +474,28 @@ class qi_create
 		$install = new install_install_qi($p_master = new p_master_dummy());
 		$install->set_data(array(
 			'dbms'				=> $dbms,
-			'dbhost'			=> $qi_config['dbhost'],
-			'dbport'			=> $qi_config['dbport'],
-			'dbuser'			=> $qi_config['dbuser'],
-			'dbpasswd'			=> $qi_config['dbpasswd'],
+			'dbhost'			=> $settings->get_config('dbhost'),
+			'dbport'			=> $settings->get_config('dbport'),
+			'dbuser'			=> $settings->get_config('dbuser'),
+			'dbpasswd'			=> $settings->get_config('dbpasswd'),
 			'dbname'			=> $dbname,
 			'table_prefix'		=> $table_prefix,
-			'default_lang'		=> $qi_config['default_lang'],
-			'admin_name'		=> $qi_config['admin_name'],
-			'admin_pass1'		=> $qi_config['admin_pass'],
-			'admin_pass2'		=> $qi_config['admin_pass'],
-			'board_email1'		=> $qi_config['board_email'],
-			'board_email2'		=> $qi_config['board_email'],
-			'email_enable'		=> $qi_config['email_enable'],
-			'smtp_delivery'		=> $qi_config['smtp_delivery'],
-			'smtp_host'			=> $qi_config['smtp_host'],
-			'smtp_auth'			=> $qi_config['smtp_auth'],
-			'smtp_user'			=> $qi_config['smtp_user'],
-			'smtp_pass'			=> $qi_config['smtp_pass'],
-			'cookie_secure'		=> $qi_config['cookie_secure'],
-			'server_protocol'	=> (!empty($qi_config['server_protocol'])) ? $qi_config['server_protocol'] : 'http://',
-			'server_name'		=> $qi_config['server_name'],
-			'server_port'		=> $qi_config['server_port'],
+			'default_lang'		=> $settings->get_config('default_lang'),
+			'admin_name'		=> $settings->get_config('admin_name'),
+			'admin_pass1'		=> $settings->get_config('admin_pass'),
+			'admin_pass2'		=> $settings->get_config('admin_pass'),
+			'board_email1'		=> $settings->get_config('board_email'),
+			'board_email2'		=> $settings->get_config('board_email'),
+			'email_enable'		=> $settings->get_config('email_enable', 0),
+			'smtp_delivery'		=> $settings->get_config('smtp_delivery', 0),
+			'smtp_host'			=> $settings->get_config('smtp_host'),
+			'smtp_auth'			=> $settings->get_config('smtp_auth'),
+			'smtp_user'			=> $settings->get_config('smtp_user'),
+			'smtp_pass'			=> $settings->get_config('smtp_pass'),
+			'cookie_secure'		=> $settings->get_config('cookie_secure'),
+			'server_protocol'	=> $settings->get_server_protocol(),
+			'server_name'		=> $settings->get_config('server_name'),
+			'server_port'		=> $settings->get_config('server_port'),
 			'script_path'		=> $script_path,
 		));
 		$install->add_modules(false, false);
@@ -507,8 +512,8 @@ class qi_create
 		if ($dbms == 'firebird')
 		{
 			// copy the temp db over
-			file_functions::copy_file($settings->get_cache_dir() . $qi_config['db_prefix'] . $dbname, $board_dir . $qi_config['db_prefix'] . $dbname);
-			$db->sql_select_db($board_dir . $qi_config['db_prefix'] . $dbname);
+			file_functions::copy_file($settings->get_cache_dir() . $settings->get_config('db_prefix') . $dbname, $board_dir . $settings->get_config('db_prefix') . $dbname);
+			$db->sql_select_db($board_dir . $settings->get_config('db_prefix') . $dbname);
 		}
 
 		// clean up
@@ -558,16 +563,16 @@ class qi_create
 				'theme_id'			=> 0,
 				'imageset_id'		=> 0,
 				'style_name'		=> $installcfg['name'],
-				'template_name'	=> $installcfg['name'],
+				'template_name'		=> $installcfg['name'],
 				'theme_name'		=> $installcfg['name'],
-				'imageset_name'	=> $installcfg['name'],
+				'imageset_name'		=> $installcfg['name'],
 				'template_copyright'	=> $installcfg['copyright'],
-				'theme_copyright'			=> $installcfg['copyright'],
+				'theme_copyright'	=> $installcfg['copyright'],
 				'imageset_copyright'	=> $installcfg['copyright'],
-				'style_copyright'			=> $installcfg['copyright'],
+				'style_copyright'	=> $installcfg['copyright'],
 				'store_db'			=> 0,
-				'style_active'	=> 1,
-				'style_default'	=> ($subsilver == 2) ? 1 : 0,
+				'style_active'		=> 1,
+				'style_default'		=> ($subsilver == 2) ? 1 : 0,
 			);
 
 			$acp_styles->install_style($error, 'install', $root_path, $style_row['style_id'], $style_row['style_name'], $install_path, $style_row['style_copyright'], $style_row['style_active'], $style_row['style_default'], $style_row);
@@ -606,7 +611,7 @@ class qi_create
 		{
 			// Log him in first.
 			$user->session_begin();
-			$auth->login($qi_config['admin_name'], $qi_config['admin_pass'], false, true, true);
+			$auth->login($settings->get_config('admin_name'), $settings->get_config('admin_pass'), false, true, true);
 			qi::redirect($board_url);
 		}
 		else if ($redirect)

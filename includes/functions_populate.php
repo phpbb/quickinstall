@@ -554,7 +554,7 @@ class populate
 	 */
 	private function save_users()
 	{
-		global $db, $config, $qi_config;
+		global $db, $config, $settings;
 
 		// Hash the password.
 		$password = phpbb_hash('123456');
@@ -588,33 +588,33 @@ class populate
 		{
 			$email = $user['username_clean'] . $this->email_domain;
 			$sql_ary[] = array(
-				'user_id'							=> $user['user_id'],
-				'username'						=> $user['username'],
-				'username_clean'			=> $user['username_clean'],
+				'user_id'				=> $user['user_id'],
+				'username'				=> $user['username'],
+				'username_clean'		=> $user['username_clean'],
 				'user_lastpost_time'	=> $user['user_lastpost_time'],
-				'user_lastmark'				=> $user['user_lastmark'],
-				'user_posts'					=> $user['user_posts'],
-				'user_password'				=> $password,
+				'user_lastmark'			=> $user['user_lastmark'],
+				'user_posts'			=> $user['user_posts'],
+				'user_password'			=> $password,
 				'user_pass_convert'		=> 0,
-				'user_email'					=> $email,
-				'user_email_hash'			=> phpbb_email_hash($email),
-				'group_id'						=> $registered_group,
-				'user_type'						=> USER_NORMAL,
+				'user_email'			=> $email,
+				'user_email_hash'		=> phpbb_email_hash($email),
+				'group_id'				=> $registered_group,
+				'user_type'				=> USER_NORMAL,
 				'user_permissions'		=> '',
-				'user_timezone'				=> $qi_config['qi_tz'],
-				'user_lang'						=> $qi_config['qi_lang'],
-				'user_dst'						=> (int) $qi_config['qi_dst'],
-				'user_form_salt'			=> unique_id(),
-				'user_style'					=> (int) $config['default_style'],
-				'user_regdate'				=> $user['user_regdate'],
-				'user_passchg'				=> $user['user_passchg'],
-				'user_options'				=> 230271,
+				'user_timezone'			=> $settings->get_config('qi_tz', 0),
+				'user_lang'				=> $settings->get_config('qi_lang'),
+				'user_dst'				=> $settings->get_config('qi_dst', 0),
+				'user_form_salt'		=> unique_id(),
+				'user_style'			=> (int) $config['default_style'],
+				'user_regdate'			=> $user['user_regdate'],
+				'user_passchg'			=> $user['user_passchg'],
+				'user_options'			=> 230271,
 				'user_full_folder'		=> PRIVMSGS_NO_BOX,
 				'user_notify_type'		=> NOTIFY_EMAIL,
 
-				'user_sig'						=> '',
-				'user_occ'						=> '',
-				'user_interests'			=> '',
+				'user_sig'			=> '',
+				'user_occ'			=> '',
+				'user_interests'	=> '',
 			);
 
 			$chunk_cnt++;

@@ -20,8 +20,8 @@ $attempted = $saved = false;
 $config_text = '';
 if ($mode == 'update_settings')
 {
-	// Time to save some settings.
-	$qi_config = @utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
+	// Time to save some settings. request_var('qi_profile', '')
+	$qi_config	= @utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
 
 	if (!empty($qi_config['other_config']))
 	{
@@ -29,14 +29,16 @@ if ($mode == 'update_settings')
 		$qi_config['other_config'] = (!empty($qi_config['other_config'])) ? serialize(explode("\n", $qi_config['other_config'])) : '';
 	}
 
-	$settings = new settings($qi_config);
+	$settings->set_config($qi_config);
+
 	$attempted = true;
 	$valid = false;
 	$error = '';
 	if ($settings->validate())
 	{
 		$valid = true;
-		if (is_writable($quickinstall_path . 'qi_config.cfg'))
+
+		if (is_writable($quickinstall_path . 'settings'))
 		{
 			if ($settings->update())
 			{
@@ -58,15 +60,15 @@ if ($mode == 'update_settings')
 	}
 	else
 	{
-		$error = $settings->error;
+		$error = $settings->get_error();
 	}
 	// configuration may have been modified by settings.
-	$qi_config = $settings->get_config();
+	$qi_config = $settings->get_config_ary(); // Revisit
 
 	if (empty($error))
 	{
 		$s_settings_success = true;
-		$language = $qi_config['qi_lang'];
+		$language = $settings->get_config('qi_lang', 'en');
 	}
 	else
 	{
@@ -75,91 +77,106 @@ if ($mode == 'update_settings')
 	$qi_install = false;
 }
 
-// Get language selects for both QI and phpBB
-gen_lang_select($language, 'qi');
-gen_lang_select(((!empty($qi_config['default_lang'])) ? $qi_config['default_lang'] : 'en'), 'phpbb');
+$s_settings_writable = true;
 
 if ($qi_install)
 {
-	// Fill some default vaues.phpbb_lang_row
+	// Don't show errors when installing QI
+	$error = '';
+
+	// Fill some default vaues.
+}
+else
+{
+	if (!is_writable($quickinstall_path . 'settings') || !is_dir($quickinstall_path . 'settings'))
+	{
+		$error .= $user->lang['SETTINGS_NOT_WRITABLE'] . '<br />';
+		$s_settings_writable = false;
+	}
 }
 
 $template->assign_vars(array(
 	'S_BOARDS_WRITABLE'		=> is_writable($settings->get_boards_dir()),
 	'S_CACHE_WRITABLE'		=> is_writable($settings->get_cache_dir()),
 	'S_CONFIG_WRITABLE'		=> is_writable($quickinstall_path . 'qi_config.cfg'),
+	'S_CONVERT'				=> $gi_convert,
 	'S_IN_INSTALL'			=> $qi_install,
 	'S_IN_SETTINGS'			=> true,
+	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
 	'S_SETTINGS_SUCCESS'	=> ($attempted && $saved) ? true : false,
 	'S_SETTINGS_FAILURE'	=> ($attempted && !$saved) ? true : false,
 
-	'ERROR'			=> (!empty($error)) ? ((!$qi_install) ? $error : '') : '',
+	'ERROR'			=> $error,
 	'CONFIG_TEXT'	=> $config_text,
 
-	'U_UPDATE_SETTINGS'		=> qi::url('update_settings'),
+	'U_UPDATE_SETTINGS'	=> qi::url('settings', array('mode' => 'update_settings')),
+	'U_CHOOSE_PROFILE'	=> qi::url('settings', array('mode' => 'change_profile')),
 
-	'TABLE_PREFIX'	=> htmlspecialchars($qi_config['table_prefix']),
-	'SITE_NAME'		=> $qi_config['site_name'],
-	'SITE_DESC'		=> $qi_config['site_desc'],
+	'TABLE_PREFIX'	=> htmlspecialchars($settings->get_config('table_prefix')),
+	'SITE_NAME'		=> $settings->get_config('site_name'),
+	'SITE_DESC'		=> $settings->get_config('site_desc'),
 	'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
 	'PAGE_MAIN'		=> false,
+	'PROFILE_OPTIONS'	=> $settings->get_profiles(),
+	'QI_LANG'		=> $settings->get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
+	'PHPBB_LANG'	=> $settings->get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
 
 	'CONFIG_SAVED'  => $saved,
 	'CONFIG_TEXT'   => htmlspecialchars($config_text),
 
 	// Config settings
-	'CHUNK_POST'			=> (!empty($qi_config['chunk_post'])) ? $qi_config['chunk_post'] : CHUNK_POST,
-	'CHUNK_TOPIC'			=> (!empty($qi_config['chunk_topic'])) ? $qi_config['chunk_topic'] : CHUNK_TOPIC,
-	'CHUNK_USER'			=> (!empty($qi_config['chunk_user'])) ? $qi_config['chunk_user'] : CHUNK_USER,
-	'CONFIG_ADMIN_EMAIL'	=> (!empty($qi_config['admin_email'])) ? $qi_config['admin_email'] : '',
-	'CONFIG_ADMIN_NAME'		=> (!empty($qi_config['admin_name'])) ? $qi_config['admin_name'] : '',
-	'CONFIG_ADMIN_PASS'		=> (!empty($qi_config['admin_pass'])) ? $qi_config['admin_pass'] : '',
-	'CONFIG_AUTOMOD'		=> (isset($qi_config['automod'])) ? $qi_config['automod'] : 1,
-	'CONFIG_BOARD_EMAIL'	=> (!empty($qi_config['board_email'])) ? $qi_config['board_email'] : '',
-	'CONFIG_BOARDS_DIR'		=> (!empty($qi_config['boards_dir'])) ? $qi_config['boards_dir'] : 'boards/',
-	'CONFIG_BOARDS_URL'		=> (!empty($qi_config['boards_url'])) ? $qi_config['boards_url'] : 'boards/',
-	'CONFIG_CACHE_DIR'		=> (!empty($qi_config['cache_dir'])) ? $qi_config['cache_dir'] : 'cache/',
-	'CONFIG_COOKIE_DOMAIN'	=> (!empty($qi_config['cookie_domain'])) ? $qi_config['cookie_domain'] : 'localhost',
-	'CONFIG_COOKIE_SECURE'	=> (!empty($qi_config['cookie_secure'])) ? $qi_config['cookie_secure'] : 0,
-	'CONFIG_DB_PREFIX'		=> (!empty($qi_config['db_prefix'])) ? $qi_config['db_prefix'] : 'qi_',
-	'CONFIG_DBHOST'			=> (!empty($qi_config['dbhost'])) ? $qi_config['dbhost'] : 'localhost',
-	'CONFIG_DBMS'			=> (!empty($qi_config['dbms'])) ? $qi_config['dbms'] : 'mysql',
-	'CONFIG_DBPASSWD'		=> (!empty($qi_config['dbpasswd'])) ? $qi_config['dbpasswd'] : '',
-	'CONFIG_DBPORT'			=> (!empty($qi_config['dbport'])) ? $qi_config['dbport'] : '',
-	'CONFIG_DBUSER'			=> (!empty($qi_config['dbuser'])) ? $qi_config['dbuser'] : '',
-	'CONFIG_EMAIL_ENABLE'	=> (!empty($qi_config['email_enable'])) ? $qi_config['email_enable'] : 0,
-	'CONFIG_GRANT_PERMISSIONS'	=> (!empty($qi_config['grant_permissions'])) ? $qi_config['grant_permissions'] : '',
-	'CONFIG_MAKE_WRITABLE'	=> (!empty($qi_config['make_writable'])) ? $qi_config['make_writable'] : 0,
-	'CONFIG_NO_PASSWORD'	=> (isset($qi_config['no_dbpasswd'])) ? $qi_config['no_dbpasswd'] : 0,
-	'CONFIG_POPULATE'		=> (isset($qi_config['populate'])) ? $qi_config['populate'] : 0,
-	'CONFIG_QI_DST'			=> (!empty($qi_config['qi_dst'])) ? $qi_config['qi_dst'] : 0,
-	'CONFIG_QI_TZ'			=> (!empty($qi_config['qi_tz'])) ? $qi_config['qi_tz'] : 0,
-	'CONFIG_REDIRECT'		=> (isset($qi_config['redirect'])) ? $qi_config['redirect'] : 1,
-	'CONFIG_SERVER_NAME'	=> (!empty($qi_config['server_name'])) ? $qi_config['server_name'] : 'localhost',
-	'CONFIG_SERVER_PORT'	=> (!empty($qi_config['server_port'])) ? $qi_config['server_port'] : '80',
-	'CONFIG_SITE_DESC'		=> (!empty($qi_config['site_desc'])) ? $qi_config['site_desc'] : 'Evils testing hood',
-	'CONFIG_SITE_NAME'		=> (!empty($qi_config['site_name'])) ? $qi_config['site_name'] : 'Testing Board',
-	'CONFIG_SMTP_AUTH'		=> (!empty($qi_config['smtp_auth'])) ? $qi_config['smtp_auth'] : 'PLAIN',
-	'CONFIG_SMTP_DELIVERY'	=> (!empty($qi_config['smtp_delivery'])) ? $qi_config['smtp_delivery'] : 0,
-	'CONFIG_SMTP_HOST'		=> (!empty($qi_config['smtp_host'])) ? $qi_config['smtp_host'] : '',
-	'CONFIG_SMTP_PASS'		=> (!empty($qi_config['smtp_pass'])) ? $qi_config['smtp_pass'] : '',
-	'CONFIG_SMTP_PORT'		=> (!empty($qi_config['smtp_port'])) ? $qi_config['smtp_port'] : 25,
-	'CONFIG_SMTP_USER'		=> (!empty($qi_config['smtp_user'])) ? $qi_config['smtp_user'] : '',
-	'CONFIG_SUBSILVER'		=> (isset($qi_config['subsilver'])) ? $qi_config['subsilver'] : 0,
-	'CONFIG_TABLE_PREFIX'	=> (!empty($qi_config['table_prefix'])) ? $qi_config['table_prefix'] : 'phpbb_',
-	'CONFIG_NUM_USERS'		=> (isset($qi_config['num_users'])) ? $qi_config['num_users'] : 150,
-	'CONFIG_NUM_NEW_GROUP'	=> (isset($qi_config['num_new_group'])) ? $qi_config['num_new_group'] : 50,
-	'CONFIG_CREATE_ADMIN'	=> (!empty($qi_config['create_admin'])) ? 1 : 0,
-	'CONFIG_CREATE_MOD'		=> (!empty($qi_config['create_mod'])) ? 1 : 0,
-	'CONFIG_NUM_CATS'		=> (isset($qi_config['num_cats'])) ? $qi_config['num_cats'] : 2,
-	'CONFIG_NUM_FORUMS'		=> (isset($qi_config['num_forums'])) ? $qi_config['num_forums'] : 10,
-	'CONFIG_NUM_TOPICS_MIN'	=> (isset($qi_config['num_topics_min'])) ? $qi_config['num_topics_min'] : 1,
-	'CONFIG_NUM_TOPICS_MAX'	=> (isset($qi_config['num_topics_max'])) ? $qi_config['num_topics_max'] : 25,
-	'CONFIG_NUM_REPLIES_MIN'	=> (isset($qi_config['num_replies_min'])) ? $qi_config['num_replies_min'] : 1,
-	'CONFIG_NUM_REPLIES_MAX'	=> (isset($qi_config['num_replies_max'])) ? $qi_config['num_replies_max'] : 15,
-	'CONFIG_EMAIL_DOMAIN'	=> (isset($qi_config['email_domain'])) ? $qi_config['email_domain'] : '',
+	'CHUNK_POST'			=> $settings->get_config('chunk_post', 0),
+	'CHUNK_TOPIC'			=> $settings->get_config('chunk_topic', 0),
+	'CHUNK_USER'			=> $settings->get_config('chunk_user', 0),
+	'CONFIG_ADMIN_EMAIL'	=> $settings->get_config('admin_email'),
+	'CONFIG_ADMIN_NAME'		=> $settings->get_config('admin_name'),
+	'CONFIG_ADMIN_PASS'		=> $settings->get_config('admin_pass'),
+	'CONFIG_AUTOMOD'		=> $settings->get_config('automod', 0),
+	'CONFIG_BOARD_EMAIL'	=> $settings->get_config('board_email'),
+	'CONFIG_BOARDS_DIR'		=> $settings->get_boards_dir(),
+	'CONFIG_BOARDS_URL'		=> $settings->get_boards_url(),
+	'CONFIG_CACHE_DIR'		=> $settings->get_cache_dir(),
+	'CONFIG_COOKIE_DOMAIN'	=> $settings->get_config('cookie_domain'),
+	'CONFIG_COOKIE_SECURE'	=> $settings->get_config('cookie_secure', 0),
+	'CONFIG_DB_PREFIX'		=> $settings->get_config('db_prefix'),
+	'CONFIG_DBHOST'			=> $settings->get_config('dbhost'),
+	'CONFIG_DBMS'			=> $settings->get_config('dbms'),
+	'CONFIG_DBPASSWD'		=> $settings->get_config('dbpasswd'),
+	'CONFIG_DBPORT'			=> $settings->get_config('dbport'),
+	'CONFIG_DBUSER'			=> $settings->get_config('dbuser'),
+	'CONFIG_EMAIL_ENABLE'	=> $settings->get_config('email_enable', 0),
+	'CONFIG_GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions'),
+	'CONFIG_MAKE_WRITABLE'	=> $settings->get_config('make_writable', 0),
+	'CONFIG_NO_PASSWORD'	=> $settings->get_config('no_dbpasswd', 0),
+	'CONFIG_POPULATE'		=> $settings->get_config('populate', 0),
+	'CONFIG_QI_DST'			=> $settings->get_config('qi_dst', 0),
+	'CONFIG_QI_TZ'			=> $settings->get_config('qi_tz', 0),
+	'CONFIG_REDIRECT'		=> $settings->get_config('redirect', 0),
+	'CONFIG_SERVER_NAME'	=> $settings->get_config('server_name'),
+	'CONFIG_SERVER_PORT'	=> $settings->get_config('server_port'),
+	'CONFIG_SITE_DESC'		=> $settings->get_config('site_desc'),
+	'CONFIG_SITE_NAME'		=> $settings->get_config('site_name'),
+	'CONFIG_SMTP_AUTH'		=> $settings->get_config('smtp_auth'),
+	'CONFIG_SMTP_DELIVERY'	=> $settings->get_config('smtp_delivery', 0),
+	'CONFIG_SMTP_HOST'		=> $settings->get_config('smtp_host'),
+	'CONFIG_SMTP_PASS'		=> $settings->get_config('smtp_pass'),
+	'CONFIG_SMTP_PORT'		=> $settings->get_config('smtp_port', 0),
+	'CONFIG_SMTP_USER'		=> $settings->get_config('smtp_user'),
+	'CONFIG_SUBSILVER'		=> $settings->get_config('subsilver', 0),
+	'CONFIG_TABLE_PREFIX'	=> $settings->get_config('table_prefix'),
+	'CONFIG_NUM_USERS'		=> $settings->get_config('num_users', 0),
+	'CONFIG_NUM_NEW_GROUP'	=> $settings->get_config('num_new_group', 0),
+	'CONFIG_CREATE_ADMIN'	=> $settings->get_config('create_admin', 0),
+	'CONFIG_CREATE_MOD'		=> $settings->get_config('create_mod', 0),
+	'CONFIG_NUM_CATS'		=> $settings->get_config('num_cats', 0),
+	'CONFIG_NUM_FORUMS'		=> $settings->get_config('num_forums', 0),
+	'CONFIG_NUM_TOPICS_MIN'	=> $settings->get_config('num_topics_min', 0),
+	'CONFIG_NUM_TOPICS_MAX'	=> $settings->get_config('num_topics_max', 0),
+	'CONFIG_NUM_REPLIES_MIN'	=> $settings->get_config('num_replies_min', 0),
+	'CONFIG_NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
+	'CONFIG_EMAIL_DOMAIN'	=> $settings->get_config('email_domain'),
 
-	'OTHER_CONFIG'			=> (!empty($qi_config['other_config'])) ? implode("\n", unserialize($qi_config['other_config'])) : '',
+	'OTHER_CONFIG'			=> $settings->get_other_config(),
 
 	'SEL_LANG'				=> (!empty($language)) ? $language : '',
 ));
