@@ -132,7 +132,7 @@ class settings
 				$cfg_file = '';
 				foreach ($files as $file)
 				{
-					if ($file == '.' || $file == '..' || strpos($file, '.cfg') === false || !is_readable("{$quickinstall_path}settings/$file"))
+					if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
 					{
 						continue;
 					}
@@ -517,7 +517,7 @@ class settings
 
 		foreach ($lang_arr as $lang)
 		{
-			if ($lang == '.' || $lang == '..' || !is_dir($lang_path . $lang))
+			if ($lang[0] === '.' || !is_dir($lang_path . $lang))
 			{
 				continue;
 			}
