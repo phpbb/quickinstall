@@ -177,12 +177,8 @@ $config = array(
 );
 
 // overwrite
-
 $cache->cache_dir = $settings->get_cache_dir();
 $template->cachepath = $cache->cache_dir . 'tpl_qi_';
-
-// load lang
-qi::add_lang(array('qi', 'phpbb'));
 
 // Load the main module
 $module->load($page, 'qi_main');
