@@ -727,6 +727,7 @@ class settings
 		{
 			$value = htmlspecialchars_decode($value);
 		}
+		unset($value);
 
 		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
