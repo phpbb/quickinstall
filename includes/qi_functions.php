@@ -159,17 +159,25 @@ class settings
 				// if manual_convert is true the config will be empty.
 				$this->manual_convert = $this->convert($config);
 			}
-			else
-			{
-				// No config.
-				$this->install = true;
-			}
+
+			return;
 		}
 		else if (!empty($config))
 		{
 			// The config array needs to be converted to an associative array.
 			$this->set_config_array($config);
+			return;
 		}
+
+		// If we reach this point there is no config.
+		// Most likely a new user so load the default settings and go to install.
+		if (!function_exists('get_default_settings'))
+		{
+			include("{$quickinstall_path}includes/default_settings.$phpEx");
+		}
+
+		$this->config = get_default_settings();
+		$this->install = true;
 	}
 
 	/**
