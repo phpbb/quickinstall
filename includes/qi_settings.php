@@ -77,7 +77,7 @@ if ($mode == 'update_settings')
 
 $s_settings_writable = true;
 
-if ($qi_install)
+if ($settings->install)
 {
 	// Don't show errors when installing QI
 	$error = '';
@@ -98,7 +98,7 @@ $template->assign_vars(array(
 	'S_CACHE_WRITABLE'		=> is_writable($settings->get_cache_dir()),
 	'S_CONFIG_WRITABLE'		=> is_writable($quickinstall_path . 'settings'),
 	'S_CONVERT'				=> $gi_convert,
-	'S_IN_INSTALL'			=> $qi_install,
+	'S_IN_INSTALL'			=> $settings->install,
 	'S_IN_SETTINGS'			=> true,
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
 	'S_SETTINGS_SUCCESS'	=> ($attempted && $saved) ? true : false,

@@ -89,7 +89,7 @@ class settings
 	/**
 	 * The current profile
 	 */
-	var $profile = 'main';
+	var $profile = 'default';
 
 	/**
 	 * Constructor.
@@ -242,10 +242,10 @@ class settings
 		$this->set_config_array($config);
 
 		// The config array needs to be converted to a string.
-		$this->profile = 'main';
+		$this->profile = 'default';
 		if ($this->update() !== false)
 		{
-			$this->set_profile_cookie('main');
+			$this->set_profile_cookie('default');
 			$this->is_converted = true;
 			$this->error[] = 'CONFIG_CONVERTED';
 			return(false);
@@ -677,7 +677,7 @@ class settings
 	 *
 	 * @param string $profile, profile name.
 	 */
-	function set_profile_cookie($profile = 'main')
+	function set_profile_cookie($profile = 'default')
 	{
 		// A Julian year == 365.25 days * 86,400 seconds
 		$expire_time = time() + 31557600;
@@ -825,6 +825,13 @@ class settings
 
 		$profile = $this->profile;
 		$res = file_put_contents("{$quickinstall_path}settings/$profile.cfg", $config_text);
+
+		if ($res !== false)
+		{
+			// Make sure install is false when the settings have been successfully saved.
+			$this->install = false;
+		}
+
 		return($res);
 	}
 }
