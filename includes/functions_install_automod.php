@@ -68,13 +68,7 @@ class automod_installer
 		$GLOBALS['lang'] = &$user->lang;
 		global $lang;
 
-		// Newer AutoMOD uses includes/automod/
-		if (file_exists($phpbb_root_path . 'includes/automod/functions_mods.' . $phpEx))
-		{
-			include($phpbb_root_path . 'includes/automod/functions_mods.' . $phpEx);
-			include($phpbb_root_path . 'includes/automod/constants_automod.' . $phpEx);
-		}
-		else if (file_exists($phpbb_root_path . 'includes/functions_mods.' . $phpEx))
+		if (file_exists($phpbb_root_path . 'includes/functions_mods.' . $phpEx))
 		{
 			include($phpbb_root_path . 'includes/functions_mods.' . $phpEx);
 		}
