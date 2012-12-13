@@ -157,6 +157,7 @@ $lang = array_merge($lang, array(
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
 	'GRANT_PERMISSIONS_EXPLAIN'	=> '(e.g. 0060 for group read/write)',
 
+	'IF_EMPTY_EXPLAIN'		=> 'If empty the default from config will be used.',
 	'IN_SETTINGS'			=> 'Manage your QuickInstall settings.',
 	'INCLUDE_MODS'			=> 'Include MODs',
 	'INCLUDE_MODS_EXPLAIN'	=> 'Select folders from the sources/mods/ folder in this list, those files will then be copied to your new board’s root dir, also overwriting old files (so you can have premodded boards in here for example). If you select “None”, it will not be used (because it’s a pain to deselect items).',
