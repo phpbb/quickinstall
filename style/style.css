@@ -1635,11 +1635,37 @@ fieldset.permissions .permissions-switch {
 
 .manage-row:hover { background-color: #eeeeee; }
 
+a.open-setting {
+	background: none no-repeat scroll left top transparent;
+	display: block;
+	float: left;
+	height: 11px;
+	letter-spacing: 1000px;
+	overflow: hidden;
+	text-decoration: none;
+	text-indent: 11px;
+	width: 11px;
+	margin-top: 2px;
+}
+
+a.open-setting { background-image: url('./images/icon_point_down.gif'); }
+
+div.open-setting {
+	float: left;
+	height: 14px;
+	text-align: left;
+}
+
+.settings-div {
+	display: none;
+	margin: 0 0 0.9em 0;
+}
+
 .settings-title {
+	margin: 0 0 0.9em 0;
 	border-top: 1px dashed #999999;
 	border-bottom: 1px dashed #C2C2C2;
 	font-weight: bold;
-	margin: 0 0 0.9em 0;
 	text-align: center;
 }
 
@@ -1662,13 +1688,10 @@ a.top {
 	margin-top: 2px;
 }
 
-a.top {
-	background-image: url('./images/icon_back_top.gif');
-}
+a.top { background-image: url('./images/icon_back_top.gif'); }
 
 .back2top {
 	float: right;
-/*	clear: both;*/
 	height: 14px;
 	text-align: right;
 }

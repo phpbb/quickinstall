@@ -204,7 +204,7 @@ $lang = array_merge($lang, array(
 	'NUM_USERS'			=> 'Number of users',
 	'NUM_USERS_EXPLAIN'	=> 'The number of users to populate your new board with.<br />They will get the username Tester_x (x is 1 to num_users). They will all get the password "123456"',
 
-	'ONLY_LOCAL'			=> 'Please note: QuickInstall is only intended to be used locally.<br />It should not be used on a web server accessible via the internet.<br />If you decide to use it on a public web server it is entirely at your own risk.',
+	'ONLY_LOCAL'			=> '<strong>Welcome to QuickInstall (QI)</strong>, a tool to quickly install a phpBB board for testing.<br /><strong>Please note</strong>: QI is only intended to be used locally.<br />It should not be used on a web server accessible via the internet. <strong>If you decide to use it on a public web server it is entirely at your own risk.</strong> There is no support to put QI up on a public web server.<br />Some default settings have been loaded below. The only things you need to add is &quot;Database user&quot; and &quot;Database password&quot;. But it would be a good idea to check the rest of the settings too.<br />Make sure the &quot;boards&quot;, &quot;cache&quot; and &quot;settings&quot; directories exists and are writable by PHP.When you have checked the settings and required directories simply click on a &quot;submit&quot; button and this profile will be saved under the name &quot;default&quot;. If you want some other name you can write it in the &quot;Save as new profile&quot; field.',
 	'OPTIONS'				=> 'Options',
 	'OPTIONS_ADVANCED'		=> 'Advanced options',
 	'OTHER_CONFIG'			=> 'Other board config settings',
@@ -241,7 +241,8 @@ $lang = array_merge($lang, array(
 	'RETURN_MANAGE'		=> 'Return to the Manage tab',
 
 	'SAVE_PROFILE'		=> 'Save as new profile',
-	'SAVE_PROFILE_EXPLAIN'	=> 'Write the name for a new profile for these settings. Allowed chars are A-Z, a-z, 0-9, &quot;-&quot; (miuns sign), &quot;_&quot; (underscore) and &quot;.&quot; (dot)<br /><strong>Note: If a profile with the name you write already exists it will be overwritten.</strong>',
+	'SAVE_PROFILE_EXPLAIN'	=> 'Write the name for a new profile for these settings. Allowed chars are A-Z, a-z, 0-9, &quot;-&quot; (miuns sign), &quot;_&quot; (underscore) and &quot;.&quot; (dot)<br /><strong>Note: If a profile with this name already exists, it will be overwritten.</strong>',
+	'SAVE_RESTORE'		=> 'Save/Restore',
 	'SELECT'			=> 'Select',
 	'SETTINGS'			=> 'Settings',
 	'SETTINGS_FAILURE'	=> 'There were errors, take a look in the box below.',

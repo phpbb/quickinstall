@@ -2,9 +2,11 @@
 
 <h1>{L_SETTINGS}</h1>
 <!-- IF S_SETTINGS_SUCCESS --><h2 class="settings-result greenish">{L_SETTINGS_SUCCESS}</h2><!-- ELSEIF S_SETTINGS_FAILURE --><h2 class="settings-result redish">{L_SETTINGS_FAILURE}</h2><!-- ENDIF -->
-<!-- IF S_IN_INSTALL --><p class="errorbox large">{L_ONLY_LOCAL}</p><!-- ENDIF -->
+<!-- IF S_IN_INSTALL --><p class="large" style="color: #505050;">
+<strong></strong>
+{L_ONLY_LOCAL}</p><!-- ENDIF -->
 
-<!-- IF not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE or S_IN_INSTALL --><div class="errorbox"><p>{L_NEED_WRITABLE}</p></div><!-- ENDIF -->
+<!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) --><div class="errorbox"><p>{L_NEED_WRITABLE}</p></div><!-- ENDIF -->
 
 <!-- IF ERROR --><div class="errorbox">{ERROR}</div><!-- ENDIF -->
 
@@ -69,7 +71,7 @@
 			</dd>
 		</dl>
 
-		<div class="settings-title"><a id="db-settings"></a>{L_DB_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
+		<div class="settings-title"><a id="db-settings"></a>{L_DB_SETTINGS}</div>
 		<dl>
 			<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
 			<dd>
@@ -110,49 +112,40 @@
 			<dt><label for="table_prefix">{L_TABLE_PREFIX}:*</label><br />{L_TABLE_PREFIX_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="dir-settings"></a>{L_DIR_URL_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
-		<dl>
-			<dt><label for="boards_dir">{L_CACHE_DIR}:*</label><br />{L_CACHE_DIR_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="boards_dir">{L_BOARDS_DIR}:*</label><br />{L_BOARDS_DIR_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="boards_dir">{L_BOARDS_URL}:*</label><br />{L_BOARDS_URL_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="make_writable">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-			<dd>
-				<dd><input class="text medium" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></dd>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
+		<div class="settings-title">
+<!--			<div class="open-setting"><a class="open-setting" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div> -->
+			<a id="dir-settings"></a>{L_DIR_URL_SETTINGS}
+		</div>
+<!--		<div class="settings-div"> -->
+			<dl>
+				<dt><label for="boards_dir">{L_CACHE_DIR}:*</label><br />{L_CACHE_DIR_EXPLAIN}</dt>
+				<dd><input class="text medium" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="boards_dir">{L_BOARDS_DIR}:*</label><br />{L_BOARDS_DIR_EXPLAIN}</dt>
+				<dd><input class="text medium" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="boards_dir">{L_BOARDS_URL}:*</label><br />{L_BOARDS_URL_EXPLAIN}</dt>
+				<dd><input class="text medium" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN}</dt>
+				<dd>
+					<label><input type="radio" class="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="make_writable">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
+				<dd>
+					<dd><input class="text medium" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></dd>
+				</dd>
+			</dl>
+<!--		</div> -->
 
-		<div class="settings-title"><a id="time-settings"></a>{L_TIME_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
+		<div class="settings-title"><a id="time-settings"></a>{L_TIME_SETTINGS}</div>
 		<dl>
 			<dt><label for="qi_tz">{L_QI_TZ}:*</label><br />{L_QI_TZ_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="qi_tz" name="qi_config[qi_tz]" value="{CONFIG_QI_TZ}" /></dd>
@@ -164,15 +157,8 @@
 				<label><input type="radio" name="qi_config[qi_dst]" value="0"<!-- IF CONFIG_QI_DST == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="admin-settings"></a>{L_ADMIN_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
+		<div class="settings-title"><a id="admin-settings"></a>{L_ADMIN_SETTINGS}</div>
 		<dl>
 			<dt><label for="admin_name">{L_ADMIN_NAME}:*</label><br />{L_ADMIN_NAME_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></dd>
@@ -185,15 +171,8 @@
 			<dt><label for="admin_email">{L_ADMIN_EMAIL}:*</label><br />{L_ADMIN_EMAIL_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="admin_email" name="qi_config[admin_email]" value="{CONFIG_ADMIN_EMAIL}" /></dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="server-settings"></a>{L_SERVER_COOKIE_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
+		<div class="settings-title"><a id="server-settings"></a>{L_SERVER_COOKIE_SETTINGS}</div>
 		<dl>
 			<dt><label for="server_name">{L_SERVER_NAME}:*</label><br />{L_SERVER_NAME_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /></dd>
@@ -213,15 +192,8 @@
 				<label><input type="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label>
 			</dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="email-settings"></a>{L_EMAIL_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
+		<div class="settings-title"><a id="email-settings"></a>{L_EMAIL_SETTINGS}</div>
 		<dl>
 			<dt><label for="board_email">{L_BOARD_EMAIL}:*</label><br />{L_BOARD_EMAIL_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /></dd>
@@ -268,15 +240,8 @@
 			<dt><label for="smtp_pass">{L_SMTP_PASS}:</label><br />{L_SMTP_PASS_EXPLAIN}</dt>
 			<dd><input class="text medium" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="config-settings"></a>{L_CONFIG_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div><br /><div class="settings-explain">{L_CONFIG_SETTINGS_EXPLAIN}</div></div>
+		<div class="settings-title"><a id="config-settings"></a>{L_CONFIG_SETTINGS}<br /><div class="settings-explain">{L_CONFIG_SETTINGS_EXPLAIN}</div></div>
 		<dl>
 			<dt><label for="site_name">{L_SITE_NAME}:*</label><br />{L_SITE_NAME_EXPLAIN}</dt>
 			<dd><input class="text medium" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /></dd>
@@ -293,15 +258,8 @@
 			<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
 			<dd><textarea name="qi_config[other_config]" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="chunk-settings"></a>{L_CHUNK_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div><br /><div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}<br />{L_CAN_BE_CHANGED}</div></div>
+		<div class="settings-title"><a id="chunk-settings"></a>{L_CHUNK_SETTINGS}<br /><div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}<br />{L_CAN_BE_CHANGED}</div></div>
 		<dl>
 			<dt><label for="chunk_post">{L_CHUNK_POST}:</label><br />{L_CHUNK_POST_EXPLAIN}</dt>
 			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="qi_config[chunk_post]" value="{CHUNK_POST}" /></dd>
@@ -314,15 +272,8 @@
 			<dt><label for="chunk_user">{L_CHUNK_USER}:</label><br />{L_CHUNK_USER_EXPLAIN}</dt>
 			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_user" name="qi_config[chunk_user]" value="{CHUNK_USER}" /></dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 
-		<div class="settings-title"><a id="other-settings"></a>{L_OTHER_SETTINGS}<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div></div>
+		<div class="settings-title"><a id="other-settings"></a>{L_OTHER_SETTINGS}</div>
 		<dl>
 			<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}</dt>
 			<dd>
@@ -345,18 +296,10 @@
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="0"<!-- IF CONFIG_SUBSILVER == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
-		<dl>
-			<dt><label>{L_CONVENIENCE}:</label><br />{L_CONVENIENCE_EXPLAIN}</dt>
-			<dd style="padding: 15px 20px 0  30px;">
-				<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp; &nbsp;
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			</dd>
-		</dl>
 	</fieldset>
 
 	<fieldset>
 		<legend><a id="populate-settings"></a>{L_POPULATE}</legend>
-		<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div>
 		<dl>
 			<dt><label>{L_POPULATE}:</label><br />{L_POPULATE_EXPLAIN}</dt>
 			<dd>
@@ -415,7 +358,7 @@
 	</fieldset>
 
 	<fieldset>
-		<div class="back2top"><a class="top" title="{L_BACK_TOP}" href="#back-top">{L_BACK_TOP}</a></div>
+		<a id="save-settings"></a>
 		<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
 		<p class="submit-buttons">
 			<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp;
