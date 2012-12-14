@@ -53,8 +53,7 @@ class module
  */
 function load_schema($install_path = '', $install_dbms = false)
 {
-	global $db;
-	global $table_prefix;
+	global $db, $table_prefix;
 
 	static $available_dbms = false;
 
