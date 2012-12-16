@@ -68,7 +68,7 @@ class qi_main
 			'U_CREATE'			=> qi::url('create'),
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
 
-			'TABLE_PREFIX'	=> htmlspecialchars($settings->get_config('table_prefix', '')),
+			'TABLE_PREFIX'	=> $settings->get_config('table_prefix', ''),
 			'DB_PERFIX'		=> htmlspecialchars($settings->get_config('db_prefix', '')),
 			'SITE_NAME'		=> $settings->get_config('site_name', ''),
 			'SITE_DESC'		=> $settings->get_config('site_desc', ''),
@@ -105,7 +105,7 @@ class qi_main
 			'OTHER_CONFIG'		=> $settings->get_other_config(),
 		));
 
-		// Output page 
+		// Output page
 		qi::page_header($user->lang['QI_MAIN'], $user->lang['QI_MAIN_ABOUT']);
 
 		$template->set_filenames(array(
