@@ -77,9 +77,10 @@ class qi_manage
 								$dbpasswd,
 								$dbport,
 							);
-							$db = db_connect($db_vars); // Needs to be moved.
+
+							$db = db_connect($db_vars);
 							$db->sql_query('DROP DATABASE IF EXISTS ' . $dbname);
-							db_close($db); // Might give a error since the DB it deleted, needs to be tested.
+							db_close($db); // Might give a error since the DB it deleted, needs to be more tested.
 						}
 					}
 
