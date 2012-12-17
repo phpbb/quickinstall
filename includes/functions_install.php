@@ -53,13 +53,13 @@ class module
  */
 function load_schema($install_path = '', $install_dbms = false)
 {
-	global $db, $table_prefix;
+	global $settings, $db, $table_prefix;
 
 	static $available_dbms = false;
 
 	if ($install_dbms === false)
 	{
-		global $dbms;
+		$dbms = $settings->get_config('dbms');
 		$install_dbms = $dbms;
 	}
 

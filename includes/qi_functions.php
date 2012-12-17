@@ -385,6 +385,10 @@ class settings
 	{
 		$cfg_string = '';
 
+		// I need this for the current bug hunting.
+		// I'll try to remove it before I push anything.
+		ksort($this->config);
+
 		foreach ($this->config as $key => $value)
 		{
 			$cfg_string .= $key . '=' . $value . "\n";
@@ -398,7 +402,7 @@ class settings
 	 *
 	 * @return array with DB connect data.
 	 */
-	function get_db_vars()
+	function get_db_data()
 	{
 		/**
 		 * The order in this array is important, don't change it.
@@ -522,7 +526,7 @@ class settings
 		return($lang_options);
 	}
 
-	function get_other_config()
+	function get_other_config($array = false)
 	{
 		$other_config = request_var('other_config', '');
 
@@ -533,7 +537,12 @@ class settings
 				return('');
 			}
 
-			$other_config = implode("\n", unserialize($this->config['other_config']));
+			$other_config = unserialize($this->config['other_config']);
+			$other_config = (!$array) ? implode("\n", $other_config) : $other_config;
+		}
+		else if ($array)
+		{
+			$other_config = explode("\n", $other_config);
 		}
 
 		return($other_config);
@@ -841,7 +850,7 @@ function db_connect($db_data = '')
 {
 	global $phpbb_root_path, $phpEx, $sql_db, $db, $quickinstall_path, $settings;
 
-	$db_data = (empty($db_data)) ? $settings->get_db_vars() : $db_data;
+	$db_data = (empty($db_data)) ? $settings->get_db_data() : $db_data;
 
 	list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $db_data;
 
@@ -853,11 +862,15 @@ function db_connect($db_data = '')
 		trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
 	}
 
-	// Load the appropriate database class if not already loaded
-	include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+	// Load the appropriate database class if not already loaded.
+	if (!class_exists('dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi'))
+	{
+		// phpBB dbal class.
+		include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
 
-	// now the quickinstall dbal extension
-	include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+		// now the quickinstall dbal extension
+		include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+	}
 
 	// Instantiate the database
 	$sql_db = 'dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi';

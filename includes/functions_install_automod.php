@@ -102,8 +102,8 @@ class automod_installer
 		$action = 'install';
 		$version_select = $current_version;
 
-		$dbms = $settings->get_config('dbms');
 		global $dbms;
+		$dbms = $settings->get_config('dbms');
 
 		$umil->run_actions($action, $versions, $version_config_name, $version_select);
 

@@ -109,65 +109,65 @@ function toggle_div(div_id)
 		<div id="options_populate" style="display: none;">
 			<dl>
 				<dt><label for="num_users">{L_NUM_USERS}:</label><br />{L_NUM_USERS_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_users" name="pop_data[num_users]" value="{NUM_USERS}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="5" id="num_users" name="num_users" value="{NUM_USERS}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="num_new_group">{L_NUM_NEW_GROUP}:</label><br />{L_NUM_NEW_GROUP_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_new_group" name="pop_data[num_new_group]" value="{NUM_NEW_GROUP}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="5" id="num_new_group" name="num_new_group" value="{NUM_NEW_GROUP}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="email_domain">{L_EMAIL_DOMAIN}:</label><br />{L_EMAIL_DOMAIN_EXPLAIN}</dt>
-				<dd><input class="text medium" type="text" id="email_domain" name="pop_data[email_domain]" value="{EMAIL_DOMAIN}" /></dd>
+				<dd><input class="text medium" type="text" id="email_domain" name="email_domain" value="{EMAIL_DOMAIN}" /></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_CREATE_ADMIN}:</label><br />{L_CREATE_ADMIN_EXPLAIN}</dt>
 				<dd>
-					<label><input type="radio" class="radio" name="pop_data[create_admin]" value="1"<!-- IF CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="pop_data[create_admin]" value="0"<!-- IF CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<label><input type="radio" class="radio" name="create_admin" value="1"<!-- IF CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="create_admin" value="0"<!-- IF CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 				</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_CREATE_MOD}:</label><br />{L_CREATE_MOD_EXPLAIN}</dt>
 				<dd>
-					<label><input type="radio" class="radio" name="pop_data[create_mod]" value="1"<!-- IF CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="pop_data[create_mod]" value="0"<!-- IF CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<label><input type="radio" class="radio" name="create_mod" value="1"<!-- IF CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="create_mod" value="0"<!-- IF CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 				</dd>
 			</dl>
 			<dl>
 				<dt><label for="num_cats">{L_NUM_CATS}:</label><br />{L_NUM_CATS_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_cats" name="pop_data[num_cats]" value="{NUM_CATS}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="5" id="num_cats" name="num_cats" value="{NUM_CATS}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="num_forums">{L_NUM_FORUMS}:</label><br />{L_NUM_FORUMS_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_forums" name="pop_data[num_forums]" value="{NUM_FORUMS}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="5" id="num_forums" name="num_forums" value="{NUM_FORUMS}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="num_topics">{L_NUM_TOPICS}:</label><br />{L_NUM_TOPICS_EXPLAIN}</dt>
 				<dd>
-					<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="num_topics" name="pop_data[num_topics_min]" value="{NUM_TOPICS_MIN}" /></label>
-					<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="pop_data[num_topics_max]" value="{NUM_TOPICS_MAX}" /></label>
+					<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="num_topics" name="num_topics_min" value="{NUM_TOPICS_MIN}" /></label>
+					<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="num_topics_max" value="{NUM_TOPICS_MAX}" /></label>
 				</dd>
 			</dl>
 			<dl>
 				<dt><label for="num_replies">{L_NUM_REPLIES}:</label><br />{L_NUM_REPLIES_EXPLAIN}</dt>
 				<dd>
-					<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="pop_data" name="pop_data[num_replies_min]" value="{NUM_REPLIES_MIN}" /></label>
-					<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="pop_data[num_replies_max]" value="{NUM_REPLIES_MAX}" /></label>
+					<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="pop_data" name="num_replies_min" value="{NUM_REPLIES_MIN}" /></label>
+					<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="num_replies_max" value="{NUM_REPLIES_MAX}" /></label>
 				</dd>
 			</dl>
 
 			<div class="settings-title">{L_CHUNK_SETTINGS}<br /><div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}</div></div>
 			<dl>
 				<dt><label for="chunk_post">{L_CHUNK_POST}:</label><br />{L_CHUNK_POST_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="pop_data[chunk_post]" value="{CHUNK_POST}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="chunk_post" value="{CHUNK_POST}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="chunk_topic">{L_CHUNK_TOPIC}:</label><br />{L_CHUNK_TOPIC_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_topic" name="pop_data[chunk_topic]" value="{CHUNK_TOPIC}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_topic" name="chunk_topic" value="{CHUNK_TOPIC}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="chunk_user">{L_CHUNK_USER}:</label><br />{L_CHUNK_USER_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_user" name="pop_data[chunk_user]" value="{CHUNK_USER}" /></dd>
+				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_user" name="chunk_user" value="{CHUNK_USER}" /></dd>
 			</dl>
 		</div>
 	</fieldset>
@@ -176,11 +176,11 @@ function toggle_div(div_id)
 		<legend><a href="javascript:toggle_div('options_advanced');">{L_OPTIONS_ADVANCED}</a></legend>
 		<div id="options_advanced" style="display: none;">
 			<dl>
-				<dt><label for="admin_name">{L_ADMIN_NAME}:</label></dt>
+				<dt><label for="admin_name">{L_ADMIN_NAME}:</label><br />{L_IF_EMPTY_EXPLAIN}</dt>
 				<dd><input class="text medium" type="text" id="admin_name" name="admin_name" /></dd>
 			</dl>
 			<dl>
-				<dt><label for="admin_pass">{L_ADMIN_PASS}:</label></dt>
+				<dt><label for="admin_pass">{L_ADMIN_PASS}:</label><br /><span>{L_IF_EMPTY_EXPLAIN}</span></dt>
 				<dd><input class="text medium" type="text" id="admin_pass" name="admin_pass" /></dd>
 			</dl>
 			<dl>
