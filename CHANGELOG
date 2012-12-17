@@ -12,6 +12,7 @@ QuickInstall Changelog
  + [Change] Removed version check from the About page and moved the changelog stuff a bit.
  + [Change] Errors are stored as a array and imploded to a string on demand.
  + [Change] The global $qi_config array has been removed and all setting/config are now handled by $settings.
+ + [Change] Deleted qi_config_sample.cfg since its not used anymore.
  + [Feature] Added possibility to set phpBB config fields before creating a board.
  + [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
  + [Feature] Ticket #62774 and #62792 Added a settings directory to replace the config file.
