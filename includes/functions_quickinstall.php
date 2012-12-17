@@ -54,6 +54,8 @@ class qi
 			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
+			'S_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 0),
+
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
 			'QI_VERSION'		=> QI_VERSION,
 		));

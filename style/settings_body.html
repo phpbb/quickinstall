@@ -50,7 +50,7 @@
 		</dl>
 		<dl>
 			<dt><label for="delete-profile">{L_DELETE_PROFILE}:</label><br />{L_DELETE_PROFILE_EXPLAIN}</dt>
-			<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1" onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}" /></dd>
+			<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> /></dd>
 		</dl>
 		<dl>
 			<dt><label for="save_profile">{L_SAVE_PROFILE}:</label><br />{L_SAVE_PROFILE_EXPLAIN}</dt>
