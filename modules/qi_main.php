@@ -75,6 +75,8 @@ class qi_main
 			'PROFILE_OPTIONS'	=> $settings->get_profiles(),
 
 			'S_AUTOMOD'		=> $settings->get_config('automod', 0),
+			'S_DELETE_FILES'=> $settings->get_config('delete_files', 0),
+			'S_DROP_DB'		=> $settings->get_config('drop_db', 0),
 			'S_MAKE_WRITABLE'	=> $settings->get_config('make_writable', 0),
 			'S_POPULATE'	=> $settings->get_config('populate', 0),
 			'S_REDIRECT'	=> $settings->get_config('redirect', 0),

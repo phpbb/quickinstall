@@ -277,8 +277,8 @@
 		<dl>
 			<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}</dt>
 			<dd>
-				<label><input type="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				<label><input type="radio" class="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 		<dl>
@@ -294,6 +294,27 @@
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="1"<!-- IF CONFIG_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="2"<!-- IF CONFIG_SUBSILVER == 2 --> checked="checked"<!-- ENDIF --> /> {L_YES}, {L_DEFAULT}</label>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="0"<!-- IF CONFIG_SUBSILVER == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DROP_DB_IF_EXISTS}:</label><br />{L_DROP_DB_IF_EXISTS_EXPLAIN}</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="qi_config[drop_db]" value="1"<!-- IF CONFIG_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[drop_db]" value="0"<!-- IF CONFIG_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DELETE_FILES_IF_EXIST}:</label><br />{L_DELETE_FILES_IF_EXIST_EXPLAIN}</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="qi_config[delete_files]" value="1"<!-- IF CONFIG_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[delete_files]" value="0"<!-- IF CONFIG_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_SHOW_CONFIRM}:</label><br />{L_SHOW_CONFIRM_EXPLAIN}</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="qi_config[show_confirm]" value="1"<!-- IF CONFIG_SHOW_CONFIRM == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[show_confirm]" value="0"<!-- IF CONFIG_SHOW_CONFIRM == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 	</fieldset>

@@ -193,11 +193,11 @@ function toggle_div(div_id)
 			</dl>
 			<dl>
 				<dt><label for="drop_db">{L_DROP_DB_IF_EXISTS}:</label></dt>
-				<dd><label><input type="checkbox" class="radio" id="drop_db" name="drop_db" /> {L_ENABLED}</label></dd>
+				<dd><label><input type="checkbox" class="radio" id="drop_db" name="drop_db"<!-- IF S_DROP_DB --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label></dd>
 			</dl>
 			<dl>
 				<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
-				<dd><label><input type="checkbox" class="radio" id="delete_files" name="delete_files" /> {L_ENABLED}</label></dd>
+				<dd><label><input type="checkbox" class="radio" id="delete_files" name="delete_files"<!-- IF S_DELETE_FILES --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label></dd>
 			</dl>
 			<dl>
 				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>

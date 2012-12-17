@@ -142,6 +142,8 @@ $template->assign_vars(array(
 	'CONFIG_DBPASSWD'		=> $settings->get_config('dbpasswd'),
 	'CONFIG_DBPORT'			=> $settings->get_config('dbport'),
 	'CONFIG_DBUSER'			=> $settings->get_config('dbuser'),
+	'CONFIG_DELETE_FILES'	=> $settings->get_config('delete_files', 0),
+	'CONFIG_DROP_DB'		=> $settings->get_config('drop_db', 0),
 	'CONFIG_EMAIL_ENABLE'	=> $settings->get_config('email_enable', 0),
 	'CONFIG_GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions'),
 	'CONFIG_MAKE_WRITABLE'	=> $settings->get_config('make_writable', 0),
@@ -152,6 +154,7 @@ $template->assign_vars(array(
 	'CONFIG_REDIRECT'		=> $settings->get_config('redirect', 0),
 	'CONFIG_SERVER_NAME'	=> $settings->get_config('server_name'),
 	'CONFIG_SERVER_PORT'	=> $settings->get_config('server_port'),
+	'CONFIG_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 0),
 	'CONFIG_SITE_DESC'		=> $settings->get_config('site_desc'),
 	'CONFIG_SITE_NAME'		=> $settings->get_config('site_name'),
 	'CONFIG_SMTP_AUTH'		=> $settings->get_config('smtp_auth'),
@@ -179,6 +182,9 @@ $template->assign_vars(array(
 	'SEL_LANG'				=> (!empty($language)) ? $language : '',
 ));
 
+/*
+	''	=> $settings->get_config('', 0),
+*/
 // Output page
 qi::page_header($user->lang['SETTINGS'], $user->lang['QI_MAIN_ABOUT']);
 
