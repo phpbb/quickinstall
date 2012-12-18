@@ -36,9 +36,9 @@
 	</script>
 <!-- ENDIF -->
 
-<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
 	<fieldset>
 		<legend><a id="profiles"></a>{L_PROFILES}</legend>
+<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
 		<dl>
 			<dt><label for="qi_profile">{L_SELECT} {L_PROFILE}:</label></dt>
 			<dd>
@@ -51,10 +51,6 @@
 		<dl>
 			<dt><label for="delete-profile">{L_DELETE_PROFILE}:</label><br />{L_DELETE_PROFILE_EXPLAIN}</dt>
 			<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> /></dd>
-		</dl>
-		<dl>
-			<dt><label for="save_profile">{L_SAVE_PROFILE}:</label><br />{L_SAVE_PROFILE_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="save_profile" name="save_profile" value="" /></dd>
 		</dl>
 	</fieldset>
 </form>
@@ -380,6 +376,12 @@
 
 	<fieldset>
 		<a id="save-settings"></a>
+		<dl>
+			<dt><label for="save_profile">{L_SAVE_PROFILE}:</label><br />{L_SAVE_PROFILE_EXPLAIN}</dt>
+			<dd>
+				<input class="text medium" type="text" id="save_profile" name="save_profile" value="" />
+			</dd>
+		</dl>
 		<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
 		<p class="submit-buttons">
 			<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp;

@@ -708,7 +708,7 @@ class settings
 		$this->adjust();
 		$this->config_text = $this->get_config_text();
 		$this->apply_language();
-		return($this->write($this->config_text, $profile));
+		return($this->write($this->config_text));
 	}
 
 	/**
