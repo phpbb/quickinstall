@@ -151,11 +151,11 @@ window.onload = function() {
 						</div>
 						<!-- ENDIF -->
 
-						<!-- IF PAGE_MAIN and S_HAS_FORUMS -->
+						<!-- IF PAGE_MAIN and .board_row -->
 						<h5>{L_BOARDS_LIST}</h5>
-							<!-- BEGIN row -->
-							<a href="{row.BOARD_URL}">{row.BOARD_NAME}</a><br />
-							<!-- END row -->
+							<!-- BEGIN board_row -->
+							<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><br />
+							<!-- END board_row -->
 						<!-- ENDIF -->
 					</div>
 

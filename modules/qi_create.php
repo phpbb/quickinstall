@@ -60,7 +60,7 @@ class qi_create
 
 		$alt_env	= $settings->get_config('alt_env', '');
 
-		if ($alt_env !== '' && !file_exists($quickinstall_path . 'sources/phpBB3_alt/' . $alt_env))
+		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
 			trigger_error('NO_ALT_ENV');
 		}

@@ -22,6 +22,7 @@ QuickInstall Changelog
  + [Feature] Added anchors and internal links to the settings tab.
  + [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkboxes default state.
  + [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirm alert or not.
+ + [Feature] A setting for default "Alternate environment" now that profiles exists.
 
  + [Fix]
  + [Change]

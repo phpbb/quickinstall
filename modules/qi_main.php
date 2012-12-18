@@ -27,43 +27,12 @@ class qi_main
 		global $db, $template, $user, $settings;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
 
-		// list of boards
-		$boards_arr = scandir($settings->get_boards_dir());
-		$s_has_forums = false;
-		foreach ($boards_arr as $board)
-		{
-			if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($settings->get_boards_dir() . $board))
-			{
-				continue;
-			}
-
-			$s_has_forums = true;
-
-			$template->assign_block_vars('row', array(
-				'BOARD_NAME'	=> htmlspecialchars($board),
-				'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
-			));
-		}
-
-		// list of alternate enviroments
-		$alt_env = '<option value="">' . $user->lang['DEFAULT_ENV'] . '</option>';
-		$d = dir($quickinstall_path . 'sources/phpBB3_alt');
-		while (false !== ($file = $d->read()))
-		{
-			if (in_array($file, array('.', '..', '.svn', '.htaccess'), true) || is_file($quickinstall_path . 'sources/phpBB3_alt/' . $file))
-			{
-				continue;
-			}
-
-			$alt_env .= '<option>' . htmlspecialchars($file) . '</option>';
-		}
-		$d->close();
+		get_installed_boards();
 
 		// Assign index specific vars
 		$template->assign_vars(array(
 			'S_IN_INSTALL'	=> false,
 			'S_IN_SETTINGS'	=> false,
-			'S_HAS_FORUMS'	=> $s_has_forums,
 
 			'U_CREATE'			=> qi::url('create'),
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
@@ -82,7 +51,7 @@ class qi_main
 			'S_REDIRECT'	=> $settings->get_config('redirect', 0),
 			'S_SUBSILVER'	=> $settings->get_config('subsilver', 0),
 
-			'ALT_ENV'		=> $alt_env,
+			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
 
 			'PAGE_MAIN'		=> true,
 

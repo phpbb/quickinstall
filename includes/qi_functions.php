@@ -48,6 +48,60 @@ function validate_dbname($dbname, $first_char = false)
 	return($prefix . $dbname);
 }
 
+/**
+ * Get a list of alternative environments.
+ */
+function get_alternative_env($selected_option = '')
+{
+	global $user;
+
+	$selected = (empty($selected_option)) ? ' selected="selected"' : '';
+	$alt_env = "<option value=''$selected>{$user->lang['DEFAULT_ENV']}</option>";
+	$d = dir($quickinstall_path . 'sources/phpBB3_alt');
+	while (false !== ($file = $d->read()))
+	{
+		// Ignore everything that starts with a dot.
+		if ($file[0] === '.' || is_file($quickinstall_path . 'sources/phpBB3_alt/' . $file))
+		{
+			continue;
+		}
+
+		$selected	= ($file == $selected_option) ? ' selected="selected"' : '';
+		$file	= htmlspecialchars($file);
+
+		$alt_env .= "<option{$selected}>$file</option>";
+	}
+	$d->close();
+
+	return($alt_env);
+}
+
+/**
+ * Get a list of installed boards.
+ */
+function get_installed_boards()
+{
+	global $settings, $template;
+
+	$boards_dir = $settings->get_boards_dir();
+	$boards_arr = scandir($boards_dir);
+
+	// list of boards
+	$boards_arr = scandir($settings->get_boards_dir());
+	foreach ($boards_arr as $board)
+	{
+		if ($board[0] === '.' || is_file($boards_dir . $board))
+		{
+			continue;
+		}
+
+		$template->assign_block_vars('board_row', array(
+			'BOARD_NAME'	=> htmlspecialchars($board),
+			'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
+		));
+	}
+}
+
 function db_connect($db_data = '')
 {
 	global $phpbb_root_path, $phpEx, $sql_db, $db, $quickinstall_path, $settings;

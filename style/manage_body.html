@@ -11,19 +11,19 @@
 	<th>{L_BOARD_NAME}</th>
 	<th>{L_SELECT}</th>
 </tr>
-<!-- BEGIN row -->
+<!-- BEGIN board_row -->
 <tr class="manage-row">
-	<td><label for="del_board_{row.S_ROW_COUNT}">{row.BOARD_NAME}</label></td>
-	<td style="width: 40px; text-align: center;"><input type="checkbox" class="radio" id="del_board_{row.S_ROW_COUNT}" name="select[]" value="{row.BOARD_NAME}" /></td>
+	<td><label for="del_board_{board_row.S_ROW_COUNT}">{board_row.BOARD_NAME}</label></td>
+	<td style="width: 40px; text-align: center;"><input type="checkbox" class="radio" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" /></td>
 </tr>
 <!-- BEGINELSE -->
 <tr>
 	<td colspan="2" style="text-align:center;">{L_NO_BOARDS}</td>
 </tr>
-<!-- END row -->
+<!-- END board_row -->
 </table>
 
-<!-- IF .row -->
+<!-- IF .board_row -->
 <div style="text-align: right;"><a href="#" onclick="marklist('acp_bbcodes', 'select', true); return false;">{L_CHECK_ALL}</a> &bull; <a href="#" onclick="marklist('acp_bbcodes', 'select', false); return false;">{L_UNCHECK_ALL}</a></div>
 <p class="quick">
 	<input class="button2" name="delete" type="submit" value="{L_DELETE}"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_BOARDS}')){return(false);}"<!-- ENDIF --> />

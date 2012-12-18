@@ -133,21 +133,7 @@ class qi_manage
 
 			default:
 				// list of boards
-				$boards_arr = scandir($settings->get_boards_dir());
-				foreach ($boards_arr as $board)
-				{
-					if (in_array($board, array('.', '..', '.svn', '.htaccess', '.git'), true) || is_file($settings->get_boards_dir() . $board))
-					{
-						continue;
-					}
-
-					qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
-
-					$template->assign_block_vars('row', array(
-						'BOARD_NAME'	=> htmlspecialchars($board),
-						'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
-					));
-				}
+				get_installed_boards();
 
 				// Output page
 				qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
