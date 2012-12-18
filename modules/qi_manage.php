@@ -55,7 +55,7 @@ class qi_manage
 					// Need to get the dbname from the board.
 					@include($current_item . '/config.php');
 
-					if (!empty($dbname))
+					if (!empty($dbname) && !empty($dbhost) && !empty($dbms))
 					{
 						if ($dbms == 'sqlite')
 						{
@@ -67,7 +67,7 @@ class qi_manage
 								@unlink($db_file);
 							}
 						}
-						else
+						else if (!empty($dbuser) && !empty($dbpasswd))
 						{
 							// The order here is important, don't change it.
 							$db_vars = array(

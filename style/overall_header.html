@@ -81,6 +81,80 @@ function bind_62574_handlers(fieldname)
 }
 <!-- ENDIF -->
 
+<!-- IF PAGE_MAIN -->
+function validate_fields()
+{
+	var error = false;
+	var color = "LightCoral";
+
+	var input_dbname = document.getElementById("dbname");
+
+	if (input_dbname && input_dbname.value == "")
+	{
+		document.getElementById("span-dbname").style.display = "inline";
+		error = true;
+	}
+	else
+	{
+		document.getElementById("span-dbname").style.display = "none";
+	}
+
+	var input_dbuser = document.getElementById("dbuser");
+
+	if (input_dbuser && input_dbuser.value == "")
+	{
+		document.getElementById("span-dbuser").style.display = "inline";
+		error = true;
+	}
+	else
+	{
+		document.getElementById("span-dbuser").style.display = "none";
+	}
+
+	var input_dbpasswd = document.getElementById("dbpasswd");
+
+	if (input_dbpasswd && input_dbpasswd.value == "")
+	{
+		document.getElementById("span-dbpasswd").style.display = "inline";
+		error = true;
+	}
+	else
+	{
+		document.getElementById("span-dbpasswd").style.display = "none";
+	}
+
+	var input_admin_name = document.getElementById("admin_name");
+
+	if (input_admin_name && input_admin_name.value == "")
+	{
+		document.getElementById("span-admin_name").style.display = "inline";
+		error = true;
+	}
+	else
+	{
+		document.getElementById("span-admin_name").style.display = "none";
+	}
+
+	var input_admin_pass = document.getElementById("admin_pass");
+
+	if (input_admin_pass && input_admin_pass.value == "")
+	{
+		document.getElementById("span-admin_pass").style.display = "inline";
+		error = true;
+	}
+	else
+	{
+		document.getElementById("span-admin_pass").style.display = "none";
+	}
+
+	if (!error)
+	{
+		document.getElementById("submituser").style.display = "none";
+	}
+
+	return(error);
+}
+<!-- ENDIF -->
 
 // Run some stuff when the page is loading
 window.onload = function() {

@@ -51,6 +51,9 @@ class qi_create
 		$db_prefix	= validate_dbname($settings->get_config('db_prefix'), true);
 		$dbname		= validate_dbname($settings->get_config('dbname'), true);
 
+		$dbpasswd	= $settings->get_config('dbpasswd');
+		$dbuser		= $settings->get_config('dbuser');
+
 		$site_dir	= $settings->get_config('dbname');
 		$site_name	= $settings->get_config('site_name', '', true);
 		$site_desc	= $settings->get_config('site_desc', '', true);
@@ -142,8 +145,8 @@ class qi_create
 			'$dbhost' => $dbhost,
 			'$dbport' => $settings->get_config('dbport'),
 			'$dbname' =>  $db_prefix . $dbname,
-			'$dbuser' => $settings->get_config('dbuser'),
-			'$dbpasswd' => htmlspecialchars_decode($settings->get_config('dbpasswd')),
+			'$dbuser' => $dbuser,
+			'$dbpasswd' => htmlspecialchars_decode($dbpasswd),
 			'$table_prefix' => $table_prefix,
 			'$acm_type' => 'file',
 			'$load_extensions' => '',
@@ -442,8 +445,8 @@ class qi_create
 			'dbms'				=> $dbms,
 			'dbhost'			=> $dbhost,
 			'dbport'			=> $settings->get_config('dbport'),
-			'dbuser'			=> $settings->get_config('dbuser'),
-			'dbpasswd'			=> $settings->get_config('dbpasswd'),
+			'dbuser'			=> $dbuser,
+			'dbpasswd'			=> $dbpasswd,
 			'dbname'			=> $dbname,
 			'table_prefix'		=> $table_prefix,
 			'default_lang'		=> $settings->get_config('default_lang'),

@@ -51,6 +51,12 @@ class qi_main
 			'S_REDIRECT'	=> $settings->get_config('redirect', 0),
 			'S_SUBSILVER'	=> $settings->get_config('subsilver', 0),
 
+			'S_ADMIN_NAME'	=> $settings->get_config('admin_name', false),
+			'S_ADMIN_PASS'	=> $settings->get_config('admin_pass', false),
+			'S_DBPASSWD'	=> $settings->get_config('dbpasswd', false),
+			'S_NODBPASSWD'	=> $settings->get_config('no_dbpasswd', false),
+			'S_DBUSER'		=> $settings->get_config('dbuser', false),
+
 			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
 
 			'PAGE_MAIN'		=> true,

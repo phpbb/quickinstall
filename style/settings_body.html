@@ -90,14 +90,14 @@
 			<dd><input class="text medium" type="text" id="dbport" name="qi_config[dbport]" value="{CONFIG_DBPORT}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="dbuser">{L_DBUSER}:*</label><br />{L_DBUSER_EXPLAIN} {L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="dbuser">{L_DBUSER}:</label><br />{L_DBUSER_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
 			<dd><input class="text medium" type="text" id="dbuser" name="qi_config[dbuser]" value="{CONFIG_DBUSER}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="dbpasswd">{L_DBPASSWD}:*</label><br />{L_DBPASSWD_EXPLAIN} {L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="dbpasswd">{L_DBPASSWD}:</label><br />{L_DBPASSWD_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
 			<dd>
 				<input class="text medium" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
-				<label><input type="checkbox" id="no_dbpasswd" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF --> /> {L_NO_PASSWORD}</label>
+				<label><input type="checkbox" id="no_dbpasswd" class="radio" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF --> /> {L_NO_PASSWORD}</label>
 			</dd>
 		</dl>
 		<dl>
@@ -127,7 +127,7 @@
 				<dd><input class="text medium" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN} {L_THIS_CAN_CHANGE} {L_NO_IMPACT_WIN}</dt>
+				<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN}<br />{L_THIS_CAN_CHANGE}</dt>
 				<dd>
 					<label><input type="radio" class="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 					<label><input type="radio" class="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
@@ -135,9 +135,7 @@
 			</dl>
 			<dl>
 				<dt><label for="make_writable">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-				<dd>
-					<dd><input class="text medium" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></dd>
-				</dd>
+				<dd><input class="text medium" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></dd>
 			</dl>
 <!--		</div> -->
 
@@ -156,11 +154,11 @@
 
 		<div class="settings-title"><a id="admin-settings"></a>{L_ADMIN_SETTINGS}</div>
 		<dl>
-			<dt><label for="admin_name">{L_ADMIN_NAME}:*</label><br />{L_ADMIN_NAME_EXPLAIN} {L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="admin_name">{L_ADMIN_NAME}:</label><br />{L_ADMIN_NAME_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
 			<dd><input class="text medium" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="admin_pass">{L_ADMIN_PASS}:*</label><br />{L_ADMIN_PASS_EXPLAIN} {L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="admin_pass">{L_ADMIN_PASS}:</label><br />{L_ADMIN_PASS_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
 			<dd><input class="text medium" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></dd>
 		</dl>
 		<dl>
@@ -275,21 +273,21 @@
 			<dd><select name="qi_config[alt_env]" id="alt_env">{CONFIG_ALT_ENV}</select></dd>
 		</dl>
 		<dl>
-			<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN} {L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_AUTOMOD}:</label><br />{L_AUTOMOD_EXPLAIN} {L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_AUTOMOD}:</label><br />{L_AUTOMOD_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_SUBSILVER}:</label><br />{L_SUBSILVER_EXPLAIN} {L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_SUBSILVER}:</label><br />{L_SUBSILVER_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="1"<!-- IF CONFIG_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="2"<!-- IF CONFIG_SUBSILVER == 2 --> checked="checked"<!-- ENDIF --> /> {L_YES}, {L_DEFAULT}</label>
@@ -297,14 +295,14 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_DROP_DB_IF_EXISTS}:</label><br />{L_DROP_DB_IF_EXISTS_EXPLAIN} {L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_DROP_DB_IF_EXISTS}:</label><br />{L_DROP_DB_IF_EXISTS_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[drop_db]" value="1"<!-- IF CONFIG_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[drop_db]" value="0"<!-- IF CONFIG_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_DELETE_FILES_IF_EXIST}:</label><br />{L_DELETE_FILES_IF_EXIST_EXPLAIN} {L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_DELETE_FILES_IF_EXIST}:</label><br />{L_DELETE_FILES_IF_EXIST_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[delete_files]" value="1"<!-- IF CONFIG_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[delete_files]" value="0"<!-- IF CONFIG_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>

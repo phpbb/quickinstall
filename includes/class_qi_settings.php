@@ -335,7 +335,26 @@ class settings
 			if (!empty($this->config[$name]))
 			{
 				// Make sure to cast the config value to the same type as $default.
-				$return = (is_int($this->config[$name])) ? intval($this->config[$name]) : strval($this->config[$name]);
+				if (is_int($default))
+				{
+					$return = (int) $this->config[$name];
+				}
+				else if (is_bool($default))
+				{
+					$return = (bool) $this->config[$name];
+				}
+				else if (is_string($default))
+				{
+					$return = (string) $this->config[$name];
+				}
+				else if (is_float($default))
+				{
+					$return = (float) $this->config[$name];
+				}
+				else
+				{
+					$return = $default;
+				}
 			}
 			else
 			{
@@ -379,11 +398,11 @@ class settings
 		 * list() only works with numerical arrays.
 		 */
 		$db_vars = array(
-			$this->config['dbms'],
-			$this->config['dbhost'],
-			$this->config['dbuser'],
-			$this->config['dbpasswd'],
-			$this->config['dbport'],
+			$this->get_config('dbms'),
+			$this->get_config('dbhost'),
+			$this->get_config('dbuser'),
+			$this->get_config('dbpasswd'),
+			$this->get_config('dbport'),
 		);
 
 		return($db_vars);
@@ -712,15 +731,11 @@ class settings
 		$error = array();
 		$error[] = ($this->config['dbms'] == '') ? 'DBMS|REQUIRED' : '';
 		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|REQUIRED' : '';
-		$error[] = ($this->config['dbuser'] == '') ? 'DBUSER|REQUIRED' : '';
-		$error[] = ($this->config['dbpasswd'] == '' && !$this->config['no_dbpasswd']) ? 'DBPASSWD|REQUIRED' : '';
 		$error[] = ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
 		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|REQUIRED' : '';
 		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|REQUIRED' : '';
 		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|REQUIRED' : '';
 		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|REQUIRED' : '';
-		$error[] = ($this->config['admin_name'] == '') ? 'ADMIN_NAME|REQUIRED' : '';
-		$error[] = ($this->config['admin_pass'] == '') ? 'ADMIN_PASS|REQUIRED' : '';
 		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|REQUIRED' : '';
 		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|REQUIRED' : '';
 		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|REQUIRED' : '';
@@ -814,4 +829,3 @@ class settings
 		return($res);
 	}
 }
-

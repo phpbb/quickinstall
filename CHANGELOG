@@ -23,6 +23,8 @@ QuickInstall Changelog
  + [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkboxes default state.
  + [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirm alert or not.
  + [Feature] A setting for default "Alternate environment" now that profiles exists.
+ + [Feature] Added option to not save passwords and/or admin/db-user names. They will be required when creating a board.
+ + [Feature] Use JS to check that the required fields are filled.
 
  + [Fix]
  + [Change]

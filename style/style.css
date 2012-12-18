@@ -1695,3 +1695,10 @@ a.top { background-image: url('./images/icon_back_top.gif'); }
 	height: 14px;
 	text-align: right;
 }
+
+span.error-main {
+	float: right;
+	color: red;
+	font-weight: bold;
+	display: none;
+}
