@@ -65,6 +65,7 @@ else
 // Include scripts for quickinstall
 require($quickinstall_path . 'includes/qi_constants.' . $phpEx);
 require($quickinstall_path . 'includes/functions_quickinstall.' . $phpEx);
+require($quickinstall_path . 'includes/class_qi_settings.' . $phpEx);
 require($quickinstall_path . 'includes/qi_functions.' . $phpEx);
 require($quickinstall_path . 'includes/functions_files.' . $phpEx);
 require($quickinstall_path . 'includes/functions_module.' . $phpEx);
