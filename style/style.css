@@ -1007,7 +1007,7 @@ input.radio, input.permissions-checkbox {
 	width: auto !important;
 	background-color: transparent;
 	border: none;
-	cursor: default;
+	cursor: pointer;
 }
 
 input.full,
