@@ -2,13 +2,11 @@
 
 <h1>{L_SETTINGS}</h1>
 <!-- IF S_SETTINGS_SUCCESS --><h2 class="settings-result greenish">{L_SETTINGS_SUCCESS}</h2><!-- ELSEIF S_SETTINGS_FAILURE --><h2 class="settings-result redish">{L_SETTINGS_FAILURE}</h2><!-- ENDIF -->
-<!-- IF S_IN_INSTALL --><p class="large" style="color: #505050;">
-<strong></strong>
-{L_ONLY_LOCAL}</p><!-- ENDIF -->
+<!-- IF S_IN_INSTALL --><p class="large" style="color: #505050;">{L_ONLY_LOCAL}</p><!-- ENDIF -->
 
 <!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) --><div class="errorbox"><p>{L_NEED_WRITABLE}</p></div><!-- ENDIF -->
 
-<!-- IF ERROR --><div class="errorbox">{ERROR}</div><!-- ENDIF -->
+<!-- IF ERROR --><div <!-- IF S_IS_CONVERTED -->class="successbox"<!-- ELSE -->class="errorbox"<!-- ENDIF -->>{ERROR}</div><!-- ENDIF -->
 
 <!-- IF CONFIG_TEXT -->
 	<div class="errorbox large">
@@ -90,11 +88,11 @@
 			<dd><input class="text medium" type="text" id="dbport" name="qi_config[dbport]" value="{CONFIG_DBPORT}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="dbuser">{L_DBUSER}:</label><br />{L_DBUSER_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="dbuser">{L_DBUSER}:</label><br />{L_DBUSER_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
 			<dd><input class="text medium" type="text" id="dbuser" name="qi_config[dbuser]" value="{CONFIG_DBUSER}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="dbpasswd">{L_DBPASSWD}:</label><br />{L_DBPASSWD_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="dbpasswd">{L_DBPASSWD}:</label><br />{L_DBPASSWD_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
 			<dd>
 				<input class="text medium" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
 				<label><input type="checkbox" id="no_dbpasswd" class="radio" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF --> /> {L_NO_PASSWORD}</label>
@@ -154,11 +152,11 @@
 
 		<div class="settings-title"><a id="admin-settings"></a>{L_ADMIN_SETTINGS}</div>
 		<dl>
-			<dt><label for="admin_name">{L_ADMIN_NAME}:</label><br />{L_ADMIN_NAME_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="admin_name">{L_ADMIN_NAME}:</label><br />{L_ADMIN_NAME_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
 			<dd><input class="text medium" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="admin_pass">{L_ADMIN_PASS}:</label><br />{L_ADMIN_PASS_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}</dt>
+			<dt><label for="admin_pass">{L_ADMIN_PASS}:</label><br />{L_ADMIN_PASS_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
 			<dd><input class="text medium" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></dd>
 		</dl>
 		<dl>

@@ -100,6 +100,7 @@ $template->assign_vars(array(
 	'S_CONVERT'				=> $gi_convert,
 	'S_IN_INSTALL'			=> $settings->install,
 	'S_IN_SETTINGS'			=> true,
+	'S_IS_CONVERTED'		=> $settings->is_converted,
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
 	'S_SETTINGS_SUCCESS'	=> ($attempted && $saved) ? true : false,
 	'S_SETTINGS_FAILURE'	=> ($attempted && !$saved) ? true : false,
