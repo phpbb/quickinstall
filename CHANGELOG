@@ -1,35 +1,5 @@
 QuickInstall Changelog
 
-- Changes since 1.1.7
- + [Fix] QI_PHPBB_VERSION and AUTOMOD_VERSION are not used so they got deleted.
- + [Fix] Use the QI_VERSION constant directly instead of copying it to the config array.
- + [Fix] Ticket #63262 SMTP port was not copied from settings to config table.
- + [Fix] Ticket #62767 QI should not crash when it can't delete a board but inform about it.
- + [Change] Cleaned up the JS in the main html file.
- + [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with most recent versions at top.
- + [Change] QI pages are now in $page instead of $mode, need $mode for settings and it got kind of crowded.
- + [Change] Only try to connect to DB when saving settings or creating/deleting a board.
- + [Change] Removed version check from the About page and moved the changelog stuff a bit.
- + [Change] Errors are stored as a array and imploded to a string on demand.
- + [Change] The global $qi_config array has been removed and all setting/config are now handled by $settings.
- + [Change] Deleted qi_config_sample.cfg since its not used anymore.
- + [Feature] Added possibility to set phpBB config fields before creating a board.
- + [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
- + [Feature] Ticket #62774 and #62792 Added a settings directory to replace the config file.
- + [Feature] Ticket #62774 and #62792 Added profiles with config files in a directory instead of one configuration file.
- + [Feature] Added confirm to the delete button. And don't show it if there is no boards to delete.
- + [Feature] Added save/reset buttons after each section on the settings page. For convenience.
- + [Feature] Added anchors and internal links to the settings tab.
- + [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkboxes default state.
- + [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirm alert or not.
- + [Feature] A setting for default "Alternate environment" now that profiles exists.
- + [Feature] Added option to not save passwords and/or admin/db-user names. They will be required when creating a board.
- + [Feature] Use JS to check that the required fields are filled.
-
- + [Fix]
- + [Change]
- + [Feature]
-
 - Changes since 1.1.6
  + [Fix] Some language edits and spelling fixes.
  + [Fix] Check that the boards directory exists and is writeable.
@@ -49,16 +19,40 @@ QuickInstall Changelog
  + [Fix] Bug #62765 Need to globalize table prefix.
  + [Fix] Bug #62831 Don't try to login when loading a alternative environment.
  + [Fix] Bug #63111 When setting table prefix, table data containing "phpbb_" was also changed.
+ + [Fix] QI_PHPBB_VERSION and AUTOMOD_VERSION are not used so they got deleted.
+ + [Fix] Use the QI_VERSION constant directly instead of copying it to the config array.
+ + [Fix] Ticket #63262 SMTP port was not copied from settings to config table.
+ + [Fix] Ticket #62767 QI should not crash when it can't delete a board but inform about it.
  + [Change] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.
  + [Change] Include functions_admin.php for postgres' benefit.
  + [Change] Use get_cache_dir() in sqlite dbal.
  + [Change] Delay database connection until it is necessary.
+ + [Change] Cleaned up the JS in the main html file.
+ + [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with most recent versions at top.
+ + [Change] QI pages are now in $page instead of $mode, need $mode for settings and it got kind of crowded.
+ + [Change] Only try to connect to DB when saving settings or creating/deleting a board.
+ + [Change] Removed version check from the About page and moved the changelog stuff a bit.
+ + [Change] Errors are stored as a array and imploded to a string on demand.
+ + [Change] The global $qi_config array has been removed and all setting/config are now handled by $settings.
+ + [Change] Deleted qi_config_sample.cfg since its not used anymore.
  + [Feature] Made quickinstall not require write access to qi_config.php
  + [Feature] Added UI for setting cache directory.
  + [Feature] Added a separate notion of boards url.
  + [Feature] Added ability to grant specific permissions when creating boards.
  + [Feature] Added hover-over on the manage tab.
  + [Feature] Added support for PostgreSQL
+ + [Feature] Added possibility to set phpBB config fields before creating a board.
+ + [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
+ + [Feature] Ticket #62774 and #62792 Added a settings directory to replace the config file.
+ + [Feature] Ticket #62774 and #62792 Added profiles with config files in a directory instead of one configuration file.
+ + [Feature] Added confirm to the delete button. And don't show it if there is no boards to delete.
+ + [Feature] Added save/reset buttons after each section on the settings page. For convenience.
+ + [Feature] Added anchors and internal links to the settings tab.
+ + [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkboxes default state.
+ + [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirm alert or not.
+ + [Feature] A setting for default "Alternate environment" now that profiles exists.
+ + [Feature] Added option to not save passwords and/or admin/db-user names. They will be required when creating a board.
+ + [Feature] Use JS to check that the required fields are filled.
 
 - Changes since 1.1.5
  + [Fix] Make sure phpBB exists before trying to load it.
