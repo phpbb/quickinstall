@@ -130,10 +130,8 @@ $settings->validate();
 $error = $settings->get_error();
 
 $page = (empty($error)) ? $page : 'settings';
-$mode = (empty($qi_convert)) ? $mode : 'convert';
-$page = (empty($qi_convert)) ? $page : 'settings';
 
-if ($qi_install || $qi_convert || $mode == 'update_settings' || $page == 'settings')
+if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings')
 {
 	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
 }
