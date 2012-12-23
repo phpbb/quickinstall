@@ -284,7 +284,7 @@ $lang = array_merge($lang, array(
 	'SUBSILVER_EXPLAIN'	=> 'Select if you want the Subsilver2 theme to be installed and if you want it to be the default style.',
 	'SUCCESS'			=> 'Success',
 	'SURE_DELETE_PROFILE'	=> 'Are you sure you want to delete this profile? It cannot be undone.',
-	'SURE_DELETE_BOARDS'	=> 'Are yoy sure you want to delete these boards/this board? It cannot be undone.',
+	'SURE_DELETE_BOARDS'	=> 'Are you sure you want to delete these boards/this board? It cannot be undone.',
 
 	'TABLE_PREFIX'			=> 'Table prefix',
 	'TABLE_PREFIX_EXPLAIN'	=> 'The table prefix that will be used for your forums. You can change this in the advanced options when you create new forums.',
