@@ -166,8 +166,18 @@ function validate_fields()
 }
 <!-- ENDIF -->
 
+<!-- IF CONFIG_TEXT -->
+function show_config()
+{
+	document.getElementById('config_text').style.display = '';
+	document.getElementById('config_text_button').style.display = 'none';
+}
+document.getElementById('config_text_button').style.display = '';
+<!-- ENDIF -->
+
 // Run some stuff when the page is loading
-window.onload = function() {
+window.onload = function()
+{
 <!-- IF S_IN_SETTINGS -->
 	// Bind some event handler to the password fields
 	// if a user hovers over the password field we'll

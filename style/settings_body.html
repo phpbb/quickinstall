@@ -13,45 +13,32 @@
 		<div class='config-text'>
 			<div id='config_text_button' style='display:none'>
 				<p>{L_CONFIG_WARNING}</p>
-				<p>
-					<input type='button' value="{L_CONFIG_BUTTON}" onclick='show_config()' />
-				</p>
+				<p><input type='button' value="{L_CONFIG_BUTTON}" onclick="show_config()" /></p>
 			</div>
 			<textarea id='config_text' readonly='readonly' style='display:none'>{CONFIG_TEXT}</textarea>
-			<noscript>
-				<textarea id='config_text' readonly='readonly'>{CONFIG_TEXT}</textarea>
-			</noscript>
+			<noscript><textarea id='config_text' readonly='readonly'>{CONFIG_TEXT}</textarea></noscript>
 		</div>
 	</div>
-
-	<script type='text/javascript'>
-		function show_config()
-		{
-			document.getElementById('config_text').style.display = '';
-			document.getElementById('config_text_button').style.display = 'none';
-		}
-		document.getElementById('config_text_button').style.display = '';
-	</script>
 <!-- ENDIF -->
 
 	<fieldset>
 		<legend><a id="profiles"></a>{L_PROFILES}</legend>
-<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
-		<dl>
-			<dt><label for="qi_profile">{L_SELECT} {L_PROFILE}:</label></dt>
-			<dd>
-				<select id="qi_profile" name="qi_profile" onchange="document.forms['profile_form'].submit();">
-					{PROFILE_OPTIONS}
-				</select>
-				<input type="submit" name="submit-profile" value="{L_GO}" class="button1" />
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="delete-profile">{L_DELETE_PROFILE}:</label><br />{L_DELETE_PROFILE_EXPLAIN}</dt>
-			<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> /></dd>
-		</dl>
+		<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
+			<dl>
+				<dt><label for="qi_profile">{L_SELECT} {L_PROFILE}:</label></dt>
+				<dd>
+					<select id="qi_profile" name="qi_profile" onchange="document.forms['profile_form'].submit();">
+						{PROFILE_OPTIONS}
+					</select>
+					<input type="submit" name="submit-profile" value="{L_GO}" class="button1" />
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="delete-profile">{L_DELETE_PROFILE}:</label><br />{L_DELETE_PROFILE_EXPLAIN}</dt>
+				<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> /></dd>
+			</dl>
+		</form>
 	</fieldset>
-</form>
 
 <form method="post" action="{U_UPDATE_SETTINGS}">
 	<fieldset>
