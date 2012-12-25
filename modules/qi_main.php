@@ -32,7 +32,6 @@ class qi_main
 		// Assign index specific vars
 		$template->assign_vars(array(
 			'S_IN_INSTALL'	=> false,
-			'S_IN_SETTINGS'	=> false,
 
 			'U_CREATE'			=> qi::url('create'),
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
@@ -58,8 +57,6 @@ class qi_main
 			'S_DBUSER'		=> $settings->get_config('dbuser', false),
 
 			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
-
-			'PAGE_MAIN'		=> true,
 
 			// Chunk settings
 			'CHUNK_POST'	=> $settings->get_config('chunk_post', CHUNK_POST),

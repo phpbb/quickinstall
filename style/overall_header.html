@@ -42,7 +42,7 @@ function marklist(id, name, state)
 	}
 }
 
-<!-- IF S_IN_SETTINGS -->
+<!-- IF S_SETTINGS -->
 /**
 * Bind the correct event handlers to a given input field
 * Bug #62574
@@ -178,7 +178,7 @@ document.getElementById('config_text_button').style.display = '';
 // Run some stuff when the page is loading
 window.onload = function()
 {
-<!-- IF S_IN_SETTINGS -->
+<!-- IF S_SETTINGS -->
 	// Bind some event handler to the password fields
 	// if a user hovers over the password field we'll
 	// show the password.
@@ -207,7 +207,7 @@ window.onload = function()
 		<div id="tabs">
 			<ul>
 				<li<!-- IF S_ABOUT --> id="activetab"<!-- ENDIF -->><a href="{U_ABOUT}"><span>{L_QI_ABOUT}</span></a></li>
-				<li<!-- IF S_IN_SETTINGS --> id="activetab"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_SETTINGS}</span></a></li>
+				<li<!-- IF S_SETTINGS --> id="activetab"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_SETTINGS}</span></a></li>
 				<li<!-- IF S_MANAGE --> id="activetab"<!-- ENDIF -->><a href="{U_MANAGE}"><span>{L_QI_MANAGE}</span></a></li>
 				<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_QI_MAIN}</span></a></li>
 			</ul>
@@ -221,35 +221,48 @@ window.onload = function()
 				<div id="content">
 
 					<div id="menu">
-						<p><!-- IF S_IN_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
+						<p><!-- IF S_SETTINGS -->{L_IN_SETTINGS}<!-- ELSEIF PAGE_ABOUT -->{PAGE_ABOUT}<!-- ELSE -->&nbsp;<!-- ENDIF --></p>
 
-						<!-- IF S_IN_SETTINGS -->
+						<!-- IF S_SETTINGS -->
 						<div style="position: fixed;">
-						<h5>{L_SETTINGS_SECTIONS}</h5>
-						<a href="#back-top">{L_BACK_TOP}</a><br />
+							<h5>{L_SETTINGS_SECTIONS}</h5>
+							<a href="#back-top">{L_BACK_TOP}</a><br />
 <!--
-						<a href="#profiles">{L_PROFILES}</a><br />
-						<a href="#lang-select">{L_LANG_SELECT}</a><br />
+							<a href="#profiles">{L_PROFILES}</a><br />
+							<a href="#lang-select">{L_LANG_SELECT}</a><br />
 -->
-						<a href="#db-settings">{L_DB_SETTINGS}</a><br />
-						<a href="#dir-settings">{L_DIR_URL_SETTINGS}</a><br />
-						<a href="#time-settings">{L_TIME_SETTINGS}</a><br />
-						<a href="#admin-settings">{L_ADMIN_SETTINGS}</a><br />
-						<a href="#server-settings">{L_SERVER_COOKIE_SETTINGS}</a><br />
-						<a href="#email-settings">{L_EMAIL_SETTINGS}</a><br />
-						<a href="#config-settings">{L_CONFIG_SETTINGS}</a><br />
-						<a href="#chunk-settings">{L_CHUNK_SETTINGS}</a><br />
-						<a href="#other-settings">{L_OTHER_SETTINGS}</a><br />
-						<a href="#populate-settings">{L_POPULATE_SETTINGS}</a><br />
-						<a href="#save-settings">{L_SAVE_RESTORE}</a><br />
+							<a href="#db-settings">{L_DB_SETTINGS}</a><br />
+							<a href="#dir-settings">{L_DIR_URL_SETTINGS}</a><br />
+							<a href="#time-settings">{L_TIME_SETTINGS}</a><br />
+							<a href="#admin-settings">{L_ADMIN_SETTINGS}</a><br />
+							<a href="#server-settings">{L_SERVER_COOKIE_SETTINGS}</a><br />
+							<a href="#email-settings">{L_EMAIL_SETTINGS}</a><br />
+							<a href="#config-settings">{L_CONFIG_SETTINGS}</a><br />
+							<a href="#chunk-settings">{L_CHUNK_SETTINGS}</a><br />
+							<a href="#other-settings">{L_OTHER_SETTINGS}</a><br />
+							<a href="#populate-settings">{L_POPULATE_SETTINGS}</a><br />
+							<a href="#save-settings">{L_SAVE_RESTORE}</a><br />
 						</div>
-						<!-- ENDIF -->
-
-						<!-- IF PAGE_MAIN and .board_row -->
+						<!-- ELSEIF S_MAIN and .board_row -->
 						<h5>{L_BOARDS_LIST}</h5>
 							<!-- BEGIN board_row -->
 							<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><br />
 							<!-- END board_row -->
+						<!-- ELSEIF S_ABOUT -->
+						<div style="position: fixed;">
+							<h5>{L_ABOUT_SECTIONS}</h5>
+							<a href="#back-top">{L_BACK_TOP}</a><br />
+							<a href="#about-what">{L_WHAT}</a><br />
+							<a href="#about-who_when">{L_WHO_WHEN}</a><br />
+							<a href="#about-who_else">{L_WHO_ELSE}</a><br />
+							<a href="#about-why">{L_WHY}</a><br />
+							<a href="#about-license">{L_LICENSE}</a><br />
+							<a href="#about-changelog">{L_CHANGELOG}</a><br />
+							<!-- BEGIN history -->
+							<a href="#{history.U_CHANGES}">{history.CHANGES_SINCE}</a><br />
+							<!-- END history -->
+						</div>
+
 						<!-- ENDIF -->
 					</div>
 

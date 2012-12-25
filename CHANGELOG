@@ -40,6 +40,8 @@ QuickInstall Changelog
  + [Change] The global $qi_config array has been removed and all setting/config are now handled by $settings.
  + [Change] Deleted qi_config_sample.cfg since its not used anymore.
  + [Change] The note about not removing the copyright is removed, as it is in phpBB.
+ + [Change] Removed some unused language strings.
+ + [Change] Added in-page links to the about page instead of big brother.
  + [Feature] Made quickinstall not require write access to qi_config.php
  + [Feature] Added UI for setting cache directory.
  + [Feature] Added a separate notion of boards url.

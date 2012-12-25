@@ -45,6 +45,8 @@ class qi_about
 
 					$template->assign_block_vars('history', array(
 						'CHANGES_SINCE'	=> $key,
+
+						'U_CHANGES'	=> strtolower(str_replace(' ', '-', $key)),
 					));
 				}
 				else
@@ -59,17 +61,15 @@ class qi_about
 		}
 
 		$template->assign_vars(array(
-			'S_IN_INSTALL' => false,
-			'S_IN_SETTINGS' => false,
-			'PAGE_MAIN'		=> false,
+			'S_IN_INSTALL'	=> false,
 		));
 
 		// Output page
-		qi::page_header($user->lang['QI_ABOUT'], $user->lang['QI_ABOUT_ABOUT']);
+		qi::page_header($user->lang['QI_ABOUT'], ' ');
 
 		$template->set_filenames(array(
-			'body' => 'about_body.html')
-		);
+			'body' => 'about_body.html',
+		));
 
 		qi::page_footer();
 	}
