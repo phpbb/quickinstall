@@ -611,6 +611,7 @@ class settings
 		}
 
 		$this->config = $config;
+		return($profile);
 	}
 
 	/**

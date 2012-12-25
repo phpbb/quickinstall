@@ -29,7 +29,7 @@ if ($mode == 'update_settings')
 		$qi_config['other_config'] = (!empty($qi_config['other_config'])) ? serialize(explode("\n", $qi_config['other_config'])) : '';
 	}
 
-	$settings->set_config($qi_config);
+	$profile = $settings->set_config($qi_config);
 
 	$attempted = true;
 	$valid = false;
@@ -67,6 +67,11 @@ if ($mode == 'update_settings')
 	{
 		$s_settings_success = true;
 		$language = $settings->get_config('qi_lang', 'en');
+
+		if (!empty($profile))
+		{
+			$settings->set_profile_cookie($profile);
+		}
 	}
 	else
 	{
