@@ -326,10 +326,21 @@ class settings
 	 */
 	function get_config($name, $default = '', $multibyte = false, $cookie = false)
 	{
-		// First check if we have a post/get var.
-		$return = request_var($name, $default, $multibyte, $cookie);
+		// First check if we have a post/get var, or a cookie if that has been selected.
+		if ($cookie)
+		{
+			$exist = (isset($_REQUEST[$name])) ? true : false;
+		}
+		else
+		{
+			$exist = (isset($_GET[$name]) || isset($_POST[$name])) ? true : false;
+		}
 
-		if (empty($return))
+		if ($exist)
+		{
+			$return = request_var($name, $default, $multibyte, $cookie);
+		}
+		else
 		{
 			// Nothing from request_var. Do we have a config setting?
 			if (!empty($this->config[$name]))
@@ -353,6 +364,7 @@ class settings
 				}
 				else
 				{
+					// Something went wrong.
 					$return = $default;
 				}
 			}
