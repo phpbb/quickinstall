@@ -23,6 +23,10 @@ QuickInstall Changelog
  + [Fix] Use the QI_VERSION constant directly instead of copying it to the config array.
  + [Fix] Ticket #63262 SMTP port was not copied from settings to config table.
  + [Fix] Ticket #62767 QI should not crash when it can't delete a board but inform about it.
+ + [Fix] Ticket #63292 Better options for Daylight saving time.
+ + [Fix] Ticket #63289 Need to check $_REQUEST data and config before returning the default value.
+ + [Fix] Ticket #63293 Changed forum/forums to board/boards in several places.
+ + [Fix] Fixed several spelling and wording errors.
  + [Change] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.
  + [Change] Include functions_admin.php for postgres' benefit.
  + [Change] Use get_cache_dir() in sqlite dbal.
@@ -35,6 +39,7 @@ QuickInstall Changelog
  + [Change] Errors are stored as a array and imploded to a string on demand.
  + [Change] The global $qi_config array has been removed and all setting/config are now handled by $settings.
  + [Change] Deleted qi_config_sample.cfg since its not used anymore.
+ + [Change] The note about not removing the copyright is removed, as it is in phpBB.
  + [Feature] Made quickinstall not require write access to qi_config.php
  + [Feature] Added UI for setting cache directory.
  + [Feature] Added a separate notion of boards url.

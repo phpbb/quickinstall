@@ -1,5 +1,6 @@
 qi_config.cfg
 boards/*
+settings/*
 cache/*.php
 sources/automod/*
 sources/extra/*
