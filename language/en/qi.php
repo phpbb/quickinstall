@@ -45,6 +45,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'ABOUT_QUICKINSTALL'	=> 'About phpBB3 QuickInstall',
+	'ABOUT_SECTIONS'		=> 'About sections',
 	'ADMIN_EMAIL'			=> 'Admin email',
 	'ADMIN_EMAIL_EXPLAIN'	=> 'Admin email to use for your boards',
 	'ADMIN_NAME'			=> 'Administrator username',
@@ -227,7 +228,6 @@ $lang = array_merge($lang, array(
 	'PROFILES'			=> 'Profiles',
 
 	'QI_ABOUT'			=> 'About',
-	'QI_ABOUT_ABOUT'	=> 'Big brother loves you and wants you to be happy.',
 	'QI_DST'			=> 'Daylight saving time',
 	'QI_DST_EXPLAIN'	=> 'Do you want daylight saving time to be on or off?',
 	'QI_LANG'			=> 'Select QuickInstall language',
@@ -299,15 +299,8 @@ $lang = array_merge($lang, array(
 	'TIME_SETTINGS'			=> 'Time settings',
 
 	'UNCHECK_ALL'		=> 'Uncheck all',
-	'UP_TO_DATE'		=> 'Big brother says you are up to date.',
-	'UP_TO_DATE_NOT'	=> 'Big brother says you are not up to date.',
-	'UPDATE_CHECK_FAILED'	=> 'Big brother’s version check failed.',
-	'UPDATE_TO'			=> '<a href="%1$s">Update to version %2$s.</a>',
 
 	'YES'	=> 'Yes',
-
-	'VERSION_CHECK'	=> 'Big brother version check',
-	'VISIT_BOARD'	=> '<a href="%s">Visit the board</a>',
 
 	'WHAT'				=> 'What?',
 	'WHAT_EXPLAIN'		=> 'phpBB3 QuickInstall is a script to quickly install phpBB. Pretty obvious... ;-)',
