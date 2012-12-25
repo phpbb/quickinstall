@@ -208,6 +208,8 @@ $lang = array_merge($lang, array(
 	'NUM_USERS'			=> 'Number of users',
 	'NUM_USERS_EXPLAIN'	=> 'The number of users to populate your new board with.<br />They will get the username Tester_x (x is 1 to num_users). They will all get the password "123456"',
 
+	'OFF'					=> 'Off',
+	'ON'					=> 'On',
 	'ONLY_LOCAL'			=> '<strong>Welcome to QuickInstall (QI)</strong>, a tool to quickly install a phpBB board for testing.<br /><br />Some default settings have been loaded below. The only things you need to enter are &quot;Database user&quot; and &quot;Database password&quot; if you want those to be stored by QI. But it would be a good idea to also check the rest of the settings.<br />Make sure the &quot;boards&quot;, &quot;cache&quot; and &quot;settings&quot; directories exist and are writable by PHP.<br /><br />Once you have checked the settings and required directories simply click on the &quot;Submit&quot; button and this profile will be saved under the name &quot;default&quot;. If you want some other name you can enter it in the &quot;Save as new profile&quot; field.<div class="errorbox"><strong>Please note</strong>: QI is only intended to be used locally and should not be used on a web server accessible via the internet (public web server). <strong>If you decide to use it on a public web server it is entirely at your own risk.</strong> There is no support provided if using QI up on a public web server.</div>',
 	'OPTIONS'				=> 'Options',
 	'OPTIONS_ADVANCED'		=> 'Advanced options',
