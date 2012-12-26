@@ -277,6 +277,8 @@ class qi_create
 			'newest_username'	=> $admin_name,
 			'avatar_salt'		=> md5(mt_rand()),
 			'cookie_name'		=> 'phpbb3_' . strtolower(gen_rand_string(5)),
+			'board_timezone'	=> $settings->get_config('qi_tz', 0),
+			'board_dst'			=> $settings->get_config('qi_dst', 0),
 		);
 
 		if (@extension_loaded('gd') || can_load_dll('gd'))
@@ -292,7 +294,16 @@ class qi_create
 		// Set default config and post data, this applies to all DB's
 		$sql_ary = array(
 			"UPDATE {$table_prefix}users
-				SET username = '" . $db->sql_escape($admin_name) . "', user_password='" . $db->sql_escape(md5($admin_pass)) . "', user_ip = '" . $db->sql_escape($user_ip) . "', user_lang = '" . $db->sql_escape($settings->get_config('default_lang')) . "', user_email='" . $db->sql_escape($settings->get_config('board_email')) . "', user_dateformat='" . $db->sql_escape($user->lang['default_dateformat']) . "', user_email_hash = " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ", username_clean = '" . $db->sql_escape(utf8_clean_string($admin_name)) . "'
+				SET username		= '" . $db->sql_escape($admin_name) . "',
+					user_password	= '" . $db->sql_escape(md5($admin_pass)) . "',
+					user_ip			= '" . $db->sql_escape($user_ip) . "',
+					user_lang		= '" . $db->sql_escape($settings->get_config('default_lang')) . "',
+					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
+					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
+					user_timezone	= " . (int) $settings->get_config('qi_tz', 0) . ",
+					user_dst		= " . (int) $settings->get_config('qi_dst', 0) . ",
+					user_email_hash	= " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ",
+					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "'
 				WHERE username = 'Admin'",
 
 			"UPDATE {$table_prefix}moderator_cache
