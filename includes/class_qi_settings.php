@@ -329,11 +329,26 @@ class settings
 		// First check if we have a post/get var, or a cookie if that has been selected.
 		if ($cookie)
 		{
-			$exist = (!empty($_REQUEST[$name])) ? true : false;
+			if (is_string($default))
+			{
+				// Using isset() on strings might give a undesired result.
+				$exist = (!empty($_REQUEST[$name])) ? true : false;
+			}
+			else
+			{
+				$exist = (isset($_REQUEST[$name])) ? true : false;
+			}
 		}
 		else
 		{
-			$exist = (!empty($_GET[$name]) || !empty($_POST[$name])) ? true : false;
+			if (is_string($default))
+			{
+				$exist = (!empty($_GET[$name]) || !empty($_POST[$name])) ? true : false;
+			}
+			else
+			{
+				$exist = (isset($_GET[$name]) || isset($_POST[$name])) ? true : false;
+			}
 		}
 
 		if ($exist)
