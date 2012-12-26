@@ -617,11 +617,11 @@ class settings
 	function set_config($config)
 	{
 		$profile = request_var('save_profile', '');
-		$profile = str_replace(' ', '_', $profile);
-		$profile = preg_replace('/[^A-Za-z0-9_.\-]*/', '', $profile);
 
 		if (!empty($profile))
 		{
+			$profile = str_replace(' ', '_', $profile);
+			$profile = preg_replace('/[^A-Za-z0-9_.\-]*/', '', $profile);
 			$this->profile = $profile;
 		}
 
