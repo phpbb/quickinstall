@@ -29,6 +29,7 @@ QuickInstall Changelog
  + [Fix] Fixed several spelling and wording errors.
  + [Fix] Set the profile cookie when saving new profiles too.
  + [Fix] Ticket #63293 Admin, board and all test users now gets the correct timezone and DST setting.
+ + [Fix] Ticket #63290 Make sure QI script path ends with one and only one slash.
  + [Change] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.
  + [Change] Include functions_admin.php for postgres' benefit.
  + [Change] Use get_cache_dir() in sqlite dbal.
