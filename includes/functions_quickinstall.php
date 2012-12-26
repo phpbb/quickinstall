@@ -115,7 +115,10 @@ class qi
 			$url .= ':' . $server_port;
 		}
 
-		$url .= $script_path . '/' . $page;
+		// Make sure script path ends with a slash.
+		$script_path .= (substr($script_path, -1) != '/') ? '/' : '';
+
+		$url .= $script_path . $page;
 		header('Location: ' . $url);
 		exit;
 	}
