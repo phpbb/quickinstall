@@ -90,7 +90,7 @@ $profile	= request_var('qi_profile', '');
 $delete_profile = (isset($_POST['delete-profile'])) ? true : false;
 
 // Let's get the config.
-$settings = new settings($profile);
+$settings = new settings($profile, $mode);
 
 // Need to set prefix here before constants.php are included.
 $table_prefix = $settings->get_config('table_prefix');

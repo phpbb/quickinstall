@@ -65,7 +65,7 @@ class settings
 	 *
 	 * Reads the settings and populates $this->config.
 	 */
-	function settings($profile = '')
+	function settings($profile = '', $mode = '')
 	{
 		global $quickinstall_path, $phpEx, $user;
 
@@ -146,7 +146,7 @@ class settings
 		}
 
 		$this->config = get_default_settings();
-		$this->install = true;
+		$this->install = ($mode != 'update_settings') ? true : false;
 	}
 
 	/**
