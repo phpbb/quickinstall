@@ -768,7 +768,6 @@ class settings
 		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|REQUIRED' : '';
 		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|REQUIRED' : '';
 		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|REQUIRED' : '';
-		$error[] = ($this->config['cookie_domain'] == '') ? 'COOKIE_DOMAIN|REQUIRED' : '';
 		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|REQUIRED' : '';
 		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|REQUIRED' : '';
 

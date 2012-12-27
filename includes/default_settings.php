@@ -37,7 +37,7 @@ function get_default_settings()
 		'admin_email'		=> 'qi_admin@phpbb-quickinstall.tld',
 		'server_name'		=> 'localhost',
 		'server_port'		=> '80',
-		'cookie_domain'		=> 'localhost',
+		'cookie_domain'		=> '',
 		'cookie_secure'		=> 0,
 		'board_email'		=> 'qi_board@phpbb-quickinstall.tld',
 		'email_enable'		=> 0,
