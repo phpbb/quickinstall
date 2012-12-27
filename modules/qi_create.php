@@ -189,7 +189,6 @@ class qi_create
 			}
 			else if ($dbms == 'postgres')
 			{
-				global $sql_db, $dbhost, $dbuser, $dbpasswd, $dbport;
 				$error_collector = new phpbb_error_collector();
 				$error_collector->install();
 				$db_check_conn = new $sql_db();
