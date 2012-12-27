@@ -133,6 +133,7 @@ $page = (empty($error)) ? $page : 'settings';
 
 if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings')
 {
+	$page = 'settings';
 	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
 }
 
