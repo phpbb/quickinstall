@@ -8,7 +8,7 @@
 *
 */
 
-define('QI_VERSION', '1.1.8-RC1');
+define('QI_VERSION', '1.1.8-RC2');
 
 // Chunk sizes
 define('CHUNK_POST', 1000);

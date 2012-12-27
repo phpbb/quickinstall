@@ -33,6 +33,7 @@ QuickInstall Changelog
  + [Fix] Ticket #63297 If a new profile name is entered; prefill the new profile name if settings validation fails.
  + [Fix] Ticket #63298 Error text was not shown when there where errors on first config save.
  + [Fix] Ticket #63303 The wrong sidebar was shown in settings when installing QI.
+ + [Fix] Ticket #63301 Removed some globalizations which got some variables to be empty.
  + [Change] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.
  + [Change] Include functions_admin.php for postgres' benefit.
  + [Change] Use get_cache_dir() in sqlite dbal.
