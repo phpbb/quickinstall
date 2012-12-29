@@ -110,11 +110,11 @@ $user = new user();
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
-	$language = request_var('lang', $language);
+	$language = request_var('lang', '');
 }
 else if (!empty($_POST['sel_lang']))
 {
-	$language = request_var('sel_lang', $language);
+	$language = request_var('sel_lang', '');
 }
 else
 {
