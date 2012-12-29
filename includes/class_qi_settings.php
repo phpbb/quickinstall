@@ -125,9 +125,9 @@ class settings
 				// Send the config to be converted and stored if possible.
 				// if manual_convert is true the config will be empty.
 				$this->manual_convert = $this->convert($config);
-			}
 
-			return;
+				return;
+			}
 		}
 		else if (!empty($config))
 		{
