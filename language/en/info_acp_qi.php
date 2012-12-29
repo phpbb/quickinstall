@@ -3,8 +3,8 @@
 *
 * info_acp_qi [English]
 *
-* @package language
-* @copyright (c) 2008 evil3
+* @package quickinstall
+* @copyright (c) 2008 phpBB Group
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
