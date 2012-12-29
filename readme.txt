@@ -19,10 +19,11 @@ https://github.com/phpbb/automod depending on what version you want. Unzip the
 package and copy the contents of the root, or upload depending on AutoMOD version,
 directory to sources/automod/.
 
-Then point your browser to quickinstall/index.php. You should be taken to the
-settings page with some default values filled in. Check them and change what is
-needed. You need to fill DB user and password. Then click "Save". If you don't
-set a profile name, the name "default" will be used.
+Then point your browser to quickinstall/index.php. Make sure the directories
+boards/, cache/ and settings/ are writable by your web server.
+You should be taken to the settings page with some default values filled in.
+Check them and change what is needed. You need to fill DB user and password. Then
+click "Save". If you don't set a profile name, the name "default" will be used.
 
 After that open index.php in your browser and it should work. If
 it does not, seek support here: http://www.phpbb.com/community/viewforum.php?f=71
