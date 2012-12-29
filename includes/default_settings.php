@@ -2,9 +2,8 @@
 /**
 *
 * @package quickinstall
-* @version $Id$
 * @copyright (c) 2012 Jari Kanerva (tumba25)
-* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 

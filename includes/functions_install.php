@@ -2,9 +2,8 @@
 /**
 *
 * @package quickinstall
-* @version $Id$
 * @copyright (c) 2007, 2008 eviL3
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
