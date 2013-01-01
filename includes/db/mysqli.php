@@ -32,6 +32,8 @@ class dbal_mysqli_qi extends dbal_mysqli
 		$this->dbname = $database;
 		$port = (!$port) ? NULL : $port;
 
+		$this->sql_layer = 'mysql_41';
+
 		// Persistant connections not supported by the mysqli extension?
 		$this->db_connect_id = @mysqli_connect($this->server, $this->user, $sqlpassword, null, $port);
 

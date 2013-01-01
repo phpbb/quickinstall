@@ -688,9 +688,6 @@ class settings
 			$qi_config['qi_lang'] = 'en';
 		}
 
-		// Temporary fix for the MySQLi error.
-		$qi_config['dbms'] = ($qi_config['dbms'] == 'mysqli') ? 'mysql' : $qi_config['dbms'];
-
 		$this->config = $qi_config;
 		return($this->config);
 	}

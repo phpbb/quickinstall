@@ -31,7 +31,7 @@ class dbal_mysql_qi extends dbal_mysql
 		$this->server = $sqlserver . (($port) ? ':' . $port : '');
 		$this->dbname = $database;
 
-		$this->sql_layer = 'mysql4';
+		$this->sql_layer = 'mysql_40';
 
 		$this->db_connect_id = ($this->persistency) ? @mysql_pconnect($this->server, $this->user, $sqlpassword, $new_link) : @mysql_connect($this->server, $this->user, $sqlpassword, $new_link);
 
