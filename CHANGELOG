@@ -2,6 +2,7 @@ QuickInstall Changelog
 
 - Changes since 1.1.8
  + [Feature] Ticket #63300 Show back trace on errors.
+ + [Feature] Added a php info tab.
 
 - Changes since 1.1.6
  + [Fix] Some language edits and spelling fixes.

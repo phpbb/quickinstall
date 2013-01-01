@@ -1702,3 +1702,11 @@ span.error-main {
 	font-weight: bold;
 	display: none;
 }
+
+.phpinfo {
+	overflow: auto;
+	width: 99%;
+	direction: ltr;
+}
+
+.phpinfo td, .phpinfo th, .phpinfo h2, .phpinfo h1 { text-align: left; }
