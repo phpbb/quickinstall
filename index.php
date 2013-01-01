@@ -61,13 +61,14 @@ else
 @ini_set('memory_limit', '128M');
 
 // Include scripts for quickinstall
-require($quickinstall_path . 'includes/qi_constants.' . $phpEx);
-require($quickinstall_path . 'includes/functions_quickinstall.' . $phpEx);
-require($quickinstall_path . 'includes/class_qi_settings.' . $phpEx);
-require($quickinstall_path . 'includes/qi_functions.' . $phpEx);
-require($quickinstall_path . 'includes/functions_files.' . $phpEx);
-require($quickinstall_path . 'includes/functions_module.' . $phpEx);
-require($quickinstall_path . 'includes/template.' . $phpEx);
+require("{$quickinstall_path}includes/qi_constants.$phpEx");
+require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
+require("{$quickinstall_path}includes/class_qi.$phpEx");
+require("{$quickinstall_path}includes/class_qi_settings.$phpEx");
+require("{$quickinstall_path}includes/qi_functions.$phpEx");
+require("{$quickinstall_path}includes/functions_files.$phpEx");
+require("{$quickinstall_path}includes/functions_module.$phpEx");
+require("{$quickinstall_path}includes/template.$phpEx");
 
 // Set PHP error handler to ours
 set_error_handler(array('qi', 'msg_handler'), E_ALL);

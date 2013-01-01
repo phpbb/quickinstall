@@ -155,6 +155,8 @@ $lang = array_merge($lang, array(
 
 	'GENERAL_ERROR'		=> 'General Error',
 	'GO'				=> 'Go',
+	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
+	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
 	'GRANT_PERMISSIONS_EXPLAIN'	=> '(e.g. 0060 for group read/write)',
 
@@ -186,7 +188,8 @@ $lang = array_merge($lang, array(
 	'NEED_WRITABLE'		=> 'QuickInstall needs the &quot;boards&quot; and &quot;cache&quot; directories to be writable all the time.<br />The &quot;settings&quot; directory needs to be in the QI root path and it also needs to be writable.',
 	'NO'				=> 'No',
 	'NO_ALT_ENV'		=> 'The specified alternative environment doesn’t exist.',
-	'NO_AUTOMOD'		=> 'AutoMOD not found in the sources directory. You need to download AutoMOD and copy the contents of the root directory to sources/automod. If you use AutoMOD 1.0.0. it is the contents of the upload directory.',
+	'NO_AUTOMOD'		=> '<strong>AutoMOD not found in the sources directory.</strong><br />You need to download AutoMOD and copy the contents of the root directory to sources/automod. If you use AutoMOD 1.0.0. it is the contents of the upload directory.',
+	'NO_AUTOMOD_TITLE'	=> 'AutoMOD not found',
 	'NO_BOARDS'			=> 'You have no boards.',
 	'NO_DB'				=> 'No database selected.',
 	'NO_IMPACT_WIN'		=> 'This setting has no impact on Windows systems older than Win7.',
@@ -243,6 +246,7 @@ $lang = array_merge($lang, array(
 	'REDIRECT_BOARD'	=> 'Redirect to new board',
 	'REQUIRED'			=> 'is required',
 	'RESET'				=> 'Reset',
+	'RETURN_MAIN'		=> '%sReturn to the Main tab%s',
 	'RETURN_MANAGE'		=> 'Return to the Manage tab',
 
 	'SAVE_PROFILE'		=> 'Save as new profile',

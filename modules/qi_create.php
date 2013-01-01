@@ -60,10 +60,18 @@ class qi_create
 		$admin_pass	= $settings->get_config('admin_pass', '', true);
 
 		$alt_env	= $settings->get_config('alt_env', '');
+		$automod	= $settings->get_config('automod', false);
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
 			trigger_error('NO_ALT_ENV');
+		}
+
+		if ($automod && ((!$files = @scandir("{$quickinstall_path}sources/automod")) || count($files) <= 2))
+		{
+			global $msg_title;
+			$msg_title = 'NO_AUTOMOD_TITLE';
+			trigger_error('NO_AUTOMOD');
 		}
 
 		// Set up our basic founder.
@@ -482,7 +490,7 @@ class qi_create
 		$install->add_bots(false, false);
 
 		// now automod (easymod)
-		if ($settings->get_config('automod', false))
+		if ($automod)
 		{
 			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
 			automod_installer::install_automod($board_dir, $settings->get_config('make_writable', false));

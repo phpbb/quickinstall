@@ -250,12 +250,19 @@ class qi
 	}
 
 	/**
-	* Error and message handler, call with trigger_error if reqd
-	*/
+	 * Error and message handler, call with trigger_error if reqd.
+	 * Mostly borrowed from phpBB includes/functions.php.
+	 */
 	public static function msg_handler($errno, $msg_text, $errfile, $errline)
 	{
 		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path;
 		global $user;
+
+		// Do not display notices if we suppress them via @
+		if (error_reporting() == 0 && $errno != E_USER_ERROR && $errno != E_USER_WARNING && $errno != E_USER_NOTICE)
+		{
+			return;
+		}
 
 		// Message handler is stripping text. In case we need it, we are possible to define long text...
 		if (isset($msg_long_text) && $msg_long_text && !$msg_text)
@@ -263,40 +270,57 @@ class qi
 			$msg_text = $msg_long_text;
 		}
 
+		if (!defined('E_DEPRECATED'))
+		{
+			define('E_DEPRECATED', 8192);
+		}
+
 		switch ($errno)
 		{
 			case E_NOTICE:
 			case E_WARNING:
-
 				// Check the error reporting level and return if the error level does not match
-				// Additionally do not display notices if we suppress them via @
 				// If DEBUG is defined the default level is E_ALL
-				if (($errno & ((defined('DEBUG') && error_reporting()) ? E_ALL : error_reporting())) == 0)
+				if (($errno & ((defined('DEBUG')) ? E_ALL : error_reporting())) == 0)
 				{
 					return;
 				}
 
 				// remove complete path to installation, with the risk of changing backslashes meant to be there
-				$errfile = str_replace(array(phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $errfile);
-				$msg_text = str_replace(array(phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $msg_text);
+				$errfile = str_replace(array(phpbb_functions::phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $errfile);
+				$msg_text = str_replace(array(phpbb_functions::phpbb_realpath($phpbb_root_path), '\\'), array('', '/'), $msg_text);
+				$error_name = ($errno === E_WARNING) ? 'PHP Warning' : 'PHP Notice';
 
-				echo '<b>[phpBB Debug] PHP Notice</b>: in file <b>' . $errfile . '</b> on line <b>' . $errline . '</b>: <b>' . $msg_text . '</b><br />' . "\n";
+				echo '<b>[QI Debug] ' . $error_name . '</b>: in file <b>' . $errfile . '</b> on line <b>' . $errline . '</b>: <b>' . $msg_text . '</b><br />' . "\n";
 
 				return;
-
 			break;
 
 			case E_USER_ERROR:
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
+				if (!empty($user) && !empty($user->lang))
+				{
+					$msg_text = (!empty($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
+					$msg_title = (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((!empty($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title);
 
-				// uncomment for debug
-				//echo "$errfile:$errline";
+					$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
+					$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
+				}
+				else
+				{
+					$msg_title = 'General Error';
+					$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
+					$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+				}
 
-				$msg_title = (isset($msg_title)) ? (isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : $msg_title) : (isset($user->lang['GENERAL_ERROR']) ? $user->lang['GENERAL_ERROR'] : 'General Error');
-				$msg_text = (isset($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
-				$l_return_index = '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
-				$l_return_index .= '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a>';
+				$backtrace = phpbb_functions::get_backtrace();
+				if ($backtrace)
+				{
+					$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
+				}
+
+				send_status_line(503, 'Service Unavailable');
 
 				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 				echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
@@ -310,36 +334,40 @@ class qi
 				echo '	<div id="page-header">';
 				echo '		' . $l_return_index;
 				echo '	</div>';
+
 				echo '	<div id="page-body">';
 				echo '		<div id="acp">';
-				echo '		<div class="panel">';
-				echo '			<span class="corners-top"><span></span></span>';
-				echo '			<div id="content">';
-
-				echo '			<h1>' . $msg_title . '</h1>';
-				echo '			<div>' . $msg_text . '</div>';
-
+				echo '			<div class="panel">';
+				echo '				<span class="corners-top"><span></span></span>';
+				echo '				<div id="content">';
+				echo '				<h1>' . $msg_title . '</h1>';
+				echo '				<div>' . $msg_text . '</div>';
+				echo '				</div>';
+				echo '				<div style="padding-left: 10px;">';
+				echo '					' . $l_return_index;
+				echo '				</div>';
+				echo '				<span class="corners-bottom"><span></span></span>';
 				echo '			</div>';
-				echo '			<div style="padding-left: 10px;">';
-				echo '		' . $l_return_index;
-				echo '			</div>';
-				echo '			<span class="corners-bottom"><span></span></span>';
-				echo '		</div>';
 				echo '		</div>';
 				echo '	</div>';
+
 				echo '	<div id="page-footer">';
-				echo '		Powered by phpBB &copy; 2000, 2002, 2005, 2007 <a href="http://www.phpbb.com/">phpBB Group</a>';
+				echo '		Powered by <a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> {QI_VERSION} for phpBB 3.0.x &copy; <a href="http://www.phpbb.com/">phpBB Group</a>';
 				echo '	</div>';
 				echo '</div>';
 				echo '</body>';
 				echo '</html>';
 
+				// As a pre-caution... some setups display a blank page if the flush() is not there.
+				(ob_get_level() > 0) ? @ob_flush() : @flush();
+
+				// On a fatal error (and E_USER_ERROR *is* fatal) we never want other scripts to continue and force an exit here.
 				exit;
 			break;
 		}
 
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
-		return false;
+		return(false);
 	}
 }
