@@ -1697,7 +1697,6 @@ a.top { background-image: url('./images/icon_back_top.gif'); }
 }
 
 span.error-main {
-	float: right;
 	color: red;
 	font-weight: bold;
 	display: none;
