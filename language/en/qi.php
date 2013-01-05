@@ -149,7 +149,7 @@ $lang = array_merge($lang, array(
 	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
-	'FORGOT_THIS'				=> 'YOU FORGOT THIS!', // Should be upper case.
+	'FORGOT_THIS'				=> 'You forgot this!',
 
 	'GENERAL_ERROR'		=> 'General Error',
 	'GO'				=> 'Go',

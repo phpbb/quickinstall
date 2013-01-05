@@ -43,31 +43,31 @@ function toggle_div(div_id)
 			<dd><input class="text medium" type="text" id="site_desc" name="site_desc" value="{SITE_DESC}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="dbname">{L_BOARD_DBNAME}:*</label> &nbsp; <span id="span-dbname" class="error-main">{L_FORGOT_THIS} -></span></dt>
+			<dt><label for="dbname">{L_BOARD_DBNAME}:*</label><span id="span-dbname" class="error-main"><br />{L_FORGOT_THIS}</span></dt>
 			<dd><input class="text medium" type="text" id="dbname" name="dbname" /></dd>
 		</dl>
 
 		<!-- IF not S_DBUSER -->
 		<dl>
-			<dt><label for="dbuser">{L_DBUSER}:*</label> &nbsp; <span id="span-dbuser" class="error-main">{L_FORGOT_THIS} -></span></dt>
+			<dt><label for="dbuser">{L_DBUSER}:*</label><span id="span-dbuser" class="error-main"><br />{L_FORGOT_THIS}</span></dt>
 			<dd><input class="text medium" type="password" id="dbuser" name="dbuser" value="{CONFIG_DBUSER}" /></dd>
 		</dl>
 		<!-- ENDIF -->
 		<!-- IF not S_DBPASSWD and not S_NODBPASSWD -->
 		<dl>
-			<dt><label for="dbpasswd">{L_DBPASSWD}:*</label> &nbsp; <span id="span-dbpasswd" class="error-main">{L_FORGOT_THIS} -></span></dt>
+			<dt><label for="dbpasswd">{L_DBPASSWD}:*</label><span id="span-dbpasswd" class="error-main"><br />{L_FORGOT_THIS}</span></dt>
 			<dd><input class="text medium" type="password" id="dbpasswd" name="dbpasswd" value="{CONFIG_DBPASSWD}" /></dd>
 		</dl>
 		<!-- ENDIF -->
 		<!-- IF not S_ADMIN_NAME -->
 		<dl>
-			<dt><label for="admin_name">{L_ADMIN_NAME}:*</label> &nbsp; <span id="span-admin_name" class="error-main">{L_FORGOT_THIS} -></span></dt>
+			<dt><label for="admin_name">{L_ADMIN_NAME}:*</label><span id="span-admin_name" class="error-main"><br />{L_FORGOT_THIS}</span></dt>
 			<dd><input class="text medium" type="password" id="admin_name" name="admin_name" value="{CONFIG_ADMIN_NAME}" /></dd>
 		</dl>
 		<!-- ENDIF -->
 		<!-- IF not S_ADMIN_PASS -->
 		<dl>
-			<dt><label for="admin_pass">{L_ADMIN_PASS}:*</label> &nbsp; <span id="span-admin_pass" class="error-main">{L_FORGOT_THIS} -></span></dt>
+			<dt><label for="admin_pass">{L_ADMIN_PASS}:*</label><span id="span-admin_pass" class="error-main"><br />{L_FORGOT_THIS}</span></dt>
 			<dd><input class="text medium" type="password" id="admin_pass" name="admin_pass" value="{CONFIG_ADMIN_PASS}" /></dd>
 		</dl>
 		<!-- ENDIF -->
