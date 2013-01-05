@@ -144,7 +144,7 @@ $lang = array_merge($lang, array(
 	'EMAIL_ENABLE_EXPLAIN'	=> 'Enable board wide emails. For a local test board this would typically be off, unless you test the emails.',
 	'EMAIL_SETTINGS'		=> 'E-mail settings',
 	'ENABLED'				=> 'Enabled',
-	'ERRORS'				=> 'There where errors',
+	'ERRORS'				=> 'There were errors',
 	'ERROR_DEL_BOARDS'		=> 'The following boards could not be deleted',
 	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
 
