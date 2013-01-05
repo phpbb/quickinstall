@@ -150,7 +150,7 @@ $lang = array_merge($lang, array(
 	'ERROR_DEL_BOARDS'		=> 'The following boards could not be deleted',
 	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
 
-	'FUNCTIONS_MODS_MISSING'	=> 'includes/automod/functions_mods.php not found.',
+	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'YOU FORGOT THIS!', // Should be upper case.
 
 	'GENERAL_ERROR'		=> 'General Error',
