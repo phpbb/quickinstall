@@ -84,7 +84,7 @@ function bind_62574_handlers(fieldname)
 <!-- IF S_MAIN -->
 function validate_fields()
 {
-	var error = false;
+	var success = true;
 	var color = "LightCoral";
 
 	var input_dbname = document.getElementById("dbname");
@@ -93,11 +93,13 @@ function validate_fields()
 		if (input_dbname.value == "")
 		{
 			document.getElementById("span-dbname").style.display = "inline";
-			error = true;
+			input_dbname.style.borderColor = "red";
+			success = false;
 		}
 		else
 		{
 			document.getElementById("span-dbname").style.display = "none";
+			input_dbname.style.borderColor = "#BC2A4D";
 		}
 	}
 
@@ -107,11 +109,13 @@ function validate_fields()
 		if (input_dbuser.value == "")
 		{
 			document.getElementById("span-dbuser").style.display = "inline";
-			error = true;
+			input_dbuser.style.borderColor = "red";
+			success = false;
 		}
 		else
 		{
 			document.getElementById("span-dbuser").style.display = "none";
+			input_dbuser.style.borderColor = "#BC2A4D";
 		}
 	}
 
@@ -121,11 +125,13 @@ function validate_fields()
 		if (input_dbpasswd.value == "")
 		{
 			document.getElementById("span-dbpasswd").style.display = "inline";
-			error = true;
+			input_dbpasswd.style.borderColor = "red";
+			success = false;
 		}
 		else
 		{
 			document.getElementById("span-dbpasswd").style.display = "none";
+			input_dbpasswd.style.borderColor = "#BC2A4D";
 		}
 	}
 
@@ -135,11 +141,13 @@ function validate_fields()
 		if (input_admin_name.value == "")
 		{
 			document.getElementById("span-admin_name").style.display = "inline";
-			error = true;
+			input_admin_name.style.borderColor = "red";
+			success = false;
 		}
 		else
 		{
 			document.getElementById("span-admin_name").style.display = "none";
+			input_admin_name.style.borderColor = "#BC2A4D";
 		}
 	}
 
@@ -149,20 +157,22 @@ function validate_fields()
 		if (input_admin_pass.value == "")
 		{
 			document.getElementById("span-admin_pass").style.display = "inline";
-			error = true;
+			input_admin_pass.style.borderColor = "red";
+			success = false;
 		}
 		else
 		{
 			document.getElementById("span-admin_pass").style.display = "none";
+			input_admin_pass.style.borderColor = "#BC2A4D";
 		}
 	}
 
-	if (!error)
+	if (success)
 	{
 		document.getElementById("submituser").style.display = "none";
 	}
 
-	return(error);
+	return(success);
 }
 <!-- ENDIF -->
 

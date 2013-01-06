@@ -1696,7 +1696,16 @@ a.top { background-image: url('./images/icon_back_top.gif'); }
 	text-align: right;
 }
 
+.ltr span.error-main {
+	float: right;
+}
+
+.rtl span.error-main {
+	float: left;
+}
+
 span.error-main {
+	background-repeat: no-repeat;
 	color: red;
 	font-weight: bold;
 	display: none;
