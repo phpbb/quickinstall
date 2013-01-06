@@ -45,7 +45,7 @@ if ($mode == 'update_settings')
 			}
 			else
 			{
-				$error .= $user->lang['CONFIG_NOT_WRITTEN'] . '<br />';
+				$error .= sprintf($user->lang['CONFIG_NOT_WRITTEN'], $profile) . '<br />';
 				$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
 				$config_text = $settings->get_config_text();
 			}

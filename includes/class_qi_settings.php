@@ -623,6 +623,7 @@ class settings
 			$this->profile = $profile;
 		}
 
+		$profile = (!empty($profile)) ? $profile : $this->profile;
 		$this->config = $config;
 		return($profile);
 	}
