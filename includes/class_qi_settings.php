@@ -834,7 +834,7 @@ class settings
 	{
 		global $quickinstall_path;
 
-		if (!is_writable($quickinstall_path . 'settings'))
+		if (!is_writable($quickinstall_path . 'settings') || !is_writable("{$quickinstall_path}settings/$profile.cfg"))
 		{
 			return(false);
 		}
