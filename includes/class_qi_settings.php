@@ -835,12 +835,13 @@ class settings
 	{
 		global $quickinstall_path;
 
+		$profile = $this->profile;
+
 		if (!is_writable($quickinstall_path . 'settings') || !is_writable("{$quickinstall_path}settings/$profile.cfg"))
 		{
 			return(false);
 		}
 
-		$profile = $this->profile;
 		$res = file_put_contents("{$quickinstall_path}settings/$profile.cfg", $config_text);
 
 		if ($res !== false)
