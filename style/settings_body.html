@@ -25,7 +25,7 @@
 		<legend><a id="profiles"></a>{L_PROFILES}</legend>
 		<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
 			<dl>
-				<dt><label for="qi_profile">{L_SELECT} {L_PROFILE}:</label></dt>
+				<dt><label for="qi_profile">{L_SELECT_PROFILE}:</label></dt>
 				<dd>
 					<select id="qi_profile" name="qi_profile" onchange="document.forms['profile_form'].submit();">
 						{PROFILE_OPTIONS}
@@ -113,7 +113,7 @@
 				<dd><input class="text medium" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN}<br />{L_THIS_CAN_CHANGE}</dt>
+				<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN}<br />{L_NO_IMPACT_WIN}<br />{L_THIS_CAN_CHANGE}</dt>
 				<dd>
 					<label><input type="radio" class="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 					<label><input type="radio" class="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>

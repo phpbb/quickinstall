@@ -252,6 +252,7 @@ $lang = array_merge($lang, array(
 	'SAVE_PROFILE_EXPLAIN'	=> 'Write the name for a new profile for these settings. Allowed chars are A-Z, a-z, 0-9, &quot;-&quot; (minus sign), &quot;_&quot; (underscore) and &quot;.&quot; (dot)<br /><strong>Note: If a profile with this name already exists, it will be overwritten.</strong>',
 	'SAVE_RESTORE'		=> 'Save/Restore',
 	'SELECT'			=> 'Select',
+	'SELECT_PROFILE'	=> 'Select profile',
 	'SETTINGS'			=> 'Settings',
 	'SETTINGS_FAILURE'	=> 'There were errors, take a look in the box below.',
 	'SETTINGS_NOT_WRITABLE'	=> 'The settings directory do not exist, is not a directory or is not writable.',
