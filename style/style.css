@@ -1635,6 +1635,7 @@ fieldset.permissions .permissions-switch {
 
 .manage-row:hover { background-color: #eeeeee; }
 
+/* Not used ATM, but save here for now. */
 a.open-setting {
 	background: none no-repeat scroll left top transparent;
 	display: block;
@@ -1688,12 +1689,19 @@ a.top {
 	margin-top: 2px;
 }
 
+.rtl a.top { float: left }
+
 a.top { background-image: url('./images/icon_back_top.gif'); }
 
 .back2top {
 	float: right;
 	height: 14px;
 	text-align: right;
+}
+
+.rtl .back2top {
+	float: left;
+	text-align: left;
 }
 
 .ltr span.error-main {
@@ -1718,3 +1726,4 @@ span.error-main {
 }
 
 .phpinfo td, .phpinfo th, .phpinfo h2, .phpinfo h1 { text-align: left; }
+.rtl .phpinfo td, .rtl .phpinfo th, .rtl .phpinfo h2, .rtl .phpinfo h1 { text-align: right; }
