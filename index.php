@@ -21,8 +21,6 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 // Report all errors, except notices
 //error_reporting(E_ALL);
 $level = E_ALL ^ E_NOTICE & ~E_DEPRECATED;
-//$level &= ~E_DEPRECATED;
-
 if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 {
 	// PHP 5.4 adds E_STRICT to E_ALL.
