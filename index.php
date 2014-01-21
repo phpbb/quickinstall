@@ -20,7 +20,9 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 
 // Report all errors, except notices
 //error_reporting(E_ALL);
-$level = E_ALL ^ E_NOTICE;
+$level = E_ALL ^ E_NOTICE & ~E_DEPRECATED;
+//$level &= ~E_DEPRECATED;
+
 if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 {
 	// PHP 5.4 adds E_STRICT to E_ALL.
@@ -35,6 +37,19 @@ if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 		define('E_STRICT', 2048);
 	}
 	$level &= ~E_STRICT;
+}
+
+if (version_compare(PHP_VERSION, '5.5.0', '>='))
+{
+	// The /e modifier is deprecated as of PHP 5.5.0 according to php.net.
+	// it is used in phpBB 3.0.x file: includes\functions_content.php
+	// That is needed to work on PHP 4.x
+	// It will be fixed in phpBB 3.1
+	if (!defined('E_DEPRECATED'))
+	{
+		define('E_DEPRECATED', 8192);
+	}
+	$level &= ~E_DEPRECATED;
 }
 error_reporting($level);
 
