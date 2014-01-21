@@ -15,6 +15,7 @@ QuickInstall Changelog
  + [Change] Had 'load_tplcompile' in several places, one should be enough.
  + [Change] No need to add session and $user to only store language keys. Changed $user->lang[] to qi::lang().
  + [Change] Removed "powered by phpBB" from the footer. That would no be true anymore.
+ + [Change] Suppress E_DEPRECATED from php >=5.5.0 to still work with php 4
  + [Feature] Ticket #63300 Show back trace on errors.
  + [Feature] Added a php info tab.
  + [Feature] Ticket #63302 Added MySQLi support.
