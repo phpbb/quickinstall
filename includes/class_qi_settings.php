@@ -67,7 +67,7 @@ class settings
 	{
 		global $quickinstall_path, $phpEx, $user;
 
-		$delete_profile = request_var('delete-profile', false);
+		$delete_profile = legacy_request_var('delete-profile', false);
 
 		if (!empty($delete_profile))
 		{
@@ -351,7 +351,7 @@ class settings
 
 		if ($exist)
 		{
-			$return = request_var($name, $default, $multibyte, $cookie);
+			$return = legacy_request_var($name, $default, $multibyte, $cookie);
 		}
 		else
 		{
@@ -837,7 +837,7 @@ class settings
 
 		$profile = $this->profile;
 
-		if (!is_writable($quickinstall_path . 'settings') || !is_writable("{$quickinstall_path}settings/$profile.cfg"))
+		if (!is_writable($quickinstall_path . 'settings') && !is_writable("{$quickinstall_path}settings/$profile.cfg"))
 		{
 			return(false);
 		}
