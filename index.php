@@ -234,7 +234,7 @@ require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 
 if (defined('PHPBB_31'))
 {
-	$user	= new \phpbb\user();
+	$user	= new \phpbb\user('\phpbb\datetime');
 	$auth	= new \phpbb\auth\auth();
 	$cache	= new \phpbb\cache\driver\file();
 
