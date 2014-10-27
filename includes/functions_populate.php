@@ -324,12 +324,22 @@ class populate
 					'topic_id'		=> (int) ++$topic_id,
 					'forum_id'		=> (int) $forum['forum_id'],
 					'topic_title'	=> sprintf($user->lang['TEST_TOPIC_TITLE'], $topic_cnt),
-					'topic_replies'			=> 0,
-					'topic_replies_real'	=> 0,
 				);
 
-				$forum['forum_topics']++;
-				$forum['forum_topics_real']++;
+				if (defined('PHPBB_31'))
+				{
+					$topic_arr['topic_posts_approved'] = 1;
+
+					$forum['forum_topics_approved']++;
+				}
+				else
+				{
+					$topic_arr['topic_replies'] = 0;
+					$topic_arr['topic_replies_real'] = 0;
+
+					$forum['forum_topics']++;
+					$forum['forum_topics_real']++;
+				}
 
 				$replies = ($this->num_replies_min == $this->num_replies_max) ? $this->num_replies_max : mt_rand($this->num_replies_min, $this->num_replies_max);
 				// The first topic post also needs to be posted.
@@ -363,6 +373,11 @@ class populate
 						'bbcode_uid'		=> $bbcode_uid,
 					);
 
+					if (defined('PHPBB_31'))
+					{
+						$sql_posts[count($sql_posts) - 1]['post_visibility']	= ITEM_APPROVED;
+					}
+
 					if ($j == 0)
 					{
 						// Put some first post info to the topic array.
@@ -370,14 +385,27 @@ class populate
 						$topic_arr['topic_first_poster_name']	= $poster_arr['username'];
 						$topic_arr['topic_time']		= $post_time;
 						$topic_arr['topic_poster']		= $poster_arr['user_id'];
+
+						if (defined('PHPBB_31'))
+						{
+							$topic_arr['topic_visibility']	= ITEM_APPROVED;
+						}
 					}
 					else
 					{
-						$topic_arr['topic_replies']++;
-						$topic_arr['topic_replies_real']++;
+						if (defined('PHPBB_31'))
+						{
+							$topic_arr['topic_posts_approved']++;
+							$forum['forum_posts_approved']++;
+						}
+						else
+						{
+							$topic_arr['topic_replies']++;
+							$topic_arr['topic_replies_real']++;
+							$forum['forum_posts']++;
+						}
 					}
 
-					$forum['forum_posts']++;
 					$forum['forum_last_post_id']		= $post_id;
 					$forum['forum_last_poster_id']		= $poster_arr['user_id'];
 					$forum['forum_last_post_subject']	= $subject;
@@ -415,9 +443,8 @@ class populate
 			}
 
 			$sql_ary = array(
-				'forum_posts'				=> $forum['forum_posts'],
-				'forum_topics'				=> $forum['forum_topics'],
-				'forum_topics_real'			=> $forum['forum_topics_real'],
+				'forum_posts' . (defined('PHPBB_31') ? '_approved' : '' )	=> $forum['forum_posts' . (defined('PHPBB_31') ? '_approved' : '' )],
+				'forum_topics' . (defined('PHPBB_31') ? '_approved' : '' )	=> $forum['forum_topics' . (defined('PHPBB_31') ? '_approved' : '' )],
 				'forum_last_post_id'		=> $forum['forum_last_post_id'],
 				'forum_last_poster_id'		=> $forum['forum_last_poster_id'],
 				'forum_last_post_subject'	=> $forum['forum_last_post_subject'],
@@ -425,6 +452,11 @@ class populate
 				'forum_last_poster_name'	=> $forum['forum_last_poster_name'],
 				'forum_last_poster_colour'	=> '',
 			);
+
+			if (!defined('PHPBB_31'))
+			{
+				$sql_ary['forum_topics_real'] = $forum['forum_topics_real'];
+			}
 
 			$sql = 'UPDATE ' . FORUMS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_ary);
 			$sql .= ' WHERE forum_id = ' . (int) $forum['forum_id'];
@@ -561,8 +593,6 @@ class populate
 			$this->forum_arr[$forum_data['forum_id']] = array(
 				'forum_id'					=> $forum_data['forum_id'],
 				'parent_id'					=> $forum_data['parent_id'],
-				'forum_posts'				=> 0,
-				'forum_topics'				=> 0,
 				'forum_topics_real'			=> 0,
 				'forum_last_post_id'		=> 0,
 				'forum_last_poster_id'		=> 0,
@@ -570,6 +600,17 @@ class populate
 				'forum_last_post_time'		=> 0,
 				'forum_last_poster_name'	=> '',
 			);
+
+			if (defined('PHPBB_31'))
+			{
+				$this->forum_arr[$forum_data['forum_id']]['forum_posts_approved']	= 0;
+				$this->forum_arr[$forum_data['forum_id']]['forum_topics_approved']	= 0;
+			}
+			else
+			{
+				$this->forum_arr[$forum_data['forum_id']]['forum_posts']	= 0;
+				$this->forum_arr[$forum_data['forum_id']]['forum_topics']	= 0;
+			}
 		}
 
 		return($forum_data['forum_id']);
@@ -584,7 +625,15 @@ class populate
 		global $db, $config, $settings;
 
 		// Hash the password.
-		$password = phpbb_hash('123456');
+		if (defined('PHPBB_31'))
+		{
+			global $passwords_manager;
+			$password = $passwords_manager->hash('123456');
+		}
+		else
+		{
+			$password = phpbb_hash('123456');
+		}
 
 		$registered_group = $newly_registered_group = 0;
 		// Get the group id for registered users and newly registered.
@@ -622,7 +671,6 @@ class populate
 				'user_lastmark'			=> $user['user_lastmark'],
 				'user_posts'			=> $user['user_posts'],
 				'user_password'			=> $password,
-				'user_pass_convert'		=> 0,
 				'user_email'			=> $email,
 				'user_email_hash'		=> phpbb_email_hash($email),
 				'group_id'				=> $registered_group,
@@ -630,7 +678,6 @@ class populate
 				'user_permissions'		=> '',
 				'user_timezone'			=> $settings->get_config('qi_tz', 0),
 				'user_lang'				=> $settings->get_config('qi_lang'),
-				'user_dst'				=> $settings->get_config('qi_dst', 0),
 				'user_form_salt'		=> unique_id(),
 				'user_style'			=> (int) $config['default_style'],
 				'user_regdate'			=> $user['user_regdate'],
@@ -640,9 +687,20 @@ class populate
 				'user_notify_type'		=> NOTIFY_EMAIL,
 
 				'user_sig'			=> '',
-				'user_occ'			=> '',
-				'user_interests'	=> '',
 			);
+
+			if (defined('PHPBB_31'))
+			{
+				$sql_ary[count($sql_ary) - 1]['user_timezone'] = $sql_ary[count($sql_ary) - 1]['user_timezone'] . ':' . $settings->get_config('qi_dst', 0);
+			}
+			else
+			{
+				$sql_ary[count($sql_ary) - 1]['user_pass_convert'] = 0;
+				$sql_ary[count($sql_ary) - 1]['user_occ'] = '';
+				$sql_ary[count($sql_ary) - 1]['user_interests'] = '';
+				$sql_ary[count($sql_ary) - 1]['user_dst'] = $settings->get_config('qi_dst', 0);
+			}
+
 
 			$chunk_cnt++;
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
@@ -723,7 +781,7 @@ class populate
 
 		// We are the only ones messing with this database so far.
 		// So the latest user_id + 1 should be the user id for the first test user.
-		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts, forum_topics, forum_topics_real, forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
+		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts' . (defined('PHPBB_31') ? '_approved' : '' ) . ', forum_topics' . (defined('PHPBB_31') ? '_approved' : ', forum_topics_real' ) . ', forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
 		$result = $db->sql_query($sql);
 
 		while ($row = $db->sql_fetchrow($result))
@@ -738,15 +796,19 @@ class populate
 				$this->forum_arr[$row['forum_id']] = array(
 					'forum_id'					=> $row['forum_id'],
 					'parent_id'					=> $row['parent_id'],
-					'forum_posts'				=> $row['forum_posts'],
-					'forum_topics'				=> $row['forum_topics'],
-					'forum_topics_real'			=> $row['forum_topics_real'],
+					'forum_posts' . (defined('PHPBB_31') ? '_approved' : '' )	=> $row['forum_posts' . (defined('PHPBB_31') ? '_approved' : '' )],
+					'forum_topics' . (defined('PHPBB_31') ? '_approved' : '' )	=> $row['forum_topics' . (defined('PHPBB_31') ? '_approved' : '' )],
 					'forum_last_post_id'		=> $row['forum_last_post_id'],
 					'forum_last_poster_id'		=> $row['forum_last_poster_id'],
 					'forum_last_post_subject'	=> $row['forum_last_post_subject'],
 					'forum_last_post_time'		=> $row['forum_last_post_time'],
 					'forum_last_poster_name'	=> $row['forum_last_poster_name'],
 				);
+
+				if (!defined('PHPBB_31'))
+				{
+					$this->forum_arr[$row['forum_id']]['forum_topics_real'] = $row['forum_topics_real'];
+				}
 
 				$this->def_forum_id = (int) $row['forum_id'];
 			}

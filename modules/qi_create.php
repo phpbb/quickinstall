@@ -30,10 +30,18 @@ class qi_create
 		// postgres uses remove_comments function which is defined in functions_admin
 		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
 
-		$config = array_merge($config, array(
-			'rand_seed'				=> md5(mt_rand()),
-			'rand_seed_last_update'	=> time(),
-		));
+		if (defined('PHPBB_31'))
+		{
+			$config->set('rand_seed', md5(mt_rand()));
+			$config->set('rand_seed_last_update', time());
+		}
+		else
+		{
+			$config = array_merge($config, array(
+				'rand_seed'				=> md5(mt_rand()),
+				'rand_seed_last_update'	=> time(),
+			));
+		}
 
 		// load installer lang
 //		qi::add_lang('phpbb');
@@ -60,7 +68,7 @@ class qi_create
 		$admin_pass	= $settings->get_config('admin_pass', '', true);
 
 		$alt_env	= $settings->get_config('alt_env', '');
-		$automod	= $settings->get_config('automod', false);
+		$automod	= !defined('PHPBB_31') && $settings->get_config('automod', false);
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
@@ -116,15 +124,18 @@ class qi_create
 		// copy all of our files
 		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 
-		// copy qi's lang file for the log
-		$qi_lang = $settings->get_config('qi_lang');
-		if (file_exists("{$quickinstall_path}language/$qi_lang/info_acp_qi.$phpEx") && file_exists("{$board_dir}language/$qi_lang"))
+		if (!defined('PHPBB_31'))
 		{
-			copy("{$quickinstall_path}language/$qi_lang/info_acp_qi.$phpEx", "{$board_dir}language/$qi_lang/mods/info_acp_qi.$phpEx");
-		}
-		else
-		{
-			copy("{$quickinstall_path}language/en/info_acp_qi.$phpEx", "{$board_dir}language/en/mods/info_acp_qi.$phpEx");
+			// copy qi's lang file for the log
+			$qi_lang = $settings->get_config('qi_lang');
+			if (file_exists("{$quickinstall_path}language/$qi_lang/info_acp_qi.$phpEx") && file_exists("{$board_dir}language/$qi_lang"))
+			{
+				copy("{$quickinstall_path}language/$qi_lang/info_acp_qi.$phpEx", "{$board_dir}language/$qi_lang/mods/info_acp_qi.$phpEx");
+			}
+			else
+			{
+				copy("{$quickinstall_path}language/en/info_acp_qi.$phpEx", "{$board_dir}language/en/mods/info_acp_qi.$phpEx");
+			}
 		}
 
 		if ($dbms == 'sqlite')
@@ -147,16 +158,26 @@ class qi_create
 		$config_data .= "// phpBB 3.0.x auto-generated configuration file\n// Do not change anything in this file!\n";
 
 		$config_data_array = array(
-			'$dbms' => $dbms,
 			'$dbhost' => $dbhost,
 			'$dbport' => $settings->get_config('dbport'),
 			'$dbname' =>  $db_prefix . $dbname,
 			'$dbuser' => $dbuser,
 			'$dbpasswd' => htmlspecialchars_decode($dbpasswd),
 			'$table_prefix' => $table_prefix,
-			'$acm_type' => 'file',
-			'$load_extensions' => '',
 		);
+
+		if (defined('PHPBB_31'))
+		{
+			$config_data_array['$dbms'] = "phpbb\\db\\driver\\$dbms";
+			$config_data_array['$acm_type'] = 'phpbb\\cache\\driver\\file';
+			$config_data_array['$phpbb_adm_relative_path'] = 'adm/';
+		}
+		else
+		{
+			$config_data_array['$dbms'] = $dbms;
+			$config_data_array['$acm_type'] = 'file';
+			$config_data_array['$load_extensions'] = '';
+		}
 
 		foreach ($config_data_array as $key => $value)
 		{
@@ -166,7 +187,17 @@ class qi_create
 
 		$config_data .= "\n@define('PHPBB_INSTALLED', true);\n";
 		$config_data .= "@define('DEBUG', true);\n";
-		$config_data .= "@define('DEBUG_EXTRA', true);\n";
+
+		if (defined('PHPBB_31'))
+		{
+			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
+			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+		}
+		else
+		{
+			$config_data .= "@define('DEBUG_EXTRA', true);\n";
+		}
+
 		$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		file_put_contents($board_dir . 'config.' . $phpEx, $config_data);
 
@@ -293,6 +324,18 @@ class qi_create
 			$config_ary['captcha_gd'] = 1;
 		}
 
+		if (defined('PHPBB_31'))
+		{
+			$current_config = $config;
+			$config = new \phpbb\config\db($db, $cache, "{$table_prefix}config");
+			set_config(false, false, false, $config);
+
+			foreach ($current_config as $key => $value)
+			{
+				$config->set($key, $value);
+			}
+		}
+
 		foreach ($config_ary as $config_name => $config_value)
 		{
 			set_config($config_name, $config_value);
@@ -307,8 +350,8 @@ class qi_create
 					user_lang		= '" . $db->sql_escape($settings->get_config('default_lang')) . "',
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
 					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
-					user_timezone	= " . (int) $settings->get_config('qi_tz', 0) . ",
-					user_dst		= " . (int) $settings->get_config('qi_dst', 0) . ",
+					user_timezone	= " . (int) $settings->get_config('qi_tz', 0) . "," .
+					(!defined('PHPBB_31') ? "user_dst = " . (int) $settings->get_config('qi_dst', 0) . "," : '') . "
 					user_email_hash	= " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ",
 					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "'
 				WHERE username = 'Admin'",
@@ -366,7 +409,15 @@ class qi_create
 			FROM ' . CONFIG_TABLE;
 		$result = $db->sql_query($sql);
 
-		$config = array();
+		if (defined('PHPBB_31'))
+		{
+			$config = new \phpbb\config\config(array());
+		}
+		else
+		{
+			$config = array();
+		}
+
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$config[$row['config_name']] = $row['config_value'];
@@ -403,7 +454,7 @@ class qi_create
 					'is_dynamic'	=> $is_dynamic,
 				);
 
-				if (array_key_exists($config_name, $config))
+				if ((defined('PHPBB_31') && $config->offsetExists($config_name)) || (!defined('PHPBB_31') && array_key_exists($config_name, $config)))
 				{
 					$sql = "UPDATE {$table_prefix}config
 						SET " . $db->sql_build_array('UPDATE', $sql_ary) . "
@@ -437,12 +488,19 @@ class qi_create
 		$config['load_tplcompile'] = '1';
 
 		// build search index
-		if (!class_exists('fulltext_native'))
+		if (defined('PHPBB_31'))
 		{
-			include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
+			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user);
 		}
+		else
+		{
+			if (!class_exists('fulltext_native'))
+			{
+				include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
+			}
 
-		$search = new fulltext_native($error = false);
+			$search = new fulltext_native($error = false);
+		}
 
 		$sql = 'SELECT post_id, post_subject, post_text, poster_id, forum_id
 			FROM ' . POSTS_TABLE;
@@ -457,6 +515,54 @@ class qi_create
 		// extended phpbb install script
 		include($phpbb_root_path . 'install/install_install.' . $phpEx);
 		include($quickinstall_path . 'includes/install_install_qi.' . $phpEx);
+
+		if (defined('PHPBB_31'))
+		{
+			global $phpbb_container, $phpbb_config_php_file, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
+			global $symfony_request, $phpbb_filesystem;
+
+			$phpbb_config_php_file = new \phpbb\config_php_file($phpbb_root_path, $phpEx);
+			$phpbb_container_builder = new \phpbb\di\container_builder($phpbb_config_php_file, $phpbb_root_path, $phpEx);
+			$phpbb_container_builder->set_inject_config(false);
+			$phpbb_container_builder->set_dump_container(false);
+			$phpbb_container_builder->set_use_extensions(false);
+			$phpbb_container_builder->set_compile_container(false);
+			$phpbb_container_builder->set_custom_parameters(array(
+				'core.table_prefix' => $table_prefix,
+				'core.root_path' => $phpbb_root_path,
+				'core.php_ext' => $phpEx,
+				'core.adm_relative_path' => 'adm/',
+			));
+
+			$phpbb_container = $phpbb_container_builder->get_container();
+
+			$phpbb_container->register('dbal.conn')->setSynthetic(true);
+			$phpbb_container->register('dbal.conn.driver')->setSynthetic(true);
+			$phpbb_container->register('cache.driver')->setSynthetic(true);
+			$phpbb_container->register('cache')->setSynthetic(true);
+			$phpbb_container->register('auth')->setSynthetic(true);
+			$phpbb_container->register('user')->setSynthetic(true);
+
+			$phpbb_container->compile();
+
+			$phpbb_container->set('dbal.conn', $db);
+			$phpbb_container->set('cache.driver', $cache);
+			$phpbb_container->set('user', $user);
+			$phpbb_container->set('auth', $auth);
+
+			$cache	= new \phpbb\cache\service($cache, $config, $db, $phpbb_root_path, $phpEx);
+			$phpbb_container->set('cache', $cache);
+
+			$phpbb_dispatcher = $phpbb_container->get('dispatcher');
+			$phpbb_log = $phpbb_container->get('log');
+
+			$request = $phpbb_container->get('request');
+			$request->enable_super_globals();
+
+			$passwords_manager = $phpbb_container->get('passwords.manager');
+			$symfony_request = $phpbb_container->get('symfony_request');
+			$phpbb_filesystem = $phpbb_container->get('filesystem');
+		}
 
 		$install = new install_install_qi($p_master = new p_master_dummy());
 		$install->set_data(array(
@@ -490,7 +596,7 @@ class qi_create
 		$install->add_bots(false, false);
 
 		// now automod (easymod)
-		if ($automod)
+		if ($automod && !defined('PHPBB_31'))
 		{
 			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
 			automod_installer::install_automod($board_dir, $settings->get_config('make_writable', false));

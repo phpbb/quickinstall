@@ -116,20 +116,44 @@ function db_connect($db_data = '')
 		trigger_error("The $dbms dbms is either not supported, or the php extension for it could not be loaded.", E_USER_ERROR);
 	}
 
-	// Load the appropriate database class if not already loaded.
-	if (!class_exists('dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi'))
+	// Instantiate the database
+	if (defined('PHPBB_31'))
 	{
-		// phpBB dbal class.
-		include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+		$dbal = substr($available_dbms[$dbms]['DRIVER'], strrpos($available_dbms[$dbms]['DRIVER'], '\\') + 1);
+		// Load the appropriate database class if not already loaded.
+		if (!class_exists('dbal_' . $dbal . '_qi'))
+		{
+			// now the quickinstall dbal extension
+			include($quickinstall_path . 'includes/db/31/' . $dbal . '.' . $phpEx);
+		}
 
-		// now the quickinstall dbal extension
-		include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+		$sql_db = 'dbal_' . $dbal  . '_qi';
+	}
+	else
+	{
+		// Load the appropriate database class if not already loaded.
+		if (!class_exists('dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi'))
+		{
+			// phpBB dbal class.
+			include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+
+			// now the quickinstall dbal extension
+			include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+		}
+		$sql_db = 'dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi';
 	}
 
-	// Instantiate the database
-	$sql_db = 'dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi';
 	$db = new $sql_db();
-	$db->sql_connect($dbhost, $dbuser, $dbpasswd, false, $dbport, false, false);
+
+	if (defined('PHPBB_31'))
+	{
+		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $settings->get_config('dbname') , $dbport, false, false);
+	}
+	else
+	{
+		$db->sql_connect($dbhost, $dbuser, $dbpasswd, false, $dbport, false, false);
+	}
+
 	$db->sql_return_on_error(true);
 
 	return($db);
