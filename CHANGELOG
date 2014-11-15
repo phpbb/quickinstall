@@ -16,9 +16,12 @@ QuickInstall Changelog
  + [Change] No need to add session and $user to only store language keys. Changed $user->lang[] to qi::lang().
  + [Change] Removed "powered by phpBB" from the footer. That would no be true anymore.
  + [Change] Suppress E_DEPRECATED from php >=5.5.0 to still work with php 4
+ + [Change]	Removed CSS hack for Mac IE since the last version was released in 2003
+ + [Change] Added CSS hack for Opera.
  + [Feature] Ticket #63300 Show back trace on errors.
  + [Feature] Added a php info tab.
  + [Feature] Ticket #63302 Added MySQLi support.
+ + [Fearure] Supports both phpBB 3.0 and 3.1 (By Nicofuma)
 
 - Changes since 1.1.6
  + [Fix] Some language edits and spelling fixes.
