@@ -666,8 +666,8 @@ legend {
 	vertical-align: middle;
 }
 
-/* Hide from macIE \*/
-legend { top: -1.2em; }
+/* Hack for Opera*/
+doesnotexist:-o-prefocus, legend { top: -1.2em; }*/
 /* end */
 
 * html legend {
