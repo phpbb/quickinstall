@@ -27,6 +27,8 @@ class qi_main
 
 		get_installed_boards();
 
+		$profiles = $settings->get_profiles();
+
 		// Assign index specific vars
 		$template->assign_vars(array(
 			'S_IN_INSTALL'	=> false,
@@ -38,7 +40,8 @@ class qi_main
 			'DB_PERFIX'		=> htmlspecialchars($settings->get_config('db_prefix', '')),
 			'SITE_NAME'		=> $settings->get_config('site_name', ''),
 			'SITE_DESC'		=> $settings->get_config('site_desc', ''),
-			'PROFILE_OPTIONS'	=> $settings->get_profiles(),
+			'PROFILE_COUNT'	=> $profiles['count'],
+			'PROFILE_OPTIONS'	=> $profiles['options'],
 
 			'S_AUTOMOD'		=> $settings->get_config('automod', 0),
 			'S_DELETE_FILES'=> $settings->get_config('delete_files', 0),

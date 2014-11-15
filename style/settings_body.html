@@ -27,16 +27,24 @@
 			<dl>
 				<dt><label for="qi_profile">{L_SELECT_PROFILE}:</label></dt>
 				<dd>
+					<!-- IF not PROFILE_COUNT -->
+					{L_NO_PROFILES}
+					<!-- ELSEIF PROFILE_COUNT == 1 -->
+					{PROFILE_OPTIONS}
+					<!-- ELSE -->
 					<select id="qi_profile" name="qi_profile" onchange="document.forms['profile_form'].submit();">
 						{PROFILE_OPTIONS}
 					</select>
 					<input type="submit" name="submit-profile" value="{L_GO}" class="button1" />
+					<!-- ENDIF -->
 				</dd>
 			</dl>
+			<!-- IF PROFILE_COUNT > 1 -->
 			<dl>
 				<dt><label for="delete-profile">{L_DELETE_PROFILE}:</label><br />{L_DELETE_PROFILE_EXPLAIN}</dt>
 				<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> /></dd>
 			</dl>
+			<!-- ENDIF -->
 		</form>
 	</fieldset>
 

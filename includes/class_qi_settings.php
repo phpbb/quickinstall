@@ -573,17 +573,28 @@ class settings
 			// Read the directory and give the first file we get if there are any.
 			$files = scandir($quickinstall_path . 'settings');
 
-			$profile_options = '';
+			$profile_options = array(
+				'count'		=> 0,
+				'options'	=> '',
+			);
+
 			foreach ($files as $file)
 			{
-				if ($file == '.' || $file == '..' || strpos($file, '.cfg') === false || !is_readable("{$quickinstall_path}settings/$file"))
+				if (strpos($file, '.') == 0 || substr($file, -4) != '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
 				{
 					continue;
 				}
 
-				$file = str_replace('.cfg', '', $file);
-				$selected = ($file == $this->profile) ? " selected='selected'" : '';
-				$profile_options .= "<option value='$file'$selected>$file</option>";
+				$profile_options['count']++;
+
+				$cfg_name = str_replace('.cfg', '', $file);
+				$selected = ($cfg_name == $this->profile) ? " selected='selected'" : '';
+				$profile_options['options'] .= "<option value='$cfg_name'$selected>$cfg_name</option>";
+			}
+
+			if ($profile_options['count'] == 1)
+			{
+				$profile_options['options'] = $cfg_name;
 			}
 
 			return($profile_options);

@@ -98,6 +98,8 @@ else
 	}
 }
 
+$profiles = $settings->get_profiles();
+
 $template->assign_vars(array(
 	'S_BOARDS_WRITABLE'		=> is_writable($settings->get_boards_dir()),
 	'S_CACHE_WRITABLE'		=> is_writable($settings->get_cache_dir()),
@@ -119,7 +121,8 @@ $template->assign_vars(array(
 	'SITE_NAME'		=> $settings->get_config('site_name'),
 	'SITE_DESC'		=> $settings->get_config('site_desc'),
 	'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
-	'PROFILE_OPTIONS'	=> $settings->get_profiles(),
+	'PROFILE_COUNT'	=> $profiles['count'],
+	'PROFILE_OPTIONS'	=> $profiles['options'],
 	'QI_LANG'		=> $settings->get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
 	'PHPBB_LANG'	=> $settings->get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
 

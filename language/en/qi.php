@@ -193,6 +193,7 @@ $lang = array_merge($lang, array(
 	'NO_IMPACT_WIN'		=> 'This setting has no impact on Windows systems older than Win7.',
 	'NO_MODULE'			=> 'The module &quot;%s&quot; could not be loaded.',
 	'NO_PASSWORD'		=> 'No password',
+	'NO_PROFILES'		=> 'No profiles found.',
 	'NO_DBPASSWD_ERR'	=> 'You have set a db password and checked no password. You can’t both <strong>have</strong> and <strong>not have</strong> a password',
 	'NONE'				=> 'None',
 	'NUM_CATS'			=> 'Number of categories',
