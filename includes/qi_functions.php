@@ -51,7 +51,7 @@ function validate_dbname($dbname, $first_char = false)
  */
 function get_alternative_env($selected_option = '')
 {
-	global $user;
+	global $user, $quickinstall_path;
 
 	$selected = (empty($selected_option)) ? ' selected="selected"' : '';
 	$alt_env = "<option value=''$selected>{$user->lang['DEFAULT_ENV']}</option>";
