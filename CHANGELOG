@@ -11,6 +11,7 @@ QuickInstall Changelog
  + [Fix] Need to set $profile before trying to use it.
  + [Fix] Ticket #63320 all left/right mentions in css need a ".rtl" equivalent that specifies the other direction.
  + [Fix] Ticket #63308 Combining language strings don't  work in all languages.
+ + [Fix] Ticket #EXTTOOLS-649 QI did not delete the DB when deleting phpBB 3.1 boards.
  + [Change] Removed the cache usage. The cache directory is for now used to store file based databases.
  + [Change] Had 'load_tplcompile' in several places, one should be enough.
  + [Change] No need to add session and $user to only store language keys. Changed $user->lang[] to qi::lang().

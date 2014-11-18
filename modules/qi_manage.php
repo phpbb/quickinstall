@@ -53,6 +53,8 @@ class qi_manage
 
 					if (!empty($dbname) && !empty($dbhost) && !empty($dbms))
 					{
+						$dbms = (strpos($dbms, '\\') !== false) ? substr(strrchr($dbms, '\\'), 1) : $dbms;
+
 						if ($dbms == 'sqlite')
 						{
 							$db_file = $dbhost . $dbname;
