@@ -18,6 +18,7 @@ QuickInstall Changelog
  + [Change] Suppress E_DEPRECATED from php >=5.5.0 to still work with php 4
  + [Change]	Removed CSS hack for Mac IE since the last version was released in 2003
  + [Change] Added CSS hack for Opera.
+ + [Change] Removed the "Manage boards" tab and moved board delete to the main tab, which where renamed to "Manage boards".
  + [Feature] Ticket #63300 Show back trace on errors.
  + [Feature] Added a php info tab.
  + [Feature] Ticket #63302 Added MySQLi support.

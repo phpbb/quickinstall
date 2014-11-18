@@ -1027,7 +1027,7 @@ input.autowidth { width: auto !important;}
 a.button1, input.button1, input.button3,
 a.button2, input.button2 {
 	width: auto !important;
-	padding: 1px 3px 0 3px;
+	padding: 2px 3px 2px 3px;
 	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
 	color: #000;
 	font-size: 0.85em;

@@ -190,6 +190,8 @@ function get_installed_boards()
 	$boards_dir = $settings->get_boards_dir();
 	$boards_arr = scandir($boards_dir);
 
+	$s_have_boards = false;
+
 	// list of boards
 	$boards_arr = scandir($settings->get_boards_dir());
 	foreach ($boards_arr as $board)
@@ -199,11 +201,15 @@ function get_installed_boards()
 			continue;
 		}
 
+		$s_have_boards = true;
+
 		$template->assign_block_vars('board_row', array(
 			'BOARD_NAME'	=> htmlspecialchars($board),
 			'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
 		));
 	}
+
+	$template->assign_var('S_HAVE_BOARDS', $s_have_boards);
 }
 
 function db_connect($db_data = '')

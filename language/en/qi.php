@@ -132,6 +132,7 @@ $lang = array_merge($lang, array(
 	'DELETE_FILES_IF_EXIST_EXPLAIN'	=> 'Have &quot;Delete files if they exist&quot; checked by default when creating boards.',
 	'DELETE_PROFILE'	=> 'Delete profile',
 	'DELETE_PROFILE_EXPLAIN'	=> 'Deletes the selected profile.<br /><strong>Note: This cannot be undone.</strong>',
+	'DELETE_SELECTED'	=> 'Delete selected',
 	'DIR_EXISTS'		=> 'The directory &quot;%s&quot; already exists.',
 	'DIR_URL_SETTINGS'	=> 'Directory and URL settings',
 	'DISABLED'			=> 'Disabled',

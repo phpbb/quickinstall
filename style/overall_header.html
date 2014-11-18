@@ -219,8 +219,7 @@ window.onload = function()
 				<li<!-- IF S_ABOUT --> id="activetab"<!-- ENDIF -->><a href="{U_ABOUT}"><span>{L_QI_ABOUT}</span></a></li>
 				<li<!-- IF S_PHPINFO --> id="activetab"<!-- ENDIF -->><a href="{U_PHPINFO}"><span>{L_PHPINFO}</span></a></li>
 				<li<!-- IF S_SETTINGS --> id="activetab"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_QI_MANAGE_PROFILE}</span></a></li>
-				<li<!-- IF S_MANAGE --> id="activetab"<!-- ENDIF -->><a href="{U_MANAGE}"><span>{L_QI_MANAGE}</span></a></li>
-				<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_QI_MAIN}</span></a></li>
+				<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_QI_MANAGE}</span></a></li>
 			</ul>
 		</div>
 		<!-- ENDIF -->
@@ -254,11 +253,31 @@ window.onload = function()
 							<a href="#populate-settings">{L_POPULATE_SETTINGS}</a><br />
 							<a href="#save-settings">{L_SAVE_RESTORE}</a><br />
 						</div>
-						<!-- ELSEIF S_MAIN and .board_row -->
+
+						<!-- ELSEIF S_MAIN -->
+							<!-- IF S_HAVE_BOARDS -->
 						<h5>{L_BOARDS_LIST}</h5>
+
+<fieldset class="tabulated" style="line-height: 1.4em;">
+<form id="acp_bbcodes" method="post" action="{U_MANAGE}">
+
 							<!-- BEGIN board_row -->
+
+<input type="checkbox" class="radio" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" />&nbsp;
 							<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><br />
+
 							<!-- END board_row -->
+
+<div><a href="#" onclick="marklist('acp_bbcodes', 'select', true); return false;">{L_CHECK_ALL}</a> &bull; <a href="#" onclick="marklist('acp_bbcodes', 'select', false); return false;">{L_UNCHECK_ALL}</a></div>
+<p>
+	<input class="button2" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_BOARDS}')){return(false);}"<!-- ENDIF --> />
+</p>
+</form>
+</fieldset>
+<!-- ELSE -->
+<p style="color: DarkBlue; font-size: 1em;">{L_NO_BOARDS}</p>
+<!-- ENDIF -->
+
 						<!-- ELSEIF S_ABOUT -->
 						<div style="position: fixed;">
 							<h5>{L_ABOUT_SECTIONS}</h5>

@@ -21,6 +21,17 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 // Report all errors, except notices
 //error_reporting(E_ALL);
 $level = E_ALL; // ^ E_NOTICE;
+
+// Include scripts for quickinstall
+require("{$quickinstall_path}includes/qi_constants.$phpEx");
+require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
+require("{$quickinstall_path}includes/class_qi.$phpEx");
+require("{$quickinstall_path}includes/class_qi_settings.$phpEx");
+require("{$quickinstall_path}includes/qi_functions.$phpEx");
+require("{$quickinstall_path}includes/functions_files.$phpEx");
+require("{$quickinstall_path}includes/functions_module.$phpEx");
+require("{$quickinstall_path}includes/template.$phpEx");
+
 if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 {
 	// PHP 5.4 adds E_STRICT to E_ALL.
@@ -72,16 +83,6 @@ else
 // Try to override some limits - maybe it helps some...
 @set_time_limit(0);
 @ini_set('memory_limit', '128M');
-
-// Include scripts for quickinstall
-require("{$quickinstall_path}includes/qi_constants.$phpEx");
-require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
-require("{$quickinstall_path}includes/class_qi.$phpEx");
-require("{$quickinstall_path}includes/class_qi_settings.$phpEx");
-require("{$quickinstall_path}includes/qi_functions.$phpEx");
-require("{$quickinstall_path}includes/functions_files.$phpEx");
-require("{$quickinstall_path}includes/functions_module.$phpEx");
-require("{$quickinstall_path}includes/template.$phpEx");
 
 // Set PHP error handler to ours
 set_error_handler(array('qi', 'msg_handler'), E_ALL);
@@ -150,6 +151,8 @@ else
 // We need to set the template here.
 $template = new template();
 $template->set_custom_template('style', 'qi');
+
+$template->assign_var('CONFIG_TEXT', false);
 
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
