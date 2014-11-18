@@ -848,7 +848,9 @@ class settings
 
 		$profile = $this->profile;
 
-		if (!is_writable($quickinstall_path . 'settings') && !is_writable("{$quickinstall_path}settings/$profile.cfg"))
+		$profile_file = "{$quickinstall_path}settings/$profile.cfg";
+
+		if (file_exists($profile_file) && !is_writable($profile_file))
 		{
 			return(false);
 		}
