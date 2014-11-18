@@ -237,10 +237,6 @@ window.onload = function()
 						<div style="position: fixed;">
 							<h5>{L_SETTINGS_SECTIONS}</h5>
 							<a href="#back-top">{L_BACK_TOP}</a><br />
-<!--
-							<a href="#profiles">{L_PROFILES}</a><br />
-							<a href="#lang-select">{L_LANG_SELECT}</a><br />
--->
 							<a href="#db-settings">{L_DB_SETTINGS}</a><br />
 							<a href="#dir-settings">{L_DIR_URL_SETTINGS}</a><br />
 							<a href="#time-settings">{L_TIME_SETTINGS}</a><br />
@@ -256,27 +252,26 @@ window.onload = function()
 
 						<!-- ELSEIF S_MAIN -->
 							<!-- IF S_HAVE_BOARDS -->
-						<h5>{L_BOARDS_LIST}</h5>
+							<h5>{L_BOARDS_LIST}</h5>
+							<fieldset class="tabulated" style="line-height: 1.4em;">
+								<form id="acp_bbcodes" method="post" action="{U_MANAGE}">
+									<!-- BEGIN board_row -->
+									<input type="checkbox" class="radio" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" />&nbsp;
+									<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><br />
+									<!-- END board_row -->
 
-<fieldset class="tabulated" style="line-height: 1.4em;">
-<form id="acp_bbcodes" method="post" action="{U_MANAGE}">
-
-							<!-- BEGIN board_row -->
-
-<input type="checkbox" class="radio" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" />&nbsp;
-							<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><br />
-
-							<!-- END board_row -->
-
-<div><a href="#" onclick="marklist('acp_bbcodes', 'select', true); return false;">{L_CHECK_ALL}</a> &bull; <a href="#" onclick="marklist('acp_bbcodes', 'select', false); return false;">{L_UNCHECK_ALL}</a></div>
-<p>
-	<input class="button2" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_BOARDS}')){return(false);}"<!-- ENDIF --> />
-</p>
-</form>
-</fieldset>
-<!-- ELSE -->
-<p style="color: DarkBlue; font-size: 1em;">{L_NO_BOARDS}</p>
-<!-- ENDIF -->
+									<div>
+										<a href="#" onclick="marklist('acp_bbcodes', 'select', true); return false;">{L_CHECK_ALL}</a> &bull;
+										<a href="#" onclick="marklist('acp_bbcodes', 'select', false); return false;">{L_UNCHECK_ALL}</a>
+									</div>
+									<p>
+										<input class="button2" style="margin-top: 3px;" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_BOARDS}')){return(false);}"<!-- ENDIF --> />
+									</p>
+								</form>
+							</fieldset>
+							<!-- ELSE -->
+								<p style="color: DarkBlue; font-size: 1em;">{L_NO_BOARDS}</p>
+							<!-- ENDIF -->
 
 						<!-- ELSEIF S_ABOUT -->
 						<div style="position: fixed;">
