@@ -68,7 +68,7 @@ class qi_create
 		$admin_pass	= $settings->get_config('admin_pass', '', true);
 
 		$alt_env	= $settings->get_config('alt_env', '');
-		$automod	= !defined('PHPBB_31') && $settings->get_config('automod', false);
+		$automod	= (!defined('PHPBB_31') && $settings->get_config('automod', false)) ? true : false;
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
@@ -562,6 +562,11 @@ class qi_create
 			$passwords_manager = $phpbb_container->get('passwords.manager');
 			$symfony_request = $phpbb_container->get('symfony_request');
 			$phpbb_filesystem = $phpbb_container->get('filesystem');
+
+			// Populate migrations table.
+			$install = new install_install($p_master = new p_master_dummy());
+			$install->populate_migrations($phpbb_container->get('ext.manager'), $phpbb_container->get('migrator'));
+			unset($install);
 		}
 
 		$install = new install_install_qi($p_master = new p_master_dummy());
@@ -621,7 +626,7 @@ class qi_create
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 
 		// Install Subsilver2
-		if (($subsilver = $settings->get_config('subsilver', 0)) != 0)
+		if (($subsilver = $settings->get_config('subsilver', 0)) != 0 && !defined('PHPBB_31'))
 		{
 			if (!class_exists('bitfield'))
 			{
@@ -682,7 +687,14 @@ class qi_create
 
 		// add log entry :D
 		$user->ip = &$user_ip;
-		add_log('admin', 'LOG_INSTALL_INSTALLED_QI', QI_VERSION);
+		if (defined('PHPBB_31'))
+		{
+			add_log('admin', sprintf($user->lang['LOG_INSTALL_INSTALLED_QI'], QI_VERSION));
+		}
+		else
+		{
+			add_log('admin', 'LOG_INSTALL_INSTALLED_QI', QI_VERSION);
+		}
 
 		// purge cache
 		$cache->purge();
