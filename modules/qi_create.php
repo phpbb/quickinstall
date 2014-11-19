@@ -269,8 +269,19 @@ class qi_create
 			$db->sql_select_db($db_prefix . $dbname);
 		}
 
-		// include install lang fom phpbb
-		qi::add_lang('install', $phpbb_root_path . 'language/' . $settings->get_config('default_lang') . '/');
+		// include install lang from phpbb. But only if it exists
+		$default_lang = $settings->get_config('default_lang');
+		$selected_lang = $phpbb_root_path . "language/$default_lang/";
+		if (file_exists($selected_lang))
+		{
+			qi::add_lang('install', $selected_lang);
+		}
+		else
+		{
+			// Assume that English is always available
+			$default_lang = 'en';
+			qi::add_lang('install', $phpbb_root_path . 'language/en/');
+		}
 
 		// perform sql
 		load_schema($phpbb_root_path . 'install/schemas/', $dbms);
@@ -295,7 +306,7 @@ class qi_create
 
 		$config_ary = array(
 			'board_startdate'	=> $current_time,
-			'default_lang'		=> $settings->get_config('default_lang'),
+			'default_lang'		=> $default_lang,
 			'server_name'		=> $settings->get_config('server_name'),
 			'server_port'		=> $settings->get_config('server_port', 0),
 			'board_email'		=> $settings->get_config('board_email'),
@@ -347,7 +358,7 @@ class qi_create
 				SET username		= '" . $db->sql_escape($admin_name) . "',
 					user_password	= '" . $db->sql_escape(md5($admin_pass)) . "',
 					user_ip			= '" . $db->sql_escape($user_ip) . "',
-					user_lang		= '" . $db->sql_escape($settings->get_config('default_lang')) . "',
+					user_lang		= '" . $db->sql_escape($default_lang) . "',
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
 					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
 					user_timezone	= " . (int) $settings->get_config('qi_tz', 0) . "," .
@@ -578,7 +589,7 @@ class qi_create
 			'dbpasswd'			=> $dbpasswd,
 			'dbname'			=> $dbname,
 			'table_prefix'		=> $table_prefix,
-			'default_lang'		=> $settings->get_config('default_lang'),
+			'default_lang'		=> $default_lang,
 			'admin_name'		=> $admin_name,
 			'admin_pass1'		=> $admin_pass,
 			'admin_pass2'		=> $admin_pass,
