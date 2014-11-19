@@ -181,6 +181,7 @@ $lang = array_merge($lang, array(
 	'MAX'					=> 'Max',
 	'MIGHT_TAKE_LONG'		=> '<strong>Please note:</strong> Creation of the board can take a while, perhaps even a minute or longer, so <strong>don’t</strong> submit the form twice.',
 	'MIN'					=> 'Min',
+	'MISC_SETTINGS'			=> 'Misc settings',
 
 	'NEED_CONVERT'		=> 'Your config file needs to be converted to the new settings style with profiles. Make sure the &quot;settings&quot; directory exists and is writable by PHP. Then click submit.',
 	'NEED_EMAIL_DOMAIN'	=> 'A e-mail domain is needed to create test users',
@@ -217,7 +218,6 @@ $lang = array_merge($lang, array(
 	'OPTIONS_ADVANCED'		=> 'Advanced options',
 	'OTHER_CONFIG'			=> 'Other board config settings',
 	'OTHER_CONFIG_EXPLAIN'	=> 'These will be updated in the config table or added to the config table if they don’t exist yet. So make sure to spell correctly. These can also be edited when creating the boards.<br />One config setting per line in a semicolon &quot;;&quot; separated list. Config-name; config-setting; dynamic, if the setting is not dynamic the dynamic part is not needed. Lines starting with a # are considered comments and not added to the DB. Example:<br />load_tplcompile;1;1<br />session_length;999999<br /># this is a comment',
-	'OTHER_SETTINGS'		=> 'Other settings',
 
 	'PHPINFO'			=> 'PHP information',
 	'PHPINFO_EXPLAIN'	=> 'This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems. Please be aware that some hosting companies will limit what information is displayed here for security reasons. You are advised to not give out any details on this page except when asked by official team members on the support forums.',
