@@ -22,6 +22,7 @@ QuickInstall Changelog
  + [Change]	Removed CSS hack for Mac IE since the last version was released in 2003
  + [Change] Added CSS hack for Opera.
  + [Change] Removed the "Manage boards" tab and moved board delete to the main tab, which where renamed to "Manage boards".
+ + [Change] Made some modifications to the settings tab and changed some wording.
  + [Feature] Ticket #63300 Show back trace on errors.
  + [Feature] Added a php info tab.
  + [Feature] Ticket #63302 Added MySQLi support.
