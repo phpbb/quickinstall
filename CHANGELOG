@@ -23,10 +23,14 @@ QuickInstall Changelog
  + [Change] Added CSS hack for Opera.
  + [Change] Removed the "Manage boards" tab and moved board delete to the main tab, which where renamed to "Manage boards".
  + [Change] Made some modifications to the settings tab and changed some wording.
+ + [Change] Better error reporting and handling. For now only when AutoMOD is missing.
+ + [Change] Removed the ability to show passwords when the user hovers over the input.
+ + [Change] Changed background color for the time note on the main page, to distinguish it from a error box.
  + [Feature] Ticket #63300 Show back trace on errors.
  + [Feature] Added a php info tab.
  + [Feature] Ticket #63302 Added MySQLi support.
- + [Fearure] Supports both phpBB 3.0 and 3.1 (By Nicofuma)
+ + [Feature] Supports both phpBB 3.0 and 3.1 (By Nicofuma)
+ + [Feature] Added a easy way to get the cache purged when working on QI.
 
 - Changes since 1.1.6
  + [Fix] Some language edits and spelling fixes.
