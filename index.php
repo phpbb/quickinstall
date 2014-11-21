@@ -19,8 +19,7 @@ $phpbb_root_path = $quickinstall_path . 'sources/phpBB3/';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 
 // Report all errors, except notices
-//error_reporting(E_ALL);
-$level = E_ALL; // ^ E_NOTICE;
+$level = E_ALL ^ E_NOTICE;
 
 // Include scripts for quickinstall
 require("{$quickinstall_path}includes/qi_constants.$phpEx");
@@ -117,6 +116,8 @@ if (file_exists($quickinstall_path . 'purge_cache'))
 				unlink($cache_dir . $file);
 			}
 		}
+
+		closedir($dh);
 	}
 }
 
@@ -203,7 +204,7 @@ if ($settings->install || $settings->is_converted || $mode == 'update_settings' 
 }
 
 // now create a module_handler object
-$module		= new module_handler($quickinstall_path . 'modules/', 'qi_');
+$module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
 
 // Set some standard variables we want to force
 if (defined('PHPBB_31'))
