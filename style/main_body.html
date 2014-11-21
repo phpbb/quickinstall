@@ -37,6 +37,13 @@ function toggle_div(div_id)
 	</fieldset>
 </form>
 
+<!-- IF S_ERROR -->
+	<h4>{ERROR_TITLE}</h4>
+	<p class="errorbox">
+		{ERROR_MSG}
+	</p>
+<!-- ENDIF -->
+
 <form method="post" id="create-form" action="{U_CREATE}">
 	<fieldset>
 		<legend>{L_OPTIONS}</legend>
@@ -50,7 +57,7 @@ function toggle_div(div_id)
 		</dl>
 		<dl>
 			<dt><label for="dbname">{L_BOARD_DBNAME}:*</label> &nbsp; <span id="span-dbname" class="error-main">{L_FORGOT_THIS}</span></dt>
-			<dd><input class="text medium" type="text" id="dbname" name="dbname" /></dd>
+			<dd><input class="text medium" type="text" id="dbname" name="dbname" value="{DBNAME}"/></dd>
 		</dl>
 
 		<!-- IF not S_DBUSER -->
@@ -228,12 +235,18 @@ function toggle_div(div_id)
 				<dd><input class="text medium" type="text" id="db_prefix" name="db_prefix" value="{DB_PERFIX}" /></dd>
 			</dl>
 			<dl>
-				<dt><label for="drop_db">{L_DROP_DB_IF_EXISTS}:</label></dt>
-				<dd><label><input type="checkbox" class="radio" id="drop_db" name="drop_db"<!-- IF S_DROP_DB --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label></dd>
+				<dt><label>{L_DROP_DB_IF_EXISTS}:</label></dt>
+				<dd>
+					<label><input type="radio" class="radio" name="drop_db" value="1"<!-- IF S_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="drop_db" value="0"<!-- IF S_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</dd>
 			</dl>
 			<dl>
 				<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
-				<dd><label><input type="checkbox" class="radio" id="delete_files" name="delete_files"<!-- IF S_DELETE_FILES --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label></dd>
+				<dd>
+					<label><input type="radio" class="radio" name="delete_files" value="1"<!-- IF S_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="delete_files" value="0"<!-- IF S_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</dd>
 			</dl>
 			<dl>
 				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>

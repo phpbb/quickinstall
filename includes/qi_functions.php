@@ -15,6 +15,27 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
+function create_board_warning($title, $text, $page)
+{
+	global $settings, $phpEx;
+
+	$args =  'page='			. urlencode($page);
+	$args .= '&error_title='	. urlencode($title);
+	$args .= '&error_msg='		. urlencode($text);
+	$args .= '&error='	. 1;
+
+	foreach ($_POST as $key => $value)
+	{
+		if (!empty($value))
+		{
+			$args .= "&$key=" . urlencode($value);
+		}
+	}
+
+	$url = "index.$phpEx?$args";
+	qi::redirect($url);
+}
+
 function legacy_set_var(&$result, $var, $type, $multibyte = false)
 {
 	settype($var, $type);

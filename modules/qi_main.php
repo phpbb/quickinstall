@@ -29,6 +29,14 @@ class qi_main
 
 		$profiles = $settings->get_profiles();
 
+		// Some error?
+		if ($settings->get_config('error', 0))
+		{
+			$error_msg = $settings->get_config('error_msg', '');
+			$error_msg = htmlspecialchars_decode($error_msg);
+			$template->assign_var('ERROR_MSG', $error_msg);
+		}
+
 		// Assign index specific vars
 		$template->assign_vars(array(
 			'S_IN_INSTALL'	=> false,
@@ -42,6 +50,10 @@ class qi_main
 			'SITE_DESC'		=> $settings->get_config('site_desc', ''),
 			'PROFILE_COUNT'	=> $profiles['count'],
 			'PROFILE_OPTIONS'	=> $profiles['options'],
+			'DBNAME'		=> $settings->get_config('dbname', ''),
+
+			'S_ERROR'		=> $settings->get_config('error', 0),
+			'ERROR_TITLE'	=> $settings->get_config('error_title', ''),
 
 			'S_AUTOMOD'		=> $settings->get_config('automod', 0),
 			'S_DELETE_FILES'=> $settings->get_config('delete_files', 0),

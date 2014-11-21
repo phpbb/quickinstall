@@ -75,11 +75,26 @@ class qi_create
 			trigger_error('NO_ALT_ENV');
 		}
 
-		if ($automod && ((!$files = @scandir("{$quickinstall_path}sources/automod")) || count($files) <= 2))
+		if ($automod)
 		{
-			global $msg_title;
-			$msg_title = 'NO_AUTOMOD_TITLE';
-			trigger_error('NO_AUTOMOD');
+			$empty = true;
+
+			// There can be '.', '..' and/or '.gitkeep' in the AutoMOD directory.
+			$dh = opendir("{$quickinstall_path}sources/automod");
+
+			while (($file = readdir($dh)) !== false)
+			{
+				if ($file[0] != '.')
+				{
+					$empty = false;
+					break;
+				}
+			}
+
+			if ($empty)
+			{
+				create_board_warning($user->lang['NO_AUTOMOD_TITLE'], $user->lang['NO_AUTOMOD'], 'main');
+			}
 		}
 
 		// Set up our basic founder.
@@ -209,7 +224,7 @@ class qi_create
 
 		$db = db_connect();
 
-		if ($settings->get_config('drop_db', false))
+		if ($settings->get_config('drop_db', 0))
 		{
 			$db->sql_query('DROP DATABASE IF EXISTS ' . $db_prefix . $dbname);
 		}
