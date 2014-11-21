@@ -193,7 +193,7 @@ $template->assign_vars(array(
 	''	=> $settings->get_config('', 0),
 */
 // Output page
-qi::page_header($user->lang['SETTINGS']);
+qi::page_header($user->lang['PROFILES']);
 
 $template->set_filenames(array(
 	'body' => 'settings_body.html')

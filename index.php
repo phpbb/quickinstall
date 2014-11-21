@@ -100,6 +100,26 @@ $profile	= legacy_request_var('qi_profile', '');
 
 $settings = new settings($profile, $mode);
 
+// This is only usefull when working on QI.
+if (file_exists($quickinstall_path . 'purge_cache'))
+{
+	$cache_dir = $settings->get_config('cache_dir', '');
+	$cache_dir = $quickinstall_path . $cache_dir;
+
+	if (!empty($cache_dir))
+	{
+		$dh = opendir($quickinstall_path . $cache_dir);
+
+		while (($file = readdir($dh)) !== false)
+		{
+			if ($file[0] != '.')
+			{
+				unlink($cache_dir . $file);
+			}
+		}
+	}
+}
+
 // We need some phpBB functions too.
 $alt_env = $settings->get_config('alt_env', '');
 if ($alt_env !== '')
