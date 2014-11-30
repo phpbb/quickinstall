@@ -2,7 +2,7 @@
 /**
 *
 * @package quickinstall
-* @copyright (c) 2007 phpBB Group
+* @copyright (c) 2007 phpBB Limited
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -354,7 +354,8 @@ class qi
 				echo '	</div>';
 
 				echo '	<div id="page-footer">';
-				echo '		Powered by <a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> {QI_VERSION} for phpBB 3.0.x &copy; <a href="http://www.phpbb.com/">phpBB Group</a>';
+				echo '		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> {QI_VERSION} for phpBB 3.0 and 3.1 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />';
+				echo '		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
 				echo '	</div>';
 				echo '</div>';
 				echo '</body>';

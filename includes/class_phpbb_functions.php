@@ -1,9 +1,11 @@
 <?php
 /**
- * @package
- * @copyright (c) 2007 phpBB Group
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- */
+*
+* @package
+* @copyright (c) 2007 phpBB Limited
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+*/
 
 /**
 * @ignore
