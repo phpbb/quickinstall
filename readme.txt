@@ -1,4 +1,4 @@
-phpBB3 QuickInstall ReadMe
+phpBB3 QuickInstall
 
 About:
 phpBB3 QuickInstall (QI) is tool used to manage many installations of phpBB3. It

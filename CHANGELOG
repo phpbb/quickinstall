@@ -27,6 +27,7 @@ QuickInstall Changelog
  + [Change] Better error reporting and handling. For now only when AutoMOD is missing.
  + [Change] Removed the ability to show passwords when the user hovers over the input.
  + [Change] Changed background color for the time note on the main page, to distinguish it from a error box.
+ + [Change] Ticket #EXTTOOLS-654 Replaced phpBB Gorup with phpBB Limited. (By  Skouat)
  + [Feature] Ticket #63300 Show back trace on errors.
  + [Feature] Added a php info tab.
  + [Feature] Ticket #63302 Added MySQLi support.
