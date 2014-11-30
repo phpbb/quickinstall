@@ -1,3 +1,4 @@
+purge_cache
 qi_config.cfg
 boards/*
 settings/*
