@@ -1,5 +1,8 @@
 QuickInstall Changelog
 
+- Changes since 1.2.0
+ + [Fix] Bug in the routine to purge the cache.
+
 - Changes since 1.1.8
  + [Fix] Ticket #63309 The first release in the changelog was broken.
  + [Fix] Ticket #63317 The "Forgot this" error message improved and also works with rtl languages.

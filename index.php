@@ -103,11 +103,11 @@ $settings = new settings($profile, $mode);
 if (file_exists($quickinstall_path . 'purge_cache'))
 {
 	$cache_dir = $settings->get_config('cache_dir', '');
-	$cache_dir = $quickinstall_path . $cache_dir;
 
 	if (!empty($cache_dir))
 	{
-		$dh = opendir($quickinstall_path . $cache_dir);
+		$cache_dir = $quickinstall_path . $cache_dir;
+		$dh = opendir($cache_dir);
 
 		while (($file = readdir($dh)) !== false)
 		{
