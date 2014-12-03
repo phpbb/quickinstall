@@ -232,10 +232,11 @@ function get_alternative_env($selected_option = '')
 {
 	global $user, $quickinstall_path;
 
-	$selected = (empty($selected_option)) ? ' selected="selected"' : '';
-	$alt_env = "<option value=''$selected>{$user->lang['DEFAULT_ENV']}</option>";
-	$d = dir($quickinstall_path . 'sources/phpBB3_alt');
-	while (false !== ($file = $d->read()))
+	$none_selected	= (empty($selected_option)) ? ' selected="selected"' : '';
+	$alt_env		= '';
+	$dh				= dir($quickinstall_path . 'sources/phpBB3_alt');
+
+	while (false !== ($file = $dh->read()))
 	{
 		// Ignore everything that starts with a dot.
 		if ($file[0] === '.' || is_file($quickinstall_path . 'sources/phpBB3_alt/' . $file))
@@ -248,7 +249,12 @@ function get_alternative_env($selected_option = '')
 
 		$alt_env .= "<option{$selected}>$file</option>";
 	}
-	$d->close();
+	$dh->close();
+
+	if (!empty($alt_env))
+	{
+		$alt_env = "<option value=''$none_selected>{$user->lang['DEFAULT_ENV']}</option>" . $alt_env;
+	}
 
 	return($alt_env);
 }

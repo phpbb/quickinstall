@@ -173,7 +173,11 @@ function toggle_div(div_id)
 			</dl>
 			<dl>
 				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>
-				<dd><select name="alt_env" id="alt_env">{ALT_ENV}</select></dd>
+				<!-- IF ALT_ENV -->
+					<dd><select name="alt_env" id="alt_env">{ALT_ENV}</select></dd>
+				<!-- ELSE -->
+					<dd>{L_NO_ALT_ENV}</dd>
+				<!-- ENDIF -->
 			</dl>
 		</div>
 	</fieldset>
