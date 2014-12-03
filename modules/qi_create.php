@@ -72,7 +72,7 @@ class qi_create
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
-			trigger_error('NO_ALT_ENV');
+			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_ALT_ENV_FOUND'], 'main');
 		}
 
 		if ($automod)
@@ -132,7 +132,7 @@ class qi_create
 			}
 			else
 			{
-				trigger_error(sprintf($user->lang['DIR_EXISTS'], $board_dir));
+				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DIR_EXISTS'], $board_dir), 'main');
 			}
 		}
 
@@ -256,7 +256,7 @@ class qi_create
 
 			if ($db_check)
 			{
-				trigger_error(sprintf($user->lang['DB_EXISTS'], $db_prefix . $dbname));
+				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DB_EXISTS'], $db_prefix . $dbname), 'main');
 			}
 		}
 

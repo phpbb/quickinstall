@@ -35,12 +35,14 @@ function toggle_div(div_id)
 	</fieldset>
 </form>
 
+<div id="felboxen">
 <!-- IF S_ERROR -->
-	<h4>{ERROR_TITLE}</h4>
+	<h4 style="text-align: center;">{ERROR_TITLE}</h4>
 	<p class="errorbox">
 		{ERROR_MSG}
 	</p>
 <!-- ENDIF -->
+</div>
 
 <form method="post" id="create-form" action="{U_CREATE}">
 	<fieldset>

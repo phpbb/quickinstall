@@ -15,13 +15,65 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
-function create_board_warning($title, $text, $page)
+
+function gen_error_msg($msg_text, $msg_title = 'General error')
+{
+	global $quickinstall_path;
+
+	$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; <a href="' . qi::url('settings') . '">Go to settings</a>';
+	$qi_version		= QI_VERSION;
+
+	phpbb_functions::send_status_line(503, 'Service Unavailable');
+
+echo<<<ERROR_PAGE
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>$msg_title</title>
+		<link href="{$quickinstall_path}style/style.css" rel="stylesheet" type="text/css" media="screen" />
+	</head>
+	<body id="errorpage">
+		<div id="wrap">
+			<div id="page-header">
+				$l_return_index
+			</div>
+
+			<div id="page-body">
+				<div id="acp">
+					<div class="panel">
+						<span class="corners-top"><span></span></span>
+						<div id="content">
+							<h1 style="margin-bottom: 10px">$msg_title</h1>
+							<div>$msg_text</div>
+						</div>
+						<div style="padding-left: 10px;">
+							$l_return_index
+						</div>
+						<span class="corners-bottom"><span></span></span>
+					</div>
+				</div>
+			</div>
+
+			<div id="page-footer">
+				Powered by <a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> $qi_version
+				for phpBB 3.0.x &copy; <a href="http://www.phpbb.com/">phpBB Group</a>
+			</div>
+		</div>
+	</body>
+</html>
+ERROR_PAGE;
+
+	exit;
+}
+
+function create_board_warning($msg_title, $msg_text, $page)
 {
 	global $settings, $phpEx;
 
 	$args =  'page='			. urlencode($page);
-	$args .= '&error_title='	. urlencode($title);
-	$args .= '&error_msg='		. urlencode($text);
+	$args .= '&error_title='	. urlencode($msg_title);
+	$args .= '&error_msg='		. urlencode($msg_text);
 	$args .= '&error='	. 1;
 
 	foreach ($_POST as $key => $value)

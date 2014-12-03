@@ -63,7 +63,7 @@ error_reporting($level);
 
 if (version_compare(PHP_VERSION, '5.2.0', '<'))
 {
-	die('You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.2.0 and newer.');
+	gen_error_msg('You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.2.0 and newer.');
 }
 
 // If we are on PHP >= 6.0.0 we do not need some code
@@ -89,7 +89,7 @@ set_error_handler(array('qi', 'msg_handler'), E_ALL);
 // Make sure we have phpBB.
 if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 {
-	trigger_error('phpBB not found. You need to download phpBB3 and extract it in sources/');
+	gen_error_msg('phpBB not found. You need to download the latest phpBB 3.0.x or phpBB 3.1.x from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>,<br />extract it and copy the phpBB3 folder to sources/. Choose the version you do most work with, for your own convenience.');
 }
 
 // Let's get the config.
@@ -126,6 +126,11 @@ $alt_env = $settings->get_config('alt_env', '');
 if ($alt_env !== '')
 {
 	$phpbb_root_path = "{$quickinstall_path}sources/phpBB3_alt/$alt_env/";
+
+	if (!file_exists($phpbb_root_path) || is_file($phpbb_root_path))
+	{
+		gen_error_msg("The specified alternative environment, <strong>$alt_env</strong>, doesn’t exist.");
+	}
 }
 
 if (file_exists($phpbb_root_path . 'phpbb/class_loader.' . $phpEx))
