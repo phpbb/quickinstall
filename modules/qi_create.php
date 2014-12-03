@@ -170,7 +170,8 @@ class qi_create
 
 		// Write to config.php ;)
 		$config_data = "<?php\n";
-		$config_data .= "// phpBB 3.0.x auto-generated configuration file\n// Do not change anything in this file!\n";
+		$config_version = (defined('PHPBB_31')) ? '3.1' : '3.0';
+		$config_data .= "// phpBB $config_version.x auto-generated configuration file\n// Do not change anything in this file!\n";
 
 		$config_data_array = array(
 			'$dbhost' => $dbhost,

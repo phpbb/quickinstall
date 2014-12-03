@@ -264,13 +264,12 @@ function get_alternative_env($selected_option = '')
  */
 function get_installed_boards()
 {
-	global $settings, $template;
+	global $settings, $template, $phpEx;
 
+	// list of boards
 	$boards_dir = $settings->get_boards_dir();
 	$boards_arr = scandir($boards_dir);
 
-	// list of boards
-	$boards_arr = scandir($settings->get_boards_dir());
 	foreach ($boards_arr as $board)
 	{
 		if ($board[0] === '.' || is_file($boards_dir . $board))
@@ -278,12 +277,28 @@ function get_installed_boards()
 			continue;
 		}
 
+		$version = '';
 		// Try to find out phpBB version.
-		
+		if (file_exists("{$boards_dir}$board/includes/constants.$phpEx"))
+		{
+			$rows = file("{$boards_dir}$board/includes/constants.$phpEx", FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+
+			foreach ($rows as $row)
+			{
+				if (($pos = strpos($row, "'PHPBB_VERSION', '")) !== false)
+				{
+					$pos = $pos + 18;
+					$version = substr($row, $pos, -3);
+					break;
+				}
+			}
+			unset($rows);
+		}
 
 		$template->assign_block_vars('board_row', array(
 			'BOARD_NAME'	=> htmlspecialchars($board),
 			'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
+			'VERSION'		=> $version,
 		));
 	}
 }
