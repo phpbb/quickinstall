@@ -14,8 +14,6 @@ function toggle_div(div_id)
 
 <h1>{L_MANAGE_BOARDS}</h1>
 
-<p class="errorbox" style="background-color: #BA0B0B;">{L_MIGHT_TAKE_LONG}</p>
-
 <form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
 	<fieldset>
 		<legend>{L_PROFILES}</legend>
@@ -129,16 +127,51 @@ function toggle_div(div_id)
 		</dl>
 
 		<p class="quick">
+			<span class="errorbox" style="background-color: #ba0b0b; margin-right: 20px;">{L_MIGHT_TAKE_LONG}</span>
 			<input type="submit" name="submituser" id="submituser" value="{L_SUBMIT}" class="button1" onclick="return(validate_fields());" />
 		</p>
 	</fieldset>
 
 	<fieldset>
-		<legend><a href="javascript:toggle_div('options_config');">{L_BOARD_CONFIG_OPTIONS}</a></legend>
-		<div id="options_config" style="display: none;">
+		<legend><a href="javascript:toggle_div('options_advanced');">{L_MISC_SETTINGS}</a></legend>
+		<div id="options_advanced" style="display: none;">
+			<!-- IF S_ADMIN_NAME -->
 			<dl>
-				<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
-				<dd><textarea name="other_config" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
+				<dt><label for="admin_name-2">{L_ADMIN_NAME}:</label><br />{L_IF_EMPTY_EXPLAIN}</dt>
+				<dd><input class="text medium" type="text" id="admin_name-2" name="admin_name" /></dd>
+			</dl>
+			<!-- ENDIF -->
+			<!-- IF S_ADMIN_PASS -->
+			<dl>
+				<dt><label for="admin_pass-2">{L_ADMIN_PASS}:</label><br /><span>{L_IF_EMPTY_EXPLAIN}</span></dt>
+				<dd><input class="text medium" type="password" id="admin_pass-2" name="admin_pass" /></dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<dt><label for="table_prefix">{L_TABLE_PREFIX}:</label></dt>
+				<dd><input class="text medium" type="text" id="table_prefix" name="table_prefix" value="{TABLE_PREFIX}" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="db_prefix">{L_DB_PREFIX}:</label></dt>
+				<dd><input class="text medium" type="text" id="db_prefix" name="db_prefix" value="{DB_PERFIX}" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DROP_DB_IF_EXISTS}:</label></dt>
+				<dd>
+					<label><input type="radio" class="radio" name="drop_db" value="1"<!-- IF S_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="drop_db" value="0"<!-- IF S_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
+				<dd>
+					<label><input type="radio" class="radio" name="delete_files" value="1"<!-- IF S_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="delete_files" value="0"<!-- IF S_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>
+				<dd><select name="alt_env" id="alt_env">{ALT_ENV}</select></dd>
 			</dl>
 		</div>
 	</fieldset>
@@ -212,45 +245,11 @@ function toggle_div(div_id)
 	</fieldset>
 
 	<fieldset>
-		<legend><a href="javascript:toggle_div('options_advanced');">{L_MISC_SETTINGS}</a></legend>
-		<div id="options_advanced" style="display: none;">
-			<!-- IF S_ADMIN_NAME -->
+		<legend><a href="javascript:toggle_div('options_config');">{L_BOARD_CONFIG_OPTIONS}</a></legend>
+		<div id="options_config" style="display: none;">
 			<dl>
-				<dt><label for="admin_name-2">{L_ADMIN_NAME}:</label><br />{L_IF_EMPTY_EXPLAIN}</dt>
-				<dd><input class="text medium" type="text" id="admin_name-2" name="admin_name" /></dd>
-			</dl>
-			<!-- ENDIF -->
-			<!-- IF S_ADMIN_PASS -->
-			<dl>
-				<dt><label for="admin_pass-2">{L_ADMIN_PASS}:</label><br /><span>{L_IF_EMPTY_EXPLAIN}</span></dt>
-				<dd><input class="text medium" type="password" id="admin_pass-2" name="admin_pass" /></dd>
-			</dl>
-			<!-- ENDIF -->
-			<dl>
-				<dt><label for="table_prefix">{L_TABLE_PREFIX}:</label></dt>
-				<dd><input class="text medium" type="text" id="table_prefix" name="table_prefix" value="{TABLE_PREFIX}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="db_prefix">{L_DB_PREFIX}:</label></dt>
-				<dd><input class="text medium" type="text" id="db_prefix" name="db_prefix" value="{DB_PERFIX}" /></dd>
-			</dl>
-			<dl>
-				<dt><label>{L_DROP_DB_IF_EXISTS}:</label></dt>
-				<dd>
-					<label><input type="radio" class="radio" name="drop_db" value="1"<!-- IF S_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="drop_db" value="0"<!-- IF S_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
-				<dd>
-					<label><input type="radio" class="radio" name="delete_files" value="1"<!-- IF S_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="delete_files" value="0"<!-- IF S_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>
-				<dd><select name="alt_env" id="alt_env">{ALT_ENV}</select></dd>
+				<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
+				<dd><textarea name="other_config" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
 			</dl>
 		</div>
 	</fieldset>
