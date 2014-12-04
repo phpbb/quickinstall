@@ -3,7 +3,7 @@ QuickInstall Changelog
 - Changes since 1.2.0
  + [Fix] Bug in the routine to purge the cache.
  + [Fix] Ticket #EXTTOOLS-655 The redirect got two slashes in the URL when QI was installed in localhost root.
- + [Fix] Write correct phpBB version (3.1 or 3.0) in cofig.php.
+ + [Fix] Write correct phpBB version (3.1 or 3.0) in config.php.
  + [Change] Moved the "can take a while" warning box and the options/settings boxes.
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
