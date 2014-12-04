@@ -11,15 +11,6 @@ QuickInstall Changelog
  + [Feature] Show board version in boards list.
  + [Feature] Make sure cache_dir, boards_dir and boards_url ends with a slash (/)
 
-
- + [Fix] Ticket #
- + [Fix]
- + [Change] Ticket #
- + [Change]
- + [Feature] Ticket #
- + [Feature]
-
-
 - Changes since 1.1.8
  + [Fix] Ticket #63309 The first release in the changelog was broken.
  + [Fix] Ticket #63317 The "Forgot this" error message improved and also works with rtl languages.
