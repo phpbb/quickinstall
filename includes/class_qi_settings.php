@@ -789,6 +789,10 @@ class settings
 			// The cache dir needs to both exist and be writeable.
 			$error[] = 'CACHE_DIR_MISSING|' . $this->get_cache_dir();
 		}
+		else
+		{
+			$this->config['cache_dir'] .= (substr($this->config['cache_dir'], -1) != '/') ? '/' : '';
+		}
 
 		if ($this->config['boards_dir'] == '')
 		{
@@ -798,6 +802,10 @@ class settings
 		{
 			// The boards dir needs to both exist and be writeable.
 			$error[] = 'BOARDS_DIR_MISSING|' . $this->get_boards_dir();
+		}
+		else
+		{
+			$this->config['boards_dir'] .= (substr($this->config['boards_dir'], -1) != '/') ? '/' : '';
 		}
 
 		// SQLite needs a writable and existing directory
@@ -817,6 +825,10 @@ class settings
 		if ($this->config['boards_url'] == '')
 		{
 			$error[] = 'BOARDS_URL|REQUIRED';
+		}
+		else
+		{
+			$this->config['boards_url'] .= (substr($this->config['boards_url'], -1) != '/') ? '/' : '';
 		}
 
 		foreach ($error as $key => $value)
