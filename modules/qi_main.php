@@ -32,7 +32,7 @@ class qi_main
 		// Some error?
 		if ($settings->get_config('error', 0))
 		{
-			$error_msg = $settings->get_config('error_msg', '');
+			$error_msg = $settings->get_config('error_msg', '', true);
 			$error_msg = htmlspecialchars_decode($error_msg);
 			$template->assign_var('ERROR_MSG', $error_msg);
 		}

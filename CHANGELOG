@@ -4,11 +4,21 @@ QuickInstall Changelog
  + [Fix] Bug in the routine to purge the cache.
  + [Fix] Ticket #EXTTOOLS-655 The redirect got two slashes in the URL when QI was installed in localhost root.
  + [Fix] Write correct phpBB version (3.1 or 3.0) in config.php.
+ + [Fix] Error messaging in main did not support multibyte chars.
  + [Change] Moved the "can take a while" warning box and the options/settings boxes.
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
  + [Feature] Show board version in boards list.
- + [Feature] Make sure cache_dir, boards_dir and boards_url ends with a slash (/).
+ + [Feature] Make sure cache_dir, boards_dir and boards_url ends with a slash (/)
+
+
+ + [Fix] Ticket #
+ + [Fix]
+ + [Change] Ticket #
+ + [Change]
+ + [Feature] Ticket #
+ + [Feature]
+
 
 - Changes since 1.1.8
  + [Fix] Ticket #63309 The first release in the changelog was broken.
