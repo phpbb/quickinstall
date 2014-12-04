@@ -8,6 +8,7 @@ QuickInstall Changelog
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
  + [Feature] Show board version in boards list.
+ + [Feature] Make sure cache_dir, boards_dir and boards_url ends with a slash (/).
 
 - Changes since 1.1.8
  + [Fix] Ticket #63309 The first release in the changelog was broken.
