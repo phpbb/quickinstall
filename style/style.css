@@ -1664,8 +1664,8 @@ div.open-setting {
 
 .settings-title {
 	margin: 0 0 0.9em 0;
+	padding-top: 5px;
 	border-top: 1px dashed #999999;
-	border-bottom: 1px dashed #C2C2C2;
 	font-weight: bold;
 	text-align: center;
 }
