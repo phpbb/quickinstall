@@ -8,6 +8,7 @@ QuickInstall Changelog
  + [Fix] Issue #37 Style for "Chunk settings" title was messed up.
  + [Change] Moved the "can take a while" warning box and the options/settings boxes.
  + [Change] Moved the header text to the sidebar in the PHP info tab.
+ + [Change] Added some space abowe and below the "Check all" link.
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
  + [Feature] Show board version in boards list.
