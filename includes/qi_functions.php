@@ -56,8 +56,8 @@ echo<<<ERROR_PAGE
 			</div>
 
 			<div id="page-footer">
-				Powered by <a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> $qi_version
-				for phpBB 3.0.x &copy; <a href="http://www.phpbb.com/">phpBB Group</a>
+				<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> $qi_version for phpBB 3.0 and 3.1 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />';
+				Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
 			</div>
 		</div>
 	</body>
