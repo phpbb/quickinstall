@@ -165,6 +165,8 @@ $lang = array_merge($lang, array(
 	'INCLUDE_MODS'			=> 'Include MODs',
 	'INCLUDE_MODS_EXPLAIN'	=> 'Select folders from the &quot;sources/mods/&quot; folder in this list, those files will then be copied to your new board’s root dir, also overwriting old files (so you can have premodded boards in here for example). If you select &quot;None&quot;, it will not be used (because it’s a pain to deselect items).',
 	'INSTALL_BOARD'			=> 'Install a board',
+	'INSTALL_STYLES'		=> 'Install styles',
+	'INSTALL_STYLES_EXPLAIN'	=> '&quot;Yes&quot; installs all styles found in [source]/styles. But only if the required parent style is available there too.',
 	'INSTALL_QI'			=> 'Install QuickInstall',
 	'IS_NOT_VALID'			=> 'Is not valid.',
 
@@ -215,7 +217,10 @@ $lang = array_merge($lang, array(
 
 	'OFF'					=> 'Off',
 	'ON'					=> 'On',
+	'ONLY_30'				=> 'Only available for phpBB 3.0.x',
+	'ONLY_31'				=> 'Only available for phpBB 3.1.x',
 	'ONLY_LOCAL'			=> '<strong>Welcome to QuickInstall (QI)</strong>, a tool to quickly install a phpBB board for testing.<br /><br />Some default settings have been loaded below. The only things you need to enter are &quot;Database user&quot; and &quot;Database password&quot; if you want those to be stored by QuickInstall. But it would be a good idea to also check the rest of the settings.<br />Make sure the &quot;boards&quot;, &quot;cache&quot; and &quot;settings&quot; directories exist and are writable by PHP.<br /><br />Once you have checked the settings and required directories simply click on the &quot;Submit&quot; button and this profile will be saved under the name &quot;default&quot;. If you want some other name you can enter it in the &quot;Save as new profile&quot; field.<div class="errorbox"><strong>Please note</strong>: QuickInstall is only intended to be used locally and should not be used on a web server accessible via the internet (public web server). <strong>If you decide to use it on a public web server it is entirely at your own risk.</strong> There is no support provided if using QuickInstall up on a public web server.</div>',
+	'ONLY_SUBSILVER'		=> 'Only subsilver2',
 	'OPTIONS'				=> 'Options',
 	'OPTIONS_ADVANCED'		=> 'Advanced options',
 	'OTHER_CONFIG'			=> 'Other board config settings',
@@ -290,6 +295,7 @@ $lang = array_merge($lang, array(
 	'SUBMIT'			=> 'Submit',
 	'SUBSILVER'			=> 'Install Subsilver2',
 	'SUBSILVER_EXPLAIN'	=> 'Select if you want the Subsilver2 theme to be installed and if you want it to be the default style.',
+	'SUBSILVER_DEFAULT'	=> 'subsilver2 default style',
 	'SUCCESS'			=> 'Success',
 	'SURE_DELETE_PROFILE'	=> 'Are you sure you want to delete this profile? It cannot be undone.',
 	'SURE_DELETE_BOARDS'	=> 'Are you sure you want to delete these boards/this board? It cannot be undone.',

@@ -93,7 +93,7 @@ function toggle_div(div_id)
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="automod">{L_AUTOMOD_INSTALL}:</label></dt>
+			<dt><label for="automod">{L_AUTOMOD_INSTALL}:</label><br />{L_ONLY_30}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="automod" value="1"<!-- IF S_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="automod" value="0"<!-- IF S_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
@@ -120,11 +120,27 @@ function toggle_div(div_id)
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="populate">{L_SUBSILVER}:</label></dt>
+			<dt><label for="populate">{L_SUBSILVER}:</label><br />{L_ONLY_30}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="subsilver" value="1"<!-- IF S_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="subsilver" value="2"<!-- IF S_SUBSILVER == 2 --> checked="checked"<!-- ENDIF --> /> {L_YES}, {L_DEFAULT}</label>
 				<label><input type="radio" class="radio" name="subsilver" value="0"<!-- IF S_SUBSILVER == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="populate">{L_INSTALL_STYLES}:</label><br />{L_INSTALL_STYLES_EXPLAIN}<br />Currently only available for phpBB 3.1.x</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="install_styles" value="1"<!-- IF INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="install_styles" value="2"<!-- IF INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
+				<label><input type="radio" class="radio" name="install_styles" value="0"<!-- IF INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="populate">{L_SUBSILVER_DEFAULT}:</label><br />Currently only available for phpBB 3.1.x</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="default_style" value="1"<!-- IF DEFAULT_STYLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="default_style" value="0"<!-- IF DEFAULT_STYLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 

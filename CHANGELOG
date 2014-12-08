@@ -6,6 +6,7 @@ QuickInstall Changelog
  + [Fix] Write correct phpBB version (3.1 or 3.0) in config.php.
  + [Fix] Error messaging in main did not support multibyte chars. (By Skouat)
  + [Fix] Issue #37 Style for "Chunk settings" title was messed up.
+ + [Fix] Issue #38 Subsilver2 was not installed for 3.1.x boards. Now all available styles can be installed (currently only for 3.1.x).
  + [Change] Moved the "can take a while" warning box and the options/settings boxes.
  + [Change] Moved the header text to the sidebar in the PHP info tab.
  + [Change] Added some space abowe and below the "Check all" link.

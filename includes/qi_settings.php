@@ -184,6 +184,10 @@ $template->assign_vars(array(
 	'CONFIG_NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
 	'CONFIG_EMAIL_DOMAIN'	=> $settings->get_config('email_domain'),
 
+	'CONFIG_INSTALL_STYLES'		=> $settings->get_config('install_styles', 0),
+	'CONFIG_DEFAULT_STYLE'		=> $settings->get_config('default_style', 0),
+
+
 	'OTHER_CONFIG'			=> $settings->get_other_config(),
 
 	'SEL_LANG'				=> (!empty($language)) ? $language : '',

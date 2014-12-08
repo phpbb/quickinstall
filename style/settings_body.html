@@ -348,20 +348,37 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_AUTOMOD}:</label><br />{L_AUTOMOD_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_AUTOMOD}:</label><br />{L_AUTOMOD_EXPLAIN}<br />{L_ONLY_30}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_SUBSILVER}:</label><br />{L_SUBSILVER_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
+			<dt><label>{L_SUBSILVER}:</label><br />{L_SUBSILVER_EXPLAIN}<br />{L_ONLY_30}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="1"<!-- IF CONFIG_SUBSILVER == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="2"<!-- IF CONFIG_SUBSILVER == 2 --> checked="checked"<!-- ENDIF --> /> {L_YES}, {L_DEFAULT}</label>
 				<label><input type="radio" class="radio" name="qi_config[subsilver]" value="0"<!-- IF CONFIG_SUBSILVER == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
+
+		<dl>
+			<dt><label for="populate">{L_INSTALL_STYLES}:</label><br />{L_INSTALL_STYLES_EXPLAIN}<br />Currently only available for phpBB 3.1.x<br />{L_THIS_CAN_CHANGE}</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="1"<!-- IF CONFIG_INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="2"<!-- IF CONFIG_INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
+				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="0"<!-- IF CONFIG_INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="populate">{L_SUBSILVER_DEFAULT}:</label><br />Currently only available for phpBB 3.1.x<br />{L_THIS_CAN_CHANGE}</dt>
+			<dd>
+				<label><input type="radio" class="radio" name="qi_config[default_style]" value="1"<!-- IF CONFIG_DEFAULT_STYLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[default_style]" value="0"<!-- IF CONFIG_DEFAULT_STYLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+			</dd>
+		</dl>
+
 		<dl>
 			<dt><label>{L_DROP_DB_IF_EXISTS}:</label><br />{L_DROP_DB_IF_EXISTS_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>

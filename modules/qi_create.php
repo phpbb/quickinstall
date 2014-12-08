@@ -652,8 +652,22 @@ class qi_create
 		// copy extra user added files
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 
-		// Install Subsilver2
-		if (($subsilver = $settings->get_config('subsilver', 0)) != 0 && !defined('PHPBB_31'))
+		// Install styles
+		if (($install_styles = $settings->get_config('install_styles', 0)) != 0 && defined('PHPBB_31'))
+		{
+			include($phpbb_root_path . 'includes/acp/acp_styles.' . $phpEx);
+			include($quickinstall_path . 'includes/class_31_styles.' . $phpEx);
+
+			if (!class_exists('bitfield'))
+			{
+				include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
+			}
+
+			$subsilver_only		= ($install_styles == 2) ? true : false;
+			$subsilver_default	= ($settings->get_config('default_style', 0)) ? true :false;
+			new class_31_styles($subsilver_only, $subsilver_default);
+		}
+		else if ($settings->get_config('subsilver', 0) && !defined('PHPBB_31'))
 		{
 			if (!class_exists('bitfield'))
 			{
@@ -701,7 +715,6 @@ class qi_create
 			);
 
 			$acp_styles->install_style($error, 'install', $root_path, $style_row['style_id'], $style_row['style_name'], $install_path, $style_row['style_copyright'], $style_row['style_active'], $style_row['style_default'], $style_row);
-
 			unset($error);
 		}
 

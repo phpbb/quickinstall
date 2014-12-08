@@ -90,6 +90,9 @@ class qi_main
 			'EMAIL_DOMAIN'		=> $settings->get_config('email_domain', ''),
 			'GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions', ''),
 			'OTHER_CONFIG'		=> $settings->get_other_config(),
+
+			'INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
+			'DEFAULT_STYLE'		=> $settings->get_config('default_style', 0),
 		));
 
 		// Output page
