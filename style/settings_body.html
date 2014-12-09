@@ -364,11 +364,8 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="populate">{L_SUBSILVER_DEFAULT}:</label><br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[default_style]" value="1"<!-- IF CONFIG_DEFAULT_STYLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[default_style]" value="0"<!-- IF CONFIG_DEFAULT_STYLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
+			<dt><label for="default_style">{L_SET_DEFAULT_STYLE}:</label><br />{L_SET_DEFAULT_STYLE_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
+			<dd><input class="text medium" type="text" id="default_style" name="qi_config[default_style]" value="{CONFIG_DEFAULT_STYLE}" /></dd>
 		</dl>
 
 		<dl>

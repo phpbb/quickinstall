@@ -38,7 +38,7 @@ class class_30_styles
 		$this->acp_styles->main(0, '');
 
 		$subsilver_only			= ($install_styles == 2) ? true : false;
-		$this->qi_default_style	= ($settings->get_config('default_style', 0)) ? 'subsilver2' : '';
+		$this->qi_default_style	= $settings->get_config('default_style', '');
 
 		// Get available styles
 		$this->qi_get_styles();
@@ -145,7 +145,7 @@ class class_30_styles
 			$style_ary['theme_copyright']	= (!empty($rows['copyright'])) ? $rows['copyright'] : '';
 
 			// Other stuff
-			$style_ary['style_default']	= ($this->qi_default_style && $style_name == 'subsilver2') ? 1 : 0;
+			$style_ary['style_default']	= ($this->qi_default_style == $style_name) ? 1 : 0;
 			$style_ary['install_path']	= $dir;
 
 			$this->qi_styles[$style_name] = $style_ary;
@@ -153,10 +153,3 @@ class class_30_styles
 		$dh->close();
 	}
 }
-
-
-
-
-
-
-//

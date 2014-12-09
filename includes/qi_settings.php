@@ -149,10 +149,12 @@ $template->assign_vars(array(
 	'CONFIG_DBPASSWD'		=> $settings->get_config('dbpasswd'),
 	'CONFIG_DBPORT'			=> $settings->get_config('dbport'),
 	'CONFIG_DBUSER'			=> $settings->get_config('dbuser'),
+	'CONFIG_DEFAULT_STYLE'	=> $settings->get_config('default_style', ''),
 	'CONFIG_DELETE_FILES'	=> $settings->get_config('delete_files', 0),
 	'CONFIG_DROP_DB'		=> $settings->get_config('drop_db', 0),
 	'CONFIG_EMAIL_ENABLE'	=> $settings->get_config('email_enable', 0),
 	'CONFIG_GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions'),
+	'CONFIG_INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
 	'CONFIG_MAKE_WRITABLE'	=> $settings->get_config('make_writable', 0),
 	'CONFIG_NO_PASSWORD'	=> $settings->get_config('no_dbpasswd', 0),
 	'CONFIG_POPULATE'		=> $settings->get_config('populate', 0),
@@ -183,8 +185,6 @@ $template->assign_vars(array(
 	'CONFIG_NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
 	'CONFIG_EMAIL_DOMAIN'	=> $settings->get_config('email_domain'),
 
-	'CONFIG_INSTALL_STYLES'		=> $settings->get_config('install_styles', 0),
-	'CONFIG_DEFAULT_STYLE'		=> $settings->get_config('default_style', 0),
 
 
 	'OTHER_CONFIG'			=> $settings->get_other_config(),

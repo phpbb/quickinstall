@@ -69,7 +69,7 @@ function get_default_settings()
 		'num_replies_max'	=> 50,
 		'no_dbpasswd'		=> 0,
 		'install_styles'	=> 0,
-		'default_style'		=> 0,
+		'default_style'		=> '',
 	);
 
 	return($config);

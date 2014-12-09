@@ -43,7 +43,7 @@ class class_31_styles extends acp_styles
 		$this->subsilver_default = $subsilver_default;
 
 		$subsilver_only			= ($install_styles == 2) ? true : false;
-		$this->qi_default_style	= ($settings->get_config('default_style', 0)) ? 'subsilver2' : '';
+		$this->qi_default_style	= $settings->get_config('default_style', '');
 
 		// Get a array with installed styles.
 		// Should only contain prosilver

@@ -44,13 +44,15 @@ class qi_main
 			'U_CREATE'			=> qi::url('create'),
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
 
-			'TABLE_PREFIX'	=> $settings->get_config('table_prefix', ''),
-			'DB_PERFIX'		=> htmlspecialchars($settings->get_config('db_prefix', '')),
-			'SITE_NAME'		=> $settings->get_config('site_name', ''),
-			'SITE_DESC'		=> $settings->get_config('site_desc', ''),
-			'PROFILE_COUNT'	=> $profiles['count'],
+			'TABLE_PREFIX'		=> $settings->get_config('table_prefix', ''),
+			'DB_PERFIX'			=> htmlspecialchars($settings->get_config('db_prefix', '')),
+			'SITE_NAME'			=> $settings->get_config('site_name', ''),
+			'SITE_DESC'			=> $settings->get_config('site_desc', ''),
+			'PROFILE_COUNT'		=> $profiles['count'],
 			'PROFILE_OPTIONS'	=> $profiles['options'],
-			'DBNAME'		=> $settings->get_config('dbname', ''),
+			'DBNAME'			=> $settings->get_config('dbname', ''),
+			'INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
+			'DEFAULT_STYLE'		=> $settings->get_config('default_style', ''),
 
 			'S_ERROR'		=> $settings->get_config('error', 0),
 			'ERROR_TITLE'	=> $settings->get_config('error_title', ''),
@@ -89,9 +91,6 @@ class qi_main
 			'EMAIL_DOMAIN'		=> $settings->get_config('email_domain', ''),
 			'GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions', ''),
 			'OTHER_CONFIG'		=> $settings->get_other_config(),
-
-			'INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
-			'DEFAULT_STYLE'		=> $settings->get_config('default_style', 0),
 		));
 
 		// Output page
