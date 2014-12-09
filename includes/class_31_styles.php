@@ -10,7 +10,7 @@
 /**
 * @ignore
 */
-if (!defined('IN_PHPBB'))
+if (!defined('IN_QUICKINSTALL'))
 {
 	exit;
 }
@@ -22,12 +22,12 @@ class class_31_styles extends acp_styles
 	private $qi_default_style = '';
 
 	/**
-	 * @param bool $subsilver_only, true installs only subsilver2, false installs all available styles.
-	 * @param bool $subsilver_default, true sets subsilver2 as default style, false do not.
+	 * @param int $install_styles. 1 = all styles, 2 only subsilver2.
 	 */
-	public function __construct($subsilver_only = false, $subsilver_default = true)
+	public function __construct($install_styles)
 	{
 		global $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $template, $request, $cache, $auth, $config;
+		global $settings;
 
 		$this->mode = 'install';
 		$this->db = $db;
@@ -42,7 +42,8 @@ class class_31_styles extends acp_styles
 		$this->styles_path = $this->phpbb_root_path . $this->styles_path_absolute . '/';
 		$this->subsilver_default = $subsilver_default;
 
-		$this->qi_default_style = ($subsilver_default) ? 'subsilver2' : '';
+		$subsilver_only			= ($install_styles == 2) ? true : false;
+		$this->qi_default_style	= ($settings->get_config('default_style', 0)) ? 'subsilver2' : '';
 
 		// Get a array with installed styles.
 		// Should only contain prosilver

@@ -170,7 +170,6 @@ $template->assign_vars(array(
 	'CONFIG_SMTP_PASS'		=> $settings->get_config('smtp_pass'),
 	'CONFIG_SMTP_PORT'		=> $settings->get_config('smtp_port', 0),
 	'CONFIG_SMTP_USER'		=> $settings->get_config('smtp_user'),
-	'CONFIG_SUBSILVER'		=> $settings->get_config('subsilver', 0),
 	'CONFIG_TABLE_PREFIX'	=> $settings->get_config('table_prefix'),
 	'CONFIG_NUM_USERS'		=> $settings->get_config('num_users', 0),
 	'CONFIG_NUM_NEW_GROUP'	=> $settings->get_config('num_new_group', 0),

@@ -55,7 +55,6 @@ function get_default_settings()
 		'chunk_user'		=> '5000',
 		'redirect'			=> 1,
 		'automod'			=> 1,
-		'subsilver'			=> 0,
 		'populate'			=> 0,
 		'email_domain'		=> 'phpbb-quickinstall.tld',
 		'num_users'			=> 100,
@@ -69,6 +68,8 @@ function get_default_settings()
 		'num_replies_min'	=> 0,
 		'num_replies_max'	=> 50,
 		'no_dbpasswd'		=> 0,
+		'install_styles'	=> 0,
+		'default_style'		=> 0,
 	);
 
 	return($config);
