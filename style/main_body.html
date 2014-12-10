@@ -100,17 +100,6 @@ function toggle_div(div_id)
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="">{L_MAKE_WRITABLE_BOARD}:</label><br />{L_MAKE_WRITABLE_BOARD_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="make_writable" value="1"<!-- IF S_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="make_writable" value="0"<!-- IF S_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="grant_permissions">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-			<dd><input class="text medium" type="text" id="grant_permissions" name="grant_permissions" value="{GRANT_PERMISSIONS}" /></dd>
-		</dl>
-		<dl>
 			<dt><label for="">{L_POPULATE}:</label><br />{L_POPULATE_MAIN_EXPLAIN}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="populate" value="1"<!-- IF S_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
@@ -173,6 +162,17 @@ function toggle_div(div_id)
 					<label><input type="radio" class="radio" name="delete_files" value="1"<!-- IF S_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 					<label><input type="radio" class="radio" name="delete_files" value="0"<!-- IF S_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 				</dd>
+			</dl>
+			<dl>
+				<dt><label for="">{L_MAKE_WRITABLE_BOARD}:</label><br />{L_MAKE_WRITABLE_BOARD_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
+				<dd>
+					<label><input type="radio" class="radio" name="make_writable" value="1"<!-- IF S_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label><input type="radio" class="radio" name="make_writable" value="0"<!-- IF S_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="grant_permissions">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
+				<dd><input class="text medium" type="text" id="grant_permissions" name="grant_permissions" value="{GRANT_PERMISSIONS}" /></dd>
 			</dl>
 			<dl>
 				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>
