@@ -137,13 +137,11 @@
 		<legend><a id="time-settings"></a>{L_TIME_SETTINGS}</legend>
 		<dl>
 			<dt><label for="qi_tz">{L_QI_TZ}:*</label><br />{L_QI_TZ_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="qi_tz" name="qi_config[qi_tz]" value="{CONFIG_QI_TZ}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_QI_DST}:</label><br />{L_QI_DST_EXPLAIN}</dt>
 			<dd>
-				<label><input type="radio" class="radio" name="qi_config[qi_dst]" value="1"<!-- IF CONFIG_QI_DST == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}</label>
-				<label><input type="radio" class="radio" name="qi_config[qi_dst]" value="0"<!-- IF CONFIG_QI_DST == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}</label>
+				<select name="qi_config[qi_tz]" id="qi_tz">
+					<option value="">{L_SELECT_TIMEZONE}</option>
+					{TIMEZONE_OPTIONS}
+				</select>
 			</dd>
 		</dl>
 	</fieldset>

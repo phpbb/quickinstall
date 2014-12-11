@@ -660,6 +660,15 @@ class populate
 		$chunk_cnt = 0;
 		$sql_ary = array();
 
+		if (!defined('PHPBB_31'))
+		{
+			$tz		= new DateTimeZone($settings->get_config('qi_tz', ''));
+			$tz_ary	= $tz->getTransitions(time());
+			$offset	= (float) $tz_ary[0]['offset'] / 3600;	// 3600 seconds = 1 hour.
+			$qi_dst	= ($tz_ary[0]['isdst']) ? 1 : 0;
+			unset($tz_ary, $tz);
+		}
+
 		foreach ($this->user_arr as $user)
 		{
 			$email = $user['username_clean'] . $this->email_domain;
@@ -676,7 +685,6 @@ class populate
 				'group_id'				=> $registered_group,
 				'user_type'				=> USER_NORMAL,
 				'user_permissions'		=> '',
-				'user_timezone'			=> $settings->get_config('qi_tz', 0),
 				'user_lang'				=> $settings->get_config('qi_lang'),
 				'user_form_salt'		=> unique_id(),
 				'user_style'			=> (int) $config['default_style'],
@@ -685,22 +693,24 @@ class populate
 				'user_options'			=> 230271,
 				'user_full_folder'		=> PRIVMSGS_NO_BOX,
 				'user_notify_type'		=> NOTIFY_EMAIL,
+				'user_dateformat'		=> 'M jS, ’y, H:i',
 
 				'user_sig'			=> '',
 			);
 
+			$count = count($sql_ary) - 1;
 			if (defined('PHPBB_31'))
 			{
-				$sql_ary[count($sql_ary) - 1]['user_timezone'] = $sql_ary[count($sql_ary) - 1]['user_timezone'] . ':' . $settings->get_config('qi_dst', 0);
+				$sql_ary[$count]['user_timezone'] = $settings->get_config('qi_tz', '');
 			}
 			else
 			{
-				$sql_ary[count($sql_ary) - 1]['user_pass_convert'] = 0;
-				$sql_ary[count($sql_ary) - 1]['user_occ'] = '';
-				$sql_ary[count($sql_ary) - 1]['user_interests'] = '';
-				$sql_ary[count($sql_ary) - 1]['user_dst'] = $settings->get_config('qi_dst', 0);
+				$sql_ary[$count]['user_timezone'] = $offset;
+				$sql_ary[$count]['user_pass_convert'] = 0;
+				$sql_ary[$count]['user_occ'] = '';
+				$sql_ary[$count]['user_interests'] = '';
+				$sql_ary[$count]['user_dst'] = $qi_dst;
 			}
-
 
 			$chunk_cnt++;
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)

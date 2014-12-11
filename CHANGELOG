@@ -15,6 +15,7 @@ QuickInstall Changelog
  + [Feature] Show board version in boards list.
  + [Feature] Make sure cache_dir, boards_dir and boards_url ends with a slash (/)
  + [Feature] Now all available styles can be installed. In both 3.0.x and 3.1.x.
+ + [Feature] Any style can be set as default style.
 
 - Changes since 1.1.8
  + [Fix] Ticket #63309 The first release in the changelog was broken.
@@ -175,6 +176,7 @@ QuickInstall Changelog
  + [Change] Added checkbox for not using a db password.
  + [Change] Added information about successfull or unsuccessfull settings update.
  + [Change] Removed set_magic_quotes_runtime()
+ + [Change] Use the same string timezones as phpBB 3.1.x. To still be compatible with both 3.0.x and 3.1.x.
  + [Feature] Added installation/settings page
  + [Feature] Validates the settings on page load.
 

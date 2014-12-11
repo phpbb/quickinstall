@@ -15,6 +15,162 @@ if (!defined('IN_QUICKINSTALL'))
 	exit;
 }
 
+/**
+* Borrowed from phpBB 3.1 includes/functions.php/phpbb_format_timezone_offset()
+* To have it available for 3.0.x too.
+*
+* Format the timezone offset with hours and minutes
+*
+* @param	int		$tz_offset	Timezone offset in seconds
+* @param	bool	$show_null	Whether null offsets should be shown
+* @return	string		Normalized offset string:	-7200 => -02:00
+*													16200 => +04:30
+*/
+function qi_format_timezone_offset($tz_offset, $show_null = false)
+{
+	$sign = ($tz_offset < 0) ? '-' : '+';
+	$time_offset = abs($tz_offset);
+
+	if ($time_offset == 0 && $show_null == false)
+	{
+		return '';
+	}
+
+	$offset_seconds	= $time_offset % 3600;
+	$offset_minutes	= $offset_seconds / 60;
+	$offset_hours	= ($time_offset - $offset_seconds) / 3600;
+
+	$offset_string	= sprintf("%s%02d:%02d", $sign, $offset_hours, $offset_minutes);
+	return $offset_string;
+}
+
+/**
+* Borrowed from phpBB 3.1 includes/functions.php/phpbb_tz_select_compare()
+* To have it available for 3.0.x too.
+*
+* Compares two time zone labels.
+* Arranges them in increasing order by timezone offset.
+* Places UTC before other timezones in the same offset.
+*/
+function qi_tz_select_compare($a, $b)
+{
+	$a_sign = $a[3];
+	$b_sign = $b[3];
+	if ($a_sign != $b_sign)
+	{
+		return $a_sign == '-' ? -1 : 1;
+	}
+
+	$a_offset = substr($a, 4, 5);
+	$b_offset = substr($b, 4, 5);
+	if ($a_offset == $b_offset)
+	{
+		$a_name = substr($a, 12);
+		$b_name = substr($b, 12);
+		if ($a_name == $b_name)
+		{
+			return 0;
+		}
+		else if ($a_name == 'UTC')
+		{
+			return -1;
+		}
+		else if ($b_name == 'UTC')
+		{
+			return 1;
+		}
+		else
+		{
+			return $a_name < $b_name ? -1 : 1;
+		}
+	}
+	else
+	{
+		if ($a_sign == '-')
+		{
+			return $a_offset > $b_offset ? -1 : 1;
+		}
+		else
+		{
+			return $a_offset < $b_offset ? -1 : 1;
+		}
+	}
+}
+
+/**
+* Mostly borrowed from phpBB 3.1 includes/functions.php/phpbb_timezone_select()
+* To have it available for 3.0.x too.
+*
+* Options to pick a timezone and date/time
+*
+* @param	\phpbb\template\template $template	phpBB template object
+* @param	\phpbb\user	$user				Object of the current user
+* @param	string		$default			A timezone to select
+* @param	boolean		$truncate			Shall we truncate the options text
+*
+* @return		array		Returns an array containing the options for the time selector.
+*/
+function qi_timezone_select($user, $default = '', $truncate = false)
+{
+	date_default_timezone_set('UTC');
+	$unsorted_timezones = DateTimeZone::listIdentifiers();
+	$timezones = array();
+
+	foreach ($unsorted_timezones as $timezone)
+	{
+		$tz = date_create(date('d M Y, H:i'), timezone_open($timezone));
+		$offset = date_offset_get($tz);
+		$current_time = date('d M Y, H:i', (time() + $offset));
+		$offset_string = qi_format_timezone_offset($offset, true);
+
+		$timezones['UTC' . $offset_string . ' - ' . $timezone] = array(
+			'tz'		=> $timezone,
+			'offset'	=> $offset_string,
+			'current'	=> $current_time,
+		);
+
+		if ($timezone === $default)
+		{
+			$default_offset = 'UTC' . $offset_string;
+		}
+	}
+	unset($unsorted_timezones);
+
+	uksort($timezones, 'qi_tz_select_compare');
+
+	$tz_select = $opt_group = '';
+
+	foreach ($timezones as $key => $timezone)
+	{
+		if ($opt_group != $timezone['offset'])
+		{
+			// Generate tz_select for backwards compatibility
+			$tz_select .= ($opt_group) ? '</optgroup>' : '';
+			$tz_select .= '<optgroup label="' . $user->lang(array('timezones', 'UTC_OFFSET_CURRENT'), $timezone['offset'], $timezone['current']) . '">';
+			$opt_group = $timezone['offset'];
+		}
+
+		$label = $timezone['tz'];
+		if (isset($user->lang['timezones'][$label]))
+		{
+			$label = $user->lang['timezones'][$label];
+		}
+		$title = $user->lang(array('timezones', 'UTC_OFFSET_CURRENT'), $timezone['offset'], $label);
+
+		if ($truncate)
+		{
+			$label = truncate_string($label, 50, 255, false, '...');
+		}
+
+		// Also generate timezone_select for backwards compatibility
+		$selected = ($timezone['tz'] === $default) ? ' selected="selected"' : '';
+		$tz_select .= '<option title="' . $title . '" value="' . $timezone['tz'] . '"' . $selected . '>' . $label . '</option>';
+	}
+	$tz_select .= '</optgroup>';
+
+	return $tz_select;
+}
+
 
 function gen_error_msg($msg_text, $msg_title = 'General error')
 {

@@ -342,9 +342,26 @@ class qi_create
 			'newest_username'	=> $admin_name,
 			'avatar_salt'		=> md5(mt_rand()),
 			'cookie_name'		=> 'phpbb3_' . strtolower(gen_rand_string(5)),
-			'board_timezone'	=> $settings->get_config('qi_tz', 0),
-			'board_dst'			=> $settings->get_config('qi_dst', 0),
 		);
+
+		if (defined('PHPBB_31'))
+		{
+			$config_ary['board_timezone'] = $settings->get_config('qi_tz', '');
+			$tz_data = "user_timezone = '{$config_ary['board_timezone']}'";
+		}
+		else
+		{
+			$tz		= new DateTimeZone($settings->get_config('qi_tz', ''));
+			$tz_ary	= $tz->getTransitions(time());
+			$offset	= (float) $tz_ary[0]['offset'] / 3600;	// 3600 seconds = 1 hour.
+			$dst	= ($tz_ary[0]['isdst']) ? 1 : 0;
+
+			$tz_data = "user_timezone = $offset, user_dst = $dst";
+			$config_ary['user_timezone'] = $offset;
+			$config_ary['user_dst'] = $dst;
+
+			unset($tz_ary, $tz, $offset, $dst);
+		}
 
 		if (@extension_loaded('gd') || can_load_dll('gd'))
 		{
@@ -377,10 +394,9 @@ class qi_create
 					user_lang		= '" . $db->sql_escape($default_lang) . "',
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
 					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
-					user_timezone	= " . (int) $settings->get_config('qi_tz', 0) . "," .
-					(!defined('PHPBB_31') ? "user_dst = " . (int) $settings->get_config('qi_dst', 0) . "," : '') . "
 					user_email_hash	= " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ",
-					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "'
+					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "',
+					$tz_data
 				WHERE username = 'Admin'",
 
 			"UPDATE {$table_prefix}moderator_cache

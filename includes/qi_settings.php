@@ -86,8 +86,6 @@ if ($settings->install)
 {
 	// Don't show errors when installing QI
 	$error = '';
-
-	// Fill some default vaues.
 }
 else
 {
@@ -159,7 +157,7 @@ $template->assign_vars(array(
 	'CONFIG_NO_PASSWORD'	=> $settings->get_config('no_dbpasswd', 0),
 	'CONFIG_POPULATE'		=> $settings->get_config('populate', 0),
 	'CONFIG_QI_DST'			=> $settings->get_config('qi_dst', 0),
-	'CONFIG_QI_TZ'			=> $settings->get_config('qi_tz', 0),
+	'CONFIG_QI_TZ'			=> $settings->get_config('qi_tz', ''),
 	'CONFIG_REDIRECT'		=> $settings->get_config('redirect', 0),
 	'CONFIG_SERVER_NAME'	=> $settings->get_config('server_name'),
 	'CONFIG_SERVER_PORT'	=> $settings->get_config('server_port'),
@@ -185,7 +183,7 @@ $template->assign_vars(array(
 	'CONFIG_NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
 	'CONFIG_EMAIL_DOMAIN'	=> $settings->get_config('email_domain'),
 
-
+	'TIMEZONE_OPTIONS'		=> qi_timezone_select($user, $settings->get_config('qi_tz', 'UTC')),
 
 	'OTHER_CONFIG'			=> $settings->get_other_config(),
 

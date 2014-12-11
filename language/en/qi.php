@@ -247,7 +247,7 @@ $lang = array_merge($lang, array(
 	'QI_MANAGE_ABOUT'		=> 'Install a new board here.<br /><br />&quot;Board database and directory name:&quot; is the only field you have to fill, the others get filled with default values from &quot;includes/default_settings.php&quot;.<br /><br />Click on “Advanced options” for more settings.',
 	'QI_MANAGE_PROFILE'	=> 'Manage profiles',
 	'QI_TZ'				=> 'Time zone',
-	'QI_TZ_EXPLAIN'		=> 'Your time zone. It will be the defaut time zone for the created boards. -1, 0, 1 etc.',
+	'QI_TZ_EXPLAIN'		=> 'Your time zone. It will be the default time zone for the created boards.<br />For the 3.0 line it will be converted to numerical timezone and DST.',
 	'QUICKINSTALL'		=> 'phpBB QuickInstall',
 
 	'REDIRECT'			=> 'Redirect',
