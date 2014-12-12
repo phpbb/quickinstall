@@ -49,6 +49,12 @@ class settings
 	var $is_converted = false;
 
 	/**
+	 * Array with info about updated config. Since QI v1.2.0
+	 */
+	var $update_text		= array();
+	var $updated_profile	= '';
+
+	/**
 	 * True if there is no config and the user needs to go to install.
 	 */
 	var $install = false;
@@ -76,6 +82,7 @@ class settings
 
 		if (!empty($profile) && is_readable("{$quickinstall_path}settings/$profile.cfg"))
 		{
+			$used_file = "{$quickinstall_path}settings/$profile.cfg";
 			$config = file("{$quickinstall_path}settings/$profile.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $profile;
 			$this->set_profile_cookie($profile);
@@ -85,6 +92,7 @@ class settings
 			// Get the previously used profile.
 			$config = file("{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $_COOKIE[QI_PROFILE_COOKIE];
+			$used_file = "{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg";
 		}
 		else
 		{
@@ -111,6 +119,7 @@ class settings
 				if (!empty($cfg_file))
 				{
 					$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+					$used_file = $cfg_file;
 				}
 			}
 		}
@@ -133,6 +142,13 @@ class settings
 		{
 			// The config array needs to be converted to an associative array.
 			$this->set_config_array($config);
+			$this->config = $this->check_updates($this->config);
+
+			if (!empty($this->update_text))
+			{
+				$this->update();
+			}
+
 			return;
 		}
 
@@ -145,6 +161,90 @@ class settings
 
 		$this->config = get_default_settings();
 		$this->install = ($mode != 'update_settings') ? true : false;
+	}
+
+	/**
+	 * Checks for changed or added config fields.
+	 * Newer changes on top so we don't have to step through all eacg time.
+	 */
+	function check_updates($config)
+	{
+		global $quickinstall_path, $phpEx;
+
+		if (!is_numeric($config['qi_tz']))
+		{
+			return($config);
+		}
+		else
+		{
+			/**
+			 * Move this part to the first check when such is added.
+			 *
+			 * From here
+			 */
+			if (!function_exists('get_default_settings'))
+			{
+				include("{$quickinstall_path}includes/default_settings.$phpEx");
+			}
+			$new_config = get_default_settings();
+			$this->updated_profile = $this->profile;
+			/**
+			 * To here
+			 */
+
+			$config['qi_tz']	= $new_config['qi_tz'];
+			unset($config['qi_dst']);
+
+			$this->update_text[]	= 'TIMEZONE_UPDATED';
+			$this->update_text[]	= 'DST_REMOVED';
+		}
+
+		return($config);
+	}
+
+	/**
+	 * Updates users all profiles if there are more than one.
+	 */
+	function update_profiles()
+	{
+		global $quickinstall_path, $phpEx, $user;
+
+		$cfg_bak	= $this->config;
+		$profil_bak	= $this->profile;
+		$path		= $quickinstall_path . 'settings';
+		$dh			= opendir($path);
+		$update_msg	= '';
+
+		while (($file = readdir($dh)) !== false)
+		{
+			if (empty($file) || $file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("$path/$file"))
+			{
+				continue;
+			}
+
+			$config = file("$path/$file", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$this->profile = substr($file, 0, -4);
+			$this->set_config_array($config);
+			$this->config = $this->check_updates($this->config);
+
+			if (!empty($this->update_text))
+			{
+				$this->update();
+				$this->update_text = array();
+				$update_msg .= '<li>' . $this->profile . '</li>';
+			}
+		}
+		closedir($dh);
+
+		$this->config	= $cfg_bak;
+		$this->profile	= $profil_bak;
+
+		if (!empty($update_msg))
+		{
+			$update_msg = "<ul>$update_msg</ul>";
+
+			gen_error_msg($update_msg, $user->lang['PROFILES_UPDATED'], $update_explain);
+		}
 	}
 
 	/**
@@ -207,6 +307,22 @@ class settings
 
 		// First convert the numeric array to a associative array and get it into $this->config.
 		$this->set_config_array($config);
+
+		// check for config fields added or changed since the "old" style.
+		include("{$quickinstall_path}includes/default_settings.$phpEx");
+		$new_config = get_default_settings();
+
+		foreach ($new_config as $key => $value)
+		{
+			if (empty($this->config[$key]))
+			{
+				$this->config[$key] = $value;
+			}
+			else if (gettype($this->config[$key]) !== gettype($value))
+			{
+				$this->config[$key] = $value;
+			}
+		}
 
 		// The config array needs to be converted to a string.
 		$this->profile = 'default';
@@ -668,10 +784,10 @@ class settings
 			}
 
 			// Someone might have edited the settings manually so make sure there is no leading or trailing white-space.
-			$cfg_row = explode('=', $row);
+			$cfg_row	= explode('=', $row);
+			$cfg_row[0]	= trim($cfg_row[0]);
 
 			// This should never happen unless the config was manually edited.
-			$cfg_row[0] = trim($cfg_row[0]);
 			if (empty($cfg_row[0]))
 			{
 				continue;

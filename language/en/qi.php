@@ -328,4 +328,14 @@ $lang = array_merge($lang, array(
 	'WHO_WHEN_EXPLAIN'	=> 'phpBB3 QuickInstall was originally created by Igor “igorw” Wiedler in the summer of 2007. It was partially rewritten by him in march 2008.<br />Since March 2010 this project is mantained by Jari “tumba25” Kanerva.',
 	'WHY'				=> 'Why?',
 	'WHY_EXPLAIN'		=> 'Just as with phpBB2, if you do a lot of modding (creating modifications), you cannot put all MODs into a single phpBB installation. So it’s best to have separate installations. Now the problem is that it’s a pain to copy the files and go through the installation process every time. To speed up this process, quickinstall was born.',
+
+	// Config updated strings.
+	'UPDATED_EXPLAIN'	=> 'Your profile has been updated to this version of QI (%s). The changes made are defined below. They have been set to default values. also defined below.<br />You might want to look into the Settings page (link at the bottom) and set them to your desired values. If you have more than one profile, just press the button below to get all profiles updated.', // %s will be replaced with QI version.
+	'PROFILE_UPDATED'	=> 'Profile &quot;%s&quot; updated', // %s will be replaced by a profile name.
+	'PROFILES_UPDATED'	=> 'The following profiles has been updated',
+	'UPDATE_PROFILES'	=> 'Update profiles',
+
+	'DST_REMOVED'		=>	'The DST setting has been removed (qi_dst).',
+	'TIMEZONE_UPDATED'	=>	'Your timezone setting has been updated from numerical to string (qi_tz), default is UTC.',
+
 ));

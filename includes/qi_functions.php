@@ -171,12 +171,23 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 	return $tz_select;
 }
 
-
-function gen_error_msg($msg_text, $msg_title = 'General error')
+function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '', $update_profiles = false)
 {
-	global $quickinstall_path;
+	global $quickinstall_path, $user;
 
-	$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; <a href="' . qi::url('settings') . '">Go to settings</a>';
+	$settings_url = qi::url('settings');
+
+	if ($update_profiles)
+	{
+		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="button2" type="submit" name="update_all" value="' .
+		$user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
+	}
+	else
+	{
+		$settings_form = '';
+	}
+
+	$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; <a href="' . $settings_url . '">Go to settings</a>';
 	$qi_version		= QI_VERSION;
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
@@ -200,8 +211,10 @@ echo<<<ERROR_PAGE
 					<div class="panel">
 						<span class="corners-top"><span></span></span>
 						<div id="content">
-							<h1 style="margin-bottom: 10px">$msg_title</h1>
+							<h1 style="margin-bottom: 10px; text-align: center;">$msg_title</h1>
+							<div style="font-weight: bold;">$msg_explain<br /><br /></div>
 							<div>$msg_text</div>
+						$settings_form
 						</div>
 						<div style="padding-left: 10px;">
 							$l_return_index

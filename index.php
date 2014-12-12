@@ -196,6 +196,26 @@ else
 
 $settings->apply_language($language);
 
+// Updated settings?
+if (legacy_request_var('update_all', false))
+{
+	$settings->update_profiles();
+}
+else if (!empty($settings->update_text)) // PROFILE_UPDATED
+{
+	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->profile);
+	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], QI_VERSION);
+
+	$update_msg = '<ul>';
+	foreach ($settings->update_text as $update)
+	{
+		$update_msg .= '<li>' . $user->lang[$update] . '</li>';
+	}
+	$update_msg .= '</ul>';
+
+	gen_error_msg($update_msg, $update_title, $update_explain, true);
+}
+
 // Probably best place to validate the settings
 $settings->validate();
 $error = $settings->get_error();
