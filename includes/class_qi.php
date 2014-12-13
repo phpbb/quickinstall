@@ -40,12 +40,12 @@ class qi
 			'T_IMAGE_PATH'	=> $quickinstall_path . 'style/images/',
 
 			'U_ABOUT'		=> self::url('about'),
+			'U_DOCS'		=> self::url('docs'),
 			'U_MANAGE'		=> self::url('manage'),
 			'U_MAIN'		=> self::url('main'),
 			'U_PHPINFO'		=> self::url('phpinfo'),
 			'U_SETTINGS'	=> self::url('settings'),
 
-			'S_ABOUT'		=> ($page == 'about') ? true : false,
 			'S_MANAGE'		=> ($page == 'manage') ? true : false,
 			'S_MAIN'		=> ($page == 'main') ? true : false,
 			'S_PHPINFO'		=> ($page == 'phpinfo') ? true : false,

@@ -68,9 +68,8 @@ class qi_phpinfo
 		$output = (!empty($output[1][0])) ? $output[1][0] : $orig_output;
 
 		$template->assign_vars(array(
+			'S_PHPINFO'	=> true,
 			'PHPINFO'	=> $output,
-
-			'S_IN_INSTALL'	=> false,
 		));
 
 		// Output page

@@ -1,5 +1,5 @@
 <!-- INCLUDE overall_header.html -->
-
+<!-- IF S_ABOUT -->
 <h1>{L_ABOUT_QUICKINSTALL}</h1>
 
 <h3><a id="about-what"></a>{L_WHAT}</h3>
@@ -18,15 +18,24 @@
 <p>{L_LICENSE_EXPLAIN}</p>
 
 <h3 style="margin-bottom: 5px;"><a id="about-changelog"></a>{L_CHANGELOG}</h3>
-<!-- BEGIN history -->
+	<!-- BEGIN history -->
 	<p>
 		<p style="margin-bottom: 2px;"><a id="{history.U_CHANGES}"></a><em>{history.CHANGES_SINCE}</em></p>
 		<ul>
-		<!-- BEGIN changelog -->
-		<li>{history.changelog.CHANGE}</li>
-		<!-- END changelog -->
+			<!-- BEGIN changelog -->
+			<li>{history.changelog.CHANGE}</li>
+			<!-- END changelog -->
 		</ul>
 	</p>
-<!-- END history -->
+	<!-- END history -->
+<!-- ELSE -->
+<h1>{L_DOCS_LONG}</h1>
+<h5>{L_FROM_README}</h5>
+<div style="line-height: 2em !important;">
+	<!-- BEGIN doc_row -->
+	{doc_row.ROW}
+	<!-- END doc_row -->
+</div>
+<!-- ENDIF -->
 
 <!-- INCLUDE overall_footer.html -->

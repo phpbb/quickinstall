@@ -202,16 +202,17 @@ window.onload = function()
 
 	<div id="page-body">
 
-		<!-- IF not S_IN_INSTALL -->
 		<div id="tabs">
 			<ul>
 				<li<!-- IF S_ABOUT --> id="activetab"<!-- ENDIF -->><a href="{U_ABOUT}"><span>{L_QI_ABOUT}</span></a></li>
+				<li<!-- IF S_DOCS --> id="activetab"<!-- ENDIF -->><a href="{U_DOCS}"><span>{L_DOCS_LONG}</span></a></li>
 				<li<!-- IF S_PHPINFO --> id="activetab"<!-- ENDIF -->><a href="{U_PHPINFO}"><span>{L_PHPINFO}</span></a></li>
 				<li<!-- IF S_SETTINGS --> id="activetab"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_QI_MANAGE_PROFILE}</span></a></li>
-				<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_QI_MANAGE}</span></a></li>
+				<!-- IF not S_IN_INSTALL -->
+					<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_QI_MANAGE}</span></a></li>
+				<!-- ENDIF -->
 			</ul>
 		</div>
-		<!-- ENDIF -->
 
 		<div id="acp">
 		<div class="panel">

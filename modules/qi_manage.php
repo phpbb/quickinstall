@@ -33,10 +33,6 @@ class qi_manage
 			$action = 'delete';
 		}
 
-		$template->assign_vars(array(
-			'S_IN_INSTALL'	=> false,
-		));
-
 		switch ($action)
 		{
 			case 'delete':

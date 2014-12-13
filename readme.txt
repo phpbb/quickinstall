@@ -1,4 +1,5 @@
-phpBB3 QuickInstall
+phpBB3 QuickInstall ReadMe
+
 
 About:
 phpBB3 QuickInstall (QI) is tool used to manage many installations of phpBB3. It
@@ -20,8 +21,8 @@ Copy the quickinstall folder to your local web space. Make sure boards/, cache/
 and settings/ are writable by your web server.
 
 Download the latest phpBB 3.1.x or 3.0.x from https://www.phpbb.com/downloads/,
-unzip it and copy the phpBB3 folder to sources/. Choose the one you do most work
-with, for your own convenience.
+extract it and copy the phpBB3 folder to sources/. Choose the version you do
+most work with, for your own convenience.
 
 In sources/phpBB3_alt you can put folders with other versions of phpBB, or
 boards with other style or language files. You can name them what you want to
@@ -43,6 +44,11 @@ You should be taken directly to the settings page with some default values
 already filled in. At least you need to fill DB user and password. But it might
 be a good time to go through all settings. Then click "Save" and you are good
 to go. If you don't set a profile name, the name "default" will be used.
+
+If you want other files to be copied to the boards when they are created; you
+can put them in the sources/extra folder. You can put folder there too. By
+keeping the same folder structure in sources/extra as phpBB you can get the
+files where you want.
 
 
 Upgrading from QI older than 1.1.8:

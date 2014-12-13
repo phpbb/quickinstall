@@ -39,8 +39,6 @@ class qi_main
 
 		// Assign index specific vars
 		$template->assign_vars(array(
-			'S_IN_INSTALL'	=> false,
-
 			'U_CREATE'			=> qi::url('create'),
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
 

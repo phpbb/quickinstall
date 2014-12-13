@@ -109,7 +109,7 @@ $lang = array_merge($lang, array(
 	'CREATE_MOD'			=> 'Create moderator',
 	'CREATE_MOD_EXPLAIN'	=> 'Set to yes if you want one global moderator created. This will be tester_1 or tester_2 if a admin is selected.',
 
-	'DB_EXISTS'			=> 'The database &quot;%s&quot; already exists.',
+	'DB_EXISTS'			=> 'The database &quot;<strong>%s</strong>&quot; already exists.',
 	'DB_PREFIX'			=> 'Database prefix',
 	'DB_PREFIX_EXPLAIN'	=> 'This is added before all database names to avoid overwriting databases not used by QuickInstall.',
 	'DB_SETTINGS'		=> 'Database settings',
@@ -133,9 +133,11 @@ $lang = array_merge($lang, array(
 	'DELETE_PROFILE'	=> 'Delete profile',
 	'DELETE_PROFILE_EXPLAIN'	=> 'Deletes the selected profile.<br /><strong>Note: This cannot be undone.</strong>',
 	'DELETE_SELECTED'	=> 'Delete selected',
-	'DIR_EXISTS'		=> 'The directory &quot;%s&quot; already exists.',
+	'DIR_EXISTS'		=> 'The directory &quot;<strong>%s</strong>&quot; already exists.',
 	'DIR_URL_SETTINGS'	=> 'Directory and URL settings',
 	'DISABLED'			=> 'Disabled',
+	'DOCS_SHORT'		=> 'Docs',
+	'DOCS_LONG'			=> 'Documentation',
 	'DROP_DB_IF_EXISTS'	=> 'Drop database if it exists',
 	'DROP_DB_IF_EXISTS_EXPLAIN'	=> 'Have &quot;Drop database if it exists&quot; checked by default when creating boards.',
 
@@ -151,6 +153,7 @@ $lang = array_merge($lang, array(
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
+	'FROM_README'				=> 'from readme.txt',
 
 	'GENERAL_ERROR'		=> 'General Error',
 	'GO'				=> 'Go',
@@ -237,8 +240,8 @@ $lang = array_merge($lang, array(
 	'PROFILE'			=> 'Profile',
 	'PROFILES'			=> 'Profiles',
 
-	'QI_ABOUT'			=> 'About QuickInstall',
-	'QI_DST'			=> 'Daylight saving time',
+	'QI_ABOUT'			=> 'About',
+	'QI_DST'			=> 'Daylight savings time',
 	'QI_DST_EXPLAIN'	=> 'Do you want daylight saving time to be on or off?',
 	'QI_LANG'			=> 'Select QuickInstall language',
 	'QI_LANG_EXPLAIN'	=> 'The language will be visible when the language pack is available in the directory &quot;language/&quot;',
@@ -295,7 +298,6 @@ $lang = array_merge($lang, array(
 	'SQLITE_PATH_MISSING'	=> 'The entered database server path is either missing or not writeable.',
 	'STAR_MANDATORY'	=> '* = mandatory',
 	'SUBMIT'			=> 'Submit',
-	'SUBSILVER_DEFAULT'	=> 'Set subsilver2 as default style',
 	'SUCCESS'			=> 'Success',
 	'SURE_DELETE_PROFILE'	=> 'Are you sure you want to delete this profile? It cannot be undone.',
 	'SURE_DELETE_BOARDS'	=> 'Are you sure you want to delete these boards/this board? It cannot be undone.',
