@@ -107,6 +107,7 @@ $template->assign_vars(array(
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
 	'S_SETTINGS_SUCCESS'	=> ($attempted && $saved) ? true : false,
 	'S_SETTINGS_FAILURE'	=> ($attempted && !$saved) ? true : false,
+	'S_SETTINGS'			=> true,
 
 	'ERROR'			=> $error,
 
