@@ -187,7 +187,17 @@ function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '
 		$settings_form = '';
 	}
 
-	$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; <a href="' . $settings_url . '">Go to settings</a>';
+	if (!empty($user) && !empty($user->lang))
+	{
+		$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
+		$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
+	}
+	else
+	{
+		$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
+		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+	}
+
 	$qi_version		= QI_VERSION;
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
