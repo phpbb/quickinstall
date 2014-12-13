@@ -1,8 +1,8 @@
 <!-- INCLUDE overall_header.html -->
 
-<h1>{L_QI_MANAGE_PROFILE}</h1>
+<!-- IF not S_IN_INSTALL --><h1>{L_QI_MANAGE_PROFILE}</h1><!-- ENDIF -->
 <!-- IF S_SETTINGS_SUCCESS --><h2 class="settings-result greenish">{L_SETTINGS_SUCCESS}</h2><!-- ELSEIF S_SETTINGS_FAILURE --><h2 class="settings-result redish">{L_SETTINGS_FAILURE}</h2><!-- ENDIF -->
-<!-- IF S_IN_INSTALL --><p class="large" style="color: #505050;">{L_ONLY_LOCAL}</p><!-- ENDIF -->
+<!-- IF S_IN_INSTALL --><h1>{L_INSTALL_QI}</h1><p class="large" style="color: #505050;">{L_ONLY_LOCAL}</p><!-- ENDIF -->
 
 <!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) --><div class="errorbox"><p>{L_NEED_WRITABLE}</p></div><!-- ENDIF -->
 
@@ -179,8 +179,8 @@
 		<dl>
 			<dt><label>{L_COOKIE_SECURE}:</label><br />{L_COOKIE_SECURE_EXPLAIN}</dt>
 			<dd>
-				<label><input type="radio" class="radio" name="qi_config[cookie_secure]" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
-				<label><input type="radio" class="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label>
+				<label><input type="radio" class="radio" name="qi_config[cookie_secure]" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 	</fieldset>
@@ -194,8 +194,8 @@
 		<dl>
 			<dt><label>{L_EMAIL_ENABLE}:</label><br />{L_EMAIL_ENABLE_EXPLAIN}</dt>
 			<dd>
-				<label><input type="radio" class="radio" name="qi_config[email_enable]" value="1"<!-- IF CONFIG_EMAIL_ENABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
-				<label><input type="radio" class="radio" name="qi_config[email_enable]" value="0"<!-- IF CONFIG_EMAIL_ENABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label>
+				<label><input type="radio" class="radio" name="qi_config[email_enable]" value="1"<!-- IF CONFIG_EMAIL_ENABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<label><input type="radio" class="radio" name="qi_config[email_enable]" value="0"<!-- IF CONFIG_EMAIL_ENABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
 		<dl>

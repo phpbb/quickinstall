@@ -46,11 +46,6 @@ class qi
 			'U_PHPINFO'		=> self::url('phpinfo'),
 			'U_SETTINGS'	=> self::url('settings'),
 
-			//'S_MANAGE'		=> ($page == 'manage') ? true : false,
-			//'S_MAIN'		=> ($page == 'main') ? true : false,
-			//'S_PHPINFO'		=> ($page == 'phpinfo') ? true : false,
-			//'S_SETTINGS'	=> ($page == 'settings') ? true : false,
-
 			'S_CONTENT_DIRECTION'	=> $user->lang['DIRECTION'],
 			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
