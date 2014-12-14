@@ -111,7 +111,7 @@ class qi_create
 		// check if we have a board db (and directory) name
 		if (!$dbname)
 		{
-			trigger_error('NO_DB');
+			create_board_warning($user->lang['GENERAL_ERROR'], $user->lang['NO_DB'], 'main');
 		}
 
 		// Set the new board as root path.
