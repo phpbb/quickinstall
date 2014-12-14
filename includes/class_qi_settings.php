@@ -978,7 +978,7 @@ class settings
 
 		$profile_file = "{$quickinstall_path}settings/$profile.cfg";
 
-		if (file_exists($profile_file) && !is_writable($profile_file))
+		if (!is_writable($profile_file))
 		{
 			return(false);
 		}

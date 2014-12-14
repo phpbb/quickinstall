@@ -208,7 +208,7 @@ window.onload = function()
 				<li<!-- IF S_DOCS --> id="activetab"<!-- ENDIF -->><a href="{U_DOCS}"><span>{L_DOCS_LONG}</span></a></li>
 				<li<!-- IF S_PHPINFO --> id="activetab"<!-- ENDIF -->><a href="{U_PHPINFO}"><span>{L_PHPINFO}</span></a></li>
 				<li<!-- IF S_SETTINGS --> id="activetab"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_PROFILES}</span></a></li>
-				<!-- IF not S_IN_INSTALL -->
+				<!-- IF not S_IN_INSTALL and not S_NO_PROFILE -->
 					<li<!-- IF S_MAIN--> id="activetab"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_BOARDS}</span></a></li>
 				<!-- ENDIF -->
 			</ul>
