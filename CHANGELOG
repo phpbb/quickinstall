@@ -9,6 +9,7 @@ QuickInstall Changelog
  + [Fix] Issue #38 Subsilver2 was not installed for 3.1.x boards.
  + [Fix] The "boards" tab was not hidden when there where errors in submitting first/only config.
  + [Fix] QI tried to write to the "settings" folder even if it was not writable.
+ + [Fix] The explain text for the Boards tab was not up to date.
  + [Change] Moved the "can take a while" warning box and the options/settings boxes.
  + [Change] Moved the header text to the sidebar in the PHP info tab.
  + [Change] Added some space abowe and below the "Check all" link.
