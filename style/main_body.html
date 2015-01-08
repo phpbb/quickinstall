@@ -120,10 +120,14 @@ function toggle_div(div_id)
 			<dd><input class="text medium" type="text" id="default_style" name="default_style" value="{DEFAULT_STYLE}" /></dd>
 		</dl>
 
-		<p class="quick">
-			<span class="errorbox" style="background-color: #ba0b0b; margin-right: 20px;">{L_MIGHT_TAKE_LONG}</span>
-			<input type="submit" name="submituser" id="submituser" value="{L_SUBMIT}" class="button1" onclick="return(validate_fields());" />
-		</p>
+		<dl>
+			<dt style="background-color: #bc2a4d; color: #fff; padding: 5px; width: 42%;">
+				{L_MIGHT_TAKE_LONG}
+			</dt>
+			<dd style="text-align: center;">
+				<input type="submit" name="submituser" id="submituser" value="{L_SUBMIT}" class="button1" style="margin-top: 20px;" onclick="return(validate_fields());" />
+			</dd>
+		</dl>
 	</fieldset>
 
 	<fieldset>
