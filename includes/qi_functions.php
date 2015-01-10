@@ -16,6 +16,38 @@ if (!defined('IN_QUICKINSTALL'))
 }
 
 /**
+ * Generate DBMS select options for the settings tab.
+ * Checks that each extension is loaded.
+ *
+ * @todo add more DBMS.
+ *
+ * @param $default string, the DBMS to set as selected
+ * @return string with options.
+ */
+function gen_dbms_options($default = 'mysqli')
+{
+	$dbms_ary = array(
+		'mysqli'	=> 'MySQLi',
+		'mysql'		=> 'MySQL',
+		'mssql'		=> 'MSSQL',
+		'pgsql'		=> 'PostgreSQL',
+		'sqlite'	=> 'SQLite',
+	);
+
+	$options = '';
+	foreach ($dbms_ary as $ext => $title)
+	{
+		if (extension_loaded($ext))
+		{
+			$selected = ($ext == $default) ? ' selected="selected"' : '';
+			$options .= "<option value='$ext'$selected>$title</option>";
+		}
+	}
+
+	return($options);
+}
+
+/**
 * Borrowed from phpBB 3.1 includes/functions.php/phpbb_format_timezone_offset()
 * To have it available for 3.0.x too.
 *

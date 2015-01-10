@@ -66,15 +66,7 @@
 		<dl>
 			<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
 			<dd>
-				<select name="qi_config[dbms]" id="dbms">
-					<option value="firebird"<!-- IF CONFIG_DBMS == 'firebird' --> selected="selected"<!-- ENDIF -->>Firebird</option>
-					<option value="mysql"<!-- IF CONFIG_DBMS == 'mysql' --> selected="selected"<!-- ENDIF -->>MySQL</option>
-					<option value="mysqli"<!-- IF CONFIG_DBMS == 'mysqli' --> selected="selected"<!-- ENDIF -->>MySQLi</option>
-					<option value="mssql"<!-- IF CONFIG_DBMS == 'mssql' --> selected="selected"<!-- ENDIF -->>MSSQL</option>
-					<option value="oracle"<!-- IF CONFIG_DBMS == 'oracle' --> selected="selected"<!-- ENDIF -->>Oracle</option>
-					<option value="postgres"<!-- IF CONFIG_DBMS == 'postgres' --> selected="selected"<!-- ENDIF -->>Postgres</option>
-					<option value="sqlite"<!-- IF CONFIG_DBMS == 'sqlite' --> selected="selected"<!-- ENDIF -->>SQLite</option>
-				</select>
+				<select name="qi_config[dbms]" id="dbms">{CONFIG_DBMS}</select>
 			</dd>
 		</dl>
 		<dl>

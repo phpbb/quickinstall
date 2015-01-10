@@ -144,7 +144,7 @@ $template->assign_vars(array(
 	'CONFIG_COOKIE_SECURE'	=> $settings->get_config('cookie_secure', 0),
 	'CONFIG_DB_PREFIX'		=> $settings->get_config('db_prefix'),
 	'CONFIG_DBHOST'			=> $settings->get_config('dbhost'),
-	'CONFIG_DBMS'			=> $settings->get_config('dbms'),
+	'CONFIG_DBMS'			=> gen_dbms_options($settings->get_config('dbms')),
 	'CONFIG_DBPASSWD'		=> $settings->get_config('dbpasswd'),
 	'CONFIG_DBPORT'			=> $settings->get_config('dbport'),
 	'CONFIG_DBUSER'			=> $settings->get_config('dbuser'),

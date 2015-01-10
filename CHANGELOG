@@ -24,6 +24,7 @@ QuickInstall Changelog
  + [Feature] Any style can be set as default style.
  + [Feature] Automagically update settings. With link to update all profiles (only for 1.2.1 and up).
  + [Feature] Added a documentation tab, with info currently from readme.txt.
+ + [Feature] Only display the DBMS whose extensions are loaded on the settings page.
 
 - Changes since 1.1.8
  + [Fix] Ticket #63309 The first release in the changelog was broken.
