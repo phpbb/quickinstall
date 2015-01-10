@@ -17,7 +17,7 @@ function get_default_settings()
 {
 	$config = array(
 		'qi_lang'			=> 'en',
-		'dbms'				=> 'mysql',
+		'dbms'				=> 'mysqli',
 		'dbhost'			=> 'localhost',
 		'dbport'			=> '',
 		'dbuser'			=> '',
