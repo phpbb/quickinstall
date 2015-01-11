@@ -17,6 +17,7 @@ QuickInstall Changelog
  + [Change] Moved template var S_page to their respective file.
  + [Change] Changed some wordings and removed unused strings from language files.
  + [Change] Changed default DBMS to MySQLi.
+ + [Change] Use the same name for the directory as the DB. Links to the boards get messed up with spaces.
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
  + [Feature] Show board version in boards list.
