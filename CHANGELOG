@@ -18,6 +18,7 @@ QuickInstall Changelog
  + [Change] Changed some wordings and removed unused strings from language files.
  + [Change] Changed default DBMS to MySQLi.
  + [Change] Use the same name for the directory as the DB. Links to the boards get messed up with spaces.
+ + [Change] Allow hyphen and dot in directory names.
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
  + [Feature] Show board version in boards list.

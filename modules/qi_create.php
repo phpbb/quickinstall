@@ -60,7 +60,7 @@ class qi_create
 		$dbpasswd	= $settings->get_config('dbpasswd');
 		$dbuser		= $settings->get_config('dbuser');
 
-		$site_dir	= $dbname;
+		$site_dir	= validate_dbname($settings->get_config('dbname'), true, true);
 		$site_name	= $settings->get_config('site_name', '', true);
 		$site_desc	= $settings->get_config('site_desc', '', true);
 
