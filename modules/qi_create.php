@@ -726,20 +726,12 @@ class qi_create
 			file_functions::grant_permissions($board_dir, $grant_permissions);
 		}
 
-		// if he/she wants to be redirected, redirect him/her
-		$redirect = $settings->get_config('redirect', false);
-		if (empty($alt_env) && $redirect)
+		// if he/she wants to be redirected, we'll do that.
+		if ($settings->get_config('redirect', false))
 		{
 			// Log him/her in first.
 			$user->session_begin();
 			$auth->login($admin_name, $settings->get_config('admin_pass'), false, true, true);
-			qi::redirect($board_url);
-		}
-		else if ($redirect)
-		{
-			// We are redirecting to a alt environment.
-			// We don't know what have been changed there so we can't login without maybe throwing a error.
-			// Just redirect without logging in.
 			qi::redirect($board_url);
 		}
 
