@@ -59,7 +59,7 @@ function load_schema($install_path = '', $install_dbms = false)
 
 function load_schema_31($install_path = '', $install_dbms = false)
 {
-	global $db, $settings, $table_prefix;
+	global $db, $settings, $table_prefix, $phpbb_root_path, $phpEx;
 
 	static $available_dbms = false;
 
@@ -96,7 +96,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 
 	if (file_exists($dbms_schema))
 	{
-		$sql_query = @file_get_contents($dbms_schema);
+		$sql_query = file_get_contents($dbms_schema);
 		$sql_query = preg_replace('#phpbb_#i', $table_prefix, $sql_query);
 		$sql_query = phpbb_remove_comments($sql_query);
 		$sql_query = split_sql_file($sql_query, $delimiter);
@@ -109,8 +109,30 @@ function load_schema_31($install_path = '', $install_dbms = false)
 	}
 
 	// Ok we have the db info go ahead and work on building the table
-	$db_table_schema = @file_get_contents($install_path . 'schema.json');
-	$db_table_schema = json_decode($db_table_schema, true);
+	if (file_exists($install_path . 'schema.json'))
+	{
+		$db_table_schema = file_get_contents($install_path . 'schema.json');
+		$db_table_schema = json_decode($db_table_schema, true);
+	}
+	else
+	{
+		$table_prefix = 'phpbb_';
+
+		if (!defined('CONFIG_TABLE'))
+		{
+			// We need to include the constants file for the table constants
+			// when we generate the schema from the migration files.
+			include($phpbb_root_path . 'includes/constants.' . $phpEx);
+		}
+
+		$finder = new \phpbb\finder(new \phpbb\filesystem(), $phpbb_root_path, null, $phpEx);
+		$classes = $finder->core_path('phpbb/db/migration/data/')
+			->get_classes();
+
+		$sqlite_db = new \phpbb\db\driver\sqlite();
+		$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, new \phpbb\db\tools($sqlite_db, true), $phpbb_root_path, $phpEx, $table_prefix);
+		$db_table_schema = $schema_generator->get_schema();
+	}
 
 	if (!defined('CONFIG_TABLE'))
 	{
