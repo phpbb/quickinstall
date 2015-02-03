@@ -21,6 +21,7 @@ QuickInstall Changelog
  + [Change] Use the same name for the directory as the DB. Links to the boards get messed up with spaces.
  + [Change] Allow hyphen and dot in directory names.
  + [Change] Always try to login if redirect is set.
+ + [Change] Don't error out when the selected alt environment can't be found.
  + [Feature] Added better error reporting and handling to more places.
  + [Feature] Don't show the select menu for alternative environments if the phpBB3_alt folder is empty.
  + [Feature] Show board version in boards list.

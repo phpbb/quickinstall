@@ -124,13 +124,16 @@ if (file_exists($quickinstall_path . 'purge_cache'))
 
 // We need some phpBB functions too.
 $alt_env = $settings->get_config('alt_env', '');
+$alt_env_missing = false;
 if ($alt_env !== '')
 {
-	$phpbb_root_path = "{$quickinstall_path}sources/phpBB3_alt/$alt_env/";
-
-	if (!file_exists($phpbb_root_path) || is_file($phpbb_root_path))
+	if (file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env/") && is_dir("{$quickinstall_path}sources/phpBB3_alt/$alt_env/"))
 	{
-		gen_error_msg("The specified alternative environment, <strong>$alt_env</strong>, doesn’t exist.");
+		$phpbb_root_path = "{$quickinstall_path}sources/phpBB3_alt/$alt_env/";
+	}
+	else
+	{
+		$alt_env_missing = true;
 	}
 }
 
@@ -230,9 +233,9 @@ $error = $settings->get_error();
 
 $page = (empty($error)) ? $page : 'settings';
 
-if ($page == 'main' || $page == 'settings')
+if ($page == 'main' || $page == 'settings' || $alt_env_missing)
 {
-	if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings')
+	if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
 	{
 		$page = 'settings';
 		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);

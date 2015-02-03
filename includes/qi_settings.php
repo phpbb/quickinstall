@@ -96,6 +96,12 @@ else
 	}
 }
 
+if ($alt_env_missing && !$attempted && !$saved)
+{
+	$err_string = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
+	$error .= $err_string . '<br />';
+}
+
 $profiles = $settings->get_profiles();
 
 $template->assign_vars(array(
