@@ -35,9 +35,9 @@ class populate
 
 	// How many of each type to send to the db each run
 	// Might be better to add some memory checking later.
-	private $user_chunks = CHUNK_USER;
-	private $post_chunks = CHUNK_POST;
-	private $topic_chunks = CHUNK_TOPIC;
+	private $user_chunks = 0;
+	private $post_chunks = 0;
+	private $topic_chunks = 0;
 
 	/**
 	 * Lorem ipsum, a placeholder for the posts.
@@ -116,9 +116,9 @@ class populate
 		include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
 
 		// Get the chunk sizes. Make sure they are integers and set to something.
-		$this->post_chunks	= $settings->get_config('chunk_post', CHUNK_POST);
-		$this->topic_chunks	= $settings->get_config('chunk_topic', CHUNK_TOPIC);
-		$this->user_chunks	= $settings->get_config('chunk_user', CHUNK_USER);
+		$this->post_chunks	= $settings->get_config('chunk_post', 0);
+		$this->topic_chunks	= $settings->get_config('chunk_topic', 0);
+		$this->user_chunks	= $settings->get_config('chunk_user', 0);
 
 		// Initiate these. $settings->get_config('', ); //
 		$this->create_admin		= $settings->get_config('create_admin', false);

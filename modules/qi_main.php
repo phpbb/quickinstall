@@ -72,9 +72,9 @@ class qi_main
 			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
 
 			// Chunk settings
-			'CHUNK_POST'	=> $settings->get_config('chunk_post', CHUNK_POST),
-			'CHUNK_TOPIC'	=> $settings->get_config('chunk_topic', CHUNK_TOPIC),
-			'CHUNK_USER'	=> $settings->get_config('chunk_user', CHUNK_USER),
+			'CHUNK_POST'	=> $settings->get_config('chunk_post', 0),
+			'CHUNK_TOPIC'	=> $settings->get_config('chunk_topic', 0),
+			'CHUNK_USER'	=> $settings->get_config('chunk_user', 0),
 
 			// Populate settings.
 			'NUM_USERS'			=> $settings->get_config('num_users', 0),
