@@ -7,7 +7,7 @@
 *
 */
 
-define('QI_VERSION', '1.2.1-dev');
+define('QI_VERSION', '1.2.1-RC1');
 
 // Cookies set by QI
 define('QI_PROFILE_COOKIE', 'qi_profile');	// Cookie with the latest used profile name as payload.
