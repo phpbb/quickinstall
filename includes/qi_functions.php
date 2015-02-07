@@ -430,7 +430,7 @@ function validate_dbname($dbname, $first_char = false, $path = false)
 	$dbname = str_replace($chars_replace, '_', $dbname);
 
 	// Just drop remaining non valid chars.
-	$dbname = preg_replace('/[^A Za-z0-9-_]*/', '', $dbname);
+	$dbname = preg_replace('/[^A-Za-z0-9-_]*/', '', $dbname);
 
 	// make sure that the first char is not a underscore if set.
 	$prefix = ($first_char && $dbname[0] == '_') ? 'qi' : '';
