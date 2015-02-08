@@ -313,8 +313,8 @@ class qi_create
 		}
 
 		// Replace backslashes and doubled slashes (could happen on some proxy setups)
-		$script_path = str_replace(array('\\', '//'), '/', $script_path);
 		$script_path = trim(dirname($script_path));
+		$script_path = str_replace(array('\\', '//'), '/', $script_path);
 
 		// Make sure $script_path ends with a slash (/).
 		$script_path = (substr($script_path, -1) != '/') ? $script_path . '/' : $script_path;
