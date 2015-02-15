@@ -481,7 +481,8 @@ function get_installed_boards()
 
 	// list of boards
 	$boards_dir = $settings->get_boards_dir();
-	$boards_arr = scandir($boards_dir);
+	$boards_arr = scandir($boards_dir, SCANDIR_SORT_NONE);
+	natcasesort($boards_arr); // Sort the tables in a natural order 10 > 9
 
 	foreach ($boards_arr as $board)
 	{

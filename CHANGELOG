@@ -1,5 +1,8 @@
 QuickInstall Changelog
 
+- Changes since 1.2.1
+ + [Change] Sort boards in a natural order (10 > 9).
+
 - Changes since 1.2.0
  + [Fix] Bug in the routine to purge the cache.
  + [Fix] Ticket #EXTTOOLS-655 The redirect got two slashes in the URL when QI was installed in localhost root.
