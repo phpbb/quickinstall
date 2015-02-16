@@ -1731,3 +1731,9 @@ span.error-main {
 
 .phpinfo td, .phpinfo th, .phpinfo h2, .phpinfo h1 { text-align: left; }
 .rtl .phpinfo td, .rtl .phpinfo th, .rtl .phpinfo h2, .rtl .phpinfo h1 { text-align: right; }
+
+#auto-scroll {
+	height: auto;
+	max-height: 427px;
+	overflow: auto;
+}

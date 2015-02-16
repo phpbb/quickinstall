@@ -245,12 +245,15 @@ window.onload = function()
 						<!-- ELSEIF S_MAIN -->
 							<!-- IF .board_row -->
 							<h5>{L_BOARDS_LIST}</h5>
+
 							<fieldset class="tabulated" style="line-height: 1.4em;">
 								<form id="acp_bbcodes" method="post" action="{U_MANAGE}">
-									<!-- BEGIN board_row -->
-									<input type="checkbox" class="radio" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" />&nbsp;
-									<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><!-- IF board_row.VERSION --> ({board_row.VERSION})<!-- ENDIF --><br />
-									<!-- END board_row -->
+									<div id="auto-scroll">
+										<!-- BEGIN board_row -->
+										<input type="checkbox" class="radio" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" />&nbsp;
+										<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><!-- IF board_row.VERSION --> ({board_row.VERSION})<!-- ENDIF --><br />
+										<!-- END board_row -->
+									</div>
 
 									<div style="margin: 7px 0;">
 										<a href="#" onclick="marklist('acp_bbcodes', 'select', true); return false;">{L_CHECK_ALL}</a> &bull;

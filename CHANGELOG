@@ -2,6 +2,7 @@ QuickInstall Changelog
 
 - Changes since 1.2.1
  + [Change] Sort boards in a natural order (10 > 9).
+ + [Change] Added a scroll bar to the boards list.
 
 - Changes since 1.2.0
  + [Fix] Bug in the routine to purge the cache.
