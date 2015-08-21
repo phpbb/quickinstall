@@ -1,6 +1,7 @@
 QuickInstall Changelog
 
 - Changes since 1.2.1
+ + [Fix] Issue #45 Fix compatibility for installing phpBB 3.1.5 boards.
  + [Change] Sort boards in a natural order (10 > 9).
  + [Change] Added a scroll bar to the boards list.
 
