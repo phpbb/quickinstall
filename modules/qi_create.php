@@ -533,7 +533,7 @@ class qi_create
 		// build search index
 		if (defined('PHPBB_31'))
 		{
-			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user);
+			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
 		}
 		else
 		{
