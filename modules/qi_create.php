@@ -208,13 +208,13 @@ class qi_create
 		{
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "\n";
 		}
 		else
 		{
 			$config_data .= "@define('DEBUG_EXTRA', true);\n";
+			$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		}
-
-		$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		file_put_contents($board_dir . 'config.' . $phpEx, $config_data);
 
 		if ($dbms == 'firebird')
