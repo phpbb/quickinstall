@@ -208,7 +208,6 @@ class qi_create
 		{
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
-			$config_data .= "\n";
 		}
 		else
 		{
