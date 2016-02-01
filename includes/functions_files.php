@@ -24,6 +24,8 @@ class file_functions
 
 	public static function delete_file($file)
 	{
+		chmod($file, 0755);
+
 		$success = @unlink($file);
 
 		if (!$success)
