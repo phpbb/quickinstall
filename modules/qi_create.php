@@ -661,8 +661,14 @@ class qi_create
 			$iohandler->set_input('submit_server', 'submit');
 
 			//$installer->run();
+
+			// Storing the db and user objects temporarily because they
+			// are altered by the installer processes below...not sure why?
 			$current_user = $user;
 			$current_db = $db;
+
+			// Suppress errors because constants.php is added again in these objects
+			// leading to debug notices about the constants already being defined.
 			@$install = $container->get('installer.install_finish.populate_migrations');
 			@$install->run();
 			@$install = $container->get('installer.install_data.add_modules');
@@ -671,12 +677,16 @@ class qi_create
 			@$install->run();
 			@$install = $container->get('installer.install_data.add_bots');
 			@$install->run();
+
+			// Restore user and db objects to original state
 			$user = $current_user;
 			$db = $current_db;
 			unset($install, $current_user, $current_db);
 
+			// Update the lang array with keys loaded for the installer
 			$user->lang = array_merge($user->lang, $language->get_lang_array());
 
+			// Set some services in the container that may be needed later
 			global $phpbb_container, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
 			global $symfony_request, $phpbb_filesystem;
 
