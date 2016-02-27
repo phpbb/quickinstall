@@ -584,8 +584,6 @@ class qi_create
 
 		if (defined('PHPBB_32'))
 		{
-			global $phpbb_container, $phpbb_config_php_file, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
-			global $symfony_request, $phpbb_filesystem;
 			global $phpbb_root_path, $phpEx;
 
 			$container_builder = new \phpbb\di\container_builder($phpbb_root_path, $phpEx);
@@ -676,6 +674,20 @@ class qi_create
 			$user = $current_user;
 			$db = $current_db;
 			unset($install, $current_user, $current_db);
+
+			global $phpbb_container, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
+			global $symfony_request, $phpbb_filesystem;
+
+			$phpbb_container = $container->get('installer.helper.container_factory');
+			$phpbb_dispatcher = $phpbb_container->get('dispatcher');
+			$phpbb_log = $phpbb_container->get('log');
+
+			$request = $phpbb_container->get('request');
+			$request->enable_super_globals();
+
+			$passwords_manager = $phpbb_container->get('passwords.manager');
+			$symfony_request = $phpbb_container->get('symfony_request');
+			$phpbb_filesystem = $phpbb_container->get('filesystem');
 		}
 		else if (defined('PHPBB_31'))
 		{
@@ -825,7 +837,7 @@ class qi_create
 		$user->ip = &$user_ip;
 		if (defined('PHPBB_31'))
 		{
-			add_log('admin', sprintf($lang['LOG_INSTALL_INSTALLED_QI'], QI_VERSION));
+			add_log('admin', sprintf($user->lang['LOG_INSTALL_INSTALLED_QI'], QI_VERSION));
 		}
 		else
 		{
