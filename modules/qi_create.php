@@ -675,6 +675,8 @@ class qi_create
 			$db = $current_db;
 			unset($install, $current_user, $current_db);
 
+			$user->lang = array_merge($user->lang, $language->get_lang_array());
+
 			global $phpbb_container, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
 			global $symfony_request, $phpbb_filesystem;
 
