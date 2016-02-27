@@ -5,7 +5,7 @@ About:
 phpBB3 QuickInstall (QI) is tool used to manage many installations of phpBB3. It
 is not intended for use on a live server. If you insist on using it on a public
 server, make sure to protect the directory where it is. No support is given for
-other than local use. You can install a phpBB 3.1.x or 3.0.x board with one
+other than local use. You can install a phpBB 3.2.x, 3.1.x or 3.0.x board with one
 single mouse click. This is useful for developing modifications and extensions,
 as you won't have any conflicts of different MODs or extensions. And might need
 to install several boards before your testing is done.
@@ -20,7 +20,7 @@ Installation:
 Copy the quickinstall folder to your local web space. Make sure boards/, cache/
 and settings/ are writable by your web server.
 
-Download the latest phpBB 3.1.x or 3.0.x from https://www.phpbb.com/downloads/,
+Download the latest phpBB 3.2.x, 3.1.x or 3.0.x from https://www.phpbb.com/downloads/,
 extract it and copy the phpBB3 folder to sources/. Choose the version you do
 most work with, for your own convenience.
 
