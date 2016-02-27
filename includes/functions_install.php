@@ -45,6 +45,16 @@ class module
 {
 }
 
+function get_db_tools($db)
+{
+	if (defined('PHPBB_32'))
+	{
+		return new \phpbb\db\tools\tools($db);
+	}
+
+	return new \phpbb\db\tools($db);
+}
+
 function load_schema($install_path = '', $install_dbms = false)
 {
 	if (defined('PHPBB_31'))
@@ -71,7 +81,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 
 	if (!$available_dbms)
 	{
-		$available_dbms = get_available_dbms($install_dbms);
+		$available_dbms = qi_get_available_dbms($install_dbms);
 
 		// If mysql is chosen, we need to adjust the schema filename slightly to reflect the correct version. ;)
 		if ($install_dbms == 'mysql')
@@ -98,8 +108,8 @@ function load_schema_31($install_path = '', $install_dbms = false)
 	{
 		$sql_query = file_get_contents($dbms_schema);
 		$sql_query = preg_replace('#phpbb_#i', $table_prefix, $sql_query);
-		$sql_query = phpbb_remove_comments($sql_query);
-		$sql_query = split_sql_file($sql_query, $delimiter);
+		$sql_query = qi_remove_comments($sql_query);
+		$sql_query = qi_split_sql_file($sql_query, $delimiter);
 
 		foreach ($sql_query as $sql)
 		{
@@ -130,7 +140,8 @@ function load_schema_31($install_path = '', $install_dbms = false)
 			->get_classes();
 
 		$sqlite_db = new \phpbb\db\driver\sqlite();
-		$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, new \phpbb\db\tools($sqlite_db, true), $phpbb_root_path, $phpEx, $table_prefix);
+		$db_tools = get_db_tools($sqlite_db, true);
+		$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, $db_tools, $phpbb_root_path, $phpEx, $table_prefix);
 		$db_table_schema = $schema_generator->get_schema();
 	}
 
@@ -142,7 +153,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 		define('CONFIG_TABLE', $table_prefix . 'config');
 	}
 
-	$db_tools = new \phpbb\db\tools($db);
+	$db_tools = get_db_tools($db);
 	foreach ($db_table_schema as $table_name => $table_data)
 	{
 		$db_tools->sql_create_table(
@@ -177,10 +188,10 @@ function load_schema_31($install_path = '', $install_dbms = false)
 	$sql_query = preg_replace('# phpbb_([^\s]*) #i', ' ' . $table_prefix . '\1 ', $sql_query);
 
 	// Change language strings...
-	$sql_query = preg_replace_callback('#\{L_([A-Z0-9\-_]*)\}#s', 'adjust_language_keys_callback', $sql_query);
+	$sql_query = preg_replace_callback('#\{L_([A-Z0-9\-_]*)\}#s', 'qi_adjust_language_keys_callback', $sql_query);
 
-	$sql_query = phpbb_remove_comments($sql_query);
-	$sql_query = split_sql_file($sql_query, ';');
+	$sql_query = qi_remove_comments($sql_query);
+	$sql_query = qi_split_sql_file($sql_query, ';');
 
 	foreach ($sql_query as $sql)
 	{
@@ -206,7 +217,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 		$install_dbms = $dbms;
 	}
 
-	if (!function_exists('get_available_dbms'))
+	if (!function_exists('get_available_dbms') && !defined('PHPBB_32'))
 	{
 		global $phpbb_root_path, $phpEx;
 		include($phpbb_root_path . 'includes/functions_install.' . $phpEx);
@@ -214,7 +225,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 
 	if (!$available_dbms)
 	{
-		$available_dbms = get_available_dbms($install_dbms);
+		$available_dbms = qi_get_available_dbms($install_dbms);
 
 		if ($install_dbms == 'mysql')
 		{
@@ -242,7 +253,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 
 		$remove_remarks($sql_query);
 
-		$sql_query = split_sql_file($sql_query, $delimiter);
+		$sql_query = qi_split_sql_file($sql_query, $delimiter);
 
 		foreach ($sql_query as $sql)
 		{
@@ -272,7 +283,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 
 		remove_remarks($sql_query);
 
-		$sql_query = split_sql_file($sql_query, ';');
+		$sql_query = qi_split_sql_file($sql_query, ';');
 
 		foreach ($sql_query as $sql)
 		{
@@ -281,3 +292,42 @@ function load_schema_30($install_path = '', $install_dbms = false)
 		unset($sql_query);
 	}
 }
+
+function qi_split_sql_file($sql, $delimiter)
+{
+	if (defined('PHPBB_32'))
+	{
+		global $phpbb_root_path;
+		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
+		return call_user_func(array($database, 'split_sql_file'), $sql, $delimiter);
+	}
+	else
+	{
+		return call_user_func('split_sql_file', $sql, $delimiter);
+	}
+}
+
+function qi_remove_comments($input)
+{
+	if (defined('PHPBB_32'))
+	{
+		global $phpbb_root_path;
+		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
+		return call_user_func(array($database, 'remove_comments'), $input);
+	}
+	else
+	{
+		return call_user_func('phpbb_remove_comments', $input);
+	}
+}
+
+function qi_adjust_language_keys_callback($matches)
+{
+	if (!empty($matches[1]))
+	{
+		global $lang, $db;
+
+		return (!empty($lang[$matches[1]])) ? $db->sql_escape($lang[$matches[1]]) : $db->sql_escape($matches[1]);
+	}
+}
+

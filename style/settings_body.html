@@ -349,7 +349,9 @@
 			<dt><label for="populate">{L_INSTALL_STYLES}:</label><br />{L_INSTALL_STYLES_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="1"<!-- IF CONFIG_INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+				<!-- IF PHPBB_VERSION != 'PHPBB_32' -->
 				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="2"<!-- IF CONFIG_INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
+				<!-- ENDIF -->
 				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="0"<!-- IF CONFIG_INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>

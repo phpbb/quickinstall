@@ -526,7 +526,7 @@ function db_connect($db_data = '')
 	list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $db_data;
 
 	// If we get here and the extension isn't loaded it should be safe to just go ahead and load it
-	$available_dbms = get_available_dbms($dbms);
+	$available_dbms = qi_get_available_dbms($dbms);
 
 	if (!isset($available_dbms[$dbms]['DRIVER']))
 	{
@@ -588,4 +588,18 @@ function db_close($db = false)
 	}
 
 	$db->sql_close();
+}
+
+function qi_get_available_dbms($dbms)
+{
+	if (defined('PHPBB_32'))
+	{
+		global $phpbb_root_path;
+		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
+		return call_user_func(array($database, 'get_available_dbms'), $dbms);
+	}
+	else
+	{
+		return call_user_func('get_available_dbms', $dbms);
+	}
 }
