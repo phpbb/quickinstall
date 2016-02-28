@@ -584,8 +584,6 @@ class qi_create
 
 		if (defined('PHPBB_32'))
 		{
-			global $phpbb_root_path, $phpEx;
-
 			$container_builder = new \phpbb\di\container_builder($phpbb_root_path, $phpEx);
 			$container = $container_builder
 				->with_environment('installer')
@@ -678,6 +676,7 @@ class qi_create
 			$user = $current_user;
 			$db = $current_db;
 			unset($current_user, $current_db);
+			$container->reset();
 
 			// Update the lang array with keys loaded for the installer
 			$user->lang = array_merge($user->lang, $language->get_lang_array());
