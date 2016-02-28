@@ -92,6 +92,7 @@ function toggle_div(div_id)
 				<label><input type="radio" class="radio" name="redirect" value="0"<!-- IF S_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
+		<!-- IF PHPBB_VERSION lt '3.1' -->
 		<dl>
 			<dt><label for="">{L_AUTOMOD_INSTALL}:</label><br />{L_ONLY_30}</dt>
 			<dd>
@@ -99,6 +100,7 @@ function toggle_div(div_id)
 				<label><input type="radio" class="radio" name="automod" value="0"<!-- IF S_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 			</dd>
 		</dl>
+		<!-- ENDIF -->
 		<dl>
 			<dt><label for="">{L_POPULATE}:</label><br />{L_POPULATE_MAIN_EXPLAIN}</dt>
 			<dd>
@@ -111,7 +113,7 @@ function toggle_div(div_id)
 			<dt><label for="">{L_INSTALL_STYLES}:</label><br />{L_INSTALL_STYLES_EXPLAIN}</dt>
 			<dd>
 				<label><input type="radio" class="radio" name="install_styles" value="1"<!-- IF INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<!-- IF PHPBB_VERSION != 'PHPBB_32' -->
+				<!-- IF PHPBB_VERSION lt '3.2' -->
 				<label><input type="radio" class="radio" name="install_styles" value="2"<!-- IF INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
 				<!-- ENDIF -->
 				<label><input type="radio" class="radio" name="install_styles" value="0"<!-- IF INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
