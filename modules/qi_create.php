@@ -669,19 +669,15 @@ class qi_create
 
 			// Suppress errors because constants.php is added again in these objects
 			// leading to debug notices about the constants already being defined.
-			@$install = $container->get('installer.install_finish.populate_migrations');
-			@$install->run();
-			@$install = $container->get('installer.install_data.add_modules');
-			@$install->run();
-			@$install = $container->get('installer.install_data.add_languages');
-			@$install->run();
-			@$install = $container->get('installer.install_data.add_bots');
-			@$install->run();
+			@$container->get('installer.install_finish.populate_migrations')->run();
+			@$container->get('installer.install_data.add_modules')->run();
+			@$container->get('installer.install_data.add_languages')->run();
+			@$container->get('installer.install_data.add_bots')->run();
 
 			// Restore user and db objects to original state
 			$user = $current_user;
 			$db = $current_db;
-			unset($install, $current_user, $current_db);
+			unset($current_user, $current_db);
 
 			// Update the lang array with keys loaded for the installer
 			$user->lang = array_merge($user->lang, $language->get_lang_array());
