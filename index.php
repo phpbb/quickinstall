@@ -89,7 +89,7 @@ set_error_handler(array('qi', 'msg_handler'), E_ALL);
 // Make sure we have phpBB.
 if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 {
-	gen_error_msg('phpBB not found. You need to download the latest phpBB 3.0.x or phpBB 3.1.x from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>,<br />extract it and copy the phpBB3 folder to sources/. Choose the version you do most work with, for your own convenience.');
+	gen_error_msg('phpBB not found. You need to download the latest phpBB 3.0.x, 3.1.x or 3.2.x from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>,<br />extract it and copy the phpBB3 folder to sources/. Choose the version you do most work with, for your own convenience.');
 }
 
 // Let's get the config.
@@ -144,6 +144,13 @@ if (file_exists($phpbb_root_path . 'phpbb/class_loader.' . $phpEx))
 	require($phpbb_root_path . 'phpbb/class_loader.' . $phpEx);
 	$phpbb_class_loader = new \phpbb\class_loader('phpbb\\', $phpbb_root_path . 'phpbb/', $phpEx);
 	$phpbb_class_loader->register();
+
+	require($phpbb_root_path . 'vendor/autoload.' . $phpEx);
+}
+
+if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx))
+{
+	define('PHPBB_32', true);
 }
 
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
@@ -155,15 +162,32 @@ $delete_profile = (isset($_POST['delete-profile'])) ? true : false;
 $table_prefix = $settings->get_config('table_prefix');
 
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
-require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
+
+if (!defined('PHPBB_32'))
+{
+	require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
+}
 
 if (defined('PHPBB_31'))
 {
-	$user	= new \phpbb\user('\phpbb\datetime');
-	$auth	= new \phpbb\auth\auth();
-	$cache	= new \phpbb\cache\driver\file();
+	if (defined('PHPBB_32'))
+	{
+		$cache_dir = $quickinstall_path . $settings->get_config('cache_dir', '');
+		$cache	   = new \phpbb\cache\driver\file($cache_dir);
+		$user	   = new \phpbb\user(
+			new \phpbb\language\language(
+				new \phpbb\language\language_file_loader($phpbb_root_path, $phpEx)),
+			'\phpbb\datetime'
+		);
+	}
+	else
+	{
+		$user	= new \phpbb\user('\phpbb\datetime');
+		$cache	= new \phpbb\cache\driver\file();
+	}
 
-	require($phpbb_root_path . 'vendor/autoload.' . $phpEx);
+	$auth	= new \phpbb\auth\auth();
+	require($phpbb_root_path . 'includes/functions_compatibility.' . $phpEx);
 }
 else
 {

@@ -40,7 +40,7 @@ class class_31_styles extends acp_styles
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $phpEx;
 		$this->styles_path = $this->phpbb_root_path . $this->styles_path_absolute . '/';
-		$this->subsilver_default = $subsilver_default;
+		$this->subsilver_default = isset($subsilver_default) ? $subsilver_default : false;
 
 		$subsilver_only			= ($install_styles == 2) ? true : false;
 		$this->qi_default_style	= $settings->get_config('default_style', '');
@@ -65,7 +65,7 @@ class class_31_styles extends acp_styles
 					$style['style_active'] = 1;
 					$id = $this->install_style($style);
 
-					if ($subsilver_default)
+					if ($this->subsilver_default)
 					{
 						$this->qi_set_default($id);
 					}
