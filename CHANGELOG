@@ -2,6 +2,7 @@ QuickInstall Changelog
 
 - Changes since 1.2.1
  + [Feature] Supports phpBB 3.2 boards
+ + [Fix] Improve compatibility with PHP 7
  + [Fix] Removed closing php tag from generated config.php file
  + [Fix] Fix for UTF-8 characters $error_msg
  + [Fix] Issue #45 Fix compatibility for installing phpBB 3.1.5 boards.

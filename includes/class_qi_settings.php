@@ -65,11 +65,9 @@ class settings
 	var $profile = 'default';
 
 	/**
-	 * Constructor.
-	 *
 	 * Reads the settings and populates $this->config.
 	 */
-	function settings($profile = '', $mode = '')
+	function __construct($profile = '', $mode = '')
 	{
 		global $quickinstall_path, $phpEx, $user;
 
