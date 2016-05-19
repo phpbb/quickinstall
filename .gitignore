@@ -2,9 +2,10 @@ purge_cache
 qi_config.cfg
 boards/*
 settings/*
-cache/*.php
+cache/*
 sources/automod/*
 sources/extra/*
 sources/phpBB3_alt/*
 sources/phpBB3
 *~
+.idea
