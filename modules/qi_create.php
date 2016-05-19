@@ -658,7 +658,8 @@ class qi_create
 			$iohandler->set_input('script_path', $script_path);
 			$iohandler->set_input('submit_server', 'submit');
 
-			//$installer->run();
+			// Update the lang array with keys loaded for the installer
+			$user->lang = array_merge($user->lang, $language->get_lang_array());
 
 			// Storing the db and user objects temporarily because they
 			// are altered by the installer processes below...not sure why?
@@ -672,14 +673,7 @@ class qi_create
 			@$container->get('installer.install_data.add_languages')->run();
 			@$container->get('installer.install_data.add_bots')->run();
 
-			// Restore user and db objects to original state
-			$user = $current_user;
-			$db = $current_db;
-			unset($current_user, $current_db);
 			$container->reset();
-
-			// Update the lang array with keys loaded for the installer
-			$user->lang = array_merge($user->lang, $language->get_lang_array());
 
 			// Set some services in the container that may be needed later
 			global $phpbb_container, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
@@ -695,6 +689,11 @@ class qi_create
 			$passwords_manager = $phpbb_container->get('passwords.manager');
 			$symfony_request = $phpbb_container->get('symfony_request');
 			$phpbb_filesystem = $phpbb_container->get('filesystem');
+
+			// Restore user and db objects to original state
+			$user = $current_user;
+			$db = $current_db;
+			unset($current_user, $current_db);
 		}
 		else if (defined('PHPBB_31'))
 		{
