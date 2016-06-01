@@ -331,6 +331,7 @@ class populate
 					$topic_arr['topic_posts_approved'] = 1;
 
 					$forum['forum_topics_approved']++;
+					$forum['forum_posts_approved']++;
 				}
 				else
 				{
@@ -339,6 +340,7 @@ class populate
 
 					$forum['forum_topics']++;
 					$forum['forum_topics_real']++;
+					$forum['forum_posts']++;
 				}
 
 				$replies = ($this->num_replies_min == $this->num_replies_max) ? $this->num_replies_max : mt_rand($this->num_replies_min, $this->num_replies_max);
