@@ -32,6 +32,7 @@ class populate
 
 	// We can't have all posts posted in the same second.
 	private $post_time = 0;
+	private $start_time = 0;
 
 	// How many of each type to send to the db each run
 	// Might be better to add some memory checking later.
@@ -90,7 +91,7 @@ class populate
 
 	public function populate()
 	{
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $settings;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $settings, $user;
 
 		// Need to include some files.
 		if (!function_exists('gen_sort_selects'))
@@ -138,6 +139,27 @@ class populate
 			return;
 		}
 
+		// There is already one forum and one category created. Let's get their data.
+		$this->get_default_forums();
+
+		// There is already one category and one forum created.
+		$this->num_forums	= ($this->num_forums) ? $this->num_forums - 1 : 0;
+		$this->num_cats		= ($this->num_cats) ? $this->num_cats - 1 : 0;
+
+		// Don't try to fool us.
+		$this->num_replies_max	= max($this->num_replies_max, $this->num_replies_min);
+		$this->num_topics_max	= max($this->num_topics_max, $this->num_topics_min);
+
+		// Estimate the number of posts created.
+		// Or in reality, calculate the highest possible number and convert to seconds in the past.
+		// If one of them is zero this would not be so nice.
+		$replies	= max($this->num_replies_max, 1);
+		$topics		= max($this->num_topics_max, 1);
+		$forums		= max($this->num_forums, 1);
+
+		// Calculate the board's start time/date
+		$this->start_time = max(0, time() - ($topics * $replies * $forums) - $this->num_users - 60);
+
 		if ($this->num_users)
 		{
 			// If we have users we also need a e-mail domain.
@@ -158,13 +180,6 @@ class populate
 			$this->pop_user_arr();
 		}
 
-		// There is already one forum and one category created. Let's get their data.
-		$this->get_default_forums();
-
-		// There is already one category and one forum created.
-		$this->num_forums	= ($this->num_forums) ? $this->num_forums - 1 : 0;
-		$this->num_cats		= ($this->num_cats) ? $this->num_cats - 1 : 0;
-
 		// We need to create categories and forums first.
 		if ($this->num_forums)
 		{
@@ -172,22 +187,11 @@ class populate
 			$this->create_forums();
 		}
 
-		// Don't try to fool us.
-		$this->num_replies_max	= ($this->num_replies_max >= $this->num_replies_min) ? $this->num_replies_max : $this->num_replies_min;
-		$this->num_topics_max	= ($this->num_topics_max >= $this->num_topics_min) ? $this->num_topics_max : $this->num_topics_min;
-
-		// And now those plesky posts.
+		// And now those pesky posts.
 		if ($this->num_replies_max || $this->num_topics_max)
 		{
-			// Estimate the number of posts created.
-			// Or in reality, calculate the highest possible number and convert to seconds in the past.
-			// If one of them is zero this would not be so nice.
-			$replies	= ($this->num_replies_max) ? $this->num_replies_max : 1;
-			$topics		= ($this->num_topics_max) ? $this->num_topics_max : 1;
-			$forums		= ($this->num_forums) ? $this->num_forums : 1;
-
-			$this->post_time	= time() - ($topics * $replies * $forums);
-			$this->post_time	= ($this->post_time < 0) ? 0 : $this->post_time;
+			// Give posts a timestamp starting 1 second after the last user reg date
+			$this->post_time = $this->start_time + $this->num_users + 1;
 
 			include($quickinstall_path . 'includes/lorem_ipsum.' . $phpEx);
 			$this->lorem_ipsum = $lorem_ipsum;
@@ -196,6 +200,7 @@ class populate
 			$this->fill_forums();
 		}
 
+		// And the users...
 		if ($this->num_users)
 		{
 			$this->save_users();
@@ -205,6 +210,9 @@ class populate
 				$this->create_management();
 			}
 		}
+
+		// If we populated any users, topics or replies, update initial start date
+		$this->update_start_date();
 	}
 
 	/**
@@ -302,10 +310,16 @@ class populate
 		// Put topics and posts in their arrays so they can be sent to the database when the limit is reached.
 		$sql_topics = $sql_posts = array();
 
+		// Use the default user if no new users are being populated
+		if (!$this->num_users && empty($this->user_arr))
+		{
+			$this->user_arr = $this->get_user(1);
+		}
+
 		// Get the min and max for mt_rand.
-		$ary	= end($this->user_arr);
+		end($this->user_arr);
 		$mt_max	= (int) key($this->user_arr);
-		$ary	= reset($this->user_arr);
+		reset($this->user_arr);
 		$mt_min	= (int) key($this->user_arr);
 
 		// Flags for BBCodes.
@@ -842,9 +856,7 @@ class populate
 		$db->sql_freeresult($result);
 		$last_user_id = $first_user_id + $this->num_users - 1;
 
-		// Do some fancy math so we get one new user per minute.
-		$reg_time = time() - ($this->num_users * 60);
-
+		$reg_time = $this->start_time + 1;
 		$cnt = 1;
 		for ($i = $first_user_id; $i <= $last_user_id; $i++)
 		{
@@ -860,8 +872,74 @@ class populate
 				'user_passchg'		=> $reg_time,
 			);
 
-			$reg_time += 60;
+			$reg_time++;
 			$cnt++;
 		}
+	}
+
+	/**
+	 * Get a user's basic info
+	 *
+	 * @param $id int User id
+	 *
+	 * @return array Row of user data
+	 */
+	private function get_user($id)
+	{
+		global $db;
+		$user_row = array();
+		$sql = 'SELECT user_id, username, user_posts, user_lastpost_time, user_lastmark FROM ' . USERS_TABLE . '
+			WHERE user_id = ' . (int) $id;
+		$result = $db->sql_query_limit($sql, 1);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$user_row[$row['user_id']] = $row;
+		}
+		$db->sql_freeresult($result);
+		return $user_row;
+	}
+
+	/**
+	 * Update the start date set during phpBB's installation
+	 * to a time just before the forum was populated with stuff.
+	 */
+	private function update_start_date()
+	{
+		global $config, $db;
+
+		if (!$this->num_replies_max && !$this->num_topics_max && !$this->num_users)
+		{
+			return;
+		}
+
+		$original_startdate = $config['board_startdate'];
+
+		// update board's start date
+		set_config('board_startdate', $this->start_time);
+
+		// update the default first forum and category
+		$sql = 'UPDATE ' . FORUMS_TABLE . '
+			SET forum_last_post_time = ' . (int) $this->start_time . '
+			WHERE forum_last_post_time = ' . (int) $original_startdate . '
+				AND ' . $db->sql_in_set('forum_id', array(1, 2));
+		$db->sql_query($sql);
+
+		// update the default (welcome) first post
+		$sql = 'UPDATE ' . POSTS_TABLE . '
+			SET post_time = ' . (int) $this->start_time . '
+			WHERE post_id = 1';
+		$db->sql_query($sql);
+
+		// update the default first topic
+		$sql = 'UPDATE ' . TOPICS_TABLE . '
+			SET topic_time =  ' . (int) $this->start_time . ', topic_last_post_time =  ' . (int) $this->start_time . '
+			WHERE topic_id = 1';
+		$db->sql_query($sql);
+
+		// update the default admin and anonymous user
+		$sql = 'UPDATE ' . USERS_TABLE . '
+			SET user_regdate =  ' . (int) $this->start_time . '
+			WHERE ' . $db->sql_in_set('user_id', array(1, 2));
+		$db->sql_query($sql);
 	}
 }
