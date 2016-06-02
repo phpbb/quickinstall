@@ -917,6 +917,8 @@ class populate
 		// update board's start date
 		set_config('board_startdate', $this->start_time);
 
+		$db->sql_transaction('begin');
+
 		// update the default first forum and category
 		$sql = 'UPDATE ' . FORUMS_TABLE . '
 			SET forum_last_post_time = ' . (int) $this->start_time . '
@@ -941,5 +943,7 @@ class populate
 			SET user_regdate =  ' . (int) $this->start_time . '
 			WHERE ' . $db->sql_in_set('user_id', array(1, 2));
 		$db->sql_query($sql);
+
+		$db->sql_transaction('commit');
 	}
 }
