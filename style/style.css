@@ -1680,6 +1680,16 @@ div.open-setting {
 	font-size: 0.95em;
 }
 
+.settings-menu {
+	position: fixed;
+	width: 20%;
+}
+
+.settings-menu a {
+	display: block;
+	padding: 3px 0;
+}
+
 a.top {
 	background: none no-repeat scroll left top transparent;
 	display: block;
