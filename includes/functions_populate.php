@@ -888,7 +888,8 @@ class populate
 	{
 		global $db;
 		$user_row = array();
-		$sql = 'SELECT user_id, username, user_posts, user_lastpost_time, user_lastmark FROM ' . USERS_TABLE . '
+		$sql = 'SELECT user_id, username, user_posts, user_lastpost_time, user_lastmark 
+			FROM ' . USERS_TABLE . '
 			WHERE user_id = ' . (int) $id;
 		$result = $db->sql_query_limit($sql, 1);
 		while ($row = $db->sql_fetchrow($result))
