@@ -1,10 +1,12 @@
 QuickInstall Changelog
 
-- Changes since 1.2.1
- + [Feature] Supports phpBB 3.2 boards
+- Changes since 1.2.2
  + [Fix] Issue #64 Fix incorrect post count totals.
  + [Fix] Issue #63 Correctly calculate dates for users, posts, and the board start date when populating the board.
  + [Fix] Issue #62 Fix display issues with the settings menu sidebar on smaller screens/windows.
+
+- Changes since 1.2.1
+ + [Feature] Supports phpBB 3.2 boards
  + [Fix] Issue #55 Improve compatibility with PHP 7
  + [Fix] Issue #49 Removed closing php tag from generated config.php file
  + [Fix] Fix for UTF-8 characters $error_msg
