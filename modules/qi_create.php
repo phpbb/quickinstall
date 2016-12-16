@@ -201,8 +201,8 @@ class qi_create
 
 		if (defined('PHPBB_31'))
 		{
-			$config_data_array['$dbms'] = "phpbb\\db\\driver\\$dbms";
-			$config_data_array['$acm_type'] = 'phpbb\\cache\\driver\\file';
+			$config_data_array['$dbms'] = "phpbb\\\\db\\\\driver\\\\$dbms";
+			$config_data_array['$acm_type'] = 'phpbb\\\\cache\\\\driver\\\\file';
 			$config_data_array['$phpbb_adm_relative_path'] = 'adm/';
 		}
 		else
