@@ -19,22 +19,16 @@
 
 <h3 style="margin-bottom: 5px;"><a id="about-changelog"></a>{L_CHANGELOG}</h3>
 	<!-- BEGIN history -->
-	<p>
 		<p style="margin-bottom: 2px;"><a id="{history.U_CHANGES}"></a><em>{history.CHANGES_SINCE}</em></p>
 		<ul>
 			<!-- BEGIN changelog -->
 			<li>{history.changelog.CHANGE}</li>
 			<!-- END changelog -->
 		</ul>
-	</p>
 	<!-- END history -->
 <!-- ELSE -->
-<h1>{L_DOCS_LONG}</h1>
-<h5>{L_FROM_README}</h5>
-<div style="line-height: 2em !important;">
-	<!-- BEGIN doc_row -->
-	{doc_row.ROW}
-	<!-- END doc_row -->
+<div>
+	{DOC_BODY}
 </div>
 <!-- ENDIF -->
 
