@@ -143,7 +143,6 @@ $lang = array_merge($lang, array(
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
-	'FROM_README'				=> 'From readme.txt',
 
 	'GENERAL_ERROR'		=> 'General Error',
 	'GO'				=> 'Go',
