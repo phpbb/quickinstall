@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Changes in 1.2.4
+- [Fix] Issue #71 Converted README and CHANGELOG to markdown. Correctly parse markdown in the Documentation and About tabs.
+- [Fix] Issue #69 Correctly handle backslashes in the generated config.php file for phpBB >= 3.1.
+
 ## Changes in 1.2.3
 - [Fix] Issue #64 Fix incorrect post count totals.
 - [Fix] Issue #63 Correctly calculate dates for users, posts, and the board start date when populating the board.
@@ -194,7 +198,7 @@
 ## Changes in 1.1.0
 - [Feature] Option to make files writable.
 - [Feature] Option to populate forum with users and posts.
-- Updated to AutoMOD 1.0.0-RC4
+- [Change] Updated to AutoMOD 1.0.0-RC4
 - [Change] Updated for phpBB 3.0.7-PL1
 - [Change] The Redirect option now works as intended
 - [Change] Updated for phpBB 3.0.7-PL1
