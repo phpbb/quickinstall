@@ -24,7 +24,7 @@ class qi_about
 	{
 		global $template, $user, $quickinstall_path, $phpEx;
 
-		include $quickinstall_path . 'includes/ParseDown.' . $phpEx;
+		include $quickinstall_path . 'includes/Parsedown.' . $phpEx;
 		$Parsedown = new Parsedown();
 
 		$s_docs = legacy_request_var('page', '') === 'docs';
