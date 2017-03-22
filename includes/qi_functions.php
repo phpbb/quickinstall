@@ -30,7 +30,7 @@ function gen_dbms_options($default = 'mysqli')
 		'mysqli'	=> 'MySQLi',
 		'mysql'		=> 'MySQL',
 		'mssql'		=> 'MSSQL',
-		'pgsql'		=> 'PostgreSQL',
+		'postgres'	=> 'PostgreSQL',
 		'sqlite'	=> 'SQLite',
 	);
 
