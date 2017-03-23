@@ -50,12 +50,12 @@ function gen_dbms_options($default = 'mysqli')
 	);
 
 	$options = '';
-	foreach ($dbms_ary as $ext => $dbms)
+	foreach ($dbms_ary as $dbms => $dbms_info)
 	{
-		if (extension_loaded($dbms['MODULE']))
+		if (extension_loaded($dbms_info['MODULE']))
 		{
-			$selected = ($ext == $default) ? ' selected="selected"' : '';
-			$options .= "<option value='$ext'$selected>{$dbms['LABEL']}</option>";
+			$selected = ($dbms == $default) ? ' selected="selected"' : '';
+			$options .= "<option value='$dbms'$selected>{$dbms_info['LABEL']}</option>";
 		}
 	}
 
