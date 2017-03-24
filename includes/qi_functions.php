@@ -536,9 +536,18 @@ function db_connect($db_data = '')
 {
 	global $phpbb_root_path, $phpEx, $sql_db, $db, $quickinstall_path, $settings;
 
-	$db_data = (empty($db_data)) ? $settings->get_db_data() : $db_data;
-
-	list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $db_data;
+	if (empty($db_data))
+	{
+		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $settings->get_db_data();
+		// When db_data is empty, it means the db does not exist yet, so for postgres
+		// we need to set dbname to false so the driver can connect to the postgres db
+		$dbname = ($dbms !== 'postgres') ? $settings->get_config('dbname') : false;
+	}
+	else
+	{
+		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $db_data;
+		$dbname = $settings->get_config('dbname');
+	}
 
 	// If we get here and the extension isn't loaded it should be safe to just go ahead and load it
 	$available_dbms = qi_get_available_dbms($dbms);
@@ -579,8 +588,6 @@ function db_connect($db_data = '')
 
 	if (defined('PHPBB_31'))
 	{
-		$dbname = ($dbms !== 'postgres') ? $settings->get_config('dbname') : false;
-
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, false);
 	}
 	else
