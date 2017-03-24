@@ -27,20 +27,35 @@ if (!defined('IN_QUICKINSTALL'))
 function gen_dbms_options($default = 'mysqli')
 {
 	$dbms_ary = array(
-		'mysqli'	=> 'MySQLi',
-		'mysql'		=> 'MySQL',
-		'mssql'		=> 'MSSQL',
-		'pgsql'		=> 'PostgreSQL',
-		'sqlite'	=> 'SQLite',
+		'mysqli'	=> array(
+			'LABEL'		=> 'MySQLi',
+			'MODULE'	=> 'mysqli',
+		),
+		'mysql'		=> array(
+			'LABEL'		=> 'MySQL',
+			'MODULE'	=> 'mysql',
+		),
+		'mssql'		=>	array(
+			'LABEL'		=> 'MS SQL Server',
+			'MODULE'	=> 'mssql',
+		),
+		'postgres'	=> array(
+			'LABEL'		=> 'PostgreSQL 8.3+',
+			'MODULE'	=> 'pgsql',
+		),
+		'sqlite'	=> array(
+			'LABEL'		=> 'SQLite',
+			'MODULE'	=> 'sqlite',
+		),
 	);
 
 	$options = '';
-	foreach ($dbms_ary as $ext => $title)
+	foreach ($dbms_ary as $dbms => $dbms_info)
 	{
-		if (extension_loaded($ext))
+		if (extension_loaded($dbms_info['MODULE']))
 		{
-			$selected = ($ext == $default) ? ' selected="selected"' : '';
-			$options .= "<option value='$ext'$selected>$title</option>";
+			$selected = ($dbms == $default) ? ' selected="selected"' : '';
+			$options .= "<option value='$dbms'$selected>{$dbms_info['LABEL']}</option>";
 		}
 	}
 
@@ -564,7 +579,9 @@ function db_connect($db_data = '')
 
 	if (defined('PHPBB_31'))
 	{
-		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $settings->get_config('dbname') , $dbport, false, false);
+		$dbname = ($dbms !== 'postgres') ? $settings->get_config('dbname') : false;
+
+		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, false);
 	}
 	else
 	{

@@ -56,6 +56,7 @@ class qi_create
 		$dbhost		= $settings->get_config('dbhost');
 		$db_prefix	= validate_dbname($settings->get_config('db_prefix'), true);
 		$dbname		= validate_dbname($settings->get_config('dbname'), true);
+		$dbport		= $settings->get_config('dbport');
 
 		$dbpasswd	= $settings->get_config('dbpasswd');
 		$dbuser		= $settings->get_config('dbuser');
@@ -263,7 +264,15 @@ class qi_create
 			else if ($dbms == 'postgres')
 			{
 				global $sql_db;
-				$error_collector = new phpbb_error_collector();
+
+				$error_collector_class = (defined('PHPBB_31')) ? '\phpbb\error_collector' : 'phpbb_error_collector';
+
+				if (!class_exists($error_collector_class))
+				{
+					include $phpbb_root_path . 'includes/error_collector.' . $phpEx;
+				}
+
+				$error_collector = new $error_collector_class;
 				$error_collector->install();
 				$db_check_conn = new $sql_db();
 				$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
