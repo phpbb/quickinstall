@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Changes in 1.2.5
+- [Fix] Issue #75 Fixed issues with creating boards using a PostgreSQL database.
+- [Fix] Corrected an issue where clicking the Documentation tabs led to PHP errors.
+
 ## Changes in 1.2.4
 - [Fix] Issue #71 Converted README and CHANGELOG to markdown. Correctly parse markdown in the Documentation and About tabs.
 - [Fix] Issue #69 Correctly handle backslashes in the generated config.php file for phpBB >= 3.1.
