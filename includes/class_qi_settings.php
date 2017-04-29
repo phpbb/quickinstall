@@ -923,7 +923,7 @@ class settings
 		}
 
 		// SQLite needs a writable and existing directory
-		if ($this->config['dbms'] == 'sqlite')
+		if (in_array($this->config['dbms'], array('sqlite', 'sqlite3')))
 		{
 			if (!file_exists($this->config['dbhost']) || !is_writable($this->config['dbhost']) || !is_dir($this->config['dbhost']))
 			{

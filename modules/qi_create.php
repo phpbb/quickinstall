@@ -159,16 +159,17 @@ class qi_create
 			}
 		}
 
-		if ($dbms == 'sqlite')
+		switch ($dbms)
 		{
-			$dbhost = $dbhost . $db_prefix . $dbname;
-		}
-		else if ($dbms == 'firebird')
-		{
-			$dbhost = $db_prefix . $dbname;
-
-			// temp remove some
-			list($db_prefix, $dbname, $temp1, $temp2) = array('', '', $db_prefix, $dbname);
+			case 'sqlite':
+			case 'sqlite3':
+				$dbhost = $dbhost . $db_prefix . $dbname;
+			break;
+			case 'firebird':
+				$dbhost = $db_prefix . $dbname;
+				// temp remove some
+				list($db_prefix, $dbname, $temp1, $temp2) = array('', '', $db_prefix, $dbname);
+			break;
 		}
 
 		// Set the new board as language path to get language files from outside phpBB
@@ -258,35 +259,35 @@ class qi_create
 		else
 		{
 			// Check if the database exists.
-			if ($dbms == 'sqlite')
+			switch ($dbms)
 			{
-				$db_check = $db->sql_select_db($dbhost);
-			}
-			else if ($dbms == 'firebird')
-			{
-				$db_check = $db->sql_select_db($settings->get_cache_dir() . $db_prefix . $dbname);
-			}
-			else if ($dbms == 'postgres')
-			{
-				global $sql_db;
+				case 'sqlite':
+				case 'sqlite3':
+					$db_check = $db->sql_select_db($dbhost);
+				break;
+				case 'firebird':
+					$db_check = $db->sql_select_db($settings->get_cache_dir() . $db_prefix . $dbname);
+				break;
+				case 'postgres':
+					global $sql_db;
 
-				$error_collector_class = (defined('PHPBB_31')) ? '\phpbb\error_collector' : 'phpbb_error_collector';
+					$error_collector_class = (defined('PHPBB_31')) ? '\phpbb\error_collector' : 'phpbb_error_collector';
 
-				if (!class_exists($error_collector_class))
-				{
-					include $phpbb_root_path . 'includes/error_collector.' . $phpEx;
-				}
+					if (!class_exists($error_collector_class))
+					{
+						include $phpbb_root_path . 'includes/error_collector.' . $phpEx;
+					}
 
-				$error_collector = new $error_collector_class;
-				$error_collector->install();
-				$db_check_conn = new $sql_db();
-				$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
-				$error_collector->uninstall();
-				$db_check = count($error_collector->errors) == 0;
-			}
-			else
-			{
-				$db_check = $db->sql_select_db($db_prefix . $dbname);
+					$error_collector = new $error_collector_class;
+					$error_collector->install();
+					$db_check_conn = new $sql_db();
+					$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
+					$error_collector->uninstall();
+					$db_check = count($error_collector->errors) == 0;
+				break;
+				default:
+					$db_check = $db->sql_select_db($db_prefix . $dbname);
+				break;
 			}
 
 			if ($db_check)
@@ -295,28 +296,28 @@ class qi_create
 			}
 		}
 
-		if ($dbms == 'sqlite')
+		switch ($dbms)
 		{
-			$db->sql_create_db($dbhost);
-			$db->sql_select_db($dbhost);
-		}
-		else if ($dbms == 'firebird')
-		{
-			$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $db_prefix . $dbname);
-			$db->sql_select_db($settings->get_cache_dir() . $db_prefix . $dbname);
-		}
-		else if ($dbms == 'postgres')
-		{
-			global $sql_db;
-			$db->sql_query('CREATE DATABASE ' . $db_prefix . $dbname);
-			$db = new $sql_db();
-			$db->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
-			$db->sql_return_on_error(true);
-		}
-		else
-		{
-			$db->sql_query('CREATE DATABASE ' . $db_prefix . $dbname);
-			$db->sql_select_db($db_prefix . $dbname);
+			case 'sqlite':
+			case 'sqlite3':
+				$db->sql_create_db($dbhost);
+				$db->sql_select_db($dbhost);
+			break;
+			case  'firebird':
+				$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $db_prefix . $dbname);
+				$db->sql_select_db($settings->get_cache_dir() . $db_prefix . $dbname);
+			break;
+			case 'postgres':
+				global $sql_db;
+				$db->sql_query('CREATE DATABASE ' . $db_prefix . $dbname);
+				$db = new $sql_db();
+				$db->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
+				$db->sql_return_on_error(true);
+			break;
+			default:
+				$db->sql_query('CREATE DATABASE ' . $db_prefix . $dbname);
+				$db->sql_select_db($db_prefix . $dbname);
+			break;
 		}
 
 		// include install lang from phpbb. But only if it exists
