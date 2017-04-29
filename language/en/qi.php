@@ -213,6 +213,7 @@ $lang = array_merge($lang, array(
 	'OTHER_CONFIG'			=> 'Other board config settings',
 	'OTHER_CONFIG_EXPLAIN'	=> 'These will be updated in the config table or added to the config table if they don’t exist yet. So make sure to spell correctly. These can also be edited when creating the boards.<br />One config setting per line in a semicolon &quot;;&quot; separated list. Config-name; config-setting; dynamic, if the setting is not dynamic the dynamic part is not needed. Lines starting with a # are considered comments and not added to the DB. Example:<br />load_tplcompile;1;1<br />session_length;999999<br /># this is a comment',
 
+	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install is not compatible with PHP 7. You are using PHP %s.',
 	'PHPINFO'			=> 'PHP info',
 	'PHPINFO_EXPLAIN'	=> '<strong>PHP information</strong><br /><br />This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems.<br /><br />Please be aware that some hosting companies will limit what information is displayed here for security reasons.<br /><br />You are advised to only give out details on this page on a need to know basis.',
 	'PLAIN_TEXT'		=> '<strong>Note</strong>: QuickInstall stores passwords and usernames as plain text.',
