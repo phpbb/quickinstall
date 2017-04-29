@@ -47,6 +47,10 @@ function gen_dbms_options($default = 'mysqli')
 			'LABEL'		=> 'SQLite',
 			'MODULE'	=> 'sqlite',
 		),
+		'sqlite3'		=> array(
+			'LABEL'			=> 'SQLite3',
+			'MODULE'		=> 'sqlite3',
+		),
 	);
 
 	$options = '';
