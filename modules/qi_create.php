@@ -30,6 +30,11 @@ class qi_create
 		// postgres uses remove_comments function which is defined in functions_admin
 		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
 
+		if (!defined('PHPBB_32') && version_compare(PHP_VERSION, '7.0.0', '>='))
+		{
+			create_board_warning($user->lang['GENERAL_ERROR'], sprintf($user->lang['PHP7_INCOMPATIBLE'], PHP_VERSION), 'main');
+		}
+
 		if (defined('PHPBB_31'))
 		{
 			$config->set('rand_seed', md5(mt_rand()));
