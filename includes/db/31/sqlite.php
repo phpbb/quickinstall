@@ -106,12 +106,4 @@ class dbal_sqlite_qi extends \phpbb\db\driver\sqlite
 
 		return $this->db_connect_id;
 	}
-
-	/**
-	 * Updates value of a sequence.
-	 * Does nothing in this dbal.
-	 */
-	public function update_sequence($sequence_name, $value)
-	{
-	}
 }
