@@ -655,10 +655,9 @@ class qi_create
 			// Update the lang array with keys loaded for the installer
 			$user->lang = array_merge($user->lang, $language->get_lang_array());
 
-			// Storing the db and user objects temporarily because they
-			// are altered by the installer processes below...not sure why?
+			// Storing the user object temporarily because it is
+			// altered by the installer processes below...not sure why?
 			$current_user = $user;
-			$current_db = $db;
 
 			// Suppress errors because constants.php is added again in these objects
 			// leading to debug notices about the constants already being defined.
@@ -684,10 +683,9 @@ class qi_create
 			$symfony_request = $phpbb_container->get('symfony_request');
 			$phpbb_filesystem = $phpbb_container->get('filesystem');
 
-			// Restore user and db objects to original state
+			// Restore user object to original state
 			$user = $current_user;
-			$db = $current_db;
-			unset($current_user, $current_db);
+			unset($current_user);
 		}
 		else if (defined('PHPBB_31'))
 		{
