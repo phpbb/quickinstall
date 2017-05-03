@@ -159,17 +159,9 @@ class qi_create
 			}
 		}
 
-		switch ($dbms)
+		if (in_array($dbms, array('sqlite', 'sqlite3')))
 		{
-			case 'sqlite':
-			case 'sqlite3':
-				$dbhost = $dbhost . $db_prefix . $dbname;
-			break;
-			case 'firebird':
-				$dbhost = $db_prefix . $dbname;
-				// temp remove some
-				list($db_prefix, $dbname, $temp1, $temp2) = array('', '', $db_prefix, $dbname);
-			break;
+			$dbhost = $dbhost . $db_prefix . $dbname;
 		}
 
 		// Set the new board as language path to get language files from outside phpBB
@@ -244,12 +236,6 @@ class qi_create
 		}
 		file_put_contents($board_dir . 'config.' . $phpEx, $config_data);
 
-		if ($dbms == 'firebird')
-		{
-			// and now restore
-			list($db_prefix, $dbname) = array($temp1, $temp2);
-		}
-
 		$db = db_connect();
 
 		if ($settings->get_config('drop_db', 0))
@@ -264,9 +250,6 @@ class qi_create
 				case 'sqlite':
 				case 'sqlite3':
 					$db_check = $db->sql_select_db($dbhost);
-				break;
-				case 'firebird':
-					$db_check = $db->sql_select_db($settings->get_cache_dir() . $db_prefix . $dbname);
 				break;
 				case 'postgres':
 					global $sql_db;
@@ -302,10 +285,6 @@ class qi_create
 			case 'sqlite3':
 				$db->sql_create_db($dbhost);
 				$db->sql_select_db($dbhost);
-			break;
-			case  'firebird':
-				$db->sql_query('CREATE DATABASE ' . $settings->get_cache_dir() . $db_prefix . $dbname);
-				$db->sql_select_db($settings->get_cache_dir() . $db_prefix . $dbname);
 			break;
 			case 'postgres':
 				global $sql_db;
@@ -800,13 +779,6 @@ class qi_create
 		{
 			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
 			automod_installer::install_automod($board_dir, $settings->get_config('make_writable', false));
-		}
-
-		if ($dbms == 'firebird')
-		{
-			// copy the temp db over
-			file_functions::copy_file($settings->get_cache_dir() . $db_prefix . $dbname, $board_dir . $db_prefix . $dbname);
-			$db->sql_select_db($board_dir . $db_prefix . $dbname);
 		}
 
 		// clean up
