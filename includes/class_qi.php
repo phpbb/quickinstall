@@ -333,37 +333,36 @@ class qi
 
 				phpbb_functions::send_status_line(503, 'Service Unavailable');
 
-				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-				echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
+				echo '<!DOCTYPE html>';
+				echo '<html>';
 				echo '<head>';
-				echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
+				echo '<meta charset="utf-8" />';
+				echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
+				echo '<meta name="viewport" content="width=device-width, initial-scale=1" />';
 				echo '<title>' . $msg_title . '</title>';
-				echo '<link href="' . $quickinstall_path . 'style/style.css" rel="stylesheet" type="text/css" media="screen" />';
+				echo '<link href="' . $quickinstall_path . 'style/bootstrap/css/bootstrap-spacelab.min.css" rel="stylesheet" type="text/css" media="screen" />';
+				echo '<link href="' . $quickinstall_path . 'style/qi_style.css" rel="stylesheet" type="text/css" media="screen" />';
 				echo '</head>';
-				echo '<body id="errorpage">';
-				echo '<div id="wrap">';
-				echo '	<div id="page-header">';
-				echo '		' . $l_return_index;
-				echo '	</div>';
+				echo '<body>';
+				echo '<div class="container-fluid">';
+				echo '	<nav class="navbar navbar-inverse navbar-fixed-top"><div class="container-fluid"><div class="navbar-header">';
+				echo '		<a class="navbar-brand">' . $user->lang['QUICKINSTALL'] . '</a>';
+				echo '	</div></div></nav>';
 
-				echo '	<div id="page-body">';
-				echo '		<div id="acp">';
-				echo '			<div class="panel">';
-				echo '				<span class="corners-top"><span></span></span>';
-				echo '				<div id="content">';
+				echo '	<div id="content">';
+				echo '		<div id="main" class="main">';
+				echo '			<div class="well">';
 				echo '				<h1>' . $msg_title . '</h1>';
 				echo '				<div>' . $msg_text . '</div>';
 				echo '				</div>';
 				echo '				<div style="padding-left: 10px;">';
 				echo '					' . $l_return_index;
-				echo '				</div>';
-				echo '				<span class="corners-bottom"><span></span></span>';
 				echo '			</div>';
 				echo '		</div>';
 				echo '	</div>';
 
 				echo '	<div id="page-footer">';
-				echo '		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> {QI_VERSION} for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />';
+				echo '		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> ' . $user->lang['QI_VERSION'] . ' for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />';
 				echo '		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
 				echo '	</div>';
 				echo '</div>';

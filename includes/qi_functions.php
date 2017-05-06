@@ -250,43 +250,42 @@ function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
 
 echo<<<ERROR_PAGE
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>$msg_title</title>
-		<link href="{$quickinstall_path}style/style.css" rel="stylesheet" type="text/css" media="screen" />
-	</head>
-	<body id="errorpage">
-		<div id="wrap">
-			<div id="page-header">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>' . $msg_title . '</title>
+<link href="{$quickinstall_path}style/bootstrap/css/bootstrap-spacelab.min.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{$quickinstall_path}style/qi_style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+<div class="container-fluid">
+	<nav class="navbar navbar-inverse navbar-fixed-top"><div class="container-fluid"><div class="navbar-header">
+		<a class="navbar-brand">phpBB QuickInstall</a>
+	</div></div></nav>
+
+	<div id="content">
+		<div id="main" class="main">
+			<div class="well">
+				<h1>$msg_title</h1>
+				<div><strong>$msg_explain</strong></div>
+				<div>$msg_text</div>
+				$settings_form
+			</div>
+			<div style="padding-left: 10px;">
 				$l_return_index
 			</div>
-
-			<div id="page-body">
-				<div id="acp">
-					<div class="panel">
-						<span class="corners-top"><span></span></span>
-						<div id="content">
-							<h1 style="margin-bottom: 10px; text-align: center;">$msg_title</h1>
-							<div style="font-weight: bold;">$msg_explain<br /><br /></div>
-							<div>$msg_text</div>
-						$settings_form
-						</div>
-						<div style="padding-left: 10px;">
-							$l_return_index
-						</div>
-						<span class="corners-bottom"><span></span></span>
-					</div>
-				</div>
-			</div>
-
-			<div id="page-footer">
-				<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> $qi_version for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />
-				Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>
-			</div>
 		</div>
-	</body>
+	</div>
+
+	<div id="page-footer">
+		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> $qi_version for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />
+		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>
+	</div>
+</div>
+</body>
 </html>
 ERROR_PAGE;
 
@@ -461,7 +460,7 @@ function get_alternative_env($selected_option = '')
 	global $user, $quickinstall_path;
 
 	$none_selected	= (empty($selected_option)) ? ' selected="selected"' : '';
-	$alt_env		= '';
+	$alt_env		= "<option value=''$none_selected>{$user->lang['DEFAULT_ENV']}</option>";
 	$dh				= dir($quickinstall_path . 'sources/phpBB3_alt');
 
 	while (false !== ($file = $dh->read()))
@@ -478,11 +477,6 @@ function get_alternative_env($selected_option = '')
 		$alt_env .= "<option{$selected}>$file</option>";
 	}
 	$dh->close();
-
-	if (!empty($alt_env))
-	{
-		$alt_env = "<option value=''$none_selected>{$user->lang['DEFAULT_ENV']}</option>" . $alt_env;
-	}
 
 	return($alt_env);
 }
