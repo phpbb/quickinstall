@@ -101,42 +101,23 @@ class qi_manage
 
 				if (empty($error))
 				{
-					// Just return to main page after succesfull deletion.
+					// Just return to main page after successful deletion.
 					qi::redirect('index.' . $phpEx);
 				}
 				else
 				{
+					$msg_title = $user->lang['GENERAL_ERROR'];
+
+					$msg_explain = $boards > 1 ? $user->lang['ERROR_DEL_BOARDS'] : $user->lang['ERROR_DEL_FILES'];
+
+					$msg_text = '';
 					foreach ($error as $row)
 					{
-						$template->assign_block_vars('row', array(
-							'ERROR'	=> htmlspecialchars($row),
-						));
+						$msg_text = '<p>' . htmlspecialchars($row) . '</p>';
 					}
 
-					$template->assign_var('L_THE_ERROR', (($boards > 1) ? $user->lang['ERROR_DEL_BOARDS'] : $user->lang['ERROR_DEL_FILES']));
-
-					qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
-
-					$template->set_filenames(array(
-						'body' => 'errors_body.html'
-					));
-
-					qi::page_footer();
+					gen_error_msg($msg_text, $msg_title, $msg_explain);
 				}
-			break;
-
-			default:
-				// list of boards
-				get_installed_boards();
-
-				// Output page
-				qi::page_header($user->lang['QI_MANAGE'], $user->lang['QI_MANAGE_ABOUT']);
-
-				$template->set_filenames(array(
-					'body' => 'manage_body.html')
-				);
-
-				qi::page_footer();
 			break;
 		}
 	}

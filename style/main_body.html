@@ -6,7 +6,7 @@ function toggle_div(div_id)
 {
 	if (document.getElementById(div_id))
 	{
-		document.getElementById(div_id).style.display = (document.getElementById(div_id).style.display == 'none') ? 'block' : 'none';
+		document.getElementById(div_id).style.display = (document.getElementById(div_id).style.display === 'none') ? 'block' : 'none';
 	}
 }
 // ]]>
@@ -14,264 +14,273 @@ function toggle_div(div_id)
 
 <h1>{L_MANAGE_BOARDS}</h1>
 
-<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
+<form method="post" id="profile_form" class="form-horizontal well" action="{U_CHOOSE_PROFILE}">
 	<fieldset>
 		<legend>{L_PROFILES}</legend>
-		<dl>
-			<dt><label for="qi_profile">{L_SELECT_PROFILE}:</label></dt>
-			<dd>
+		<div class="form-group">
+			<label for="qi_profile" class="col-sm-5 control-label">{L_SELECT_PROFILE}:</label>
+			<div class="form-inline col-sm-7">
 				<!-- IF not PROFILE_COUNT -->
 				{L_NO_PROFILES}
 				<!-- ELSEIF PROFILE_COUNT == 1 -->
 				{PROFILE_OPTIONS}
 				<!-- ELSE -->
-				<select id="qi_profile" name="qi_profile" onchange="document.forms['profile_form'].submit();">
+				<select id="qi_profile" name="qi_profile" class="form-control" onchange="document.forms['profile_form'].submit();">
 					{PROFILE_OPTIONS}
 				</select>
-				<input type="submit" name="submit-profile" value="{L_GO}" class="button1" />
+				<input type="submit" name="submit-profile" value="{L_GO}" class="btn btn-primary" />
 				<!-- ENDIF -->
-			</dd>
-		</dl>
+			</div>
+		</div>
 	</fieldset>
 </form>
 
-<div id="felboxen">
 <!-- IF S_ERROR -->
-	<h4 style="text-align: center;">{ERROR_TITLE}</h4>
-	<p class="errorbox">
-		{ERROR_MSG}
-	</p>
-<!-- ENDIF -->
+<div class="alert alert-danger text-center" role="alert">
+	<p><strong>{ERROR_TITLE}</strong></p>
+	<p>{ERROR_MSG}</p>
 </div>
+<!-- ENDIF -->
 
-<form method="post" id="create-form" action="{U_CREATE}">
+<form method="post" id="create-form" class="form-horizontal well" action="{U_CREATE}">
 	<fieldset>
 		<legend>{L_OPTIONS}</legend>
-		<dl>
-			<dt><label for="site_name">{L_BOARD_NAME}:</label></dt>
-			<dd><input class="text medium" type="text" id="site_name" name="site_name" value="{SITE_NAME}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="site_desc">{L_BOARD_DESC}:</label></dt>
-			<dd><input class="text medium" type="text" id="site_desc" name="site_desc" value="{SITE_DESC}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="dbname">{L_BOARD_DBNAME}:*</label> &nbsp; <span id="span-dbname" class="error-main">{L_FORGOT_THIS}</span></dt>
-			<dd><input class="text medium" type="text" id="dbname" name="dbname" value="{DBNAME}"/></dd>
-		</dl>
+		<div class="form-group">
+			<label for="site_name" class="col-sm-5 control-label">{L_BOARD_NAME}:</label>
+			<div class="col-sm-7"><input class="form-control" type="text" id="site_name" name="site_name" value="{SITE_NAME}" /></div>
+		</div>
+		<div class="form-group">
+			<label for="site_desc" class="col-sm-5 control-label">{L_BOARD_DESC}:</label>
+			<div class="col-sm-7"><input class="form-control" type="text" id="site_desc" name="site_desc" value="{SITE_DESC}" /></div>
+		</div>
+		<div class="form-group">
+			<label for="dbname" class="col-sm-5 control-label">{L_BOARD_DBNAME}:<span class="help-block" id="span-dbname">{L_REQUIRED}</span></label>
+			<div class="col-sm-7"><input class="form-control" type="text" id="dbname" name="dbname" value="{DBNAME}"/></div>
+		</div>
 
 		<!-- IF not S_DBUSER -->
-		<dl>
-			<dt><label for="dbuser">{L_DBUSER}:*</label> &nbsp; <span id="span-dbuser" class="error-main">{L_FORGOT_THIS}</span></dt>
-			<dd><input class="text medium" type="password" id="dbuser" name="dbuser" value="{CONFIG_DBUSER}" /></dd>
-		</dl>
+		<div class="form-group">
+			<label for="dbuser" class="col-sm-5 control-label">{L_DBUSER}:<span class="help-block" id="span-dbuser">{L_REQUIRED}</span></label>
+			<div class="col-sm-7"><input class="form-control" type="password" id="dbuser" name="dbuser" value="{CONFIG_DBUSER}" /></div>
+		</div>
 		<!-- ENDIF -->
 		<!-- IF not S_DBPASSWD and not S_NODBPASSWD -->
-		<dl>
-			<dt><label for="dbpasswd">{L_DBPASSWD}:*</label> &nbsp; <span id="span-dbpasswd" class="error-main">{L_FORGOT_THIS}</span></dt>
-			<dd><input class="text medium" type="password" id="dbpasswd" name="dbpasswd" value="{CONFIG_DBPASSWD}" /></dd>
-		</dl>
+		<div class="form-group">
+			<label for="dbpasswd" class="col-sm-5 control-label">{L_DBPASSWD}:<span class="help-block" id="span-dbpasswd">{L_REQUIRED}</span></label>
+			<div class="col-sm-7"><input class="form-control" type="password" id="dbpasswd" name="dbpasswd" value="{CONFIG_DBPASSWD}" /></div>
+		</div>
 		<!-- ENDIF -->
 		<!-- IF not S_ADMIN_NAME -->
-		<dl>
-			<dt><label for="admin_name">{L_ADMIN_NAME}:*</label> &nbsp; <span id="span-admin_name" class="error-main">{L_FORGOT_THIS}</span></dt>
-			<dd><input class="text medium" type="password" id="admin_name" name="admin_name" value="{CONFIG_ADMIN_NAME}" /></dd>
-		</dl>
+		<div class="form-group">
+			<label for="admin_name" class="col-sm-5 control-label">{L_ADMIN_NAME}:<span class="help-block" id="span-admin_name">{L_REQUIRED}</span></label>
+			<div class="col-sm-7"><input class="form-control" type="password" id="admin_name" name="admin_name" value="{CONFIG_ADMIN_NAME}" /></div>
+		</div>
 		<!-- ENDIF -->
 		<!-- IF not S_ADMIN_PASS -->
-		<dl>
-			<dt><label for="admin_pass">{L_ADMIN_PASS}:*</label> &nbsp; <span id="span-admin_pass" class="error-main">{L_FORGOT_THIS}</span></dt>
-			<dd><input class="text medium" type="password" id="admin_pass" name="admin_pass" value="{CONFIG_ADMIN_PASS}" /></dd>
-		</dl>
+		<div class="form-group">
+			<label for="admin_pass" class="col-sm-5 control-label">{L_ADMIN_PASS}:<span class="help-block" id="span-admin_pass">{L_REQUIRED}</span></label>
+			<div class="col-sm-7"><input class="form-control" type="password" id="admin_pass" name="admin_pass" value="{CONFIG_ADMIN_PASS}" /></div>
+		</div>
 		<!-- ENDIF -->
 
-		<dl>
-			<dt><label>{L_REDIRECT_BOARD}:</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="redirect" value="1"<!-- IF S_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="redirect" value="0"<!-- IF S_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
+		<div class="form-group">
+			<label class="col-sm-5 control-label">{L_REDIRECT_BOARD}:</label>
+			<div class="col-sm-7">
+				<label class="radio-inline"><input type="radio" name="redirect" value="1"<!-- IF S_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> />{L_YES}</label>
+				<label class="radio-inline"><input type="radio" name="redirect" value="0"<!-- IF S_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> />{L_NO}</label>
+			</div>
+		</div>
 		<!-- IF PHPBB_VERSION lt '3.1' -->
-		<dl>
-			<dt><label for="">{L_AUTOMOD_INSTALL}:</label><br />{L_ONLY_30}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="automod" value="1"<!-- IF S_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="automod" value="0"<!-- IF S_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
+		<div class="form-group">
+			<label class="col-sm-5 control-label">{L_AUTOMOD_INSTALL}:<span class="help-block">{L_ONLY_30}</span></label>
+			<div class="col-sm-7">
+				<label class="radio-inline"><input type="radio" name="automod" value="1"<!-- IF S_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> />{L_YES}</label>
+				<label class="radio-inline"><input type="radio" name="automod" value="0"<!-- IF S_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> />{L_NO}</label>
+			</div>
+		</div>
 		<!-- ENDIF -->
-		<dl>
-			<dt><label for="">{L_POPULATE}:</label><br />{L_POPULATE_MAIN_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="populate" value="1"<!-- IF S_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="populate" value="0"<!-- IF S_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
+		<div class="form-group">
+			<label class="col-sm-5 control-label">{L_POPULATE}:</label>
+			<div class="col-sm-7">
+				<label class="radio-inline"><input type="radio" name="populate" value="1"<!-- IF S_POPULATE == 1 --> checked="checked"<!-- ENDIF --> />{L_YES}</label>
+				<label class="radio-inline"><input type="radio" name="populate" value="0"<!-- IF S_POPULATE == 0 --> checked="checked"<!-- ENDIF --> />{L_NO}</label>
+			</div>
+		</div>
 
-		<dl>
-			<dt><label for="">{L_INSTALL_STYLES}:</label><br />{L_INSTALL_STYLES_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="install_styles" value="1"<!-- IF INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+		<div class="form-group">
+			<label class="col-sm-5 control-label">{L_INSTALL_STYLES}:<span class="help-block">{L_INSTALL_STYLES_EXPLAIN}</span></label>
+			<div class="col-sm-7">
+				<label class="radio-inline"><input type="radio" name="install_styles" value="1"<!-- IF INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> />{L_YES}</label>
 				<!-- IF PHPBB_VERSION lt '3.2' -->
-				<label><input type="radio" class="radio" name="install_styles" value="2"<!-- IF INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
+				<label class="radio-inline"><input type="radio" name="install_styles" value="2"<!-- IF INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> />{L_ONLY_SUBSILVER}</label>
 				<!-- ENDIF -->
-				<label><input type="radio" class="radio" name="install_styles" value="0"<!-- IF INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="default_style">{L_SET_DEFAULT_STYLE}:</label><br />{L_SET_DEFAULT_STYLE_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="default_style" name="default_style" value="{DEFAULT_STYLE}" /></dd>
-		</dl>
+				<label class="radio-inline"><input type="radio" name="install_styles" value="0"<!-- IF INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> />{L_NO}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="default_style" class="col-sm-5 control-label">{L_SET_DEFAULT_STYLE}:<span class="help-block">{L_SET_DEFAULT_STYLE_EXPLAIN}</span></label>
+			<div class="col-sm-7"><input class="form-control" type="text" id="default_style" name="default_style" value="{DEFAULT_STYLE}" /></div>
+		</div>
 
-		<dl>
-			<dt style="background-color: #bc2a4d; color: #fff; padding: 5px; width: 42%;">
-				{L_MIGHT_TAKE_LONG}
-			</dt>
-			<dd style="text-align: center;">
-				<input type="submit" name="submituser" id="submituser" value="{L_SUBMIT}" class="button1" style="margin-top: 20px;" onclick="return(validate_fields());" />
-			</dd>
-		</dl>
+		<div class="form-group">
+			<div class="col-sm-5">
+				<p class="text-left alert alert-danger">{L_MIGHT_TAKE_LONG}</p>
+			</div>
+			<div class="col-sm-7">
+				<input type="submit" name="submituser" id="submituser" value="{L_CREATE_BOARD}" class="btn btn-primary" onclick="return(validate_fields());" />
+			</div>
+		</div>
 	</fieldset>
+
+	<div class="alert alert-info" role="alert">{L_QI_MANAGE_HEADINGS}</div>
 
 	<fieldset>
 		<legend><a href="javascript:toggle_div('options_advanced');">{L_MISC_SETTINGS}</a></legend>
 		<div id="options_advanced" style="display: none;">
 			<!-- IF S_ADMIN_NAME -->
-			<dl>
-				<dt><label for="admin_name-2">{L_ADMIN_NAME}:</label><br />{L_IF_EMPTY_EXPLAIN}</dt>
-				<dd><input class="text medium" type="text" id="admin_name-2" name="admin_name" /></dd>
-			</dl>
+			<div class="form-group">
+				<label for="admin_name-2" class="col-sm-5 control-label">{L_ADMIN_NAME}:<span class="help-block">{L_IF_EMPTY_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" id="admin_name-2" name="admin_name" /></div>
+			</div>
 			<!-- ENDIF -->
 			<!-- IF S_ADMIN_PASS -->
-			<dl>
-				<dt><label for="admin_pass-2">{L_ADMIN_PASS}:</label><br /><span>{L_IF_EMPTY_EXPLAIN}</span></dt>
-				<dd><input class="text medium" type="password" id="admin_pass-2" name="admin_pass" /></dd>
-			</dl>
+			<div class="form-group">
+				<label for="admin_pass-2" class="col-sm-5 control-label">{L_ADMIN_PASS}:<span class="help-block">{L_IF_EMPTY_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="password" id="admin_pass-2" name="admin_pass" /></div>
+			</div>
 			<!-- ENDIF -->
-			<dl>
-				<dt><label for="table_prefix">{L_TABLE_PREFIX}:</label></dt>
-				<dd><input class="text medium" type="text" id="table_prefix" name="table_prefix" value="{TABLE_PREFIX}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="db_prefix">{L_DB_PREFIX}:</label></dt>
-				<dd><input class="text medium" type="text" id="db_prefix" name="db_prefix" value="{DB_PERFIX}" /></dd>
-			</dl>
-			<dl>
-				<dt><label>{L_DROP_DB_IF_EXISTS}:</label></dt>
-				<dd>
-					<label><input type="radio" class="radio" name="drop_db" value="1"<!-- IF S_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="drop_db" value="0"<!-- IF S_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="delete_files">{L_DELETE_FILES_IF_EXIST}:</label></dt>
-				<dd>
-					<label><input type="radio" class="radio" name="delete_files" value="1"<!-- IF S_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="delete_files" value="0"<!-- IF S_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="">{L_MAKE_WRITABLE_BOARD}:</label><br />{L_MAKE_WRITABLE_BOARD_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-				<dd>
-					<label><input type="radio" class="radio" name="make_writable" value="1"<!-- IF S_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="make_writable" value="0"<!-- IF S_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="grant_permissions">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-				<dd><input class="text medium" type="text" id="grant_permissions" name="grant_permissions" value="{GRANT_PERMISSIONS}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>
+			<div class="form-group">
+				<label for="table_prefix" class="col-sm-5 control-label">{L_TABLE_PREFIX}:</label>
+				<div class="col-sm-7"><input class="form-control" type="text" id="table_prefix" name="table_prefix" value="{TABLE_PREFIX}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="db_prefix" class="col-sm-5 control-label">{L_DB_PREFIX}:</label>
+				<div class="col-sm-7"><input class="form-control" type="text" id="db_prefix" name="db_prefix" value="{DB_PERFIX}" /></div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_DROP_DB_IF_EXISTS}:</label>
+				<div class="col-sm-7">
+					<label class="radio-inline"><input type="radio" name="drop_db" value="1"<!-- IF S_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label class="radio-inline"><input type="radio" name="drop_db" value="0"<!-- IF S_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_DELETE_FILES_IF_EXIST}:</label>
+				<div class="col-sm-7">
+					<label class="radio-inline"><input type="radio" name="delete_files" value="1"<!-- IF S_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label class="radio-inline"><input type="radio" name="delete_files" value="0"<!-- IF S_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_MAKE_WRITABLE_BOARD}:<span class="help-block">{L_MAKE_WRITABLE_BOARD_EXPLAIN} {L_NO_IMPACT_WIN}</span></label>
+				<div class="col-sm-7">
+					<label class="radio-inline"><input type="radio" name="make_writable" value="1"<!-- IF S_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label class="radio-inline"><input type="radio" name="make_writable" value="0"<!-- IF S_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="grant_permissions" class="col-sm-5 control-label">{L_GRANT_PERMISSIONS}:<span class="help-block">{L_GRANT_PERMISSIONS_EXPLAIN} {L_NO_IMPACT_WIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" id="grant_permissions" name="grant_permissions" value="{GRANT_PERMISSIONS}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="alt_env" class="col-sm-5 control-label">{L_ALT_ENV}:</label>
+				<div class="col-sm-7">
 				<!-- IF ALT_ENV -->
-					<dd><select name="alt_env" id="alt_env">{ALT_ENV}</select></dd>
+					<select class="form-control" name="alt_env" id="alt_env">{ALT_ENV}</select>
 				<!-- ELSE -->
-					<dd>{L_NO_ALT_ENV}</dd>
+					{L_NO_ALT_ENV}
 				<!-- ENDIF -->
-			</dl>
+				</div>
+			</div>
 		</div>
 	</fieldset>
 
 	<fieldset>
 		<legend><a href="javascript:toggle_div('options_populate');">{L_POPULATE_OPTIONS}</a></legend>
 		<div id="options_populate" style="display: none;">
-			<dl>
-				<dt><label for="num_users">{L_NUM_USERS}:</label><br />{L_NUM_USERS_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_users" name="num_users" value="{NUM_USERS}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="num_new_group">{L_NUM_NEW_GROUP}:</label><br />{L_NUM_NEW_GROUP_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_new_group" name="num_new_group" value="{NUM_NEW_GROUP}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="email_domain">{L_EMAIL_DOMAIN}:</label><br />{L_EMAIL_DOMAIN_EXPLAIN}</dt>
-				<dd><input class="text medium" type="text" id="email_domain" name="email_domain" value="{EMAIL_DOMAIN}" /></dd>
-			</dl>
-			<dl>
-				<dt><label>{L_CREATE_ADMIN}:</label><br />{L_CREATE_ADMIN_EXPLAIN}</dt>
-				<dd>
-					<label><input type="radio" class="radio" name="create_admin" value="1"<!-- IF CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="create_admin" value="0"<!-- IF CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label>{L_CREATE_MOD}:</label><br />{L_CREATE_MOD_EXPLAIN}</dt>
-				<dd>
-					<label><input type="radio" class="radio" name="create_mod" value="1"<!-- IF CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-					<label><input type="radio" class="radio" name="create_mod" value="0"<!-- IF CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="num_cats">{L_NUM_CATS}:</label><br />{L_NUM_CATS_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_cats" name="num_cats" value="{NUM_CATS}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="num_forums">{L_NUM_FORUMS}:</label><br />{L_NUM_FORUMS_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="5" id="num_forums" name="num_forums" value="{NUM_FORUMS}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="num_topics">{L_NUM_TOPICS}:</label><br />{L_NUM_TOPICS_EXPLAIN}</dt>
-				<dd>
-					<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="num_topics" name="num_topics_min" value="{NUM_TOPICS_MIN}" /></label>
-					<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="num_topics_max" value="{NUM_TOPICS_MAX}" /></label>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label for="num_replies">{L_NUM_REPLIES}:</label><br />{L_NUM_REPLIES_EXPLAIN}</dt>
-				<dd>
-					<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="pop_data" name="num_replies_min" value="{NUM_REPLIES_MIN}" /></label>
-					<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="num_replies_max" value="{NUM_REPLIES_MAX}" /></label>
-				</dd>
-			</dl>
+			<div class="form-group">
+				<label for="num_users" class="col-sm-5 control-label">{L_NUM_USERS}:<span class="help-block">{L_NUM_USERS_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_users" name="num_users" value="{NUM_USERS}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="num_new_group" class="col-sm-5 control-label">{L_NUM_NEW_GROUP}:<span class="help-block">{L_NUM_NEW_GROUP_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_new_group" name="num_new_group" value="{NUM_NEW_GROUP}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="email_domain" class="col-sm-5 control-label">{L_EMAIL_DOMAIN}:<span class="help-block">{L_EMAIL_DOMAIN_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" id="email_domain" name="email_domain" value="{EMAIL_DOMAIN}" /></div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_CREATE_ADMIN}:<span class="help-block">{L_CREATE_ADMIN_EXPLAIN}</span></label>
+				<div class="col-sm-7">
+					<label class="radio-inline"><input type="radio" name="create_admin" value="1"<!-- IF CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label class="radio-inline"><input type="radio" name="create_admin" value="0"<!-- IF CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_CREATE_MOD}:<span class="help-block">{L_CREATE_MOD_EXPLAIN}</span></label>
+				<div class="col-sm-7">
+					<label class="radio-inline"><input type="radio" name="create_mod" value="1"<!-- IF CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+					<label class="radio-inline"><input type="radio" name="create_mod" value="0"<!-- IF CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="num_cats" class="col-sm-5 control-label">{L_NUM_CATS}:<span class="help-block">{L_NUM_CATS_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_cats" name="num_cats" value="{NUM_CATS}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="num_forums" class="col-sm-5 control-label">{L_NUM_FORUMS}:<span class="help-block">{L_NUM_FORUMS_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_forums" name="num_forums" value="{NUM_FORUMS}" /></div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_NUM_TOPICS}:<span class="help-block">{L_NUM_TOPICS_EXPLAIN}</span></label>
+				<div class="col-sm-7">
+					<label>{L_MIN} <input class="form-control" type="text" maxlength="5" id="num_topics" name="num_topics_min" value="{NUM_TOPICS_MIN}" /></label>
+					<label>{L_MAX} <input class="form-control" type="text" maxlength="5" name="num_topics_max" value="{NUM_TOPICS_MAX}" /></label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-5 control-label">{L_NUM_REPLIES}:<span class="help-block">{L_NUM_REPLIES_EXPLAIN}</span></label>
+				<div class="col-sm-7">
+					<label>{L_MIN} <input class="form-control" type="text" maxlength="5" id="pop_data" name="num_replies_min" value="{NUM_REPLIES_MIN}" /></label>
+					<label>{L_MAX} <input class="form-control" type="text" maxlength="5" name="num_replies_max" value="{NUM_REPLIES_MAX}" /></label>
+				</div>
+			</div>
 
-			<div class="settings-title">{L_CHUNK_SETTINGS}<br /><div class="settings-explain" style="margin-top: 2px;">{L_CHUNK_SETTINGS_EXPLAIN}</div></div>
-			<dl>
-				<dt><label for="chunk_post">{L_CHUNK_POST}:</label><br />{L_CHUNK_POST_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="chunk_post" value="{CHUNK_POST}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="chunk_topic">{L_CHUNK_TOPIC}:</label><br />{L_CHUNK_TOPIC_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_topic" name="chunk_topic" value="{CHUNK_TOPIC}" /></dd>
-			</dl>
-			<dl>
-				<dt><label for="chunk_user">{L_CHUNK_USER}:</label><br />{L_CHUNK_USER_EXPLAIN}</dt>
-				<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_user" name="chunk_user" value="{CHUNK_USER}" /></dd>
-			</dl>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">{L_CHUNK_SETTINGS}</h3>
+				</div>
+				<div class="panel-body">
+					{L_CHUNK_SETTINGS_EXPLAIN}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="chunk_post" class="col-sm-5 control-label">{L_CHUNK_POST}:<span class="help-block">{L_CHUNK_POST_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="6" id="chunk_post" name="chunk_post" value="{CHUNK_POST}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="chunk_topic" class="col-sm-5 control-label">{L_CHUNK_TOPIC}:<span class="help-block">{L_CHUNK_TOPIC_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="6" id="chunk_topic" name="chunk_topic" value="{CHUNK_TOPIC}" /></div>
+			</div>
+			<div class="form-group">
+				<label for="chunk_user" class="col-sm-5 control-label">{L_CHUNK_USER}:<span class="help-block">{L_CHUNK_USER_EXPLAIN}</span></label>
+				<div class="col-sm-7"><input class="form-control" type="text" maxlength="6" id="chunk_user" name="chunk_user" value="{CHUNK_USER}" /></div>
+			</div>
 		</div>
 	</fieldset>
 
 	<fieldset>
 		<legend><a href="javascript:toggle_div('options_config');">{L_BOARD_CONFIG_OPTIONS}</a></legend>
 		<div id="options_config" style="display: none;">
-			<dl>
-				<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
-				<dd><textarea name="other_config" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
-			</dl>
+			<div class="form-group">
+				<label for="other_config" class="col-sm-5 control-label">{L_OTHER_CONFIG}:<span class="help-block">{L_OTHER_CONFIG_EXPLAIN}</span></label>
+				<div class="col-sm-7"><textarea class="form-control" name="other_config" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>
+			</div>
 		</div>
 	</fieldset>
 
-	<p>{L_STAR_MANDATORY}</p>
 </form>
 
 <!-- INCLUDE overall_footer.html -->

@@ -83,7 +83,7 @@ class qi_about
 		));
 
 		// Output page
-		qi::page_header(($s_docs ? $user->lang['DOCS_LONG'] : $user->lang['QI_ABOUT']), ' ');
+		qi::page_header(($s_docs ? $user->lang['DOCS_LONG'] : $user->lang['QI_ABOUT']));
 
 		$template->set_filenames(array(
 			'body' => 'about_body.html',

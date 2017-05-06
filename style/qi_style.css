@@ -1,0 +1,59 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+	padding-top: 50px;
+}
+
+/* Sidebar navigation */
+/* Hide for mobile, show later */
+.sidebar {
+	text-align: center;
+}
+@media (min-width: 768px) {
+	.sidebar {
+		position: fixed;
+		top: 50px;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+		display: block;
+		padding: 20px;
+		overflow-x: hidden;
+		overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+		border-right: 1px solid #eee;
+		text-align: left;
+	}
+}
+
+.nav-sidebar {
+	margin-right: -21px; /* 20px padding + 1px border */
+	margin-bottom: 20px;
+	margin-left: -20px;
+}
+.nav-sidebar > li > a {
+	padding: 0 20px;
+}
+.main {
+	padding: 0 40px;
+}
+
+#page-footer {
+	padding: 10px;
+	text-align: center;
+}
+
+.page-about {
+	margin-top: 20px;
+}
+
+/* bootstrap mods */
+.help-block {
+	font-size: 0.9em;
+}
+
+.form-horizontal .control-label.text-left{
+	text-align: left;
+}
+
+blockquote {
+	font-size: inherit;
+}

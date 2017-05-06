@@ -36,7 +36,7 @@ class qi_phpinfo
 
 		if (empty($phpinfo) || empty($output))
 		{
-			trigger_error('NO_PHPINFO_AVAILABLE', E_USER_WARNING);
+			trigger_error($user->lang['NO_PHPINFO_AVAILABLE'], E_USER_WARNING);
 		}
 
 		$output = $output[1][0];
@@ -50,7 +50,7 @@ class qi_phpinfo
 		{
 			$output = preg_replace('#<tr class="v"><td>(.*?)</td></tr>#s', '<tr class="row1"><td><table class="type2"><tr><td>\1</td></tr></table></td></tr>', $output);
 		}
-		$output = preg_replace('#<table[^>]+>#i', '<table>', $output);
+		$output = preg_replace('#<table[^>]*>#i', '<table class="table table-bordered">', $output);
 		$output = preg_replace('#<img border="0"#i', '<img', $output);
 		$output = str_replace(array('class="e"', 'class="v"', 'class="h"', '<hr />', '<font', '</font>'), array('class="row1"', 'class="row2"', '', '', '<span', '</span>'), $output);
 
@@ -59,7 +59,7 @@ class qi_phpinfo
 
 		if (empty($output))
 		{
-			trigger_error('NO_PHPINFO_AVAILABLE', E_USER_WARNING);
+			trigger_error($user->lang['NO_PHPINFO_AVAILABLE'], E_USER_WARNING);
 		}
 
 		$orig_output = $output;
