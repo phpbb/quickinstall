@@ -255,6 +255,22 @@ else if (!empty($settings->update_text)) // PROFILE_UPDATED
 $settings->validate();
 $error = $settings->get_error();
 
+// Set some standard variables we want to force
+if (defined('PHPBB_31'))
+{
+	$config = new \phpbb\config\config(array(
+		'load_tplcompile'	=> '1',
+	));
+	set_config(false, false, false, $config);
+	set_config_count(null, null, null, $config);
+}
+else
+{
+	$config = array(
+		'load_tplcompile'	=> '1',
+	);
+}
+
 $page = (empty($error)) ? $page : 'settings';
 
 if ($page == 'main' || $page == 'settings' || $alt_env_missing)
@@ -271,22 +287,6 @@ $template->assign_var('S_IN_INSTALL', $settings->install);
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
-
-// Set some standard variables we want to force
-if (defined('PHPBB_31'))
-{
-	$config = new \phpbb\config\config(array(
-		'load_tplcompile'	=> '1',
-	));
-	set_config(false, false, false, $config);
-	set_config_count(null, null, null, $config);
-}
-else
-{
-	$config = array(
-		'load_tplcompile'	=> '1',
-	);
-}
 
 // overwrite
 $cache->cache_dir = $settings->get_cache_dir();
