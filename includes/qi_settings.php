@@ -168,7 +168,7 @@ $template->assign_vars(array(
 	'CONFIG_REDIRECT'		=> $settings->get_config('redirect', 0),
 	'CONFIG_SERVER_NAME'	=> $settings->get_config('server_name'),
 	'CONFIG_SERVER_PORT'	=> $settings->get_config('server_port'),
-	'CONFIG_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 0),
+	'CONFIG_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 1),
 	'CONFIG_SITE_DESC'		=> $settings->get_config('site_desc'),
 	'CONFIG_SITE_NAME'		=> $settings->get_config('site_name'),
 	'CONFIG_SMTP_AUTH'		=> $settings->get_config('smtp_auth'),
