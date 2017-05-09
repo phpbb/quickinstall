@@ -3,13 +3,21 @@ body {
 	padding-top: 50px;
 }
 
+/* workaround to reposition anchor links under navbar */
+.anchor {
+	padding-top: 60px;
+	margin-top: -60px;
+}
+
 /* Sidebar navigation */
 /* Hide for mobile, show later */
 .sidebar {
+	display: none;
 	text-align: center;
 }
 @media (min-width: 768px) {
 	.sidebar {
+		display: block;
 		position: fixed;
 		top: 50px;
 		bottom: 0;
@@ -22,6 +30,9 @@ body {
 		border-right: 1px solid #eee;
 		text-align: left;
 	}
+}
+.sidebar-boards {
+	display: block;
 }
 
 .nav-sidebar {
@@ -50,7 +61,7 @@ body {
 	font-size: 0.9em;
 }
 
-.form-horizontal .control-label.text-left{
+.form-horizontal .control-label.text-left {
 	text-align: left;
 }
 

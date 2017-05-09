@@ -124,7 +124,7 @@ function toggle_div(div_id)
 
 		<div class="form-group">
 			<div class="col-sm-5">
-				<p class="text-left alert alert-danger">{L_MIGHT_TAKE_LONG}</p>
+				<p class="text-left alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {L_MIGHT_TAKE_LONG}</p>
 			</div>
 			<div class="col-sm-7">
 				<input type="submit" name="submituser" id="submituser" value="{L_CREATE_BOARD}" class="btn btn-primary" onclick="return(validate_fields());" />
@@ -132,7 +132,7 @@ function toggle_div(div_id)
 		</div>
 	</fieldset>
 
-	<div class="alert alert-info" role="alert">{L_QI_MANAGE_HEADINGS}</div>
+	<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_QI_MANAGE_HEADINGS}</div>
 
 	<fieldset>
 		<legend><a href="javascript:toggle_div('options_advanced');">{L_MISC_SETTINGS}</a></legend>
@@ -249,7 +249,7 @@ function toggle_div(div_id)
 
 			<div class="panel panel-info">
 				<div class="panel-heading">
-					<h3 class="panel-title">{L_CHUNK_SETTINGS}</h3>
+					<h3 class="panel-title"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_CHUNK_SETTINGS}</h3>
 				</div>
 				<div class="panel-body">
 					{L_CHUNK_SETTINGS_EXPLAIN}
