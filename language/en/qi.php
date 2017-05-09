@@ -214,7 +214,7 @@ $lang = array_merge($lang, array(
 
 	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install is not compatible with PHP 7. You are using PHP %s.',
 	'PHPINFO'			=> 'PHP info',
-	'PHPINFO_EXPLAIN'	=> '<strong>PHP information</strong><br /><br />This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems.<br /><br />Please be aware that some hosting companies will limit what information is displayed here for security reasons.<br /><br />You are advised to only give out details on this page on a need to know basis.',
+	'PHPINFO_EXPLAIN'	=> '<h1>PHP information</h1>This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems.<br /><br />Please be aware that some hosting companies will limit what information is displayed here for security reasons.<br /><br />You are advised to only give out details on this page on a need to know basis.',
 	'PLAIN_TEXT'		=> '<strong>Note</strong>: QuickInstall stores passwords and usernames as plain text.',
 	'POPULATE'			=> 'Populate board',
 	'POPULATE_EXPLAIN'	=> 'Populates the board with the number of users, forums, posts and topics you specify below. Note that the more users, forums, posts and topics you specify, the longer it will take to process.',

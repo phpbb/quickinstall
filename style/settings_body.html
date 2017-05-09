@@ -9,14 +9,14 @@
 	<div class="alert alert-success" role="alert">{L_SETTINGS_SUCCESS}</div>
 <!-- ELSEIF S_SETTINGS_FAILURE -->
 	<div class="alert alert-danger" role="alert">
-		{L_SETTINGS_FAILURE}
+		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {L_SETTINGS_FAILURE}
 	</div>
 <!-- ENDIF -->
 <!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) -->
 	<div class="alert alert-danger" role="alert">{L_NEED_WRITABLE}</div>
 <!-- ENDIF -->
 <!-- IF ERROR -->
-	<div class="alert alert-<!-- IF S_IS_CONVERTED -->success<!-- ELSE -->danger<!-- ENDIF -->">{ERROR}</div>
+	<div class="alert alert-<!-- IF S_IS_CONVERTED -->success<!-- ELSE -->danger<!-- ENDIF -->" role="alert">{ERROR}</div>
 <!-- ENDIF -->
 
 <!-- IF CONFIG_TEXT -->
@@ -34,8 +34,9 @@
 
 <!-- IF PROFILE_COUNT -->
 <form method="post" id="profile_form" class="form-horizontal well" action="{U_CHOOSE_PROFILE}">
+	<section id="profiles" class="anchor">
 	<fieldset>
-		<legend id="profiles">{L_PROFILES}</legend>
+		<legend>{L_PROFILES}</legend>
 		<div class="form-group">
 			<label for="qi_profile" class="col-sm-5 control-label">{L_SELECT_PROFILE}:</label>
 			<div class="form-inline col-sm-7">
@@ -60,12 +61,14 @@
 		</div>
 		<!-- ENDIF -->
 	</fieldset>
+	</section>
 </form>
 <!-- ENDIF -->
 
 <form method="post" class="form-horizontal well" action="{U_UPDATE_SETTINGS}">
+	<section id="qi-settings" class="anchor">
 	<fieldset>
-		<legend id="lang-settings">{L_QI_SETTINGS}</legend>
+		<legend>{L_QI_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="qi_lang" class="col-sm-5 control-label">* {L_QI_LANG}:<span class="help-block">{L_QI_LANG_EXPLAIN}</span></label>
 			<div class="col-sm-7">
@@ -82,9 +85,11 @@
 			</div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="db-settings" class="anchor">
 	<fieldset>
-		<legend id="db-settings">{L_DB_SETTINGS}</legend>
+		<legend>{L_DB_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="dbms" class="col-sm-5 control-label">* {L_DBMS}:<span class="help-block">{L_DBMS_EXPLAIN}</span></label>
 			<div class="col-sm-7">
@@ -124,9 +129,11 @@
 			<div class="col-sm-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="dir-settings" class="anchor">
 	<fieldset>
-		<legend id="dir-settings">{L_DIR_URL_SETTINGS}</legend>
+		<legend>{L_DIR_URL_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="cache_dir" class="col-sm-5 control-label">* {L_CACHE_DIR}:<span class="help-block">{L_CACHE_DIR_EXPLAIN}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /></div>
@@ -151,9 +158,11 @@
 			<div class="col-sm-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="time-settings" class="anchor">
 	<fieldset>
-		<legend id="time-settings">{L_TIME_SETTINGS}</legend>
+		<legend>{L_TIME_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="qi_tz" class="col-sm-5 control-label">* {L_QI_TZ}:<span class="help-block">{L_QI_TZ_EXPLAIN}</span></label>
 			<div class="col-sm-7">
@@ -164,9 +173,11 @@
 			</div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="admin-settings" class="anchor">
 	<fieldset>
-		<legend id="admin-settings">{L_ADMIN_SETTINGS}</legend>
+		<legend>{L_ADMIN_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="admin_name" class="col-sm-5 control-label">{L_ADMIN_NAME}:<span class="help-block">{L_ADMIN_NAME_EXPLAIN} {L_IF_LEAVE_EMPTY} {L_PLAIN_TEXT}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></div>
@@ -180,9 +191,11 @@
 			<div class="col-sm-7"><input class="form-control" type="text" id="admin_email" name="qi_config[admin_email]" value="{CONFIG_ADMIN_EMAIL}" /></div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="server-settings" class="anchor">
 	<fieldset>
-		<legend id="server-settings">{L_SERVER_COOKIE_SETTINGS}</legend>
+		<legend>{L_SERVER_COOKIE_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="server_name" class="col-sm-5 control-label">* {L_SERVER_NAME}:<span class="help-block">{L_SERVER_NAME_EXPLAIN}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /></div>
@@ -203,9 +216,11 @@
 			</div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="email-settings" class="anchor">
 	<fieldset>
-		<legend id="email-settings">{L_EMAIL_SETTINGS}</legend>
+		<legend>{L_EMAIL_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="board_email" class="col-sm-5 control-label">* {L_BOARD_EMAIL}:<span class="help-block">{L_BOARD_EMAIL_EXPLAIN}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /></div>
@@ -253,10 +268,12 @@
 			<div class="col-sm-7"><input class="form-control" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="config-settings" class="anchor">
 	<fieldset>
-		<legend id="config-settings">{L_BOARD_CONFIG_SETTINGS}</legend>
-		<div class="alert alert-info">{L_BOARD_CONFIG_SETTINGS_EXPLAIN}</div>
+		<legend>{L_BOARD_CONFIG_SETTINGS}</legend>
+		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_BOARD_CONFIG_SETTINGS_EXPLAIN}</div>
 		<div class="form-group">
 			<label for="site_name" class="col-sm-5 control-label">* {L_SITE_NAME}:<span class="help-block">{L_SITE_NAME_EXPLAIN}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /></div>
@@ -274,10 +291,12 @@
 			<div class="col-sm-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="populate-settings" class="anchor">
 	<fieldset>
-		<legend id="populate-settings">{L_POPULATE}</legend>
-		<div class="alert alert-info">{L_THESE_CAN_CHANGE}</div>
+		<legend>{L_POPULATE_SETTINGS}</legend>
+		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
 		<div class="form-group">
 			<label class="col-sm-5 control-label">{L_POPULATE}:<span class="help-block">{L_POPULATE_EXPLAIN}</span></label>
 			<div class="col-sm-7">
@@ -335,7 +354,7 @@
 		</div>
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h3 class="panel-title">{L_CHUNK_SETTINGS}</h3>
+				<h3 class="panel-title"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_CHUNK_SETTINGS}</h3>
 			</div>
 			<div class="panel-body">
 				{L_CHUNK_SETTINGS_EXPLAIN}
@@ -353,12 +372,13 @@
 			<label for="chunk_user" class="col-sm-5 control-label">{L_CHUNK_USER}:<span class="help-block">{L_CHUNK_USER_EXPLAIN}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" size="4" maxlength="6" id="chunk_user" name="qi_config[chunk_user]" value="{CHUNK_USER}" /></div>
 		</div>
-
 	</fieldset>
+	</section>
 
+	<section id="misc-settings" class="anchor">
 	<fieldset>
-		<legend id="misc-settings">{L_MISC_SETTINGS}</legend>
-		<div class="alert alert-info">{L_THESE_CAN_CHANGE}</div>
+		<legend>{L_MISC_SETTINGS}</legend>
+		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
 		<div class="form-group">
 			<label for="alt_env" class="col-sm-5 control-label">{L_ALT_ENV}:</label>
 			<div class="col-sm-7"><select name="qi_config[alt_env]" id="alt_env" class="form-control">{CONFIG_ALT_ENV}</select></div>
@@ -404,9 +424,11 @@
 			</div>
 		</div>
 	</fieldset>
+	</section>
 
+	<section id="save-settings" class="anchor">
 	<fieldset>
-		<legend id="save-settings">{L_SAVE_RESTORE}</legend>
+		<legend>{L_SAVE_RESTORE}</legend>
 		<div class="form-group">
 			<label for="save_profile" class="col-sm-5 control-label">{L_SAVE_PROFILE}:<span class="help-block">{L_SAVE_PROFILE_EXPLAIN}</span></label>
 			<div class="col-sm-3">
@@ -420,6 +442,7 @@
 			</div>
 		</div>
 	</fieldset>
+	</section>
 
 </form>
 <!-- INCLUDE overall_footer.html -->

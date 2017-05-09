@@ -2,27 +2,39 @@
 <!-- IF S_ABOUT -->
 <h1>{L_ABOUT_QUICKINSTALL}</h1>
 
-<h3><a id="about-what"></a>{L_WHAT}</h3>
+<section id="about-what" class="anchor">
+<h3>{L_WHAT}</h3>
 <p>{L_WHAT_EXPLAIN}</p>
+</section>
 
-<h3><a id="about-who_when"></a>{L_WHO_WHEN}</h3>
+<section id="about-who_when" class="anchor">
+<h3>{L_WHO_WHEN}</h3>
 <p>{L_WHO_WHEN_EXPLAIN}</p>
+</section>
 
-<h3><a id="about-who_else"></a>{L_WHO_ELSE}</h3>
+<section id="about-who_else" class="anchor">
+<h3>{L_WHO_ELSE}</h3>
 {L_WHO_ELSE_EXPLAIN}
+</section>
 
-<h3><a id="about-why"></a>{L_WHY}</h3>
+<section id="about-why" class="anchor">
+<h3>{L_WHY}</h3>
 <p>{L_WHY_EXPLAIN}</p>
+</section>
 
-<h3><a id="about-changelog"></a>{L_CHANGELOG}</h3>
-	<!-- BEGIN history -->
-		<p><a id="{history.U_CHANGES}"></a><em>{history.CHANGES_SINCE}</em></p>
-		<ul>
-			<!-- BEGIN changelog -->
-			<li>{history.changelog.CHANGE}</li>
-			<!-- END changelog -->
-		</ul>
-	<!-- END history -->
+<section id="about-changelog" class="anchor">
+<h3>{L_CHANGELOG}</h3>
+<!-- BEGIN history -->
+<section id="{history.U_CHANGES}" class="anchor">
+	<p><em>{history.CHANGES_SINCE}</em></p>
+</section>
+<ul>
+	<!-- BEGIN changelog -->
+	<li>{history.changelog.CHANGE}</li>
+	<!-- END changelog -->
+</ul>
+<!-- END history -->
+</section>
 <!-- ELSE -->
 <div>
 	{DOC_BODY}
