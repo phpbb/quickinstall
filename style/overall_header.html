@@ -15,127 +15,6 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<script type="text/javascript">
-// <![CDATA[
-/**
-* Mark/unmark checklist
-* id = ID of parent container, name = name prefix, state = state [true/false]
-* From phpBB
-*/
-function marklist(id, name, state)
-{
-	var parent = document.getElementById(id);
-	if (!parent)
-	{
-		eval('parent = document.' + id);
-	}
-
-	if (!parent)
-	{
-		return;
-	}
-
-	var rb = parent.getElementsByTagName('input');
-
-	for (var r = 0; r < rb.length; r++)
-	{
-		if (rb[r].name.substr(0, name.length) === name)
-		{
-			rb[r].checked = state;
-		}
-	}
-}
-
-<!-- IF S_SETTINGS -->
-/**
-* Bind the correct event handlers to a given input field
-* Bug #62574
-*/
-var labels = document.getElementsByTagName('label');
-function bind_62574_handlers(fieldname)
-{
-	// The password fields can be accessed directly
-	var inputfield = document.getElementById(fieldname);
-
-	// Bind the handler on the inputfield
-	inputfield.onmouseover = function(e)
-	{
-		this.type = 'text';
-	};
-	inputfield.onmouseout = function(e)
-	{
-		this.type = 'password';
-	};
-
-	// Find the labels for this field
-	for (var j in labels)
-	{
-		if (labels[j].htmlFor === fieldname)
-		{
-			labels[j].onmouseover = function(e)
-			{
-				inputfield.type = 'text';
-			};
-			labels[j].onmouseout = function(e)
-			{
-				inputfield.type = 'password';
-			}
-		}
-	}
-}
-<!-- ENDIF -->
-
-<!-- IF S_MAIN -->
-function validate_fields()
-{
-	var success = true;
-	var validate = function(field, label) {
-		if (field)
-		{
-			if (field.value === "")
-			{
-				label.style.color = "red";
-				field.style.borderColor = "red";
-				success = false;
-			}
-			else
-			{
-				label.style.color = "#a6a6a6";
-				field.style.borderColor = "#cccccc";
-			}
-		}
-	};
-
-	validate(document.getElementById("dbname"), document.getElementById("span-dbname"));
-	validate(document.getElementById("dbuser"), document.getElementById("span-dbuser"));
-	validate(document.getElementById("dbpasswd"), document.getElementById("span-dbpasswd"));
-	validate(document.getElementById("admin_name"), document.getElementById("span-admin_name"));
-	validate(document.getElementById("admin_pass"), document.getElementById("span-admin_pass"));
-
-	if (success)
-	{
-		document.getElementById("submituser").style.display = "none";
-	}
-
-	return(success);
-}
-<!-- ENDIF -->
-
-<!-- IF CONFIG_TEXT -->
-function show_config()
-{
-	document.getElementById('config_text').style.display = '';
-	document.getElementById('config_text_button').style.display = 'none';
-}
-document.getElementById('config_text_button').style.display = '';
-<!-- ENDIF -->
-
-// Run some stuff when the page is loading
-window.onload = function()
-{};
-// ]]>
-</script>
-
 </head>
 
 <body class="{S_CONTENT_DIRECTION}">
@@ -193,17 +72,17 @@ window.onload = function()
 					<!-- BEGIN board_row -->
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" >
+							<input type="checkbox" data-mark id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" >
 							<a href="{board_row.BOARD_URL}">{board_row.BOARD_NAME}</a><!-- IF board_row.VERSION --> ({board_row.VERSION})<!-- ENDIF -->
 						</label>
 					</div>
 					<!-- END board_row -->
 					<p>
-						<a href="#" onclick="marklist('del_board', 'select', true); return false;">{L_CHECK_ALL}</a> &bull;
-						<a href="#" onclick="marklist('del_board', 'select', false); return false;">{L_UNCHECK_ALL}</a>
+						<a href="#" data-mark-list="markall" data-mark-target="#del_board">{L_CHECK_ALL}</a> &bull;
+						<a href="#" data-mark-list="false" data-mark-target="#del_board">{L_UNCHECK_ALL}</a>
 					</p>
 					<p>
-						<input class="btn btn-default" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_BOARDS}')){return(false);}"<!-- ENDIF --> />
+						<input class="btn btn-default" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_BOARDS}"<!-- ENDIF --> />
 					</p>
 				</form>
 				<!-- ELSE -->
