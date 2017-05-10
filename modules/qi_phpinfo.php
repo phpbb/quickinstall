@@ -62,6 +62,17 @@ class qi_phpinfo
 			}
 			return '<table class="' . $matches[1] . ' searchable">';
 		}, $output);
+		// Process all the anchors for the menu
+		$anchor = '#<a name="(.*)">(.*)</a>#';
+		preg_match_all($anchor, $output, $matches);
+		foreach ($matches[1] as $key => $match)
+		{
+			$template->assign_block_vars('phpinfo', array(
+				'U_ANCHOR'	=> $matches[1][$key],
+				'TITLE'		=> $matches[2][$key],
+			));
+		}
+		$output = preg_replace($anchor, '<span class="anchor" id="$1">$2</span>', $output);
 
 		// Fix invalid anchor names (eg "module_Zend Optimizer")
 		$output = preg_replace_callback('#<a name="([^"]+)">#', array($this, 'remove_spaces'), $output);
