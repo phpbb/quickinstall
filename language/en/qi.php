@@ -247,6 +247,7 @@ $lang = array_merge($lang, array(
 	'SAVE_PROFILE'			=> 'Save as new profile',
 	'SAVE_PROFILE_EXPLAIN'	=> 'Write the name for a new profile for these settings. Allowed chars are <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>-</code>, <code>_</code>, <code>.</code> <strong>Note: If a profile with this name already exists, it will be overwritten.</strong>',
 	'SAVE_RESTORE'			=> 'Save/Restore',
+	'SEARCH_HERE'			=> 'Search here...',
 	'SELECT_PROFILE'		=> 'Select profile',
 	'SET_DEFAULT_STYLE'		=> 'Set default style',
 	'SET_DEFAULT_STYLE_EXPLAIN'	=> 'Write the name of the style you want as default style. The name can be found in the <code>styles/[style name]/style.cfg</code> file. Defaults to prosilver if empty or the style can’t be installed.',

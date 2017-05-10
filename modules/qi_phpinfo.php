@@ -53,6 +53,15 @@ class qi_phpinfo
 		$output = preg_replace('#<table[^>]*>#i', '<table class="table table-bordered">', $output);
 		$output = preg_replace('#<img border="0"#i', '<img', $output);
 		$output = str_replace(array('class="e"', 'class="v"', 'class="h"', '<hr />', '<font', '</font>'), array('class="row1"', 'class="row2"', '', '', '<span', '</span>'), $output);
+		// Add searchable class to all but the 1st table
+		$output = preg_replace_callback('#<table class="(.*)">#', function($matches) {
+			static $index = 0;
+			if ($index++ === 0)
+			{
+				return $matches[0];
+			}
+			return '<table class="' . $matches[1] . ' searchable">';
+		}, $output);
 
 		// Fix invalid anchor names (eg "module_Zend Optimizer")
 		$output = preg_replace_callback('#<a name="([^"]+)">#', array($this, 'remove_spaces'), $output);
