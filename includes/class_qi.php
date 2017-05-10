@@ -37,7 +37,6 @@ class qi
 			'PAGE_TITLE'	=> $page_title,
 			'PAGE_ABOUT'	=> $page_about,
 			'T_THEME_PATH'	=> 'style',
-			'T_IMAGE_PATH'	=> $quickinstall_path . 'style/images/',
 
 			'U_ABOUT'		=> self::url('about'),
 			'U_DOCS'		=> self::url('docs'),
