@@ -257,8 +257,8 @@ echo<<<ERROR_PAGE
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>' . $msg_title . '</title>
-<link href="{$quickinstall_path}style/bootstrap/css/bootstrap-spacelab.min.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="{$quickinstall_path}style/qi_style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{$quickinstall_path}style/assets/css/bootstrap-spacelab.min.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{$quickinstall_path}style/assets/css/qi_style.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
 <div class="container-fluid">
