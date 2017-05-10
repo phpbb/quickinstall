@@ -52,7 +52,7 @@ class qi_phpinfo
 		}
 		$output = preg_replace('#<table[^>]*>#i', '<table class="table table-bordered">', $output);
 		$output = preg_replace('#<img border="0"#i', '<img', $output);
-		$output = str_replace(array('class="e"', 'class="v"', 'class="h"', '<hr />', '<font', '</font>'), array('class="row1"', 'class="row2"', '', '', '<span', '</span>'), $output);
+		$output = str_replace(array('class="e"', 'class="v"', 'class="h"', '<hr />', '<font', '</font>'), array('', '', '', '', '<span', '</span>'), $output);
 		// Add searchable class to all but the 1st table
 		$output = preg_replace_callback('#<table class="(.*)">#', function($matches) {
 			static $index = 0;
