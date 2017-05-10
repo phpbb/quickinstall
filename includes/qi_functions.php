@@ -238,11 +238,13 @@ function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '
 	{
 		$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
 		$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
+		$l_quickinstall = $user->lang['QUICKINSTALL'];
 	}
 	else
 	{
 		$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
 		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+		$l_quickinstall = 'phpBB QuickInstall';
 	}
 
 	$qi_version		= QI_VERSION;
@@ -263,7 +265,7 @@ echo<<<ERROR_PAGE
 <body>
 <div class="container-fluid">
 	<nav class="navbar navbar-inverse navbar-fixed-top"><div class="container-fluid"><div class="navbar-header">
-		<a class="navbar-brand">phpBB QuickInstall</a>
+		<a class="navbar-brand"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> ' . $l_quickinstall . '</a>
 	</div></div></nav>
 
 	<div id="content">
@@ -281,7 +283,7 @@ echo<<<ERROR_PAGE
 	</div>
 
 	<div id="page-footer">
-		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> $qi_version for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />
+		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">' . $l_quickinstall . '</a> $qi_version for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />
 		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>
 	</div>
 </div>
