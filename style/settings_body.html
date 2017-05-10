@@ -21,14 +21,11 @@
 
 <!-- IF CONFIG_TEXT -->
 	<div class="alert alert-danger">
-		<div class="config-text">
-			<div id="config_text_button">
-				<p>{L_CONFIG_WARNING}</p>
-				<p><input class="btn btn-primary" type="button" value="{L_CONFIG_BUTTON}" onclick="show_config()" /></p>
-			</div>
-			<textarea id="config_text" class="form-control" readonly="readonly" style="display:none">{CONFIG_TEXT}</textarea>
-			<noscript><textarea id="config_text" class="form-control" readonly="readonly">{CONFIG_TEXT}</textarea></noscript>
+		<div id="config_text_alert">
+			<p>{L_CONFIG_WARNING}</p>
+			<p><input id="config_text_button" class="btn btn-primary" type="button" value="{L_CONFIG_BUTTON}" /></p>
 		</div>
+		<textarea id="config_text" class="form-control" readonly="readonly" style="display:none">{CONFIG_TEXT}</textarea>
 	</div>
 <!-- ENDIF -->
 
@@ -40,7 +37,7 @@
 		<div class="form-group">
 			<label for="qi_profile" class="col-sm-5 control-label">{L_SELECT_PROFILE}:</label>
 			<div class="form-inline col-sm-7">
-				<select id="qi_profile" name="qi_profile" class="form-control" onchange="document.forms['profile_form'].submit();">
+				<select id="qi_profile" name="qi_profile" class="form-control" data-form-submit="true">
 				<!-- IF PROFILE_COUNT == 1 -->
 					<option>{PROFILE_OPTIONS}</option>
 				<!-- ELSE -->
@@ -48,7 +45,7 @@
 				<!-- ENDIF -->
 				</select>
 				<!-- IF PROFILE_COUNT > 1  -->
-				<input type="submit" name="submit-profile" value="{L_GO}" class="btn btn-primary" />
+				<noscript><input type="submit" name="submit-profile" value="{L_GO}" class="btn btn-primary" /></noscript>
 				<!-- ENDIF -->
 			</div>
 		</div>
@@ -56,7 +53,7 @@
 		<div class="form-group">
 			<label class="col-sm-5 control-label">{L_DELETE_PROFILE}:</label>
 			<div class="col-sm-7">
-				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="btn btn-default"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> />
+				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="btn btn-default"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_PROFILE}"<!-- ENDIF --> />
 			</div>
 		</div>
 		<!-- ENDIF -->
@@ -72,7 +69,7 @@
 		<div class="form-group">
 			<label for="qi_lang" class="col-sm-5 control-label">* {L_QI_LANG}:<span class="help-block">{L_QI_LANG_EXPLAIN}</span></label>
 			<div class="col-sm-7">
-				<select id="qi_lang" name="qi_config[qi_lang]" class="form-control" onchange="window.location.href='index.php?page=settings&amp;lang='+this.options[this.selectedIndex].value;">
+				<select id="qi_lang" name="qi_config[qi_lang]" class="form-control" data-load-selection="index.php?page=settings&amp;lang=">
 					{QI_LANG}
 				</select>
 			</div>
