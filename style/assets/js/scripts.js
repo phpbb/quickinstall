@@ -58,6 +58,16 @@
 			$("#config_text").show();
 		});
 
+		// search filter for PHP info table
+		$('#phpinfo-filter').on("keyup", function () {
+			var $rows = $('.searchable tr');
+			var regex = new RegExp($(this).val(), "i");
+			$rows.hide();
+			$rows.filter(function () {
+				return regex.test($(this).text());
+			}).show();
+		})
+
 	});
 
 }(jQuery));
