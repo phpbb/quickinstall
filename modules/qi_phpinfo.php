@@ -82,7 +82,7 @@ class qi_phpinfo
 		));
 
 		// Output page
-		qi::page_header($user->lang['PHPINFO'], $user->lang['PHPINFO_EXPLAIN']);
+		qi::page_header($user->lang['PHPINFO']);
 
 		$template->set_filenames(array(
 			'body' => 'phpinfo_body.html',

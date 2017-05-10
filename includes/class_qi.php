@@ -23,7 +23,7 @@ class qi
 	/**
 	* Output the standard page header
 	*/
-	public static function page_header($page_title = '', $page_about = '')
+	public static function page_header($page_title = '')
 	{
 		if (defined('HEADER_INC'))
 		{
@@ -35,7 +35,6 @@ class qi
 
 		$template->assign_vars(array(
 			'PAGE_TITLE'	=> $page_title,
-			'PAGE_ABOUT'	=> $page_about,
 			'T_THEME_PATH'	=> 'style',
 
 			'U_ABOUT'		=> self::url('about'),
