@@ -51,7 +51,7 @@ class qi_manage
 					{
 						$dbms = (strpos($dbms, '\\') !== false) ? substr(strrchr($dbms, '\\'), 1) : $dbms;
 
-						if ($dbms == 'sqlite')
+						if (in_array($dbms, array('sqlite', 'sqlite3')))
 						{
 							$db_file = $dbhost . $dbname;
 
@@ -59,6 +59,11 @@ class qi_manage
 							{
 								// Assuming the DB file is created by PHP, then PHP should also have permissions to delete it.
 								@unlink($db_file);
+							}
+							else if (file_exists($dbhost))
+							{
+								// Assuming the DB file is created by PHP, then PHP should also have permissions to delete it.
+								@unlink($dbhost);
 							}
 						}
 						else if (!empty($dbuser) && !empty($dbpasswd))
