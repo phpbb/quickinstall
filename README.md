@@ -1,6 +1,6 @@
 # phpBB3 QuickInstall
 
-phpBB3 QuickInstall (QI) is tool used to manage multiple phpBB3 installations. You can quickly install phpBB 3.2.x, 3.1.x and 3.0.x boards with one single mouse click.
+phpBB3 QuickInstall (QI) is a tool used to manage multiple phpBB3 installations. You can quickly install phpBB 3.2.x, 3.1.x and 3.0.x boards with one single mouse click.
 
 QuickInstall is not intended for use on a live server. It is aimed at users developing extensions and modifications for phpBB. QuickInstall can set up new phpBB boards to develop and test extensions or MODs in without having to worry about conflicts. If you insist on using QuickInstall on a public server, make sure to protect the directory where it is. No support is given for QI other than local use.   
 
