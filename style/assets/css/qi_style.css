@@ -46,11 +46,6 @@ body {
 	padding: 0 40px;
 }
 
-#page-footer {
-	padding: 10px;
-	text-align: center;
-}
-
 .phpinfo {
 	margin-top: 20px;
 }
@@ -66,4 +61,8 @@ body {
 
 blockquote {
 	font-size: inherit;
+}
+
+footer {
+	padding: 10px;
 }
