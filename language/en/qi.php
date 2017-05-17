@@ -322,4 +322,6 @@ $lang = array_merge($lang, array(
 	'DST_REMOVED'		=>	'The DST setting has been removed (qi_dst).',
 	'TIMEZONE_UPDATED'	=>	'Your timezone setting has been updated from numerical to string (qi_tz), default is UTC.',
 
+	'ASTERISK'			=> '*',
+	'COLON'				=> ':',
 ));
