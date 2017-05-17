@@ -69,7 +69,7 @@ $lang = array_merge($lang, array(
 	'BOARDS_DIR'			=> 'Boards directory',
 	'BOARDS_DIR_EXPLAIN'	=> 'The directory where your boards will be created. PHP needs to have write permissions to this directory.',
 	'BOARDS_DIR_MISSING'	=> 'The directory &quot;%s&quot; does not exist or is not writeable.',
-	'BOARDS_LIST'			=> 'List of boards',
+	'BOARDS_LIST'			=> 'Installed boards',
 	'BOARDS_URL'			=> 'Boards URL prefix',
 	'BOARDS_URL_EXPLAIN'	=> 'URL prefix to the boards directory. If you specified an absolute directory in the boards directory setting above, you may need to provide a domain and/or path here that leads to the boards directory. If boards directory is a relative path, you may just copy it here.',
 
