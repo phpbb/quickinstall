@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=48be6c8442999892a7f7a4cf08a44e1c)
- * Config saved to config.json and https://gist.github.com/48be6c8442999892a7f7a4cf08a44e1c
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=62ba7ea6f650160e00be887463320c84)
+ * Config saved to config.json and https://gist.github.com/62ba7ea6f650160e00be887463320c84
  */
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
@@ -4524,7 +4524,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #0d4573;
+  color: #e6e6e6;
   background-color: #0c416c;
 }
 .navbar-default .navbar-nav > .disabled > a,
@@ -4534,14 +4534,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   background-color: transparent;
 }
 .navbar-default .navbar-toggle {
-  border-color: #dddddd;
+  border-color: #0c416c;
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-  background-color: #dddddd;
+  background-color: #0c416c;
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #888888;
+  background-color: #ffffff;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
@@ -4551,7 +4551,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
   background-color: #0c416c;
-  color: #0d4573;
+  color: #e6e6e6;
 }
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
@@ -4565,7 +4565,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #0d4573;
+    color: #e6e6e6;
     background-color: #0c416c;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
@@ -4630,11 +4630,11 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   background-color: transparent;
 }
 .navbar-inverse .navbar-toggle {
-  border-color: #333333;
+  border-color: transparent;
 }
 .navbar-inverse .navbar-toggle:hover,
 .navbar-inverse .navbar-toggle:focus {
-  background-color: #333333;
+  background-color: #1989e6;
 }
 .navbar-inverse .navbar-toggle .icon-bar {
   background-color: #ffffff;
