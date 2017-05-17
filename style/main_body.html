@@ -188,11 +188,11 @@
 		<div id="options_populate" style="display: none;">
 			<div class="form-group">
 				<label for="num_users" class="col-sm-5 control-label text-left">{L_NUM_USERS}{L_COLON}<span class="help-block">{L_NUM_USERS_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_users" name="num_users" value="{NUM_USERS}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="num_users" value="{NUM_USERS}" /></div>
 			</div>
 			<div class="form-group">
 				<label for="num_new_group" class="col-sm-5 control-label text-left">{L_NUM_NEW_GROUP}{L_COLON}<span class="help-block">{L_NUM_NEW_GROUP_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_new_group" name="num_new_group" value="{NUM_NEW_GROUP}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_new_group" name="num_new_group" value="{NUM_NEW_GROUP}" /></div>
 			</div>
 			<div class="form-group">
 				<label for="email_domain" class="col-sm-5 control-label text-left">{L_EMAIL_DOMAIN}{L_COLON}<span class="help-block">{L_EMAIL_DOMAIN_EXPLAIN}</span></label>
@@ -214,24 +214,24 @@
 			</div>
 			<div class="form-group">
 				<label for="num_cats" class="col-sm-5 control-label text-left">{L_NUM_CATS}{L_COLON}<span class="help-block">{L_NUM_CATS_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_cats" name="num_cats" value="{NUM_CATS}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_cats" name="num_cats" value="{NUM_CATS}" /></div>
 			</div>
 			<div class="form-group">
 				<label for="num_forums" class="col-sm-5 control-label text-left">{L_NUM_FORUMS}{L_COLON}<span class="help-block">{L_NUM_FORUMS_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="num_forums" name="num_forums" value="{NUM_FORUMS}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="num_forums" value="{NUM_FORUMS}" /></div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-5 control-label text-left">{L_NUM_TOPICS}{L_COLON}<span class="help-block">{L_NUM_TOPICS_EXPLAIN}</span></label>
 				<div class="col-sm-7">
-					<label>{L_MIN} <input class="form-control" type="text" maxlength="5" id="num_topics" name="num_topics_min" value="{NUM_TOPICS_MIN}" /></label>
-					<label>{L_MAX} <input class="form-control" type="text" maxlength="5" name="num_topics_max" value="{NUM_TOPICS_MAX}" /></label>
+					<label>{L_MIN} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="num_topics_min" value="{NUM_TOPICS_MIN}" /></label>
+					<label>{L_MAX} <input class="form-control" type="number" min="0" max="99999" name="num_topics_max" value="{NUM_TOPICS_MAX}" /></label>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-5 control-label text-left">{L_NUM_REPLIES}{L_COLON}<span class="help-block">{L_NUM_REPLIES_EXPLAIN}</span></label>
 				<div class="col-sm-7">
-					<label>{L_MIN} <input class="form-control" type="text" maxlength="5" id="pop_data" name="num_replies_min" value="{NUM_REPLIES_MIN}" /></label>
-					<label>{L_MAX} <input class="form-control" type="text" maxlength="5" name="num_replies_max" value="{NUM_REPLIES_MAX}" /></label>
+					<label>{L_MIN} <input class="form-control" type="number" min="0" max="99999" id="pop_data" name="num_replies_min" value="{NUM_REPLIES_MIN}" /></label>
+					<label>{L_MAX} <input class="form-control" type="number" min="0" max="99999" name="num_replies_max" value="{NUM_REPLIES_MAX}" /></label>
 				</div>
 			</div>
 
@@ -246,15 +246,15 @@
 
 			<div class="form-group">
 				<label for="chunk_post" class="col-sm-5 control-label text-left">{L_CHUNK_POST}{L_COLON}<span class="help-block">{L_CHUNK_POST_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="6" id="chunk_post" name="chunk_post" value="{CHUNK_POST}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="chunk_post" value="{CHUNK_POST}" /></div>
 			</div>
 			<div class="form-group">
 				<label for="chunk_topic" class="col-sm-5 control-label text-left">{L_CHUNK_TOPIC}{L_COLON}<span class="help-block">{L_CHUNK_TOPIC_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="6" id="chunk_topic" name="chunk_topic" value="{CHUNK_TOPIC}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_topic" name="chunk_topic" value="{CHUNK_TOPIC}" /></div>
 			</div>
 			<div class="form-group">
 				<label for="chunk_user" class="col-sm-5 control-label text-left">{L_CHUNK_USER}{L_COLON}<span class="help-block">{L_CHUNK_USER_EXPLAIN}</span></label>
-				<div class="col-sm-7"><input class="form-control" type="text" maxlength="6" id="chunk_user" name="chunk_user" value="{CHUNK_USER}" /></div>
+				<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_user" name="chunk_user" value="{CHUNK_USER}" /></div>
 			</div>
 		</div>
 	</fieldset>
