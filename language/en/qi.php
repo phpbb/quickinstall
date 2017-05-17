@@ -199,7 +199,7 @@ $lang = array_merge($lang, array(
 	'NUM_TOPICS'			=> 'Number of topics',
 	'NUM_TOPICS_EXPLAIN'	=> 'The number of topics to create in each forum. Each forum will get a random number of topics between these max and min values.',
 	'NUM_USERS'				=> 'Number of users',
-	'NUM_USERS_EXPLAIN'		=> 'The number of users to populate your new board with. They will get the username <code>tester_x</code> (x is 1 to num_users) and they will all get the password <code>123456</code>',
+	'NUM_USERS_EXPLAIN'		=> 'The number of users to populate your new board with. They will be assigned the username <kbd>tester_x</kbd> (x is from 1 to number of users) and they will all use the password <kbd>123456</kbd>',
 
 	'OFF'					=> 'Off',
 	'ON'					=> 'On',
@@ -210,7 +210,7 @@ $lang = array_merge($lang, array(
 	'ONLY_SUBSILVER'		=> 'Only subsilver2',
 	'OPTIONS'				=> 'Options',
 	'OTHER_CONFIG'			=> 'Other board config settings',
-	'OTHER_CONFIG_EXPLAIN'	=> 'These will be updated in the config table or added to the config table if they don’t exist yet. So make sure to spell correctly. These can also be edited when creating the boards.<br /><br />One config setting per line in a semicolon <code>;</code> separated list. <code>config-name;config-setting;dynamic</code>, if the setting is not dynamic the dynamic part is not needed. Lines starting with a <code>#</code> are considered comments and not added to the DB.<br /><br />Example:<br /><code>load_tplcompile;1;1</code><br /><code>session_length;999999</code><br /><code># this is a comment</code>',
+	'OTHER_CONFIG_EXPLAIN'	=> 'Config settings entered here will be updated in the config table or added to the config table if they don’t exist yet. <u>Make sure to spell correctly.</u> This can also be edited when creating the boards.<br /><br />Type one config setting per line in a semicolon <kbd>;</kbd> separated list e.g., <kbd>config-name;config-setting;dynamic</kbd>. If the setting is not dynamic then the dynamic part is not needed. Lines starting with a <kbd>#</kbd> are considered comments and not added to the DB.<br /><br />Example:<br /><kbd>session_length;999999</kbd><br /><kbd>load_tplcompile;1;1</kbd><br /><kbd># A comment</kbd>',
 
 	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install is not compatible with PHP 7. You are using PHP %s.',
 	'PHPINFO'			=> 'PHP info',
@@ -245,12 +245,12 @@ $lang = array_merge($lang, array(
 
 	'SAVE'					=> 'Save',
 	'SAVE_PROFILE'			=> 'Save as new profile',
-	'SAVE_PROFILE_EXPLAIN'	=> 'Write the name for a new profile for these settings. Allowed chars are <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>-</code>, <code>_</code>, <code>.</code> <strong>Note: If a profile with this name already exists, it will be overwritten.</strong>',
+	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name for these new profile settings. Allowed characters are <kbd>A-Z</kbd>, <kbd>a-z</kbd>, <kbd>0-9</kbd>, <kbd>-</kbd>, <kbd>_</kbd>, <kbd>.</kbd><br /><br />Note: If a profile with this name already exists, it will be overwritten.',
 	'SAVE_RESTORE'			=> 'Save/Restore',
 	'SEARCH_HERE'			=> 'Search here...',
 	'SELECT_PROFILE'		=> 'Select profile',
 	'SET_DEFAULT_STYLE'		=> 'Set default style',
-	'SET_DEFAULT_STYLE_EXPLAIN'	=> 'Write the name of the style you want as default style. The name can be found in the <code>styles/[style name]/style.cfg</code> file. Defaults to prosilver if empty or the style can’t be installed.',
+	'SET_DEFAULT_STYLE_EXPLAIN'	=> 'Enter the name of the style you want to use as the default style. The name can be found in the <code>styles/[style name]/style.cfg</code> file. Defaults to prosilver if empty or the style can’t be installed.',
 	'SETTINGS_FAILURE'		=> 'The following errors were detected:',
 	'SETTINGS_NOT_WRITABLE'	=> 'The settings directory do not exist, is not a directory or is not writable.',
 	'SETTINGS_SECTIONS'		=> 'Settings sections',
