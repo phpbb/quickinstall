@@ -43,31 +43,31 @@
 		</div>
 		<div class="form-group">
 			<label for="dbname" class="col-sm-5 control-label">* {L_BOARD_DBNAME}:</label>
-			<div class="col-sm-7"><input class="form-control" type="text" id="dbname" name="dbname" value="{DBNAME}" data-validate-required /></div>
+			<div class="col-sm-7"><input class="form-control" type="text" id="dbname" name="dbname" value="{DBNAME}" data-validate-required /><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div>
 		</div>
 
 		<!-- IF not S_DBUSER -->
 		<div class="form-group">
 			<label for="dbuser" class="col-sm-5 control-label">* {L_DBUSER}:</label>
-			<div class="col-sm-7"><input class="form-control" type="password" id="dbuser" name="dbuser" value="{CONFIG_DBUSER}" data-validate-required /></div>
+			<div class="col-sm-7"><input class="form-control" type="password" id="dbuser" name="dbuser" value="{CONFIG_DBUSER}" data-validate-required /><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div>
 		</div>
 		<!-- ENDIF -->
 		<!-- IF not S_DBPASSWD and not S_NODBPASSWD -->
 		<div class="form-group">
 			<label for="dbpasswd" class="col-sm-5 control-label">* {L_DBPASSWD}:</label>
-			<div class="col-sm-7"><input class="form-control" type="password" id="dbpasswd" name="dbpasswd" value="{CONFIG_DBPASSWD}" data-validate-required /></div>
+			<div class="col-sm-7"><input class="form-control" type="password" id="dbpasswd" name="dbpasswd" value="{CONFIG_DBPASSWD}" data-validate-required /><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div>
 		</div>
 		<!-- ENDIF -->
 		<!-- IF not S_ADMIN_NAME -->
 		<div class="form-group">
 			<label for="admin_name" class="col-sm-5 control-label">* {L_ADMIN_NAME}:</label>
-			<div class="col-sm-7"><input class="form-control" type="password" id="admin_name" name="admin_name" value="{CONFIG_ADMIN_NAME}" data-validate-required /></div>
+			<div class="col-sm-7"><input class="form-control" type="password" id="admin_name" name="admin_name" value="{CONFIG_ADMIN_NAME}" data-validate-required /><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div>
 		</div>
 		<!-- ENDIF -->
 		<!-- IF not S_ADMIN_PASS -->
 		<div class="form-group">
 			<label for="admin_pass" class="col-sm-5 control-label">* {L_ADMIN_PASS}:</label>
-			<div class="col-sm-7"><input class="form-control" type="password" id="admin_pass" name="admin_pass" value="{CONFIG_ADMIN_PASS}" data-validate-required /></div>
+			<div class="col-sm-7"><input class="form-control" type="password" id="admin_pass" name="admin_pass" value="{CONFIG_ADMIN_PASS}" data-validate-required /><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div>
 		</div>
 		<!-- ENDIF -->
 
