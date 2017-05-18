@@ -3,6 +3,10 @@ body {
 	padding-top: 50px;
 }
 
+footer {
+	padding: 10px 0;
+}
+
 /* workaround to reposition anchor links under navbar */
 .anchor {
 	padding-top: 60px;
@@ -52,17 +56,11 @@ body {
 
 /* bootstrap mods */
 .help-block {
+	color: #555;
 	font-size: 0.9em;
+	font-weight: normal;
 }
 
 .form-horizontal .control-label.text-left {
 	text-align: left;
-}
-
-blockquote {
-	font-size: inherit;
-}
-
-footer {
-	padding: 10px;
 }
