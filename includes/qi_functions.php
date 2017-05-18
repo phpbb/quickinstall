@@ -230,7 +230,7 @@ function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '
 
 	if ($update_profiles)
 	{
-		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="button2" type="submit" name="update_all" value="' .
+		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary" type="submit" name="update_all" value="' .
 		$user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
 	}
 	else
@@ -247,53 +247,19 @@ function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '
 	else
 	{
 		$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
-		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a>';
 		$l_quickinstall = 'phpBB QuickInstall';
 	}
 
-	$qi_version		= QI_VERSION;
-
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
 
-echo<<<ERROR_PAGE
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>' . $msg_title . '</title>
-<link href="{$quickinstall_path}style/assets/css/bootstrap-spacelab.min.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="{$quickinstall_path}style/assets/css/qi_style.css" rel="stylesheet" type="text/css" media="screen" />
-</head>
-<body>
-<div class="container-fluid">
-	<nav class="navbar navbar-inverse navbar-fixed-top"><div class="container-fluid"><div class="navbar-header">
-		<a class="navbar-brand"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> ' . $l_quickinstall . '</a>
-	</div></div></nav>
-
-	<div id="content">
-		<div id="main" class="main">
-			<div class="well">
-				<h1>$msg_title</h1>
-				<div><strong>$msg_explain</strong></div>
-				<div>$msg_text</div>
-				$settings_form
-			</div>
-			<div style="padding-left: 10px;">
-				$l_return_index
-			</div>
-		</div>
-	</div>
-
-	<div id="page-footer">
-		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">' . $l_quickinstall . '</a> $qi_version for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />
-		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>
-	</div>
-</div>
-</body>
-</html>
-ERROR_PAGE;
+	$error_out = file_get_contents($quickinstall_path . 'style/error.html');
+	$error_out = str_replace(
+		array('{L_QUICKINSTALL}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}'),
+		array($l_quickinstall, $quickinstall_path, $msg_title, $msg_explain, $msg_text, $settings_form, $l_return_index, QI_VERSION),
+		$error_out
+	);
+	echo $error_out;
 
 	exit;
 }

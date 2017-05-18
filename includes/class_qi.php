@@ -331,41 +331,13 @@ class qi
 
 				phpbb_functions::send_status_line(503, 'Service Unavailable');
 
-				echo '<!DOCTYPE html>';
-				echo '<html>';
-				echo '<head>';
-				echo '<meta charset="utf-8" />';
-				echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
-				echo '<meta name="viewport" content="width=device-width, initial-scale=1" />';
-				echo '<title>' . $msg_title . '</title>';
-				echo '<link href="' . $quickinstall_path . 'style/assets/css/bootstrap-spacelab.min.css" rel="stylesheet" type="text/css" media="screen" />';
-				echo '<link href="' . $quickinstall_path . 'style/assets/css/qi_style.css" rel="stylesheet" type="text/css" media="screen" />';
-				echo '</head>';
-				echo '<body>';
-				echo '<div class="container-fluid">';
-				echo '	<nav class="navbar navbar-inverse navbar-fixed-top"><div class="container-fluid"><div class="navbar-header">';
-				echo '		<a class="navbar-brand"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> ' . $user->lang['QUICKINSTALL'] . '</a>';
-				echo '	</div></div></nav>';
-
-				echo '	<div id="content">';
-				echo '		<div id="main" class="main">';
-				echo '			<div class="well">';
-				echo '				<h1>' . $msg_title . '</h1>';
-				echo '				<div>' . $msg_text . '</div>';
-				echo '				</div>';
-				echo '				<div style="padding-left: 10px;">';
-				echo '					' . $l_return_index;
-				echo '			</div>';
-				echo '		</div>';
-				echo '	</div>';
-
-				echo '	<div id="page-footer">';
-				echo '		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">' . $user->lang['QUICKINSTALL'] . '</a> ' . $user->lang['QI_VERSION'] . ' for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />';
-				echo '		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
-				echo '	</div>';
-				echo '</div>';
-				echo '</body>';
-				echo '</html>';
+				$error_out = file_get_contents($quickinstall_path . 'style/error.html');
+				$error_out = str_replace(
+					array('{L_QUICKINSTALL}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}'),
+					array($user->lang['QUICKINSTALL'], $quickinstall_path, $msg_title, '', $msg_text, '', $l_return_index, QI_VERSION),
+					$error_out
+				);
+				echo $error_out;
 
 				// As a pre-caution... some setups display a blank page if the flush() is not there.
 				(ob_get_level() > 0) ? @ob_flush() : @flush();
