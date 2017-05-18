@@ -51,8 +51,7 @@
 		</div>
 		<!-- IF PROFILE_COUNT > 1 -->
 		<div class="form-group">
-			<label class="col-sm-5 control-label text-left">{L_DELETE_PROFILE}{L_COLON}</label>
-			<div class="col-sm-7">
+			<div class="col-sm-7 col-sm-offset-5">
 				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="btn btn-primary"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_PROFILE}"<!-- ENDIF --> />
 			</div>
 		</div>
@@ -122,7 +121,7 @@
 			<div class="col-sm-7"><input class="form-control" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /></div>
 		</div>
 		<div class="form-group">
-			<label for="table_prefix" class="col-sm-5 control-label text-left">{L_TABLE_PREFIX}{L_COLON} {L_ASTERISK}<span class="help-block">{L_TABLE_PREFIX_EXPLAIN}</span></label>
+			<label for="table_prefix" class="col-sm-5 control-label text-left">{L_TABLE_PREFIX}{L_COLON} {L_ASTERISK}<span class="help-block">{L_TABLE_PREFIX_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></div>
 		</div>
 	</fieldset>
@@ -272,11 +271,11 @@
 		<legend>{L_BOARD_CONFIG_SETTINGS}</legend>
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_BOARD_CONFIG_SETTINGS_EXPLAIN}</div>
 		<div class="form-group">
-			<label for="site_name" class="col-sm-5 control-label text-left">{L_SITE_NAME}{L_COLON} {L_ASTERISK}<span class="help-block">{L_SITE_NAME_EXPLAIN}</span></label>
+			<label for="site_name" class="col-sm-5 control-label text-left">{L_SITE_NAME}{L_COLON} {L_ASTERISK}<span class="help-block">{L_SITE_NAME_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /></div>
 		</div>
 		<div class="form-group">
-			<label for="site_desc" class="col-sm-5 control-label text-left">{L_SITE_DESC}{L_COLON}<span class="help-block">{L_SITE_DESC_EXPLAIN}</span></label>
+			<label for="site_desc" class="col-sm-5 control-label text-left">{L_SITE_DESC}{L_COLON}<span class="help-block">{L_SITE_DESC_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
 			<div class="col-sm-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}" /></div>
 		</div>
 		<div class="form-group">
@@ -377,7 +376,7 @@
 		<legend>{L_MISC_SETTINGS}</legend>
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
 		<div class="form-group">
-			<label for="alt_env" class="col-sm-5 control-label text-left">{L_ALT_ENV}{L_COLON}</label>
+			<label for="alt_env" class="col-sm-5 control-label text-left">{L_ALT_ENV}{L_COLON}<span class="help-block">{L_ALT_ENV_EXPLAIN}</span></label>
 			<div class="col-sm-7"><select name="qi_config[alt_env]" id="alt_env" class="form-control">{CONFIG_ALT_ENV}</select></div>
 		</div>
 		<div class="form-group">
@@ -388,7 +387,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-5 control-label text-left">{L_AUTOMOD}{L_COLON}<span class="help-block">{L_ONLY_30}</span></label>
+			<label class="col-sm-5 control-label text-left">{L_AUTOMOD_INSTALL}{L_COLON}<span class="help-block">{L_ONLY_30}</span></label>
 			<div class="col-sm-7">
 				<label class="radio-inline"><input type="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
 				<label class="radio-inline"><input type="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
@@ -425,7 +424,7 @@
 
 	<section id="save-settings" class="anchor">
 	<fieldset>
-		<legend>{L_SAVE_RESTORE}</legend>
+		<legend>{L_SAVE_SETTINGS}</legend>
 		<div class="form-group">
 			<label for="save_profile" class="col-sm-5 control-label text-left">{L_SAVE_PROFILE}{L_COLON}<span class="help-block">{L_SAVE_PROFILE_EXPLAIN}</span></label>
 			<div class="col-sm-3">
