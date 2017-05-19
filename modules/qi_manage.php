@@ -47,7 +47,29 @@ class qi_manage
 					// Need to get the dbname from the board.
 					@include($current_item . '/config.php');
 
-					if (!empty($dbname) && !empty($dbhost) && !empty($dbms))
+					// Attempt to delete the board from filesystem
+					if (!file_exists($current_item) || !is_dir($current_item))
+					{
+						continue;
+					}
+
+					file_functions::delete_dir($current_item);
+
+					if (!empty(file_functions::$error))
+					{
+						if ($boards > 1)
+						{
+							$error[] = $current_item;
+							file_functions::$error = array();
+						}
+						else
+						{
+							$error = file_functions::$error;
+						}
+					}
+
+					// Attempt to delete the database
+					if (!empty($dbname) && !empty($dbhost) && !empty($dbms) && empty($error))
 					{
 						$dbms = (strpos($dbms, '\\') !== false) ? substr(strrchr($dbms, '\\'), 1) : $dbms;
 
@@ -80,26 +102,6 @@ class qi_manage
 							$db = db_connect($db_vars);
 							$db->sql_query('DROP DATABASE IF EXISTS ' . $dbname);
 							db_close($db); // Might give a error since the DB it deleted, needs to be more tested.
-						}
-					}
-
-					if (!file_exists($current_item) || !is_dir($current_item))
-					{
-						continue;
-					}
-
-					file_functions::delete_dir($current_item);
-
-					if (!empty(file_functions::$error))
-					{
-						if ($boards > 1)
-						{
-							$error[] = $current_item;
-							file_functions::$error = array();
-						}
-						else
-						{
-							$error = file_functions::$error;
 						}
 					}
 				}
