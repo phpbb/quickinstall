@@ -21,6 +21,8 @@ if (!defined('IN_QUICKINSTALL'))
 */
 class dbal_mysql_qi extends dbal_mysql
 {
+	public $mysql_version;
+
 	/**
 	* Connect to server
 	*/

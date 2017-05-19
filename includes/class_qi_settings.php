@@ -80,7 +80,6 @@ class settings
 
 		if (!empty($profile) && is_readable("{$quickinstall_path}settings/$profile.cfg"))
 		{
-			$used_file = "{$quickinstall_path}settings/$profile.cfg";
 			$config = file("{$quickinstall_path}settings/$profile.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $profile;
 			$this->set_profile_cookie($profile);
@@ -90,7 +89,6 @@ class settings
 			// Get the previously used profile.
 			$config = file("{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $_COOKIE[QI_PROFILE_COOKIE];
-			$used_file = "{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg";
 		}
 		else
 		{
@@ -117,7 +115,6 @@ class settings
 				if (!empty($cfg_file))
 				{
 					$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-					$used_file = $cfg_file;
 				}
 			}
 		}
@@ -241,7 +238,7 @@ class settings
 		{
 			$update_msg = "<ul>$update_msg</ul>";
 
-			gen_error_msg($update_msg, $user->lang['PROFILES_UPDATED'], $update_explain);
+			gen_error_msg($update_msg, $user->lang['PROFILES_UPDATED']);
 		}
 	}
 
@@ -981,7 +978,7 @@ class settings
 			return(false);
 		}
 
-		$res = file_put_contents("{$quickinstall_path}settings/$profile.cfg", $config_text);
+		$res = file_put_contents($profile_file, $config_text);
 
 		if ($res !== false)
 		{

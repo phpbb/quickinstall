@@ -102,7 +102,7 @@ class qi_phpinfo
 		qi::page_footer();
 	}
 
-	function remove_spaces($matches)
+	public function remove_spaces($matches)
 	{
 		return '<a name="' . str_replace(' ', '_', $matches[1]) . '">';
 	}
