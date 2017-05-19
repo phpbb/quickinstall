@@ -42,7 +42,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'ABOUT_QUICKINSTALL'	=> 'About phpBB3 QuickInstall',
+	'ABOUT_QUICKINSTALL'	=> 'About phpBB QuickInstall',
 	'ABOUT_SECTIONS'		=> 'About sections',
 	'ADMIN_EMAIL'			=> 'Admin email',
 	'ADMIN_EMAIL_EXPLAIN'	=> 'The email to assign to the admin account created for your boards.',
@@ -299,7 +299,7 @@ $lang = array_merge($lang, array(
 	'YES'	=> 'Yes',
 
 	'WHAT'				=> 'What?',
-	'WHAT_EXPLAIN'		=> 'phpBB3 QuickInstall is a tool to quickly setup phpBB boards. Pretty obvious... 😉',
+	'WHAT_EXPLAIN'		=> 'phpBB QuickInstall is a tool to quickly setup phpBB boards. Pretty obvious... 😉',
 	'WHO_ELSE'			=> 'Who else?',
 	'WHO_ELSE_EXPLAIN'	=> '<ul><li>' . implode('</li><li>', array(
 		'Credits go to the phpBB team, especially the development team which created such a wonderful piece of software.',
@@ -308,12 +308,12 @@ $lang = array_merge($lang, array(
 		'Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!',
 	)) . '</li></ul>',
 	'WHO_WHEN'			=> 'Who? When?',
-	'WHO_WHEN_EXPLAIN'	=> 'phpBB3 QuickInstall was originally created by Igor “igorw” Wiedler in the summer of 2007. It was partially rewritten by him in March 2008. From March 2010 to March 2015 the project was mantained by Jari “tumba25” Kanerva. The project is now maintained by the phpBB Extensions Team.',
+	'WHO_WHEN_EXPLAIN'	=> 'phpBB QuickInstall was originally created by Igor “igorw” Wiedler in the summer of 2007. It was partially rewritten by him in March 2008. From March 2010 to March 2015 the project was mantained by Jari “tumba25” Kanerva. The project is now maintained by the phpBB Extensions Team.',
 	'WHY'				=> 'Why?',
 	'WHY_EXPLAIN'		=> 'The days of phpBB 2.x and 3.0 were all about modding (creating modifications). Authors could not effectively develop and test all their MODs in a single phpBB installation. QuickInstall was born to speed up and simplify the process of creating separate fresh installations for each of their MODs. Now, in the era of extensions, QuickInstall is still just as useful for rapidly generating fresh installations to safely install, develop and test extensions in.',
 
 	// Config updated strings.
-	'UPDATED_EXPLAIN'	=> 'Your profile has been updated to this version of QI (%s). The changes made are defined below. They have been set to default values. also defined below.<br />You might want to look into the Settings page (link at the bottom) and set them to your desired values. If you have more than one profile, just press the button below to get all profiles updated.', // %s will be replaced with QI version.
+	'UPDATED_EXPLAIN'	=> 'Your profile has been updated to this version of QuickInstall (%s). The changes made are defined below. They have been set to default values. also defined below.<br />You might want to look into the Settings page (link at the bottom) and set them to your desired values. If you have more than one profile, just press the button below to get all profiles updated.', // %s will be replaced with QI version.
 	'PROFILE_UPDATED'	=> 'Profile &quot;%s&quot; updated', // %s will be replaced by a profile name.
 	'PROFILES_UPDATED'	=> 'The following profiles has been updated',
 	'UPDATE_PROFILES'	=> 'Update profiles',
