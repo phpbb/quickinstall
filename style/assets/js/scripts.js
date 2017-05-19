@@ -69,7 +69,7 @@
 			$rows.filter(function () {
 				return regex.test($(this).text());
 			}).show();
-		})
+		});
 
 	});
 

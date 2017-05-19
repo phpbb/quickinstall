@@ -99,7 +99,7 @@ class file_functions
 
 		if (!file_exists($dir) || !is_dir($dir) || !is_readable($dir))
 		{
-			return false;
+			return;
 		}
 
 		foreach (scandir($dir) as $file)
@@ -136,12 +136,9 @@ class file_functions
 				continue;
 			}
 
-			if (is_dir($dir . $file))
+			if ($recursive && is_dir($dir . $file))
 			{
-				if ($recursive)
-				{
-					self::delete_files($dir . $file, $files_ary, true);
-				}
+				self::delete_files($dir . $file, $files_ary, true);
 			}
 
 			if (in_array($file, $files_ary, true))
@@ -168,6 +165,9 @@ class file_functions
 
 	/**
 	 * Recursive make all files and directories world writable.
+	 *
+	 * @param string $dir
+	 * @param bool   $root
 	 */
 	public static function make_writable($dir, $root = true)
 	{

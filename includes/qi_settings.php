@@ -17,6 +17,7 @@ if (!defined('IN_QUICKINSTALL'))
 
 $attempted = $saved = false;
 $config_text = '';
+$error = '';
 if ($mode == 'update_settings')
 {
 	// Time to save some settings. request_var('qi_profile', '')
@@ -32,7 +33,6 @@ if ($mode == 'update_settings')
 
 	$attempted = true;
 	$valid = false;
-	$error = '';
 	if ($settings->validate())
 	{
 		$valid = true;
@@ -87,13 +87,10 @@ if ($settings->install)
 	// Don't show errors when installing QI
 	$error = '';
 }
-else
+else if (!is_writable($quickinstall_path . 'settings') || !is_dir($quickinstall_path . 'settings'))
 {
-	if (!is_writable($quickinstall_path . 'settings') || !is_dir($quickinstall_path . 'settings'))
-	{
-		$error .= $user->lang['SETTINGS_NOT_WRITABLE'] . '<br />';
-		$s_settings_writable = false;
-	}
+	$error .= $user->lang['SETTINGS_NOT_WRITABLE'] . '<br />';
+	$s_settings_writable = false;
 }
 
 if ($alt_env_missing && !$attempted && !$saved)
