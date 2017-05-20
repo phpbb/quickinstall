@@ -8,15 +8,20 @@
 <!-- IF S_SETTINGS_SUCCESS -->
 	<div class="alert alert-success" role="alert">{L_SETTINGS_SUCCESS}</div>
 <!-- ELSEIF S_SETTINGS_FAILURE -->
-	<div class="alert alert-danger" role="alert">
-		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {L_SETTINGS_FAILURE}
+	<div class="panel panel-danger">
+		<div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {L_SETTINGS_FAILURE}</div>
+		<div class="panel-body">
+			<!-- IF ERROR -->
+				{ERROR}
+			<!-- ENDIF -->
+		</div>
 	</div>
 <!-- ENDIF -->
 <!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) -->
 	<div class="alert alert-danger" role="alert">{L_NEED_WRITABLE}</div>
 <!-- ENDIF -->
-<!-- IF ERROR -->
-	<div class="alert alert-<!-- IF S_IS_CONVERTED -->success<!-- ELSE -->danger<!-- ENDIF -->" role="alert">{ERROR}</div>
+<!-- IF ERROR and S_IS_CONVERTED -->
+	<div class="alert alert-success" role="alert">{ERROR}</div>
 <!-- ENDIF -->
 
 <!-- IF CONFIG_TEXT -->
