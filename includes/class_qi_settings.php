@@ -875,25 +875,25 @@ class settings
 		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
 		$error = array();
-		$error[] = ($this->config['dbms'] == '') ? 'DBMS|REQUIRED' : '';
-		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|REQUIRED' : '';
+		$error[] = ($this->config['dbms'] == '') ? 'DBMS|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|IS_REQUIRED' : '';
 		$error[] = ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
-		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|REQUIRED' : '';
-		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|REQUIRED' : '';
-		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|REQUIRED' : '';
-		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|REQUIRED' : '';
-		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|REQUIRED' : '';
-		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|REQUIRED' : '';
-		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|REQUIRED' : '';
-		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|REQUIRED' : '';
-		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|REQUIRED' : '';
-		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|REQUIRED' : '';
+		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|IS_REQUIRED' : '';
+		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|IS_REQUIRED' : '';
+		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|IS_REQUIRED' : '';
 
 		$error[] = ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
 
 		if ($this->config['cache_dir'] == '')
 		{
-			$error[] = 'CACHE_DIR|REQUIRED';
+			$error[] = 'CACHE_DIR|IS_REQUIRED';
 		}
 		else if (!file_exists($this->get_cache_dir()) || !is_writable($this->get_cache_dir()))
 		{
@@ -907,7 +907,7 @@ class settings
 
 		if ($this->config['boards_dir'] == '')
 		{
-			$error[] = 'BOARDS_DIR|REQUIRED';
+			$error[] = 'BOARDS_DIR|IS_REQUIRED';
 		}
 		else if (!file_exists($this->get_boards_dir()) || !is_writable($this->get_boards_dir()))
 		{
@@ -935,7 +935,7 @@ class settings
 
 		if ($this->config['boards_url'] == '')
 		{
-			$error[] = 'BOARDS_URL|REQUIRED';
+			$error[] = 'BOARDS_URL|IS_REQUIRED';
 		}
 		else
 		{

@@ -9,7 +9,7 @@ QuickInstall is not intended for use on a live server. It is aimed at users deve
 
 2. [Download a copy of phpBB 3.2.x, 3.1.x or 3.0.x](https://www.phpbb.com/downloads/), extract it and copy the phpBB3 folder into `sources/`. Choose the version you do the most work with, for your own convenience.
 
-3. Point your browser to the QuickInstall folder (e.g., https://localhost/quickinstall). You should be taken directly to the "Install QuickInstall" page. Some default values will already be filled in but you should add your database connection settings. Click "Save" once you have configured all the settings to your liking and you are good to go. If you don't set a profile name, the name "Default" will be used.
+3. Point your browser to the QuickInstall folder (e.g., https://localhost/quickinstall). You should be taken directly to the "Install QuickInstall" page. Some default values will already be filled in but you should add your database connection settings. Click "Save" once you have configured all the settings to your liking and you are good to go. If you don't set a profile name, the name "default" will be used.
 
 > In `sources/phpBB3_alt/` you can store additional versions of phpBB, or boards with other styles or language files. You can name them whatever you want to make it easier to recognize them when you create boards. e.g.,  `sources/phpBB3_alt/phpBB-3.0.12`, `sources/phpBB3_alt/phpBB-sv`, etc.
 
@@ -24,11 +24,11 @@ QuickInstall stores all passwords in a plain text file. They are hidden in the u
 Download the latest QuickInstall and unzip it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
 
 ### Upgrading from QuickInstall 1.1.8 or older
-Download the latest QuickInstall and unzip it into your QuickInstall folder **except for the `boards/` and `sources/` folders**. 
+Download the latest QuickInstall and unzip it into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**. 
 
-If upgrading from QuickInstall 1.1.8, point your browser to the Profiles page, make sure the new settings are in order and Save.
+If upgrading from QuickInstall 1.1.8, point your browser to the Profiles page, make sure the settings are in order and click "Save".
 
-If upgrading from QuickInstall 1.1.6 or older, make sure the new `settings/` folder is writable by PHP and point your browser to your QuickInstall folder. QuickInstall will convert your old config to a profile named "Default" which you can choose to rename after it has been created.
+If upgrading from QuickInstall earlier than 1.1.8, make sure the new `settings/` folder is writable by PHP and point your browser to your QuickInstall folder. QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default". Make sure the settings are in order and click "Save".
 
 ## Support and Bugs
 You can receive support at: https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support
