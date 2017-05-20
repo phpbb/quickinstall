@@ -271,6 +271,10 @@ else
 	);
 }
 
+// overwrite
+$cache->cache_dir = $settings->get_cache_dir();
+$template->cachepath = $cache->cache_dir . 'tpl_qi_';
+
 $page = (empty($error)) ? $page : 'settings';
 
 if ($page == 'main' || $page == 'settings' || $alt_env_missing)
@@ -287,10 +291,6 @@ $template->assign_var('S_IN_INSTALL', $settings->install);
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
-
-// overwrite
-$cache->cache_dir = $settings->get_cache_dir();
-$template->cachepath = $cache->cache_dir . 'tpl_qi_';
 
 // Load the main module
 $module->load($page, 'qi_main');
