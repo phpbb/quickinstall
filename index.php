@@ -207,9 +207,9 @@ $template = new template();
 $template->set_custom_template('style', 'qi');
 
 $profiles = $settings->get_profiles();
+$template->assign_var('PROFILE_COUNT', $profiles['count']);
 if (empty($profiles['count']))
 {
-	$template->assign_var('S_NO_PROFILE', true);
 	$page = ($page == 'main' || $page == '') ? 'settings' : $page;
 }
 
