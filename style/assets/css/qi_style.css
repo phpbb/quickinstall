@@ -1,6 +1,7 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
 	padding-top: 50px;
+	position: relative;
 }
 
 footer {
@@ -46,6 +47,11 @@ footer {
 .nav-sidebar > li > a {
 	padding: 0 20px;
 }
+
+.nav-sidebar > li.active {
+	background-color: #eee;
+}
+
 .main {
 	padding: 0 40px;
 }
