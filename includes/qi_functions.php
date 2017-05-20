@@ -222,7 +222,7 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 	return $tz_select;
 }
 
-function gen_error_msg($msg_text, $msg_title = 'General error', $msg_explain = '', $update_profiles = false)
+function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '', $update_profiles = false)
 {
 	global $quickinstall_path, $user;
 
