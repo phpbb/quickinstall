@@ -12,10 +12,7 @@
 				var $this = $(this);
 				var empty = $this.val() === "";
 				if (empty) validated = false;
-				$this.next()
-					.toggleClass("glyphicon-exclamation-sign", empty)
-					.closest(".form-group")
-					.toggleClass("has-error has-feedback", empty);
+				$this.closest(".has-feedback").toggleClass("has-error", empty);
 			});
 			if (validated) {
 				$(this).prop("disabled", true).parents("form").submit();

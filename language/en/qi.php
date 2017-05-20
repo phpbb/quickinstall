@@ -242,7 +242,6 @@ $lang = array_merge($lang, array(
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
 	'REDIRECT_BOARD'	=> 'Redirect to new board',
-	'REQUIRED'			=> 'Required',
 	'RESET'				=> 'Reset',
 	'RETURN_MAIN'		=> 'Return to the Boards tab',
 	'RETURN_MANAGE'		=> 'Return to the Manage tab',
@@ -282,7 +281,6 @@ $lang = array_merge($lang, array(
 	'SMTP_USER'				=> 'SMTP username',
 	'SMTP_USER_EXPLAIN'		=> 'Only enter a username if your SMTP server requires it.',
 	'SQLITE_PATH_MISSING'	=> 'The entered database server path is either missing or not writeable.',
-	'STAR_MANDATORY'		=> '* Required',
 	'SUBMIT'				=> 'Submit',
 	'SUCCESS'				=> 'Success',
 	'SURE_DELETE_PROFILE'	=> 'Are you sure you want to delete the selected profile? This cannot be undone.',
@@ -325,6 +323,5 @@ $lang = array_merge($lang, array(
 	'DST_REMOVED'		=>	'The DST setting has been removed (qi_dst).',
 	'TIMEZONE_UPDATED'	=>	'Your timezone setting has been updated from numerical to string (qi_tz), default is UTC.',
 
-	'ASTERISK'			=> '*',
 	'COLON'				=> ':',
 ));

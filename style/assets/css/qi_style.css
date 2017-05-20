@@ -65,6 +65,7 @@ footer {
 	color: #555;
 	font-size: 0.9em;
 	font-weight: normal;
+	margin-bottom: 0;
 }
 
 .form-horizontal .control-label.text-left {
