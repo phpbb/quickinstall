@@ -62,7 +62,7 @@ class qi_about
 						$template->assign_block_vars('history', array(
 							'CHANGES_SINCE'	=> $key,
 
-							'U_CHANGES'	=> strtolower(str_replace(' ', '-', $key)),
+							'U_CHANGES'	=> strtolower(str_replace(array(' ', '.'), array('-', ''), $key)),
 						));
 					}
 					else if ($row[0] === '-')
