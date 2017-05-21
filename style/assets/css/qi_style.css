@@ -60,6 +60,14 @@ footer {
 	margin-top: 20px;
 }
 
+.unstyled-link {
+	color: #333;
+}
+
+.unstyled-link:hover {
+	text-decoration: none;
+}
+
 /* bootstrap mods */
 .help-block {
 	color: #555;

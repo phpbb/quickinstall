@@ -32,7 +32,10 @@
 			<p>{L_CONFIG_WARNING}</p>
 			<p><input id="config_text_button" class="btn btn-primary" type="button" value="{L_CONFIG_BUTTON}" /></p>
 		</div>
-		<textarea id="config_text" class="form-control hidden" readonly="readonly" rows="10">{CONFIG_TEXT}</textarea>
+		<div id="config_text_container" class="hidden">
+			<a href="#" class="unstyled-link" data-copy="config_text"><i class="glyphicon glyphicon-copy"></i> Copy</a>
+			<textarea id="config_text" class="form-control" readonly="readonly" rows="10">{CONFIG_TEXT}</textarea>
+		</div>
 	</div>
 <!-- ENDIF -->
 

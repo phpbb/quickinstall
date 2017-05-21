@@ -55,7 +55,7 @@
 		// show config
 		$("#config_text_button").on("click", function () {
 			$("#config_text_alert").hide();
-			$("#config_text").removeClass('hidden');
+			$("#config_text_container").removeClass('hidden');
 		});
 
 		// search filter for PHP info table
@@ -66,6 +66,13 @@
 			$rows.filter(function () {
 				return regex.test($(this).text());
 			}).show();
+		});
+
+		// Copy data from a textarea field
+		$("[data-copy]").on("click", function () {
+			var target = "#" + $(this).attr("data-copy");
+			$(target).select();
+			document.execCommand('copy');
 		});
 
 	});
