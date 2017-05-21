@@ -122,8 +122,8 @@
 		<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_QI_MANAGE_HEADINGS}</div>
 
 		<fieldset>
-			<legend><a href="#" data-toggle="options_advanced">{L_MISC_SETTINGS}</a></legend>
-			<div id="options_advanced" style="display: none;">
+			<legend><a href="#" data-toggle-view="options_advanced">{L_MISC_OPTIONS}</a></legend>
+			<div id="options_advanced" class="hidden">
 				<!-- IF S_ADMIN_NAME -->
 				<div class="form-group">
 					<label for="admin_name-2" class="col-sm-5 control-label text-left">{L_ADMIN_NAME}{L_COLON}<span class="help-block">{L_IF_EMPTY_EXPLAIN}</span></label>
@@ -187,8 +187,8 @@
 		</fieldset>
 
 		<fieldset>
-			<legend><a href="#" data-toggle="options_populate">{L_POPULATE_OPTIONS}</a></legend>
-			<div id="options_populate" style="display: none;">
+			<legend><a href="#" data-toggle-view="options_populate">{L_POPULATE_OPTIONS}</a></legend>
+			<div id="options_populate" class="hidden">
 				<div class="form-group">
 					<label for="num_users" class="col-sm-5 control-label text-left">{L_NUM_USERS}{L_COLON}<span class="help-block">{L_NUM_USERS_EXPLAIN}</span></label>
 					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="num_users" value="{NUM_USERS}" /></div>
@@ -263,8 +263,8 @@
 		</fieldset>
 
 		<fieldset>
-			<legend><a href="#" data-toggle="options_config">{L_BOARD_CONFIG_OPTIONS}</a></legend>
-			<div id="options_config" style="display: none;">
+			<legend><a href="#" data-toggle-view="options_config">{L_BOARD_CONFIG_OPTIONS}</a></legend>
+			<div id="options_config" class="hidden">
 				<div class="form-group">
 					<label for="other_config" class="col-sm-5 control-label text-left">{L_OTHER_CONFIG}{L_COLON}<span class="help-block">{L_OTHER_CONFIG_EXPLAIN}</span></label>
 					<div class="col-sm-7"><textarea class="form-control" name="other_config" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>

@@ -24,11 +24,11 @@
 			$(this).closest("form").submit();
 		});
 
-		// toggle divs
-		$("[data-toggle]").on("click", function (e) {
+		// toggle visibility
+		$("[data-toggle-view]").on("click", function (e) {
 			e.preventDefault();
-			var target = "#" + $(this).attr("data-toggle");
-			$(target).toggle();
+			var target = "#" + $(this).attr("data-toggle-view");
+			$(target).toggleClass('hidden');
 		});
 
 		// mark all / unmark all checkboxes
@@ -55,7 +55,7 @@
 		// show config
 		$("#config_text_button").on("click", function () {
 			$("#config_text_alert").hide();
-			$("#config_text").show();
+			$("#config_text").removeClass('hidden');
 		});
 
 		// search filter for PHP info table
