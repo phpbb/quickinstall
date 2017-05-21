@@ -5,10 +5,10 @@
 	$(document).ready(function () {
 
 		// form validation
-		$('form[data-validate]').on("click", "input[type='submit']", function(e) {
+		$('form[data-validate]').on("click", "input[type='submit']", function (e) {
 			e.preventDefault();
 			var validated = true;
-			$('[data-validate-required]').each(function() {
+			$('[data-validate-required]').each(function () {
 				var $this = $(this);
 				var empty = $this.val() === "";
 				if (empty) validated = false;
@@ -48,8 +48,8 @@
 		});
 
 		// load new page from menu selection
-		$("[data-load-selection]").on("change", function() {
-			window.location.href=$(this).attr("data-load-selection") + $(this).find(":selected").val();
+		$("[data-load-selection]").on("change", function () {
+			window.location.href = $(this).attr("data-load-selection") + $(this).find(":selected").val();
 		});
 
 		// show config
