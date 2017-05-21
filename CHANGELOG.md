@@ -1,5 +1,27 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.0
+- [Change] QuickInstall has a new paint-job, with a fresh modern look...a flat, responsive, prosilver inspired theme.
+- [Change] Rewrote all javascript functionality from the ground up, using jQuery.
+- [Change] Updated the README/Documentation and About information.
+- [Change] Updated most of the language files to fix typos and improve clarity.
+- [Change] Use a common template file for general error message handling.
+- [Change] Prevent an issue when deleting boards where files can't be deleted if the DB connection errors.
+- [Change] Removed 'eviLs testing hood' as the default site description value, replaced with 'QuickInstall sandbox'.
+- [Change] Changed the default setting for showing confirmation alerts when deleting boards and profiles to true.
+- [Change] Use the gen_error_msg() function instead of compiling an error template when board deletion has an error.
+- [Change] Removed the default case from qi_manage since it is no longer used (there is no 'manage' mode).
+- [Change] Removed duplicated phpBB copyright from the page footers.
+- [Change] Moved "Set default style" setting from main options to Misc options as it isn't commonly used.
+- [Fix] Fixed several probable bugs discovered (undefined/unused variables, etc.).
+- [Fix] Fixed an issue where the Boards tab would not appear after initial installation was saved.
+- [Fix] Fixed an issue where the settings template was not being stored in the cache as expected nor allowed to recompile.
+- [Fix] Removed dots from anchor links in the changelog as they caused problems with ScrollSpy.
+- [Feature] PHP Info page now has sidebar navigation and a new live search feature, making it much easier to navigate.
+- [Feature] Use ScrollSpy to highlight sidebar nav links that correspond with the visible page sections.
+- [Feature] Added ability to copy the raw config data that is presented when the settings.cfg can not be written.
+- [Feature] Use cache busting for CSS and JS using QI version to ensure upgrades get fresh assets.
+
 ## Changes in 1.2.5
 - [Fix] Issue #75 Fixed issues with creating boards using a PostgreSQL database.
 - [Fix] Corrected an issue where clicking the Documentation tabs led to PHP errors.
