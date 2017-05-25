@@ -30,7 +30,7 @@
 	<div class="alert alert-danger">
 		<div id="config_text_alert">
 			<p>{L_CONFIG_WARNING}</p>
-			<p><input id="config_text_button" class="btn btn-primary" type="button" value="{L_CONFIG_BUTTON}" /></p>
+			<p><input id="config_text_button" class="button" type="button" value="{L_CONFIG_BUTTON}" /></p>
 		</div>
 		<div id="config_text_container" class="hidden">
 			<a href="#" class="unstyled-link" data-copy="config_text"><i class="glyphicon glyphicon-copy"></i> Copy</a>
@@ -55,14 +55,14 @@
 				<!-- ENDIF -->
 				</select>
 				<!-- IF PROFILE_COUNT > 1  -->
-				<noscript><input type="submit" name="submit-profile" value="{L_GO}" class="btn btn-primary" /></noscript>
+				<noscript><input type="submit" name="submit-profile" value="{L_GO}" class="button" /></noscript>
 				<!-- ENDIF -->
 			</div>
 		</div>
 		<!-- IF PROFILE_COUNT > 1 -->
 		<div class="form-group">
 			<div class="col-sm-7 col-sm-offset-5">
-				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="btn btn-primary"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_PROFILE}"<!-- ENDIF --> />
+				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="button"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_PROFILE}"<!-- ENDIF --> />
 			</div>
 		</div>
 		<!-- ENDIF -->
@@ -462,8 +462,8 @@
 						<input class="form-control" type="text" id="save_profile" name="save_profile" value="{SAVE_PROFILE}" />
 					</div>
 					<div class="col-sm-4">
-						<input type="submit" name="submit" value="{L_SAVE}" class="btn btn-primary" />&nbsp;&nbsp;
-						<input type="reset" name="reset" value="{L_RESET}" class="btn btn-default" />
+						<input type="submit" name="submit" value="{L_SAVE}" class="button button-bold" />&nbsp;&nbsp;
+						<input type="reset" name="reset" value="{L_RESET}" class="button" />
 						<input type="hidden" name="sel_lang" value="{SEL_LANG}" />
 						<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
 					</div>

@@ -79,3 +79,63 @@ footer {
 .form-horizontal .control-label.text-left {
 	text-align: left;
 }
+
+/* custom QI buttons */
+.button {
+	font-family: "Open Sans", "Droid Sans", Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 1.4;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	border: 1px solid #666666;
+	border-radius: 4px;
+	display: inline-block;
+	padding: 4px 8px;
+	cursor: pointer;
+	touch-action: manipulation;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	background-color: #e9e9e9;
+	background-image: linear-gradient(to bottom, #ffffff 0%, #e9e9e9 100%);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	color: #333333;
+}
+
+.button-bold {
+	font-weight: 700;
+}
+
+.button:active,
+.button:focus,
+.button:hover {
+	text-decoration: none;
+	outline: none;
+	background-color: #ffffff;
+	background-image: linear-gradient(to bottom, #e9e9e9 0%, #ffffff 100%);
+}
+
+.button:hover,
+.button-bold:hover {
+	border-color: #d31141;
+	text-shadow: none;
+	color: #d31141;
+}
+
+.button:active,
+.button-bold:active {
+	border-color: #0a8ed0;
+	text-shadow: none;
+	color: #0a8ed0;
+}
+
+.button[disabled],
+.button-bold[disabled] {
+	opacity: 0.65;
+	filter: alpha(opacity=65);
+	cursor: not-allowed;
+}
