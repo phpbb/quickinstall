@@ -21,19 +21,19 @@ QuickInstall is not intended for use on a live server. It is aimed at users deve
 QuickInstall stores all passwords in a plain text file. They are hidden in the user interface, but can be read by anyone with access to the QuickInstall folder.
 
 ## Upgrading
-Download the latest QuickInstall and unzip it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
+* Download the latest QuickInstall and unzip it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
 
-### Upgrading from QuickInstall 1.1.8 or older
-Download the latest QuickInstall and unzip it into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**. 
+#### Upgrading from QuickInstall 1.1.8 or older?
+* Download the latest QuickInstall and unzip it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
 
-If upgrading from QuickInstall 1.1.8, point your browser to the Profiles page, make sure the settings are in order and click "Save".
+* If upgrading from QuickInstall 1.1.8, point your browser to the Profiles page, make sure the settings are in order and click "Save".
 
-If upgrading from QuickInstall earlier than 1.1.8, make sure the new `settings/` folder is writable by PHP and point your browser to your QuickInstall folder. QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default". Make sure the settings are in order and click "Save".
+* If upgrading from QuickInstall earlier than 1.1.8, make sure the new `settings/` folder is writable by PHP and point your browser to your QuickInstall folder. QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default". Make sure the settings are in order and click "Save".
 
 ## Support and Bugs
-You can receive support at: https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support
+You can receive support at [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support).
 
-Please report all bugs you find, even reports for small bugs are welcome to make QuickInstall even better than it is now. The right place for bug reports is: https://github.com/phpbb/quickinstall/issues
+Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickinstall/issues). Even reports for small bugs are welcome to help make QuickInstall even better than it is now.
 
 ## License
 phpBB QuickInstall is distributed under the terms of the [GNU General Public License 2 (GPL)](license.txt).
