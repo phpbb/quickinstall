@@ -856,10 +856,18 @@ class qi_create
 			// Log him/her in first.
 			$user->session_begin();
 			$auth->login($admin_name, $settings->get_config('admin_pass'), false, true, true);
+			if (qi::is_ajax())
+			{
+				qi::ajax_response(array('redirect' => $board_url));
+			}
 			qi::redirect($board_url);
 		}
 
 		// On succces just return to main page.
+		if (qi::is_ajax())
+		{
+			qi::ajax_response(array('redirect' => 'index.' . $phpEx));
+		}
 		qi::redirect('index.' . $phpEx);
 	}
 }

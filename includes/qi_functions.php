@@ -282,6 +282,10 @@ function create_board_warning($msg_title, $msg_text, $page)
 	}
 
 	$url = "index.$phpEx?$args";
+	if (qi::is_ajax())
+	{
+		qi::ajax_response(array('redirect' => $url));
+	}
 	qi::redirect($url);
 }
 

@@ -32,7 +32,7 @@
 </div>
 <!-- ENDIF -->
 
-<form method="post" id="create-form" class="form-horizontal" data-validate action="{U_CREATE}">
+<form method="post" id="create-form" class="form-horizontal" data-validate data-submit-ajax action="{U_CREATE}">
 	<div class="well">
 		<fieldset>
 			<legend>{L_OPTIONS}</legend>
@@ -273,5 +273,16 @@
 		</fieldset>
 	</div>
 </form>
+
+<div class="modal fade" data-submit-modal tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="padding: 20px 0;">
+			<div class="modal-body text-center">
+				<h1>{L_WORKING_ON_IT}</h1>
+				<img src="{T_THEME_PATH}/assets/img/loading.svg" alt="" />
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- INCLUDE overall_footer.html -->

@@ -295,6 +295,8 @@ $lang = array_merge($lang, array(
 
 	'UNCHECK_ALL'		=> 'Uncheck all',
 
+	'WORKING_ON_IT'		=> 'We’re working on it...',
+
 	'YES'	=> 'Yes',
 
 	'WHAT'				=> 'What?',

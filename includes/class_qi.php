@@ -337,7 +337,14 @@ class qi
 					array($user->lang['QUICKINSTALL'], $quickinstall_path, $msg_title, '', $msg_text, '', $l_return_index, QI_VERSION),
 					$error_out
 				);
-				echo $error_out;
+				if (self::is_ajax())
+				{
+					echo json_encode(array('errorOut' => $error_out));
+				}
+				else
+				{
+					echo $error_out;
+				}
 
 				// As a pre-caution... some setups display a blank page if the flush() is not there.
 				(ob_get_level() > 0) ? @ob_flush() : @flush();
@@ -350,5 +357,26 @@ class qi
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
 		return(false);
+	}
+
+	/**
+	 * Is an AJAX request active
+	 *
+	 * @return bool
+	 */
+	public static function is_ajax()
+	{
+		return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+	}
+
+	/**
+	 * Send an ajax response and exit
+	 *
+	 * @param array $response
+	 */
+	public static function ajax_response($response)
+	{
+		echo json_encode($response);
+		exit;
 	}
 }

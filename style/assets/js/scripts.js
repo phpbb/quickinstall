@@ -4,7 +4,7 @@
 
 	$(document).ready(function () {
 
-		// form validation
+		// create form validation and submit
 		$('form[data-validate]').on("click", "input[type='submit']", function (e) {
 			e.preventDefault();
 			var validated = true;
@@ -15,9 +15,44 @@
 				$this.closest(".has-feedback").toggleClass("has-error", empty);
 			});
 			if (validated) {
-				$(this).prop("disabled", true).parents("form").submit();
+				var $form = $(this).parents("form");
+				if ($form.attr('data-submit-ajax') !== undefined) {
+					ajaxSubmit($form);
+				} else {
+					$form.submit();
+				}
 			}
 		});
+
+		// submit form via ajax
+		var ajaxSubmit = function ($form) {
+			var $modal = $('[data-submit-modal]');
+			$modal.modal({
+				show: true,
+				keyboard: false,
+				backdrop: 'static'
+			});
+			$.ajax({
+				type: "POST",
+				url: $form.attr("action").replace("&amp;", "&"),
+				data: $form.serialize(),
+				dataType: "json",
+				success: function (res) {
+					if (res.redirect !== undefined && res.redirect) {
+						window.location.replace(res.redirect);
+					} else {
+						$modal.modal("hide");
+					}
+				},
+				error: function (res) {
+					if (res.responseJSON.errorOut !== undefined && res.responseJSON.errorOut) {
+						$("body").html(res.responseJSON.errorOut);
+					} else {
+						$modal.modal("hide");
+					}
+				}
+			});
+		};
 
 		// submit forms on change
 		$("[data-form-submit=true]").on("change", function () {
