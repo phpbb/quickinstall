@@ -17,6 +17,7 @@
 - [Fix] Fixed an issue where the Boards tab would not appear after initial installation was saved.
 - [Fix] Fixed an issue where the settings template was not being stored in the cache as expected nor allowed to recompile.
 - [Fix] Removed dots from anchor links in the changelog as they caused problems with ScrollSpy.
+- [Feature] Added a new AJAX working/loading indicator when creating boards for a better UX.
 - [Feature] PHP Info page now has sidebar navigation and a new live search feature, making it much easier to navigate.
 - [Feature] Use ScrollSpy to highlight sidebar nav links that correspond with the visible page sections.
 - [Feature] Added ability to copy the raw config data that is presented when the settings.cfg can not be written.
