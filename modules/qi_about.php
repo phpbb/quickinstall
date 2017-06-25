@@ -62,7 +62,7 @@ class qi_about
 						$template->assign_block_vars('history', array(
 							'CHANGES_SINCE'	=> $key,
 
-							'U_CHANGES'	=> strtolower(str_replace(' ', '-', $key)),
+							'U_CHANGES'	=> strtolower(str_replace(array(' ', '.'), array('-', ''), $key)),
 						));
 					}
 					else if ($row[0] === '-')
@@ -83,7 +83,7 @@ class qi_about
 		));
 
 		// Output page
-		qi::page_header(($s_docs ? $user->lang['DOCS_LONG'] : $user->lang['QI_ABOUT']), ' ');
+		qi::page_header(($s_docs ? $user->lang['DOCS_LONG'] : $user->lang['QI_ABOUT']));
 
 		$template->set_filenames(array(
 			'body' => 'about_body.html',

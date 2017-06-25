@@ -80,7 +80,6 @@ class settings
 
 		if (!empty($profile) && is_readable("{$quickinstall_path}settings/$profile.cfg"))
 		{
-			$used_file = "{$quickinstall_path}settings/$profile.cfg";
 			$config = file("{$quickinstall_path}settings/$profile.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $profile;
 			$this->set_profile_cookie($profile);
@@ -90,7 +89,6 @@ class settings
 			// Get the previously used profile.
 			$config = file("{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $_COOKIE[QI_PROFILE_COOKIE];
-			$used_file = "{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg";
 		}
 		else
 		{
@@ -117,7 +115,6 @@ class settings
 				if (!empty($cfg_file))
 				{
 					$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-					$used_file = $cfg_file;
 				}
 			}
 		}
@@ -241,7 +238,7 @@ class settings
 		{
 			$update_msg = "<ul>$update_msg</ul>";
 
-			gen_error_msg($update_msg, $user->lang['PROFILES_UPDATED'], $update_explain);
+			gen_error_msg($update_msg, $user->lang['PROFILES_UPDATED']);
 		}
 	}
 
@@ -326,7 +323,7 @@ class settings
 		$this->profile = 'default';
 		if ($this->update() !== false)
 		{
-			$this->set_profile_cookie('default');
+			$this->set_profile_cookie($this->profile);
 			$this->is_converted = true;
 			$this->error[] = 'CONFIG_CONVERTED';
 			return(false);
@@ -878,25 +875,25 @@ class settings
 		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
 		$error = array();
-		$error[] = ($this->config['dbms'] == '') ? 'DBMS|REQUIRED' : '';
-		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|REQUIRED' : '';
+		$error[] = ($this->config['dbms'] == '') ? 'DBMS|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|IS_REQUIRED' : '';
 		$error[] = ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
-		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|REQUIRED' : '';
-		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|REQUIRED' : '';
-		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|REQUIRED' : '';
-		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|REQUIRED' : '';
-		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|REQUIRED' : '';
-		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|REQUIRED' : '';
-		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|REQUIRED' : '';
-		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|REQUIRED' : '';
-		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|REQUIRED' : '';
-		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|REQUIRED' : '';
+		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|IS_REQUIRED' : '';
+		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|IS_REQUIRED' : '';
+		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|IS_REQUIRED' : '';
 
 		$error[] = ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
 
 		if ($this->config['cache_dir'] == '')
 		{
-			$error[] = 'CACHE_DIR|REQUIRED';
+			$error[] = 'CACHE_DIR|IS_REQUIRED';
 		}
 		else if (!file_exists($this->get_cache_dir()) || !is_writable($this->get_cache_dir()))
 		{
@@ -910,7 +907,7 @@ class settings
 
 		if ($this->config['boards_dir'] == '')
 		{
-			$error[] = 'BOARDS_DIR|REQUIRED';
+			$error[] = 'BOARDS_DIR|IS_REQUIRED';
 		}
 		else if (!file_exists($this->get_boards_dir()) || !is_writable($this->get_boards_dir()))
 		{
@@ -938,7 +935,7 @@ class settings
 
 		if ($this->config['boards_url'] == '')
 		{
-			$error[] = 'BOARDS_URL|REQUIRED';
+			$error[] = 'BOARDS_URL|IS_REQUIRED';
 		}
 		else
 		{
@@ -981,7 +978,7 @@ class settings
 			return(false);
 		}
 
-		$res = file_put_contents("{$quickinstall_path}settings/$profile.cfg", $config_text);
+		$res = file_put_contents($profile_file, $config_text);
 
 		if ($res !== false)
 		{

@@ -1,403 +1,476 @@
 <!-- INCLUDE overall_header.html -->
 
-<!-- IF not S_IN_INSTALL --><h1>{L_QI_MANAGE_PROFILE}</h1><!-- ENDIF -->
-<!-- IF S_SETTINGS_SUCCESS --><h2 class="settings-result greenish">{L_SETTINGS_SUCCESS}</h2><!-- ELSEIF S_SETTINGS_FAILURE --><h2 class="settings-result redish">{L_SETTINGS_FAILURE}</h2><!-- ENDIF -->
-<!-- IF S_IN_INSTALL --><h1>{L_INSTALL_QI}</h1><p class="large" style="color: #505050;">{L_ONLY_LOCAL}</p><!-- ENDIF -->
-
-<!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) --><div class="errorbox"><p>{L_NEED_WRITABLE}</p></div><!-- ENDIF -->
-
-<!-- IF ERROR --><div <!-- IF S_IS_CONVERTED -->class="successbox"<!-- ELSE -->class="errorbox"<!-- ENDIF -->>{ERROR}</div><!-- ENDIF -->
+<!-- IF S_IN_INSTALL -->
+	<h1>{L_INSTALL_QI}</h1>
+	<p>{L_INSTALL_WELCOME}</p>
+	<div class="alert alert-warning">{L_ONLY_LOCAL}</div>
+<!-- ELSE -->
+	<h1>{L_QI_MANAGE_PROFILE}</h1>
+<!-- ENDIF -->
+<!-- IF S_SETTINGS_SUCCESS -->
+	<div class="alert alert-success" role="alert">{L_SETTINGS_SUCCESS}</div>
+<!-- ELSEIF S_SETTINGS_FAILURE -->
+	<div class="panel panel-danger">
+		<div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {L_SETTINGS_FAILURE}</div>
+		<div class="panel-body">
+			<!-- IF ERROR -->
+				{ERROR}
+			<!-- ENDIF -->
+		</div>
+	</div>
+<!-- ENDIF -->
+<!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) -->
+	<div class="alert alert-danger" role="alert">{L_NEED_WRITABLE}</div>
+<!-- ENDIF -->
+<!-- IF ERROR and S_IS_CONVERTED -->
+	<div class="alert alert-success" role="alert">{ERROR}</div>
+<!-- ENDIF -->
 
 <!-- IF CONFIG_TEXT -->
-	<div class="errorbox large">
-		<div class='config-text'>
-			<div id='config_text_button' >
-				<p>{L_CONFIG_WARNING}</p>
-				<p><input type='button' value="{L_CONFIG_BUTTON}" onclick="show_config()" /></p>
-			</div>
-			<textarea id='config_text' readonly='readonly' style='display:none'>{CONFIG_TEXT}</textarea>
-			<noscript><textarea id='config_text' readonly='readonly'>{CONFIG_TEXT}</textarea></noscript>
+	<div class="alert alert-danger">
+		<div id="config_text_alert">
+			<p>{L_CONFIG_WARNING}</p>
+			<p><input id="config_text_button" class="button" type="button" value="{L_CONFIG_BUTTON}" /></p>
+		</div>
+		<div id="config_text_container" class="hidden">
+			<a href="#" class="unstyled-link" data-copy="config_text"><i class="glyphicon glyphicon-copy"></i> Copy</a>
+			<textarea id="config_text" class="form-control" readonly="readonly" rows="10">{CONFIG_TEXT}</textarea>
 		</div>
 	</div>
 <!-- ENDIF -->
 
+<!-- IF PROFILE_COUNT -->
+<form method="post" id="profile_form" class="form-horizontal well" action="{U_CHOOSE_PROFILE}">
+	<section id="profiles" class="anchor">
 	<fieldset>
-		<legend><a id="profiles"></a>{L_PROFILES}</legend>
-		<form method="post" id="profile_form" action="{U_CHOOSE_PROFILE}">
-			<dl>
-				<dt><label for="qi_profile">{L_SELECT_PROFILE}:</label></dt>
-				<dd>
-					<!-- IF not PROFILE_COUNT -->
-					{L_NO_PROFILES}
-					<!-- ELSEIF PROFILE_COUNT == 1 -->
+		<legend>{L_PROFILES}</legend>
+		<div class="form-group">
+			<label for="qi_profile" class="col-sm-5 control-label text-left">{L_CURRENT_PROFILE}{L_COLON}</label>
+			<div class="form-inline col-sm-7">
+				<select id="qi_profile" name="qi_profile" class="form-control" data-form-submit="true">
+				<!-- IF PROFILE_COUNT == 1 -->
+					<option>{PROFILE_OPTIONS}</option>
+				<!-- ELSE -->
 					{PROFILE_OPTIONS}
-					<!-- ELSE -->
-					<select id="qi_profile" name="qi_profile" onchange="document.forms['profile_form'].submit();">
-						{PROFILE_OPTIONS}
-					</select>
-					<input type="submit" name="submit-profile" value="{L_GO}" class="button1" />
-					<!-- ENDIF -->
-				</dd>
-			</dl>
-			<!-- IF PROFILE_COUNT > 1 -->
-			<dl>
-				<dt><label for="delete-profile">{L_DELETE_PROFILE}:</label><br />{L_DELETE_PROFILE_EXPLAIN}</dt>
-				<dd><input type="submit" name="delete-profile" value="{L_DELETE}" class="button1"<!-- IF S_SHOW_CONFIRM --> onclick="if(!confirm('{L_SURE_DELETE_PROFILE}')){return(false);}"<!-- ENDIF --> /></dd>
-			</dl>
-			<!-- ENDIF -->
-		</form>
-	</fieldset>
-
-<form method="post" action="{U_UPDATE_SETTINGS}">
-	<fieldset>
-		<legend><a id="lang-settings"></a>{L_QI_LANG_SETTINGS}</legend>
-		<dl>
-			<dt><label for="qi_lang">{L_QI_LANG}:*</label><br />{L_QI_LANG_EXPLAIN}</dt>
-			<dd>
-				<select id="qi_lang" name="qi_config[qi_lang]" onchange="window.location.href='index.php?page=settings&amp;lang='+this.options[this.selectedIndex].value;">
-					{QI_LANG}
+				<!-- ENDIF -->
 				</select>
-			</dd>
-		</dl>
+				<!-- IF PROFILE_COUNT > 1  -->
+				<noscript><input type="submit" name="submit-profile" value="{L_GO}" class="button" /></noscript>
+				<!-- ENDIF -->
+			</div>
+		</div>
+		<!-- IF PROFILE_COUNT > 1 -->
+		<div class="form-group">
+			<div class="col-sm-7 col-sm-offset-5">
+				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="button"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_PROFILE}"<!-- ENDIF --> />
+			</div>
+		</div>
+		<!-- ENDIF -->
 	</fieldset>
+	</section>
+</form>
+<!-- ENDIF -->
 
-	<fieldset>
-		<legend><a id="db-settings"></a>{L_DB_SETTINGS}</legend>
-		<dl>
-			<dt><label for="dbms">{L_DBMS}:*</label><br />{L_DBMS_EXPLAIN}</dt>
-			<dd>
-				<select name="qi_config[dbms]" id="dbms">{CONFIG_DBMS}</select>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="dbhost">{L_DBHOST}:*</label><br />{L_DBHOST_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="dbhost" name="qi_config[dbhost]" value="{CONFIG_DBHOST}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="dbport">{L_DBPORT}:</label><br />{L_DBPORT_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="dbport" name="qi_config[dbport]" value="{CONFIG_DBPORT}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="dbuser">{L_DBUSER}:</label><br />{L_DBUSER_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
-			<dd><input class="text medium" type="text" id="dbuser" name="qi_config[dbuser]" value="{CONFIG_DBUSER}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="dbpasswd">{L_DBPASSWD}:</label><br />{L_DBPASSWD_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
-			<dd>
-				<input class="text medium" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
-				<label><input type="checkbox" id="no_dbpasswd" class="radio" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF --> /> {L_NO_PASSWORD}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="db_prefix">{L_DB_PREFIX}:*</label><br />{L_DB_PREFIX_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="table_prefix">{L_TABLE_PREFIX}:*</label><br />{L_TABLE_PREFIX_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /></dd>
-		</dl>
-	</fieldset>
+<form method="post" class="form-horizontal" action="{U_UPDATE_SETTINGS}">
+	<section id="qi-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_QI_SETTINGS}</legend>
+				<div class="form-group">
+					<label for="qi_lang" class="col-sm-5 control-label text-left">{L_QI_LANG}{L_COLON}<span class="help-block">{L_QI_LANG_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<select id="qi_lang" name="qi_config[qi_lang]" class="form-control" data-load-selection="index.php?page=settings&amp;lang=">
+							{QI_LANG}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_SHOW_CONFIRM}{L_COLON}<span class="help-block">{L_SHOW_CONFIRM_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[show_confirm]" value="1"<!-- IF CONFIG_SHOW_CONFIRM == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[show_confirm]" value="0"<!-- IF CONFIG_SHOW_CONFIRM == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="dir-settings"></a>{L_DIR_URL_SETTINGS}</legend>
-		<dl>
-			<dt><label for="boards_dir">{L_CACHE_DIR}:*</label><br />{L_CACHE_DIR_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="boards_dir">{L_BOARDS_DIR}:*</label><br />{L_BOARDS_DIR_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="boards_dir">{L_BOARDS_URL}:*</label><br />{L_BOARDS_URL_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_MAKE_WRITABLE}:</label><br />{L_MAKE_WRITABLE_EXPLAIN}<br />{L_NO_IMPACT_WIN}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="make_writable">{L_GRANT_PERMISSIONS}:</label><br />{L_GRANT_PERMISSIONS_EXPLAIN}<br />{L_NO_IMPACT_WIN}</dt>
-			<dd><input class="text medium" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></dd>
-		</dl>
-	</fieldset>
+	<section id="db-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_DB_SETTINGS}</legend>
+				<div class="form-group">
+					<label for="dbms" class="col-sm-5 control-label text-left">{L_DBMS}{L_COLON}<span class="help-block">{L_DBMS_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<select name="qi_config[dbms]" id="dbms" class="form-control">{CONFIG_DBMS}</select>
+					</div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="dbhost" class="col-sm-5 control-label text-left">{L_DBHOST}{L_COLON}<span class="help-block">{L_DBHOST_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="dbhost" name="qi_config[dbhost]" value="{CONFIG_DBHOST}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group">
+					<label for="dbport" class="col-sm-5 control-label text-left">{L_DBPORT}{L_COLON}<span class="help-block">{L_DBPORT_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="dbport" name="qi_config[dbport]" value="{CONFIG_DBPORT}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="dbuser" class="col-sm-5 control-label text-left">{L_DBUSER}{L_COLON}<span class="help-block">{L_DBUSER_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="dbuser" name="qi_config[dbuser]" value="{CONFIG_DBUSER}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="dbpasswd" class="col-sm-5 control-label text-left">{L_DBPASSWD}{L_COLON}<span class="help-block">{L_DBPASSWD_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
+					<div class="col-sm-7">
+						<input class="form-control" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="no_dbpasswd" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF -->>
+								{L_NO_PASSWORD}
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="db_prefix" class="col-sm-5 control-label text-left">{L_DB_PREFIX}{L_COLON}<span class="help-block">{L_DB_PREFIX_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="table_prefix" class="col-sm-5 control-label text-left">{L_TABLE_PREFIX}{L_COLON}<span class="help-block">{L_TABLE_PREFIX_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="time-settings"></a>{L_TIME_SETTINGS}</legend>
-		<dl>
-			<dt><label for="qi_tz">{L_QI_TZ}:*</label><br />{L_QI_TZ_EXPLAIN}</dt>
-			<dd>
-				<select name="qi_config[qi_tz]" id="qi_tz">
-					<option value="">{L_SELECT_TIMEZONE}</option>
-					{TIMEZONE_OPTIONS}
-				</select>
-			</dd>
-		</dl>
-	</fieldset>
+	<section id="dir-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_DIR_URL_SETTINGS}</legend>
+				<div class="form-group has-feedback">
+					<label for="cache_dir" class="col-sm-5 control-label text-left">{L_CACHE_DIR}{L_COLON}<span class="help-block">{L_CACHE_DIR_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="boards_dir" class="col-sm-5 control-label text-left">{L_BOARDS_DIR}{L_COLON}<span class="help-block">{L_BOARDS_DIR_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="boards_url" class="col-sm-5 control-label text-left">{L_BOARDS_URL}{L_COLON}<span class="help-block">{L_BOARDS_URL_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_MAKE_WRITABLE}{L_COLON}<span class="help-block">{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN} {L_THIS_CAN_CHANGE}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="grant_permissions" class="col-sm-5 control-label text-left">{L_GRANT_PERMISSIONS}{L_COLON}<span class="help-block">{L_GRANT_PERMISSIONS_EXPLAIN} {L_NO_IMPACT_WIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="admin-settings"></a>{L_ADMIN_SETTINGS}</legend>
-		<dl>
-			<dt><label for="admin_name">{L_ADMIN_NAME}:</label><br />{L_ADMIN_NAME_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
-			<dd><input class="text medium" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="admin_pass">{L_ADMIN_PASS}:</label><br />{L_ADMIN_PASS_EXPLAIN}<br />{L_IF_LEAVE_EMPTY}<br />{L_PLAIN_TEXT}</dt>
-			<dd><input class="text medium" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="admin_email">{L_ADMIN_EMAIL}:*</label><br />{L_ADMIN_EMAIL_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="admin_email" name="qi_config[admin_email]" value="{CONFIG_ADMIN_EMAIL}" /></dd>
-		</dl>
-	</fieldset>
+	<section id="time-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_TIME_SETTINGS}</legend>
+				<div class="form-group">
+					<label for="qi_tz" class="col-sm-5 control-label text-left">{L_QI_TZ}{L_COLON}<span class="help-block">{L_QI_TZ_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<select name="qi_config[qi_tz]" id="qi_tz" class="form-control">
+							<option value="">{L_SELECT_TIMEZONE}</option>
+							{TIMEZONE_OPTIONS}
+						</select>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="server-settings"></a>{L_SERVER_COOKIE_SETTINGS}</legend>
-		<dl>
-			<dt><label for="server_name">{L_SERVER_NAME}:*</label><br />{L_SERVER_NAME_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="server_port">{L_SERVER_PORT}:*</label><br />{L_SERVER_PORT_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="server_port" name="qi_config[server_port]" value="{CONFIG_SERVER_PORT}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="cookie_domain">{L_COOKIE_DOMAIN}:</label><br />{L_COOKIE_DOMAIN_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{CONFIG_COOKIE_DOMAIN}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_COOKIE_SECURE}:</label><br />{L_COOKIE_SECURE_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[cookie_secure]" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-	</fieldset>
+	<section id="admin-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_ADMIN_SETTINGS}</legend>
+				<div class="form-group">
+					<label for="admin_name" class="col-sm-5 control-label text-left">{L_ADMIN_NAME}{L_COLON}<span class="help-block">{L_ADMIN_NAME_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="admin_pass" class="col-sm-5 control-label text-left">{L_ADMIN_PASS}{L_COLON}<span class="help-block">{L_ADMIN_PASS_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
+					<div class="col-sm-7"><input class="form-control" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="admin_email" class="col-sm-5 control-label text-left">{L_ADMIN_EMAIL}{L_COLON}<span class="help-block">{L_ADMIN_EMAIL_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="admin_email" name="qi_config[admin_email]" value="{CONFIG_ADMIN_EMAIL}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="email-settings"></a>{L_EMAIL_SETTINGS}</legend>
-		<dl>
-			<dt><label for="board_email">{L_BOARD_EMAIL}:*</label><br />{L_BOARD_EMAIL_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_EMAIL_ENABLE}:</label><br />{L_EMAIL_ENABLE_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[email_enable]" value="1"<!-- IF CONFIG_EMAIL_ENABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[email_enable]" value="0"<!-- IF CONFIG_EMAIL_ENABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_SMTP_DELIVERY}:</label><br />{L_SMTP_DELIVERY_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[smtp_delivery]" value="1"<!-- IF CONFIG_SMTP_DELIVERY == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[smtp_delivery]" value="0"<!-- IF CONFIG_SMTP_DELIVERY == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="smtp_host">{L_SMTP_HOST}:</label><br />{L_SMTP_HOST_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="smtp_host" name="qi_config[smtp_host]" value="{CONFIG_SMTP_HOST}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="smtp_port">{L_SMTP_PORT}:</label><br />{L_SMTP_PORT_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="3" maxlength="5" id="smtp_port" name="qi_config[smtp_port]" value="{CONFIG_SMTP_PORT}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="smtp_auth">{L_SMTP_AUTH}:</label><br />{L_SMTP_AUTH_EXPLAIN}</dt>
-			<dd>
-				<select name="qi_config[smtp_auth]" id="smtp_auth">
-					<option value="PLAIN"<!-- IF CONFIG_SMTP_AUTH == 'PLAIN' --> selected="selected"<!-- ENDIF -->>PLAIN</option>
-					<option value="LOGIN"<!-- IF CONFIG_SMTP_AUTH == 'LOGIN' --> selected="selected"<!-- ENDIF -->>LOGIN</option>
-					<option value="CRAM-MD5"<!-- IF CONFIG_SMTP_AUTH == 'CRAM-MD5' --> selected="selected"<!-- ENDIF -->>CRAM-MD5</option>
-					<option value="DIGEST-MD5"<!-- IF CONFIG_SMTP_AUTH == 'DIGEST-MD5' --> selected="selected"<!-- ENDIF -->>DIGEST-MD5</option>
-					<option value="POP-BEFORE-SMTP"<!-- IF CONFIG_SMTP_AUTH == 'POP-BEFORE-SMTP' --> selected="selected"<!-- ENDIF -->>POP-BEFORE-SMTP</option>
-				</select>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="smtp_user">{L_SMTP_USER}:</label><br />{L_SMTP_USER_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="smtp_user" name="qi_config[smtp_user]" value="{CONFIG_SMTP_USER}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="smtp_pass">{L_SMTP_PASS}:</label><br />{L_SMTP_PASS_EXPLAIN}</dt>
-			<dd><input class="text medium" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></dd>
-		</dl>
-	</fieldset>
+	<section id="server-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_SERVER_COOKIE_SETTINGS}</legend>
+				<div class="form-group has-feedback">
+					<label for="server_name" class="col-sm-5 control-label text-left">{L_SERVER_NAME}{L_COLON}<span class="help-block">{L_SERVER_NAME_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="server_port" class="col-sm-5 control-label text-left">{L_SERVER_PORT}{L_COLON}<span class="help-block">{L_SERVER_PORT_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="server_port" name="qi_config[server_port]" value="{CONFIG_SERVER_PORT}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group">
+					<label for="cookie_domain" class="col-sm-5 control-label text-left">{L_COOKIE_DOMAIN}{L_COLON}<span class="help-block">{L_COOKIE_DOMAIN_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{CONFIG_COOKIE_DOMAIN}" /></div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_COOKIE_SECURE}{L_COLON}<span class="help-block">{L_COOKIE_SECURE_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[cookie_secure]" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="config-settings"></a>{L_BOARD_CONFIG_SETTINGS}</legend>
-		<div class="settings-explain">{L_BOARD_CONFIG_SETTINGS_EXPLAIN}<br />{L_THESE_CAN_CHANGE}</div>
-		<dl>
-			<dt><label for="site_name">{L_SITE_NAME}:*</label><br />{L_SITE_NAME_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="site_desc">{L_SITE_DESC}:</label><br />{L_SITE_DESC_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="default_lang">{L_DEFAULT_LANG}:*</label><br />{L_DEFAULT_LANG_EXPLAIN}</dt>
-			<dd><select id="default_lang" name="qi_config[default_lang]">{PHPBB_LANG}</select></dd>
-		</dl>
-		<dl>
-			<dt><label for="other_config">{L_OTHER_CONFIG}:</label><br />{L_OTHER_CONFIG_EXPLAIN}</dt>
-			<dd><textarea name="qi_config[other_config]" id="other_config" style="width: 75%;" rows="10">{OTHER_CONFIG}</textarea></dd>
-		</dl>
-	</fieldset>
+	<section id="email-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_EMAIL_SETTINGS}</legend>
+				<div class="form-group has-feedback">
+					<label for="board_email" class="col-sm-5 control-label text-left">{L_BOARD_EMAIL}{L_COLON}<span class="help-block">{L_BOARD_EMAIL_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_EMAIL_ENABLE}{L_COLON}<span class="help-block">{L_EMAIL_ENABLE_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[email_enable]" value="1"<!-- IF CONFIG_EMAIL_ENABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[email_enable]" value="0"<!-- IF CONFIG_EMAIL_ENABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_SMTP_DELIVERY}{L_COLON}<span class="help-block">{L_SMTP_DELIVERY_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[smtp_delivery]" value="1"<!-- IF CONFIG_SMTP_DELIVERY == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[smtp_delivery]" value="0"<!-- IF CONFIG_SMTP_DELIVERY == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="smtp_host" class="col-sm-5 control-label text-left">{L_SMTP_HOST}{L_COLON}<span class="help-block">{L_SMTP_HOST_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="smtp_host" name="qi_config[smtp_host]" value="{CONFIG_SMTP_HOST}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="smtp_port" class="col-sm-5 control-label text-left">{L_SMTP_PORT}{L_COLON}<span class="help-block">{L_SMTP_PORT_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="smtp_port" name="qi_config[smtp_port]" value="{CONFIG_SMTP_PORT}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="smtp_auth" class="col-sm-5 control-label text-left">{L_SMTP_AUTH}{L_COLON}<span class="help-block">{L_SMTP_AUTH_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<select name="qi_config[smtp_auth]" id="smtp_auth" class="form-control">
+							<option value="PLAIN"<!-- IF CONFIG_SMTP_AUTH == 'PLAIN' --> selected="selected"<!-- ENDIF -->>PLAIN</option>
+							<option value="LOGIN"<!-- IF CONFIG_SMTP_AUTH == 'LOGIN' --> selected="selected"<!-- ENDIF -->>LOGIN</option>
+							<option value="CRAM-MD5"<!-- IF CONFIG_SMTP_AUTH == 'CRAM-MD5' --> selected="selected"<!-- ENDIF -->>CRAM-MD5</option>
+							<option value="DIGEST-MD5"<!-- IF CONFIG_SMTP_AUTH == 'DIGEST-MD5' --> selected="selected"<!-- ENDIF -->>DIGEST-MD5</option>
+							<option value="POP-BEFORE-SMTP"<!-- IF CONFIG_SMTP_AUTH == 'POP-BEFORE-SMTP' --> selected="selected"<!-- ENDIF -->>POP-BEFORE-SMTP</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="smtp_user" class="col-sm-5 control-label text-left">{L_SMTP_USER}{L_COLON}<span class="help-block">{L_SMTP_USER_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="smtp_user" name="qi_config[smtp_user]" value="{CONFIG_SMTP_USER}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="smtp_pass" class="col-sm-5 control-label text-left">{L_SMTP_PASS}{L_COLON}<span class="help-block">{L_SMTP_PASS_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="chunk-settings"></a>{L_CHUNK_SETTINGS}</legend>
-		<div class="settings-explain">{L_CHUNK_SETTINGS_EXPLAIN}<br />{L_THESE_CAN_CHANGE}</div>
-		<dl>
-			<dt><label for="chunk_post">{L_CHUNK_POST}:</label><br />{L_CHUNK_POST_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_post" name="qi_config[chunk_post]" value="{CHUNK_POST}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="chunk_topic">{L_CHUNK_TOPIC}:</label><br />{L_CHUNK_TOPIC_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_topic" name="qi_config[chunk_topic]" value="{CHUNK_TOPIC}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="chunk_user">{L_CHUNK_USER}:</label><br />{L_CHUNK_USER_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="6" id="chunk_user" name="qi_config[chunk_user]" value="{CHUNK_USER}" /></dd>
-		</dl>
-	</fieldset>
+	<section id="config-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_BOARD_CONFIG_SETTINGS}</legend>
+				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_BOARD_CONFIG_SETTINGS_EXPLAIN}</div>
+				<div class="form-group has-feedback">
+					<label for="site_name" class="col-sm-5 control-label text-left">{L_SITE_NAME}{L_COLON}<span class="help-block">{L_SITE_NAME_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group">
+					<label for="site_desc" class="col-sm-5 control-label text-left">{L_SITE_DESC}{L_COLON}<span class="help-block">{L_SITE_DESC_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="default_lang" class="col-sm-5 control-label text-left">{L_DEFAULT_LANG}{L_COLON}<span class="help-block">{L_DEFAULT_LANG_EXPLAIN}</span></label>
+					<div class="col-sm-7"><select class="form-control" id="default_lang" name="qi_config[default_lang]">{PHPBB_LANG}</select></div>
+				</div>
+				<div class="form-group">
+					<label for="other_config" class="col-sm-5 control-label text-left">{L_OTHER_CONFIG}{L_COLON}<span class="help-block">{L_OTHER_CONFIG_EXPLAIN}</span></label>
+					<div class="col-sm-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="populate-settings"></a>{L_POPULATE}</legend>
-		<dl>
-			<dt><label>{L_POPULATE}:</label><br />{L_POPULATE_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[populate]" value="1"<!-- IF CONFIG_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[populate]" value="0"<!-- IF CONFIG_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="num_users">{L_NUM_USERS}:</label><br />{L_NUM_USERS_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="5" id="num_users" name="qi_config[num_users]" value="{CONFIG_NUM_USERS}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="num_new_group">{L_NUM_NEW_GROUP}:</label><br />{L_NUM_NEW_GROUP_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="5" id="num_new_group" name="qi_config[num_new_group]" value="{CONFIG_NUM_NEW_GROUP}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="email_domain">{L_EMAIL_DOMAIN}:*</label><br />{L_EMAIL_DOMAIN_EXPLAIN}</dt>
-			<dd><input class="text medium" type="text" id="email_domain" name="qi_config[email_domain]" value="{CONFIG_EMAIL_DOMAIN}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_CREATE_ADMIN}:</label><br />{L_CREATE_ADMIN_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[create_admin]" value="1"<!-- IF CONFIG_CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[create_admin]" value="0"<!-- IF CONFIG_CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_CREATE_MOD}:</label><br />{L_CREATE_MOD_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[create_mod]" value="1"<!-- IF CONFIG_CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[create_mod]" value="0"<!-- IF CONFIG_CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="num_cats">{L_NUM_CATS}:</label><br />{L_NUM_CATS_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="5" id="num_cats" name="qi_config[num_cats]" value="{CONFIG_NUM_CATS}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="num_forums">{L_NUM_FORUMS}:</label><br />{L_NUM_FORUMS_EXPLAIN}</dt>
-			<dd><input class="text" type="text" size="4" maxlength="5" id="num_forums" name="qi_config[num_forums]" value="{CONFIG_NUM_FORUMS}" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="num_topics">{L_NUM_TOPICS}:</label><br />{L_NUM_TOPICS_EXPLAIN}</dt>
-			<dd>
-				<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="num_topics" name="qi_config[num_topics_min]" value="{CONFIG_NUM_TOPICS_MIN}" /></label>
-				<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="qi_config[num_topics_max]" value="{CONFIG_NUM_TOPICS_MAX}" /></label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="num_replies">{L_NUM_REPLIES}:</label><br />{L_NUM_REPLIES_EXPLAIN}</dt>
-			<dd>
-				<label>{L_MIN} <input class="text" type="text" size="4" maxlength="5" id="num_replies" name="qi_config[num_replies_min]" value="{CONFIG_NUM_REPLIES_MIN}" /></label>
-				<label>{L_MAX} <input class="text" type="text" size="4" maxlength="5" name="qi_config[num_replies_max]" value="{CONFIG_NUM_REPLIES_MAX}" /></label>
-			</dd>
-		</dl>
-	</fieldset>
+	<section id="populate-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_POPULATE_SETTINGS}</legend>
+				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_POPULATE}{L_COLON}<span class="help-block">{L_POPULATE_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[populate]" value="1"<!-- IF CONFIG_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[populate]" value="0"<!-- IF CONFIG_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="num_users" class="col-sm-5 control-label text-left">{L_NUM_USERS}{L_COLON}<span class="help-block">{L_NUM_USERS_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="qi_config[num_users]" value="{CONFIG_NUM_USERS}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="num_new_group" class="col-sm-5 control-label text-left">{L_NUM_NEW_GROUP}{L_COLON}<span class="help-block">{L_NUM_NEW_GROUP_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_new_group" name="qi_config[num_new_group]" value="{CONFIG_NUM_NEW_GROUP}" /></div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="email_domain" class="col-sm-5 control-label text-left">{L_EMAIL_DOMAIN}{L_COLON}<span class="help-block">{L_EMAIL_DOMAIN_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="email_domain" name="qi_config[email_domain]" value="{CONFIG_EMAIL_DOMAIN}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_CREATE_ADMIN}{L_COLON}<span class="help-block">{L_CREATE_ADMIN_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[create_admin]" value="1"<!-- IF CONFIG_CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[create_admin]" value="0"<!-- IF CONFIG_CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_CREATE_MOD}{L_COLON}<span class="help-block">{L_CREATE_MOD_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[create_mod]" value="1"<!-- IF CONFIG_CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[create_mod]" value="0"<!-- IF CONFIG_CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="num_cats" class="col-sm-5 control-label text-left">{L_NUM_CATS}{L_COLON}<span class="help-block">{L_NUM_CATS_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_cats" name="qi_config[num_cats]" value="{CONFIG_NUM_CATS}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="num_forums" class="col-sm-5 control-label text-left">{L_NUM_FORUMS}{L_COLON}<span class="help-block">{L_NUM_FORUMS_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="qi_config[num_forums]" value="{CONFIG_NUM_FORUMS}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="num_topics" class="col-sm-5 control-label text-left">{L_NUM_TOPICS}{L_COLON}<span class="help-block">{L_NUM_TOPICS_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label>{L_MIN} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="qi_config[num_topics_min]" value="{CONFIG_NUM_TOPICS_MIN}" /></label>
+						<label>{L_MAX} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_topics_max]" value="{CONFIG_NUM_TOPICS_MAX}" /></label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="num_replies" class="col-sm-5 control-label text-left">{L_NUM_REPLIES}{L_COLON}<span class="help-block">{L_NUM_REPLIES_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label>{L_MIN} <input class="form-control" type="number" min="0" max="99999" id="num_replies" name="qi_config[num_replies_min]" value="{CONFIG_NUM_REPLIES_MIN}" /></label>
+						<label>{L_MAX} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_replies_max]" value="{CONFIG_NUM_REPLIES_MAX}" /></label>
+					</div>
+				</div>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_CHUNK_SETTINGS}</h3>
+					</div>
+					<div class="panel-body">
+						{L_CHUNK_SETTINGS_EXPLAIN}
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="chunk_post" class="col-sm-5 control-label text-left">{L_CHUNK_POST}{L_COLON}<span class="help-block">{L_CHUNK_POST_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="qi_config[chunk_post]" value="{CHUNK_POST}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="chunk_topic" class="col-sm-5 control-label text-left">{L_CHUNK_TOPIC}{L_COLON}<span class="help-block">{L_CHUNK_TOPIC_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_topic" name="qi_config[chunk_topic]" value="{CHUNK_TOPIC}" /></div>
+				</div>
+				<div class="form-group">
+					<label for="chunk_user" class="col-sm-5 control-label text-left">{L_CHUNK_USER}{L_COLON}<span class="help-block">{L_CHUNK_USER_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_user" name="qi_config[chunk_user]" value="{CHUNK_USER}" /></div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-	<fieldset>
-		<legend><a id="misc-settings"></a>{L_MISC_SETTINGS}</legend>
-		<dl>
-			<dt><label for="alt_env">{L_ALT_ENV}:</label></dt>
-			<dd><select name="qi_config[alt_env]" id="alt_env">{CONFIG_ALT_ENV}</select></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_REDIRECT}:</label><br />{L_REDIRECT_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_AUTOMOD}:</label><br />{L_AUTOMOD_EXPLAIN}<br />{L_ONLY_30}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
+	<section id="misc-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_MISC_SETTINGS}</legend>
+				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
+				<div class="form-group">
+					<label for="alt_env" class="col-sm-5 control-label text-left">{L_ALT_ENV}{L_COLON}<span class="help-block">{L_ALT_ENV_EXPLAIN}</span></label>
+					<div class="col-sm-7"><select name="qi_config[alt_env]" id="alt_env" class="form-control">{CONFIG_ALT_ENV}</select></div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_REDIRECT_BOARD}{L_COLON}<span class="help-block">{L_REDIRECT_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_AUTOMOD_INSTALL}{L_COLON}<span class="help-block">{L_ONLY_30}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_INSTALL_STYLES}{L_COLON}<span class="help-block">{L_INSTALL_STYLES_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[install_styles]" value="1"<!-- IF CONFIG_INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[install_styles]" value="0"<!-- IF CONFIG_INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[install_styles]" value="2"<!-- IF CONFIG_INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="default_style" class="col-sm-5 control-label text-left">{L_SET_DEFAULT_STYLE}{L_COLON}<span class="help-block">{L_SET_DEFAULT_STYLE_EXPLAIN}</span></label>
+					<div class="col-sm-7"><input class="form-control" type="text" id="default_style" name="qi_config[default_style]" value="{CONFIG_DEFAULT_STYLE}" /></div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_DROP_DB_IF_EXISTS}{L_COLON}<span class="help-block">{L_DROP_DB_IF_EXISTS_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[drop_db]" value="1"<!-- IF CONFIG_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[drop_db]" value="0"<!-- IF CONFIG_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_DELETE_FILES_IF_EXIST}{L_COLON}<span class="help-block">{L_DELETE_FILES_IF_EXIST_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[delete_files]" value="1"<!-- IF CONFIG_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[delete_files]" value="0"<!-- IF CONFIG_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
-		<dl>
-			<dt><label for="populate">{L_INSTALL_STYLES}:</label><br />{L_INSTALL_STYLES_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="1"<!-- IF CONFIG_INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="2"<!-- IF CONFIG_INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
-				<label><input type="radio" class="radio" name="qi_config[install_styles]" value="0"<!-- IF CONFIG_INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="default_style">{L_SET_DEFAULT_STYLE}:</label><br />{L_SET_DEFAULT_STYLE_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd><input class="text medium" type="text" id="default_style" name="qi_config[default_style]" value="{CONFIG_DEFAULT_STYLE}" /></dd>
-		</dl>
-
-		<dl>
-			<dt><label>{L_DROP_DB_IF_EXISTS}:</label><br />{L_DROP_DB_IF_EXISTS_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[drop_db]" value="1"<!-- IF CONFIG_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[drop_db]" value="0"<!-- IF CONFIG_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_DELETE_FILES_IF_EXIST}:</label><br />{L_DELETE_FILES_IF_EXIST_EXPLAIN}<br />{L_THIS_CAN_CHANGE}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[delete_files]" value="1"<!-- IF CONFIG_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[delete_files]" value="0"<!-- IF CONFIG_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_SHOW_CONFIRM}:</label><br />{L_SHOW_CONFIRM_EXPLAIN}</dt>
-			<dd>
-				<label><input type="radio" class="radio" name="qi_config[show_confirm]" value="1"<!-- IF CONFIG_SHOW_CONFIRM == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-				<label><input type="radio" class="radio" name="qi_config[show_confirm]" value="0"<!-- IF CONFIG_SHOW_CONFIRM == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-			</dd>
-		</dl>
-	</fieldset>
-
-	<fieldset>
-		<legend><a id="save-settings"></a>{L_SAVE_RESTORE}</legend>
-		<dl>
-			<dt><label for="save_profile">{L_SAVE_PROFILE}:</label><br />{L_SAVE_PROFILE_EXPLAIN}</dt>
-			<dd>
-				<input class="text medium" type="text" id="save_profile" name="save_profile" value="{SAVE_PROFILE}" />
-			</dd>
-		</dl>
-		<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
-		<p class="submit-buttons">
-			<input type="reset" name="reset" value="{L_RESET}" class="button1" /> &nbsp;
-			<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
-			<input type="hidden" name="sel_lang" value="{SEL_LANG}" />
-		</p>
-	</fieldset>
-
-	<p>{L_STAR_MANDATORY}</p>
+	<section id="save-settings" class="anchor">
+		<div class="well">
+			<fieldset>
+				<legend>{L_SAVE_SETTINGS}</legend>
+				<div class="form-group">
+					<label for="save_profile" class="col-sm-5 control-label text-left">{L_SAVE_PROFILE}{L_COLON}<span class="help-block">{L_SAVE_PROFILE_EXPLAIN}</span></label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" id="save_profile" name="save_profile" value="{SAVE_PROFILE}" />
+					</div>
+					<div class="col-sm-4">
+						<input type="submit" name="submit" value="{L_SAVE}" class="button button-bold" />&nbsp;&nbsp;
+						<input type="reset" name="reset" value="{L_RESET}" class="button" />
+						<input type="hidden" name="sel_lang" value="{SEL_LANG}" />
+						<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</section>
 
 </form>
 <!-- INCLUDE overall_footer.html -->

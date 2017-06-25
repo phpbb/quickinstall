@@ -32,7 +32,7 @@ class qi_create
 
 		if (!defined('PHPBB_32') && version_compare(PHP_VERSION, '7.0.0', '>='))
 		{
-			create_board_warning($user->lang['GENERAL_ERROR'], sprintf($user->lang['PHP7_INCOMPATIBLE'], PHP_VERSION), 'main');
+			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['PHP7_INCOMPATIBLE'], PHP_VERSION), 'main');
 		}
 
 		if (defined('PHPBB_31'))
@@ -117,7 +117,7 @@ class qi_create
 		// check if we have a board db (and directory) name
 		if (!$dbname)
 		{
-			create_board_warning($user->lang['GENERAL_ERROR'], $user->lang['NO_DB'], 'main');
+			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_DB'], 'main');
 		}
 
 		// Set the new board as root path.
@@ -856,10 +856,18 @@ class qi_create
 			// Log him/her in first.
 			$user->session_begin();
 			$auth->login($admin_name, $settings->get_config('admin_pass'), false, true, true);
+			if (qi::is_ajax())
+			{
+				qi::ajax_response(array('redirect' => $board_url));
+			}
 			qi::redirect($board_url);
 		}
 
 		// On succces just return to main page.
+		if (qi::is_ajax())
+		{
+			qi::ajax_response(array('redirect' => 'index.' . $phpEx));
+		}
 		qi::redirect('index.' . $phpEx);
 	}
 }

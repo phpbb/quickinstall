@@ -23,7 +23,7 @@ class qi
 	/**
 	* Output the standard page header
 	*/
-	public static function page_header($page_title = '', $page_about = '')
+	public static function page_header($page_title = '')
 	{
 		if (defined('HEADER_INC'))
 		{
@@ -35,9 +35,7 @@ class qi
 
 		$template->assign_vars(array(
 			'PAGE_TITLE'	=> $page_title,
-			'PAGE_ABOUT'	=> $page_about,
 			'T_THEME_PATH'	=> 'style',
-			'T_IMAGE_PATH'	=> $quickinstall_path . 'style/images/',
 
 			'U_ABOUT'		=> self::url('about'),
 			'U_DOCS'		=> self::url('docs'),
@@ -50,7 +48,7 @@ class qi
 			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
-			'S_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 0),
+			'S_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 1),
 
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
 			'QI_VERSION'		=> QI_VERSION,
@@ -333,42 +331,20 @@ class qi
 
 				phpbb_functions::send_status_line(503, 'Service Unavailable');
 
-				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-				echo '<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">';
-				echo '<head>';
-				echo '<meta http-equiv="content-type" content="text/html; charset=utf-8" />';
-				echo '<title>' . $msg_title . '</title>';
-				echo '<link href="' . $quickinstall_path . 'style/style.css" rel="stylesheet" type="text/css" media="screen" />';
-				echo '</head>';
-				echo '<body id="errorpage">';
-				echo '<div id="wrap">';
-				echo '	<div id="page-header">';
-				echo '		' . $l_return_index;
-				echo '	</div>';
-
-				echo '	<div id="page-body">';
-				echo '		<div id="acp">';
-				echo '			<div class="panel">';
-				echo '				<span class="corners-top"><span></span></span>';
-				echo '				<div id="content">';
-				echo '				<h1>' . $msg_title . '</h1>';
-				echo '				<div>' . $msg_text . '</div>';
-				echo '				</div>';
-				echo '				<div style="padding-left: 10px;">';
-				echo '					' . $l_return_index;
-				echo '				</div>';
-				echo '				<span class="corners-bottom"><span></span></span>';
-				echo '			</div>';
-				echo '		</div>';
-				echo '	</div>';
-
-				echo '	<div id="page-footer">';
-				echo '		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB QuickInstall</a> {QI_VERSION} for phpBB 3.0, 3.1 and 3.2 &copy; <a href="https://www.phpbb.com/">phpBB Limited</a><br />';
-				echo '		Powered by phpBB&reg; Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
-				echo '	</div>';
-				echo '</div>';
-				echo '</body>';
-				echo '</html>';
+				$error_out = file_get_contents($quickinstall_path . 'style/error.html');
+				$error_out = str_replace(
+					array('{L_QUICKINSTALL}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}'),
+					array($user->lang['QUICKINSTALL'], $quickinstall_path, $msg_title, '', $msg_text, '', $l_return_index, QI_VERSION),
+					$error_out
+				);
+				if (self::is_ajax())
+				{
+					echo json_encode(array('errorOut' => $error_out));
+				}
+				else
+				{
+					echo $error_out;
+				}
 
 				// As a pre-caution... some setups display a blank page if the flush() is not there.
 				(ob_get_level() > 0) ? @ob_flush() : @flush();
@@ -381,5 +357,26 @@ class qi
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
 		return(false);
+	}
+
+	/**
+	 * Is an AJAX request active
+	 *
+	 * @return bool
+	 */
+	public static function is_ajax()
+	{
+		return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+	}
+
+	/**
+	 * Send an ajax response and exit
+	 *
+	 * @param array $response
+	 */
+	public static function ajax_response($response)
+	{
+		echo json_encode($response);
+		exit;
 	}
 }

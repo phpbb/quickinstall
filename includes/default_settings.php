@@ -46,7 +46,7 @@ function get_default_settings()
 		'smtp_user'			=> '',
 		'smtp_pass'			=> '',
 		'site_name'			=> 'Testing Board',
-		'site_desc'			=> 'eviLs testing hood',
+		'site_desc'			=> 'QuickInstall sandbox',
 		'default_lang'		=> 'en',
 		'other_config'		=> 'a:2:{i:0;s:21:"session_length;999999";i:1;s:13:"#A comment...";}',
 		'chunk_post'		=> 1000,

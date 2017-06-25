@@ -17,6 +17,10 @@ if (!defined('IN_QUICKINSTALL'))
 
 class class_30_styles
 {
+	const ALL_STYLES = 1;
+
+	const SUBSILVER2 = 2;
+
 	private $qi_default_style = '';
 
 	private $qi_styles = array();
@@ -37,7 +41,7 @@ class class_30_styles
 		$this->acp_styles = new acp_styles();
 		$this->acp_styles->main(0, '');
 
-		$subsilver_only			= ($install_styles == 2) ? true : false;
+		$subsilver_only			= $install_styles == self::SUBSILVER2;
 		$this->qi_default_style	= $settings->get_config('default_style', '');
 
 		// Get available styles
@@ -87,11 +91,7 @@ class class_30_styles
 
 	private function qi_get_styles()
 	{
-		global $phpbb_root_path, $settings;
-
-		$styles	= array();
-		$dh		= dir($this->styles_path);
-
+		$dh = dir($this->styles_path);
 		while (($dir = $dh->read()) !== false)
 		{
 			// Ignore everything that starts with a dot, is a file or prosilver.
@@ -100,9 +100,8 @@ class class_30_styles
 				continue;
 			}
 
-			$style_name	= '';
 			$style_ary	= array(
-				'style_id'		=> ($dir == 'prosilver') ? 1 :0,
+				'style_id'		=> ($dir === 'prosilver') ? 1 : 0,
 				'template_id'	=> 0,
 				'theme_id'		=> 0,
 				'imageset_id'	=> 0,

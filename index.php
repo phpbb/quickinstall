@@ -89,7 +89,7 @@ set_error_handler(array('qi', 'msg_handler'), E_ALL);
 // Make sure we have phpBB.
 if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 {
-	gen_error_msg('phpBB not found. You need to download the latest phpBB 3.0.x, 3.1.x or 3.2.x from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>,<br />extract it and copy the phpBB3 folder to sources/. Choose the version you do most work with, for your own convenience.');
+	gen_error_msg('phpBB not found.<br /><br />You need to download the latest phpBB 3.0.x, 3.1.x or 3.2.x from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to the sources directory.<br /><br />Choose the version you do most work with, for your own convenience.');
 }
 
 // Let's get the config.
@@ -207,9 +207,9 @@ $template = new template();
 $template->set_custom_template('style', 'qi');
 
 $profiles = $settings->get_profiles();
+$template->assign_var('PROFILE_COUNT', $profiles['count']);
 if (empty($profiles['count']))
 {
-	$template->assign_var('S_NO_PROFILE', true);
 	$page = ($page == 'main' || $page == '') ? 'settings' : $page;
 }
 
@@ -255,23 +255,6 @@ else if (!empty($settings->update_text)) // PROFILE_UPDATED
 $settings->validate();
 $error = $settings->get_error();
 
-$page = (empty($error)) ? $page : 'settings';
-
-if ($page == 'main' || $page == 'settings' || $alt_env_missing)
-{
-	if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
-	{
-		$page = 'settings';
-		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
-	}
-}
-
-// Hide manage boards if there is no saved config.
-$template->assign_var('S_IN_INSTALL', $settings->install);
-
-// now create a module_handler object
-$module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
-
 // Set some standard variables we want to force
 if (defined('PHPBB_31'))
 {
@@ -291,6 +274,23 @@ else
 // overwrite
 $cache->cache_dir = $settings->get_cache_dir();
 $template->cachepath = $cache->cache_dir . 'tpl_qi_';
+
+$page = (empty($error)) ? $page : 'settings';
+
+if ($page == 'main' || $page == 'settings' || $alt_env_missing)
+{
+	if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
+	{
+		$page = 'settings';
+		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
+	}
+}
+
+// Hide manage boards if there is no saved config.
+$template->assign_var('S_IN_INSTALL', $settings->install);
+
+// now create a module_handler object
+$module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
 
 // Load the main module
 $module->load($page, 'qi_main');
