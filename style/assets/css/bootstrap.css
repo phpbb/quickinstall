@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700");/*!
+/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2017 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=4617ceb099c23418031118065576212a)
- * Config saved to config.json and https://gist.github.com/4617ceb099c23418031118065576212a
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=e73d2b5ce962664be552205d6eadc22c)
+ * Config saved to config.json and https://gist.github.com/e73d2b5ce962664be552205d6eadc22c
  */
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
@@ -4888,32 +4888,32 @@ a.label:focus {
   background-color: #4c84b3;
 }
 .label-success {
-  background-color: #3c763d;
+  background-color: #5cb85c;
 }
 .label-success[href]:hover,
 .label-success[href]:focus {
-  background-color: #2b542c;
+  background-color: #449d44;
 }
 .label-info {
-  background-color: #31708f;
+  background-color: #5bc0de;
 }
 .label-info[href]:hover,
 .label-info[href]:focus {
-  background-color: #245269;
+  background-color: #31b0d5;
 }
 .label-warning {
-  background-color: #8a6d3b;
+  background-color: #f0ad4e;
 }
 .label-warning[href]:hover,
 .label-warning[href]:focus {
-  background-color: #66512c;
+  background-color: #ec971f;
 }
 .label-danger {
-  background-color: #a94442;
+  background-color: #d9534f;
 }
 .label-danger[href]:hover,
 .label-danger[href]:focus {
-  background-color: #843534;
+  background-color: #c9302c;
 }
 .badge {
   display: inline-block;
