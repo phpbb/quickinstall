@@ -33,6 +33,8 @@ class qi
 		define('HEADER_INC', true);
 		global $template, $user, $phpbb_root_path, $quickinstall_path, $settings, $page, $mode;
 
+		$update = self::get_update();
+
 		$template->assign_vars(array(
 			'PAGE_TITLE'	=> $page_title,
 			'T_THEME_PATH'	=> 'style',
@@ -52,6 +54,9 @@ class qi
 
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
 			'QI_VERSION'		=> QI_VERSION,
+
+			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], QI_VERSION) : '',
+			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['announcement'] : '',
 		));
 
 		header('Content-type: text/html; charset=UTF-8');
@@ -378,5 +383,28 @@ class qi
 	{
 		echo json_encode($response);
 		exit;
+	}
+
+	/**
+	 * Get version update data
+	 *
+	 * @return array
+	 */
+	public static function get_update()
+	{
+		global $quickinstall_path, $phpEx;
+
+		if (!class_exists('qi_version_helper'))
+		{
+			include "{$quickinstall_path}includes/qi_version_helper.$phpEx";
+		}
+
+		$version_helper = new qi_version_helper();
+
+		return $version_helper
+			->set_current_version(QI_VERSION)
+			->force_stability('stable')
+			->set_file_location('www.phpbb.com', '/customise/db/official_tool/phpbb3_quickinstall', 'version_check')
+			->get_update();
 	}
 }
