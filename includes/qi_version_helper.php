@@ -213,7 +213,7 @@ class qi_version_helper
 	 */
 	public function get_versions($force_update = false, $force_cache = false)
 	{
-		$cache_file = '_versioncheck_' . $this->path;
+		$cache_file = 'versioncheck' . $this->path;
 
 		$info = $this->cache_get($cache_file);
 
