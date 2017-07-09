@@ -237,7 +237,7 @@ class qi_version_helper
 			if (!empty($info))
 			{
 				$json_sanitizer = function (&$value, $key) {
-					$this->set_var($value, $value, gettype($value));
+					legacy_set_var($value, $value, gettype($value));
 				};
 				array_walk_recursive($info, $json_sanitizer);
 			}
@@ -315,60 +315,7 @@ class qi_version_helper
 	{
 		global $settings;
 
-		return $settings->get_cache_dir() . 'data' . str_replace('/', '_', $handle) . '.json';
-	}
-
-	/**
-	 * Set variable $result to a particular type.
-	 *
-	 * @param mixed	&$result		The variable to fill
-	 * @param mixed	$var			The contents to fill with
-	 * @param mixed	$type			The variable type. Will be used with {@link settype()}
-	 * @param bool	$multibyte		Indicates whether string values may contain UTF-8 characters.
-	 * 								Default is false, causing all bytes outside the ASCII range (0-127) to be replaced with question marks.
-	 * @param bool	$trim			Indicates whether trim() should be applied to string values.
-	 * 								Default is true.
-	 */
-	protected function set_var(&$result, $var, $type, $multibyte = false, $trim = true)
-	{
-		settype($var, $type);
-		$result = $var;
-
-		if ($type === 'string')
-		{
-			$result = str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $result);
-
-			if ($trim)
-			{
-				$result = trim($result);
-			}
-
-			$result = htmlspecialchars($result);
-
-//			if ($multibyte)
-//			{
-//				$result = utf8_normalize_nfc($result);
-//			}
-
-			if (!empty($result))
-			{
-				// Make sure multibyte characters are wellformed
-				if ($multibyte)
-				{
-					if (!preg_match('/^./u', $result))
-					{
-						$result = '';
-					}
-				}
-				else
-				{
-					// no multibyte, allow only ASCII (0-127)
-					$result = preg_replace('/[\x80-\xFF]/', '?', $result);
-				}
-			}
-
-			$result = (version_compare(PHP_VERSION, '5.4.0-dev', '<') && @get_magic_quotes_gpc()) ? stripslashes($result) : $result;
-		}
+		return $settings->get_cache_dir() . 'data_' . str_replace('/', '_', $handle) . '.json';
 	}
 }
 
