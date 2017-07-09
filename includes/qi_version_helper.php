@@ -154,7 +154,7 @@ class qi_version_helper
 		try
 		{
 			$updates = $this->get_suggested_updates();
-			return reset($updates);
+			return array_shift($updates);
 		}
 		catch (RuntimeException $e)
 		{
