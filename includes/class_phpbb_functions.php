@@ -325,4 +325,32 @@ class phpbb_functions
 		$output .= '</div>';
 		return $output;
 	}
+
+	/**
+	 * Wrapper for version_compare() that allows using uppercase A and B
+	 * for alpha and beta releases.
+	 *
+	 * See http://www.php.net/manual/en/function.version-compare.php
+	 *
+	 * @param string $version1		First version number
+	 * @param string $version2		Second version number
+	 * @param string $operator		Comparison operator (optional)
+	 *
+	 * @return mixed					Boolean (true, false) if comparison operator is specified.
+	 *								Integer (-1, 0, 1) otherwise.
+	 */
+	public static function phpbb_version_compare($version1, $version2, $operator = null)
+	{
+		$version1 = strtolower($version1);
+		$version2 = strtolower($version2);
+
+		if (is_null($operator))
+		{
+			return version_compare($version1, $version2);
+		}
+		else
+		{
+			return version_compare($version1, $version2, $operator);
+		}
+	}
 }
