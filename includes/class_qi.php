@@ -56,7 +56,7 @@ class qi
 			'QI_VERSION'		=> QI_VERSION,
 
 			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], QI_VERSION) : '',
-			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['announcement'] : '',
+			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['download'] : '',
 		));
 
 		header('Content-type: text/html; charset=UTF-8');
