@@ -247,10 +247,10 @@
     "@popover-arrow-outer-fallback-color": "darken(@popover-fallback-border-color, 20%)",
     "@label-default-bg": "@gray-light",
     "@label-primary-bg": "@brand-primary",
-    "@label-success-bg": "@brand-success",
-    "@label-info-bg": "@brand-info",
-    "@label-warning-bg": "@brand-warning",
-    "@label-danger-bg": "@brand-danger",
+    "@label-success-bg": "#5cb85c",
+    "@label-info-bg": "#5bc0de",
+    "@label-warning-bg": "#f0ad4e",
+    "@label-danger-bg": "#d9534f",
     "@label-color": "#fff",
     "@label-link-hover-color": "#fff",
     "@modal-inner-padding": "15px",
@@ -431,5 +431,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=4617ceb099c23418031118065576212a"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=e73d2b5ce962664be552205d6eadc22c"
 }

@@ -181,7 +181,7 @@ $lang = array_merge($lang, array(
 	'NO'					=> 'No',
 	'NO_ALT_ENV'			=> 'No alternative environments found.',
 	'NO_ALT_ENV_FOUND'		=> 'The specified alternative environment <strong>%s</strong> don’t exist.', // %s is the missing environment name
-	'NO_AUTOMOD'			=> '<strong>AutoMOD not found in the sources directory.</strong><br />You need to download AutoMOD and copy the contents of the &quot;root&quot; directory to &quot;sources/automod&quot;. If you use AutoMOD 1.0.0. it is the contents of the &quot;upload&quot; directory.',
+	'NO_AUTOMOD'			=> '<strong>AutoMOD not found in the sources directory.</strong><br />You need to download AutoMOD and copy the contents of the <code>root</code> directory to <code>sources/automod</code>. If you use AutoMOD 1.0.0. it is the contents of the <code>upload</code> directory.',
 	'NO_AUTOMOD_TITLE'		=> 'AutoMOD not found',
 	'NO_BOARDS'				=> 'You have no boards.',
 	'NO_DB'					=> 'No database selected.',
@@ -294,6 +294,9 @@ $lang = array_merge($lang, array(
 	'TIME_SETTINGS'			=> 'Time settings',
 
 	'UNCHECK_ALL'		=> 'Uncheck all',
+	'UPDATE'			=> 'Update',
+
+	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 
 	'WORKING_ON_IT'		=> 'We’re working on it...',
 
