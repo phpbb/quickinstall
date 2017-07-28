@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.1
+- [Feature] Added QI version update check. New version notifications will be available in the header nav-bar.
+- [Fix] Correctly allow dot in board directory name.
+
 ## Changes in 1.3.0
 - [Change] QuickInstall has a new paint-job, with a fresh modern look...a flat, responsive, prosilver inspired theme.
 - [Change] Rewrote all javascript functionality from the ground up, using jQuery.
