@@ -677,7 +677,7 @@ class settings
 	 */
 	function get_profiles()
 	{
-		global $quickinstall_path, $user;
+		global $quickinstall_path;
 
 		if (file_exists($quickinstall_path . 'settings'))
 		{
@@ -696,7 +696,7 @@ class settings
 
 			foreach ($files as $file)
 			{
-				if (strpos($file, '.') == 0 || substr($file, -4) != '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
+				if (strpos($file, '.') == 0 || substr($file, -4) !== '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
 				{
 					continue;
 				}
@@ -713,13 +713,11 @@ class settings
 				$profile_options['options'] = $cfg_name;
 			}
 
-			return($profile_options);
+			return $profile_options;
 		}
-		else
-		{
-			$this->error[] = 'SETTINGS_NOT_WRITABLE';
-			return(false);
-		}
+
+		$this->error[] = 'SETTINGS_NOT_WRITABLE';
+		return false;
 	}
 
 	/**
