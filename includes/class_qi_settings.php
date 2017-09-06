@@ -689,6 +689,11 @@ class settings
 				'options'	=> '',
 			);
 
+			if (is_array($files))
+			{
+				natcasesort($files);
+			}
+
 			foreach ($files as $file)
 			{
 				if (strpos($file, '.') == 0 || substr($file, -4) != '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
