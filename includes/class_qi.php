@@ -252,15 +252,12 @@ class qi
 
 		if (is_array($params))
 		{
-			$_params = '';
-			foreach ($params as $name => $value)
-			{
-				$_params .= urlencode($name) . '=' . urlencode($value);
-			}
-			$params = &$_params;
+			array_walk($params, function (&$value, $name) {
+				$value = urlencode($name) . '=' . urlencode($value);
+			});
 		}
 
-		return $quickinstall_path . 'index.' . $phpEx . '?page=' . $page . ($params ? ('&amp;' . $params) : '');
+		return $quickinstall_path . 'index.' . $phpEx . '?page=' . $page . ($params ? ('&amp;' . implode('&amp;', $params)) : '');
 	}
 
 	/**
