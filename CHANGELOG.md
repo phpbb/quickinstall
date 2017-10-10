@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.2
+- [Change] Sort profiles naturally in drop down lists.
+- [Fix] Corrected potential problems with how URLs are generated internally.
+
 ## Changes in 1.3.1
 - [Feature] Added QI version update check. New version notifications will be available in the header nav-bar.
 - [Fix] Correctly allow dot in board directory name.
