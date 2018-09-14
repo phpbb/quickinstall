@@ -544,31 +544,6 @@ class qi_create
 		// no templates though :P
 		$config['load_tplcompile'] = '1';
 
-		// build search index
-		if (defined('PHPBB_31'))
-		{
-			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
-		}
-		else
-		{
-			if (!class_exists('fulltext_native'))
-			{
-				include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
-			}
-
-			$search = new fulltext_native($error = false);
-		}
-
-		$sql = 'SELECT post_id, post_subject, post_text, poster_id, forum_id
-			FROM ' . POSTS_TABLE;
-		$result = $db->sql_query($sql);
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$search->index('post', $row['post_id'], $row['post_text'], $row['post_subject'], $row['poster_id'], $row['forum_id']);
-		}
-		$db->sql_freeresult($result);
-
 		// extended phpbb install script
 		if (!defined('PHPBB_32'))
 		{
@@ -773,6 +748,32 @@ class qi_create
 			$install->add_language(false, false);
 			$install->add_bots(false, false);
 		}
+
+		// build search index
+		$search_error_msg = false;
+		if (defined('PHPBB_31'))
+		{
+			$search = new \phpbb\search\fulltext_native($search_error_msg, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
+		}
+		else
+		{
+			if (!class_exists('fulltext_native'))
+			{
+				include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
+			}
+
+			$search = new fulltext_native($search_error_msg);
+		}
+
+		$sql = 'SELECT post_id, post_subject, post_text, poster_id, forum_id
+			FROM ' . POSTS_TABLE;
+		$result = $db->sql_query($sql);
+
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$search->index('post', $row['post_id'], $row['post_text'], $row['post_subject'], $row['poster_id'], $row['forum_id']);
+		}
+		$db->sql_freeresult($result);
 
 		// now automod (easymod)
 		if ($automod && !defined('PHPBB_31'))
