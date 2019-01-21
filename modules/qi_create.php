@@ -661,6 +661,10 @@ class qi_create
 			// Restore user object to original state
 			$user = $current_user;
 			unset($current_user);
+
+			// get search for 3.2.x
+			$search_error_msg = false;
+			$search = new \phpbb\search\fulltext_native($search_error_msg, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
 		}
 		else if (defined('PHPBB_31'))
 		{
@@ -713,7 +717,23 @@ class qi_create
 			$install = new install_install($p_master = new p_master_dummy());
 			$install->populate_migrations($phpbb_container->get('ext.manager'), $phpbb_container->get('migrator'));
 			unset($install);
+
+			// get search for 3.1
+			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
 		}
+
+		// get search for 3.0
+		if (!isset($search))
+		{
+			if (!class_exists('fulltext_native'))
+			{
+				include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
+			}
+
+			$search = new fulltext_native($error = false);
+		}
+
+		$this->build_search_index($db, $search);
 
 		if (!defined('PHPBB_32'))
 		{
@@ -748,32 +768,6 @@ class qi_create
 			$install->add_language(false, false);
 			$install->add_bots(false, false);
 		}
-
-		// build search index
-		$search_error_msg = false;
-		if (defined('PHPBB_31'))
-		{
-			$search = new \phpbb\search\fulltext_native($search_error_msg, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
-		}
-		else
-		{
-			if (!class_exists('fulltext_native'))
-			{
-				include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
-			}
-
-			$search = new fulltext_native($search_error_msg);
-		}
-
-		$sql = 'SELECT post_id, post_subject, post_text, poster_id, forum_id
-			FROM ' . POSTS_TABLE;
-		$result = $db->sql_query($sql);
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$search->index('post', $row['post_id'], $row['post_text'], $row['post_subject'], $row['poster_id'], $row['forum_id']);
-		}
-		$db->sql_freeresult($result);
 
 		// now automod (easymod)
 		if ($automod && !defined('PHPBB_31'))
@@ -870,5 +864,18 @@ class qi_create
 			qi::ajax_response(array('redirect' => 'index.' . $phpEx));
 		}
 		qi::redirect('index.' . $phpEx);
+	}
+
+	protected function build_search_index($db, $search)
+	{
+		$sql = 'SELECT post_id, post_subject, post_text, poster_id, forum_id
+			FROM ' . POSTS_TABLE;
+		$result = $db->sql_query($sql);
+
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$search->index('post', $row['post_id'], $row['post_text'], $row['post_subject'], $row['poster_id'], $row['forum_id']);
+		}
+		$db->sql_freeresult($result);
 	}
 }
