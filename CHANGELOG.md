@@ -1,5 +1,8 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.4
+- [Fix] Fixed an issue introduced in 1.3.3 that caused a fatal error while installing 3.0 boards.
+
 ## Changes in 1.3.3
 - [Fix] phpBB 3.2.3 can now be installed with QI without failing and getting hung up.
 
