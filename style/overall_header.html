@@ -67,16 +67,17 @@
 			<p><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> {L_IS_REQUIRED}</p>
 			<!-- ELSEIF S_MAIN -->
 			<h4>{L_BOARDS_LIST}</h4>
-				<!-- IF .board_row -->
+			<!-- BEGIN board_row -->
+			<!-- IF board_row.S_FIRST_ROW -->
 				<form id="del_board" method="post" action="{U_MANAGE}">
-					<!-- BEGIN board_row -->
+			<!-- ENDIF -->
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" data-mark id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" >
 							<a href="{board_row.BOARD_URL}"><strong>{board_row.BOARD_NAME}</strong></a><!-- IF board_row.VERSION --> ({board_row.VERSION})<!-- ENDIF -->
 						</label>
 					</div>
-					<!-- END board_row -->
+			<!-- IF board_row.S_LAST_ROW -->
 					<p>
 						<a href="#" data-mark-list="markall" data-mark-target="#del_board">{L_CHECK_ALL}</a> &bull;
 						<a href="#" data-mark-list="false" data-mark-target="#del_board">{L_UNCHECK_ALL}</a>
@@ -85,9 +86,10 @@
 						<input class="button" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_BOARDS}"<!-- ENDIF --> />
 					</p>
 				</form>
-				<!-- ELSE -->
+			<!-- ENDIF -->
+			<!-- BEGINELSE -->
 				<p>{L_NO_BOARDS}</p>
-				<!-- ENDIF -->
+			<!-- END board_row -->
 			<!-- ELSEIF S_ABOUT -->
 			<h4>{L_ABOUT_SECTIONS}</h4>
 			<ul class="nav nav-sidebar">
