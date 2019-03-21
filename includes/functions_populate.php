@@ -386,7 +386,7 @@ class populate
 						'post_text'			=> $post_text,
 						'post_checksum'		=> md5($post_text),
 						'bbcode_bitfield'	=> $bbcode_bitfield,
-						'bbcode_uid'		=> $bbcode_uid,
+						'bbcode_uid'		=> 'a',
 					);
 
 					if (defined('PHPBB_31'))
