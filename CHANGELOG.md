@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.5
+- [Fix] Fixed an issue where search results of pre-populated posts showed unparsed BBCode XML tags.
+- [Fix] Fixed a PHP notice that popped up in QI's templating system with PHP 7.2.
+
 ## Changes in 1.3.4
 - [Fix] Fixed an issue introduced in 1.3.3 that caused a fatal error while installing 3.0 boards.
 
