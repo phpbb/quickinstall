@@ -386,7 +386,7 @@ class populate
 						'post_text'			=> $post_text,
 						'post_checksum'		=> md5($post_text),
 						'bbcode_bitfield'	=> $bbcode_bitfield,
-						'bbcode_uid'		=> $bbcode_uid,
+						'bbcode_uid'		=> defined('PHPBB_32') ? gen_rand_string() : $bbcode_uid,
 					);
 
 					if (defined('PHPBB_31'))
