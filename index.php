@@ -149,7 +149,7 @@ if (file_exists($phpbb_root_path . 'phpbb/class_loader.' . $phpEx))
 }
 
 if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx)
-	&& !file_exists($phpbb_root_path . 'phpBB/phpbb/db/migration/data/v330/remove_attachment_flash.' . $phpEx)
+	&& !file_exists($phpbb_root_path . 'phpBB/phpbb/db/migration/data/v330/dev.' . $phpEx)
 )
 {
 	define('PHPBB_32', true);
