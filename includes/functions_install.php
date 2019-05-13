@@ -47,7 +47,7 @@ class module
 
 function get_db_tools($db)
 {
-	if (defined('PHPBB_32'))
+	if (defined('PHPBB_32') || defined('PHPBB_33'))
 	{
 		$factory = new \phpbb\db\tools\factory();
 		return $factory->get($db);

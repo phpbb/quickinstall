@@ -153,6 +153,11 @@ if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx))
 	define('PHPBB_32', true);
 }
 
+if (file_exists($phpbb_root_path . 'phpBB/cron/manager.' . $phpEx))
+{
+	define('PHPBB_33', true);
+}
+
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
 
