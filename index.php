@@ -168,14 +168,14 @@ $table_prefix = $settings->get_config('table_prefix');
 
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 
-if (!defined('PHPBB_32'))
+if (!defined('PHPBB_32') || !defined('PHPBB_33'))
 {
 	require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 }
 
 if (defined('PHPBB_31'))
 {
-	if (defined('PHPBB_32'))
+	if (defined('PHPBB_32') || defined('PHPBB_33'))
 	{
 		$cache_dir = $quickinstall_path . $settings->get_config('cache_dir', '');
 		$cache	   = new \phpbb\cache\driver\file($cache_dir);
