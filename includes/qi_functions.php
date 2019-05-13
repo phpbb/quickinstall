@@ -586,7 +586,7 @@ function db_close($db = false)
 
 function qi_get_available_dbms($dbms)
 {
-	if (defined('PHPBB_32'))
+	if (defined('PHPBB_32') || defined('PHPBB_33'))
 	{
 		global $phpbb_root_path;
 		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);

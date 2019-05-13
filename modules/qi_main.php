@@ -71,7 +71,7 @@ class qi_main
 
 			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
 
-			'PHPBB_VERSION'	=> defined('PHPBB_32') ? '3.2' : (defined('PHPBB_31') ? '3.1' : '3.0'),
+			'PHPBB_VERSION'	=> defined('PHPBB_33') ? '3.3' : (defined('PHPBB_32') ? '3.2' : (defined('PHPBB_31') ? '3.1' : '3.0')),
 
 			// Chunk settings
 			'CHUNK_POST'	=> $settings->get_config('chunk_post', 0),
