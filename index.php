@@ -148,7 +148,9 @@ if (file_exists($phpbb_root_path . 'phpbb/class_loader.' . $phpEx))
 	require($phpbb_root_path . 'vendor/autoload.' . $phpEx);
 }
 
-if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx)
+	&& !file_exists($phpbb_root_path . 'phpBB/phpbb/db/migration/data/v330/remove_attachment_flash.' . $phpEx)
+)
 {
 	define('PHPBB_32', true);
 }
