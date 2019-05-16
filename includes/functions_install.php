@@ -140,7 +140,15 @@ function load_schema_31($install_path = '', $install_dbms = false)
 		$classes = $finder->core_path('phpbb/db/migration/data/')
 			->get_classes();
 
-		$sqlite_db = new \phpbb\db\driver\sqlite();
+		if (!file_exists($phpbb_root_path . 'phpbb\db\driver\sqlite.' . $phpEx))
+		{
+			$sqlite_db = new \phpbb\db\driver\sqlite3();
+		}
+		else
+		{
+			$sqlite_db = new \phpbb\db\driver\sqlite();
+		}
+
 		$db_tools = get_db_tools($sqlite_db);
 		$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, $db_tools, $phpbb_root_path, $phpEx, $table_prefix);
 		$db_table_schema = $schema_generator->get_schema();
