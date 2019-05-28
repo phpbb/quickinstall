@@ -136,7 +136,15 @@ function load_schema_31($install_path = '', $install_dbms = false)
 			include($phpbb_root_path . 'includes/constants.' . $phpEx);
 		}
 
-		$finder = new \phpbb\finder(new \phpbb\filesystem(), $phpbb_root_path, null, $phpEx);
+		if (defined('PHPBB_40'))
+		{
+			$finder = new \phpbb\finder($phpbb_root_path, null, $phpEx);
+		}
+		else
+		{
+			$finder = new \phpbb\finder(new \phpbb\filesystem(), $phpbb_root_path, null, $phpEx);
+		}
+
 		$classes = $finder->core_path('phpbb/db/migration/data/')
 			->get_classes();
 
