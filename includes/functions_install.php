@@ -150,7 +150,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 			->get_classes();
 
 		// Check if greater than 3.2
-		if (defined('PHPBB_33'))
+		if (!file_exists($phpbb_root_path . 'phpbb\db\driver\sqlite.' . $phpEx))
 		{
 			$sqlite_db = new \phpbb\db\driver\sqlite3();
 		}
