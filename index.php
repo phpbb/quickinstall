@@ -153,6 +153,18 @@ if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx))
 	define('PHPBB_32', true);
 }
 
+// Check if greater than 3.2
+if (!file_exists($phpbb_root_path . 'phpbb\db\driver\sqlite.' . $phpEx))
+{
+	define('PHPBB_33', true);
+}
+
+// Check if equal or greater than 4.0@dev
+if (file_exists($phpbb_root_path . 'vendor-ext'))
+{
+	define('PHPBB_40', true);
+}
+
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
 

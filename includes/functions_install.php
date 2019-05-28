@@ -137,7 +137,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 		}
 
 		// Check if equal or greater than 4.0@dev
-		if (file_exists($phpbb_root_path . 'vendor-ext'))
+		if (defined('PHPBB_40'))
 		{
 			$finder = new \phpbb\finder($phpbb_root_path, null, $phpEx);
 		}
@@ -150,7 +150,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 			->get_classes();
 
 		// Check if greater than 3.2
-		if (!file_exists($phpbb_root_path . 'phpbb\db\driver\sqlite.' . $phpEx))
+		if (defined('PHPBB_33'))
 		{
 			$sqlite_db = new \phpbb\db\driver\sqlite3();
 		}
