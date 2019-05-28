@@ -153,7 +153,6 @@ if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx))
 	define('PHPBB_32', true);
 }
 
-// Check if equal or greater than 4.0@dev
 if (file_exists($phpbb_root_path . 'vendor-ext'))
 {
 	define('PHPBB_40', true);
