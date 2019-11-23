@@ -652,7 +652,7 @@ class populate
 	 */
 	private function save_users()
 	{
-		global $db, $config, $settings;
+		global $db, $db_tools, $config, $settings;
 
 		// Hash the password.
 		if (defined('PHPBB_31'))
@@ -711,7 +711,6 @@ class populate
 				'user_posts'			=> $user['user_posts'],
 				'user_password'			=> $password,
 				'user_email'			=> $email,
-				'user_email_hash'		=> phpbb_email_hash($email),
 				'group_id'				=> $registered_group,
 				'user_type'				=> USER_NORMAL,
 				'user_permissions'		=> '',
@@ -724,8 +723,7 @@ class populate
 				'user_full_folder'		=> PRIVMSGS_NO_BOX,
 				'user_notify_type'		=> NOTIFY_EMAIL,
 				'user_dateformat'		=> 'M jS, ’y, H:i',
-
-				'user_sig'			=> '',
+				'user_sig'				=> '',
 			);
 
 			$count = count($sql_ary) - 1;
@@ -740,6 +738,11 @@ class populate
 				$sql_ary[$count]['user_occ'] = '';
 				$sql_ary[$count]['user_interests'] = '';
 				$sql_ary[$count]['user_dst'] = $qi_dst;
+			}
+
+			if (!defined('PHPBB_33') || $db_tools->sql_column_exists(USERS_TABLE, 'user_email_hash'))
+			{
+				$sql_ary[$count]['user_email_hash'] = phpbb_email_hash($email);
 			}
 
 			$chunk_cnt++;

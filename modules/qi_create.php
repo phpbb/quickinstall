@@ -22,7 +22,7 @@ class qi_create
 {
 	public function __construct()
 	{
-		global $db, $user, $auth, $cache, $settings, $table_prefix;
+		global $db, $db_tools, $user, $auth, $cache, $settings, $table_prefix;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
 
 		// include installation functions
@@ -238,6 +238,16 @@ class qi_create
 
 		$db = db_connect();
 
+		if (defined('PHPBB_31'))
+		{
+			$db_tools = new \phpbb\db\tools($db);
+		}
+		else
+		{
+			$factory = new \phpbb\db\tools\factory();
+			$db_tools = $factory->get($db);
+		}
+
 		if ($settings->get_config('drop_db', 0))
 		{
 			$db->sql_query('DROP DATABASE IF EXISTS ' . $db_prefix . $dbname);
@@ -408,8 +418,8 @@ class qi_create
 					user_lang		= '" . $db->sql_escape($default_lang) . "',
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
 					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
-					user_email_hash	= " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ",
 					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "',
+					" . (!defined('PHPBB_33') || $db_tools->sql_column_exists("{$table_prefix}users", 'user_email_hash') ? 'user_email_hash = ' . phpbb_email_hash($settings->get_config('board_email')) . ',' : '') . "
 					$tz_data
 				WHERE username = 'Admin'",
 
