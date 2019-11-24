@@ -206,22 +206,26 @@ class qi_create
 		unset($config_data_array);
 
 		$config_data .= "\n@define('PHPBB_INSTALLED', true);\n";
-		$config_data .= "@define('DEBUG', true);\n";
-
-		if (defined('PHPBB_32'))
+		if (defined('PHPBB_33'))
 		{
 			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
-		}
-		if (defined('PHPBB_31'))
-		{
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
-			if (!defined('PHPBB_33'))
-			{
-				$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
-			}
+		}
+		else if (defined('PHPBB_32'))
+		{
+			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
+			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
+		}
+		else if (defined('PHPBB_31'))
+		{
+			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "@define('DEBUG', true);\n";
+			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 		}
 		else
 		{
+			$config_data .= "@define('DEBUG', true);\n";
 			$config_data .= "@define('DEBUG_EXTRA', true);\n";
 			$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		}
