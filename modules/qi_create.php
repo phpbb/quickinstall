@@ -22,7 +22,7 @@ class qi_create
 {
 	public function __construct()
 	{
-		global $db, $user, $auth, $cache, $settings, $table_prefix;
+		global $db, $db_tools, $user, $auth, $cache, $settings, $table_prefix;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
 
 		// include installation functions
@@ -173,19 +173,7 @@ class qi_create
 		}
 
 		// Write to config.php ;)
-		if (defined('PHPBB_32'))
-		{
-			$config_version = '3.2';
-		}
-		else if (defined('PHPBB_31'))
-		{
-			$config_version = '3.1';
-		}
-		else
-		{
-			$config_version = '3.0';
-		}
-
+		$config_version = qi_get_phpbb_version();
 		$config_data = "<?php\n";
 		$config_data .= "// phpBB $config_version.x auto-generated configuration file\n// Do not change anything in this file!\n";
 
@@ -218,25 +206,50 @@ class qi_create
 		unset($config_data_array);
 
 		$config_data .= "\n@define('PHPBB_INSTALLED', true);\n";
-		$config_data .= "@define('DEBUG', true);\n";
-
-		if (defined('PHPBB_32'))
+		if (defined('PHPBB_33'))
 		{
 			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
-		}
-		if (defined('PHPBB_31'))
-		{
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
+		}
+		else if (defined('PHPBB_32'))
+		{
+			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
 			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
+		}
+		else if (defined('PHPBB_31'))
+		{
+			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "@define('DEBUG', true);\n";
+			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 		}
 		else
 		{
+			$config_data .= "@define('DEBUG', true);\n";
 			$config_data .= "@define('DEBUG_EXTRA', true);\n";
 			$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		}
 		file_put_contents($board_dir . 'config.' . $phpEx, $config_data);
 
 		$db = db_connect();
+
+		if (defined('PHPBB_32'))
+		{
+			$factory = new \phpbb\db\tools\factory();
+			$db_tools = $factory->get($db);
+		}
+		else if (defined('PHPBB_31'))
+		{
+			$db_tools = new \phpbb\db\tools($db);
+		}
+		else
+		{
+			if (!class_exists('phpbb_db_tools'))
+			{
+				include $phpbb_root_path . 'includes/db/db_tools.' . $phpEx;
+			}
+			$db_tools = new phpbb_db_tools($db);
+		}
 
 		if ($settings->get_config('drop_db', 0))
 		{
@@ -408,8 +421,8 @@ class qi_create
 					user_lang		= '" . $db->sql_escape($default_lang) . "',
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
 					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
-					user_email_hash	= " . (crc32($settings->get_config('board_email')) . strlen($settings->get_config('board_email'))) . ",
 					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "',
+					" . (!defined('PHPBB_33') || $db_tools->sql_column_exists("{$table_prefix}users", 'user_email_hash') ? 'user_email_hash = ' . phpbb_email_hash($settings->get_config('board_email')) . ',' : '') . "
 					$tz_data
 				WHERE username = 'Admin'",
 

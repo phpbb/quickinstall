@@ -161,6 +161,11 @@ if (file_exists($phpbb_root_path . 'vendor-ext'))
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
 
+if (!function_exists('phpbb_email_hash'))
+{
+	define('PHPBB_33', true);
+}
+
 $delete_profile = (isset($_POST['delete-profile'])) ? true : false;
 
 // Need to set prefix here before constants.php are included.

@@ -73,8 +73,8 @@
 			<!-- ENDIF -->
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" data-mark id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}" >
-							<a href="{board_row.BOARD_URL}"><strong>{board_row.BOARD_NAME}</strong></a><!-- IF board_row.VERSION --> ({board_row.VERSION})<!-- ENDIF -->
+							<input type="checkbox" data-mark id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}">
+							<a href="{board_row.BOARD_URL}"><strong>{board_row.BOARD_NAME}</strong></a><!-- IF board_row.VERSION --> <span class="label label-primary">{board_row.VERSION}</span><!-- ENDIF -->
 						</label>
 					</div>
 			<!-- IF board_row.S_LAST_ROW -->
