@@ -173,19 +173,7 @@ class qi_create
 		}
 
 		// Write to config.php ;)
-		if (defined('PHPBB_32'))
-		{
-			$config_version = '3.2';
-		}
-		else if (defined('PHPBB_31'))
-		{
-			$config_version = '3.1';
-		}
-		else
-		{
-			$config_version = '3.0';
-		}
-
+		$config_version = qi_get_phpbb_version();
 		$config_data = "<?php\n";
 		$config_data .= "// phpBB $config_version.x auto-generated configuration file\n// Do not change anything in this file!\n";
 

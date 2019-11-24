@@ -597,3 +597,28 @@ function qi_get_available_dbms($dbms)
 		return call_user_func('get_available_dbms', $dbms);
 	}
 }
+
+function qi_get_phpbb_version()
+{
+	if (defined('PHPBB_40'))
+	{
+		return '4.0';
+	}
+
+	if (defined('PHPBB_33'))
+	{
+		return '3.3';
+	}
+
+	if (defined('PHPBB_32'))
+	{
+		return '3.2';
+	}
+
+	if (defined('PHPBB_31'))
+	{
+		return '3.1';
+	}
+
+	return '3.0';
+}
