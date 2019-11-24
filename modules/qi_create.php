@@ -227,7 +227,10 @@ class qi_create
 		if (defined('PHPBB_31'))
 		{
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
-			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			if (!defined('PHPBB_33'))
+			{
+				$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			}
 		}
 		else
 		{
