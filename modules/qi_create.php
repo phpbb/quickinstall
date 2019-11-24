@@ -241,14 +241,22 @@ class qi_create
 
 		$db = db_connect();
 
-		if (defined('PHPBB_31'))
+		if (defined('PHPBB_32'))
+		{
+			$factory = new \phpbb\db\tools\factory();
+			$db_tools = $factory->get($db);
+		}
+		else if (defined('PHPBB_31'))
 		{
 			$db_tools = new \phpbb\db\tools($db);
 		}
 		else
 		{
-			$factory = new \phpbb\db\tools\factory();
-			$db_tools = $factory->get($db);
+			if (!class_exists('phpbb_db_tools'))
+			{
+				include $phpbb_root_path . 'includes/db/db_tools.' . $phpEx;
+			}
+			$db_tools = new phpbb_db_tools($db);
 		}
 
 		if ($settings->get_config('drop_db', 0))
