@@ -42,7 +42,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'ABOUT_QUICKINSTALL'	=> 'About phpBB QuickInstall',
+	'ABOUT_QUICKINSTALL'	=> 'About phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
 	'ABOUT_SECTIONS'		=> 'About sections',
 	'ADMIN_EMAIL'			=> 'Admin email',
 	'ADMIN_EMAIL_EXPLAIN'	=> 'The email to assign to the admin account created for your boards.',
@@ -146,6 +146,7 @@ $lang = array_merge($lang, array(
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
+	'FOR_PHPBB_VERSIONS'		=> 'for phpBB 3.0 - 4.0',
 
 	'GENERAL_ERROR'		=> 'General Error',
 	'GO'				=> 'Go',
@@ -226,6 +227,7 @@ $lang = array_merge($lang, array(
 	'POPULATE_EXPLAIN'	=> 'Populates the board with the number of users, forums, posts and topics you specify below. Note that the more users, forums, posts and topics you specify, the longer it will take to process.',
 	'POPULATE_OPTIONS'	=> 'Populate options',
 	'POPULATE_SETTINGS'	=> 'Populate settings',
+	'POWERED_BY_PHPBB'	=> 'Powered by phpBB<sup>&reg;</sup> Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>',
 	'PROFILES'			=> 'Profiles',
 
 	'QI_ABOUT'			=> 'About',
@@ -238,7 +240,7 @@ $lang = array_merge($lang, array(
 	'QI_SETTINGS'		=> 'QuickInstall settings',
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for created boards. (For the 3.0.x branch it will be converted to numerical timezone and DST.)',
-	'QUICKINSTALL'		=> 'phpBB QuickInstall',
+	'QUICKINSTALL'		=> 'phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
