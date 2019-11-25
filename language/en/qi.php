@@ -42,7 +42,7 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'ABOUT_QUICKINSTALL'	=> 'About phpBB QuickInstall',
+	'ABOUT_QUICKINSTALL'	=> 'About phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
 	'ABOUT_SECTIONS'		=> 'About sections',
 	'ADMIN_EMAIL'			=> 'Admin email',
 	'ADMIN_EMAIL_EXPLAIN'	=> 'The email to assign to the admin account created for your boards.',
@@ -240,7 +240,7 @@ $lang = array_merge($lang, array(
 	'QI_SETTINGS'		=> 'QuickInstall settings',
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for created boards. (For the 3.0.x branch it will be converted to numerical timezone and DST.)',
-	'QUICKINSTALL'		=> 'phpBB QuickInstall',
+	'QUICKINSTALL'		=> 'phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
