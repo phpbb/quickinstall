@@ -241,6 +241,7 @@ $lang = array_merge($lang, array(
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for created boards. (For the 3.0.x branch it will be converted to numerical timezone and DST.)',
 	'QUICKINSTALL'		=> 'phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
+	'QUICKINSTALL_TITLE'=> 'phpBB&reg; QuickInstall',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
