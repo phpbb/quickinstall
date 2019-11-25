@@ -448,6 +448,13 @@
 						<label class="radio-inline"><input type="radio" name="qi_config[delete_files]" value="0"<!-- IF CONFIG_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="col-sm-5 control-label text-left">{L_ENABLE_DEBUG}{L_COLON}<span class="help-block">{L_ENABLE_DEBUG_EXPLAIN}</span></label>
+					<div class="col-sm-7">
+						<label class="radio-inline"><input type="radio" name="qi_config[debug]" value="1"<!-- IF CONFIG_DEBUG == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+						<label class="radio-inline"><input type="radio" name="qi_config[debug]" value="0"<!-- IF CONFIG_DEBUG == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					</div>
+				</div>
 			</fieldset>
 		</div>
 	</section>
