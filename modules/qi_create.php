@@ -205,28 +205,48 @@ class qi_create
 		}
 		unset($config_data_array);
 
+		$s_debug = !$settings->get_config('debug', 0) ? '//' : '';
+
 		$config_data .= "\n@define('PHPBB_INSTALLED', true);\n";
 		if (defined('PHPBB_33'))
 		{
 			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
+
+			if (empty($s_debug))
+			{
+				$debug_data = array(
+					'debug.load_time'             => 'true',
+					'debug.memory'                => 'true',
+					'debug.sql_explain'           => 'true',
+					'debug.show_errors'           => 'true',
+					'debug.exceptions'            => 'true',
+					'twig.debug'                  => 'false',
+					'twig.auto_reload'            => 'false',
+					'twig.enable_debug_extension' => 'false',
+				);
+				$dump = "\nparameters:\n    " . implode("\n    ", array_map(function ($key, $value) {
+						return "$key: $value";
+					}, array_keys($debug_data), $debug_data)) . "\n";
+				file_put_contents($board_dir . 'config/production/config.yml', $dump, FILE_APPEND);
+			}
 		}
 		else if (defined('PHPBB_32'))
 		{
 			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
-			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "$s_debug@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 		}
 		else if (defined('PHPBB_31'))
 		{
-			$config_data .= "@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
-			$config_data .= "@define('DEBUG', true);\n";
+			$config_data .= "$s_debug@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
+			$config_data .= "$s_debug@define('DEBUG', true);\n";
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 		}
 		else
 		{
-			$config_data .= "@define('DEBUG', true);\n";
-			$config_data .= "@define('DEBUG_EXTRA', true);\n";
+			$config_data .= "$s_debug@define('DEBUG', true);\n";
+			$config_data .= "$s_debug@define('DEBUG_EXTRA', true);\n";
 			$config_data .= '?' . '>'; // Done this to prevent highlighting editors getting confused!
 		}
 		file_put_contents($board_dir . 'config.' . $phpEx, $config_data);

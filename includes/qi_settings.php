@@ -153,6 +153,7 @@ $template->assign_vars(array(
 	'CONFIG_DBUSER'			=> $settings->get_config('dbuser'),
 	'CONFIG_DEFAULT_STYLE'	=> $settings->get_config('default_style', ''),
 	'CONFIG_DELETE_FILES'	=> $settings->get_config('delete_files', 0),
+	'CONFIG_DEBUG'			=> $settings->get_config('debug', 0),
 	'CONFIG_DROP_DB'		=> $settings->get_config('drop_db', 0),
 	'CONFIG_EMAIL_ENABLE'	=> $settings->get_config('email_enable', 0),
 	'CONFIG_GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions'),
