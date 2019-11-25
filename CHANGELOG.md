@@ -1,5 +1,13 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.6
+- [Feature] Added a new setting to enable/disable Debug mode on boards. Disable it for a production board, or enable it for a development board.
+- [Fix] Fixed compatibility issues with phpBB 3.3.0-b2.
+- [Fix] Fixed compatibility issues with phpBB 4.0.0-a1-dev.
+- [Fix] Fixed compatibility issues with SQLite and phpBB 3.2 (or newer).
+- [Fix] Fixed the config.php files so they have the relevant DEBUG related definitions for a given phpBB board version.
+- [Change] Added badge-styling to the phpBB board version number displayed next to the board name in the QI sidebar.
+
 ## Changes in 1.3.5
 - [Fix] Fixed an issue where search results of pre-populated posts showed unparsed BBCode XML tags.
 - [Fix] Fixed a PHP notice that popped up in QI's templating system with PHP 7.2.

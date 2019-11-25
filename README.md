@@ -1,13 +1,13 @@
 # phpBB QuickInstall
 
-phpBB<sup>&reg;</sup> QuickInstall is a tool used to manage multiple phpBB3 installations. You can quickly install phpBB 3.2.x, 3.1.x and 3.0.x boards with a single mouse click.
+phpBB<sup>&reg;</sup> QuickInstall is a tool used to manage multiple phpBB3 installations. You can quickly install phpBB 3.x.x boards with a single mouse click.
 
 QuickInstall is not intended for use on a live server. It is aimed at users developing extensions and modifications for phpBB. QuickInstall can set up new phpBB boards to develop and test extensions or MODs in without having to worry about conflicts. If you insist on using QuickInstall on a public server, make sure to protect the folder where it is. No support is given for QuickInstall other than local use.   
 
 ## Installation & Setup
 1. Copy the QuickInstall folder to your local web server. Make sure `boards/`, `cache/` and `settings/` are writable by your web server. You can move `boards` and `cache` to other locations after the initial setup if you wish.
 
-2. [Download a copy of phpBB 3.2.x, 3.1.x or 3.0.x](https://www.phpbb.com/downloads/), extract it and copy the phpBB3 folder into `sources/`. Choose the version you do the most work with, for your own convenience.
+2. [Download a copy of phpBB 3.x.x](https://www.phpbb.com/downloads/), extract it and copy the phpBB3 folder into `sources/`. Choose the version you do the most work with, for your own convenience.
 
 3. Point your browser to the QuickInstall folder (e.g., https://localhost/quickinstall). You should be taken directly to the "Install QuickInstall" page. Some default values will already be filled in but you should add your database connection settings. Click "Save" once you have configured all the settings to your liking and you are good to go. If you don't set a profile name, the name "default" will be used.
 
