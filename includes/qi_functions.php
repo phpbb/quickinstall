@@ -243,20 +243,24 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 		$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
 		$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
 		$l_quickinstall = $user->lang['QUICKINSTALL'];
+		$l_for_phpbb_versions = $user->lang['FOR_PHPBB_VERSIONS'];
+		$l_powered_by_phpbb = $user->lang['POWERED_BY_PHPBB'];
 	}
 	else
 	{
 		$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
 		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a>';
 		$l_quickinstall = 'phpBB QuickInstall';
+		$l_for_phpbb_versions = 'for phpBB 3.0 - 4.0';
+		$l_powered_by_phpbb = 'Powered by phpBB<sup>&reg;</sup> Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
 	}
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
 
 	$error_out = file_get_contents($quickinstall_path . 'style/error.html');
 	$error_out = str_replace(
-		array('{L_QUICKINSTALL}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}'),
-		array($l_quickinstall, $quickinstall_path, $msg_title, $msg_explain, $msg_text, $settings_form, $l_return_index, QI_VERSION),
+		array('{L_QUICKINSTALL}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}', '{L_FOR_PHPBB_VERSIONS}', '{L_POWERED_BY_PHPBB}'),
+		array($l_quickinstall, $quickinstall_path, $msg_title, $msg_explain, $msg_text, $settings_form, $l_return_index, QI_VERSION, $l_for_phpbb_versions, $l_powered_by_phpbb),
 		$error_out
 	);
 	echo $error_out;
