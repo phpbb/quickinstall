@@ -226,8 +226,8 @@ class qi_create
 					'twig.enable_debug_extension' => 'false',
 				);
 				$dump = "\nparameters:\n    " . implode("\n    ", array_map(function ($key, $value) {
-						return "$key: $value";
-					}, array_keys($debug_data), $debug_data)) . "\n";
+					return "$key: $value";
+				}, array_keys($debug_data), $debug_data)) . "\n";
 				file_put_contents($board_dir . 'config/production/config.yml', $dump, FILE_APPEND);
 			}
 		}
