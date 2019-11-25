@@ -146,6 +146,7 @@ $lang = array_merge($lang, array(
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
+	'FOR_PHPBB_VERSIONS'		=> 'for phpBB 3.0 - 4.0',
 
 	'GENERAL_ERROR'		=> 'General Error',
 	'GO'				=> 'Go',
@@ -226,6 +227,7 @@ $lang = array_merge($lang, array(
 	'POPULATE_EXPLAIN'	=> 'Populates the board with the number of users, forums, posts and topics you specify below. Note that the more users, forums, posts and topics you specify, the longer it will take to process.',
 	'POPULATE_OPTIONS'	=> 'Populate options',
 	'POPULATE_SETTINGS'	=> 'Populate settings',
+	'POWERED_BY_PHPBB'	=> 'Powered by phpBB<sup>&reg;</sup> Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>',
 	'PROFILES'			=> 'Profiles',
 
 	'QI_ABOUT'			=> 'About',
