@@ -27,63 +27,53 @@ class qi_about
 		include $quickinstall_path . 'includes/Parsedown.' . $phpEx;
 		$Parsedown = new Parsedown();
 
-		$s_docs = legacy_request_var('page', '') === 'docs';
-
-		if ($s_docs)
+		// GET README
+		$doc_file = $quickinstall_path . 'README.md';
+		if (file_exists($doc_file))
 		{
-			$doc_file = $quickinstall_path . 'README.md';
-
-			if (file_exists($doc_file))
-			{
-				$doc_body = file_get_contents($doc_file);
-				$template->assign_var('DOC_BODY', $Parsedown->text($doc_body));
-			}
+			$doc_body = file_get_contents($doc_file);
+			$template->assign_var('DOC_BODY', $Parsedown->text($doc_body));
 		}
-		else
+
+		// GET CHANGELOG
+		$changelog_file = $quickinstall_path . 'CHANGELOG.md';
+		if (file_exists($changelog_file))
 		{
-			$changelog_file = $quickinstall_path . 'CHANGELOG.md';
+			// let's get the changelog :)
+			$data = file($changelog_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-			if (file_exists($changelog_file))
+			// We do not want the first line.
+			unset($data[0]);
+
+			foreach ($data as $row)
 			{
-				// let's get the changelog :)
-				$data = file($changelog_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+				$row = ltrim($row);
 
-				// We do not want the first line.
-				unset($data[0]);
-
-				foreach ($data as $row)
+				if (strpos($row, '#') === 0)
 				{
-					$row = ltrim($row);
+					$key = substr($row, 3);
 
-					if ($row[0] === '#')
-					{
-						$key = substr($row, 3);
+					$template->assign_block_vars('history', array(
+						'CHANGES_SINCE'	=> $key,
 
-						$template->assign_block_vars('history', array(
-							'CHANGES_SINCE'	=> $key,
+						'U_CHANGES'	=> strtolower(str_replace(array(' ', '.'), array('-', ''), $key)),
+					));
+				}
+				else if (strpos($row, '-') === 0)
+				{
+					$change = substr($row, 2);
 
-							'U_CHANGES'	=> strtolower(str_replace(array(' ', '.'), array('-', ''), $key)),
-						));
-					}
-					else if ($row[0] === '-')
-					{
-						$change = substr($row, 2);
-
-						$template->assign_block_vars('history.changelog', array(
-							'CHANGE'	=> $Parsedown->line($change),
-						));
-					}
+					$template->assign_block_vars('history.changelog', array(
+						'CHANGE'	=> $Parsedown->line($change),
+					));
 				}
 			}
 		}
 
-		$template->assign_vars(array(
-			'S_DOCS'	=> $s_docs,
-			'S_ABOUT'	=> !$s_docs,
-		));
+		$template->assign_var('S_DOCS', true);
 
 		// Output page
-		qi::page_header(($s_docs ? $user->lang['DOCS_LONG'] : $user->lang['QI_ABOUT']));
+		qi::page_header($user->lang['DOCS_LONG']);
 
 		$template->set_filenames(array(
 			'body' => 'about_body.html',

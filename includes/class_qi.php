@@ -39,7 +39,6 @@ class qi
 			'PAGE_TITLE'	=> $page_title,
 			'T_THEME_PATH'	=> 'style',
 
-			'U_ABOUT'		=> self::url('about'),
 			'U_DOCS'		=> self::url('docs'),
 			'U_MANAGE'		=> self::url('manage'),
 			'U_MAIN'		=> self::url('main'),

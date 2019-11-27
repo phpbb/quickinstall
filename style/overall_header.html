@@ -37,7 +37,6 @@
 				<!-- ENDIF -->
 				<li<!-- IF S_SETTINGS --> class="active"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_PROFILES}</span></a></li>
 				<li<!-- IF S_DOCS --> class="active"<!-- ENDIF -->><a href="{U_DOCS}"><span>{L_DOCS_LONG}</span></a></li>
-				<li<!-- IF S_ABOUT --> class="active"<!-- ENDIF -->><a href="{U_ABOUT}"><span>{L_QI_ABOUT}</span></a></li>
 				<li<!-- IF S_PHPINFO --> class="active"<!-- ENDIF -->><a href="{U_PHPINFO}"><span>{L_PHPINFO}</span></a></li>
 			</ul>
 		</div>
@@ -90,14 +89,10 @@
 			<!-- BEGINELSE -->
 				<p>{L_NO_BOARDS}</p>
 			<!-- END board_row -->
-			<!-- ELSEIF S_ABOUT -->
-			<h4>{L_ABOUT_SECTIONS}</h4>
+			<!-- ELSEIF S_DOCS -->
+			<h4>{L_DOCS_LONG}</h4>
 			<ul class="nav nav-sidebar">
-				<li><a href="#back-top">{L_BACK_TOP}</a></li>
-				<li><a href="#about-what">{L_WHAT}</a></li>
-				<li><a href="#about-why">{L_WHY}</a></li>
-				<li><a href="#about-who_when">{L_WHO_WHEN}</a></li>
-				<li><a href="#about-who_else">{L_WHO_ELSE}</a></li>
+				<li><a href="#back-top">{L_QUICKINSTALL}</a></li>
 				<li><a href="#about-changelog">{L_CHANGELOG}</a></li>
 				<!-- BEGIN history -->
 				<li><a href="#{history.U_CHANGES}">{history.CHANGES_SINCE}</a></li>
