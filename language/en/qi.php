@@ -218,7 +218,7 @@ $lang = array_merge($lang, array(
 	'OTHER_CONFIG'			=> 'Additional board config settings',
 	'OTHER_CONFIG_EXPLAIN'	=> 'Config settings entered here will be updated in the config table or added to the config table if they don’t exist yet. <u>Make sure to spell correctly.</u> This can also be edited when creating the boards.<br /><br />Type one config setting per line in a semicolon <kbd>;</kbd> separated list e.g., <kbd>config-name;config-setting;dynamic</kbd>. If the setting is not dynamic then the dynamic part is not needed. Lines starting with a <kbd>#</kbd> are considered comments and not added to the DB.<br /><br />Example:<br /><kbd>session_length;999999</kbd><br /><kbd>load_tplcompile;1;1</kbd><br /><kbd># A comment</kbd>',
 
-	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install is not compatible with PHP 7. You are using PHP %s.',
+	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install, phpBB %1$s, is not compatible with PHP %2$s.',
 	'PHPINFO'			=> 'PHP info',
 	'PHPINFO_TITLE'		=> 'PHP information',
 	'PHPINFO_EXPLAIN'	=> 'This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems.<br /><br />Please be aware that some hosting companies will limit what information is displayed here for security reasons.<br /><br />You are advised to only give out details on this page on a need to know basis.',
