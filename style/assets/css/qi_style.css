@@ -142,3 +142,9 @@ footer {
 	filter: alpha(opacity=65);
 	cursor: not-allowed;
 }
+
+.phpbb-logo {
+	background-image: url("../img/logo_small_white.svg");
+	background-repeat: no-repeat;
+	padding-left: 70px;
+}
