@@ -1,4 +1,4 @@
-# phpBB<sup>&reg;</sup> QuickInstall
+# <img height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB">  QuickInstall
 
 QuickInstall is a tool used to manage multiple phpBB3 installations. You can quickly install phpBB 3.x.x boards with a single mouse click.
 
