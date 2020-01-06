@@ -1,5 +1,10 @@
 # QuickInstall Changelog
 
+## Changes in 1.3.7
+- [Fix] Improved PHP version compatibility checks to make sure the version of phpBB you are attempting to install will work with your version of PHP.
+- [Change] The About page has been merged and streamlined with the Documentation page.
+- [Change] Official phpBB logos have been added to QI's headers and page titles.
+
 ## Changes in 1.3.6
 - [Feature] Added a new setting to enable/disable Debug mode on boards. Disable it for a production board, or enable it for a development board.
 - [Fix] Fixed compatibility issues with phpBB 3.3.0-b2.
