@@ -334,8 +334,8 @@ class qi
 
 				$error_out = file_get_contents($quickinstall_path . 'style/error.html');
 				$error_out = str_replace(
-					array('{L_PHPBB_QI_TEXT}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}', '{L_FOR_PHPBB_VERSIONS}', '{L_POWERED_BY_PHPBB}'),
-					array($user->lang['PHPBB_QI_TEXT'], $quickinstall_path, $msg_title, '', $msg_text, '', $l_return_index, QI_VERSION, $user->lang['FOR_PHPBB_VERSIONS'], $user->lang['POWERED_BY_PHPBB']),
+					array('{L_QUICKINSTALL}', '{L_PHPBB_QI_TEXT}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}', '{L_FOR_PHPBB_VERSIONS}', '{L_POWERED_BY_PHPBB}'),
+					array($user->lang['QUICKINSTALL'], $user->lang['PHPBB_QI_TEXT'], $quickinstall_path, $msg_title, '', $msg_text, '', $l_return_index, QI_VERSION, $user->lang['FOR_PHPBB_VERSIONS'], $user->lang['POWERED_BY_PHPBB']),
 					$error_out
 				);
 				if (self::is_ajax())
