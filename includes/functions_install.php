@@ -158,7 +158,24 @@ function load_schema_31($install_path = '', $install_dbms = false)
 		}
 
 		$db_tools = get_db_tools($sqlite_db);
-		$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, $db_tools, $phpbb_root_path, $phpEx, $table_prefix);
+
+		if (defined('PHPBB_40'))
+		{
+			$tables_data = \Symfony\Component\Yaml\Yaml::parseFile($phpbb_root_path . '/config/default/container/tables.yml');
+			$tables = [];
+
+			foreach ($tables_data['parameters'] as $parameter => $table)
+			{
+				$tables[str_replace('tables.', '', $parameter)] = str_replace('%core.table_prefix%', $table_prefix, $table);
+			}
+
+			$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, $db_tools, $phpbb_root_path, $phpEx, $table_prefix, $tables);
+		}
+		else
+		{
+			$schema_generator = new \phpbb\db\migration\schema_generator($classes, new \phpbb\config\config(array()), $sqlite_db, $db_tools, $phpbb_root_path, $phpEx, $table_prefix);
+		}
+
 		$db_table_schema = $schema_generator->get_schema();
 	}
 
