@@ -56,3 +56,12 @@ legend {
 .form-text {
 	font-size: 0.8em;
 }
+
+svg.icon {
+	color: #999999;
+}
+
+.sidebar .nav-link:hover svg.icon,
+.sidebar .nav-link.active svg.icon {
+	color: inherit;
+}

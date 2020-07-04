@@ -76,7 +76,7 @@
 		<div class="card bg-light mb-3">
 			<div class="card-body">
 				<fieldset>
-					<legend>{L_QI_SETTINGS}</legend>
+					<legend>{L_QUICKINSTALL}</legend>
 					<div class="form-group row">
 						<label for="qi_lang" class="col-md-5 col-form-label">{L_QI_LANG}{L_COLON}<span class="form-text text-muted">{L_QI_LANG_EXPLAIN}</span></label>
 						<div class="col-md-7">
@@ -97,6 +97,45 @@
 								<label class="form-check-label" for="qi_config[show_confirm]0">{L_NO}</label>
 							</div>
 						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</section>
+
+	<section id="dir-settings" class="anchor">
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{L_DIR_FILE_SETTINGS}</legend>
+					<div class="form-group row">
+						<label for="cache_dir" class="col-md-5 col-form-label">{L_CACHE_DIR}{L_COLON}<span class="form-text text-muted">{L_CACHE_DIR_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="boards_dir" class="col-md-5 col-form-label">{L_BOARDS_DIR}{L_COLON}<span class="form-text text-muted">{L_BOARDS_DIR_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="boards_url" class="col-md-5 col-form-label">{L_BOARDS_URL}{L_COLON}<span class="form-text text-muted">{L_BOARDS_URL_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}"></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{L_MAKE_WRITABLE}{L_COLON}<span class="form-text text-muted">{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN} {L_THIS_CAN_CHANGE}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]1" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF -->>
+								<label class="form-check-label" for="qi_config[make_writable]1">{L_YES}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]0" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF -->>
+								<label class="form-check-label" for="qi_config[make_writable]0">{L_NO}</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="grant_permissions" class="col-md-5 col-form-label">{L_GRANT_PERMISSIONS}{L_COLON}<span class="form-text text-muted">{L_GRANT_PERMISSIONS_EXPLAIN} {L_NO_IMPACT_WIN}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}"></div>
 					</div>
 				</fieldset>
 			</div>
@@ -149,57 +188,34 @@
 		</div>
 	</section>
 
-	<section id="dir-settings" class="anchor">
+	<section id="server-settings" class="anchor">
 		<div class="card bg-light mb-3">
 			<div class="card-body">
 				<fieldset>
-					<legend>{L_DIR_URL_SETTINGS}</legend>
+					<legend>{L_SERVER_SETTINGS}</legend>
 					<div class="form-group row">
-						<label for="cache_dir" class="col-md-5 col-form-label">{L_CACHE_DIR}{L_COLON}<span class="form-text text-muted">{L_CACHE_DIR_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}"></div>
+						<label for="server_name" class="col-md-5 col-form-label">{L_SERVER_NAME}{L_COLON}<span class="form-text text-muted">{L_SERVER_NAME_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}"></div>
 					</div>
 					<div class="form-group row">
-						<label for="boards_dir" class="col-md-5 col-form-label">{L_BOARDS_DIR}{L_COLON}<span class="form-text text-muted">{L_BOARDS_DIR_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}"></div>
+						<label for="server_port" class="col-md-5 col-form-label">{L_SERVER_PORT}{L_COLON}<span class="form-text text-muted">{L_SERVER_PORT_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="server_port" name="qi_config[server_port]" value="{CONFIG_SERVER_PORT}"></div>
 					</div>
 					<div class="form-group row">
-						<label for="boards_url" class="col-md-5 col-form-label">{L_BOARDS_URL}{L_COLON}<span class="form-text text-muted">{L_BOARDS_URL_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}"></div>
+						<label for="cookie_domain" class="col-md-5 col-form-label">{L_COOKIE_DOMAIN}{L_COLON}<span class="form-text text-muted">{L_COOKIE_DOMAIN_EXPLAIN}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{CONFIG_COOKIE_DOMAIN}"></div>
 					</div>
 					<div class="form-group row">
-						<label class="col-md-5 col-form-label">{L_MAKE_WRITABLE}{L_COLON}<span class="form-text text-muted">{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN} {L_THIS_CAN_CHANGE}</span></label>
+						<label class="col-md-5 col-form-label">{L_COOKIE_SECURE}{L_COLON}<span class="form-text text-muted">{L_COOKIE_SECURE_EXPLAIN}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]1" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF -->>
-								<label class="form-check-label" for="qi_config[make_writable]1">{L_YES}</label>
+								<input class="form-check-input" type="radio" name="qi_config[cookie_secure]" id="qi_config[cookie_secure]1" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF -->>
+								<label class="form-check-label" for="qi_config[cookie_secure]1">{L_YES}</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]0" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF -->>
-								<label class="form-check-label" for="qi_config[make_writable]0">{L_NO}</label>
+								<input class="form-check-input" type="radio" name="qi_config[cookie_secure]" id="qi_config[cookie_secure]0" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF -->>
+								<label class="form-check-label" for="qi_config[cookie_secure]0">{L_NO}</label>
 							</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="grant_permissions" class="col-md-5 col-form-label">{L_GRANT_PERMISSIONS}{L_COLON}<span class="form-text text-muted">{L_GRANT_PERMISSIONS_EXPLAIN} {L_NO_IMPACT_WIN}</span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}"></div>
-					</div>
-				</fieldset>
-			</div>
-		</div>
-	</section>
-
-	<section id="time-settings" class="anchor">
-		<div class="card bg-light mb-3">
-			<div class="card-body">
-				<fieldset>
-					<legend>{L_TIME_SETTINGS}</legend>
-					<div class="form-group row">
-						<label for="qi_tz" class="col-md-5 col-form-label">{L_QI_TZ}{L_COLON}<span class="form-text text-muted">{L_QI_TZ_EXPLAIN}</span></label>
-						<div class="col-md-7">
-							<select name="qi_config[qi_tz]" id="qi_tz" class="custom-select">
-								<option value="">{L_SELECT_TIMEZONE}</option>
-								{TIMEZONE_OPTIONS}
-							</select>
 						</div>
 					</div>
 				</fieldset>
@@ -229,35 +245,35 @@
 		</div>
 	</section>
 
-	<section id="server-settings" class="anchor">
+	<section id="config-settings" class="anchor">
 		<div class="card bg-light mb-3">
 			<div class="card-body">
 				<fieldset>
-					<legend>{L_SERVER_COOKIE_SETTINGS}</legend>
+					<legend>{L_BOARD_CONFIG_SETTINGS}</legend>
 					<div class="form-group row">
-						<label for="server_name" class="col-md-5 col-form-label">{L_SERVER_NAME}{L_COLON}<span class="form-text text-muted">{L_SERVER_NAME_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}"></div>
+						<label for="site_name" class="col-md-5 col-form-label">{L_SITE_NAME}{L_COLON}<span class="form-text text-muted">{L_SITE_NAME_EXPLAIN} {L_THIS_CAN_CHANGE} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}"></div>
 					</div>
 					<div class="form-group row">
-						<label for="server_port" class="col-md-5 col-form-label">{L_SERVER_PORT}{L_COLON}<span class="form-text text-muted">{L_SERVER_PORT_EXPLAIN} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="server_port" name="qi_config[server_port]" value="{CONFIG_SERVER_PORT}"></div>
+						<label for="site_desc" class="col-md-5 col-form-label">{L_SITE_DESC}{L_COLON}<span class="form-text text-muted">{L_SITE_DESC_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}"></div>
 					</div>
 					<div class="form-group row">
-						<label for="cookie_domain" class="col-md-5 col-form-label">{L_COOKIE_DOMAIN}{L_COLON}<span class="form-text text-muted">{L_COOKIE_DOMAIN_EXPLAIN}</span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{CONFIG_COOKIE_DOMAIN}"></div>
+						<label for="default_lang" class="col-md-5 col-form-label">{L_DEFAULT_LANG}{L_COLON}<span class="form-text text-muted">{L_DEFAULT_LANG_EXPLAIN}</span></label>
+						<div class="col-md-7"><select class="custom-select" id="default_lang" name="qi_config[default_lang]">{PHPBB_LANG}</select></div>
 					</div>
 					<div class="form-group row">
-						<label class="col-md-5 col-form-label">{L_COOKIE_SECURE}{L_COLON}<span class="form-text text-muted">{L_COOKIE_SECURE_EXPLAIN}</span></label>
+						<label for="qi_tz" class="col-md-5 col-form-label">{L_QI_TZ}{L_COLON}<span class="form-text text-muted">{L_QI_TZ_EXPLAIN}</span></label>
 						<div class="col-md-7">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="qi_config[cookie_secure]" id="qi_config[cookie_secure]1" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF -->>
-								<label class="form-check-label" for="qi_config[cookie_secure]1">{L_YES}</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="qi_config[cookie_secure]" id="qi_config[cookie_secure]0" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF -->>
-								<label class="form-check-label" for="qi_config[cookie_secure]0">{L_NO}</label>
-							</div>
+							<select name="qi_config[qi_tz]" id="qi_tz" class="custom-select">
+								<option value="">{L_SELECT_TIMEZONE}</option>
+								{TIMEZONE_OPTIONS}
+							</select>
 						</div>
+					</div>
+					<div class="form-group row">
+						<label for="other_config" class="col-md-5 col-form-label">{L_OTHER_CONFIG}{L_COLON}<span class="form-text text-muted">{L_OTHER_CONFIG_EXPLAIN}</span></label>
+						<div class="col-md-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>
 					</div>
 				</fieldset>
 			</div>
@@ -332,38 +348,11 @@
 		</div>
 	</section>
 
-	<section id="config-settings" class="anchor">
-		<div class="card bg-light mb-3">
-			<div class="card-body">
-				<fieldset>
-					<legend>{L_BOARD_CONFIG_SETTINGS}</legend>
-					<div class="alert alert-info">ℹ️ {L_BOARD_CONFIG_SETTINGS_EXPLAIN}</div>
-					<div class="form-group row">
-						<label for="site_name" class="col-md-5 col-form-label">{L_SITE_NAME}{L_COLON}<span class="form-text text-muted">{L_SITE_NAME_EXPLAIN} {L_THIS_CAN_CHANGE} <span class="badge badge-secondary">{L_REQUIRED}</span></span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}"></div>
-					</div>
-					<div class="form-group row">
-						<label for="site_desc" class="col-md-5 col-form-label">{L_SITE_DESC}{L_COLON}<span class="form-text text-muted">{L_SITE_DESC_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
-						<div class="col-md-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}"></div>
-					</div>
-					<div class="form-group row">
-						<label for="default_lang" class="col-md-5 col-form-label">{L_DEFAULT_LANG}{L_COLON}<span class="form-text text-muted">{L_DEFAULT_LANG_EXPLAIN}</span></label>
-						<div class="col-md-7"><select class="custom-select" id="default_lang" name="qi_config[default_lang]">{PHPBB_LANG}</select></div>
-					</div>
-					<div class="form-group row">
-						<label for="other_config" class="col-md-5 col-form-label">{L_OTHER_CONFIG}{L_COLON}<span class="form-text text-muted">{L_OTHER_CONFIG_EXPLAIN}</span></label>
-						<div class="col-md-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>
-					</div>
-				</fieldset>
-			</div>
-		</div>
-	</section>
-
 	<section id="populate-settings" class="anchor">
 		<div class="card bg-light mb-3">
 			<div class="card-body">
 				<fieldset>
-					<legend>{L_POPULATE_SETTINGS}</legend>
+					<legend>{L_POPULATE_OPTIONS}</legend>
 					<div class="alert alert-info">ℹ️ {L_THESE_CAN_CHANGE}</div>
 					<div class="form-group row">
 						<label class="col-md-5 col-form-label">{L_POPULATE}{L_COLON}<span class="form-text text-muted">{L_POPULATE_EXPLAIN}</span></label>
@@ -472,7 +461,7 @@
 		<div class="card bg-light mb-3">
 			<div class="card-body">
 				<fieldset>
-					<legend>{L_MISC_SETTINGS}</legend>
+					<legend>{L_INSTALL_OPTIONS}</legend>
 					<div class="alert alert-info">ℹ️ {L_THESE_CAN_CHANGE}</div>
 					<div class="form-group row">
 						<label for="alt_env" class="col-md-5 col-form-label">{L_ALT_ENV}{L_COLON}<span class="form-text text-muted">{L_ALT_ENV_EXPLAIN}</span></label>
