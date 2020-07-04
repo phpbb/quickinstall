@@ -42,7 +42,6 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'ABOUT_QUICKINSTALL'	=> 'About phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
 	'ADMIN_EMAIL'			=> 'Administrator email',
 	'ADMIN_EMAIL_EXPLAIN'	=> 'The email to assign to the admin account created for your boards.',
 	'ADMIN_NAME'			=> 'Administrator username',
@@ -215,7 +214,7 @@ $lang = array_merge($lang, array(
 	'OTHER_CONFIG'			=> 'Additional board config settings',
 	'OTHER_CONFIG_EXPLAIN'	=> 'Config settings entered here will be updated in the config table or added to the config table if they don’t exist yet. <u>Make sure to spell correctly.</u> This can also be edited when creating the boards.<br /><br />Type one config setting per line in a semicolon <kbd>;</kbd> separated list e.g., <kbd>config-name;config-setting;dynamic</kbd>. If the setting is not dynamic then the dynamic part is not needed. Lines starting with a <kbd>#</kbd> are considered comments and not added to the DB.<br /><br />Example:<br /><kbd>session_length;999999</kbd><br /><kbd>load_tplcompile;1;1</kbd><br /><kbd># A comment</kbd>',
 
-	'PHPBB_QI_TEXT'		=> 'phpBB<small><sup><i class="glyphicon glyphicon-registration-mark" aria-hidden="true"></i></sup></small> QuickInstall',
+	'PHPBB_QI_TEXT'		=> 'phpBB<small><sup>&reg;</sup></small> QuickInstall',
 	'PHPBB_QI_TITLE'	=> 'phpBB&reg; QuickInstall',
 
 	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install, phpBB %1$s, is not compatible with PHP %2$s.',

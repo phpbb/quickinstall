@@ -1,6 +1,6 @@
 # <img height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB">  QuickInstall
 
-QuickInstall is a tool used to manage multiple phpBB3 installations. You can quickly install phpBB 3.x.x boards with a single mouse click.
+QuickInstall is a developer tool used to create multiple phpBB3 installations. You can quickly install phpBB 3.x.x boards with a single mouse click.
 
 QuickInstall is aimed at users developing extensions and modifications for phpBB. The days of phpBB 2.x and 3.0 were all about modding (creating modifications). Authors could not effectively develop and test all their MODs in a single phpBB installation. QuickInstall was born to speed up and simplify the process of creating separate fresh installations for each of their MODs. Now, in the era of extensions, QuickInstall is still just as useful for rapidly generating fresh installations to safely install, develop and test extensions in without having to worry about conflicts. 
 
