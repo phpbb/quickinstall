@@ -32,10 +32,19 @@ QuickInstall stores all passwords in a plain text file. They are hidden in the u
 
 * If upgrading from QuickInstall earlier than 1.1.8, make sure the new `settings/` folder is writable by PHP and point your browser to your QuickInstall folder. QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default". Make sure the settings are in order and click "Save".
 
-## Support and Bugs
+## Contributing
 You can receive support at [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support).
 
 Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickinstall/issues). Even reports for small bugs are welcome to help make QuickInstall even better than it is now.
+
+Feel free to contribute to this project. Submit Pull Requests with any bug fixes or feature enhancements. 
+
+> Note: QuickInstall uses the Bootstrap framework which is compiled via NPM and located in the `develop` folder. To update or customise Quickinstall's Bootstrap files you must:
+> - Have Node JS installed.
+> - Navigate to the develop folder, `$ cd develop`.
+> - Run `$ npm update bootstrap` to update to the latest Bootstrap release.
+> - Edit the `qi_bootstrap.scss` file to customise Bootstrap variables.
+> - Run `$ npm run all` to compile and deploy Bootstrap to QuickInstall.
 
 ## Credits
 The project is maintained by the phpBB Extensions Team.
