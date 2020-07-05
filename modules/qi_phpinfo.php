@@ -95,11 +95,7 @@ class qi_phpinfo
 		// Output page
 		qi::page_header($user->lang['PHPINFO']);
 
-		$template->set_filenames(array(
-			'body' => 'phpinfo_body.html',
-		));
-
-		qi::page_footer();
+		qi::page_display('phpinfo_body');
 	}
 
 	public function remove_spaces($matches)

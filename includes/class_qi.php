@@ -69,11 +69,11 @@ class qi
 	/**
 	* Output the standard page footer
 	*/
-	public static function page_footer()
+	public static function page_display($filename)
 	{
 		global $db, $template;
 
-		$template->display('body');
+		$template->display($filename);
 
 		// Close our DB connection.
 		if (!empty($db) && is_object($db))
@@ -353,7 +353,6 @@ class qi
 					'L_POWERED_BY_PHPBB'   => $user->lang['POWERED_BY_PHPBB'],
 				]);
 
-				$template->set_filenames(['error' => 'error.html']);
 				$template->display('error');
 
 				// As a pre-caution... some setups display a blank page if the flush() is not there.

@@ -31,11 +31,6 @@ class twig
 	/**
 	 * @var array
 	 */
-	protected $templateFiles = [];
-
-	/**
-	 * @var array
-	 */
 	protected $variables = [];
 
 	/**
@@ -53,7 +48,6 @@ class twig
 		$this->twig = new Environment($loader, [
 			'cache' => $cachepath,
 			'autoescape' => false,
-			'auto_reload' => true,
 		]);
 
 		$this->twig->addFunction(
@@ -61,16 +55,6 @@ class twig
 		);
 
 		$this->user = $user;
-	}
-
-	/**
-	 * Sets the template filenames for handles.
-	 *
-	 * @param array $filenames Should be a hash of handle => filename pairs.
-	 */
-	public function set_filenames(array $filenames)
-	{
-		$this->templateFiles = array_merge($this->templateFiles, $filenames);
 	}
 
 	/**
@@ -97,7 +81,7 @@ class twig
 	 */
 	public function display($templateFile)
 	{
-		echo $this->twig->render($this->templateFiles[$templateFile], $this->variables);
+		echo $this->twig->render("$templateFile.html", $this->variables);
 	}
 
 	/**
