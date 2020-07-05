@@ -10,12 +10,11 @@ legend {
 
 /* workaround to reposition anchor links under navbar */
 .anchor {
-	margin-top: -60px;
-	padding-top: 60px;
+	margin-top: -64px;
+	padding-top: 64px;
 }
 
 .sidebar {
-	font-size: .875rem;
 	text-align: left;
 	border-right: 1px solid #eeeeee;
 	position: fixed;
@@ -50,11 +49,15 @@ legend {
 .phpbb-logo {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
-	padding-left: 74px;
+	padding-left: 70px;
 }
 
 .form-text {
-	font-size: 0.8em;
+	font-size: 0.8rem;
+}
+
+.navbar {
+	font-size: 1rem;
 }
 
 svg.icon {

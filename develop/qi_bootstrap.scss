@@ -1,10 +1,12 @@
 // Define QI theme variables for Bootstrap
-$white:   #fff !default;
-$primary: #47A1EB !default;
+$white:   #fff;
+$primary: #47A1EB;
 
-$navbar-dark-color: rgba($white,.8) !default;
-$navbar-dark-hover-color: $white !default;
-$navbar-dark-toggler-border-color: transparent !default;
+$font-size-base: 0.875rem;
+
+$navbar-dark-color: rgba($white,.8);
+$navbar-dark-hover-color: $white;
+$navbar-dark-toggler-border-color: transparent;
 
 // Import Bootstrap (do not change this line)
 @import "node_modules/bootstrap/scss/bootstrap.scss";
