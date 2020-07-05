@@ -8,6 +8,7 @@
 */
 
 define('QI_VERSION', '1.4.0-dev');
+//define('QI_DEBUG', true); // un-comment this disable template caching
 
 // Cookies set by QI
 define('QI_PROFILE_COOKIE', 'qi_profile');	// Cookie with the latest used profile name as payload.
