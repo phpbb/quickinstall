@@ -294,8 +294,8 @@ $lang = array_merge($lang, array(
 	'THIS_CAN_CHANGE'		=> 'This can be changed when you create a board.',
 	'TIME_SETTINGS'			=> 'Time settings',
 
-	'UNCHECK_ALL'		=> 'Uncheck all',
-	'UPDATE'			=> 'Update',
+	'UNCHECK_ALL'			=> 'Uncheck all',
+	'UPDATE_AVAILABLE'		=> 'Update available',
 
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 
