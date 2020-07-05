@@ -60,7 +60,7 @@
 				{% if PROFILE_COUNT > 1 %}
 				<div class="form-group row">
 					<div class="col-md-7 offset-md-5">
-						<input type="submit" name="delete-profile" id="delete-profile" value="{{ lang('DELETE_PROFILE') }}" class="btn btn-danger"{% if S_SHOW_CONFIRM %} data-confirm="{{ lang('SURE_DELETE_PROFILE') }}"{% endif %}>
+						<input type="submit" name="delete-profile" id="delete-profile" value="{{ lang('DELETE_PROFILE') }}" class="btn btn-danger" data-confirm="{{ lang('SURE_DELETE_PROFILE') }}">
 					</div>
 				</div>
 				{% endif %}
@@ -83,19 +83,6 @@
 							<select id="qi_lang" name="qi_config[qi_lang]" class="custom-select" data-load-selection="index.php?page=settings&amp;lang=">
 								{{ QI_LANG }}
 							</select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-md-5 col-form-label">{{ lang('SHOW_CONFIRM') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SHOW_CONFIRM_EXPLAIN') }}</span></label>
-						<div class="col-md-7">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="qi_config[show_confirm]" id="qi_config[show_confirm]1" value="1"{% if CONFIG_SHOW_CONFIRM == 1 %} checked="checked"{% endif %}>
-								<label class="form-check-label" for="qi_config[show_confirm]1">{{ lang('YES') }}</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="qi_config[show_confirm]" id="qi_config[show_confirm]0" value="0"{% if CONFIG_SHOW_CONFIRM == 0 %} checked="checked"{% endif %}>
-								<label class="form-check-label" for="qi_config[show_confirm]0">{{ lang('NO') }}</label>
-							</div>
 						</div>
 					</div>
 				</fieldset>
