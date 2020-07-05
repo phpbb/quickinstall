@@ -34,63 +34,14 @@
 	<div class="row">
 		<div class="col-md-3 col-lg-2 sidebar d-none d-md-block" id="sidebar" role="navigation">
 			{% if S_SETTINGS %}
-			<h5>{{ lang('SETTINGS_SECTIONS') }}</h5>
-			<ul class="nav flex-column">
-				<li class="nav-item py-1"><a class="nav-link" href="#back-top"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#arrow-90deg-up"/></svg> {{ lang('BACK_TOP') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#profiles"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#collection"/></svg> {{ lang('PROFILES') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#qi-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#lightning-fill"/></svg> {{ lang('QUICKINSTALL') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#db-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#clipboard-data"/></svg> {{ lang('DB_SETTINGS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#server-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#hdd-network"/></svg> {{ lang('SERVER_SETTINGS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#admin-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#person-circle"/></svg> {{ lang('ADMIN_SETTINGS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#config-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#sliders"/></svg> {{ lang('BOARD_CONFIG_SETTINGS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#email-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#envelope"/></svg> {{ lang('EMAIL_SETTINGS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#populate-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#people"/></svg> {{ lang('POPULATE_OPTIONS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#misc-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#gear"/></svg> {{ lang('INSTALL_OPTIONS') }}</a></li>
-				<li class="nav-item py-1"><a class="nav-link" href="#save-settings"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#arrow-down-circle"/></svg> {{ lang('SAVE_SETTINGS') }}</a></li>
-			</ul>
+				{% include 'sidebar_settings.html' %}
 			{% elseif S_MAIN %}
-			<h5>{{ lang('BOARDS_LIST') }}</h5>
-			{% for board in board_row %}
-				{% if loop.first %}
-					<form id="del_board" method="post" action="{{ U_MANAGE }}">
-				{% endif %}
-						<div class="custom-control custom-checkbox mb-1">
-							<input type="checkbox" class="custom-control-input" data-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}">
-							<label class="custom-control-label" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}"><strong>{{ board.BOARD_NAME }}</strong></a>{% if board.VERSION %} <span class="badge badge-secondary">{{ board.VERSION }}</span>{% endif %}</label>
-						</div>
-				{% if loop.last %}
-						<div class="custom-control custom-switch mb-3">
-							<input type="checkbox" class="custom-control-input" id="toggle_all" data-mark-list="markall" data-mark-target="#del_board">
-							<label class="custom-control-label" for="toggle_all">{{ lang('CHECK_ALL') }}</label>
-						</div>
-						<p>
-							<input class="btn btn-primary btn-sm" name="delete" type="submit" value="{{ lang('DELETE_SELECTED') }}" data-confirm="{{ lang('SURE_DELETE_BOARDS') }}" />
-						</p>
-					</form>
-				{% endif %}
-			{% else %}
-				<p>{{ lang('NO_BOARDS') }}</p>
-			{% endfor %}
+				{% include 'sidebar_boards.html' %}
 			{% elseif S_DOCS %}
-			<h5>{{ lang('DOCS_LONG') }}</h5>
-			<ul class="nav flex-column">
-				<li class="nav-item"><a class="nav-link" href="#back-top">{{ lang('PHPBB_QI_TEXT') }}</a></li>
-				<li class="nav-item"><a class="nav-link" href="#about-changelog">{{ lang('CHANGELOG') }}</a></li>
-				{% for change in history %}
-				<li class="nav-item"><a class="nav-link" href="#{{ change.U_CHANGES }}"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#journal-code"/></svg> {{ change.CHANGES_SINCE }}</a></li>
-				{% endfor %}
-			</ul>
+				{% include 'sidebar_docs.html' %}
 			{% elseif S_PHPINFO %}
-			<input id="phpinfo-filter" type="text" class="form-control" placeholder="{{ lang('SEARCH_HERE') }}">
-			<br />
-			<ul class="nav flex-column">
-				<li class="nav-item"><a class="nav-link" href="#back-top">{{ lang('BACK_TOP') }}</a></li>
-				{% for info in phpinfo %}
-				<li class="nav-item"><a class="nav-link" href="#{{ info.U_ANCHOR }}">{{ info.TITLE }}</a></li>
-				{% endfor %}
-			</ul>
+				{% include 'sidebar_phpinfo.html' %}
 			{% endif %}
-
 		</div>
 		<div class="col-md-9 ml-sm-auto col-lg-10 px-5">
 			<div id="main">
