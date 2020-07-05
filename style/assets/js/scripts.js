@@ -66,7 +66,7 @@
 		// mark all / unmark all checkboxes
 		$("[data-mark-list]").on("click", function (e) {
 			var target = $(this).attr("data-mark-target");
-			var checks = $(target).find("input[type=checkbox]");
+			var checks = $(target).find("[data-mark]");
 			checks.prop("checked", $(this).prop("checked"));
 		});
 
