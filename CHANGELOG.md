@@ -1,11 +1,20 @@
 # QuickInstall Changelog
 
-## Changes in 1.3.7
+## Version 1.4.0
+- [Change] Re-styled some of QI's UX elements including sidebar menus, buttons and various other form elements.
+- [Change] Migrated QI's Bootstrap framework to version 4.5.
+- [Change] Bootstrap framework now managed as an NPM library, located in the new `develop` folder. Contributors can use NPM commands to update, customise, compile and deploy Bootstrap to QI (see README).
+- [Change] Migrated QI's templating framework over to Twig. All QI html files now use Twig syntax. Contributors can use Composer commands to update Twig, located in the `vendor` directory.
+- [Feature] Added a `DEBUG` constant to `qi_constants.php`. Contributors can un-comment it while developing QI to disable template caching.
+- [Fix] Fixed an issue with the migration schema generator that blocked QI from working with phpBB 4.0.0-dev.
+- [Fix] Fixed some issues with language vars not working on error pages.
+
+## Version 1.3.7
 - [Fix] Improved PHP version compatibility checks to make sure the version of phpBB you are attempting to install will work with your version of PHP.
 - [Change] The About page has been merged and streamlined with the Documentation page.
 - [Change] Official phpBB logos have been added to QI's headers and page titles.
 
-## Changes in 1.3.6
+## Version 1.3.6
 - [Feature] Added a new setting to enable/disable Debug mode on boards. Disable it for a production board, or enable it for a development board.
 - [Fix] Fixed compatibility issues with phpBB 3.3.0-b2.
 - [Fix] Fixed compatibility issues with phpBB 4.0.0-a1-dev.
@@ -13,25 +22,25 @@
 - [Fix] Fixed the config.php files so they have the relevant DEBUG related definitions for a given phpBB board version.
 - [Change] Added badge-styling to the phpBB board version number displayed next to the board name in the QI sidebar.
 
-## Changes in 1.3.5
+## Version 1.3.5
 - [Fix] Fixed an issue where search results of pre-populated posts showed unparsed BBCode XML tags.
 - [Fix] Fixed a PHP notice that popped up in QI's templating system with PHP 7.2.
 
-## Changes in 1.3.4
+## Version 1.3.4
 - [Fix] Fixed an issue introduced in 1.3.3 that caused a fatal error while installing 3.0 boards.
 
-## Changes in 1.3.3
+## Version 1.3.3
 - [Fix] phpBB 3.2.3 can now be installed with QI without failing and getting hung up.
 
-## Changes in 1.3.2
+## Version 1.3.2
 - [Change] Sort profiles naturally in drop down lists.
 - [Fix] Corrected potential problems with how URLs are generated internally.
 
-## Changes in 1.3.1
+## Version 1.3.1
 - [Feature] Added QI version update check. New version notifications will be available in the header nav-bar.
 - [Fix] Correctly allow dot in board directory name.
 
-## Changes in 1.3.0
+## Version 1.3.0
 - [Change] QuickInstall has a new paint-job, with a fresh modern look...a flat, responsive, prosilver inspired theme.
 - [Change] Rewrote all javascript functionality from the ground up, using jQuery.
 - [Change] Updated the README/Documentation and About information.
@@ -54,20 +63,20 @@
 - [Feature] Added ability to copy the raw config data that is presented when the settings.cfg can not be written.
 - [Feature] Use cache busting for CSS and JS using QI version to ensure upgrades get fresh assets.
 
-## Changes in 1.2.5
+## Version 1.2.5
 - [Fix] Issue #75 Fixed issues with creating boards using a PostgreSQL database.
 - [Fix] Corrected an issue where clicking the Documentation tabs led to PHP errors.
 
-## Changes in 1.2.4
+## Version 1.2.4
 - [Fix] Issue #71 Converted README and CHANGELOG to markdown. Correctly parse markdown in the Documentation and About tabs.
 - [Fix] Issue #69 Correctly handle backslashes in the generated config.php file for phpBB >= 3.1.
 
-## Changes in 1.2.3
+## Version 1.2.3
 - [Fix] Issue #64 Fix incorrect post count totals.
 - [Fix] Issue #63 Correctly calculate dates for users, posts, and the board start date when populating the board.
 - [Fix] Issue #62 Fix display issues with the settings menu sidebar on smaller screens/windows.
 
-## Changes in 1.2.2
+## Version 1.2.2
 - [Feature] Supports phpBB 3.2 boards
 - [Fix] Issue #55 Improve compatibility with PHP 7
 - [Fix] Issue #49 Removed closing php tag from generated config.php file
@@ -76,7 +85,7 @@
 - [Change] Sort boards in a natural order (10 > 9).
 - [Change] Added a scroll bar to the boards list.
 
-## Changes in 1.2.1
+## Version 1.2.1
 - [Fix] Bug in the routine to purge the cache.
 - [Fix] Ticket #EXTTOOLS-655 The redirect got two slashes in the URL when QI was installed in localhost root.
 - [Fix] Write correct phpBB version (3.1 or 3.0) in config.php.
@@ -111,7 +120,7 @@
 - [Feature] Added a documentation tab, with info currently from readme.txt.
 - [Feature] Only display the DBMS whose extensions are loaded on the settings page.
 
-## Changes in 1.2.0
+## Version 1.2.0
 - [Fix] Ticket #63309 The first release in the changelog was broken.
 - [Fix] Ticket #63317 The "Forgot this" error message improved and also works with rtl languages.
 - [Fix] Ticket #63318 Fixed language string error. The directory includes/automod don't exist.
@@ -145,7 +154,7 @@
 - [Feature] Supports both phpBB 3.0 and 3.1 (By Nicofuma)
 - [Feature] Added a easy way to get the cache purged when working on QI.
 
-## Changes in 1.1.8
+## Version 1.1.8
 - [Fix] Some language edits and spelling fixes.
 - [Fix] Check that the boards directory exists and is writeable.
 - [Fix] Create one user per minute and one post per second, or actually change the timestamp.
@@ -217,7 +226,7 @@
 - [Feature] Added option to not save passwords and/or admin/db-user names. They will be required when creating a board.
 - [Feature] Use JS to check that the required fields are filled.
 
-## Changes in 1.1.6
+## Version 1.1.6
 - [Fix] Make sure phpBB exists before trying to load it.
 - [Fix] Allow localized usernames. Bug #62563
 - [Fix] Added gitattributes to not export all .gitkeep files.
@@ -231,29 +240,29 @@
 - [Change] Moved some AutoMOD installation to QI instead of MODding UMIL or AutoMOD.
 - [Feature] Added option so set how many users, forums, topics and posts that will be created.
 
-## Changes in 1.1.5
+## Version 1.1.5
 - [Fix] Set the new boards language directory as custom language path.
 - [Change] Moved to github.
 - [Change] Deleted phpBB from the sources/ dir. I now needs to be downloaded from http://www.phpbb.com/.
 
-## Changes in 1.1.4
+## Version 1.1.4
 - [Change] Finally moved to MOD Teams repo.
 - [Change] Updated to AutoMOD 1.0.0.
 - [Feature] AutoMOD setting "Preview changes" is on as default.
 
-## Changes in 1.1.3
+## Version 1.1.3
 - [Fix] Restore the admin after making all posts and users to get the logs correct.
 - [Fix] Reset the admin in umil_auto.php for the logs.
 - [Feature] Added French.
 - [Change] Replaced the language text input with a select.
 
-## Changes in 1.1.2
+## Version 1.1.2
 - [Fix] If installed, Subsilver2 was always made the default style.
 
-## Changes in 1.1.1
+## Version 1.1.1
 - [Feature] Option to install Subsilver2.
 
-## Changes in 1.1.0
+## Version 1.1.0
 - [Feature] Option to make files writable.
 - [Feature] Option to populate forum with users and posts.
 - [Change] Updated to AutoMOD 1.0.0-RC4
@@ -274,47 +283,47 @@
 - [Feature] Added installation/settings page
 - [Feature] Validates the settings on page load.
 
-## Changes in 1.0.10
+## Version 1.0.10
 - [Change] Updating for phpBB 3.0.4
 - [Change] Updating for AutoMOD 1.0.0-b2
 - [Feature] Allow users to choose an alternate enviroment
 
-## Changes in 1.0.9
+## Version 1.0.9
 - [Change] Put default site_name and site_desc on main page (thanks exreaction)
 - [Change] Updating for phpBB 3.0.2
 
-## Changes in 1.0.8
+## Version 1.0.8
 - [Change] Updating for phpBB 3.0.1
 
-## Changes in 1.0.7
+## Version 1.0.7
 - [Fix] Updated version number in footer.
 - [Fix] Added some more security.
 - [Change] Partial rewrite.
 - [Change] Blinky (easymod) support.
 
-## Changes in 1.0.6
+## Version 1.0.6
 - [Change] Added hook functionality (auto include files).
 - [Change] Updated for phpBB 3.0.0 (Gold).
 
-## Changes in 1.0.5
+## Version 1.0.5
 - [Change] Updated for phpBB 3.0.RC7.
 
-## Changes in 1.0.4
+## Version 1.0.4
 - [Fix] Fixed bug in about_body.html.
 - [Fix] Fixed some other minon stuff.
 - [Change] Added SQLite support.
 - [Change] Updated for phpBB 3.0.RC6.
 
-## Changes in 1.0.3
+## Version 1.0.3
 - [Change] Updated for phpBB 3.0.RC5.
 
-## Changes in 1.0.2
+## Version 1.0.2
 - [Fix] Fixed language string.
 
-## Changes in 1.0.1
+## Version 1.0.1
 - [Change] Updated for phpBB 3.0.RC4.
 
-## Changes in 1.0.0
+## Version 1.0.0
 - [Feature] Added a changelog to the about page.
 - [Feature] Added possibility of a database prefix. This also keeps the databases more organised.
 - [Fix] Adjusted some of the language.

@@ -48,6 +48,7 @@ class twig
 		$this->twig = new Environment($loader, [
 			'cache' => $cachepath,
 			'autoescape' => false,
+			'auto_reload' => defined('QI_DEBUG'),
 		]);
 
 		$this->twig->addFunction(
