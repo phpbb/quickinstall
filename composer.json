@@ -1,0 +1,25 @@
+{
+  "name": "phpbb/quickinstall",
+  "description": "QuickInstall is a developer tool used to create multiple phpBB3 installations.",
+  "homepage": "https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall",
+  "version": "1.3.7",
+  "license": "GPL-2.0-only",
+  "authors": [
+    {
+      "name": "Matt Friedman",
+      "role": "Extensions Development Team Lead"
+    },
+    {
+      "name": "Igor Wiedler (igorw)",
+      "role": "Created by"
+    },
+    {
+      "name": "Jari Kanerva (tumba25)",
+      "role": "Maintained from March 2010 to March 2015"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "twig/twig": "^2.0"
+  }
+}
