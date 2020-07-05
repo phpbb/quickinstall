@@ -201,8 +201,4 @@ $template->assign_vars(array(
 // Output page
 qi::page_header($user->lang['PROFILES']);
 
-$template->set_filenames(array(
-	'body' => 'settings_body.html')
-);
-
-qi::page_footer();
+qi::page_display('settings_body');

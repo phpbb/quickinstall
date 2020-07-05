@@ -75,10 +75,6 @@ class qi_about
 		// Output page
 		qi::page_header($user->lang['DOCS_LONG']);
 
-		$template->set_filenames(array(
-			'body' => 'about_body.html',
-		));
-
-		qi::page_footer();
+		qi::page_display('about_body');
 	}
 }

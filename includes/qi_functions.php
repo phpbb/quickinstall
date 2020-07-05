@@ -277,7 +277,6 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 		'L_POWERED_BY_PHPBB'   => $l_powered_by_phpbb,
 	]);
 
-	$template->set_filenames(['error' => 'error.html']);
 	$template->display('error');
 
 	exit;

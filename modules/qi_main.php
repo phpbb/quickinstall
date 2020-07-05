@@ -98,10 +98,6 @@ class qi_main
 		// Output page
 		qi::page_header($user->lang['QI_MANAGE']);
 
-		$template->set_filenames(array(
-			'body' => 'main_body.html')
-		);
-
-		qi::page_footer();
+		qi::page_display('main_body');
 	}
 }

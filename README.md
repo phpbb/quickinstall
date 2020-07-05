@@ -39,8 +39,13 @@ Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickins
 
 Feel free to contribute to this project. Submit Pull Requests with any bug fixes or feature enhancements. 
 
-> Note: QuickInstall uses the Bootstrap framework which is compiled via NPM and located in the `develop` folder. To update or customise Quickinstall's Bootstrap files you must:
-> - Have Node JS installed.
+> QuickInstall also uses Twig for its template engine. Twig is not commited to the repository, so before you can use QI if you downloaded it from this repository, you must install Twig:
+> - Have [composer](https://getcomposer.org/download/) installed.
+> - From QI's root directory, run `$ php composer.phar install`
+> - If you did things correctly, the vendor directory will be created in QI's root with Twig inside it.
+>
+> QuickInstall uses the Bootstrap framework which is compiled via NPM and located in the `develop` folder. To update or customise Quickinstall's Bootstrap files you must:
+> - Have [Node JS](https://nodejs.org/) installed.
 > - Navigate to the develop folder, `$ cd develop`.
 > - Run `$ npm update bootstrap` to update to the latest Bootstrap release.
 > - Edit the `qi_bootstrap.scss` file to customise Bootstrap variables.
