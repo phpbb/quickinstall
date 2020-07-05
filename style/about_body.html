@@ -1,18 +1,18 @@
-<!-- INCLUDE overall_header.html -->
+{% include 'overall_header.html' %}
 <section>
-	{DOC_BODY}
+	{{ DOC_BODY }}
 </section>
 <section id="about-changelog" class="anchor">
-<h3>{L_CHANGELOG}</h3>
-<!-- BEGIN history -->
-<section id="{history.U_CHANGES}" class="anchor">
-	<p><em>{history.CHANGES_SINCE}</em></p>
+<h3>{{ lang('CHANGELOG') }}</h3>
+{% for change in history %}
+<section id="{{ change.U_CHANGES }}" class="anchor">
+	<p><em>{{ change.CHANGES_SINCE }}</em></p>
 	<ul>
-		<!-- BEGIN changelog -->
-		<li>{history.changelog.CHANGE}</li>
-		<!-- END changelog -->
+		{% for changelog in change.changelog %}
+		<li>{{ changelog.CHANGE }}</li>
+		{% endfor %}
 	</ul>
 </section>
-<!-- END history -->
+{% endfor %}
 </section>
-<!-- INCLUDE overall_footer.html -->
+{% include 'overall_footer.html' %}

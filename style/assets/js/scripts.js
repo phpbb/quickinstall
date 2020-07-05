@@ -42,15 +42,15 @@
 				data: $form.serialize(),
 				dataType: "json",
 				success: function (res) {
-					if (res.redirect !== undefined && res.redirect) {
+					if (typeof res.redirect !== "undefined" && res.redirect) {
 						window.location.replace(res.redirect);
 					} else {
 						$modal.modal("hide");
 					}
 				},
 				error: function (res) {
-					if (res.responseJSON.errorOut !== undefined && res.responseJSON.errorOut) {
-						$("body").html(res.responseJSON.errorOut);
+					if (typeof res.responseText !== "undefined" && res.responseText) {
+						$("body").html(res.responseText);
 					} else {
 						$modal.modal("hide");
 					}

@@ -4,6 +4,7 @@ boards/*
 settings/*
 cache/*
 sources/*
+vendor/*
 *~
 .idea
 */node_modules

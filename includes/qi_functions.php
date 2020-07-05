@@ -224,14 +224,11 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 
 function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '', $update_profiles = false)
 {
-	global $quickinstall_path, $user;
-
-	$settings_url = qi::url('settings');
+	global $quickinstall_path, $user, $phpEx;
 
 	if ($update_profiles)
 	{
-		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary" type="submit" name="update_all" value="' .
-		$user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
+		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary" type="submit" name="update_all" value="' . $user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
 	}
 	else
 	{
@@ -259,13 +256,29 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
 
-	$error_out = file_get_contents($quickinstall_path . 'style/error.html');
-	$error_out = str_replace(
-		array('{L_QUICKINSTALL}', '{L_PHPBB_QI_TEXT}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}', '{L_FOR_PHPBB_VERSIONS}', '{L_POWERED_BY_PHPBB}'),
-		array($l_quickinstall, $l_phpbb_qi_text, $quickinstall_path, $msg_title, $msg_explain, $msg_text, $settings_form, $l_return_index, QI_VERSION, $l_for_phpbb_versions, $l_powered_by_phpbb),
-		$error_out
-	);
-	echo $error_out;
+	if (!class_exists('twig'))
+	{
+		require("{$quickinstall_path}includes/twig.$phpEx");
+	}
+
+	$template = new twig($user, false, $quickinstall_path);
+
+	$template->assign_vars([
+		'QI_PATH'              => $quickinstall_path,
+		'MSG_TITLE'            => $msg_title,
+		'MSG_TEXT'             => $msg_text,
+		'MSG_EXPLAIN'          => $msg_explain,
+		'SETTINGS_FORM'        => $settings_form,
+		'RETURN_LINKS'         => $l_return_index,
+		'QI_VERSION'           => QI_VERSION,
+		'L_QUICKINSTALL'       => $l_quickinstall,
+		'L_PHPBB_QI_TEXT'      => $l_phpbb_qi_text,
+		'L_FOR_PHPBB_VERSIONS' => $l_for_phpbb_versions,
+		'L_POWERED_BY_PHPBB'   => $l_powered_by_phpbb,
+	]);
+
+	$template->set_filenames(['error' => 'error.html']);
+	$template->display('error');
 
 	exit;
 }
