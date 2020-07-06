@@ -27,5 +27,8 @@
     "platform": {
       "php": "5.4.7"
     }
+  },
+  "require-dev": {
+    "phing/phing": "^2.16"
   }
 }

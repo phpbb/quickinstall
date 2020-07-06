@@ -5,6 +5,7 @@ settings/*
 cache/*
 sources/*
 vendor/*
+build/*
 *~
 .idea
 */node_modules
