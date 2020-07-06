@@ -95,6 +95,7 @@ $lang = array_merge($lang, array(
 	'COOKIE_DOMAIN_EXPLAIN'	=> 'Usually <code>localhost</code>.',
 	'COOKIE_SECURE'			=> 'Cookie secure',
 	'COOKIE_SECURE_EXPLAIN'	=> 'If your server is running via SSL set this to yes, otherwise leave this set to no to prevent server errors during redirects.',
+	'COPY_CONFIG'			=> 'Copy configuration to clipboard',
 	'CREATE_ADMIN'			=> 'Create admin',
 	'CREATE_ADMIN_EXPLAIN'	=> 'Create one admin. This will not be the founder. This will be <code>tester_1</code>.',
 	'CREATE_BOARD'			=> 'Create board',

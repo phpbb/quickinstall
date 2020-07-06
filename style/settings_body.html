@@ -29,7 +29,9 @@
 			<p><input id="config_text_button" class="btn btn-primary" type="button" value="{{ lang('CONFIG_BUTTON') }}"></p>
 		</div>
 		<div id="config_text_container" class="d-none">
-			<a href="#" class="text-reset text-decoration-none" data-copy="config_text">Copy</a>
+			<label for="config_text">
+				<a href="#" class="text-decoration-none text-black-50" data-copy="config_text"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#clipboard-plus"/></svg> {{ lang('COPY_CONFIG') }}</a>
+			</label>
 			<textarea id="config_text" class="form-control" readonly="readonly" rows="10">{{ CONFIG_TEXT }}</textarea>
 		</div>
 	</div>
