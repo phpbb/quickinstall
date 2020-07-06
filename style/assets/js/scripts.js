@@ -5,14 +5,18 @@
 	$(document).ready(function () {
 
 		// create form validation and submit
-		$('form[data-validate]').on("click", "input[type='submit']", function (e) {
+		$(".needs-validation").on("click", "input[type='submit']", function (e) {
 			e.preventDefault();
 			var validated = true;
-			$('[data-validate-required]').each(function () {
+			$("input[required]").each(function () {
 				var $this = $(this);
 				var empty = $this.val() === "";
 				if (empty) validated = false;
-				$this.closest(".has-feedback").toggleClass("has-error", empty);
+				if (!empty && $this.prop("validity").valid) {
+					$this.addClass("is-valid");
+				} else {
+					$this.addClass("is-invalid");
+				}
 			});
 			if (validated) {
 				var $form = $(this).parents("form");
@@ -38,15 +42,15 @@
 				data: $form.serialize(),
 				dataType: "json",
 				success: function (res) {
-					if (res.redirect !== undefined && res.redirect) {
+					if (typeof res.redirect !== "undefined" && res.redirect) {
 						window.location.replace(res.redirect);
 					} else {
 						$modal.modal("hide");
 					}
 				},
 				error: function (res) {
-					if (res.responseJSON.errorOut !== undefined && res.responseJSON.errorOut) {
-						$("body").html(res.responseJSON.errorOut);
+					if (typeof res.responseText !== "undefined" && res.responseText) {
+						$("body").html(res.responseText);
 					} else {
 						$modal.modal("hide");
 					}
@@ -59,19 +63,11 @@
 			$(this).closest("form").submit();
 		});
 
-		// toggle visibility
-		$("[data-toggle-view]").on("click", function (e) {
-			e.preventDefault();
-			var target = "#" + $(this).attr("data-toggle-view");
-			$(target).toggleClass('hidden');
-		});
-
 		// mark all / unmark all checkboxes
 		$("[data-mark-list]").on("click", function (e) {
-			e.preventDefault();
 			var target = $(this).attr("data-mark-target");
-			var checks = $(target).find("input[type=checkbox]");
-			checks.prop("checked", $(this).data("mark-list") === "markall");
+			var checks = $(target).find("[data-mark]");
+			checks.prop("checked", $(this).prop("checked"));
 		});
 
 		// confirm alert dialog
@@ -90,7 +86,7 @@
 		// show config
 		$("#config_text_button").on("click", function () {
 			$("#config_text_alert").hide();
-			$("#config_text_container").removeClass('hidden');
+			$("#config_text_container").removeClass('d-none');
 		});
 
 		// search filter for PHP info table

@@ -29,7 +29,7 @@ require("{$quickinstall_path}includes/class_qi_settings.$phpEx");
 require("{$quickinstall_path}includes/qi_functions.$phpEx");
 require("{$quickinstall_path}includes/functions_files.$phpEx");
 require("{$quickinstall_path}includes/functions_module.$phpEx");
-require("{$quickinstall_path}includes/template.$phpEx");
+require("{$quickinstall_path}includes/twig.$phpEx");
 
 if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 {
@@ -213,8 +213,7 @@ else
 }
 
 // We need to set the template here.
-$template = new template();
-$template->set_custom_template('style', 'qi');
+$template = new twig($user, $settings->get_cache_dir(), $quickinstall_path);
 
 $profiles = $settings->get_profiles();
 $template->assign_var('PROFILE_COUNT', $profiles['count']);
@@ -281,9 +280,8 @@ else
 	);
 }
 
-// overwrite
-$cache->cache_dir = $settings->get_cache_dir();
-$template->cachepath = $cache->cache_dir . 'tpl_qi_';
+// update chache path
+$template->set_cachepath($settings->get_cache_dir());
 
 $page = (empty($error)) ? $page : 'settings';
 

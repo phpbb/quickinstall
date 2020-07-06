@@ -1,483 +1,563 @@
-<!-- INCLUDE overall_header.html -->
+{% include 'overall_header.html' %}
 
-<!-- IF S_IN_INSTALL -->
-	<h1>{L_INSTALL_QI}</h1>
-	<p>{L_INSTALL_WELCOME}</p>
-	<div class="alert alert-warning">{L_ONLY_LOCAL}</div>
-<!-- ELSE -->
-	<h1>{L_QI_MANAGE_PROFILE}</h1>
-<!-- ENDIF -->
-<!-- IF S_SETTINGS_SUCCESS -->
-	<div class="alert alert-success" role="alert">{L_SETTINGS_SUCCESS}</div>
-<!-- ELSEIF S_SETTINGS_FAILURE -->
-	<div class="panel panel-danger">
-		<div class="panel-heading"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {L_SETTINGS_FAILURE}</div>
-		<div class="panel-body">
-			<!-- IF ERROR -->
-				{ERROR}
-			<!-- ENDIF -->
-		</div>
+{% if S_IN_INSTALL %}
+	<h1>{{ lang('INSTALL_QI') }}</h1>
+	<p>{{ lang('INSTALL_WELCOME') }}</p>
+	<div class="alert alert-warning">{{ lang('ONLY_LOCAL') }}</div>
+{% else %}
+	<h1>{{ lang('QI_MANAGE_PROFILE') }}</h1>
+{% endif %}
+{% if S_SETTINGS_SUCCESS %}
+	<div class="alert alert-success" role="alert">{{ lang('SETTINGS_SUCCESS') }}</div>
+{% elseif S_SETTINGS_FAILURE %}
+	<div class="alert alert-danger" role="alert">
+		<h5 class="alert-heading">⚠️ {{ lang('SETTINGS_FAILURE') }}</h5>
+		<p class="mb-0">{% if ERROR %}{{ ERROR }}{% endif %}error r</p>
 	</div>
-<!-- ENDIF -->
-<!-- IF (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) -->
-	<div class="alert alert-danger" role="alert">{L_NEED_WRITABLE}</div>
-<!-- ENDIF -->
-<!-- IF ERROR and S_IS_CONVERTED -->
-	<div class="alert alert-success" role="alert">{ERROR}</div>
-<!-- ENDIF -->
+{% endif %}
+{% if (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) %}
+	<div class="alert alert-danger" role="alert">{{ lang('NEED_WRITABLE') }}</div>
+{% endif %}
+{% if ERROR and S_IS_CONVERTED %}
+	<div class="alert alert-success" role="alert">{{ ERROR }}</div>
+{% endif %}
 
-<!-- IF CONFIG_TEXT -->
+{% if CONFIG_TEXT %}
 	<div class="alert alert-danger">
 		<div id="config_text_alert">
-			<p>{L_CONFIG_WARNING}</p>
-			<p><input id="config_text_button" class="button" type="button" value="{L_CONFIG_BUTTON}" /></p>
+			<p>{{ lang('CONFIG_WARNING') }}</p>
+			<p><input id="config_text_button" class="btn btn-primary" type="button" value="{{ lang('CONFIG_BUTTON') }}"></p>
 		</div>
-		<div id="config_text_container" class="hidden">
-			<a href="#" class="unstyled-link" data-copy="config_text"><i class="glyphicon glyphicon-copy"></i> Copy</a>
-			<textarea id="config_text" class="form-control" readonly="readonly" rows="10">{CONFIG_TEXT}</textarea>
+		<div id="config_text_container" class="d-none">
+			<label for="config_text">
+				<a href="#" class="text-decoration-none text-black-50" data-copy="config_text"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#clipboard-plus"/></svg> {{ lang('COPY_CONFIG') }}</a>
+			</label>
+			<textarea id="config_text" class="form-control" readonly="readonly" rows="10">{{ CONFIG_TEXT }}</textarea>
 		</div>
 	</div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF PROFILE_COUNT -->
-<form method="post" id="profile_form" class="form-horizontal well" action="{U_CHOOSE_PROFILE}">
+{% if PROFILE_COUNT %}
+<form method="post" id="profile_form" action="{{ U_CHOOSE_PROFILE }}">
 	<section id="profiles" class="anchor">
-	<fieldset>
-		<legend>{L_PROFILES}</legend>
-		<div class="form-group">
-			<label for="qi_profile" class="col-sm-5 control-label text-left">{L_CURRENT_PROFILE}{L_COLON}</label>
-			<div class="form-inline col-sm-7">
-				<select id="qi_profile" name="qi_profile" class="form-control" data-form-submit="true">
-				<!-- IF PROFILE_COUNT == 1 -->
-					<option>{PROFILE_OPTIONS}</option>
-				<!-- ELSE -->
-					{PROFILE_OPTIONS}
-				<!-- ENDIF -->
-				</select>
-				<!-- IF PROFILE_COUNT > 1  -->
-				<noscript><input type="submit" name="submit-profile" value="{L_GO}" class="button" /></noscript>
-				<!-- ENDIF -->
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+				<legend>{{ lang('PROFILES') }}</legend>
+				<div class="form-group row">
+					<label for="qi_profile" class="col-md-5 col-form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
+					<div class="col-md-7">
+						<select id="qi_profile" name="qi_profile" class="custom-select" data-form-submit="true">
+						{% if PROFILE_COUNT == 1 %}
+							<option>{{ PROFILE_OPTIONS }}</option>
+						{% else %}
+							{{ PROFILE_OPTIONS }}
+						{% endif %}
+						</select>
+						{% if PROFILE_COUNT > 1  %}
+						<noscript><input type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary my-2"></noscript>
+						{% endif %}
+					</div>
+				</div>
+				{% if PROFILE_COUNT > 1 %}
+				<div class="form-group row">
+					<div class="col-md-7 offset-md-5">
+						<input type="submit" name="delete-profile" id="delete-profile" value="{{ lang('DELETE_PROFILE') }}" class="btn btn-danger" data-confirm="{{ lang('SURE_DELETE_PROFILE') }}">
+					</div>
+				</div>
+				{% endif %}
+			</fieldset>
 			</div>
 		</div>
-		<!-- IF PROFILE_COUNT > 1 -->
-		<div class="form-group">
-			<div class="col-sm-7 col-sm-offset-5">
-				<input type="submit" name="delete-profile" id="delete-profile" value="{L_DELETE_PROFILE}" class="button"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_PROFILE}"<!-- ENDIF --> />
-			</div>
-		</div>
-		<!-- ENDIF -->
-	</fieldset>
 	</section>
 </form>
-<!-- ENDIF -->
+{% endif %}
 
-<form method="post" class="form-horizontal" action="{U_UPDATE_SETTINGS}">
+<form method="post" action="{{ U_UPDATE_SETTINGS }}">
 	<section id="qi-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_QI_SETTINGS}</legend>
-				<div class="form-group">
-					<label for="qi_lang" class="col-sm-5 control-label text-left">{L_QI_LANG}{L_COLON}<span class="help-block">{L_QI_LANG_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<select id="qi_lang" name="qi_config[qi_lang]" class="form-control" data-load-selection="index.php?page=settings&amp;lang=">
-							{QI_LANG}
-						</select>
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('QUICKINSTALL') }}</legend>
+					<div class="form-group row">
+						<label for="qi_lang" class="col-md-5 col-form-label">{{ lang('QI_LANG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('QI_LANG_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<select id="qi_lang" name="qi_config[qi_lang]" class="custom-select" data-load-selection="index.php?page=settings&amp;lang=">
+								{{ QI_LANG }}
+							</select>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_SHOW_CONFIRM}{L_COLON}<span class="help-block">{L_SHOW_CONFIRM_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[show_confirm]" value="1"<!-- IF CONFIG_SHOW_CONFIRM == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[show_confirm]" value="0"<!-- IF CONFIG_SHOW_CONFIRM == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label for="cache_dir" class="col-md-5 col-form-label">{{ lang('CACHE_DIR') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CACHE_DIR_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{{ CONFIG_CACHE_DIR }}"></div>
 					</div>
-				</div>
-			</fieldset>
+					<div class="form-group row">
+						<label for="boards_dir" class="col-md-5 col-form-label">{{ lang('BOARDS_DIR') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('BOARDS_DIR_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{{ CONFIG_BOARDS_DIR }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="boards_url" class="col-md-5 col-form-label">{{ lang('BOARDS_URL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('BOARDS_URL_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{{ CONFIG_BOARDS_URL }}"></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('MAKE_WRITABLE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('MAKE_WRITABLE_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]1" value="1"{% if CONFIG_MAKE_WRITABLE == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[make_writable]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]0" value="0"{% if CONFIG_MAKE_WRITABLE == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[make_writable]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="grant_permissions" class="col-md-5 col-form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{{ CONFIG_GRANT_PERMISSIONS }}"></div>
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 	<section id="db-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_DB_SETTINGS}</legend>
-				<div class="form-group">
-					<label for="dbms" class="col-sm-5 control-label text-left">{L_DBMS}{L_COLON}<span class="help-block">{L_DBMS_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<select name="qi_config[dbms]" id="dbms" class="form-control">{CONFIG_DBMS}</select>
-					</div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="dbhost" class="col-sm-5 control-label text-left">{L_DBHOST}{L_COLON}<span class="help-block">{L_DBHOST_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="dbhost" name="qi_config[dbhost]" value="{CONFIG_DBHOST}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group">
-					<label for="dbport" class="col-sm-5 control-label text-left">{L_DBPORT}{L_COLON}<span class="help-block">{L_DBPORT_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="dbport" name="qi_config[dbport]" value="{CONFIG_DBPORT}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="dbuser" class="col-sm-5 control-label text-left">{L_DBUSER}{L_COLON}<span class="help-block">{L_DBUSER_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="dbuser" name="qi_config[dbuser]" value="{CONFIG_DBUSER}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="dbpasswd" class="col-sm-5 control-label text-left">{L_DBPASSWD}{L_COLON}<span class="help-block">{L_DBPASSWD_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
-					<div class="col-sm-7">
-						<input class="form-control" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{CONFIG_DBPASSWD}" />
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" id="no_dbpasswd" name="qi_config[no_dbpasswd]" value="1"<!-- IF CONFIG_NO_PASSWORD == 1 --> checked="checked"<!-- ENDIF -->>
-								{L_NO_PASSWORD}
-							</label>
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('DB_SETTINGS') }}</legend>
+					<div class="form-group row">
+						<label for="dbms" class="col-md-5 col-form-label">{{ lang('DBMS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBMS_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<select name="qi_config[dbms]" id="dbms" class="custom-select">{{ CONFIG_DBMS }}</select>
 						</div>
 					</div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="db_prefix" class="col-sm-5 control-label text-left">{L_DB_PREFIX}{L_COLON}<span class="help-block">{L_DB_PREFIX_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{CONFIG_DB_PREFIX}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="table_prefix" class="col-sm-5 control-label text-left">{L_TABLE_PREFIX}{L_COLON}<span class="help-block">{L_TABLE_PREFIX_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{CONFIG_TABLE_PREFIX}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-			</fieldset>
-		</div>
-	</section>
-
-	<section id="dir-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_DIR_URL_SETTINGS}</legend>
-				<div class="form-group has-feedback">
-					<label for="cache_dir" class="col-sm-5 control-label text-left">{L_CACHE_DIR}{L_COLON}<span class="help-block">{L_CACHE_DIR_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{CONFIG_CACHE_DIR}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="boards_dir" class="col-sm-5 control-label text-left">{L_BOARDS_DIR}{L_COLON}<span class="help-block">{L_BOARDS_DIR_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{CONFIG_BOARDS_DIR}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="boards_url" class="col-sm-5 control-label text-left">{L_BOARDS_URL}{L_COLON}<span class="help-block">{L_BOARDS_URL_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{CONFIG_BOARDS_URL}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_MAKE_WRITABLE}{L_COLON}<span class="help-block">{L_MAKE_WRITABLE_EXPLAIN} {L_NO_IMPACT_WIN} {L_THIS_CAN_CHANGE}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[make_writable]" value="1"<!-- IF CONFIG_MAKE_WRITABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[make_writable]" value="0"<!-- IF CONFIG_MAKE_WRITABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label for="dbhost" class="col-md-5 col-form-label">{{ lang('DBHOST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBHOST_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="dbhost" name="qi_config[dbhost]" value="{{ CONFIG_DBHOST }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="grant_permissions" class="col-sm-5 control-label text-left">{L_GRANT_PERMISSIONS}{L_COLON}<span class="help-block">{L_GRANT_PERMISSIONS_EXPLAIN} {L_NO_IMPACT_WIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{CONFIG_GRANT_PERMISSIONS}" /></div>
-				</div>
-			</fieldset>
-		</div>
-	</section>
-
-	<section id="time-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_TIME_SETTINGS}</legend>
-				<div class="form-group">
-					<label for="qi_tz" class="col-sm-5 control-label text-left">{L_QI_TZ}{L_COLON}<span class="help-block">{L_QI_TZ_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<select name="qi_config[qi_tz]" id="qi_tz" class="form-control">
-							<option value="">{L_SELECT_TIMEZONE}</option>
-							{TIMEZONE_OPTIONS}
-						</select>
+					<div class="form-group row">
+						<label for="dbport" class="col-md-5 col-form-label">{{ lang('DBPORT') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBPORT_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="dbport" name="qi_config[dbport]" value="{{ CONFIG_DBPORT }}"></div>
 					</div>
-				</div>
-			</fieldset>
-		</div>
-	</section>
-
-	<section id="admin-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_ADMIN_SETTINGS}</legend>
-				<div class="form-group">
-					<label for="admin_name" class="col-sm-5 control-label text-left">{L_ADMIN_NAME}{L_COLON}<span class="help-block">{L_ADMIN_NAME_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="admin_name" name="qi_config[admin_name]" value="{CONFIG_ADMIN_NAME}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="admin_pass" class="col-sm-5 control-label text-left">{L_ADMIN_PASS}{L_COLON}<span class="help-block">{L_ADMIN_PASS_EXPLAIN} {L_IF_LEAVE_EMPTY} <strong>{L_PLAIN_TEXT}</strong></span></label>
-					<div class="col-sm-7"><input class="form-control" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{CONFIG_ADMIN_PASS}" /></div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="admin_email" class="col-sm-5 control-label text-left">{L_ADMIN_EMAIL}{L_COLON}<span class="help-block">{L_ADMIN_EMAIL_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="admin_email" name="qi_config[admin_email]" value="{CONFIG_ADMIN_EMAIL}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-			</fieldset>
+					<div class="form-group row">
+						<label for="dbuser" class="col-md-5 col-form-label">{{ lang('DBUSER') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBUSER_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="dbuser" name="qi_config[dbuser]" value="{{ CONFIG_DBUSER }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="dbpasswd" class="col-md-5 col-form-label">{{ lang('DBPASSWD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBPASSWD_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
+						<div class="col-md-7">
+							<input class="form-control" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{{ CONFIG_DBPASSWD }}">
+							<div class="custom-control custom-switch">
+								<input type="checkbox" class="custom-control-input" id="no_dbpasswd" name="qi_config[no_dbpasswd]" value="1"{% if CONFIG_NO_PASSWORD == 1 %} checked="checked"{% endif %}>
+								<label class="custom-control-label" for="no_dbpasswd">{{ lang('NO_PASSWORD') }}</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="db_prefix" class="col-md-5 col-form-label">{{ lang('DB_PREFIX') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DB_PREFIX_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{{ CONFIG_DB_PREFIX }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="table_prefix" class="col-md-5 col-form-label">{{ lang('TABLE_PREFIX') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('TABLE_PREFIX_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{{ CONFIG_TABLE_PREFIX }}"></div>
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 	<section id="server-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_SERVER_COOKIE_SETTINGS}</legend>
-				<div class="form-group has-feedback">
-					<label for="server_name" class="col-sm-5 control-label text-left">{L_SERVER_NAME}{L_COLON}<span class="help-block">{L_SERVER_NAME_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{CONFIG_SERVER_NAME}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="server_port" class="col-sm-5 control-label text-left">{L_SERVER_PORT}{L_COLON}<span class="help-block">{L_SERVER_PORT_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="server_port" name="qi_config[server_port]" value="{CONFIG_SERVER_PORT}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group">
-					<label for="cookie_domain" class="col-sm-5 control-label text-left">{L_COOKIE_DOMAIN}{L_COLON}<span class="help-block">{L_COOKIE_DOMAIN_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{CONFIG_COOKIE_DOMAIN}" /></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_COOKIE_SECURE}{L_COLON}<span class="help-block">{L_COOKIE_SECURE_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[cookie_secure]" value="1"<!-- IF CONFIG_COOKIE_SECURE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[cookie_secure]" value="0"<!-- IF CONFIG_COOKIE_SECURE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('SERVER_SETTINGS') }}</legend>
+					<div class="form-group row">
+						<label for="server_name" class="col-md-5 col-form-label">{{ lang('SERVER_NAME') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SERVER_NAME_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{{ CONFIG_SERVER_NAME }}"></div>
 					</div>
-				</div>
-			</fieldset>
+					<div class="form-group row">
+						<label for="server_port" class="col-md-5 col-form-label">{{ lang('SERVER_PORT') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SERVER_PORT_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="server_port" name="qi_config[server_port]" value="{{ CONFIG_SERVER_PORT }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="cookie_domain" class="col-md-5 col-form-label">{{ lang('COOKIE_DOMAIN') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('COOKIE_DOMAIN_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{{ CONFIG_COOKIE_DOMAIN }}"></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('COOKIE_SECURE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('COOKIE_SECURE_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[cookie_secure]" id="qi_config[cookie_secure]1" value="1"{% if CONFIG_COOKIE_SECURE == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[cookie_secure]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[cookie_secure]" id="qi_config[cookie_secure]0" value="0"{% if CONFIG_COOKIE_SECURE == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[cookie_secure]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
-	<section id="email-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_EMAIL_SETTINGS}</legend>
-				<div class="form-group has-feedback">
-					<label for="board_email" class="col-sm-5 control-label text-left">{L_BOARD_EMAIL}{L_COLON}<span class="help-block">{L_BOARD_EMAIL_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="board_email" name="qi_config[board_email]" value="{CONFIG_BOARD_EMAIL}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_EMAIL_ENABLE}{L_COLON}<span class="help-block">{L_EMAIL_ENABLE_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[email_enable]" value="1"<!-- IF CONFIG_EMAIL_ENABLE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[email_enable]" value="0"<!-- IF CONFIG_EMAIL_ENABLE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+	<section id="admin-settings" class="anchor">
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('ADMIN_SETTINGS') }}</legend>
+					<div class="form-group row">
+						<label for="admin_name" class="col-md-5 col-form-label">{{ lang('ADMIN_NAME') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ADMIN_NAME_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="admin_name" name="qi_config[admin_name]" value="{{ CONFIG_ADMIN_NAME }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_SMTP_DELIVERY}{L_COLON}<span class="help-block">{L_SMTP_DELIVERY_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[smtp_delivery]" value="1"<!-- IF CONFIG_SMTP_DELIVERY == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[smtp_delivery]" value="0"<!-- IF CONFIG_SMTP_DELIVERY == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label for="admin_pass" class="col-md-5 col-form-label">{{ lang('ADMIN_PASS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ADMIN_PASS_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
+						<div class="col-md-7"><input class="form-control" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{{ CONFIG_ADMIN_PASS }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="smtp_host" class="col-sm-5 control-label text-left">{L_SMTP_HOST}{L_COLON}<span class="help-block">{L_SMTP_HOST_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="smtp_host" name="qi_config[smtp_host]" value="{CONFIG_SMTP_HOST}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="smtp_port" class="col-sm-5 control-label text-left">{L_SMTP_PORT}{L_COLON}<span class="help-block">{L_SMTP_PORT_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" maxlength="5" id="smtp_port" name="qi_config[smtp_port]" value="{CONFIG_SMTP_PORT}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="smtp_auth" class="col-sm-5 control-label text-left">{L_SMTP_AUTH}{L_COLON}<span class="help-block">{L_SMTP_AUTH_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<select name="qi_config[smtp_auth]" id="smtp_auth" class="form-control">
-							<option value="PLAIN"<!-- IF CONFIG_SMTP_AUTH == 'PLAIN' --> selected="selected"<!-- ENDIF -->>PLAIN</option>
-							<option value="LOGIN"<!-- IF CONFIG_SMTP_AUTH == 'LOGIN' --> selected="selected"<!-- ENDIF -->>LOGIN</option>
-							<option value="CRAM-MD5"<!-- IF CONFIG_SMTP_AUTH == 'CRAM-MD5' --> selected="selected"<!-- ENDIF -->>CRAM-MD5</option>
-							<option value="DIGEST-MD5"<!-- IF CONFIG_SMTP_AUTH == 'DIGEST-MD5' --> selected="selected"<!-- ENDIF -->>DIGEST-MD5</option>
-							<option value="POP-BEFORE-SMTP"<!-- IF CONFIG_SMTP_AUTH == 'POP-BEFORE-SMTP' --> selected="selected"<!-- ENDIF -->>POP-BEFORE-SMTP</option>
-						</select>
+					<div class="form-group row">
+						<label for="admin_email" class="col-md-5 col-form-label">{{ lang('ADMIN_EMAIL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ADMIN_EMAIL_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="admin_email" name="qi_config[admin_email]" value="{{ CONFIG_ADMIN_EMAIL }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="smtp_user" class="col-sm-5 control-label text-left">{L_SMTP_USER}{L_COLON}<span class="help-block">{L_SMTP_USER_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="smtp_user" name="qi_config[smtp_user]" value="{CONFIG_SMTP_USER}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="smtp_pass" class="col-sm-5 control-label text-left">{L_SMTP_PASS}{L_COLON}<span class="help-block">{L_SMTP_PASS_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{CONFIG_SMTP_PASS}" /></div>
-				</div>
-			</fieldset>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 	<section id="config-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_BOARD_CONFIG_SETTINGS}</legend>
-				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_BOARD_CONFIG_SETTINGS_EXPLAIN}</div>
-				<div class="form-group has-feedback">
-					<label for="site_name" class="col-sm-5 control-label text-left">{L_SITE_NAME}{L_COLON}<span class="help-block">{L_SITE_NAME_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{CONFIG_SITE_NAME}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group">
-					<label for="site_desc" class="col-sm-5 control-label text-left">{L_SITE_DESC}{L_COLON}<span class="help-block">{L_SITE_DESC_EXPLAIN} {L_THIS_CAN_CHANGE}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{CONFIG_SITE_DESC}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="default_lang" class="col-sm-5 control-label text-left">{L_DEFAULT_LANG}{L_COLON}<span class="help-block">{L_DEFAULT_LANG_EXPLAIN}</span></label>
-					<div class="col-sm-7"><select class="form-control" id="default_lang" name="qi_config[default_lang]">{PHPBB_LANG}</select></div>
-				</div>
-				<div class="form-group">
-					<label for="other_config" class="col-sm-5 control-label text-left">{L_OTHER_CONFIG}{L_COLON}<span class="help-block">{L_OTHER_CONFIG_EXPLAIN}</span></label>
-					<div class="col-sm-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{OTHER_CONFIG}</textarea></div>
-				</div>
-			</fieldset>
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('BOARD_CONFIG_SETTINGS') }}</legend>
+					<div class="form-group row">
+						<label for="site_name" class="col-md-5 col-form-label">{{ lang('SITE_NAME') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SITE_NAME_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{{ CONFIG_SITE_NAME }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="site_desc" class="col-md-5 col-form-label">{{ lang('SITE_DESC') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SITE_DESC_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{{ CONFIG_SITE_DESC }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="default_lang" class="col-md-5 col-form-label">{{ lang('DEFAULT_LANG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DEFAULT_LANG_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><select class="custom-select" id="default_lang" name="qi_config[default_lang]">{{ PHPBB_LANG }}</select></div>
+					</div>
+					<div class="form-group row">
+						<label for="qi_tz" class="col-md-5 col-form-label">{{ lang('QI_TZ') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('QI_TZ_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<select name="qi_config[qi_tz]" id="qi_tz" class="custom-select">
+								<option value="">{{ lang('SELECT_TIMEZONE') }}</option>
+								{{ TIMEZONE_OPTIONS }}
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="other_config" class="col-md-5 col-form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{{ OTHER_CONFIG }}</textarea></div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</section>
+
+	<section id="email-settings" class="anchor">
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('EMAIL_SETTINGS') }}</legend>
+					<div class="form-group row">
+						<label for="board_email" class="col-md-5 col-form-label">{{ lang('BOARD_EMAIL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('BOARD_EMAIL_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="board_email" name="qi_config[board_email]" value="{{ CONFIG_BOARD_EMAIL }}"></div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('EMAIL_ENABLE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('EMAIL_ENABLE_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[email_enable]" id="qi_config[email_enable]1" value="1"{% if CONFIG_EMAIL_ENABLE == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[email_enable]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[email_enable]" id="qi_config[email_enable]0" value="0"{% if CONFIG_EMAIL_ENABLE == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[email_enable]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('SMTP_DELIVERY') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_DELIVERY_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[smtp_delivery]" id="qi_config[smtp_delivery]1" value="1"{% if CONFIG_SMTP_DELIVERY == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[smtp_delivery]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[smtp_delivery]" id="qi_config[smtp_delivery]0" value="0"{% if CONFIG_SMTP_DELIVERY == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[smtp_delivery]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="smtp_host" class="col-md-5 col-form-label">{{ lang('SMTP_HOST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_HOST_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="smtp_host" name="qi_config[smtp_host]" value="{{ CONFIG_SMTP_HOST }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="smtp_port" class="col-md-5 col-form-label">{{ lang('SMTP_PORT') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_PORT_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" maxlength="5" id="smtp_port" name="qi_config[smtp_port]" value="{{ CONFIG_SMTP_PORT }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="smtp_auth" class="col-md-5 col-form-label">{{ lang('SMTP_AUTH') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_AUTH_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<select name="qi_config[smtp_auth]" id="smtp_auth" class="custom-select">
+								<option value="PLAIN"{% if CONFIG_SMTP_AUTH == 'PLAIN' %} selected="selected"{% endif %}>PLAIN</option>
+								<option value="LOGIN"{% if CONFIG_SMTP_AUTH == 'LOGIN' %} selected="selected"{% endif %}>LOGIN</option>
+								<option value="CRAM-MD5"{% if CONFIG_SMTP_AUTH == 'CRAM-MD5' %} selected="selected"{% endif %}>CRAM-MD5</option>
+								<option value="DIGEST-MD5"{% if CONFIG_SMTP_AUTH == 'DIGEST-MD5' %} selected="selected"{% endif %}>DIGEST-MD5</option>
+								<option value="POP-BEFORE-SMTP"{% if CONFIG_SMTP_AUTH == 'POP-BEFORE-SMTP' %} selected="selected"{% endif %}>POP-BEFORE-SMTP</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="smtp_user" class="col-md-5 col-form-label">{{ lang('SMTP_USER') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_USER_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="smtp_user" name="qi_config[smtp_user]" value="{{ CONFIG_SMTP_USER }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="smtp_pass" class="col-md-5 col-form-label">{{ lang('SMTP_PASS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_PASS_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{{ CONFIG_SMTP_PASS }}"></div>
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 	<section id="populate-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_POPULATE_SETTINGS}</legend>
-				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_POPULATE}{L_COLON}<span class="help-block">{L_POPULATE_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[populate]" value="1"<!-- IF CONFIG_POPULATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[populate]" value="0"<!-- IF CONFIG_POPULATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('POPULATE_OPTIONS') }}</legend>
+					<div class="alert alert-info">ℹ️ {{ lang('THESE_CAN_CHANGE') }}</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('POPULATE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('POPULATE_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[populate]" id="qi_config[populate]1" value="1"{% if CONFIG_POPULATE == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[populate]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[populate]" id="qi_config[populate]0" value="0"{% if CONFIG_POPULATE == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[populate]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="num_users" class="col-sm-5 control-label text-left">{L_NUM_USERS}{L_COLON}<span class="help-block">{L_NUM_USERS_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="qi_config[num_users]" value="{CONFIG_NUM_USERS}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="num_new_group" class="col-sm-5 control-label text-left">{L_NUM_NEW_GROUP}{L_COLON}<span class="help-block">{L_NUM_NEW_GROUP_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_new_group" name="qi_config[num_new_group]" value="{CONFIG_NUM_NEW_GROUP}" /></div>
-				</div>
-				<div class="form-group has-feedback">
-					<label for="email_domain" class="col-sm-5 control-label text-left">{L_EMAIL_DOMAIN}{L_COLON}<span class="help-block">{L_EMAIL_DOMAIN_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="email_domain" name="qi_config[email_domain]" value="{CONFIG_EMAIL_DOMAIN}" /><span class="glyphicon form-control-feedback glyphicon-exclamation-sign" aria-hidden="true"></span></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_CREATE_ADMIN}{L_COLON}<span class="help-block">{L_CREATE_ADMIN_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[create_admin]" value="1"<!-- IF CONFIG_CREATE_ADMIN == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[create_admin]" value="0"<!-- IF CONFIG_CREATE_ADMIN == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label for="num_users" class="col-md-5 col-form-label">{{ lang('NUM_USERS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_USERS_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="qi_config[num_users]" value="{{ CONFIG_NUM_USERS }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_CREATE_MOD}{L_COLON}<span class="help-block">{L_CREATE_MOD_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[create_mod]" value="1"<!-- IF CONFIG_CREATE_MOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[create_mod]" value="0"<!-- IF CONFIG_CREATE_MOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label for="num_new_group" class="col-md-5 col-form-label">{{ lang('NUM_NEW_GROUP') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_NEW_GROUP_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_new_group" name="qi_config[num_new_group]" value="{{ CONFIG_NUM_NEW_GROUP }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="num_cats" class="col-sm-5 control-label text-left">{L_NUM_CATS}{L_COLON}<span class="help-block">{L_NUM_CATS_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_cats" name="qi_config[num_cats]" value="{CONFIG_NUM_CATS}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="num_forums" class="col-sm-5 control-label text-left">{L_NUM_FORUMS}{L_COLON}<span class="help-block">{L_NUM_FORUMS_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="qi_config[num_forums]" value="{CONFIG_NUM_FORUMS}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="num_topics" class="col-sm-5 control-label text-left">{L_NUM_TOPICS}{L_COLON}<span class="help-block">{L_NUM_TOPICS_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label>{L_MIN} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="qi_config[num_topics_min]" value="{CONFIG_NUM_TOPICS_MIN}" /></label>
-						<label>{L_MAX} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_topics_max]" value="{CONFIG_NUM_TOPICS_MAX}" /></label>
+					<div class="form-group row">
+						<label for="email_domain" class="col-md-5 col-form-label">{{ lang('EMAIL_DOMAIN') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('EMAIL_DOMAIN_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
+						<div class="col-md-7">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="basic-addon1">@</span>
+								</div>
+								<input class="form-control" type="text" id="email_domain" name="qi_config[email_domain]" value="{{ CONFIG_EMAIL_DOMAIN }}">
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="num_replies" class="col-sm-5 control-label text-left">{L_NUM_REPLIES}{L_COLON}<span class="help-block">{L_NUM_REPLIES_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label>{L_MIN} <input class="form-control" type="number" min="0" max="99999" id="num_replies" name="qi_config[num_replies_min]" value="{CONFIG_NUM_REPLIES_MIN}" /></label>
-						<label>{L_MAX} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_replies_max]" value="{CONFIG_NUM_REPLIES_MAX}" /></label>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('CREATE_ADMIN') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CREATE_ADMIN_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[create_admin]" id="qi_config[create_admin]1" value="1"{% if CONFIG_CREATE_ADMIN == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[create_admin]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[create_admin]" id="qi_config[create_admin]0" value="0"{% if CONFIG_CREATE_ADMIN == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[create_admin]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						<h3 class="panel-title"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_CHUNK_SETTINGS}</h3>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('CREATE_MOD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CREATE_MOD_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[create_mod]" id="qi_config[create_mod]1" value="1"{% if CONFIG_CREATE_MOD == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[create_mod]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[create_mod]" id="qi_config[create_mod]0" value="0"{% if CONFIG_CREATE_MOD == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[create_mod]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
 					</div>
-					<div class="panel-body">
-						{L_CHUNK_SETTINGS_EXPLAIN}
+					<div class="form-group row">
+						<label for="num_cats" class="col-md-5 col-form-label">{{ lang('NUM_CATS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_CATS_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_cats" name="qi_config[num_cats]" value="{{ CONFIG_NUM_CATS }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="chunk_post" class="col-sm-5 control-label text-left">{L_CHUNK_POST}{L_COLON}<span class="help-block">{L_CHUNK_POST_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="qi_config[chunk_post]" value="{CHUNK_POST}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="chunk_topic" class="col-sm-5 control-label text-left">{L_CHUNK_TOPIC}{L_COLON}<span class="help-block">{L_CHUNK_TOPIC_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_topic" name="qi_config[chunk_topic]" value="{CHUNK_TOPIC}" /></div>
-				</div>
-				<div class="form-group">
-					<label for="chunk_user" class="col-sm-5 control-label text-left">{L_CHUNK_USER}{L_COLON}<span class="help-block">{L_CHUNK_USER_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_user" name="qi_config[chunk_user]" value="{CHUNK_USER}" /></div>
-				</div>
-			</fieldset>
+					<div class="form-group row">
+						<label for="num_forums" class="col-md-5 col-form-label">{{ lang('NUM_FORUMS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_FORUMS_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="qi_config[num_forums]" value="{{ CONFIG_NUM_FORUMS }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="num_topics" class="col-md-5 col-form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="qi_config[num_topics_min]" value="{{ CONFIG_NUM_TOPICS_MIN }}"></label>
+							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_topics_max]" value="{{ CONFIG_NUM_TOPICS_MAX }}"></label>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="num_replies" class="col-md-5 col-form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_replies" name="qi_config[num_replies_min]" value="{{ CONFIG_NUM_REPLIES_MIN }}"></label>
+							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_replies_max]" value="{{ CONFIG_NUM_REPLIES_MAX }}"></label>
+						</div>
+					</div>
+					<div class="card text-white bg-secondary mb-3">
+						<div class="card-body">
+							<h5 class="card-title">{{ lang('CHUNK_SETTINGS') }}</h5>
+							<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="chunk_post" class="col-md-5 col-form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="qi_config[chunk_post]" value="{{ CHUNK_POST }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="chunk_topic" class="col-md-5 col-form-label">{{ lang('CHUNK_TOPIC') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_TOPIC_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_topic" name="qi_config[chunk_topic]" value="{{ CHUNK_TOPIC }}"></div>
+					</div>
+					<div class="form-group row">
+						<label for="chunk_user" class="col-md-5 col-form-label">{{ lang('CHUNK_USER') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_USER_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_user" name="qi_config[chunk_user]" value="{{ CHUNK_USER }}"></div>
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 	<section id="misc-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_MISC_SETTINGS}</legend>
-				<div class="alert alert-info"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> {L_THESE_CAN_CHANGE}</div>
-				<div class="form-group">
-					<label for="alt_env" class="col-sm-5 control-label text-left">{L_ALT_ENV}{L_COLON}<span class="help-block">{L_ALT_ENV_EXPLAIN}</span></label>
-					<div class="col-sm-7"><select name="qi_config[alt_env]" id="alt_env" class="form-control">{CONFIG_ALT_ENV}</select></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_REDIRECT_BOARD}{L_COLON}<span class="help-block">{L_REDIRECT_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[redirect]" value="1"<!-- IF CONFIG_REDIRECT == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[redirect]" value="0"<!-- IF CONFIG_REDIRECT == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('INSTALL_OPTIONS') }}</legend>
+					<div class="alert alert-info">ℹ️ {{ lang('THESE_CAN_CHANGE') }}</div>
+					<div class="form-group row">
+						<label for="alt_env" class="col-md-5 col-form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><select name="qi_config[alt_env]" id="alt_env" class="custom-select">{{ CONFIG_ALT_ENV }}</select></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_AUTOMOD_INSTALL}{L_COLON}<span class="help-block">{L_ONLY_30}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[automod]" value="1"<!-- IF CONFIG_AUTOMOD == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[automod]" value="0"<!-- IF CONFIG_AUTOMOD == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('REDIRECT_BOARD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('REDIRECT_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[redirect]" id="qi_config[redirect]1" value="1"{% if CONFIG_REDIRECT == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[redirect]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[redirect]" id="qi_config[redirect]0" value="0"{% if CONFIG_REDIRECT == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[redirect]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_INSTALL_STYLES}{L_COLON}<span class="help-block">{L_INSTALL_STYLES_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[install_styles]" value="1"<!-- IF CONFIG_INSTALL_STYLES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[install_styles]" value="0"<!-- IF CONFIG_INSTALL_STYLES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[install_styles]" value="2"<!-- IF CONFIG_INSTALL_STYLES == 2 --> checked="checked"<!-- ENDIF --> /> {L_ONLY_SUBSILVER}</label>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('AUTOMOD_INSTALL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ONLY_30') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[automod]" id="qi_config[automod]1" value="1"{% if CONFIG_AUTOMOD == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[automod]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[automod]" id="qi_config[automod]0" value="0"{% if CONFIG_AUTOMOD == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[automod]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label for="default_style" class="col-sm-5 control-label text-left">{L_SET_DEFAULT_STYLE}{L_COLON}<span class="help-block">{L_SET_DEFAULT_STYLE_EXPLAIN}</span></label>
-					<div class="col-sm-7"><input class="form-control" type="text" id="default_style" name="qi_config[default_style]" value="{CONFIG_DEFAULT_STYLE}" /></div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_DROP_DB_IF_EXISTS}{L_COLON}<span class="help-block">{L_DROP_DB_IF_EXISTS_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[drop_db]" value="1"<!-- IF CONFIG_DROP_DB == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[drop_db]" value="0"<!-- IF CONFIG_DROP_DB == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('INSTALL_STYLES') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('INSTALL_STYLES_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[install_styles]" id="qi_config[install_styles]1" value="1"{% if CONFIG_INSTALL_STYLES == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[install_styles]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[install_styles]" id="qi_config[install_styles]0" value="0"{% if CONFIG_INSTALL_STYLES == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[install_styles]0">{{ lang('NO') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[install_styles]" id="qi_config[install_styles]2" value="2"{% if CONFIG_INSTALL_STYLES == 2 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[install_styles]2">{{ lang('ONLY_SUBSILVER') }}</label>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_DELETE_FILES_IF_EXIST}{L_COLON}<span class="help-block">{L_DELETE_FILES_IF_EXIST_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[delete_files]" value="1"<!-- IF CONFIG_DELETE_FILES == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[delete_files]" value="0"<!-- IF CONFIG_DELETE_FILES == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label for="default_style" class="col-md-5 col-form-label">{{ lang('SET_DEFAULT_STYLE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SET_DEFAULT_STYLE_EXPLAIN') }}</span></label>
+						<div class="col-md-7"><input class="form-control" type="text" id="default_style" name="qi_config[default_style]" value="{{ CONFIG_DEFAULT_STYLE }}"></div>
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-5 control-label text-left">{L_ENABLE_DEBUG}{L_COLON}<span class="help-block">{L_ENABLE_DEBUG_EXPLAIN}</span></label>
-					<div class="col-sm-7">
-						<label class="radio-inline"><input type="radio" name="qi_config[debug]" value="1"<!-- IF CONFIG_DEBUG == 1 --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-						<label class="radio-inline"><input type="radio" name="qi_config[debug]" value="0"<!-- IF CONFIG_DEBUG == 0 --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('DROP_DB_IF_EXISTS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DROP_DB_IF_EXISTS_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[drop_db]" id="qi_config[drop_db]1" value="1"{% if CONFIG_DROP_DB == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[drop_db]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[drop_db]" id="qi_config[drop_db]0" value="0"{% if CONFIG_DROP_DB == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[drop_db]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
 					</div>
-				</div>
-			</fieldset>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('DELETE_FILES_IF_EXIST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DELETE_FILES_IF_EXIST_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[delete_files]" id="qi_config[delete_files]1" value="1"{% if CONFIG_DELETE_FILES == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[delete_files]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[delete_files]" id="qi_config[delete_files]0" value="0"{% if CONFIG_DELETE_FILES == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[delete_files]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-5 col-form-label">{{ lang('ENABLE_DEBUG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ENABLE_DEBUG_EXPLAIN') }}</span></label>
+						<div class="col-md-7">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[debug]" id="qi_config[debug]1" value="1"{% if CONFIG_DEBUG == 1 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[debug]1">{{ lang('YES') }}</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="qi_config[debug]" id="qi_config[debug]0" value="0"{% if CONFIG_DEBUG == 0 %} checked="checked"{% endif %}>
+								<label class="form-check-label" for="qi_config[debug]0">{{ lang('NO') }}</label>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 	<section id="save-settings" class="anchor">
-		<div class="well">
-			<fieldset>
-				<legend>{L_SAVE_SETTINGS}</legend>
-				<div class="form-group">
-					<label for="save_profile" class="col-sm-5 control-label text-left">{L_SAVE_PROFILE}{L_COLON}<span class="help-block">{L_SAVE_PROFILE_EXPLAIN}</span></label>
-					<div class="col-sm-3">
-						<input class="form-control" type="text" id="save_profile" name="save_profile" value="{SAVE_PROFILE}" />
+		<div class="card bg-light mb-3">
+			<div class="card-body">
+				<fieldset>
+					<legend>{{ lang('SAVE_SETTINGS') }}</legend>
+					<div class="form-group row">
+						<label for="save_profile" class="col-md-5 col-form-label">{{ lang('SAVE_PROFILE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SAVE_PROFILE_EXPLAIN') }}</span></label>
+						<div class="col-md-3">
+							<input class="form-control" type="text" id="save_profile" name="save_profile" value="{{ SAVE_PROFILE }}">
+						</div>
+						<div class="col-md-4">
+							<input type="submit" name="submit" value="{{ lang('SAVE') }}" class="btn btn-primary">&nbsp;&nbsp;
+							<input type="reset" name="reset" value="{{ lang('RESET') }}" class="btn btn-secondary">
+							<input type="hidden" name="sel_lang" value="{{ SEL_LANG }}">
+							<input type="hidden" name="used_profile" value="{{ USED_PROFILE }}">
+						</div>
 					</div>
-					<div class="col-sm-4">
-						<input type="submit" name="submit" value="{L_SAVE}" class="button button-bold" />&nbsp;&nbsp;
-						<input type="reset" name="reset" value="{L_RESET}" class="button" />
-						<input type="hidden" name="sel_lang" value="{SEL_LANG}" />
-						<input type="hidden" name="used_profile" value="{USED_PROFILE}" />
-					</div>
-				</div>
-			</fieldset>
+				</fieldset>
+			</div>
 		</div>
 	</section>
 
 </form>
-<!-- INCLUDE overall_footer.html -->
+{% include 'overall_footer.html' %}

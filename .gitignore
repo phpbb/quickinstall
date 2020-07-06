@@ -3,9 +3,8 @@ qi_config.cfg
 boards/*
 settings/*
 cache/*
-sources/automod/*
-sources/extra/*
-sources/phpBB3_alt/*
-sources/phpBB3
+sources/*
+vendor/*
 *~
 .idea
+*/node_modules

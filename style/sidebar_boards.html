@@ -1,0 +1,22 @@
+<h5>{{ lang('BOARDS_LIST') }}</h5>
+{% for board in board_row %}
+	{% if loop.first %}
+		<form id="del_board" method="post" action="{{ U_MANAGE }}">
+	{% endif %}
+		<div class="custom-control custom-checkbox mb-1">
+			<input type="checkbox" class="custom-control-input" data-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}">
+			<label class="custom-control-label" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}"><strong>{{ board.BOARD_NAME }}</strong></a>{% if board.VERSION %} <span class="badge badge-secondary">{{ board.VERSION }}</span>{% endif %}</label>
+		</div>
+	{% if loop.last %}
+		<div class="custom-control custom-switch mb-3">
+			<input type="checkbox" class="custom-control-input" id="toggle_all" data-mark-list="markall" data-mark-target="#del_board">
+			<label class="custom-control-label" for="toggle_all">{{ lang('CHECK_ALL') }}</label>
+		</div>
+		<p>
+			<input class="btn btn-danger" name="delete" type="submit" value="{{ lang('DELETE') }}" data-confirm="{{ lang('SURE_DELETE_BOARDS') }}">
+		</p>
+		</form>
+	{% endif %}
+{% else %}
+	<p>{{ lang('NO_BOARDS') }}</p>
+{% endfor %}

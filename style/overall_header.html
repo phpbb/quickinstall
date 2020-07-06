@@ -1,114 +1,47 @@
 <!DOCTYPE html>
-<html dir="{S_CONTENT_DIRECTION}" lang="{S_USER_LANG}">
+<html dir="{{ S_CONTENT_DIRECTION }}" lang="{{ S_USER_LANG }}">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{PAGE_TITLE} &bull; {L_PHPBB_QI_TITLE}</title>
+<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
 
-<link href="{T_THEME_PATH}/assets/css/bootstrap.min.css?v={QI_VERSION}" rel="stylesheet" type="text/css" media="screen">
-<link href="{T_THEME_PATH}/assets/css/qi_style.css?v={QI_VERSION}" rel="stylesheet" type="text/css" media="screen">
-
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
-
+<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 </head>
 
-<body class="{S_CONTENT_DIRECTION}" data-spy="scroll" data-target="#sidebar">
+<body class="{{ S_CONTENT_DIRECTION }}" data-spy="scroll" data-target="#sidebar">
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<span class="navbar-brand"><span class="phpbb-logo">{L_QUICKINSTALL}</span><!-- IF U_VERSION_CHECK_URL --> &nbsp; <a href="{U_VERSION_CHECK_URL}" title="{VERSION_CHECK_TITLE}" class="label label-danger">{L_UPDATE}</a><!-- ENDIF --></span>
-		</div>
-		<div id="navbar" class="navbar-collapse collapse" role="navigation">
-			<ul class="nav navbar-nav navbar-right">
-				<!-- IF not S_IN_INSTALL and PROFILE_COUNT -->
-				<li<!-- IF S_MAIN--> class="active"<!-- ENDIF -->><a href="{U_MAIN}"><span>{L_BOARDS}</span></a></li>
-				<!-- ENDIF -->
-				<li<!-- IF S_SETTINGS --> class="active"<!-- ENDIF -->><a href="{U_SETTINGS}"><span>{L_PROFILES}</span></a></li>
-				<li<!-- IF S_DOCS --> class="active"<!-- ENDIF -->><a href="{U_DOCS}"><span>{L_DOCS_LONG}</span></a></li>
-				<li<!-- IF S_PHPINFO --> class="active"<!-- ENDIF -->><a href="{U_PHPINFO}"><span>{L_PHPINFO}</span></a></li>
-			</ul>
-		</div>
+<nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-primary flex-md-nowrap mb-2">
+	<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span></span> {% if U_VERSION_CHECK_URL %} &nbsp; <a href="{{ U_VERSION_CHECK_URL }}" title="{{ VERSION_CHECK_TITLE }}" class="btn btn-danger">{{ lang('UPDATE_AVAILABLE')}} <span class="badge badge-light">{{ VERSION_CHECK_CURRENT }}</span></a>{% endif %}
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse justify-content-end" id="navbar">
+		<ul class="navbar-nav mt-2 mt-lg-0">
+			{% if not S_IN_INSTALL and PROFILE_COUNT %}
+			<li class="nav-item{% if S_MAIN %} active{% endif %}"><a class="nav-link" href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
+			{% endif %}
+			<li class="nav-item{% if S_SETTINGS %} active{% endif %}"><a class="nav-link" href="{{ U_SETTINGS }}"><span>{{ lang('PROFILES') }}</span></a></li>
+			<li class="nav-item{% if S_DOCS %} active{% endif %}"><a class="nav-link" href="{{ U_DOCS }}"><span>{{ lang('DOCS_LONG') }}</span></a></li>
+			<li class="nav-item{% if S_PHPINFO %} active{% endif %}"><a class="nav-link" href="{{ U_PHPINFO }}"><span>{{ lang('PHPINFO') }}</span></a></li>
+		</ul>
 	</div>
 </nav>
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
-		<div class="col-sm-3 col-md-2 sidebar<!-- IF S_MAIN --> sidebar-boards<!-- ENDIF -->" id="sidebar" role="navigation">
-			<!-- IF S_SETTINGS -->
-			<h4>{L_SETTINGS_SECTIONS}</h4>
-			<ul class="nav nav-sidebar">
-				<li><a href="#back-top">{L_BACK_TOP}</a></li>
-				<li><a href="#profiles">{L_PROFILES}</a></li>
-				<li><a href="#qi-settings">{L_QI_SETTINGS}</a></li>
-				<li><a href="#db-settings">{L_DB_SETTINGS}</a></li>
-				<li><a href="#dir-settings">{L_DIR_URL_SETTINGS}</a></li>
-				<li><a href="#time-settings">{L_TIME_SETTINGS}</a></li>
-				<li><a href="#admin-settings">{L_ADMIN_SETTINGS}</a></li>
-				<li><a href="#server-settings">{L_SERVER_COOKIE_SETTINGS}</a></li>
-				<li><a href="#email-settings">{L_EMAIL_SETTINGS}</a></li>
-				<li><a href="#config-settings">{L_BOARD_CONFIG_SETTINGS}</a></li>
-				<li><a href="#populate-settings">{L_POPULATE_SETTINGS}</a></li>
-				<li><a href="#misc-settings">{L_MISC_SETTINGS}</a></li>
-				<li><a href="#save-settings">{L_SAVE_SETTINGS}</a></li>
-			</ul>
-			<p><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> {L_IS_REQUIRED}</p>
-			<!-- ELSEIF S_MAIN -->
-			<h4>{L_BOARDS_LIST}</h4>
-			<!-- BEGIN board_row -->
-			<!-- IF board_row.S_FIRST_ROW -->
-				<form id="del_board" method="post" action="{U_MANAGE}">
-			<!-- ENDIF -->
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" data-mark id="del_board_{board_row.S_ROW_COUNT}" name="select[]" value="{board_row.BOARD_NAME}">
-							<a href="{board_row.BOARD_URL}"><strong>{board_row.BOARD_NAME}</strong></a><!-- IF board_row.VERSION --> <span class="label label-primary">{board_row.VERSION}</span><!-- ENDIF -->
-						</label>
-					</div>
-			<!-- IF board_row.S_LAST_ROW -->
-					<p>
-						<a href="#" data-mark-list="markall" data-mark-target="#del_board">{L_CHECK_ALL}</a> &bull;
-						<a href="#" data-mark-list="false" data-mark-target="#del_board">{L_UNCHECK_ALL}</a>
-					</p>
-					<p>
-						<input class="button" name="delete" type="submit" value="{L_DELETE_SELECTED}"<!-- IF S_SHOW_CONFIRM --> data-confirm="{L_SURE_DELETE_BOARDS}"<!-- ENDIF --> />
-					</p>
-				</form>
-			<!-- ENDIF -->
-			<!-- BEGINELSE -->
-				<p>{L_NO_BOARDS}</p>
-			<!-- END board_row -->
-			<!-- ELSEIF S_DOCS -->
-			<h4>{L_DOCS_LONG}</h4>
-			<ul class="nav nav-sidebar">
-				<li><a href="#back-top">{L_PHPBB_QI_TEXT}</a></li>
-				<li><a href="#about-changelog">{L_CHANGELOG}</a></li>
-				<!-- BEGIN history -->
-				<li><a href="#{history.U_CHANGES}">{history.CHANGES_SINCE}</a></li>
-				<!-- END history -->
-			</ul>
-			<!-- ELSEIF S_PHPINFO -->
-			<input id="phpinfo-filter" type="text" class="form-control" placeholder="{L_SEARCH_HERE}">
-			<br />
-			<ul class="nav nav-sidebar">
-				<li><a href="#back-top">{L_BACK_TOP}</a></li>
-				<!-- BEGIN phpinfo -->
-				<li><a href="#{phpinfo.U_ANCHOR}">{phpinfo.TITLE}</a></li>
-				<!-- END phpinfo -->
-			</ul>
-			<!-- ENDIF -->
-
+		<div class="col-md-3 col-lg-2 sidebar d-none d-md-block" id="sidebar" role="navigation">
+			{% if S_SETTINGS %}
+				{% include 'sidebar_settings.html' %}
+			{% elseif S_MAIN %}
+				{% include 'sidebar_boards.html' %}
+			{% elseif S_DOCS %}
+				{% include 'sidebar_docs.html' %}
+			{% elseif S_PHPINFO %}
+				{% include 'sidebar_phpinfo.html' %}
+			{% endif %}
 		</div>
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		<div class="col-md-9 ml-sm-auto col-lg-10 px-5">
 			<div id="main">

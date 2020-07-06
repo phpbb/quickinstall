@@ -62,6 +62,10 @@ class qi_about
 				else if (strpos($row, '-') === 0)
 				{
 					$change = substr($row, 2);
+					$change = str_replace(
+						['[Fix]', '[Change]', '[Feature]'],
+						['<span class="badge badge-primary">Fix</span>', '<span class="badge badge-warning">Change</span>', '<span class="badge badge-success">Feature</span>'],
+						$change);
 
 					$template->assign_block_vars('history.changelog', array(
 						'CHANGE'	=> $Parsedown->line($change),
@@ -75,10 +79,6 @@ class qi_about
 		// Output page
 		qi::page_header($user->lang['DOCS_LONG']);
 
-		$template->set_filenames(array(
-			'body' => 'about_body.html',
-		));
-
-		qi::page_footer();
+		qi::page_display('about_body');
 	}
 }

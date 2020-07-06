@@ -3,16 +3,16 @@
 		</div>
 	</div>
 
-	<footer class="text-center">
-		<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">{L_PHPBB_QI_TEXT}</a> {QI_VERSION} {L_FOR_PHPBB_VERSIONS}<br />
-		{L_POWERED_BY_PHPBB}
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->
+	<footer class="text-center py-3">
+		<p class="mb-0"><a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">{{ lang('PHPBB_QI_TEXT') }}</a> {{ QI_VERSION }} {{ lang('FOR_PHPBB_VERSIONS') }}</p>
+		<p class="mb-0">{{ lang('POWERED_BY_PHPBB') }}</p>
+		{% if TRANSLATION_INFO %}<p class="mb-0">{{ TRANSLATION_INFO }}</p>{% endif %}
 	</footer>
 </div>
 
-<script src="{T_THEME_PATH}/assets/js/jquery-1.12.4.min.js?v={QI_VERSION}"></script>
-<script src="{T_THEME_PATH}/assets/js/bootstrap.min.js?v={QI_VERSION}"></script>
-<script src="{T_THEME_PATH}/assets/js/scripts.js?v={QI_VERSION}"></script>
+<script src="{{ T_THEME_PATH }}/assets/js/jquery.min.js"></script>
+<script src="{{ T_THEME_PATH }}/assets/js/bootstrap.min.js"></script>
+<script src="{{ T_THEME_PATH }}/assets/js/scripts.js?v={{ QI_VERSION }}"></script>
 
 </body>
 </html>

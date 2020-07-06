@@ -49,12 +49,11 @@ class qi
 			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
-			'S_SHOW_CONFIRM'	=> $settings->get_config('show_confirm', 1),
-
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
 			'QI_VERSION'		=> QI_VERSION,
 
 			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], QI_VERSION) : '',
+			'VERSION_CHECK_CURRENT'	=> !empty($update) ? $update['current'] : '',
 			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['download'] : '',
 		));
 
@@ -69,11 +68,11 @@ class qi
 	/**
 	* Output the standard page footer
 	*/
-	public static function page_footer()
+	public static function page_display($filename)
 	{
 		global $db, $template;
 
-		$template->display('body');
+		$template->display($filename);
 
 		// Close our DB connection.
 		if (!empty($db) && is_object($db))
@@ -332,20 +331,28 @@ class qi
 
 				phpbb_functions::send_status_line(503, 'Service Unavailable');
 
-				$error_out = file_get_contents($quickinstall_path . 'style/error.html');
-				$error_out = str_replace(
-					array('{L_QUICKINSTALL}', '{L_PHPBB_QI_TEXT}', '{QI_PATH}', '{MSG_TITLE}', '{MSG_EXPLAIN}', '{MSG_TEXT}', '{SETTINGS_FORM}', '{RETURN_LINKS}', '{QI_VERSION}', '{L_FOR_PHPBB_VERSIONS}', '{L_POWERED_BY_PHPBB}'),
-					array($user->lang['QUICKINSTALL'], $user->lang['PHPBB_QI_TEXT'], $quickinstall_path, $msg_title, '', $msg_text, '', $l_return_index, QI_VERSION, $user->lang['FOR_PHPBB_VERSIONS'], $user->lang['POWERED_BY_PHPBB']),
-					$error_out
-				);
-				if (self::is_ajax())
+				if (!class_exists('twig'))
 				{
-					echo json_encode(array('errorOut' => $error_out));
+					require("{$quickinstall_path}includes/twig.$phpEx");
 				}
-				else
-				{
-					echo $error_out;
-				}
+
+				$template = new twig($user, false, $quickinstall_path);
+
+				$template->assign_vars([
+					'QI_PATH'              => $quickinstall_path,
+					'MSG_TITLE'            => $msg_title,
+					'MSG_TEXT'             => $msg_text,
+					'MSG_EXPLAIN'          => '',
+					'SETTINGS_FORM'        => '',
+					'RETURN_LINKS'         => $l_return_index,
+					'QI_VERSION'           => QI_VERSION,
+					'L_QUICKINSTALL'       => $user->lang['QUICKINSTALL'],
+					'L_PHPBB_QI_TEXT'      => $user->lang['PHPBB_QI_TEXT'],
+					'L_FOR_PHPBB_VERSIONS' => $user->lang['FOR_PHPBB_VERSIONS'],
+					'L_POWERED_BY_PHPBB'   => $user->lang['POWERED_BY_PHPBB'],
+				]);
+
+				$template->display('error');
 
 				// As a pre-caution... some setups display a blank page if the flush() is not there.
 				(ob_get_level() > 0) ? @ob_flush() : @flush();
