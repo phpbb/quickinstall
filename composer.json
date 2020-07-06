@@ -20,11 +20,15 @@
   ],
   "require": {
     "php": ">=5.4",
-    "twig/twig": "^1.0"
+    "twig/twig": "^1.0",
+    "erusev/parsedown": "^1.7"
   },
   "config": {
     "platform": {
       "php": "5.4.7"
     }
+  },
+  "require-dev": {
+    "phing/phing": "^2.16"
   }
 }

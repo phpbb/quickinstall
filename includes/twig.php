@@ -41,8 +41,6 @@ class twig
 	 */
 	public function __construct($user, $cachepath, $qi_root_path)
 	{
-		require_once $qi_root_path . 'vendor/autoload.php';
-
 		$loader = new FilesystemLoader($qi_root_path . 'style/');
 		$this->twig = new Environment($loader, [
 			'cache' => $cachepath,

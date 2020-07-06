@@ -30,6 +30,7 @@ require("{$quickinstall_path}includes/qi_functions.$phpEx");
 require("{$quickinstall_path}includes/functions_files.$phpEx");
 require("{$quickinstall_path}includes/functions_module.$phpEx");
 require("{$quickinstall_path}includes/twig.$phpEx");
+require("{$quickinstall_path}vendor/autoload.$phpEx");
 
 if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 {
