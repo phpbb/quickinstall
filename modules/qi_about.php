@@ -24,7 +24,6 @@ class qi_about
 	{
 		global $template, $user, $quickinstall_path, $phpEx;
 
-		include $quickinstall_path . 'includes/Parsedown/Parsedown.' . $phpEx;
 		$Parsedown = new Parsedown();
 
 		// GET README
