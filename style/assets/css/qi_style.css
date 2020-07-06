@@ -68,3 +68,9 @@ svg.icon {
 .sidebar .nav-link.active svg.icon {
 	color: inherit;
 }
+
+blockquote {
+	padding: 0 1rem;
+	color: #6a737d;
+	border-left: .25rem solid #dfe2e5;
+}

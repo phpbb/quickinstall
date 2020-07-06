@@ -22,16 +22,14 @@ class qi_about
 {
 	public function __construct()
 	{
-		global $template, $user, $quickinstall_path, $phpEx;
-
-		$Parsedown = new Parsedown();
+		global $template, $user, $quickinstall_path;
 
 		// GET README
 		$doc_file = $quickinstall_path . 'README.md';
 		if (file_exists($doc_file))
 		{
 			$doc_body = file_get_contents($doc_file);
-			$template->assign_var('DOC_BODY', $Parsedown->text($doc_body));
+			$template->assign_var('DOC_BODY', Parsedown::instance()->text($doc_body));
 		}
 
 		// GET CHANGELOG
@@ -67,7 +65,7 @@ class qi_about
 						$change);
 
 					$template->assign_block_vars('history.changelog', array(
-						'CHANGE'	=> $Parsedown->line($change),
+						'CHANGE'	=> Parsedown::instance()->line($change),
 					));
 				}
 			}
