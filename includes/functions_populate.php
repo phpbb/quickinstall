@@ -193,10 +193,6 @@ class populate
 			// Give posts a timestamp starting 1 second after the last user reg date
 			$this->post_time = $this->start_time + $this->num_users + 1;
 
-			include($quickinstall_path . 'includes/lorem_ipsum.' . $phpEx);
-			$this->lorem_ipsum = $lorem_ipsum;
-			unset($lorem_impsum);
-
 			$this->fill_forums();
 		}
 
@@ -369,7 +365,7 @@ class populate
 					$poster_id	= mt_rand($mt_min, $mt_max);
 					$poster_arr	= $this->user_arr[$poster_id];
 					$post_time	= $this->post_time++;
-					$post_text	= sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $this->lorem_ipsum;
+					$post_text	= sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $user->lang['LOREM_IPSUM'];
 					$subject	= (($j > 0) ? 'Re: ' : '') . $topic_arr['topic_title'];
 
 					$bbcode_uid = $bbcode_bitfield = '';
