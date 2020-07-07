@@ -138,7 +138,6 @@ $template->assign_vars(array(
 	'CONFIG_ADMIN_NAME'		=> $settings->get_config('admin_name'),
 	'CONFIG_ADMIN_PASS'		=> $settings->get_config('admin_pass'),
 	'CONFIG_ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
-	'CONFIG_AUTOMOD'		=> $settings->get_config('automod', 0),
 	'CONFIG_BOARD_EMAIL'	=> $settings->get_config('board_email'),
 	'CONFIG_BOARDS_DIR'		=> $settings->get_boards_dir(),
 	'CONFIG_BOARDS_URL'		=> $settings->get_boards_url(),

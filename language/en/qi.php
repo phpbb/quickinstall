@@ -51,8 +51,6 @@ $lang = array_merge($lang, array(
 	'ADMIN_SETTINGS'		=> 'Admin account',
 	'ALT_ENV'				=> 'Alternate environment',
 	'ALT_ENV_EXPLAIN'		=> 'Alternate phpBB environments are available if you have added additional phpBB3 boards to the <code>sources/phpBB3_alt/</code> directory.',
-	'AUTOMOD'				=> 'AutoMOD',
-	'AUTOMOD_INSTALL'		=> 'Install AutoMOD',
 
 	'BACK_TOP'				=> 'Back to the top',
 	'BOARD_CONFIG_OPTIONS'	=> 'Board configuration options',
@@ -181,8 +179,6 @@ $lang = array_merge($lang, array(
 	'NO'					=> 'No',
 	'NO_ALT_ENV'			=> 'No alternative environments found.',
 	'NO_ALT_ENV_FOUND'		=> 'The specified alternative environment <strong>%s</strong> don’t exist.', // %s is the missing environment name
-	'NO_AUTOMOD'			=> '<strong>AutoMOD not found in the sources directory.</strong><br />You need to download AutoMOD and copy the contents of the <code>root</code> directory to <code>sources/automod</code>. If you use AutoMOD 1.0.0. it is the contents of the <code>upload</code> directory.',
-	'NO_AUTOMOD_TITLE'		=> 'AutoMOD not found',
 	'NO_BOARDS'				=> 'You have no boards.',
 	'NO_DB'					=> 'No database selected.',
 	'NO_IMPACT_WIN'			=> 'This setting has no impact on Windows systems older than Win7.',

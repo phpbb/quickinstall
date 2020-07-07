@@ -53,7 +53,6 @@ function get_default_settings()
 		'chunk_topic'		=> 2000,
 		'chunk_user'		=> 5000,
 		'redirect'			=> 1,
-		'automod'			=> 0,
 		'populate'			=> 0,
 		'email_domain'		=> 'phpbb-quickinstall.tld',
 		'num_users'			=> 100,

@@ -80,33 +80,10 @@ class qi_create
 		$admin_pass	= $settings->get_config('admin_pass', '', true);
 
 		$alt_env	= $settings->get_config('alt_env', '');
-		$automod	= (!defined('PHPBB_31') && $settings->get_config('automod', false)) ? true : false;
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
 			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_ALT_ENV_FOUND'], 'main');
-		}
-
-		if ($automod)
-		{
-			$empty = true;
-
-			// There can be '.', '..' and/or '.gitkeep' in the AutoMOD directory.
-			$dh = opendir("{$quickinstall_path}sources/automod");
-
-			while (($file = readdir($dh)) !== false)
-			{
-				if ($file[0] != '.')
-				{
-					$empty = false;
-					break;
-				}
-			}
-
-			if ($empty)
-			{
-				create_board_warning($user->lang['NO_AUTOMOD_TITLE'], $user->lang['NO_AUTOMOD'], 'main');
-			}
 		}
 
 		// Set up our basic founder.
@@ -806,13 +783,6 @@ class qi_create
 			$install->add_modules(false, false);
 			$install->add_language(false, false);
 			$install->add_bots(false, false);
-		}
-
-		// now automod (easymod)
-		if ($automod && !defined('PHPBB_31'))
-		{
-			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
-			automod_installer::install_automod($board_dir, $settings->get_config('make_writable', false));
 		}
 
 		// clean up

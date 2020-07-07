@@ -55,7 +55,6 @@ class qi_main
 			'S_ERROR'		=> $settings->get_config('error', 0),
 			'ERROR_TITLE'	=> $settings->get_config('error_title', '', true),
 
-			'S_AUTOMOD'		=> $settings->get_config('automod', 0),
 			'S_DELETE_FILES'=> $settings->get_config('delete_files', 0),
 			'S_DEBUG'		=> $settings->get_config('debug', 0),
 			'S_DROP_DB'		=> $settings->get_config('drop_db', 0),
