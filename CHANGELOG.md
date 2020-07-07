@@ -1,13 +1,13 @@
 # QuickInstall Changelog
 
 ## Version 1.4.0
-- [Change] Re-styled some of QI's UX elements including sidebar menus, buttons and various other form elements.
+- [Change] Re-styled some of QI's UI elements including sidebar menus, buttons and various other form elements.
 - [Change] Migrated QI's Bootstrap framework to version 4.5.
 - [Change] Bootstrap framework now managed as an NPM library, located in the new `develop` folder. Contributors can use NPM commands to update, customise, compile and deploy Bootstrap to QI (see README).
-- [Change] Migrated QI's templating framework over to Twig. All QI html files now use Twig syntax. Contributors can use Composer commands to update Twig, located in the `vendor` directory.
-- [Change] Dropped support for installing AutoMOD from QuickInstall.
-- [Change] Dropped the subsilver2 only option from the Install additional styles setting.
-- [Feature] Added a `DEBUG` constant to `qi_constants.php`. Contributors can un-comment it while developing QI to disable template caching.
+- [Change] Migrated QI's templating framework to Twig. All QI html files now use Twig syntax. Contributors can use Composer commands to update Twig, located in the `vendor` directory.
+- [Change] Dropped support for installing AutoMOD into 3.0.x boards from QuickInstall. AutoMOD can still be installed manually for 3.0.x boards.
+- [Change] Dropped the *subsilver2 only* option from the Install additional styles setting.
+- [Change] Added a `DEBUG` constant to `qi_constants.php`. Contributors can un-comment it while developing QI to disable template caching.
 - [Fix] Fixed an issue with the migration schema generator that blocked QI from working with phpBB 4.0.0-dev.
 - [Fix] Fixed some issues with language vars not working on error pages.
 
