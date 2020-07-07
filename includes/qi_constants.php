@@ -7,7 +7,7 @@
 *
 */
 
-define('QI_VERSION', '1.4.0-dev');
+define('QI_VERSION', '1.4.0');
 //define('QI_DEBUG', true); // un-comment this disable template caching
 
 // Cookies set by QI
