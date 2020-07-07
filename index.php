@@ -90,7 +90,7 @@ set_error_handler(array('qi', 'msg_handler'), E_ALL);
 // Make sure we have phpBB.
 if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 {
-	gen_error_msg('phpBB not found.<br /><br />You need to download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to the <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0.x, 3.1.x, and 3.2.x. Choose the version you would like to use as your default test board.');
+	gen_error_msg('phpBB not found.<br /><br />You need to download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to the <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0.x, 3.1.x, 3.2.x, and 3.3.x. Choose the version you would like to use as your default test board.');
 }
 
 // Let's get the config.

@@ -90,21 +90,6 @@
 						</div>
 					</div>
 				</div>
-				{% if PHPBB_VERSION < '3.1' %}
-				<div class="form-group row">
-					<label class="col-md-5 col-form-label">{{ lang('AUTOMOD_INSTALL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ONLY_30') }}</span></label>
-					<div class="col-md-7">
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="automod" id="automod1" value="1"{% if S_AUTOMOD == 1 %} checked="checked"{% endif %}>
-							<label class="form-check-label" for="automod1">{{ lang('YES') }}</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="automod" id="automod2" value="0"{% if S_AUTOMOD == 0 %} checked="checked"{% endif %}>
-							<label class="form-check-label" for="automod2">{{ lang('NO') }}</label>
-						</div>
-					</div>
-				</div>
-				{% endif %}
 				<div class="form-group row">
 					<label class="col-md-5 col-form-label">{{ lang('POPULATE') ~ lang('COLON') }}</label>
 					<div class="col-md-7">
@@ -139,12 +124,6 @@
 							<input class="form-check-input" type="radio" name="install_styles" id="install_styles1" value="1"{% if INSTALL_STYLES == 1 %} checked="checked"{% endif %}>
 							<label class="form-check-label" for="install_styles1">{{ lang('YES') }}</label>
 						</div>
-						{% if PHPBB_VERSION < '3.2' %}
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="install_styles" id="install_styles2" value="2"{% if INSTALL_STYLES == 2 %} checked="checked"{% endif %}>
-							<label class="form-check-label" for="install_styles2">{{ lang('ONLY_SUBSILVER') }}</label>
-						</div>
-						{% endif %}
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="radio" name="install_styles" id="install_styles0" value="0"{% if INSTALL_STYLES == 0 %} checked="checked"{% endif %}>
 							<label class="form-check-label" for="install_styles0">{{ lang('NO') }}</label>

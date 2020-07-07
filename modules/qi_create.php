@@ -80,33 +80,10 @@ class qi_create
 		$admin_pass	= $settings->get_config('admin_pass', '', true);
 
 		$alt_env	= $settings->get_config('alt_env', '');
-		$automod	= (!defined('PHPBB_31') && $settings->get_config('automod', false)) ? true : false;
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
 			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_ALT_ENV_FOUND'], 'main');
-		}
-
-		if ($automod)
-		{
-			$empty = true;
-
-			// There can be '.', '..' and/or '.gitkeep' in the AutoMOD directory.
-			$dh = opendir("{$quickinstall_path}sources/automod");
-
-			while (($file = readdir($dh)) !== false)
-			{
-				if ($file[0] != '.')
-				{
-					$empty = false;
-					break;
-				}
-			}
-
-			if ($empty)
-			{
-				create_board_warning($user->lang['NO_AUTOMOD_TITLE'], $user->lang['NO_AUTOMOD'], 'main');
-			}
 		}
 
 		// Set up our basic founder.
@@ -808,13 +785,6 @@ class qi_create
 			$install->add_bots(false, false);
 		}
 
-		// now automod (easymod)
-		if ($automod && !defined('PHPBB_31'))
-		{
-			include($quickinstall_path . 'includes/functions_install_automod.' . $phpEx);
-			automod_installer::install_automod($board_dir, $settings->get_config('make_writable', false));
-		}
-
 		// clean up
 		file_functions::delete_files($board_dir, array('Thumbs.db', 'DS_Store', 'CVS', '.svn', '.git'));
 
@@ -827,7 +797,7 @@ class qi_create
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 
 		// Install styles
-		if (($install_styles = $settings->get_config('install_styles', 0)) != 0)
+		if ($settings->get_config('install_styles', 0))
 		{
 			include($phpbb_root_path . 'includes/acp/acp_styles.' . $phpEx);
 
@@ -840,14 +810,13 @@ class qi_create
 			{
 				include($quickinstall_path . 'includes/class_31_styles.' . $phpEx);
 
-				new class_31_styles($install_styles);
+				new class_31_styles();
 			}
 			else
 			{
-
 				include($quickinstall_path . 'includes/class_30_styles.' . $phpEx);
 
-				new class_30_styles($install_styles);
+				new class_30_styles();
 			}
 		}
 

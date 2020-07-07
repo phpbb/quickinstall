@@ -17,10 +17,6 @@ if (!defined('IN_QUICKINSTALL'))
 
 class class_30_styles
 {
-	const ALL_STYLES = 1;
-
-	const SUBSILVER2 = 2;
-
 	private $qi_default_style = '';
 
 	private $qi_styles = array();
@@ -29,10 +25,7 @@ class class_30_styles
 
 	private $acp_styles;
 
-	/**
-	 * @param int $install_styles. 1 = all styles, 2 only subsilver2.
-	 */
-	public function __construct($install_styles)
+	public function __construct()
 	{
 		global $settings, $phpbb_root_path;
 
@@ -41,17 +34,10 @@ class class_30_styles
 		$this->acp_styles = new acp_styles();
 		$this->acp_styles->main(0, '');
 
-		$subsilver_only			= $install_styles == self::SUBSILVER2;
 		$this->qi_default_style	= $settings->get_config('default_style', '');
 
 		// Get available styles
 		$this->qi_get_styles();
-
-		if ($subsilver_only && !empty($this->qi_styles['subsilver2']))
-		{
-			$this->qi_install_style($this->qi_styles['subsilver2']);
-			return;
-		}
 
 		// Install all styles.
 		foreach ($this->qi_styles as $key => $style)
@@ -65,7 +51,7 @@ class class_30_styles
 
 	private function qi_install_style($style)
 	{
-		global $phpbb_root_path, $settings;
+		global $phpbb_root_path;
 
 		if (!empty($style['inherit_from']) && empty($this->qi_styles[$style['inherit_from']]))
 		{
