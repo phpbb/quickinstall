@@ -797,7 +797,7 @@ class qi_create
 		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 
 		// Install styles
-		if (($install_styles = $settings->get_config('install_styles', 0)) != 0)
+		if ($settings->get_config('install_styles', 0))
 		{
 			include($phpbb_root_path . 'includes/acp/acp_styles.' . $phpEx);
 
@@ -810,14 +810,13 @@ class qi_create
 			{
 				include($quickinstall_path . 'includes/class_31_styles.' . $phpEx);
 
-				new class_31_styles($install_styles);
+				new class_31_styles();
 			}
 			else
 			{
-
 				include($quickinstall_path . 'includes/class_30_styles.' . $phpEx);
 
-				new class_30_styles($install_styles);
+				new class_30_styles();
 			}
 		}
 

@@ -17,20 +17,13 @@ if (!defined('IN_QUICKINSTALL'))
 
 class class_31_styles extends acp_styles
 {
-	const ALL_STYLES = 1;
-
-	const SUBSILVER2 = 2;
-
 	private $qi_styles = array();
 
 	private $qi_default_style = '';
 
-	/**
-	 * @param int $install_styles. 1 = all styles, 2 only subsilver2.
-	 */
-	public function __construct($install_styles)
+	public function __construct()
 	{
-		global $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $template, $request, $cache, $auth, $config;
+		global $db, $user, $phpbb_root_path, $phpEx, $template, $request, $cache, $auth, $config;
 		global $settings;
 
 		$this->mode = 'install';
@@ -45,8 +38,6 @@ class class_31_styles extends acp_styles
 		$this->php_ext = $phpEx;
 		$this->styles_path = $this->phpbb_root_path . $this->styles_path_absolute . '/';
 
-		$subsilver_default		= isset($subsilver_default) ? $subsilver_default : false;
-		$subsilver_only			= $install_styles == self::SUBSILVER2;
 		$this->qi_default_style	= $settings->get_config('default_style', '');
 
 		// Get a array with installed styles.
@@ -59,33 +50,11 @@ class class_31_styles extends acp_styles
 		// And merge them into one array.
 		$style_ary = array_merge($installed, $available);
 
-		if ($subsilver_only)
+		// Set styles as active and put their name as key.
+		foreach ($style_ary as $style)
 		{
-			// Find subsilver2
-			foreach ($style_ary as $style)
-			{
-				if ($style['style_name'] == 'subsilver2')
-				{
-					$style['style_active'] = 1;
-					$id = $this->install_style($style);
-
-					if ($subsilver_default)
-					{
-						$this->qi_set_default($id);
-					}
-
-					return;
-				}
-			}
-		}
-		else
-		{
-			// Set styles as active and put their name as key.
-			foreach ($style_ary as $style)
-			{
-				$style['style_active'] = 1;
-				$this->qi_styles[$style['style_name']] = $style;
-			}
+			$style['style_active'] = 1;
+			$this->qi_styles[$style['style_name']] = $style;
 		}
 
 		unset($style_ary);

@@ -124,12 +124,6 @@
 							<input class="form-check-input" type="radio" name="install_styles" id="install_styles1" value="1"{% if INSTALL_STYLES == 1 %} checked="checked"{% endif %}>
 							<label class="form-check-label" for="install_styles1">{{ lang('YES') }}</label>
 						</div>
-						{% if PHPBB_VERSION < '3.2' %}
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="install_styles" id="install_styles2" value="2"{% if INSTALL_STYLES == 2 %} checked="checked"{% endif %}>
-							<label class="form-check-label" for="install_styles2">{{ lang('ONLY_SUBSILVER') }}</label>
-						</div>
-						{% endif %}
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="radio" name="install_styles" id="install_styles0" value="0"{% if INSTALL_STYLES == 0 %} checked="checked"{% endif %}>
 							<label class="form-check-label" for="install_styles0">{{ lang('NO') }}</label>
