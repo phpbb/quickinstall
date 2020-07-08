@@ -63,11 +63,20 @@
 			$(this).closest("form").submit();
 		});
 
-		// mark all / unmark all checkboxes
-		$("[data-mark-list]").on("click", function (e) {
-			var target = $(this).attr("data-mark-target");
-			var checks = $(target).find("[data-mark]");
-			checks.prop("checked", $(this).prop("checked"));
+		// Toggle all checkboxes
+		var $toggleAll = $("[data-mark-list]");
+		var $targetForm = $toggleAll.closest("form");
+		var $checkboxes = $targetForm.find("[data-mark]");
+		$toggleAll.on("change", function () {
+			$checkboxes.prop("checked", $(this).prop("checked"));
+		});
+		$checkboxes.on("change", function () {
+			if ($(this).prop("checked") === false) {
+				$toggleAll.prop("checked", false);
+			}
+			if ($targetForm.find("[data-mark]:checked").length === $checkboxes.length) {
+				$toggleAll.prop("checked", true);
+			}
 		});
 
 		// confirm alert dialog
