@@ -20,7 +20,7 @@ QuickInstall was made to support the community of phpBB extension developers (an
 > If you want additional files/folders to be copied to your boards when they are created (i.e., extensions), you can put them in the `sources/extra/` folder. By using the same folder structure in `sources/extra/` as phpBB, the files/folders should be mapped to the correct locations in your boards.
 
 ## Upgrading
-* Download the latest QuickInstall and unzip it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
+* Download the latest QuickInstall and extract it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
 
 ##### Upgrading from QuickInstall 1.1.8 or earlier?
 * If upgrading from QuickInstall 1.1.8 or earlier, follow the normal upgrade procedure mentioned above. Then point your browser to the Profiles page, make sure the settings are in order and click "Save".  QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default".

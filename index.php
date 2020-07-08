@@ -281,7 +281,7 @@ else
 	);
 }
 
-// update chache path
+// update cache path
 $template->set_cachepath($settings->get_cache_dir());
 
 $page = (empty($error)) ? $page : 'settings';
