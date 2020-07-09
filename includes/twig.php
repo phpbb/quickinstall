@@ -9,6 +9,7 @@
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 /**
  * A slim template class to enable twig variables in templates
@@ -49,7 +50,7 @@ class twig
 		]);
 
 		$this->twig->addFunction(
-			new Twig_SimpleFunction('lang', array($this, 'lang'))
+			new TwigFunction('lang', [$this, 'lang'])
 		);
 
 		$this->user = $user;

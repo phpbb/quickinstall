@@ -170,7 +170,7 @@ $lang = array_merge($lang, array(
 	'MAKE_WRITABLE_BOARD_EXPLAIN'	=> 'Sets file permissions to 0666.',
 	'MANAGE_BOARDS'			=> 'Manage boards',
 	'MAX'					=> 'Max',
-	'MIGHT_TAKE_LONG'		=> 'Creation of the board can take several seconds or minutes. Do not submit the form twice.',
+	'MIGHT_TAKE_LONG'		=> 'Creation of the board can take a while. Do not submit the form twice.',
 	'MIN'					=> 'Min',
 	'MINOR_MISHAP'			=> 'Minor mishap',
 
