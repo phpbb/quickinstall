@@ -22,6 +22,11 @@ if (!defined('IN_QUICKINSTALL'))
 class settings
 {
 	/**
+	 * Cookie with the latest used profile name as payload.
+	 */
+	const QI_PROFILE_COOKIE = 'qi_profile';
+
+	/**
 	 * Array with configuration settings.
 	 * @private
 	 */
@@ -84,11 +89,11 @@ class settings
 			$this->profile = $profile;
 			$this->set_profile_cookie($profile);
 		}
-		else if (!empty($_COOKIE[QI_PROFILE_COOKIE]) && is_readable("{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg"))
+		else if (!empty($_COOKIE[self::QI_PROFILE_COOKIE]) && is_readable("{$quickinstall_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg"))
 		{
 			// Get the previously used profile.
-			$config = file("{$quickinstall_path}settings/{$_COOKIE[QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-			$this->profile = $_COOKIE[QI_PROFILE_COOKIE];
+			$config = file("{$quickinstall_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$this->profile = $_COOKIE[self::QI_PROFILE_COOKIE];
 		}
 		else
 		{
@@ -827,7 +832,7 @@ class settings
 	{
 		// A Julian year == 365.25 days * 86,400 seconds
 		$expire_time = time() + 31557600;
-		setcookie(QI_PROFILE_COOKIE, $profile, $expire_time);
+		setcookie(self::QI_PROFILE_COOKIE, $profile, $expire_time);
 	}
 
 	/**
