@@ -5,7 +5,7 @@
 	$(document).ready(function () {
 
 		// create form validation and submit
-		$(".needs-validation").on("click", "input[type='submit']", function (e) {
+		$(".needs-validation").on("click", "button[type='submit']", function (e) {
 			e.preventDefault();
 			var validated = true;
 			$("input[required]").each(function () {
