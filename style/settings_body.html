@@ -11,7 +11,7 @@
 	<div class="alert alert-success" role="alert">{{ lang('SETTINGS_SUCCESS') }}</div>
 {% elseif S_SETTINGS_FAILURE %}
 	<div class="alert alert-danger" role="alert">
-		<h5 class="alert-heading">⚠️ {{ lang('SETTINGS_FAILURE') }}</h5>
+		<h5 class="alert-heading"><svg class="bi icon text-danger" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg>️ {{ lang('SETTINGS_FAILURE') }}</h5>
 		<p class="mb-0">{% if ERROR %}{{ ERROR }}{% endif %}error r</p>
 	</div>
 {% endif %}
@@ -332,7 +332,7 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('POPULATE_OPTIONS') }}</legend>
-					<div class="alert alert-info">ℹ️ {{ lang('THESE_CAN_CHANGE') }}</div>
+					<div class="alert alert-info"><svg class="bi icon text-info" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/></svg>️ {{ lang('THESE_CAN_CHANGE') }}</div>
 					<div class="form-group row">
 						<label class="col-md-5 col-form-label">{{ lang('POPULATE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('POPULATE_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
@@ -441,7 +441,7 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('INSTALL_OPTIONS') }}</legend>
-					<div class="alert alert-info">ℹ️ {{ lang('THESE_CAN_CHANGE') }}</div>
+					<div class="alert alert-info"><svg class="bi icon text-info" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/></svg>️ {{ lang('THESE_CAN_CHANGE') }}</div>
 					<div class="form-group row">
 						<label for="alt_env" class="col-md-5 col-form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><select name="qi_config[alt_env]" id="alt_env" class="custom-select">{{ CONFIG_ALT_ENV }}</select></div>

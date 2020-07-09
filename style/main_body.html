@@ -133,7 +133,11 @@
 
 				<div class="form-group row">
 					<div class="col-md-5">
-						<p class="alert alert-warning">⚠️ {{ lang('MIGHT_TAKE_LONG') }}</p>
+						<p class="alert alert-warning">
+							<svg class="bi icon text-warning" width="24" height="24" fill="currentColor">
+								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/>
+							</svg>️ {{ lang('MIGHT_TAKE_LONG') }}
+						</p>
 					</div>
 					<div class="col-md-5">
 						<input type="submit" name="submituser" id="submituser" value="{{ lang('CREATE_BOARD') }}" class="btn btn-primary btn-lg btn-block">
@@ -141,7 +145,7 @@
 				</div>
 			</fieldset>
 
-			<div class="alert alert-info">ℹ️ {{ lang('QI_MANAGE_HEADINGS') }}</div>
+			<div class="alert alert-info"><svg class="bi icon text-info" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/></svg>️ {{ lang('QI_MANAGE_HEADINGS') }}</div>
 
 			<fieldset>
 				<legend><a href="#options_advanced" data-toggle="collapse">{{ lang('INSTALL_OPTIONS') }}</a></legend>
