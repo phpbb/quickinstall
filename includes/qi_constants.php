@@ -9,6 +9,8 @@
 
 // IMPORTANT NOTE:
 // This file is for development and debugging purposes only. Use class constants instead of
-// defining global constants here. This file is ignored by git.
+// defining global constants here.
 
-//define('QI_DEBUG', true); // un-comment this disable template caching
+// DO NOT COMMIT CHANGES TO THIS FILE TO GIT
+
+// define('QI_DEBUG', true); // un-comment this disable template caching
