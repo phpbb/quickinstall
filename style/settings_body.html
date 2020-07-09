@@ -553,14 +553,16 @@
 					<legend>{{ lang('SAVE_SETTINGS') }}</legend>
 					<div class="form-group row">
 						<label for="save_profile" class="col-md-5 col-form-label">{{ lang('SAVE_PROFILE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SAVE_PROFILE_EXPLAIN') }}</span></label>
-						<div class="col-md-3">
-							<input class="form-control" type="text" id="save_profile" name="save_profile" value="{{ SAVE_PROFILE }}">
-							<input type="hidden" name="sel_lang" value="{{ SEL_LANG }}">
-							<input type="hidden" name="used_profile" value="{{ USED_PROFILE }}">
-						</div>
-						<div class="col-md-4">
-							<button type="submit" name="submit" class="btn btn-primary">{{ lang('SAVE') }}</button>&nbsp;&nbsp;
-							<button type="reset" name="reset" class="btn btn-secondary">{{ lang('RESET') }}</button>
+						<input type="hidden" name="sel_lang" value="{{ SEL_LANG }}">
+						<input type="hidden" name="used_profile" value="{{ USED_PROFILE }}">
+						<div class="col-md-6">
+							<div class="input-group">
+								<input class="form-control" type="text" id="save_profile" name="save_profile" value="{{ SAVE_PROFILE }}" aria-describedby="button-addon">
+								<div class="input-group-append" id="button-addon">
+									<button type="submit" name="submit" class="btn btn-primary">{{ lang('SAVE') }}</button>
+									<button type="reset" name="reset" class="btn btn-secondary">{{ lang('RESET') }}</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</fieldset>
