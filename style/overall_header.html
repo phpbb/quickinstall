@@ -12,14 +12,14 @@
 
 <body class="{{ S_CONTENT_DIRECTION }}" data-spy="scroll" data-target="#sidebar">
 
-<nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-primary flex-md-nowrap mb-2">
+<nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span></span> {% if U_VERSION_CHECK_URL %} &nbsp; <a href="{{ U_VERSION_CHECK_URL }}" title="{{ VERSION_CHECK_TITLE }}" class="btn btn-danger">{{ lang('UPDATE_AVAILABLE')}} <span class="badge badge-light">{{ VERSION_CHECK_CURRENT }}</span></a>{% endif %}
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
 	<div class="collapse navbar-collapse justify-content-end" id="navbar">
-		<ul class="navbar-nav mt-2 mt-lg-0">
+		<ul class="navbar-nav mt-2 mt-md-0">
 			{% if not S_IN_INSTALL and PROFILE_COUNT %}
 			<li class="nav-item{% if S_MAIN %} active{% endif %}"><a class="nav-link" href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
 			{% endif %}
