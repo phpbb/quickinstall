@@ -336,7 +336,18 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('POPULATE_OPTIONS') }}</legend>
-					<div class="alert alert-info"><svg class="bi icon text-info" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/></svg>️ {{ lang('THESE_CAN_CHANGE') }}</div>
+					<div class="alert alert-info">
+						<div class="row">
+							<div class="col-auto align-self-start pr-2">
+								<svg class="bi icon text-info" width="24" height="24" fill="currentColor">
+									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+								</svg>️
+							</div>
+							<div class="col pl-2">
+								{{ lang('THESE_CAN_CHANGE') }}
+							</div>
+						</div>
+					</div>
 					<div class="form-group row">
 						<label class="col-md-5 col-form-label">{{ lang('POPULATE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('POPULATE_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
@@ -445,7 +456,18 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('INSTALL_OPTIONS') }}</legend>
-					<div class="alert alert-info"><svg class="bi icon text-info" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/></svg>️ {{ lang('THESE_CAN_CHANGE') }}</div>
+					<div class="alert alert-info">
+						<div class="row">
+							<div class="col-auto align-self-start pr-2">
+								<svg class="bi icon text-info" width="24" height="24" fill="currentColor">
+									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+								</svg>️
+							</div>
+							<div class="col pl-2">
+								{{ lang('THESE_CAN_CHANGE') }}
+							</div>
+						</div>
+					</div>
 					<div class="form-group row">
 						<label for="alt_env" class="col-md-5 col-form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><select name="qi_config[alt_env]" id="alt_env" class="custom-select">{{ CONFIG_ALT_ENV }}</select></div>

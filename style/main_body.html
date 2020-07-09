@@ -133,11 +133,18 @@
 
 				<div class="form-group row">
 					<div class="col-md-5">
-						<p class="alert alert-warning">
-							<svg class="bi icon text-warning" width="24" height="24" fill="currentColor">
-								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/>
-							</svg>️ {{ lang('MIGHT_TAKE_LONG') }}
-						</p>
+						<div class="alert alert-warning">
+							<div class="row">
+								<div class="col-auto align-self-start pr-2">
+									<svg class="bi icon text-warning" width="24" height="24" fill="currentColor">
+										<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/>
+									</svg>
+								</div>
+								<div class="col pl-2">
+									{{ lang('MIGHT_TAKE_LONG') }}
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="col-md-5">
 						<button type="submit" name="submituser" id="submituser" class="btn btn-primary btn-lg btn-block">{{ lang('CREATE_BOARD') }}</button>
@@ -145,7 +152,18 @@
 				</div>
 			</fieldset>
 
-			<div class="alert alert-info"><svg class="bi icon text-info" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/></svg>️ {{ lang('QI_MANAGE_HEADINGS') }}</div>
+			<div class="alert alert-info">
+				<div class="row">
+					<div class="col-auto align-self-start pr-2">
+						<svg class="bi icon text-info" width="24" height="24" fill="currentColor">
+							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+						</svg>️
+					</div>
+					<div class="col pl-2">
+						{{ lang('QI_MANAGE_HEADINGS') }}
+					</div>
+				</div>
+			</div>
 
 			<fieldset>
 				<legend><a href="#options_advanced" data-toggle="collapse">{{ lang('INSTALL_OPTIONS') }}</a></legend>
