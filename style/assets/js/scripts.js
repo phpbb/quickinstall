@@ -73,6 +73,7 @@
 		$checkboxes.on("change", function () {
 			if ($(this).prop("checked") === false) {
 				$toggleAll.prop("checked", false);
+				return;
 			}
 			if ($targetForm.find("[data-mark]:checked").length === $checkboxes.length) {
 				$toggleAll.prop("checked", true);
