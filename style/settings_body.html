@@ -26,7 +26,7 @@
 	<div class="alert alert-danger">
 		<div id="config_text_alert">
 			<p>{{ lang('CONFIG_WARNING') }}</p>
-			<p><input id="config_text_button" class="btn btn-primary" type="button" value="{{ lang('CONFIG_BUTTON') }}"></p>
+			<button id="config_text_button" class="btn btn-primary" type="button">{{ lang('CONFIG_BUTTON') }}</button>
 		</div>
 		<div id="config_text_container" class="d-none">
 			<label for="config_text">
@@ -54,9 +54,9 @@
 							{{ PROFILE_OPTIONS }}
 						{% endif %}
 						</select>
-						{% if PROFILE_COUNT > 1  %}
-						<noscript><input type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary my-2"></noscript>
-						{% endif %}
+					</div>
+					<div class="col-md-2">
+						{% if PROFILE_COUNT > 1 %}<noscript><button type="submit" name="submit-profile" class="btn btn-primary">{{ lang('GO') }}</button></noscript>{% endif %}
 					</div>
 				</div>
 				{% if PROFILE_COUNT > 1 %}
@@ -533,12 +533,12 @@
 						<label for="save_profile" class="col-md-5 col-form-label">{{ lang('SAVE_PROFILE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SAVE_PROFILE_EXPLAIN') }}</span></label>
 						<div class="col-md-3">
 							<input class="form-control" type="text" id="save_profile" name="save_profile" value="{{ SAVE_PROFILE }}">
-						</div>
-						<div class="col-md-4">
-							<input type="submit" name="submit" value="{{ lang('SAVE') }}" class="btn btn-primary">&nbsp;&nbsp;
-							<input type="reset" name="reset" value="{{ lang('RESET') }}" class="btn btn-secondary">
 							<input type="hidden" name="sel_lang" value="{{ SEL_LANG }}">
 							<input type="hidden" name="used_profile" value="{{ USED_PROFILE }}">
+						</div>
+						<div class="col-md-4">
+							<button type="submit" name="submit" class="btn btn-primary">{{ lang('SAVE') }}</button>&nbsp;&nbsp;
+							<button type="reset" name="reset" class="btn btn-secondary">{{ lang('RESET') }}</button>
 						</div>
 					</div>
 				</fieldset>

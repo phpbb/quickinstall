@@ -15,10 +15,10 @@
 						{% elseif PROFILE_COUNT == 1 %}
 						{{ PROFILE_OPTIONS }}
 						{% else %}
-						<select id="qi_profile" name="qi_profile" class="custom-select" data-form-submit="true">
+						<select id="qi_profile" name="qi_profile" class="custom-select mb-3" data-form-submit="true">
 							{{ PROFILE_OPTIONS }}
 						</select>
-						<noscript><input type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary my-2"></noscript>
+						<noscript><button type="submit" name="submit-profile" class="btn btn-primary">{{ lang('GO') }}</noscript>
 						{% endif %}
 					</div>
 				</div>
