@@ -249,7 +249,7 @@ if (legacy_request_var('update_all', false))
 else if (!empty($settings->update_text)) // PROFILE_UPDATED
 {
 	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->profile);
-	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], QI_VERSION);
+	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], qi::current_version());
 
 	$update_msg = '<ul>';
 	foreach ($settings->update_text as $update)

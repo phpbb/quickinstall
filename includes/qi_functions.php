@@ -270,7 +270,7 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 		'MSG_EXPLAIN'          => $msg_explain,
 		'SETTINGS_FORM'        => $settings_form,
 		'RETURN_LINKS'         => $l_return_index,
-		'QI_VERSION'           => QI_VERSION,
+		'QI_VERSION'           => qi::current_version(),
 		'L_QUICKINSTALL'       => $l_quickinstall,
 		'L_PHPBB_QI_TEXT'      => $l_phpbb_qi_text,
 		'L_FOR_PHPBB_VERSIONS' => $l_for_phpbb_versions,

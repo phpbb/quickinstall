@@ -50,9 +50,9 @@ class qi
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
-			'QI_VERSION'		=> QI_VERSION,
+			'QI_VERSION'		=> self::current_version(),
 
-			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], QI_VERSION) : '',
+			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], self::current_version()) : '',
 			'VERSION_CHECK_CURRENT'	=> !empty($update) ? $update['current'] : '',
 			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['download'] : '',
 		));
@@ -345,7 +345,7 @@ class qi
 					'MSG_EXPLAIN'          => '',
 					'SETTINGS_FORM'        => '',
 					'RETURN_LINKS'         => $l_return_index,
-					'QI_VERSION'           => QI_VERSION,
+					'QI_VERSION'           => self::current_version(),
 					'L_QUICKINSTALL'       => $user->lang['QUICKINSTALL'],
 					'L_PHPBB_QI_TEXT'      => $user->lang['PHPBB_QI_TEXT'],
 					'L_FOR_PHPBB_VERSIONS' => $user->lang['FOR_PHPBB_VERSIONS'],
@@ -405,9 +405,28 @@ class qi
 		$version_helper = new qi_version_helper();
 
 		return $version_helper
-			->set_current_version(QI_VERSION)
+			->set_current_version(self::current_version())
 			->force_stability('stable')
 			->set_file_location('www.phpbb.com', '/customise/db/official_tool/phpbb3_quickinstall', 'version_check')
 			->get_update();
+	}
+
+	/**
+	 * Get the current version of QuickInstall from composer.json
+	 *
+	 * @return string
+	 */
+	public static function current_version()
+	{
+		global $quickinstall_path;
+
+		static $composerJson = null;
+
+		if ($composerJson === null) {
+			$composerJson = file_get_contents("{$quickinstall_path}composer.json");
+			$composerJson = json_decode($composerJson, true);
+		}
+
+		return $composerJson["version"];
 	}
 }
