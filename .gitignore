@@ -9,4 +9,3 @@ build/*
 *~
 .idea
 */node_modules
-includes/qi_constants.php
