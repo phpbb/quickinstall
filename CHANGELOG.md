@@ -1,5 +1,14 @@
 # QuickInstall Changelog
 
+## Version 1.4.1
+- [Change] Replaced use of Emoji with BS icons for a more cohesive and consistent UI.
+- [Change] Improved all Buttons in the QI UI.
+- [Change] Removed QI version constant. QI's version number now maintained in `composer.json`.
+- [Change] Removed global QI constants. Now `qi_constants.php` is used just for debugging.
+- [Fix] Fixed an issue where phpBB 3.1.0 to 3.2.1 boards would break QuickInstall's new Twig template engine.
+- [Fix] Fixed the behavior of the Check all boards toggle switch.
+- [Fix] Fixed responsive issues with the nav bar at the top of QI.
+
 ## Version 1.4.0
 - [Change] Re-styled some of QI's UI elements including sidebar menus, buttons and various other form elements.
 - [Change] Migrated QI's Bootstrap framework to version 4.5.
