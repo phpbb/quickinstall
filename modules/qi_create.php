@@ -831,11 +831,11 @@ class qi_create
 		$user->ip = &$user_ip;
 		if (defined('PHPBB_31'))
 		{
-			add_log('admin', sprintf($user->lang['LOG_INSTALL_INSTALLED_QI'], QI_VERSION));
+			add_log('admin', sprintf($user->lang['LOG_INSTALL_INSTALLED_QI'], qi::current_version()));
 		}
 		else
 		{
-			add_log('admin', 'LOG_INSTALL_INSTALLED_QI', QI_VERSION);
+			add_log('admin', 'LOG_INSTALL_INSTALLED_QI', qi::current_version());
 		}
 
 		// purge cache
