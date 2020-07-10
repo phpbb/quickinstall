@@ -1,5 +1,8 @@
 # QuickInstall Changelog
 
+## Version 1.4.2
+- [Fix] Fixed Delete buttons broken in version 1.4.1.
+
 ## Version 1.4.1
 - [Change] Replaced use of Emoji with BS icons for a more cohesive and consistent UI.
 - [Change] Improved all Buttons in the QI UI.
