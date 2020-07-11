@@ -25,6 +25,31 @@ QuickInstall was made to support the community of phpBB extension developers (an
 ##### Upgrading from QuickInstall 1.1.8 or earlier?
 * If upgrading from QuickInstall 1.1.8 or earlier, follow the normal upgrade procedure mentioned above. Then point your browser to the Profiles page, make sure the settings are in order and click "Save".  QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default".
 
+## Requirements
+
+##### Browsers:
+QuickInstall is designed to run on all modern browsers. Please don't use old stuff anymore...seriously.
+- Desktop: Chrome 45+, Firefox 38+, Safari 9+, Edge 12+, Explorer 10+, Opera 30+
+- Mobile: iOS 9+, Android 4.4+
+
+##### Servers:
+- Apache or Ngnix
+- PHP 5.3.3 or above, with the JSON module
+
+> Note that each version of phpBB has its own requirements and limitations:
+>
+> PHP requirements:
+> - phpBB 3.0 and 3.1 will not work with PHP 7
+> - phpBB 3.2.0-3.2.1 will only work with PHP 5.4.7 through 7.1.x
+> - phpBB 3.2.2-3.2.x will only work with PHP 5.4.7 through 7.2.x
+> - phpBB 3.3 will only work with PHP 7.1.3 or above
+> 
+> Database minimum requirements:
+> - phpBB 3.0 - MySQL 3.23+, MS SQL Server 2000, PostgreSQL 7.x, or SQLite 2
+> - phpBB 3.1 - MySQL 3.23+ (MySQLi supported), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 2 or 3
+> - phpBB 3.2 - MySQL 3.23+ (MySQLi supported), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 3.6.15+
+> - phpBB 3.3 - MySQL 4.1.3+ (MySQLi required), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 3.6.15+
+
 ## Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.
 
