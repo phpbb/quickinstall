@@ -48,11 +48,7 @@
 					<label for="qi_profile" class="col-md-5 col-form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
 					<div class="col-md-5">
 						<select id="qi_profile" name="qi_profile" class="custom-select" data-form-submit="true">
-						{% if PROFILE_COUNT == 1 %}
-							<option>{{ PROFILE_OPTIONS }}</option>
-						{% else %}
 							{{ PROFILE_OPTIONS }}
-						{% endif %}
 						</select>
 					</div>
 					<div class="col-md-2">
@@ -428,11 +424,13 @@
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_replies_max]" value="{{ CONFIG_NUM_REPLIES_MAX }}"></label>
 						</div>
 					</div>
-					<div class="card text-white bg-secondary mb-3">
-						<div class="card-body">
-							<h5 class="card-title">{{ lang('CHUNK_SETTINGS') }}</h5>
-							<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
-						</div>
+					<div class="alert alert-info">
+						<h5 class="card-title">
+							<svg class="bi icon text-info" width="24" height="24" fill="currentColor">
+								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+							</svg> {{ lang('CHUNK_SETTINGS') }}
+						</h5>
+						<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
 					</div>
 					<div class="form-group row">
 						<label for="chunk_post" class="col-md-5 col-form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</span></label>

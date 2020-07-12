@@ -2,6 +2,13 @@
 
 <h1>{{ lang('CREATE_BOARD') }}</h1>
 
+{% if S_ERROR %}
+	<div class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">{{ ERROR_TITLE }}</h4>
+		<p class="mb-0">{{ ERROR_MSG }}</p>
+	</div>
+{% endif %}
+
 <form method="post" id="profile_form" action="{{ U_CHOOSE_PROFILE }}">
 	<div class="card bg-light mb-3">
 		<div class="card-body">
@@ -12,13 +19,11 @@
 					<div class="col-md-5">
 						{% if not PROFILE_COUNT %}
 						{{ lang('NO_PROFILES') }}
-						{% elseif PROFILE_COUNT == 1 %}
-						{{ PROFILE_OPTIONS }}
 						{% else %}
 						<select id="qi_profile" name="qi_profile" class="custom-select mb-3" data-form-submit="true">
 							{{ PROFILE_OPTIONS }}
 						</select>
-						<noscript><button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">{{ lang('GO') }}</button></noscript>
+						{% if PROFILE_COUNT > 1 %}<noscript><button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">{{ lang('GO') }}</button></noscript>{% endif %}
 						{% endif %}
 					</div>
 				</div>
@@ -26,13 +31,6 @@
 		</div>
 	</div>
 </form>
-
-{% if S_ERROR %}
-<div class="alert alert-danger text-center" role="alert">
-	<p><strong>{{ ERROR_TITLE }}</strong></p>
-	<p>{{ ERROR_MSG }}</p>
-</div>
-{% endif %}
 
 <form method="post" id="create-form" class="needs-validation" novalidate data-submit-ajax action="{{ U_CREATE }}">
 	<div class="card bg-light mb-3">
@@ -318,14 +316,14 @@
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_replies_max" value="{{ NUM_REPLIES_MAX }}"></label>
 						</div>
 					</div>
-
-					<div class="card text-white bg-secondary mb-3">
-						<div class="card-body">
-							<h5 class="card-title">{{ lang('CHUNK_SETTINGS') }}</h5>
-							<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
-						</div>
+					<div class="alert alert-info">
+						<h5 class="card-title">
+							<svg class="bi icon text-info" width="24" height="24" fill="currentColor">
+								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+							</svg> {{ lang('CHUNK_SETTINGS') }}
+						</h5>
+						<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
 					</div>
-
 					<div class="form-group row">
 						<label for="chunk_post" class="col-md-5 col-form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="chunk_post" value="{{ CHUNK_POST }}"></div>

@@ -69,8 +69,16 @@ svg.icon {
 	color: inherit;
 }
 
-blockquote {
+/* Parsedown styling for docs */
+#readme blockquote {
 	padding: 0 1rem;
 	color: #6a737d;
 	border-left: .25rem solid #dfe2e5;
+}
+
+#about-readme h2,
+#about-changelog h2 {
+	padding-bottom: .5rem;
+	padding-top: 1rem;
+	border-bottom: 1px solid #eaecef;
 }
