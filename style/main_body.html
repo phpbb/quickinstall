@@ -2,6 +2,13 @@
 
 <h1>{{ lang('CREATE_BOARD') }}</h1>
 
+{% if S_ERROR %}
+	<div class="alert alert-danger" role="alert">
+		<h4 class="alert-heading">{{ ERROR_TITLE }}</h4>
+		<p class="mb-0">{{ ERROR_MSG }}</p>
+	</div>
+{% endif %}
+
 <form method="post" id="profile_form" action="{{ U_CHOOSE_PROFILE }}">
 	<div class="card bg-light mb-3">
 		<div class="card-body">
@@ -24,13 +31,6 @@
 		</div>
 	</div>
 </form>
-
-{% if S_ERROR %}
-<div class="alert alert-danger text-center" role="alert">
-	<p><strong>{{ ERROR_TITLE }}</strong></p>
-	<p>{{ ERROR_MSG }}</p>
-</div>
-{% endif %}
 
 <form method="post" id="create-form" class="needs-validation" novalidate data-submit-ajax action="{{ U_CREATE }}">
 	<div class="card bg-light mb-3">
