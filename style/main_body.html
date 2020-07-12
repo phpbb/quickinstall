@@ -12,13 +12,11 @@
 					<div class="col-md-5">
 						{% if not PROFILE_COUNT %}
 						{{ lang('NO_PROFILES') }}
-						{% elseif PROFILE_COUNT == 1 %}
-						{{ PROFILE_OPTIONS }}
 						{% else %}
 						<select id="qi_profile" name="qi_profile" class="custom-select mb-3" data-form-submit="true">
 							{{ PROFILE_OPTIONS }}
 						</select>
-						<noscript><button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">{{ lang('GO') }}</button></noscript>
+						{% if PROFILE_COUNT > 1 %}<noscript><button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">{{ lang('GO') }}</button></noscript>{% endif %}
 						{% endif %}
 					</div>
 				</div>
