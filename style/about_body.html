@@ -1,9 +1,9 @@
 {% include 'overall_header.html' %}
-<section>
+<section id="about-readme">
 	{{ DOC_BODY }}
 </section>
 <section id="about-changelog" class="anchor">
-<h3>{{ lang('CHANGELOG') }}</h3>
+<h2>{{ lang('CHANGELOG') }}</h2>
 {% for change in history %}
 <section id="{{ change.U_CHANGES }}" class="anchor">
 	<p><em>{{ change.CHANGES_SINCE }}</em></p>
