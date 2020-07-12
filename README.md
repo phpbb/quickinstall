@@ -6,7 +6,7 @@ QuickInstall was made to support the community of phpBB extension developers (an
 
 > ⚠️ **QuickInstall is not intended for use on a live production web site.** QuickInstall stores all passwords in a plain text file. They are hidden in the user interface, but can be read by anyone with access to the QuickInstall folder. Therefor, if you do use QuickInstall on a public server, you do so at your own risk and must protect access to the folder where it resides from unauthorised users. No support is given for QuickInstall other than local use.
 
-## Installation & Setup
+## 📦 Installation & Setup
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/).
 
 2. Extract it and copy the QuickInstall folder to your local web server.
@@ -19,20 +19,24 @@ QuickInstall was made to support the community of phpBB extension developers (an
 
 > If you want additional files/folders to be copied to your boards when they are created (i.e., extensions), you can put them in the `sources/extra/` folder. By using the same folder structure in `sources/extra/` as phpBB, the files/folders should be mapped to the correct locations in your boards.
 
-## Upgrading
+## 🛠 Upgrading
 * Download the latest QuickInstall and extract it. Copy everything into your QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**.
 
 ##### Upgrading from QuickInstall 1.1.8 or earlier?
 * If upgrading from QuickInstall 1.1.8 or earlier, follow the normal upgrade procedure mentioned above. Then point your browser to the Profiles page, make sure the settings are in order and click "Save".  QuickInstall will convert your old `qi_config.cfg` to a settings profile named "default".
 
-## Requirements
+## 💻 Requirements
 
-##### Browsers:
+##### Browsers
 QuickInstall is designed to run on all modern browsers. Please don't use old stuff anymore...seriously.
-- Desktop: Chrome 45+, Firefox 38+, Safari 9+, Edge 12+, Explorer 10+, Opera 30+
-- Mobile: iOS 9+, Android 4.4+
 
-##### Servers:
+|  |  |  |  |  |  |  |
+|-|-|-|-|-|-|-|
+| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/chrome/chrome_32x32.png) 45+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/firefox/firefox_32x32.png) 38+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/safari/safari_32x32.png) 9+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/edge/edge_32x32.png) 12+ | ![Explorer](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/archive/internet-explorer_9-11/internet-explorer_9-11_32x32.png) 10+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/opera/opera_32x32.png) 30+ |
+| Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/safari-ios/safari-ios_32x32.png) 9+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/android-webview/android-webview_32x32.png) 4.4+ |  |  |  |  |
+<br>
+
+##### Servers
 - Apache or Ngnix
 - PHP 5.3.3 or above, with the JSON module
 
@@ -50,12 +54,12 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 > - phpBB 3.2 - MySQL 3.23+ (MySQLi supported), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 3.6.15+
 > - phpBB 3.3 - MySQL 4.1.3+ (MySQLi required), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 3.6.15+
 
-## Support
+## 🐞 Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.
 
 Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickinstall/issues). Even reports for small bugs are welcome to help make QuickInstall even better than it is now.
 
-## Contributing
+## 👋 Contributing
 Feel free to contribute to this project. Submit Pull Requests with any bug fixes or feature enhancements.
 
 1. On GitHub, Fork your own copy of `phpbb/quickinstall` to your account.
@@ -71,7 +75,7 @@ Feel free to contribute to this project. Submit Pull Requests with any bug fixes
 > - Edit the `qi_bootstrap.scss` file to customise Bootstrap variables.
 > - Run `$ npm run all` to compile and deploy Bootstrap to QuickInstall.
 
-## Credits
+## 💖 Credits
 The project is maintained by the phpBB Extensions Team.
 - Credits go to the phpBB team, especially the development team which 
 created such a wonderful piece of software.
@@ -81,5 +85,5 @@ created such a wonderful piece of software.
 - Thanks to the beta testers!
 - Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!
 
-## License
+## 📜 License
 phpBB QuickInstall is distributed under the terms of the [GNU General Public License 2 (GPL)](license.txt).
