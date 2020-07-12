@@ -63,20 +63,7 @@ You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://
 Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickinstall/issues). Even reports for small bugs are welcome to help make QuickInstall even better than it is now.
 
 ## 👋 Contributing
-Feel free to contribute to this project. Submit Pull Requests with any bug fixes or feature enhancements.
-
-1. On GitHub, Fork your own copy of `phpbb/quickinstall` to your account.
-2. Create a local clone of your fork `$ git clone https://github.com/YOUR-USERNAME/quickinstall`.
-3. From QI's root directory, run `$ php composer.phar install` to install its dependencies. 
-4. Open QuickInstall in a browser on your local web server (e.g., `https://localhost/quickinstall`).
-5. Do work on a new branch, push it to your repository, and submit a Pull Request.
-
-> Optional: QuickInstall uses the Bootstrap framework which is compiled via NPM and located in the `develop` folder. To update or customise Quickinstall's Bootstrap files you must:
-> - Have [Node JS](https://nodejs.org/) installed.
-> - Navigate to the `develop` folder: `$ cd develop`.
-> - Run `$ npm update bootstrap` to update to the latest Bootstrap release.
-> - Edit the `qi_bootstrap.scss` file to customise Bootstrap variables.
-> - Run `$ npm run all` to compile and deploy Bootstrap to QuickInstall.
+Feel free to contribute to this project. Please read our [Contributing Guidelines](https://github.com/phpbb/quickinstall/blob/master/CONTRIBUTING.md) before submitting Pull Requests with any bug fixes or feature enhancements to this repository.
 
 ## 💖 Credits
 The project is maintained by the phpBB Extensions Team.
