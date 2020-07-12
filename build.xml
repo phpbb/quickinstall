@@ -12,6 +12,7 @@
 		<!--
 		Remove some unnecessary files/directories
 		-->
+		<delete dir="${dir}/.github" />
 		<delete dir="${dir}/develop" />
 		<delete dir="${dir}/vendor/twig/twig/doc" />
 		<delete dir="${dir}/vendor/twig/twig/ext" />
