@@ -228,7 +228,7 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 
 	if ($update_profiles)
 	{
-		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary" type="submit" name="update_all" value="' . $user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
+		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary text-white" type="submit" name="update_all" value="' . $user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
 	}
 	else
 	{

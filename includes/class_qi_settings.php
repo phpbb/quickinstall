@@ -713,11 +713,6 @@ class settings
 				$profile_options['options'] .= "<option value='$cfg_name'$selected>$cfg_name</option>";
 			}
 
-			if ($profile_options['count'] == 1)
-			{
-				$profile_options['options'] = $cfg_name;
-			}
-
 			return $profile_options;
 		}
 
