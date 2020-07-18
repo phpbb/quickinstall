@@ -22,8 +22,7 @@ class qi_main
 {
 	public function __construct()
 	{
-		global $db, $template, $user, $settings;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
+		global $template, $user, $settings;
 
 		get_installed_boards();
 

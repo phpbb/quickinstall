@@ -337,6 +337,13 @@ function legacy_set_var(&$result, $var, $type, $multibyte = false)
 	}
 }
 
+function qi_request_var($var_name, $default, $multibyte = false, $cookie = false)
+{
+	$method = (function_exists('request_var')) ? 'request_var' : 'legacy_request_var';
+
+	return $method($var_name, $default, $multibyte, $cookie);
+}
+
 function legacy_request_var($var_name, $default, $multibyte = false, $cookie = false)
 {
 	if (!$cookie && isset($_COOKIE[$var_name]))
@@ -383,7 +390,7 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 		foreach ($_var as $k => $v)
 		{
 			legacy_set_var($k, $k, $key_type);
-			if ($type == 'array' && is_array($v))
+			if ($type === 'array' && is_array($v))
 			{
 				foreach ($v as $_k => $_v)
 				{
@@ -397,7 +404,7 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 			}
 			else
 			{
-				if ($type == 'array' || is_array($v))
+				if ($type === 'array' || is_array($v))
 				{
 					$v = null;
 				}

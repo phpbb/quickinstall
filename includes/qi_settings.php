@@ -18,10 +18,10 @@ if (!defined('IN_QUICKINSTALL'))
 $attempted = $saved = false;
 $config_text = '';
 $error = '';
-if ($mode == 'update_settings')
+if ($mode === 'update_settings')
 {
 	// Time to save some settings. request_var('qi_profile', '')
-	$qi_config	= @utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
+	$qi_config	= @utf8_normalize_nfc(qi_request_var('qi_config', array('' => ''), true));
 
 	if (!empty($qi_config['other_config']))
 	{
@@ -106,8 +106,8 @@ $template->assign_vars(array(
 	'S_IN_INSTALL'			=> $settings->install,
 	'S_IS_CONVERTED'		=> $settings->is_converted,
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
-	'S_SETTINGS_SUCCESS'	=> ($attempted && $saved) ? true : false,
-	'S_SETTINGS_FAILURE'	=> ($attempted && !$saved) ? true : false,
+	'S_SETTINGS_SUCCESS'	=> $attempted && $saved,
+	'S_SETTINGS_FAILURE'	=> $attempted && !$saved,
 	'S_SETTINGS'			=> true,
 
 	'ERROR'			=> $error,

@@ -76,7 +76,7 @@ class settings
 	{
 		global $quickinstall_path, $phpEx, $user;
 
-		$delete_profile = legacy_request_var('delete-profile', false);
+		$delete_profile = qi_request_var('delete-profile', false);
 
 		if (!empty($delete_profile))
 		{
@@ -467,7 +467,7 @@ class settings
 
 		if ($exist)
 		{
-			$return = legacy_request_var($name, $default, $multibyte, $cookie);
+			$return = qi_request_var($name, $default, $multibyte, $cookie);
 		}
 		else
 		{
@@ -587,7 +587,7 @@ class settings
 
 					$error .= implode(' ', $err_ary) . '<br />';
 				}
-				else if (sizeof($err_ary) > 1)
+				else if (count($err_ary) > 1)
 				{
 					// Formated language string.
 					unset($err_ary[0]);
@@ -614,12 +614,12 @@ class settings
 	function get_lang_select($lang_path, $config_var, $get_var = '')
 	{
 		// Make sure $source_path ends with a slash.
-		$lang_path .= (substr($lang_path, -1) != '/') ? '/' : '';
+		$lang_path .= (substr($lang_path, -1) !== '/') ? '/' : '';
 
 		// Need to assume that English always is available.
 		if ($get_var && !empty($_GET[$get_var]))
 		{
-			$lang = request_var($get_var, '');
+			$lang = qi_request_var($get_var, '');
 			$user_lang = ($lang && file_exists($lang_path . $lang)) ? $lang : 'en';
 		}
 		else
@@ -657,7 +657,7 @@ class settings
 
 	function get_other_config($array = false)
 	{
-		$other_config = request_var('other_config', '');
+		$other_config = qi_request_var('other_config', '');
 
 		if (empty($other_config))
 		{
@@ -740,7 +740,7 @@ class settings
 	 */
 	function set_config($config)
 	{
-		$profile = request_var('save_profile', '');
+		$profile = qi_request_var('save_profile', '');
 
 		if (!empty($profile))
 		{
@@ -795,7 +795,7 @@ class settings
 			$key = $cfg_row[0];
 
 			// Handle config values containing a = char.
-			if (sizeof($cfg_row) > 2)
+			if (count($cfg_row) > 2)
 			{
 				unset($cfg_row[0]);
 				$value = implode('=', $cfg_row);

@@ -21,7 +21,8 @@
   "require": {
     "php": ">=5.4",
     "twig/twig": "^1.0",
-    "erusev/parsedown": "^1.7"
+    "erusev/parsedown": "^1.7",
+    "ext-json": "*"
   },
   "config": {
     "platform": {

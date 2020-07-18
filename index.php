@@ -94,9 +94,9 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 }
 
 // Let's get the config.
-$page		= legacy_request_var('page', 'main');
-$mode		= legacy_request_var('mode', '');
-$profile	= legacy_request_var('qi_profile', '');
+$page		= qi_request_var('page', 'main');
+$mode		= qi_request_var('mode', '');
+$profile	= qi_request_var('qi_profile', '');
 $page		= ($page == 'docs') ? 'about' : $page;
 
 $settings = new settings($profile, $mode);
@@ -220,7 +220,7 @@ $profiles = count($settings->get_profiles());
 $template->assign_var('PROFILE_COUNT', $profiles);
 if ($profiles === 0)
 {
-	$page = ($page == 'main' || $page == '') ? 'settings' : $page;
+	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
 }
 
 $template->assign_var('CONFIG_TEXT', false);
@@ -228,11 +228,11 @@ $template->assign_var('CONFIG_TEXT', false);
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
-	$language = request_var('lang', '');
+	$language = qi_request_var('lang', '');
 }
 else if (!empty($_POST['sel_lang']))
 {
-	$language = request_var('sel_lang', '');
+	$language = qi_request_var('sel_lang', '');
 }
 else
 {
@@ -242,7 +242,7 @@ else
 $settings->apply_language($language);
 
 // Updated settings?
-if (legacy_request_var('update_all', false))
+if (qi_request_var('update_all', false))
 {
 	$settings->update_profiles();
 }
