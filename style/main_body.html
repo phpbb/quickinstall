@@ -14,16 +14,24 @@
 		<div class="card-body">
 			<fieldset>
 				<legend>{{ lang('PROFILES') }}</legend>
-				<div class="row">
+				<div class="mb-3 row">
 					<label for="qi_profile" class="col-md-5 col-form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
 					<div class="col-md-5">
 						{% if not PROFILE_COUNT %}
-						{{ lang('NO_PROFILES') }}
+							{{ lang('NO_PROFILES') }}
 						{% else %}
-						<select id="qi_profile" name="qi_profile" class="custom-select mb-3" data-form-submit="true">
-							{{ PROFILE_OPTIONS }}
-						</select>
-						{% if PROFILE_COUNT > 1 %}<noscript><button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">{{ lang('GO') }}</button></noscript>{% endif %}
+							<select id="qi_profile" name="qi_profile" class="custom-select" data-form-submit="true">
+								{{ PROFILE_OPTIONS }}
+							</select>
+						{% endif %}
+					</div>
+					<div class="col-md-2">
+						{% if PROFILE_COUNT > 1 %}
+							<noscript>
+								<button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">
+									{{ lang('GO') }}
+								</button>
+							</noscript>
 						{% endif %}
 					</div>
 				</div>
