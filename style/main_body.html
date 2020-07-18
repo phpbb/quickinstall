@@ -17,16 +17,18 @@
 				<div class="mb-3 row">
 					<label for="qi_profile" class="col-md-5 col-form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
 					<div class="col-md-5">
-						{% if not PROFILE_COUNT %}
+						{% if PROFILES is empty %}
 							{{ lang('NO_PROFILES') }}
 						{% else %}
 							<select id="qi_profile" name="qi_profile" class="custom-select" data-form-submit="true">
-								{{ PROFILE_OPTIONS }}
+								{% for name, selected in PROFILES %}
+									<option value="{{ name }}"{% if selected %} selected="selected"{% endif %}>{{ name }}</option>
+								{% endfor %}
 							</select>
 						{% endif %}
 					</div>
 					<div class="col-md-2">
-						{% if PROFILE_COUNT > 1 %}
+						{% if PROFILES|length > 1 %}
 							<noscript>
 								<button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary">
 									{{ lang('GO') }}

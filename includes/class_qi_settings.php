@@ -684,15 +684,19 @@ class settings
 	{
 		global $quickinstall_path;
 
+		static $profiles;
+
+		if ($profiles !== null)
+		{
+			return $profiles;
+		}
+
 		if (file_exists($quickinstall_path . 'settings'))
 		{
 			// Read the directory and give the first file we get if there are any.
 			$files = scandir($quickinstall_path . 'settings');
 
-			$profile_options = array(
-				'count'		=> 0,
-				'options'	=> '',
-			);
+			$profiles = [];
 
 			if (is_array($files))
 			{
@@ -706,14 +710,11 @@ class settings
 					continue;
 				}
 
-				$profile_options['count']++;
-
 				$cfg_name = str_replace('.cfg', '', $file);
-				$selected = ($cfg_name == $this->profile) ? " selected='selected'" : '';
-				$profile_options['options'] .= "<option value='$cfg_name'$selected>$cfg_name</option>";
+				$profiles[$cfg_name] = $cfg_name === $this->profile;
 			}
 
-			return $profile_options;
+			return $profiles;
 		}
 
 		$this->error[] = 'SETTINGS_NOT_WRITABLE';

@@ -27,8 +27,6 @@ class qi_main
 
 		get_installed_boards();
 
-		$profiles = $settings->get_profiles();
-
 		// Some error?
 		if ($settings->get_config('error', 0))
 		{
@@ -46,8 +44,7 @@ class qi_main
 			'DB_PERFIX'			=> htmlspecialchars($settings->get_config('db_prefix', '')),
 			'SITE_NAME'			=> $settings->get_config('site_name', ''),
 			'SITE_DESC'			=> $settings->get_config('site_desc', ''),
-			'PROFILE_COUNT'		=> $profiles['count'],
-			'PROFILE_OPTIONS'	=> $profiles['options'],
+			'PROFILES'			=> $settings->get_profiles(),
 			'DBNAME'			=> $settings->get_config('dbname', ''),
 			'INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
 			'DEFAULT_STYLE'		=> $settings->get_config('default_style', ''),
