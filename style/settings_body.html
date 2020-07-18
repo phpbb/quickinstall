@@ -79,7 +79,7 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('QUICKINSTALL') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="qi_lang" class="col-md-5 col-form-label">{{ lang('QI_LANG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('QI_LANG_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<select id="qi_lang" name="qi_config[qi_lang]" class="custom-select" data-load-selection="index.php?page=settings&amp;lang=">
@@ -87,19 +87,19 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="cache_dir" class="col-md-5 col-form-label">{{ lang('CACHE_DIR') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CACHE_DIR_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="cache_dir" name="qi_config[cache_dir]" value="{{ CONFIG_CACHE_DIR }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="boards_dir" class="col-md-5 col-form-label">{{ lang('BOARDS_DIR') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('BOARDS_DIR_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="boards_dir" name="qi_config[boards_dir]" value="{{ CONFIG_BOARDS_DIR }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="boards_url" class="col-md-5 col-form-label">{{ lang('BOARDS_URL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('BOARDS_URL_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{{ CONFIG_BOARDS_URL }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('MAKE_WRITABLE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('MAKE_WRITABLE_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -112,7 +112,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="grant_permissions" class="col-md-5 col-form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{{ CONFIG_GRANT_PERMISSIONS }}"></div>
 					</div>
@@ -126,25 +126,25 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('DB_SETTINGS') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="dbms" class="col-md-5 col-form-label">{{ lang('DBMS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBMS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<select name="qi_config[dbms]" id="dbms" class="custom-select">{{ CONFIG_DBMS }}</select>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="dbhost" class="col-md-5 col-form-label">{{ lang('DBHOST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBHOST_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="dbhost" name="qi_config[dbhost]" value="{{ CONFIG_DBHOST }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="dbport" class="col-md-5 col-form-label">{{ lang('DBPORT') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBPORT_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="dbport" name="qi_config[dbport]" value="{{ CONFIG_DBPORT }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="dbuser" class="col-md-5 col-form-label">{{ lang('DBUSER') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBUSER_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="dbuser" name="qi_config[dbuser]" value="{{ CONFIG_DBUSER }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="dbpasswd" class="col-md-5 col-form-label">{{ lang('DBPASSWD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBPASSWD_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
 						<div class="col-md-7">
 							<input class="form-control" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{{ CONFIG_DBPASSWD }}">
@@ -154,11 +154,11 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="db_prefix" class="col-md-5 col-form-label">{{ lang('DB_PREFIX') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DB_PREFIX_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{{ CONFIG_DB_PREFIX }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="table_prefix" class="col-md-5 col-form-label">{{ lang('TABLE_PREFIX') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('TABLE_PREFIX_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{{ CONFIG_TABLE_PREFIX }}"></div>
 					</div>
@@ -172,19 +172,19 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('SERVER_SETTINGS') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="server_name" class="col-md-5 col-form-label">{{ lang('SERVER_NAME') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SERVER_NAME_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="server_name" name="qi_config[server_name]" value="{{ CONFIG_SERVER_NAME }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="server_port" class="col-md-5 col-form-label">{{ lang('SERVER_PORT') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SERVER_PORT_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="server_port" name="qi_config[server_port]" value="{{ CONFIG_SERVER_PORT }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="cookie_domain" class="col-md-5 col-form-label">{{ lang('COOKIE_DOMAIN') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('COOKIE_DOMAIN_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="cookie_domain" name="qi_config[cookie_domain]" value="{{ CONFIG_COOKIE_DOMAIN }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('COOKIE_SECURE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('COOKIE_SECURE_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -207,15 +207,15 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('ADMIN_SETTINGS') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="admin_name" class="col-md-5 col-form-label">{{ lang('ADMIN_NAME') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ADMIN_NAME_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="admin_name" name="qi_config[admin_name]" value="{{ CONFIG_ADMIN_NAME }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="admin_pass" class="col-md-5 col-form-label">{{ lang('ADMIN_PASS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ADMIN_PASS_EXPLAIN') }} {{ lang('IF_LEAVE_EMPTY') }} <strong>{{ lang('PLAIN_TEXT') }}</strong></span></label>
 						<div class="col-md-7"><input class="form-control" type="password" id="admin_pass" name="qi_config[admin_pass]" value="{{ CONFIG_ADMIN_PASS }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="admin_email" class="col-md-5 col-form-label">{{ lang('ADMIN_EMAIL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ADMIN_EMAIL_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="admin_email" name="qi_config[admin_email]" value="{{ CONFIG_ADMIN_EMAIL }}"></div>
 					</div>
@@ -229,19 +229,19 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('BOARD_CONFIG_SETTINGS') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="site_name" class="col-md-5 col-form-label">{{ lang('SITE_NAME') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SITE_NAME_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{{ CONFIG_SITE_NAME }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="site_desc" class="col-md-5 col-form-label">{{ lang('SITE_DESC') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SITE_DESC_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{{ CONFIG_SITE_DESC }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="default_lang" class="col-md-5 col-form-label">{{ lang('DEFAULT_LANG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DEFAULT_LANG_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><select class="custom-select" id="default_lang" name="qi_config[default_lang]">{{ PHPBB_LANG }}</select></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="qi_tz" class="col-md-5 col-form-label">{{ lang('QI_TZ') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('QI_TZ_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<select name="qi_config[qi_tz]" id="qi_tz" class="custom-select">
@@ -250,7 +250,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="other_config" class="col-md-5 col-form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{{ OTHER_CONFIG }}</textarea></div>
 					</div>
@@ -264,11 +264,11 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('EMAIL_SETTINGS') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="board_email" class="col-md-5 col-form-label">{{ lang('BOARD_EMAIL') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('BOARD_EMAIL_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="board_email" name="qi_config[board_email]" value="{{ CONFIG_BOARD_EMAIL }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('EMAIL_ENABLE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('EMAIL_ENABLE_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -281,7 +281,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('SMTP_DELIVERY') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_DELIVERY_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -294,15 +294,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="smtp_host" class="col-md-5 col-form-label">{{ lang('SMTP_HOST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_HOST_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="smtp_host" name="qi_config[smtp_host]" value="{{ CONFIG_SMTP_HOST }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="smtp_port" class="col-md-5 col-form-label">{{ lang('SMTP_PORT') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_PORT_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" maxlength="5" id="smtp_port" name="qi_config[smtp_port]" value="{{ CONFIG_SMTP_PORT }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="smtp_auth" class="col-md-5 col-form-label">{{ lang('SMTP_AUTH') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_AUTH_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<select name="qi_config[smtp_auth]" id="smtp_auth" class="custom-select">
@@ -314,11 +314,11 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="smtp_user" class="col-md-5 col-form-label">{{ lang('SMTP_USER') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_USER_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="smtp_user" name="qi_config[smtp_user]" value="{{ CONFIG_SMTP_USER }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="smtp_pass" class="col-md-5 col-form-label">{{ lang('SMTP_PASS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SMTP_PASS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="password" id="smtp_pass" name="qi_config[smtp_pass]" value="{{ CONFIG_SMTP_PASS }}"></div>
 					</div>
@@ -344,7 +344,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('POPULATE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('POPULATE_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -357,15 +357,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="num_users" class="col-md-5 col-form-label">{{ lang('NUM_USERS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_USERS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="qi_config[num_users]" value="{{ CONFIG_NUM_USERS }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="num_new_group" class="col-md-5 col-form-label">{{ lang('NUM_NEW_GROUP') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_NEW_GROUP_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_new_group" name="qi_config[num_new_group]" value="{{ CONFIG_NUM_NEW_GROUP }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="email_domain" class="col-md-5 col-form-label">{{ lang('EMAIL_DOMAIN') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('EMAIL_DOMAIN_EXPLAIN') }} <span class="badge badge-secondary">{{ lang('REQUIRED') }}</span></span></label>
 						<div class="col-md-7">
 							<div class="input-group">
@@ -376,7 +376,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('CREATE_ADMIN') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CREATE_ADMIN_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -389,7 +389,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('CREATE_MOD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CREATE_MOD_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -402,22 +402,22 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="num_cats" class="col-md-5 col-form-label">{{ lang('NUM_CATS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_CATS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_cats" name="qi_config[num_cats]" value="{{ CONFIG_NUM_CATS }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="num_forums" class="col-md-5 col-form-label">{{ lang('NUM_FORUMS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_FORUMS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="qi_config[num_forums]" value="{{ CONFIG_NUM_FORUMS }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="num_topics" class="col-md-5 col-form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="qi_config[num_topics_min]" value="{{ CONFIG_NUM_TOPICS_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_topics_max]" value="{{ CONFIG_NUM_TOPICS_MAX }}"></label>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="num_replies" class="col-md-5 col-form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_replies" name="qi_config[num_replies_min]" value="{{ CONFIG_NUM_REPLIES_MIN }}"></label>
@@ -432,15 +432,15 @@
 						</h5>
 						<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="chunk_post" class="col-md-5 col-form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="qi_config[chunk_post]" value="{{ CHUNK_POST }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="chunk_topic" class="col-md-5 col-form-label">{{ lang('CHUNK_TOPIC') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_TOPIC_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_topic" name="qi_config[chunk_topic]" value="{{ CHUNK_TOPIC }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="chunk_user" class="col-md-5 col-form-label">{{ lang('CHUNK_USER') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('CHUNK_USER_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_user" name="qi_config[chunk_user]" value="{{ CHUNK_USER }}"></div>
 					</div>
@@ -466,11 +466,11 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="alt_env" class="col-md-5 col-form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><select name="qi_config[alt_env]" id="alt_env" class="custom-select">{{ CONFIG_ALT_ENV }}</select></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('REDIRECT_BOARD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('REDIRECT_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -483,7 +483,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('INSTALL_STYLES') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('INSTALL_STYLES_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -496,11 +496,11 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="default_style" class="col-md-5 col-form-label">{{ lang('SET_DEFAULT_STYLE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SET_DEFAULT_STYLE_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="default_style" name="qi_config[default_style]" value="{{ CONFIG_DEFAULT_STYLE }}"></div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('DROP_DB_IF_EXISTS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DROP_DB_IF_EXISTS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -513,7 +513,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('DELETE_FILES_IF_EXIST') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DELETE_FILES_IF_EXIST_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -526,7 +526,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('ENABLE_DEBUG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ENABLE_DEBUG_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
@@ -549,7 +549,7 @@
 			<div class="card-body">
 				<fieldset>
 					<legend>{{ lang('SAVE_SETTINGS') }}</legend>
-					<div class="form-group row">
+					<div class="mb-3 row">
 						<label for="save_profile" class="col-md-5 col-form-label">{{ lang('SAVE_PROFILE') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('SAVE_PROFILE_EXPLAIN') }}</span></label>
 						<input type="hidden" name="sel_lang" value="{{ SEL_LANG }}">
 						<input type="hidden" name="used_profile" value="{{ USED_PROFILE }}">
