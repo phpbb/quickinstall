@@ -226,32 +226,13 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 {
 	global $quickinstall_path, $user, $phpEx;
 
-	if ($update_profiles)
-	{
-		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary" type="submit" name="update_all" value="' . $user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
-	}
-	else
-	{
-		$settings_form = '';
-	}
-
 	if (!empty($user) && !empty($user->lang))
 	{
-		$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
-		$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
-		$l_quickinstall = $user->lang['QUICKINSTALL'];
-		$l_phpbb_qi_text = $user->lang['PHPBB_QI_TEXT'];
-		$l_for_phpbb_versions = $user->lang['FOR_PHPBB_VERSIONS'];
-		$l_powered_by_phpbb = $user->lang['POWERED_BY_PHPBB'];
+		$lang = $user->lang;
 	}
 	else
 	{
-		$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
-		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a>';
-		$l_quickinstall = 'QuickInstall';
-		$l_phpbb_qi_text = 'phpBB QuickInstall';
-		$l_for_phpbb_versions = 'for phpBB 3.0 - 4.0';
-		$l_powered_by_phpbb = 'Powered by phpBB<sup>&reg;</sup> Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
+		include "{$quickinstall_path}language/en/qi.$phpEx";
 	}
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
@@ -268,13 +249,14 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 		'MSG_TITLE'            => $msg_title,
 		'MSG_TEXT'             => $msg_text,
 		'MSG_EXPLAIN'          => $msg_explain,
-		'SETTINGS_FORM'        => $settings_form,
-		'RETURN_LINKS'         => $l_return_index,
+		'SETTINGS_FORM'        => $update_profiles,
+		'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 		'QI_VERSION'           => qi::current_version(),
-		'L_QUICKINSTALL'       => $l_quickinstall,
-		'L_PHPBB_QI_TEXT'      => $l_phpbb_qi_text,
-		'L_FOR_PHPBB_VERSIONS' => $l_for_phpbb_versions,
-		'L_POWERED_BY_PHPBB'   => $l_powered_by_phpbb,
+		'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
+		'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
+		'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
+		'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
+		'L_UPDATE_PROFILES'    => $lang['UPDATE_PROFILES'],
 	]);
 
 	$template->display('error');
