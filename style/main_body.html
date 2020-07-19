@@ -246,8 +246,12 @@
 					<div class="mb-3 row">
 						<label for="alt_env" class="col-md-5 col-form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
-						{% if ALT_ENV %}
-							<select class="custom-select" name="alt_env" id="alt_env">{{ ALT_ENV }}</select>
+						{% if ALT_ENV|length %}
+							<select class="custom-select" name="alt_env" id="alt_env">
+								{% for alt_env in ALT_ENV %}
+									<option value="{{ alt_env.value }}"{% if alt_env.selected %} selected="selected"{% endif %}>{{ alt_env.name }}</option>
+								{% endfor %}
+							</select>
 						{% else %}
 							{{ lang('NO_ALT_ENV') }}
 						{% endif %}

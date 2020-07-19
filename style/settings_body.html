@@ -143,7 +143,11 @@
 					<div class="mb-3 row">
 						<label for="dbms" class="col-md-5 col-form-label">{{ lang('DBMS') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DBMS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
-							<select name="qi_config[dbms]" id="dbms" class="custom-select">{{ CONFIG_DBMS }}</select>
+							<select name="qi_config[dbms]" id="dbms" class="custom-select">
+								{% for config_dbm in CONFIG_DBMS %}
+									<option value="{{ config_dbm.value }}"{% if config_dbm.selected %} selected="selected"{% endif %}>{{ config_dbm.name }}</option>
+								{% endfor %}
+							</select>
 						</div>
 					</div>
 					<div class="mb-3 row">
@@ -482,7 +486,13 @@
 					</div>
 					<div class="mb-3 row">
 						<label for="alt_env" class="col-md-5 col-form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
-						<div class="col-md-7"><select name="qi_config[alt_env]" id="alt_env" class="custom-select">{{ CONFIG_ALT_ENV }}</select></div>
+						<div class="col-md-7">
+							<select name="qi_config[alt_env]" id="alt_env" class="custom-select">
+								{% for alt_env in CONFIG_ALT_ENV %}
+									<option value="{{ alt_env.value }}"{% if alt_env.selected %} selected="selected"{% endif %}>{{ alt_env.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
 					</div>
 					<div class="mb-3 row">
 						<label class="col-md-5 col-form-label">{{ lang('REDIRECT_BOARD') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('REDIRECT_EXPLAIN') }}</span></label>

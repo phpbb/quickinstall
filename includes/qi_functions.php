@@ -19,12 +19,10 @@ if (!defined('IN_QUICKINSTALL'))
  * Generate DBMS select options for the settings tab.
  * Checks that each extension is loaded.
  *
- * @todo add more DBMS to QI.
- *
- * @param $default string, the DBMS to set as selected
- * @return string with options.
+ * @param string $selected the DBMS to set as selected
+ * @return array the options
  */
-function gen_dbms_options($default = 'mysqli')
+function gen_dbms_options($selected = 'mysqli')
 {
 	$dbms_ary = array(
 		'mysqli'	=> array(
@@ -53,17 +51,20 @@ function gen_dbms_options($default = 'mysqli')
 		),
 	);
 
-	$options = '';
+	$options = [];
 	foreach ($dbms_ary as $dbms => $dbms_info)
 	{
 		if (extension_loaded($dbms_info['MODULE']))
 		{
-			$selected = ($dbms == $default) ? ' selected="selected"' : '';
-			$options .= "<option value='$dbms'$selected>{$dbms_info['LABEL']}</option>";
+			$options[] = [
+				'name' => $dbms_info['LABEL'],
+				'value' => $dbms,
+				'selected' => $dbms === $selected,
+			];
 		}
 	}
 
-	return($options);
+	return $options;
 }
 
 /**
@@ -436,16 +437,21 @@ function validate_dbname($dbname, $first_char = false, $path = false)
 }
 
 /**
- * Get a list of alternative environments.
+ * Get an array of alternative environments for select menus.
  */
 function get_alternative_env($selected_option = '')
 {
 	global $user, $quickinstall_path;
 
-	$none_selected	= (empty($selected_option)) ? ' selected="selected"' : '';
-	$alt_env		= "<option value=''$none_selected>{$user->lang['DEFAULT_ENV']}</option>";
-	$dh				= dir($quickinstall_path . 'sources/phpBB3_alt');
+	$alt_envs = [
+		[
+			'name' => $user->lang['DEFAULT_ENV'],
+			'value' => '',
+			'selected' => empty($selected_option),
+		],
+	];
 
+	$dh = dir($quickinstall_path . 'sources/phpBB3_alt');
 	while (false !== ($file = $dh->read()))
 	{
 		// Ignore everything that starts with a dot.
@@ -454,14 +460,16 @@ function get_alternative_env($selected_option = '')
 			continue;
 		}
 
-		$selected	= ($file == $selected_option) ? ' selected="selected"' : '';
-		$file	= htmlspecialchars($file);
-
-		$alt_env .= "<option{$selected}>$file</option>";
+		$value = htmlspecialchars($file);
+		$alt_envs[] = [
+			'name' => $value,
+			'value' => $value,
+			'selected' => $file === $selected_option,
+		];
 	}
 	$dh->close();
 
-	return($alt_env);
+	return $alt_envs;
 }
 
 /**
