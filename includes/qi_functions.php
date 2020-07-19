@@ -92,8 +92,7 @@ function qi_format_timezone_offset($tz_offset, $show_null = false)
 	$offset_minutes	= $offset_seconds / 60;
 	$offset_hours	= ($time_offset - $offset_seconds) / 3600;
 
-	$offset_string	= sprintf("%s%02d:%02d", $sign, $offset_hours, $offset_minutes);
-	return $offset_string;
+	return sprintf("%s%02d:%02d", $sign, $offset_hours, $offset_minutes);
 }
 
 /**
@@ -110,7 +109,7 @@ function qi_tz_select_compare($a, $b)
 	$b_sign = $b[3];
 	if ($a_sign != $b_sign)
 	{
-		return $a_sign == '-' ? -1 : 1;
+		return $a_sign === '-' ? -1 : 1;
 	}
 
 	$a_offset = substr($a, 4, 5);
@@ -119,49 +118,44 @@ function qi_tz_select_compare($a, $b)
 	{
 		$a_name = substr($a, 12);
 		$b_name = substr($b, 12);
-		if ($a_name == $b_name)
+		if ($a_name === $b_name)
 		{
 			return 0;
 		}
-		else if ($a_name == 'UTC')
+
+		if ($a_name === 'UTC')
 		{
 			return -1;
 		}
-		else if ($b_name == 'UTC')
+
+		if ($b_name === 'UTC')
 		{
 			return 1;
 		}
-		else
-		{
-			return $a_name < $b_name ? -1 : 1;
-		}
+
+		return $a_name < $b_name ? -1 : 1;
 	}
-	else
+
+	if ($a_sign === '-')
 	{
-		if ($a_sign == '-')
-		{
-			return $a_offset > $b_offset ? -1 : 1;
-		}
-		else
-		{
-			return $a_offset < $b_offset ? -1 : 1;
-		}
+		return $a_offset > $b_offset ? -1 : 1;
 	}
+
+	return $a_offset < $b_offset ? -1 : 1;
 }
 
 /**
-* Mostly borrowed from phpBB 3.1 includes/functions.php/phpbb_timezone_select()
-* To have it available for 3.0.x too.
-*
-* Options to pick a timezone and date/time
-*
-* @param	\phpbb\template\template $template	phpBB template object
-* @param	\phpbb\user	$user				Object of the current user
-* @param	string		$default			A timezone to select
-* @param	boolean		$truncate			Shall we truncate the options text
-*
-* @return		array		Returns an array containing the options for the time selector.
-*/
+ * Mostly borrowed from phpBB 3.1 includes/functions.php/phpbb_timezone_select()
+ * To have it available for 3.0.x too.
+ *
+ * Options to pick a timezone and date/time
+ *
+ * @param \phpbb\user $user     Object of the current user
+ * @param string      $default  A timezone to select
+ * @param boolean     $truncate Shall we truncate the options text
+ *
+ * @return string Returns the options for the time selector.
+ */
 function qi_timezone_select($user, $default = '', $truncate = false)
 {
 	date_default_timezone_set('UTC');
@@ -227,12 +221,13 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 {
 	global $quickinstall_path, $user, $phpEx;
 
-	if (!empty($user) && !empty($user->lang))
+	if ($user !== null && !empty($user->lang))
 	{
 		$lang = $user->lang;
 	}
 	else
 	{
+		$lang = [];
 		include "{$quickinstall_path}language/en/qi.$phpEx";
 	}
 
@@ -267,7 +262,7 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 
 function create_board_warning($msg_title, $msg_text, $page)
 {
-	global $settings, $phpEx;
+	global $phpEx;
 
 	$args =  'page='			. urlencode($page);
 	$args .= '&error_title='	. urlencode($msg_title);
@@ -295,7 +290,7 @@ function legacy_set_var(&$result, $var, $type, $multibyte = false)
 	settype($var, $type);
 	$result = $var;
 
-	if ($type == 'string')
+	if ($type === 'string')
 	{
 		$result = trim(htmlspecialchars(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $result), ENT_COMPAT, 'UTF-8'));
 
@@ -339,7 +334,7 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 	}
 
 	$super_global = ($cookie) ? '_COOKIE' : '_REQUEST';
-	if (!isset($GLOBALS[$super_global][$var_name]) || is_array($GLOBALS[$super_global][$var_name]) != is_array($default))
+	if (!isset($GLOBALS[$super_global][$var_name]) || is_array($GLOBALS[$super_global][$var_name]) !== is_array($default))
 	{
 		return (is_array($default)) ? array() : $default;
 	}
@@ -354,13 +349,13 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 		list($key_type, $type) = each($default);
 		$type = gettype($type);
 		$key_type = gettype($key_type);
-		if ($type == 'array')
+		if ($type === 'array')
 		{
 			reset($default);
 			$default = current($default);
 			list($sub_key_type, $sub_type) = each($default);
 			$sub_type = gettype($sub_type);
-			$sub_type = ($sub_type == 'array') ? 'NULL' : $sub_type;
+			$sub_type = ($sub_type === 'array') ? 'NULL' : $sub_type;
 			$sub_key_type = gettype($sub_key_type);
 		}
 	}
@@ -501,7 +496,7 @@ function get_installed_boards()
 			{
 				if (($pos = strpos($row, "'PHPBB_VERSION', '")) !== false)
 				{
-					$pos = $pos + 18;
+					$pos += 18;
 					$version = substr($row, $pos, -3);
 					break;
 				}
@@ -607,10 +602,8 @@ function qi_get_available_dbms($dbms)
 		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
 		return call_user_func(array($database, 'get_available_dbms'), $dbms);
 	}
-	else
-	{
-		return call_user_func('get_available_dbms', $dbms);
-	}
+
+	return call_user_func('get_available_dbms', $dbms);
 }
 
 function qi_get_phpbb_version()

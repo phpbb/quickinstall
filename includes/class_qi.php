@@ -308,12 +308,13 @@ class qi
 			case E_USER_ERROR:
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
-				if (!empty($user) && !empty($user->lang))
+				if ($user !== null && !empty($user->lang))
 				{
 					$lang = $user->lang;
 				}
 				else
 				{
+					$lang = [];
 					include "{$quickinstall_path}language/en/qi.$phpEx";
 				}
 
