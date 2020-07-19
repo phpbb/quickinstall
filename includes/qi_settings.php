@@ -17,7 +17,7 @@ if (!defined('IN_QUICKINSTALL'))
 
 $attempted = $saved = false;
 $config_text = '';
-$error = '';
+$errors = [];
 if ($mode === 'update_settings')
 {
 	// Time to save some settings. request_var('qi_profile', '')
@@ -45,24 +45,24 @@ if ($mode === 'update_settings')
 			}
 			else
 			{
-				$error .= sprintf($user->lang['CONFIG_NOT_WRITTEN'], $profile) . '<br />';
-				$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
+				$errors[] = sprintf($user->lang['CONFIG_NOT_WRITTEN'], $profile);
+				$errors[] = $user->lang['CONFIG_IS_DISPLAYED'];
 				$config_text = $settings->get_config_text();
 			}
 		}
 		else
 		{
-			$error .= $user->lang['CONFIG_NOT_WRITABLE'] . '<br />';
-			$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
+			$errors[] = $user->lang['CONFIG_NOT_WRITABLE'];
+			$errors[] = $user->lang['CONFIG_IS_DISPLAYED'];
 			$config_text = $settings->get_config_text();
 		}
 	}
 	else
 	{
-		$error = $settings->get_error();
+		$errors = $settings->get_errors();
 	}
 
-	if (empty($error))
+	if (empty($errors))
 	{
 		$s_settings_success = true;
 		$language = $settings->get_config('qi_lang', 'en');
@@ -85,18 +85,17 @@ $s_settings_writable = true;
 if ($settings->install)
 {
 	// Don't show errors when installing QI
-	$error = '';
+	$errors = [];
 }
 else if (!is_writable($quickinstall_path . 'settings') || !is_dir($quickinstall_path . 'settings'))
 {
-	$error .= $user->lang['SETTINGS_NOT_WRITABLE'] . '<br />';
+	$errors[] = $user->lang['SETTINGS_NOT_WRITABLE'];
 	$s_settings_writable = false;
 }
 
 if ($alt_env_missing && !$attempted && !$saved)
 {
-	$err_string = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
-	$error .= $err_string . '<br />';
+	$errors[] = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
 }
 
 $template->assign_vars(array(
@@ -110,7 +109,7 @@ $template->assign_vars(array(
 	'S_SETTINGS_FAILURE'	=> $attempted && !$saved,
 	'S_SETTINGS'			=> true,
 
-	'ERROR'			=> $error,
+	'ERRORS'			=> $errors,
 
 	'U_UPDATE_SETTINGS'	=> qi::url('settings', array('mode' => 'update_settings')),
 	'U_CHOOSE_PROFILE'	=> qi::url('settings', array('mode' => 'change_profile')),

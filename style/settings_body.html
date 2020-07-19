@@ -12,14 +12,20 @@
 {% elseif S_SETTINGS_FAILURE %}
 	<div class="alert alert-danger" role="alert">
 		<h5 class="alert-heading"><svg class="bi icon text-danger" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg>️ {{ lang('SETTINGS_FAILURE') }}</h5>
-		<p class="mb-0">{% if ERROR %}{{ ERROR }}{% endif %}</p>
+		<ol class="mb-0">
+		{% for ERROR in ERRORS %}<li>{{ ERROR }}</li>{% endfor %}
+		</ol>
 	</div>
 {% endif %}
 {% if (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) %}
 	<div class="alert alert-danger" role="alert">{{ lang('NEED_WRITABLE') }}</div>
 {% endif %}
-{% if ERROR and S_IS_CONVERTED %}
-	<div class="alert alert-success" role="alert">{{ ERROR }}</div>
+{% if ERRORS|length and S_IS_CONVERTED %}
+	<div class="alert alert-success" role="alert">
+		{% for ERROR in ERRORS %}
+			<p class="mb-0">{{ ERROR }}</p>
+		{% endfor %}
+	</div>
 {% endif %}
 
 {% if CONFIG_TEXT %}

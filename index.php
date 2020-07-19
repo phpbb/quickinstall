@@ -263,7 +263,7 @@ else if (!empty($settings->update_text)) // PROFILE_UPDATED
 
 // Probably best place to validate the settings
 $settings->validate();
-$error = $settings->get_error();
+$errors = $settings->get_errors();
 
 // Set some standard variables we want to force
 if (defined('PHPBB_31'))
@@ -284,7 +284,7 @@ else
 // update cache path
 $template->set_cachepath($settings->get_cache_dir());
 
-$page = (empty($error)) ? $page : 'settings';
+$page = (empty($errors)) ? $page : 'settings';
 
 if ($page == 'main' || $page == 'settings' || $alt_env_missing)
 {

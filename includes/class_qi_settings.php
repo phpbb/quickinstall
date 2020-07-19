@@ -550,62 +550,59 @@ class settings
 	}
 
 	/**
-	 * Returns a string containing errors ready to show the user or false for no error.
+	 * Returns an array containing translated errors, or false for no error.
 	 */
-	function get_error()
+	function get_errors()
 	{
 		global $user;
 
 		if (empty($this->error))
 		{
 			// Yay, no errors.
-			return(false);
+			return false;
 		}
 
-		$error = '';
+		$errors = [];
 		foreach ($this->error as $row)
 		{
 			if (strpos($row, '|') === false)
 			{
 				// Simple only one language key.
-				$error .= $user->lang[$row] . '<br />';
+				$errors[] = $user->lang[$row];
 			}
 			else
 			{
 				// More than one language key.
-				$err_ary	= explode('|', $row);
-				$format		= $user->lang[$err_ary[0]];
+				$err_ary = explode('|', $row);
+				$format  = $user->lang[$err_ary[0]];
 
 				if (strpos($format, '%') === false)
 				{
-					// No formating, just pack them together.
+					// No formatting, just pack them together.
 					foreach ($err_ary as &$err_row)
 					{
 						$err_row = $user->lang[$err_row];
 					}
 					unset($err_row);
 
-					$error .= implode(' ', $err_ary) . '<br />';
+					$errors[] = implode(' ', $err_ary);
 				}
 				else if (count($err_ary) > 1)
 				{
 					// Formated language string.
 					unset($err_ary[0]);
-					$error .= vsprintf($format, $err_ary) . '<br />';
+					$errors[] = vsprintf($format, $err_ary);
 				}
 				else
 				{
-					$error .= $user->lang[$err_ary[0]] . '<br />';
+					$errors[] = $user->lang[$err_ary[0]];
 				}
 			}
 		}
 
-		// Remove the last <br />
-		$error = substr($error, 0, -6);
-
 		// Empty the errors.
-		$this->error = array();
-		return($error);
+		$this->error = [];
+		return($errors);
 	}
 
 	/**
