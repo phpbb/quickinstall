@@ -410,7 +410,7 @@ function validate_dbname($dbname, $first_char = false, $path = false)
 	if (empty($dbname))
 	{
 		// Nothing to validate, this should already have been catched.
-		return('');
+		return '';
 	}
 
 	// Try to replace some chars whit their valid equivalents
@@ -428,7 +428,7 @@ function validate_dbname($dbname, $first_char = false, $path = false)
 	// make sure that the first char is not a underscore if set.
 	$prefix = ($first_char && $dbname[0] === '_') ? 'qi' : '';
 
-	return($prefix . $dbname);
+	return $prefix . $dbname;
 }
 
 /**
@@ -577,7 +577,7 @@ function db_connect($db_data = '')
 
 	$db->sql_return_on_error(true);
 
-	return($db);
+	return $db;
 }
 
 /**

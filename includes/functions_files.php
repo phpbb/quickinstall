@@ -33,7 +33,7 @@ class file_functions
 			self::$error[] = $file;
 		}
 
-		return($success);
+		return $success;
 	}
 
 	public static function copy_file($src_file, $dst_file)
@@ -176,8 +176,6 @@ class file_functions
 
 	public static function grant_permissions($dir, $add_perms, $root = true)
 	{
-		global $phpEx;
-
 		$old_perms = fileperms($dir);
 		$new_perms = $old_perms | $add_perms;
 		if ($new_perms != $old_perms)

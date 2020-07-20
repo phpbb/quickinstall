@@ -31,7 +31,7 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user, $phpbb_root_path, $quickinstall_path, $settings, $page, $mode;
+		global $template, $user;
 
 		$update = self::get_update();
 
@@ -264,8 +264,7 @@ class qi
 	 */
 	public static function msg_handler($errno, $msg_text, $errfile, $errline)
 	{
-		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path;
-		global $user;
+		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path, $user;
 
 		// Do not display notices if we suppress them via @
 		if (error_reporting() == 0 && $errno != E_USER_ERROR && $errno != E_USER_WARNING && $errno != E_USER_NOTICE)
@@ -361,7 +360,7 @@ class qi
 
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
-		return(false);
+		return false;
 	}
 
 	/**

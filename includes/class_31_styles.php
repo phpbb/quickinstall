@@ -23,8 +23,7 @@ class class_31_styles extends acp_styles
 
 	public function __construct()
 	{
-		global $db, $user, $phpbb_root_path, $phpEx, $template, $request, $cache, $auth, $config;
-		global $settings;
+		global $db, $user, $phpbb_root_path, $phpEx, $template, $request, $cache, $auth, $config, $settings;
 
 		$this->mode = 'install';
 		$this->db = $db;

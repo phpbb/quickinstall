@@ -30,7 +30,7 @@ class settings
 	 * Array with configuration settings.
 	 * @private
 	 */
-	var $config = array();
+	private $config;
 
 	/**
 	 * Holds errors.
@@ -39,35 +39,35 @@ class settings
 	 * If more than one language key is used they are separated with a | (vertical bar).
 	 * Or if the first key contains a %, the sprintf args are separated with a |.
 	 */
-	var $error = array();
+	protected $error = array();
 
 	/**
 	 * Bool true if the settings need to be converted to the new style
 	 * and that could not be done automatically
 	 */
-	var $manual_convert = false;
+	protected $manual_convert = false;
 
 	/**
 	 * Bool true if the settings where automatically converted to the new style
 	 * and the user is not informed yet.
 	 */
-	var $is_converted = false;
+	public $is_converted = false;
 
 	/**
 	 * Array with info about updated config. Since QI v1.2.0
 	 */
-	var $update_text		= array();
-	var $updated_profile	= '';
+	public $update_text		= array();
+	public $updated_profile	= '';
 
 	/**
 	 * True if there is no config and the user needs to go to install.
 	 */
-	var $install = false;
+	public $install = false;
 
 	/**
 	 * The current profile
 	 */
-	var $profile = 'default';
+	public $profile = 'default';
 
 	/**
 	 * @var \phpbb\user
@@ -90,7 +90,7 @@ class settings
 	 * @param string $profile
 	 * @param string $mode
 	 */
-	function __construct($profile = '', $mode = '')
+	public function __construct($profile = '', $mode = '')
 	{
 		global $quickinstall_path, $phpEx;
 
@@ -116,32 +116,28 @@ class settings
 			$config = file("{$this->qi_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $_COOKIE[self::QI_PROFILE_COOKIE];
 		}
-		else
+		// The profile cookie is empty, not set or the profile file is not found or not readable. Check if we have a settings directory.
+		else if (file_exists($this->qi_path . 'settings'))
 		{
-			// The profile cookie is empty, not set or the profile file is not found or not readable.
-			// Check if we have a settings directory.
-			if (file_exists($this->qi_path . 'settings'))
+			// Read the directory and give the first file we get if there are any.
+			$files = scandir($this->qi_path . 'settings');
+
+			$cfg_file = '';
+			foreach ($files as $file)
 			{
-				// Read the directory and give the first file we get if there are any.
-				$files = scandir($this->qi_path . 'settings');
-
-				$cfg_file = '';
-				foreach ($files as $file)
+				if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file"))
 				{
-					if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file"))
-					{
-						continue;
-					}
-
-					$cfg_file = "{$this->qi_path}settings/$file";
-					$this->profile = str_replace('.cfg', '', $file);
-					break;
+					continue;
 				}
 
-				if (!empty($cfg_file))
-				{
-					$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-				}
+				$cfg_file = "{$this->qi_path}settings/$file";
+				$this->profile = str_replace('.cfg', '', $file);
+				break;
+			}
+
+			if (!empty($cfg_file))
+			{
+				$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			}
 		}
 
@@ -181,12 +177,15 @@ class settings
 		}
 
 		$this->config = get_default_settings();
-		$this->install = ($mode != 'update_settings') ? true : false;
+		$this->install = $mode !== 'update_settings';
 	}
 
 	/**
 	 * Checks for changed or added config fields.
 	 * Newer changes on top so we don't have to step through all each time.
+	 *
+	 * @param array $config
+	 * @return mixed
 	 */
 	protected function check_updates($config)
 	{
@@ -280,6 +279,8 @@ class settings
 
 	/**
 	 * Applies language selected by user to quickinstall.
+	 *
+	 * @param string $lang
 	 */
 	public function apply_language($lang = '')
 	{
@@ -361,7 +362,7 @@ class settings
 			$cfg_file = '';
 			foreach ($files as $file)
 			{
-				if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file") || $file == "$profile.cfg")
+				if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file") || $file === "$profile.cfg")
 				{
 					continue;
 				}
@@ -405,8 +406,11 @@ class settings
 	/**
 	 * Get a config setting or request a post/get var
 	 *
-	 * @param string $name, config/var name.
-	 * @param mixed $default, 0 (zero) or '' to tell what to cast it to.
+	 * @param string $name    , config/var name.
+	 * @param mixed  $default , 0 (zero) or '' to tell what to cast it to.
+	 * @param bool   $multibyte
+	 * @param bool   $cookie
+	 * @return mixed
 	 */
 	public function get_config($name, $default = '', $multibyte = false, $cookie = false)
 	{
@@ -416,22 +420,22 @@ class settings
 			if (is_string($default))
 			{
 				// Using isset() on strings might give a undesired result.
-				$exist = (!empty($_REQUEST[$name])) ? true : false;
+				$exist = !empty($_REQUEST[$name]);
 			}
 			else
 			{
-				$exist = (isset($_REQUEST[$name])) ? true : false;
+				$exist = isset($_REQUEST[$name]);
 			}
 		}
 		else
 		{
 			if (is_string($default))
 			{
-				$exist = (!empty($_GET[$name]) || !empty($_POST[$name])) ? true : false;
+				$exist = !empty($_GET[$name]) || !empty($_POST[$name]);
 			}
 			else
 			{
-				$exist = (isset($_GET[$name]) || isset($_POST[$name])) ? true : false;
+				$exist = isset($_GET[$name]) || isset($_POST[$name]);
 			}
 		}
 
@@ -508,15 +512,13 @@ class settings
 		 * The callers uses list() to set its DB vars.
 		 * list() only works with numerical arrays.
 		 */
-		$db_vars = array(
+		return array(
 			$this->get_config('dbms'),
 			$this->get_config('dbhost'),
 			$this->get_config('dbuser'),
 			$this->get_config('dbpasswd'),
 			$this->get_config('dbport'),
 		);
-
-		return $db_vars;
 	}
 
 	/**
@@ -577,6 +579,11 @@ class settings
 
 	/**
 	 * Generate a lang select for the settings page.
+	 *
+	 * @param string $lang_path
+	 * @param string $config_var
+	 * @param string $get_var
+	 * @return array
 	 */
 	public function get_lang_select($lang_path, $config_var, $get_var = '')
 	{
@@ -671,7 +678,7 @@ class settings
 
 			foreach ($files as $file)
 			{
-				if (strpos($file, '.') == 0 || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file"))
+				if (strpos($file, '.') === 0 || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file"))
 				{
 					continue;
 				}
@@ -703,6 +710,9 @@ class settings
 
 	/**
 	 * Updates configuration settings.
+	 *
+	 * @param array $config
+	 * @return mixed
 	 */
 	public function set_config($config)
 	{
@@ -840,23 +850,23 @@ class settings
 		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
 		$error = array();
-		$error[] = ($this->config['dbms'] == '') ? 'DBMS|IS_REQUIRED' : '';
-		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|IS_REQUIRED' : '';
-		$error[] = ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
-		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|IS_REQUIRED' : '';
-		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|IS_REQUIRED' : '';
-		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|IS_REQUIRED' : '';
-		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|IS_REQUIRED' : '';
-		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|IS_REQUIRED' : '';
-		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|IS_REQUIRED' : '';
-		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|IS_REQUIRED' : '';
-		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|IS_REQUIRED' : '';
-		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|IS_REQUIRED' : '';
-		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbms'] === '') ? 'DBMS|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbhost'] === '') ? 'DBHOST|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbpasswd'] !== '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
+		$error[] = ($this->config['table_prefix'] === '') ? 'TABLE_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_lang'] === '') ? 'QI_LANG|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_tz'] === '') ? 'QI_TZ|IS_REQUIRED' : '';
+		$error[] = ($this->config['db_prefix'] === '') ? 'DB_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['admin_email'] === '') ? 'ADMIN_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['site_name'] === '') ? 'SITE_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_name'] === '') ? 'SERVER_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_port'] === '') ? 'SERVER_PORT|IS_REQUIRED' : '';
+		$error[] = ($this->config['board_email'] === '') ? 'BOARD_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['default_lang'] === '') ? 'DEFAULT_LANG|IS_REQUIRED' : '';
 
-		$error[] = ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
+		$error[] = ($this->config['db_prefix'] !== validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
 
-		if ($this->config['cache_dir'] == '')
+		if ($this->config['cache_dir'] === '')
 		{
 			$error[] = 'CACHE_DIR|IS_REQUIRED';
 		}
@@ -870,7 +880,7 @@ class settings
 			$this->config['cache_dir'] .= (substr($this->config['cache_dir'], -1) !== '/') ? '/' : '';
 		}
 
-		if ($this->config['boards_dir'] == '')
+		if ($this->config['boards_dir'] === '')
 		{
 			$error[] = 'BOARDS_DIR|IS_REQUIRED';
 		}
@@ -898,7 +908,7 @@ class settings
 			}
 		}
 
-		if ($this->config['boards_url'] == '')
+		if ($this->config['boards_url'] === '')
 		{
 			$error[] = 'BOARDS_URL|IS_REQUIRED';
 		}
@@ -927,6 +937,9 @@ class settings
 
 	/**
 	 * Writes configuration settings to the configuration file.
+	 *
+	 * @param string $config_text
+	 * @return bool|int
 	 */
 	protected function write($config_text)
 	{

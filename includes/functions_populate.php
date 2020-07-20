@@ -639,7 +639,7 @@ class populate
 			}
 		}
 
-		return($forum_data['forum_id']);
+		return $forum_data['forum_id'];
 	}
 
 	/**
