@@ -97,7 +97,9 @@
 						<label for="qi_lang" class="col-md-5 col-form-label">{{ lang('QI_LANG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('QI_LANG_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<select id="qi_lang" name="qi_config[qi_lang]" class="custom-select" data-load-selection="index.php?page=settings&amp;lang=">
-								{{ QI_LANG }}
+								{% for lang in QI_LANG %}
+									<option value="{{ lang.value }}"{% if lang.selected %}selected="selected"{% endif %}>{{ lang.name }}</option>
+								{% endfor %}
 							</select>
 						</div>
 					</div>
@@ -257,7 +259,13 @@
 					</div>
 					<div class="mb-3 row">
 						<label for="default_lang" class="col-md-5 col-form-label">{{ lang('DEFAULT_LANG') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('DEFAULT_LANG_EXPLAIN') }}</span></label>
-						<div class="col-md-7"><select class="custom-select" id="default_lang" name="qi_config[default_lang]">{{ PHPBB_LANG }}</select></div>
+						<div class="col-md-7">
+							<select class="custom-select" id="default_lang" name="qi_config[default_lang]">
+								{% for lang in PHPBB_LANG %}
+									<option value="{{ lang.value }}"{% if lang.selected %}selected="selected"{% endif %}>{{ lang.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
 					</div>
 					<div class="mb-3 row">
 						<label for="qi_tz" class="col-md-5 col-form-label">{{ lang('QI_TZ') ~ lang('COLON') }}<span class="form-text text-muted">{{ lang('QI_TZ_EXPLAIN') }}</span></label>
