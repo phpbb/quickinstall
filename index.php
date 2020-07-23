@@ -97,31 +97,9 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 $page		= qi_request_var('page', 'main');
 $mode		= qi_request_var('mode', '');
 $profile	= qi_request_var('qi_profile', '');
-$page		= ($page == 'docs') ? 'about' : $page;
+$page		= ($page === 'docs') ? 'about' : $page;
 
 $settings = new settings($profile, $mode);
-
-// This is only usefull when working on QI.
-if (file_exists($quickinstall_path . 'purge_cache'))
-{
-	$cache_dir = $settings->get_config('cache_dir', '');
-
-	if (!empty($cache_dir))
-	{
-		$cache_dir = $quickinstall_path . $cache_dir;
-		$dh = opendir($cache_dir);
-
-		while (($file = readdir($dh)) !== false)
-		{
-			if ($file[0] != '.')
-			{
-				unlink($cache_dir . $file);
-			}
-		}
-
-		closedir($dh);
-	}
-}
 
 // We need some phpBB functions too.
 $alt_env = $settings->get_config('alt_env', '');

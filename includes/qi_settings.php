@@ -32,11 +32,8 @@ if ($mode === 'update_settings')
 	$profile = $settings->set_config($qi_config);
 
 	$attempted = true;
-	$valid = false;
 	if ($settings->validate())
 	{
-		$valid = true;
-
 		if (is_writable($quickinstall_path . 'settings'))
 		{
 			if ($settings->update())

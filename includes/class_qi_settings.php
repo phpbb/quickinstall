@@ -657,13 +657,6 @@ class settings
 	 */
 	public function get_profiles()
 	{
-		static $profiles;
-
-		if ($profiles !== null)
-		{
-			return $profiles;
-		}
-
 		if (file_exists($this->qi_path . 'settings'))
 		{
 			// Read the directory and give the first file we get if there are any.
