@@ -51,23 +51,22 @@ class settings
 	 * Bool true if the settings where automatically converted to the new style
 	 * and the user is not informed yet.
 	 */
-	public $is_converted = false;
+	protected $is_converted = false;
 
 	/**
 	 * Array with info about updated config. Since QI v1.2.0
 	 */
-	public $update_text		= array();
-	public $updated_profile	= '';
+	protected $update_text	= array();
 
 	/**
 	 * True if there is no config and the user needs to go to install.
 	 */
-	public $install = false;
+	protected $install = false;
 
 	/**
 	 * The current profile
 	 */
-	public $profile = 'default';
+	protected $profile = 'default';
 
 	/**
 	 * @var \phpbb\user
@@ -204,7 +203,6 @@ class settings
 			include("{$this->qi_path}includes/default_settings.{$this->php_ext}");
 		}
 		$new_config = get_default_settings();
-		$this->updated_profile = $this->profile;
 		/**
 		 * To here
 		 */
@@ -973,5 +971,45 @@ class settings
 		}
 
 		return $this->user;
+	}
+
+	/**
+	 * Get $profile property
+	 *
+	 * @return string
+	 */
+	public function get_profile()
+	{
+		return $this->profile;
+	}
+
+	/**
+	 * Get $in_install property
+	 *
+	 * @return bool
+	 */
+	public function is_install()
+	{
+		return $this->install;
+	}
+
+	/**
+	 * Get $is_converted property
+	 *
+	 * @return bool
+	 */
+	public function is_converted()
+	{
+		return $this->is_converted;
+	}
+
+	/**
+	 * Get $update_text property
+	 *
+	 * @return array
+	 */
+	public function get_update_text()
+	{
+		return $this->update_text;
 	}
 }

@@ -224,13 +224,13 @@ if (qi_request_var('update_all', false))
 {
 	$settings->update_profiles();
 }
-else if (!empty($settings->update_text)) // PROFILE_UPDATED
+else if (count($settings->get_update_text())) // PROFILE_UPDATED
 {
-	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->profile);
+	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->get_profile());
 	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], qi::current_version());
 
 	$update_msg = '<ul>';
-	foreach ($settings->update_text as $update)
+	foreach ($settings->get_update_text() as $update)
 	{
 		$update_msg .= '<li>' . $user->lang[$update] . '</li>';
 	}
@@ -266,7 +266,7 @@ $page = (empty($errors)) ? $page : 'settings';
 
 if ($page == 'main' || $page == 'settings' || $alt_env_missing)
 {
-	if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
+	if ($settings->is_install() || $settings->is_converted() || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
 	{
 		$page = 'settings';
 		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
@@ -274,7 +274,7 @@ if ($page == 'main' || $page == 'settings' || $alt_env_missing)
 }
 
 // Hide manage boards if there is no saved config.
-$template->assign_var('S_IN_INSTALL', $settings->install);
+$template->assign_var('S_IN_INSTALL', $settings->is_install());
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
