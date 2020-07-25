@@ -90,7 +90,7 @@ class qi
 	*/
 	public static function redirect($page)
 	{
-		if (strpos($page, 'http://') == 0 || strpos($page, 'https://') == 0)
+		if (strpos($page, 'http://') === 0 || strpos($page, 'https://') === 0)
 		{
 			// Assume we have a fully qualified URL. And we are done.
 			header('Location: ' . $page);
@@ -99,7 +99,7 @@ class qi
 
 		$server_name = (!empty($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : getenv('SERVER_NAME');
 		$server_port = (!empty($_SERVER['SERVER_PORT'])) ? (int) $_SERVER['SERVER_PORT'] : (int) getenv('SERVER_PORT');
-		$secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0;
+		$secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
 
 		$script_name = (!empty($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : getenv('PHP_SELF');
 		if (!$script_name)
@@ -111,18 +111,18 @@ class qi
 		$script_name = str_replace(array('\\', '//'), '/', $script_name);
 		$script_path = trim(dirname($script_name));
 
-		$url = (($secure) ? 'https://' : 'http://') . $server_name;
+		$url = ($secure ? 'https://' : 'http://') . $server_name;
 
-		if ($server_port && (($secure && $server_port <> 443) || (!$secure && $server_port <> 80)))
+		if ($server_port && (($secure && $server_port !== 443) || (!$secure && $server_port !== 80)))
 		{
 			$url .= ':' . $server_port;
 		}
 
 		// Make sure script path ends with a slash.
-		$script_path .= (substr($script_path, -1) != '/') ? '/' : '';
+		$script_path .= (substr($script_path, -1) !== '/') ? '/' : '';
 
 		// Since $script_path ends with a slash we don't want $page to start with one.
-		$page = ($page[0] == '/') ? substr($page, 1) : $page;
+		$page = ltrim($page, '/');
 
 		$url .= $script_path . $page;
 		header('Location: ' . $url);
@@ -230,12 +230,14 @@ class qi
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
 			return str_replace('||', $user->lang['datetime']['TOMORROW'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
 		}
-		else if ($gmepoch > $midnight && !$forcedate)
+
+		if ($gmepoch > $midnight && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
 			return str_replace('||', $user->lang['datetime']['TODAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
 		}
-		else if ($gmepoch > $midnight - 86400 && !$forcedate)
+
+		if ($gmepoch > $midnight - 86400 && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
 			return str_replace('||', $user->lang['datetime']['YESTERDAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
