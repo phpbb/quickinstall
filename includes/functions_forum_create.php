@@ -24,8 +24,8 @@ if (!defined('IN_QUICKINSTALL'))
  *
  * Copied from adm/index.php, since we do not want to include that file.
  *
- * param mixed $value_ary An array of the form array(array('lang' => ..., 'value' => ..., 'column_type' =>))'
- * param mixed $error The error array
+ * @param mixed $value_ary An array of the form array(array('lang' => ..., 'value' => ..., 'column_type' =>))'
+ * @param mixed $error The error array
  */
 function validate_range($value_ary, &$error)
 {
@@ -43,16 +43,12 @@ function validate_range($value_ary, &$error)
 	foreach ($value_ary as $value)
 	{
 		$column = explode(':', $value['column_type']);
-		$max = $min = 0;
-		$type = 0;
 		if (!isset($column_types[$column[0]]))
 		{
 			continue;
 		}
-		else
-		{
-			$type = $column_types[$column[0]];
-		}
+
+		$type = $column_types[$column[0]];
 
 		switch ($type['php_type'])
 		{

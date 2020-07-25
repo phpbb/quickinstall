@@ -94,34 +94,12 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 }
 
 // Let's get the config.
-$page		= legacy_request_var('page', 'main');
-$mode		= legacy_request_var('mode', '');
-$profile	= legacy_request_var('qi_profile', '');
-$page		= ($page == 'docs') ? 'about' : $page;
+$page		= qi_request_var('page', 'main');
+$mode		= qi_request_var('mode', '');
+$profile	= qi_request_var('qi_profile', '');
+$page		= ($page === 'docs') ? 'about' : $page;
 
 $settings = new settings($profile, $mode);
-
-// This is only usefull when working on QI.
-if (file_exists($quickinstall_path . 'purge_cache'))
-{
-	$cache_dir = $settings->get_config('cache_dir', '');
-
-	if (!empty($cache_dir))
-	{
-		$cache_dir = $quickinstall_path . $cache_dir;
-		$dh = opendir($cache_dir);
-
-		while (($file = readdir($dh)) !== false)
-		{
-			if ($file[0] != '.')
-			{
-				unlink($cache_dir . $file);
-			}
-		}
-
-		closedir($dh);
-	}
-}
 
 // We need some phpBB functions too.
 $alt_env = $settings->get_config('alt_env', '');
@@ -216,11 +194,11 @@ else
 // We need to set the template here.
 $template = new twig($user, $settings->get_cache_dir(), $quickinstall_path);
 
-$profiles = $settings->get_profiles();
-$template->assign_var('PROFILE_COUNT', $profiles['count']);
-if (empty($profiles['count']))
+$profiles = count($settings->get_profiles());
+$template->assign_var('PROFILE_COUNT', $profiles);
+if ($profiles === 0)
 {
-	$page = ($page == 'main' || $page == '') ? 'settings' : $page;
+	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
 }
 
 $template->assign_var('CONFIG_TEXT', false);
@@ -228,11 +206,11 @@ $template->assign_var('CONFIG_TEXT', false);
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
-	$language = request_var('lang', '');
+	$language = qi_request_var('lang', '');
 }
 else if (!empty($_POST['sel_lang']))
 {
-	$language = request_var('sel_lang', '');
+	$language = qi_request_var('sel_lang', '');
 }
 else
 {
@@ -242,17 +220,17 @@ else
 $settings->apply_language($language);
 
 // Updated settings?
-if (legacy_request_var('update_all', false))
+if (qi_request_var('update_all', false))
 {
 	$settings->update_profiles();
 }
-else if (!empty($settings->update_text)) // PROFILE_UPDATED
+else if (count($settings->get_update_text())) // PROFILE_UPDATED
 {
-	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->profile);
+	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->get_profile());
 	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], qi::current_version());
 
 	$update_msg = '<ul>';
-	foreach ($settings->update_text as $update)
+	foreach ($settings->get_update_text() as $update)
 	{
 		$update_msg .= '<li>' . $user->lang[$update] . '</li>';
 	}
@@ -263,7 +241,7 @@ else if (!empty($settings->update_text)) // PROFILE_UPDATED
 
 // Probably best place to validate the settings
 $settings->validate();
-$error = $settings->get_error();
+$errors = $settings->get_errors();
 
 // Set some standard variables we want to force
 if (defined('PHPBB_31'))
@@ -284,11 +262,11 @@ else
 // update cache path
 $template->set_cachepath($settings->get_cache_dir());
 
-$page = (empty($error)) ? $page : 'settings';
+$page = (empty($errors)) ? $page : 'settings';
 
 if ($page == 'main' || $page == 'settings' || $alt_env_missing)
 {
-	if ($settings->install || $settings->is_converted || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
+	if ($settings->is_install() || $settings->is_converted() || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
 	{
 		$page = 'settings';
 		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
@@ -296,7 +274,7 @@ if ($page == 'main' || $page == 'settings' || $alt_env_missing)
 }
 
 // Hide manage boards if there is no saved config.
-$template->assign_var('S_IN_INSTALL', $settings->install);
+$template->assign_var('S_IN_INSTALL', $settings->is_install());
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');

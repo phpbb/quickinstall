@@ -159,6 +159,7 @@ $lang = array_merge($lang, array(
 	'INSTALL_QI'			=> 'Install QuickInstall',
 	'INSTALL_WELCOME'		=> 'Welcome to QuickInstall, a tool for quickly installing phpBB boards for testing and development.<br /><br />Some default settings have been loaded below. The only fields you should enter are <code>Database user</code> and <code>Database password</code> if you want those to be stored by QuickInstall. But it is also a good idea to check the rest of the settings.<br /><br />Make sure the <code>boards</code>, <code>cache</code> and <code>settings</code> directories exist in the QuickInstall root directory and are writable by PHP.<br /><br />Once you save these settings they will be stored as the &quot;default&quot; profile. Optionally, you may enter your own unique profile name in the <code>Save as new profile</code> field.',
 	'IS_NOT_VALID'			=> 'Is not valid.',
+	'IS_REQUIRED'			=> 'is required',
 	'REQUIRED'				=> 'Required',
 
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',
@@ -248,7 +249,7 @@ $lang = array_merge($lang, array(
 	'SEARCH_HERE'			=> 'Search here...',
 	'SET_DEFAULT_STYLE'		=> 'Set default style',
 	'SET_DEFAULT_STYLE_EXPLAIN'	=> 'Enter the name of the style you want to use as the default style. The name can be found in the <code>styles/[style name]/style.cfg</code> file. Defaults to prosilver if empty or the style can’t be installed.',
-	'SETTINGS_FAILURE'		=> 'The following errors were detected',
+	'SETTINGS_FAILURE'		=> 'The following errors occurred',
 	'SETTINGS_NOT_WRITABLE'	=> 'The settings directory does not exist, is not a directory or is not writable.',
 	'SETTINGS_SECTIONS'		=> 'Settings',
 	'SETTINGS_SUCCESS'		=> 'Your settings were successfully saved.',

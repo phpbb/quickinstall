@@ -31,7 +31,7 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user, $phpbb_root_path, $quickinstall_path, $settings, $page, $mode;
+		global $template, $user;
 
 		$update = self::get_update();
 
@@ -264,8 +264,7 @@ class qi
 	 */
 	public static function msg_handler($errno, $msg_text, $errfile, $errline)
 	{
-		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path;
-		global $user;
+		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path, $user;
 
 		// Do not display notices if we suppress them via @
 		if (error_reporting() == 0 && $errno != E_USER_ERROR && $errno != E_USER_WARNING && $errno != E_USER_NOTICE)
@@ -308,20 +307,17 @@ class qi
 			case E_USER_ERROR:
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
-				if (!empty($user) && !empty($user->lang))
+				if ($user !== null && !empty($user->lang))
 				{
-					$msg_text = (!empty($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
-					$msg_title = (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((!empty($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title);
-
-					$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
-					$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
+					$lang = $user->lang;
 				}
 				else
 				{
-					$msg_title = 'General Error';
-					$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
-					$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+					$lang = [];
+					include "{$quickinstall_path}language/en/qi.$phpEx";
 				}
+
+				$msg_text = isset($lang[$msg_text]) ? $lang[$msg_text] : $msg_text;
 
 				$backtrace = phpbb_functions::get_backtrace();
 				if ($backtrace)
@@ -340,16 +336,16 @@ class qi
 
 				$template->assign_vars([
 					'QI_PATH'              => $quickinstall_path,
-					'MSG_TITLE'            => $msg_title,
+					'MSG_TITLE'            => (!isset($msg_title)) ? $lang['GENERAL_ERROR'] : ((isset($lang[$msg_title])) ? $lang[$msg_title] : $msg_title),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'SETTINGS_FORM'        => '',
-					'RETURN_LINKS'         => $l_return_index,
+					'SETTINGS_FORM'        => false,
+					'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
-					'L_QUICKINSTALL'       => $user->lang['QUICKINSTALL'],
-					'L_PHPBB_QI_TEXT'      => $user->lang['PHPBB_QI_TEXT'],
-					'L_FOR_PHPBB_VERSIONS' => $user->lang['FOR_PHPBB_VERSIONS'],
-					'L_POWERED_BY_PHPBB'   => $user->lang['POWERED_BY_PHPBB'],
+					'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
+					'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
+					'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
+					'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
 				]);
 
 				$template->display('error');
@@ -364,7 +360,7 @@ class qi
 
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
-		return(false);
+		return false;
 	}
 
 	/**

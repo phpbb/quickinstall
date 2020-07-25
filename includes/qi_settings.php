@@ -17,11 +17,11 @@ if (!defined('IN_QUICKINSTALL'))
 
 $attempted = $saved = false;
 $config_text = '';
-$error = '';
-if ($mode == 'update_settings')
+$errors = [];
+if ($mode === 'update_settings')
 {
 	// Time to save some settings. request_var('qi_profile', '')
-	$qi_config	= @utf8_normalize_nfc(request_var('qi_config', array('' => ''), true));
+	$qi_config	= @utf8_normalize_nfc(qi_request_var('qi_config', array('' => ''), true));
 
 	if (!empty($qi_config['other_config']))
 	{
@@ -32,11 +32,8 @@ if ($mode == 'update_settings')
 	$profile = $settings->set_config($qi_config);
 
 	$attempted = true;
-	$valid = false;
 	if ($settings->validate())
 	{
-		$valid = true;
-
 		if (is_writable($quickinstall_path . 'settings'))
 		{
 			if ($settings->update())
@@ -45,24 +42,24 @@ if ($mode == 'update_settings')
 			}
 			else
 			{
-				$error .= sprintf($user->lang['CONFIG_NOT_WRITTEN'], $profile) . '<br />';
-				$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
+				$errors[] = sprintf($user->lang['CONFIG_NOT_WRITTEN'], $profile);
+				$errors[] = $user->lang['CONFIG_IS_DISPLAYED'];
 				$config_text = $settings->get_config_text();
 			}
 		}
 		else
 		{
-			$error .= $user->lang['CONFIG_NOT_WRITABLE'] . '<br />';
-			$error .= $user->lang['CONFIG_IS_DISPLAYED'] . '<br />';
+			$errors[] = $user->lang['CONFIG_NOT_WRITABLE'];
+			$errors[] = $user->lang['CONFIG_IS_DISPLAYED'];
 			$config_text = $settings->get_config_text();
 		}
 	}
 	else
 	{
-		$error = $settings->get_error();
+		$errors = $settings->get_errors();
 	}
 
-	if (empty($error))
+	if (empty($errors))
 	{
 		$s_settings_success = true;
 		$language = $settings->get_config('qi_lang', 'en');
@@ -82,37 +79,34 @@ if ($mode == 'update_settings')
 
 $s_settings_writable = true;
 
-if ($settings->install)
+if ($settings->is_install())
 {
 	// Don't show errors when installing QI
-	$error = '';
+	$errors = [];
 }
 else if (!is_writable($quickinstall_path . 'settings') || !is_dir($quickinstall_path . 'settings'))
 {
-	$error .= $user->lang['SETTINGS_NOT_WRITABLE'] . '<br />';
+	$errors[] = $user->lang['SETTINGS_NOT_WRITABLE'];
 	$s_settings_writable = false;
 }
 
 if ($alt_env_missing && !$attempted && !$saved)
 {
-	$err_string = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
-	$error .= $err_string . '<br />';
+	$errors[] = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
 }
-
-$profiles = $settings->get_profiles();
 
 $template->assign_vars(array(
 	'S_BOARDS_WRITABLE'		=> is_writable($settings->get_boards_dir()),
 	'S_CACHE_WRITABLE'		=> is_writable($settings->get_cache_dir()),
 	'S_CONFIG_WRITABLE'		=> is_writable($quickinstall_path . 'settings'),
-	'S_IN_INSTALL'			=> $settings->install,
-	'S_IS_CONVERTED'		=> $settings->is_converted,
+	'S_IN_INSTALL'			=> $settings->is_install(),
+	'S_IS_CONVERTED'		=> $settings->is_converted(),
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
-	'S_SETTINGS_SUCCESS'	=> ($attempted && $saved) ? true : false,
-	'S_SETTINGS_FAILURE'	=> ($attempted && !$saved) ? true : false,
+	'S_SETTINGS_SUCCESS'	=> $attempted && $saved,
+	'S_SETTINGS_FAILURE'	=> $attempted && !$saved,
 	'S_SETTINGS'			=> true,
 
-	'ERROR'			=> $error,
+	'ERRORS'			=> $errors,
 
 	'U_UPDATE_SETTINGS'	=> qi::url('settings', array('mode' => 'update_settings')),
 	'U_CHOOSE_PROFILE'	=> qi::url('settings', array('mode' => 'change_profile')),
@@ -122,8 +116,7 @@ $template->assign_vars(array(
 	'SITE_NAME'		=> $settings->get_config('site_name'),
 	'SITE_DESC'		=> $settings->get_config('site_desc'),
 	'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
-	'PROFILE_COUNT'	=> $profiles['count'],
-	'PROFILE_OPTIONS'	=> $profiles['options'],
+	'PROFILES'		=> $settings->get_profiles(),
 	'QI_LANG'		=> $settings->get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
 	'PHPBB_LANG'	=> $settings->get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
 

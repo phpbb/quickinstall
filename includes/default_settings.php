@@ -70,5 +70,5 @@ function get_default_settings()
 		'default_style'		=> '',
 	);
 
-	return($config);
+	return $config;
 }

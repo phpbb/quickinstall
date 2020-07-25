@@ -30,7 +30,7 @@ class settings
 	 * Array with configuration settings.
 	 * @private
 	 */
-	var $config = array();
+	private $config;
 
 	/**
 	 * Holds errors.
@@ -39,95 +39,111 @@ class settings
 	 * If more than one language key is used they are separated with a | (vertical bar).
 	 * Or if the first key contains a %, the sprintf args are separated with a |.
 	 */
-	var $error = array();
+	protected $error = array();
 
 	/**
 	 * Bool true if the settings need to be converted to the new style
 	 * and that could not be done automatically
 	 */
-	var $manual_convert = false;
+	protected $manual_convert = false;
 
 	/**
 	 * Bool true if the settings where automatically converted to the new style
 	 * and the user is not informed yet.
 	 */
-	var $is_converted = false;
+	protected $is_converted = false;
 
 	/**
 	 * Array with info about updated config. Since QI v1.2.0
 	 */
-	var $update_text		= array();
-	var $updated_profile	= '';
+	protected $update_text	= array();
 
 	/**
 	 * True if there is no config and the user needs to go to install.
 	 */
-	var $install = false;
+	protected $install = false;
 
 	/**
 	 * The current profile
 	 */
-	var $profile = 'default';
+	protected $profile = 'default';
+
+	/**
+	 * @var \phpbb\user
+	 */
+	protected $user;
+
+	/**
+	 * @var string QI root path
+	 */
+	protected $qi_path;
+
+	/**
+	 * @var string PHP extension
+	 */
+	protected $php_ext;
 
 	/**
 	 * Reads the settings and populates $this->config.
+	 *
+	 * @param string $profile
+	 * @param string $mode
 	 */
-	function __construct($profile = '', $mode = '')
+	public function __construct($profile = '', $mode = '')
 	{
-		global $quickinstall_path, $phpEx, $user;
+		global $quickinstall_path, $phpEx;
 
-		$delete_profile = legacy_request_var('delete-profile', false);
+		$this->qi_path = $quickinstall_path;
+		$this->php_ext = $phpEx;
+
+		$delete_profile = qi_request_var('delete-profile', false);
 
 		if (!empty($delete_profile))
 		{
 			$profile = $this->delete_profile($profile);
 		}
 
-		if (!empty($profile) && is_readable("{$quickinstall_path}settings/$profile.cfg"))
+		if (!empty($profile) && is_readable("{$this->qi_path}settings/$profile.cfg"))
 		{
-			$config = file("{$quickinstall_path}settings/$profile.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$config = file("{$this->qi_path}settings/$profile.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $profile;
 			$this->set_profile_cookie($profile);
 		}
-		else if (!empty($_COOKIE[self::QI_PROFILE_COOKIE]) && is_readable("{$quickinstall_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg"))
+		else if (!empty($_COOKIE[self::QI_PROFILE_COOKIE]) && is_readable("{$this->qi_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg"))
 		{
 			// Get the previously used profile.
-			$config = file("{$quickinstall_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$config = file("{$this->qi_path}settings/{$_COOKIE[self::QI_PROFILE_COOKIE]}.cfg", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$this->profile = $_COOKIE[self::QI_PROFILE_COOKIE];
 		}
-		else
+		// The profile cookie is empty, not set or the profile file is not found or not readable. Check if we have a settings directory.
+		else if (file_exists($this->qi_path . 'settings'))
 		{
-			// The profile cookie is empty, not set or the profile file is not found or not readable.
-			// Check if we have a settings directory.
-			if (file_exists($quickinstall_path . 'settings'))
+			// Read the directory and give the first file we get if there are any.
+			$files = scandir($this->qi_path . 'settings');
+
+			$cfg_file = '';
+			foreach ($files as $file)
 			{
-				// Read the directory and give the first file we get if there are any.
-				$files = scandir($quickinstall_path . 'settings');
-
-				$cfg_file = '';
-				foreach ($files as $file)
+				if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file"))
 				{
-					if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
-					{
-						continue;
-					}
-
-					$cfg_file = "{$quickinstall_path}settings/$file";
-					$this->profile = str_replace('.cfg', '', $file);
-					break;
+					continue;
 				}
 
-				if (!empty($cfg_file))
-				{
-					$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-				}
+				$cfg_file = "{$this->qi_path}settings/$file";
+				$this->profile = str_replace('.cfg', '', $file);
+				break;
+			}
+
+			if (!empty($cfg_file))
+			{
+				$config = file($cfg_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			}
 		}
 
-		if (empty($config) && is_readable($quickinstall_path . 'qi_config.cfg'))
+		if (empty($config) && is_readable($this->qi_path . 'qi_config.cfg'))
 		{
 			// Still no config, but the old style congfig file is available.
-			$config = file($quickinstall_path . 'qi_config.cfg');
+			$config = file($this->qi_path . 'qi_config.cfg');
 
 			if (!empty($config))
 			{
@@ -156,62 +172,60 @@ class settings
 		// Most likely a new user so load the default settings and go to install.
 		if (!function_exists('get_default_settings'))
 		{
-			include("{$quickinstall_path}includes/default_settings.$phpEx");
+			include("{$this->qi_path}includes/default_settings.{$this->php_ext}");
 		}
 
 		$this->config = get_default_settings();
-		$this->install = ($mode != 'update_settings') ? true : false;
+		$this->install = $mode !== 'update_settings';
 	}
 
 	/**
 	 * Checks for changed or added config fields.
-	 * Newer changes on top so we don't have to step through all eacg time.
+	 * Newer changes on top so we don't have to step through all each time.
+	 *
+	 * @param array $config
+	 * @return mixed
 	 */
-	function check_updates($config)
+	protected function check_updates($config)
 	{
-		global $quickinstall_path, $phpEx;
-
 		if (!is_numeric($config['qi_tz']))
 		{
-			return($config);
+			return $config;
 		}
-		else
+
+		/**
+		 * Move this part to the first check when such is added.
+		 *
+		 * From here
+		 */
+		if (!function_exists('get_default_settings'))
 		{
-			/**
-			 * Move this part to the first check when such is added.
-			 *
-			 * From here
-			 */
-			if (!function_exists('get_default_settings'))
-			{
-				include("{$quickinstall_path}includes/default_settings.$phpEx");
-			}
-			$new_config = get_default_settings();
-			$this->updated_profile = $this->profile;
-			/**
-			 * To here
-			 */
-
-			$config['qi_tz']	= $new_config['qi_tz'];
-			unset($config['qi_dst']);
-
-			$this->update_text[]	= 'TIMEZONE_UPDATED';
-			$this->update_text[]	= 'DST_REMOVED';
+			include("{$this->qi_path}includes/default_settings.{$this->php_ext}");
 		}
+		$new_config = get_default_settings();
+		/**
+		 * To here
+		 */
 
-		return($config);
+		$config['qi_tz'] = $new_config['qi_tz'];
+		unset($config['qi_dst']);
+
+		$this->update_text[] = 'TIMEZONE_UPDATED';
+		$this->update_text[] = 'DST_REMOVED';
+
+		return $config;
 	}
 
 	/**
 	 * Updates users all profiles if there are more than one.
 	 */
-	function update_profiles()
+	public function update_profiles()
 	{
-		global $quickinstall_path, $phpEx, $user;
+		$this->get_user();
 
 		$cfg_bak	= $this->config;
 		$profil_bak	= $this->profile;
-		$path		= $quickinstall_path . 'settings';
+		$path		= $this->qi_path . 'settings';
 		$dh			= opendir($path);
 		$update_msg	= '';
 
@@ -243,7 +257,7 @@ class settings
 		{
 			$update_msg = "<ul>$update_msg</ul>";
 
-			gen_error_msg($update_msg, $user->lang['PROFILES_UPDATED']);
+			gen_error_msg($update_msg, $this->user->lang['PROFILES_UPDATED']);
 		}
 	}
 
@@ -254,37 +268,37 @@ class settings
 	 * This function transforms settings to the canonical representation
 	 * that the rest of the code expects.
 	 */
-	function adjust()
+	protected function adjust()
 	{
 		// Let's make sure our boards dir ends with a slash.
-		$this->config['boards_dir'] = (substr($this->config['boards_dir'], -1) == '/') ? $this->config['boards_dir'] : $this->config['boards_dir'] . '/';
-		$this->config['boards_url'] = (substr($this->config['boards_url'], -1) == '/') ? $this->config['boards_url'] : $this->config['boards_url'] . '/';
+		$this->config['boards_dir'] = (substr($this->config['boards_dir'], -1) === '/') ? $this->config['boards_dir'] : $this->config['boards_dir'] . '/';
+		$this->config['boards_url'] = (substr($this->config['boards_url'], -1) === '/') ? $this->config['boards_url'] : $this->config['boards_url'] . '/';
 	}
 
 	/**
 	 * Applies language selected by user to quickinstall.
+	 *
+	 * @param string $lang
 	 */
-	function apply_language($lang = '')
+	public function apply_language($lang = '')
 	{
-		global $quickinstall_path, $user;
-
-		if (empty($user))
+		if ($this->get_user() === null)
 		{
 			return;
 		}
 
 		$lang = (empty($lang)) ? $this->config['qi_lang'] : $lang;
-		$lang = (file_exists("{$quickinstall_path}language/$lang")) ? $lang : 'en';
+		$lang = (file_exists("{$this->qi_path}language/$lang")) ? $lang : 'en';
 
-		if (!empty($user))
+		if (!empty($this->user))
 		{
-			$user->lang = (file_exists("{$quickinstall_path}language/$lang")) ? $lang : 'en';
+			$this->user->lang = (file_exists("{$this->qi_path}language/$lang")) ? $lang : 'en';
 		}
 
 		// Need to make sure 'en' exists too.
-		if (file_exists("{$quickinstall_path}language/$lang"))
+		if (file_exists("{$this->qi_path}language/$lang"))
 		{
-			qi::add_lang(array('qi', 'phpbb'), "{$quickinstall_path}language/$lang/");
+			qi::add_lang(array('qi', 'phpbb'), "{$this->qi_path}language/$lang/");
 		}
 		else
 		{
@@ -301,15 +315,13 @@ class settings
 	 * @param array $config from qi_config.cfg
 	 * @return true if the profile file could not be written or false for no errors.
 	 */
-	function convert($config)
+	protected function convert($config)
 	{
-		global $quickinstall_path, $phpEx, $user;
-
 		// First convert the numeric array to a associative array and get it into $this->config.
 		$this->set_config_array($config);
 
 		// check for config fields added or changed since the "old" style.
-		include("{$quickinstall_path}includes/default_settings.$phpEx");
+		include("{$this->qi_path}includes/default_settings.{$this->php_ext}");
 		$new_config = get_default_settings();
 
 		foreach ($new_config as $key => $value)
@@ -331,114 +343,74 @@ class settings
 			$this->set_profile_cookie($this->profile);
 			$this->is_converted = true;
 			$this->error[] = 'CONFIG_CONVERTED';
-			return(false);
+			return false;
 		}
 
-		return(true);
+		return true;
 	}
 
-	function delete_profile($profile)
+	protected function delete_profile($profile)
 	{
-		global $quickinstall_path, $phpEx, $user;
-
 		// First scan the existing profiles to find one to replace the deleted profile.
-		if (file_exists($quickinstall_path . 'settings'))
+		if (file_exists($this->qi_path . 'settings'))
 		{
 			// Read the directory and give the first file we get if, there are any.
-			$files = scandir($quickinstall_path . 'settings');
+			$files = scandir($this->qi_path . 'settings');
 
 			$cfg_file = '';
 			foreach ($files as $file)
 			{
-				if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$quickinstall_path}settings/$file") || $file == "$profile.cfg")
+				if ($file[0] === '.' || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file") || $file === "$profile.cfg")
 				{
 					continue;
 				}
 
-				$cfg_file = "{$quickinstall_path}settings/$file";
+				$cfg_file = "{$this->qi_path}settings/$file";
 				$this->profile = str_replace('.cfg', '', $file);
 				break;
 			}
 
 			if (!empty($cfg_file))
 			{
-				$success = @unlink("{$quickinstall_path}settings/$profile.cfg");
-				return($this->profile);
+				@unlink("{$this->qi_path}settings/$profile.cfg");
+				return $this->profile;
 			}
-			else
-			{
-				$this->error[] = 'CANNOT_DELETE_LAST_PROFILE';
-			}
+
+			$this->error[] = 'CANNOT_DELETE_LAST_PROFILE';
 		}
 		else
 		{
 			$this->error[] = 'SETTINGS_NOT_WRITABLE';
 		}
 
-		return($profile);
+		return $profile;
 	}
 
-	function get_boards_dir()
+	public function get_boards_dir()
 	{
-		global $quickinstall_path;
-
-		if (empty($this->config['boards_dir']))
-		{
-			$boards_dir = $quickinstall_path . 'boards/';
-		}
-		else
-		{
-			$boards_dir = $this->config['boards_dir'];
-		}
-
-		return($boards_dir);
+		return empty($this->config['boards_dir']) ? $this->qi_path . 'boards/' : $this->config['boards_dir'];
 	}
 
-	function get_boards_url()
+	public function get_boards_url()
 	{
-		global $quickinstall_path;
-
-		if (empty($this->config['boards_url']))
-		{
-			$boards_url = $quickinstall_path . 'boards/';
-		}
-		else
-		{
-			$boards_url = $this->config['boards_url'];
-			/*
-			if (!preg_match('|^\w+://|', $boards_url))
-			{
-				$boards_url = $quickinstall_path . $boards_url;
-			}
-			*/
-		}
-
-		return($boards_url);
+		return empty($this->config['boards_url']) ? $this->qi_path . 'boards/' : $this->config['boards_url'];
 	}
 
-	function get_cache_dir()
+	public function get_cache_dir()
 	{
-		global $quickinstall_path;
-
-		if (empty($this->config['cache_dir']))
-		{
-			$cache_dir = $quickinstall_path . 'cache/';
-		}
-		else
-		{
-			$cache_dir = $this->config['cache_dir'];
-		}
-
-		return($cache_dir);
+		return empty($this->config['cache_dir']) ? $this->qi_path . 'cache/' : $this->config['cache_dir'];
 	}
 
 	/**
 	 * Get a config setting or request a post/get var
 	 *
-	 * @param string $name, config/var name.
-	 * @param mixed $default, 0 (zero) or '' to tell what to cast it to.
+	 * @param string $name    , config/var name.
+	 * @param mixed  $default , 0 (zero) or '' to tell what to cast it to.
+	 * @param bool   $multibyte
+	 * @param bool   $cookie
+	 * @return mixed
 	 */
-	function get_config($name, $default = '', $multibyte = false, $cookie = false)
+	public function get_config($name, $default = '', $multibyte = false, $cookie = false)
 	{
 		// First check if we have a post/get var, or a cookie if that has been selected.
 		if ($cookie)
@@ -446,28 +418,28 @@ class settings
 			if (is_string($default))
 			{
 				// Using isset() on strings might give a undesired result.
-				$exist = (!empty($_REQUEST[$name])) ? true : false;
+				$exist = !empty($_REQUEST[$name]);
 			}
 			else
 			{
-				$exist = (isset($_REQUEST[$name])) ? true : false;
+				$exist = isset($_REQUEST[$name]);
 			}
 		}
 		else
 		{
 			if (is_string($default))
 			{
-				$exist = (!empty($_GET[$name]) || !empty($_POST[$name])) ? true : false;
+				$exist = !empty($_GET[$name]) || !empty($_POST[$name]);
 			}
 			else
 			{
-				$exist = (isset($_GET[$name]) || isset($_POST[$name])) ? true : false;
+				$exist = isset($_GET[$name]) || isset($_POST[$name]);
 			}
 		}
 
 		if ($exist)
 		{
-			$return = legacy_request_var($name, $default, $multibyte, $cookie);
+			$return = qi_request_var($name, $default, $multibyte, $cookie);
 		}
 		else
 		{
@@ -503,14 +475,14 @@ class settings
 			}
 		}
 
-		return($return);
+		return $return;
 	}
 
 	/**
 	 * Serializes configuration settings into a string suitable for
 	 * writing to the configuration file.
 	 */
-	function get_config_text()
+	public function get_config_text()
 	{
 		$cfg_string = '';
 
@@ -531,95 +503,95 @@ class settings
 	 *
 	 * @return array with DB connect data.
 	 */
-	function get_db_data()
+	public function get_db_data()
 	{
 		/**
 		 * The order in this array is important, don't change it.
 		 * The callers uses list() to set its DB vars.
 		 * list() only works with numerical arrays.
 		 */
-		$db_vars = array(
+		return array(
 			$this->get_config('dbms'),
 			$this->get_config('dbhost'),
 			$this->get_config('dbuser'),
 			$this->get_config('dbpasswd'),
 			$this->get_config('dbport'),
 		);
-
-		return($db_vars);
 	}
 
 	/**
-	 * Returns a string containing errors ready to show the user or false for no error.
+	 * Returns an array containing translated errors, or false for no error.
 	 */
-	function get_error()
+	public function get_errors()
 	{
-		global $user;
+		$this->get_user();
 
 		if (empty($this->error))
 		{
 			// Yay, no errors.
-			return(false);
+			return false;
 		}
 
-		$error = '';
+		$errors = [];
 		foreach ($this->error as $row)
 		{
 			if (strpos($row, '|') === false)
 			{
 				// Simple only one language key.
-				$error .= $user->lang[$row] . '<br />';
+				$errors[] = $this->user->lang[$row];
 			}
 			else
 			{
 				// More than one language key.
-				$err_ary	= explode('|', $row);
-				$format		= $user->lang[$err_ary[0]];
+				$err_ary = explode('|', $row);
+				$format  = $this->user->lang[$err_ary[0]];
 
 				if (strpos($format, '%') === false)
 				{
-					// No formating, just pack them together.
+					// No formatting, just pack them together.
 					foreach ($err_ary as &$err_row)
 					{
-						$err_row = $user->lang[$err_row];
+						$err_row = $this->user->lang[$err_row];
 					}
 					unset($err_row);
 
-					$error .= implode(' ', $err_ary) . '<br />';
+					$errors[] = implode(' ', $err_ary);
 				}
-				else if (sizeof($err_ary) > 1)
+				else if (count($err_ary) > 1)
 				{
 					// Formated language string.
 					unset($err_ary[0]);
-					$error .= vsprintf($format, $err_ary) . '<br />';
+					$errors[] = vsprintf($format, $err_ary);
 				}
 				else
 				{
-					$error .= $user->lang[$err_ary[0]] . '<br />';
+					$errors[] = $this->user->lang[$err_ary[0]];
 				}
 			}
 		}
 
-		// Remove the last <br />
-		$error = substr($error, 0, -6);
-
 		// Empty the errors.
-		$this->error = array();
-		return($error);
+		$this->error = [];
+		return $errors;
 	}
 
 	/**
 	 * Generate a lang select for the settings page.
+	 *
+	 * @param string $lang_path
+	 * @param string $config_var
+	 * @param string $get_var
+	 * @return array
 	 */
-	function get_lang_select($lang_path, $config_var, $get_var = '')
+	public function get_lang_select($lang_path, $config_var, $get_var = '')
 	{
 		// Make sure $source_path ends with a slash.
-		$lang_path .= (substr($lang_path, -1) != '/') ? '/' : '';
+		$lang_path .= (substr($lang_path, -1) !== '/') ? '/' : '';
 
 		// Need to assume that English always is available.
 		if ($get_var && !empty($_GET[$get_var]))
 		{
-			$lang = request_var($get_var, '');
+			$lang = qi_request_var($get_var, '');
 			$user_lang = ($lang && file_exists($lang_path . $lang)) ? $lang : 'en';
 		}
 		else
@@ -629,7 +601,7 @@ class settings
 		}
 
 		$lang_arr = scandir($lang_path);
-		$lang_options = '';
+		$lang_options = [];
 
 		foreach ($lang_arr as $lang)
 		{
@@ -645,25 +617,26 @@ class settings
 				$rows = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 				// Always show the English language name, except for the "active" language.
-				$lang_name	= ($lang == $user_lang) ? $rows[1] : $rows[0];
-				$selected	= ($lang == $user_lang) ? " selected='selected'" : '';
-
-				$lang_options .= "<option value='$lang'$selected>$lang_name</option>";
+				$lang_options[] = [
+					'name' => ($lang === $user_lang) ? $rows[1] : $rows[0],
+					'value' => $lang,
+					'selected' => $lang === $user_lang,
+				];
 			}
 		}
 
-		return($lang_options);
+		return $lang_options;
 	}
 
-	function get_other_config($array = false)
+	public function get_other_config($array = false)
 	{
-		$other_config = request_var('other_config', '');
+		$other_config = qi_request_var('other_config', '');
 
 		if (empty($other_config))
 		{
 			if (empty($this->config['other_config']))
 			{
-				return('');
+				return '';
 			}
 
 			$other_config = unserialize($this->config['other_config']);
@@ -674,25 +647,20 @@ class settings
 			$other_config = explode("\n", $other_config);
 		}
 
-		return($other_config);
+		return $other_config;
 	}
 
 	/**
 	 * Scans the settings directory and return options for a profile select.
 	 */
-	function get_profiles()
+	public function get_profiles()
 	{
-		global $quickinstall_path;
-
-		if (file_exists($quickinstall_path . 'settings'))
+		if (file_exists($this->qi_path . 'settings'))
 		{
 			// Read the directory and give the first file we get if there are any.
-			$files = scandir($quickinstall_path . 'settings');
+			$files = scandir($this->qi_path . 'settings');
 
-			$profile_options = array(
-				'count'		=> 0,
-				'options'	=> '',
-			);
+			$profiles = [];
 
 			if (is_array($files))
 			{
@@ -701,19 +669,16 @@ class settings
 
 			foreach ($files as $file)
 			{
-				if (strpos($file, '.') == 0 || substr($file, -4) !== '.cfg' || !is_readable("{$quickinstall_path}settings/$file"))
+				if (strpos($file, '.') === 0 || substr($file, -4) !== '.cfg' || !is_readable("{$this->qi_path}settings/$file"))
 				{
 					continue;
 				}
 
-				$profile_options['count']++;
-
 				$cfg_name = str_replace('.cfg', '', $file);
-				$selected = ($cfg_name == $this->profile) ? " selected='selected'" : '';
-				$profile_options['options'] .= "<option value='$cfg_name'$selected>$cfg_name</option>";
+				$profiles[$cfg_name] = $cfg_name === $this->profile;
 			}
 
-			return $profile_options;
+			return $profiles;
 		}
 
 		$this->error[] = 'SETTINGS_NOT_WRITABLE';
@@ -724,22 +689,25 @@ class settings
 	 * There is no setting for server_protocol ATM,
 	 * but there might be in the future so let's keep this for now.
 	 */
-	function get_server_protocol()
+	public function get_server_protocol()
 	{
 		/*
 		$server_protocol = (!empty($this->config['server_protocol'])) ? $this->config['server_protocol'] : 'http://';
-		return($server_protocol);
+		return $server_protocol;
 		*/
 
-		return('http://');
+		return 'http://';
 	}
 
 	/**
 	 * Updates configuration settings.
+	 *
+	 * @param array $config
+	 * @return mixed
 	 */
-	function set_config($config)
+	public function set_config($config)
 	{
-		$profile = request_var('save_profile', '');
+		$profile = qi_request_var('save_profile', '');
 
 		if (!empty($profile))
 		{
@@ -750,7 +718,7 @@ class settings
 
 		$profile = (!empty($profile)) ? $profile : $this->profile;
 		$this->config = $config;
-		return($profile);
+		return $profile;
 	}
 
 	/**
@@ -758,12 +726,10 @@ class settings
 	 * and sets $this->config.
 	 *
 	 * @param array $config, a numerical array directly from the config or profile file.
-	 * @return array, the converted associative array.
+	 * @return void
 	 */
-	function set_config_array($config)
+	protected function set_config_array($config)
 	{
-		global $quickinstall_path, $phpEx, $user;
-
 		if (empty($config) || !is_array($config))
 		{
 			$this->config = array();
@@ -794,7 +760,7 @@ class settings
 			$key = $cfg_row[0];
 
 			// Handle config values containing a = char.
-			if (sizeof($cfg_row) > 2)
+			if (count($cfg_row) > 2)
 			{
 				unset($cfg_row[0]);
 				$value = implode('=', $cfg_row);
@@ -808,14 +774,13 @@ class settings
 		}
 
 		// Make sure the selected language exists.
-		if (!file_exists("{$quickinstall_path}language/{$qi_config['qi_lang']}/qi.$phpEx"))
+		if (!file_exists("{$this->qi_path}language/{$qi_config['qi_lang']}/qi.{$this->php_ext}"))
 		{
 			// Assume English exists.
 			$qi_config['qi_lang'] = 'en';
 		}
 
 		$this->config = $qi_config;
-		return($this->config);
 	}
 
 	/**
@@ -823,7 +788,7 @@ class settings
 	 *
 	 * @param string $profile, profile name.
 	 */
-	function set_profile_cookie($profile = 'default')
+	public function set_profile_cookie($profile = 'default')
 	{
 		// A Julian year == 365.25 days * 86,400 seconds
 		$expire_time = time() + 31557600;
@@ -840,12 +805,12 @@ class settings
 	 * @param array
 	 * @return string, error
 	 */
-	function update()
+	public function update()
 	{
 		$this->adjust();
 		$this->config_text = $this->get_config_text();
 		$this->apply_language();
-		return($this->write($this->config_text));
+		return $this->write($this->config_text);
 	}
 
 	/**
@@ -858,10 +823,8 @@ class settings
 	 *
 	 * @return boolean
 	 */
-	function validate()
+	public function validate()
 	{
-		global $user, $quickinstall_path;
-
 		// The config cannot be empty
 		if (empty($this->config))
 		{
@@ -878,23 +841,23 @@ class settings
 		$this->config['no_dbpasswd'] = (empty($this->config['no_dbpasswd'])) ? 0 : 1;
 		// Lets check the required settings...
 		$error = array();
-		$error[] = ($this->config['dbms'] == '') ? 'DBMS|IS_REQUIRED' : '';
-		$error[] = ($this->config['dbhost'] == '') ? 'DBHOST|IS_REQUIRED' : '';
-		$error[] = ($this->config['dbpasswd'] != '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
-		$error[] = ($this->config['table_prefix'] == '') ? 'TABLE_PREFIX|IS_REQUIRED' : '';
-		$error[] = ($this->config['qi_lang'] == '') ? 'QI_LANG|IS_REQUIRED' : '';
-		$error[] = ($this->config['qi_tz'] == '') ? 'QI_TZ|IS_REQUIRED' : '';
-		$error[] = ($this->config['db_prefix'] == '') ? 'DB_PREFIX|IS_REQUIRED' : '';
-		$error[] = ($this->config['admin_email'] == '') ? 'ADMIN_EMAIL|IS_REQUIRED' : '';
-		$error[] = ($this->config['site_name'] == '') ? 'SITE_NAME|IS_REQUIRED' : '';
-		$error[] = ($this->config['server_name'] == '') ? 'SERVER_NAME|IS_REQUIRED' : '';
-		$error[] = ($this->config['server_port'] == '') ? 'SERVER_PORT|IS_REQUIRED' : '';
-		$error[] = ($this->config['board_email'] == '') ? 'BOARD_EMAIL|IS_REQUIRED' : '';
-		$error[] = ($this->config['default_lang'] == '') ? 'DEFAULT_LANG|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbms'] === '') ? 'DBMS|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbhost'] === '') ? 'DBHOST|IS_REQUIRED' : '';
+		$error[] = ($this->config['dbpasswd'] !== '' && $this->config['no_dbpasswd']) ? 'NO_DBPASSWD_ERR' : '';
+		$error[] = ($this->config['table_prefix'] === '') ? 'TABLE_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_lang'] === '') ? 'QI_LANG|IS_REQUIRED' : '';
+		$error[] = ($this->config['qi_tz'] === '') ? 'QI_TZ|IS_REQUIRED' : '';
+		$error[] = ($this->config['db_prefix'] === '') ? 'DB_PREFIX|IS_REQUIRED' : '';
+		$error[] = ($this->config['admin_email'] === '') ? 'ADMIN_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['site_name'] === '') ? 'SITE_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_name'] === '') ? 'SERVER_NAME|IS_REQUIRED' : '';
+		$error[] = ($this->config['server_port'] === '') ? 'SERVER_PORT|IS_REQUIRED' : '';
+		$error[] = ($this->config['board_email'] === '') ? 'BOARD_EMAIL|IS_REQUIRED' : '';
+		$error[] = ($this->config['default_lang'] === '') ? 'DEFAULT_LANG|IS_REQUIRED' : '';
 
-		$error[] = ($this->config['db_prefix'] != validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
+		$error[] = ($this->config['db_prefix'] !== validate_dbname($this->config['db_prefix'], true)) ? 'DB_PREFIX|IS_NOT_VALID' : '';
 
-		if ($this->config['cache_dir'] == '')
+		if ($this->config['cache_dir'] === '')
 		{
 			$error[] = 'CACHE_DIR|IS_REQUIRED';
 		}
@@ -905,10 +868,10 @@ class settings
 		}
 		else
 		{
-			$this->config['cache_dir'] .= (substr($this->config['cache_dir'], -1) != '/') ? '/' : '';
+			$this->config['cache_dir'] .= (substr($this->config['cache_dir'], -1) !== '/') ? '/' : '';
 		}
 
-		if ($this->config['boards_dir'] == '')
+		if ($this->config['boards_dir'] === '')
 		{
 			$error[] = 'BOARDS_DIR|IS_REQUIRED';
 		}
@@ -919,7 +882,7 @@ class settings
 		}
 		else
 		{
-			$this->config['boards_dir'] .= (substr($this->config['boards_dir'], -1) != '/') ? '/' : '';
+			$this->config['boards_dir'] .= (substr($this->config['boards_dir'], -1) !== '/') ? '/' : '';
 		}
 
 		// SQLite needs a writable and existing directory
@@ -932,17 +895,17 @@ class settings
 			else
 			{
 				// Make sure the directory ends with a slash if we use SQLite
-				$this->config['dbhost'] = (substr($this->config['dbhost'], -1) == '/') ? $this->config['dbhost'] : $this->config['dbhost'] . '/';
+				$this->config['dbhost'] = (substr($this->config['dbhost'], -1) === '/') ? $this->config['dbhost'] : $this->config['dbhost'] . '/';
 			}
 		}
 
-		if ($this->config['boards_url'] == '')
+		if ($this->config['boards_url'] === '')
 		{
 			$error[] = 'BOARDS_URL|IS_REQUIRED';
 		}
 		else
 		{
-			$this->config['boards_url'] .= (substr($this->config['boards_url'], -1) != '/') ? '/' : '';
+			$this->config['boards_url'] .= (substr($this->config['boards_url'], -1) !== '/') ? '/' : '';
 		}
 
 		foreach ($error as $key => $value)
@@ -955,30 +918,29 @@ class settings
 
 		if (empty($error))
 		{
-			return(true);
+			return true;
 		}
-		else
-		{
-			$this->error = array_merge($this->error, $error);
 
-			return(false);
-		}
+		$this->error = array_merge($this->error, $error);
+
+		return false;
 	}
 
 	/**
 	 * Writes configuration settings to the configuration file.
+	 *
+	 * @param string $config_text
+	 * @return bool|int
 	 */
-	function write($config_text)
+	protected function write($config_text)
 	{
-		global $quickinstall_path;
-
 		$profile = $this->profile;
 
-		$profile_file = "{$quickinstall_path}settings/$profile.cfg";
+		$profile_file = "{$this->qi_path}settings/$profile.cfg";
 
-		if ((file_exists($profile_file) && !is_writable($profile_file)) || !is_writable("{$quickinstall_path}settings/"))
+		if ((file_exists($profile_file) && !is_writable($profile_file)) || !is_writable("{$this->qi_path}settings/"))
 		{
-			return(false);
+			return false;
 		}
 
 		$res = file_put_contents($profile_file, $config_text);
@@ -989,6 +951,65 @@ class settings
 			$this->install = false;
 		}
 
-		return($res);
+		return $res;
+	}
+
+	/**
+	 * Get the global user object. Should be called whenever the user is needed,
+	 * since in this procedural code base, it doesn't exist when this class is
+	 * instantiated but could exist later on when it's member methods are called.
+	 * This is gross!
+	 *
+	 * @return \phpbb\user
+	 */
+	protected function get_user()
+	{
+		if ($this->user === null)
+		{
+			global $user;
+			$this->user = $user;
+		}
+
+		return $this->user;
+	}
+
+	/**
+	 * Get $profile property
+	 *
+	 * @return string
+	 */
+	public function get_profile()
+	{
+		return $this->profile;
+	}
+
+	/**
+	 * Get $in_install property
+	 *
+	 * @return bool
+	 */
+	public function is_install()
+	{
+		return $this->install;
+	}
+
+	/**
+	 * Get $is_converted property
+	 *
+	 * @return bool
+	 */
+	public function is_converted()
+	{
+		return $this->is_converted;
+	}
+
+	/**
+	 * Get $update_text property
+	 *
+	 * @return array
+	 */
+	public function get_update_text()
+	{
+		return $this->update_text;
 	}
 }

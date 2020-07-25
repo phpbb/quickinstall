@@ -24,8 +24,7 @@ class qi_phpinfo
 {
 	public function __construct()
 	{
-		global $db, $template, $user, $settings;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
+		global $template, $user;
 
 		ob_start();
 		phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_VARIABLES);

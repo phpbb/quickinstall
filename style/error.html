@@ -19,7 +19,13 @@
 				<h3>{{ MSG_TITLE }}</h3>
 				<div><strong>{{ MSG_EXPLAIN }}</strong></div>
 				<div>{{ MSG_TEXT }}</div>
-				{{ SETTINGS_FORM }}
+				{% if SETTINGS_FORM %}
+					<div class="mt-3 d-flex justify-content-center">
+						<form action="" method="post">
+							<p><button class="btn btn-primary" type="submit" name="update_all" value="{{ L_UPDATE_PROFILES }}">{{ L_UPDATE_PROFILES }}</button></p>
+						</form>
+					</div>
+				{% endif %}
 			</div>
 		</div>
 		<div>

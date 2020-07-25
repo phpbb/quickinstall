@@ -134,7 +134,7 @@ class qi_version_helper
 	public function is_stable($version)
 	{
 		$matches = false;
-		preg_match('/^[\d\.]+/', $version, $matches);
+		preg_match('/^[\d.]+/', $version, $matches);
 
 		if (empty($matches[0]))
 		{
