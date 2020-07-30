@@ -25,7 +25,7 @@ $level = E_ALL ^ E_NOTICE;
 require("{$quickinstall_path}includes/qi_constants.$phpEx");
 require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
 require("{$quickinstall_path}includes/class_qi.$phpEx");
-require("{$quickinstall_path}includes/class_qi_settings.$phpEx");
+require("{$quickinstall_path}includes/settings.$phpEx");
 require("{$quickinstall_path}includes/qi_functions.$phpEx");
 require("{$quickinstall_path}includes/functions_files.$phpEx");
 require("{$quickinstall_path}includes/functions_module.$phpEx");
@@ -88,7 +88,10 @@ $page		= qi_request_var('page', 'main');
 $mode		= qi_request_var('mode', '');
 $profile	= qi_request_var('qi_profile', '');
 
-$settings = new settings($profile, $mode);
+$settings = new settings($quickinstall_path);
+
+// load settings profile
+$settings->import_profile($profile);
 
 // We need some phpBB functions too.
 $alt_env = $settings->get_config('alt_env', '');
