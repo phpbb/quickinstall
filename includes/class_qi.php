@@ -192,6 +192,61 @@ class qi
 	}
 
 	/**
+	 * Generate a lang select for the settings page.
+	 *
+	 * @param string $lang_path
+	 * @param string $config_var
+	 * @param string $get_var
+	 * @return array
+	 */
+	public static function get_lang_select($lang_path, $config_var, $get_var = '')
+	{
+		global $settings;
+
+		// Make sure $source_path ends with a slash.
+		$lang_path .= $settings->append_slash($lang_path);
+
+		// Need to assume that English always is available.
+		if ($get_var && !empty($_GET[$get_var]))
+		{
+			$lang = qi_request_var($get_var, '');
+			$user_lang = ($lang && file_exists($lang_path . $lang)) ? $lang : 'en';
+		}
+		else
+		{
+			$user_lang = $settings->get_config($config_var, 'en');
+			$user_lang = (file_exists($lang_path . $user_lang)) ? $user_lang : 'en';
+		}
+
+		$lang_arr = scandir($lang_path);
+		$lang_options = [];
+
+		foreach ($lang_arr as $lang)
+		{
+			if ($lang[0] === '.' || !is_dir($lang_path . $lang))
+			{
+				continue;
+			}
+
+			$file = "$lang_path/$lang/iso.txt";
+
+			if (file_exists($file))
+			{
+				$rows = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+				// Always show the English language name, except for the "active" language.
+				$lang_options[] = [
+					'name' => ($lang === $user_lang) ? $rows[1] : $rows[0],
+					'value' => $lang,
+					'selected' => $lang === $user_lang,
+				];
+			}
+		}
+
+		return $lang_options;
+	}
+
+	/**
 	* Format user date
 	*/
 	public static function format_date($gmepoch, $format = false, $forcedate = false)

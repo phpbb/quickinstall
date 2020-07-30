@@ -116,8 +116,8 @@ $template->assign_vars(array(
 	'SITE_DESC'		=> $settings->get_config('site_desc'),
 	'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
 	'PROFILES'		=> $settings->get_profiles(),
-	'QI_LANG'		=> $settings->get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
-	'PHPBB_LANG'	=> $settings->get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
+	'QI_LANG'		=> qi::get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
+	'PHPBB_LANG'	=> qi::get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
 
 	'CONFIG_SAVED'  => $saved,
 	'CONFIG_TEXT'   => htmlspecialchars($config_text),
