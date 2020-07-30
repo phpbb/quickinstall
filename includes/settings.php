@@ -211,10 +211,11 @@ class settings
 	 * Delete a profile
 	 *
 	 * @param string $profile Name of profile
+	 * @param string $ext     The file extension (default is json)
 	 */
-	public function delete_profile($profile)
+	public function delete_profile($profile, $ext = 'json')
 	{
-		@unlink("{$this->qi_path}settings/$profile.json");
+		@unlink("{$this->qi_path}settings/$profile.$ext");
 	}
 
 	/**
@@ -333,7 +334,7 @@ class settings
 			$profile = pathinfo($file, PATHINFO_FILENAME);
 			if ($this->save_profile($profile, $settings))
 			{
-				$this->delete_profile($profile);
+				$this->delete_profile($profile, 'cfg');
 			}
 		}
 
