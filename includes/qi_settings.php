@@ -100,7 +100,6 @@ $template->assign_vars(array(
 	'S_CACHE_WRITABLE'		=> is_writable($settings->get_cache_dir()),
 	'S_CONFIG_WRITABLE'		=> is_writable($quickinstall_path . 'settings'),
 	'S_IN_INSTALL'			=> $settings->is_install(),
-	'S_IS_CONVERTED'		=> $settings->is_converted(),
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
 	'S_SETTINGS_SUCCESS'	=> $attempted && $saved,
 	'S_SETTINGS_FAILURE'	=> $attempted && !$saved,

@@ -341,7 +341,6 @@ class qi
 					'MSG_TITLE'            => (!isset($msg_title)) ? $lang['GENERAL_ERROR'] : ((isset($lang[$msg_title])) ? $lang[$msg_title] : $msg_title),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'SETTINGS_FORM'        => false,
 					'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
 					'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],

@@ -209,26 +209,6 @@ else
 
 $settings->apply_language($language);
 
-// Updated settings?
-if (qi_request_var('update_all', false))
-{
-	$settings->update_profiles();
-}
-else if (count($settings->get_update_text())) // PROFILE_UPDATED
-{
-	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->get_profile());
-	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], qi::current_version());
-
-	$update_msg = '<ul>';
-	foreach ($settings->get_update_text() as $update)
-	{
-		$update_msg .= '<li>' . $user->lang[$update] . '</li>';
-	}
-	$update_msg .= '</ul>';
-
-	gen_error_msg($update_msg, $update_title, $update_explain, true);
-}
-
 // Probably best place to validate the settings
 $settings->validate();
 $errors = $settings->get_errors();
@@ -256,7 +236,7 @@ $page = (empty($errors)) ? $page : 'settings';
 
 if ($page === 'main' || $page === 'settings' || $alt_env_missing)
 {
-	if ($settings->is_install() || $settings->is_converted() || $mode === 'update_settings' || $page === 'settings' || $alt_env_missing)
+	if ($settings->is_install() || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
 	{
 		$page = 'settings';
 		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);

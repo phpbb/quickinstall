@@ -84,7 +84,6 @@ $lang = array_merge($lang, array(
 	'CHUNK_USER'			=> 'User chunk',
 	'CHUNK_USER_EXPLAIN'	=> 'The number of users that will be sent to the database in each query. Default: 5000.',
 	'CONFIG_BUTTON'			=> 'Click here to see the configuration.',
-	'CONFIG_CONVERTED'		=> 'Your configuration has been updated from the old style with one config file to the new style where you can save profiles. It has been saved with the name &quot;default&quot;.<br />You can now save settings for different profiles and load them when you create a board.',
 	'CONFIG_EMPTY'			=> 'The config array was empty. This is probably worth a bug report.',
 	'CONFIG_IS_DISPLAYED'	=> 'Configuration is displayed below. You can try manually writing it into a file in the settings direcotry.<br />Make sure the file name ends in &quot;.cfg&quot; for example &quot;settings/main.cfg&quot;.',
 	'CONFIG_NOT_WRITABLE'	=> 'The &quot;settings/&quot; directory is not writable.',
@@ -303,15 +302,6 @@ $lang = array_merge($lang, array(
 	'WORKING_ON_IT'		=> 'We’re working on it...',
 
 	'YES'	=> 'Yes',
-
-	// Config updated strings.
-	'UPDATED_EXPLAIN'	=> 'Your profile has been updated to this version of QuickInstall (%s). The changes made are defined below. They have been set to default values. also defined below.<br />You might want to look into the Settings page (link at the bottom) and set them to your desired values. If you have more than one profile, just press the button below to get all profiles updated.', // %s will be replaced with QI version.
-	'PROFILE_UPDATED'	=> 'Profile &quot;%s&quot; updated', // %s will be replaced by a profile name.
-	'PROFILES_UPDATED'	=> 'The following profiles has been updated',
-	'UPDATE_PROFILES'	=> 'Update profiles',
-
-	'DST_REMOVED'		=>	'The DST setting has been removed (qi_dst).',
-	'TIMEZONE_UPDATED'	=>	'Your timezone setting has been updated from numerical to string (qi_tz), default is UTC.',
 
 	'COLON'				=> ':',
 ));

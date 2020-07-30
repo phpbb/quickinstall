@@ -20,13 +20,6 @@
 {% if (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) %}
 	<div class="alert alert-danger" role="alert">{{ lang('NEED_WRITABLE') }}</div>
 {% endif %}
-{% if ERRORS|length and S_IS_CONVERTED %}
-	<div class="alert alert-success" role="alert">
-		{% for ERROR in ERRORS %}
-			<p class="mb-0">{{ ERROR }}</p>
-		{% endfor %}
-	</div>
-{% endif %}
 
 {% if CONFIG_TEXT %}
 	<div class="alert alert-danger">
