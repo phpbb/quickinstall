@@ -23,12 +23,6 @@ if ($mode === 'update_settings')
 	// Time to save some settings. request_var('qi_profile', '')
 	$qi_config	= @utf8_normalize_nfc(qi_request_var('qi_config', array('' => ''), true));
 
-	if (!empty($qi_config['other_config']))
-	{
-		// $qi_config['other_config'] can be several lines, needs to be a string for storage.
-		$qi_config['other_config'] = (!empty($qi_config['other_config'])) ? serialize(explode("\n", $qi_config['other_config'])) : '';
-	}
-
 	$profile = $settings->set_config($qi_config);
 
 	$attempted = true;
@@ -180,7 +174,7 @@ $template->assign_vars(array(
 
 	'TIMEZONE_OPTIONS'		=> qi_timezone_select($user, $settings->get_config('qi_tz', 'UTC')),
 
-	'OTHER_CONFIG'			=> $settings->get_other_config(),
+	'OTHER_CONFIG'			=> $settings->get_config('other_config', ''),
 
 	'SEL_LANG'				=> (!empty($language)) ? $language : '',
 ));

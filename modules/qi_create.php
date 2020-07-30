@@ -507,8 +507,9 @@ class qi_create
 		// Set other optional config data.
 		// Have it here to not having to do a query for each key
 		// to see if it is a update or insert.
-		if (($other_config = $settings->get_other_config(true)) != '')
+		if (($other_config = $settings->get_config('other_config')) !== '')
 		{
+			$other_config = explode("\n", $other_config);
 			foreach ($other_config as $config_row)
 			{
 				// First check if this is a comment.

@@ -87,7 +87,7 @@ class qi_main
 			'NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
 			'EMAIL_DOMAIN'		=> $settings->get_config('email_domain', ''),
 			'GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions', ''),
-			'OTHER_CONFIG'		=> $settings->get_other_config(),
+			'OTHER_CONFIG'		=> $settings->get_config('other_config', ''),
 		));
 
 		// Output page
