@@ -373,17 +373,6 @@ class settings
 	}
 
 	/**
-	 * Convert settings array into pretty JSON
-	 *
-	 * @param array $settings An array of settings data
-	 * @return false|string   The JSON data string, or false if there was some error
-	 */
-	protected function encode_settings($settings)
-	{
-		return json_encode($settings, JSON_PRETTY_PRINT);
-	}
-
-	/**
 	 * Update the settings property with new values
 	 *
 	 * @param array $cfg_ary An array of settings
@@ -405,28 +394,52 @@ class settings
 		return $this->profile;
 	}
 
-	// Convenience setting getters
+	/**
+	 * Get the boards directory path
+	 *
+	 * @return string Board directory path from settings, otherwise QI's default
+	 */
 	public function get_boards_dir()
 	{
 		return empty($this->settings['boards_dir']) ? $this->qi_path . 'boards/' : $this->settings['boards_dir'];
 	}
 
+	/**
+	 * Get the boards URL path
+	 *
+	 * @return string Board URL path from settings, otherwise QI's default
+	 */
 	public function get_boards_url()
 	{
 		return empty($this->settings['boards_url']) ? $this->qi_path . 'boards/' : $this->settings['boards_url'];
 	}
 
+	/**
+	 * Get the cache directory path
+	 *
+	 * @return string Cache directory path from settings, otherwise QI's default
+	 */
 	public function get_cache_dir()
 	{
 		return empty($this->settings['cache_dir']) ? $this->qi_path . 'cache/' : $this->settings['cache_dir'];
 	}
 
+	/**
+	 * Get the server protocol
+	 *
+	 * @return string Server protocol from settings, otherwise QI's default
+	 */
 	public function get_server_protocol()
 	{
 		//There is no setting for server_protocol ATM, but there might be in the future so let's keep this for now.
 		return empty($this->settings['server_protocol']) ? 'http://' : $this->settings['server_protocol'];
 	}
 
+	/**
+	 * Get the database connection settings
+	 *
+	 * @return array Database connection settings
+	 */
 	public function get_db_data()
 	{
 		// The order in this array is important, don't change it.
@@ -481,6 +494,17 @@ class settings
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Convert settings array into pretty JSON
+	 *
+	 * @param array $settings An array of settings data
+	 * @return false|string   The JSON data string, or false if there was some error
+	 */
+	protected function encode_settings($settings)
+	{
+		return json_encode($settings, JSON_PRETTY_PRINT);
 	}
 
 	/**
