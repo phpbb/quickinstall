@@ -90,6 +90,13 @@ $profile	= qi_request_var('qi_profile', '');
 
 $settings = new settings($quickinstall_path);
 
+// delete settings profile if requested
+if (qi_request_var('delete-profile', false) !== false)
+{
+	$settings->delete_profile($profile);
+	$profile = '';
+}
+
 // load settings profile
 $settings->import_profile($profile);
 
@@ -136,8 +143,6 @@ if (!function_exists('phpbb_email_hash'))
 {
 	define('PHPBB_33', true);
 }
-
-$delete_profile = (isset($_POST['delete-profile'])) ? true : false;
 
 // Need to set prefix here before constants.php are included.
 $table_prefix = $settings->get_config('table_prefix');
