@@ -191,9 +191,9 @@ else
 // We need to set the template here.
 $template = new twig($user, $settings->get_cache_dir(), $quickinstall_path);
 
-$profiles = count($settings->get_profiles());
-$template->assign_var('PROFILE_COUNT', $profiles);
-if ($profiles === 0)
+$profiles = $settings->get_profiles();
+$template->assign_var('HAS_PROFILES', $profiles);
+if (empty($profiles))
 {
 	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
 }

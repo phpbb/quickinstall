@@ -20,7 +20,7 @@
 
 	<div class="collapse navbar-collapse justify-content-end" id="navbar">
 		<ul class="navbar-nav mt-2 mt-md-0">
-			{% if not S_IN_INSTALL and PROFILE_COUNT %}
+			{% if not S_IN_INSTALL and HAS_PROFILES %}
 			<li class="nav-item{% if S_MAIN %} active{% endif %}"><a class="nav-link" href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
 			{% endif %}
 			<li class="nav-item{% if S_SETTINGS %} active{% endif %}"><a class="nav-link" href="{{ U_SETTINGS }}"><span>{{ lang('PROFILES') }}</span></a></li>
