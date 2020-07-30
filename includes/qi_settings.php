@@ -30,7 +30,7 @@ if ($mode === 'update_settings')
 	{
 		if (is_writable($quickinstall_path . 'settings'))
 		{
-			if ($settings->update())
+			if ($settings->save_profile())
 			{
 				$saved = true;
 			}

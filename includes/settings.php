@@ -189,7 +189,7 @@ class settings
 	 * @param array  $settings The settings data array
 	 * @return bool True or false if profile was saved
 	 */
-	public function update($profile = '', $settings = []) //rename save_profile
+	public function save_profile($profile = '', $settings = [])
 	{
 		$profile  = $profile  !== '' ? $profile  : $this->profile;
 		$settings = $settings !== [] ? $settings : $this->settings;
@@ -331,7 +331,7 @@ class settings
 			}
 
 			$profile = pathinfo($file, PATHINFO_FILENAME);
-			if ($this->update($profile, $settings))
+			if ($this->save_profile($profile, $settings))
 			{
 				$this->delete_profile($profile);
 			}
