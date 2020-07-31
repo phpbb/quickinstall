@@ -543,20 +543,8 @@ class settings
 	 */
 	public function apply_language($lang = '')
 	{
-		if ($this->get_user() === null)
-		{
-			return;
-		}
-
 		$lang = empty($lang) ? $this->settings['qi_lang'] : $lang;
 		$lang = file_exists("{$this->qi_path}language/$lang") ? $lang : 'en';
-
-		if (!empty($this->user))
-		{
-			$this->user->lang = $lang;
-		}
-
-		// Need to make sure 'en' exists too.
 		if (!file_exists("{$this->qi_path}language/$lang"))
 		{
 			trigger_error('Neither your selected language or English found. Make sure that you have at least the English language files in QI_PATH/language/', E_USER_ERROR);
