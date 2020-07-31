@@ -130,6 +130,24 @@ class qi
 	}
 
 	/**
+	 * Applies language selected by user to QI.
+	 *
+	 * @param string $lang
+	 */
+	public static function apply_lang($lang = '')
+	{
+		global $quickinstall_path;
+
+		$lang = empty($lang) ? 'en' : $lang;
+		if (!file_exists("{$quickinstall_path}language/$lang"))
+		{
+			trigger_error('Neither your selected language nor English could be found. Make sure that you have at least the English language files in QI_PATH/language/', E_USER_ERROR);
+		}
+
+		self::add_lang(['qi', 'phpbb'], "{$quickinstall_path}language/$lang/");
+	}
+
+	/**
 	* Add Language Items
 	*
 	* @param mixed $lang_set specifies the language entries to include

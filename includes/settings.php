@@ -525,23 +525,6 @@ class settings
 	}
 
 	/**
-	 * Applies language selected by user to QI.
-	 *
-	 * @param string $lang
-	 */
-	public function apply_language($lang = '')
-	{
-		$lang = empty($lang) ? $this->settings['qi_lang'] : $lang;
-		$lang = file_exists("{$this->qi_path}language/$lang") ? $lang : 'en';
-		if (!file_exists("{$this->qi_path}language/$lang"))
-		{
-			trigger_error('Neither your selected language or English found. Make sure that you have at least the English language files in QI_PATH/language/', E_USER_ERROR);
-		}
-
-		qi::add_lang(['qi', 'phpbb'], "{$this->qi_path}language/$lang/");
-	}
-
-	/**
 	 * Get the global user object. Should be called whenever the user is needed,
 	 * since in this procedural code base, it doesn't exist when this class is
 	 * instantiated but could exist later on when it's member methods are called.

@@ -209,10 +209,9 @@ else if (!empty($_POST['sel_lang']))
 }
 else
 {
-	$language = '';
+	$language = $settings->get_config('qi_lang', '');
 }
-
-$settings->apply_language($language);
+qi::apply_lang($language);
 
 // Probably best place to validate the settings
 $settings->validate();
