@@ -87,7 +87,7 @@ class settings
 		// If we reach this point there are no profiles.
 		// Most likely a new user so load the default settings and go to install.
 		$this->settings = $this->load_profile("{$this->qi_path}includes/default_settings.json");
-		$this->install  = $this->get_config('mode', '') !== 'update_settings';
+		$this->install  = qi_request_var('mode', '') !== 'update_settings';
 
 		return true;
 	}
@@ -352,12 +352,21 @@ class settings
 	public function get_config($name, $default = '', $multibyte = false)
 	{
 		// First check if we have a post/get var
-		if (!empty($_REQUEST[$name]))
+		if (is_string($default))
+		{
+			$request = !empty($_GET[$name]) || !empty($_POST[$name]);
+		}
+		else
+		{
+			$request = isset($_GET[$name]) || isset($_POST[$name]);
+		}
+
+		if ($request)
 		{
 			return qi_request_var($name, $default, $multibyte);
 		}
 
-		// Nothing from request_var. Do we have a config setting?
+		// Nothing from post/get. Do we have a config setting?
 		if (!empty($this->settings[$name]))
 		{
 			$type = gettype($default);
@@ -380,7 +389,7 @@ class settings
 	 */
 	public function set_config($cfg_ary)
 	{
-		$profile = $this->get_config('save_profile', '');
+		$profile = qi_request_var('save_profile', '');
 
 		if ($profile !== '')
 		{
