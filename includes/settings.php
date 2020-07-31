@@ -253,7 +253,7 @@ class settings
 	 */
 	protected function find_profiles($type = 'json')
 	{
-		if (($files = scandir($this->qi_path . 'settings')) !== false)
+		if (($files = scandir("{$this->qi_path}settings")) !== false)
 		{
 			foreach ($files as $key => $file)
 			{
@@ -262,10 +262,6 @@ class settings
 					unset($files[$key]);
 				}
 			}
-		}
-		else
-		{
-			$this->errors[] = 'SETTINGS_NOT_WRITABLE';
 		}
 
 		return !empty($files) ? $files : false;
@@ -410,7 +406,7 @@ class settings
 	 */
 	public function get_boards_dir()
 	{
-		return empty($this->settings['boards_dir']) ? $this->qi_path . 'boards/' : $this->settings['boards_dir'];
+		return empty($this->settings['boards_dir']) ? "{$this->qi_path}boards/" : $this->settings['boards_dir'];
 	}
 
 	/**
@@ -420,7 +416,7 @@ class settings
 	 */
 	public function get_boards_url()
 	{
-		return empty($this->settings['boards_url']) ? $this->qi_path . 'boards/' : $this->settings['boards_url'];
+		return empty($this->settings['boards_url']) ? "{$this->qi_path}boards/" : $this->settings['boards_url'];
 	}
 
 	/**
@@ -430,7 +426,7 @@ class settings
 	 */
 	public function get_cache_dir()
 	{
-		return empty($this->settings['cache_dir']) ? $this->qi_path . 'cache/' : $this->settings['cache_dir'];
+		return empty($this->settings['cache_dir']) ? "{$this->qi_path}cache/" : $this->settings['cache_dir'];
 	}
 
 	/**
