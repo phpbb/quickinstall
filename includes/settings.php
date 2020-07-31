@@ -151,26 +151,26 @@ class settings
 		}
 
 		// Validate cache directory
-		$this->settings['cache_dir'] .= $this->append_slash($this->settings['cache_dir']);
+		file_functions::append_slash($this->settings['cache_dir']);
 		if (!file_exists($this->get_cache_dir()) || !is_writable($this->get_cache_dir()))
 		{
 			$validation_errors[] = ['CACHE_DIR_MISSING', $this->get_cache_dir()];
 		}
 
 		// Validate boards directory
-		$this->settings['boards_dir'] .= $this->append_slash($this->settings['boards_dir']);
+		file_functions::append_slash($this->settings['boards_dir']);
 		if (!file_exists($this->get_boards_dir()) || !is_writable($this->get_boards_dir()))
 		{
 			$validation_errors[] = ['BOARDS_DIR_MISSING', $this->get_boards_dir()];
 		}
 
 		// Adjust boards URL path
-		$this->settings['boards_url'] .= $this->append_slash($this->settings['boards_url']);
+		file_functions::append_slash($this->settings['boards_url']);
 
 		// SQLite needs a writable and existing directory
 		if (in_array($this->settings['dbms'], ['sqlite', 'sqlite3']))
 		{
-			$this->settings['dbhost'] .= $this->append_slash($this->settings['dbhost']);
+			file_functions::append_slash($this->settings['dbhost']);
 			if (!file_exists($this->settings['dbhost']) || !is_writable($this->settings['dbhost']) || !is_dir($this->settings['dbhost']))
 			{
 				$validation_errors[] = 'SQLITE_PATH_MISSING';
@@ -215,7 +215,7 @@ class settings
 	 */
 	public function delete_profile($profile, $ext = 'json')
 	{
-		@unlink("{$this->qi_path}settings/$profile.$ext");
+		file_functions::delete_file("{$this->qi_path}settings/$profile.$ext");
 	}
 
 	/**
@@ -514,18 +514,6 @@ class settings
 	protected function encode_settings($settings)
 	{
 		return json_encode($settings, JSON_PRETTY_PRINT);
-	}
-
-	/**
-	 * Return a back slash if the given string does not
-	 * end with a backslash.
-	 *
-	 * @param string $path A simple string, usually a path to directories
-	 * @return string Back slash or nothing
-	 */
-	public function append_slash($path)
-	{
-		return $path !== '' && !preg_match('/\/$/', $path) ? '/' : '';
 	}
 
 	/**
