@@ -191,8 +191,6 @@ if ($profiles === 0)
 	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
 }
 
-$template->assign_var('CONFIG_TEXT', false);
-
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
@@ -254,9 +252,9 @@ $template->set_cachepath($settings->get_cache_dir());
 
 $page = (empty($errors)) ? $page : 'settings';
 
-if ($page == 'main' || $page == 'settings' || $alt_env_missing)
+if ($page === 'main' || $page === 'settings' || $alt_env_missing)
 {
-	if ($settings->is_install() || $settings->is_converted() || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
+	if ($settings->is_install() || $settings->is_converted() || $mode === 'update_settings' || $page === 'settings' || $alt_env_missing)
 	{
 		$page = 'settings';
 		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
