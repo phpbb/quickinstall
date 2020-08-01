@@ -238,13 +238,10 @@ $template->set_cachepath($settings->get_cache_dir());
 
 $page = (empty($errors)) ? $page : 'settings';
 
-if ($page === 'main' || $page === 'settings' || $alt_env_missing)
+if ($page === 'settings' || $alt_env_missing || ($page === 'main' && $settings->is_install()))
 {
-	if ($settings->is_install() || $mode == 'update_settings' || $page == 'settings' || $alt_env_missing)
-	{
-		$page = 'settings';
-		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
-	}
+	$page = 'settings';
+	require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
 }
 
 // Hide manage boards if there is no saved config.
