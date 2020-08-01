@@ -32,7 +32,7 @@ require("{$quickinstall_path}includes/functions_module.$phpEx");
 require("{$quickinstall_path}includes/twig.$phpEx");
 require("{$quickinstall_path}vendor/autoload.$phpEx");
 
-if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
+if (PHP_VERSION_ID >= 50400)
 {
 	// PHP 5.4 adds E_STRICT to E_ALL.
 	// Our utf8 normalizer triggers E_STRICT output on PHP 5.4.
@@ -48,7 +48,7 @@ if (version_compare(PHP_VERSION, '5.4.0-dev', '>='))
 	$level &= ~E_STRICT;
 }
 
-if (version_compare(PHP_VERSION, '5.5.0', '>='))
+if (PHP_VERSION_ID >= 50500)
 {
 	// The /e modifier is deprecated as of PHP 5.5.0 according to php.net.
 	// it is used in phpBB 3.0.x file: includes\functions_content.php
@@ -62,23 +62,13 @@ if (version_compare(PHP_VERSION, '5.5.0', '>='))
 }
 error_reporting($level);
 
-if (version_compare(PHP_VERSION, '5.2.0', '<'))
+if (PHP_VERSION_ID < 50407)
 {
 	gen_error_msg('ERROR_PHP_UNSUPPORTED');
 }
 
-// If we are on PHP >= 6.0.0 we do not need some code
-if (version_compare(PHP_VERSION, '6.0.0-dev', '>='))
-{
-	/**
-	* @ignore
-	*/
-	define('STRIP', false);
-}
-else
-{
-	define('STRIP', (get_magic_quotes_gpc()) ? true : false);
-}
+// If we are on PHP5 we may need to define STRIP to strip slashes
+define('STRIP', PHP_VERSION_ID < 60000 && get_magic_quotes_gpc());
 
 // Try to override some limits - maybe it helps some...
 @set_time_limit(0);
