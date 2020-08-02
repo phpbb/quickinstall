@@ -21,7 +21,7 @@ class qi_settings
 	{
 		global $settings, $template, $user, $quickinstall_path, $mode, $alt_env, $alt_env_missing;
 
-		$attempted = $saved = false;
+		$saved = false;
 		$config_text = '';
 		$profile = '';
 		$errors = [];
@@ -32,7 +32,6 @@ class qi_settings
 
 			$profile = $settings->set_config($qi_config);
 
-			$attempted = true;
 			if ($settings->validate())
 			{
 				if (is_writable($quickinstall_path . 'settings'))
@@ -72,20 +71,7 @@ class qi_settings
 			}
 		}
 
-		$s_settings_writable = true;
-
-		if ($settings->is_install())
-		{
-			// Don't show errors when installing QI
-			$errors = [];
-		}
-		else if (!is_writable($quickinstall_path . 'settings') || !is_dir($quickinstall_path . 'settings'))
-		{
-			$errors[] = $user->lang['SETTINGS_NOT_WRITABLE'];
-			$s_settings_writable = false;
-		}
-
-		if ($alt_env_missing && !$attempted && !$saved)
+		if ($alt_env_missing && !$saved && empty($errors))
 		{
 			$errors[] = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
 		}
@@ -96,12 +82,9 @@ class qi_settings
 			'S_CONFIG_WRITABLE'		=> is_writable($quickinstall_path . 'settings'),
 			'S_HAS_PROFILES'		=> $settings->get_profiles(),
 			'S_IN_INSTALL'			=> $settings->is_install(),
-			'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
-			'S_SETTINGS_SUCCESS'	=> $attempted && $saved,
-			'S_SETTINGS_FAILURE'	=> $attempted && !$saved,
+			'S_SETTINGS_SUCCESS'	=> $saved && empty($errors),
+			'S_SETTINGS_ERRORS'		=> $errors,
 			'S_SETTINGS'			=> true,
-
-			'ERRORS'			=> $errors,
 
 			'U_UPDATE_SETTINGS'	=> qi::url('settings', array('mode' => 'update_settings')),
 			'U_CHOOSE_PROFILE'	=> qi::url('settings', array('mode' => 'change_profile')),
@@ -110,12 +93,11 @@ class qi_settings
 			'TABLE_PREFIX'	=> htmlspecialchars($settings->get_config('table_prefix')),
 			'SITE_NAME'		=> $settings->get_config('site_name'),
 			'SITE_DESC'		=> $settings->get_config('site_desc'),
-			'ALT_ENV'		=> (!empty($alt_env)) ? $alt_env : false,
+			'ALT_ENV'		=> !empty($alt_env) ? $alt_env : false,
 			'PROFILES'		=> $settings->get_profiles(),
 			'QI_LANG'		=> qi::get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
 			'PHPBB_LANG'	=> qi::get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
 
-			'CONFIG_SAVED'  => $saved,
 			'CONFIG_TEXT'   => htmlspecialchars($config_text),
 
 			// Config settings
@@ -178,7 +160,7 @@ class qi_settings
 
 			'OTHER_CONFIG'			=> $settings->get_config('other_config', ''),
 
-			'SEL_LANG'				=> (!empty($language)) ? $language : '',
+			'SEL_LANG'				=> !empty($language) ? $language : '',
 		));
 
 		// Output page
