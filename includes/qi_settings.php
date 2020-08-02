@@ -93,6 +93,7 @@ $template->assign_vars(array(
 	'S_BOARDS_WRITABLE'		=> is_writable($settings->get_boards_dir()),
 	'S_CACHE_WRITABLE'		=> is_writable($settings->get_cache_dir()),
 	'S_CONFIG_WRITABLE'		=> is_writable($quickinstall_path . 'settings'),
+	'S_HAS_PROFILES'		=> $settings->get_profiles(),
 	'S_IN_INSTALL'			=> $settings->is_install(),
 	'S_SETTINGS_WRITABLE'	=> $s_settings_writable,
 	'S_SETTINGS_SUCCESS'	=> $attempted && $saved,

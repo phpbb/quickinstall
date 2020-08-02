@@ -192,7 +192,6 @@ else
 $template = new twig($user, $settings->get_cache_dir(), $quickinstall_path);
 
 $profiles = $settings->get_profiles();
-$template->assign_var('HAS_PROFILES', $profiles);
 if (empty($profiles))
 {
 	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
@@ -246,6 +245,7 @@ if ($page === 'settings' || $alt_env_missing || ($page === 'main' && $settings->
 
 // Hide manage boards if there is no saved config.
 $template->assign_var('S_IN_INSTALL', $settings->is_install());
+$template->assign_var('S_HAS_PROFILES', $settings->get_profiles());
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
