@@ -87,7 +87,6 @@ if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 $page		= qi_request_var('page', 'main');
 $mode		= qi_request_var('mode', '');
 $profile	= qi_request_var('qi_profile', '');
-$page		= ($page === 'docs') ? 'about' : $page;
 
 $settings = new settings($profile, $mode);
 
