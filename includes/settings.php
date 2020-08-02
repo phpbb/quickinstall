@@ -10,10 +10,10 @@
 class settings
 {
 	/** @var string The QI settings profile */
-	protected $profile;
+	protected $profile = 'default';
 
 	/** @var array An array containing the QI settings */
-	protected $settings;
+	protected $settings = [];
 
 	/** @var bool True if there is no config and the user needs to go to install */
 	protected $install = false;
