@@ -191,12 +191,6 @@ else
 // We need to set the template here.
 $template = new twig($user, $settings->get_cache_dir(), $quickinstall_path);
 
-$profiles = $settings->get_profiles();
-if (empty($profiles))
-{
-	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
-}
-
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
@@ -211,6 +205,8 @@ else
 	$language = $settings->get_config('qi_lang', '');
 }
 qi::apply_lang($language);
+
+$profiles = $settings->get_profiles();
 
 // Probably best place to validate the settings
 $settings->validate();
@@ -236,7 +232,7 @@ else
 $template->set_cachepath($settings->get_cache_dir());
 
 // force going to the settings page
-if (!empty($errors) || $alt_env_missing || ($page === 'main' && $settings->is_install()))
+if (!empty($errors) || $alt_env_missing || (empty($profiles) && ($page === 'main' || $page === '')) || ($page === 'main' && $settings->is_install()))
 {
 	$page = 'settings';
 }
