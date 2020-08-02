@@ -56,7 +56,7 @@ class file_functions
 		{
 			if (!mkdir($dst_dir) && !is_dir($dst_dir))
 			{
-				throw new \RuntimeException(sprintf('Directory "%s" was not created', $dst_dir));
+				throw new \RuntimeException('BOARDS_DIR_ERROR');
 			}
 		}
 

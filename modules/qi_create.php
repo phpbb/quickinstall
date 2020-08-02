@@ -126,7 +126,14 @@ class qi_create
 		}
 
 		// copy all of our files
-		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
+		try
+		{
+			file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
+		}
+		catch (RuntimeException $e)
+		{
+			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+		}
 
 		if (!defined('PHPBB_31'))
 		{
@@ -794,7 +801,14 @@ class qi_create
 		file_functions::delete_dir($board_dir . 'umil/');
 
 		// copy extra user added files
-		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+		try
+		{
+			file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+		}
+		catch (RuntimeException $e)
+		{
+			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+		}
 
 		// Install styles
 		if ($settings->get_config('install_styles', 0))
