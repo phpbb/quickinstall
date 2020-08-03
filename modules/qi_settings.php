@@ -164,7 +164,7 @@ class qi_settings
 		));
 
 		// Output page
-		qi::page_header($user->lang['PROFILES']);
+		qi::page_header('PROFILES');
 
 		qi::page_display('settings_body');
 	}

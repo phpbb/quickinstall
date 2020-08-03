@@ -74,7 +74,7 @@ class qi_docs
 		$template->assign_var('S_DOCS', true);
 
 		// Output page
-		qi::page_header($user->lang['DOCS_LONG']);
+		qi::page_header('DOCS_LONG');
 
 		qi::page_display('docs_body');
 	}

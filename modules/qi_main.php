@@ -91,7 +91,7 @@ class qi_main
 		));
 
 		// Output page
-		qi::page_header($user->lang['QI_MANAGE']);
+		qi::page_header('QI_MANAGE');
 
 		qi::page_display('main_body');
 	}

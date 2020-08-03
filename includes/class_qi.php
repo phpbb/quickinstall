@@ -36,7 +36,7 @@ class qi
 		$update = self::get_update();
 
 		$template->assign_vars(array(
-			'PAGE_TITLE'	=> $page_title,
+			'PAGE_TITLE'	=> $user->lang[$page_title],
 			'T_THEME_PATH'	=> 'style',
 
 			'U_DOCS'		=> self::url('docs'),
