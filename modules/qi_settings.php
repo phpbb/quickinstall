@@ -27,7 +27,6 @@ class qi_settings
 		$errors = [];
 		if ($mode === 'update_settings')
 		{
-			// Time to save some settings. request_var('qi_profile', '')
 			$qi_config = @utf8_normalize_nfc(qi_request_var('qi_config', array('' => ''), true));
 
 			$profile = $settings->set_config($qi_config);
@@ -59,19 +58,14 @@ class qi_settings
 				$errors = $settings->get_errors();
 			}
 
-			if (empty($errors))
+			if (empty($errors) && !empty($profile))
 			{
-				$language = $settings->get_config('qi_lang', 'en');
-
-				if (!empty($profile))
-				{
-					$settings->set_profile_cookie($profile);
-					$profile = '';
-				}
+				$settings->set_profile_cookie($profile);
+				$profile = '';
 			}
 		}
 
-		if ($alt_env_missing && !$saved && empty($errors))
+		if ($alt_env_missing && $mode !== 'update_settings')
 		{
 			$errors[] = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
 		}
@@ -152,15 +146,15 @@ class qi_settings
 			'CONFIG_NUM_FORUMS'		=> $settings->get_config('num_forums', 0),
 			'CONFIG_NUM_TOPICS_MIN'	=> $settings->get_config('num_topics_min', 0),
 			'CONFIG_NUM_TOPICS_MAX'	=> $settings->get_config('num_topics_max', 0),
-			'CONFIG_NUM_REPLIES_MIN'	=> $settings->get_config('num_replies_min', 0),
-			'CONFIG_NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
+			'CONFIG_NUM_REPLIES_MIN'=> $settings->get_config('num_replies_min', 0),
+			'CONFIG_NUM_REPLIES_MAX'=> $settings->get_config('num_replies_max', 0),
 			'CONFIG_EMAIL_DOMAIN'	=> $settings->get_config('email_domain'),
 
 			'TIMEZONE_OPTIONS'		=> qi_timezone_select($user, $settings->get_config('qi_tz', 'UTC')),
 
 			'OTHER_CONFIG'			=> $settings->get_config('other_config', ''),
 
-			'SEL_LANG'				=> !empty($language) ? $language : '',
+			'SEL_LANG'				=> empty($errors) ? $settings->get_config('qi_lang', 'en') : '',
 		));
 
 		// Output page
