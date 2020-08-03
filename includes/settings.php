@@ -486,7 +486,7 @@ class settings
 				{
 					$key = array_shift($error);
 					$errors[] = vsprintf($user->lang[$key], array_map(function($i) use($user) {
-						return $user->lang[$i];
+						return isset($user->lang[$i]) ? $user->lang[$i] : $i;
 					}, $error));
 				}
 				else
