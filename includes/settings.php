@@ -219,6 +219,16 @@ class settings
 	}
 
 	/**
+	 * Get the name of the current profile
+	 *
+	 * @return string
+	 */
+	public function get_profile()
+	{
+		return $this->profile;
+	}
+
+	/**
 	 * Scans the settings directory and returns an array all setting profiles,
 	 * typically for use in select menus.
 	 * [
@@ -380,21 +390,20 @@ class settings
 	/**
 	 * Update the settings property with new values
 	 *
-	 * @param array $cfg_ary An array of settings
+	 * @param array $data An array of settings
 	 * @return string The profile name (new profile if one was saved, otherwise current profile)
 	 */
-	public function set_config($cfg_ary)
+	public function set_settings($data)
 	{
+		$this->settings = $data;
+
 		$profile = qi_request_var('save_profile', '');
 
 		if ($profile !== '')
 		{
-			$profile = str_replace(' ', '_', $profile);
-			$profile = preg_replace('/[^A-Za-z0-9_.\-]*/', '', $profile);
-			$this->profile = $profile;
+			// Replace/remove illegal characters
+			$this->profile = preg_replace(['/\s+/', '/[^A-Za-z0-9_.\-]*/'], ['_', ''], $profile);
 		}
-
-		$this->settings = $cfg_ary;
 
 		return $this->profile;
 	}

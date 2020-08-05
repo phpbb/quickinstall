@@ -23,13 +23,12 @@ class qi_settings
 
 		$saved = false;
 		$config_text = '';
-		$profile = '';
 		$errors = [];
 		if ($mode === 'update_settings')
 		{
 			$qi_config = @utf8_normalize_nfc(qi_request_var('qi_config', array('' => ''), true));
 
-			$profile = $settings->set_config($qi_config);
+			$profile = $settings->set_settings($qi_config);
 
 			if ($settings->validate())
 			{
@@ -37,6 +36,7 @@ class qi_settings
 				{
 					if ($settings->save_profile())
 					{
+						$settings->set_profile_cookie($profile);
 						$saved = true;
 					}
 					else
@@ -57,15 +57,8 @@ class qi_settings
 			{
 				$errors = $settings->get_errors();
 			}
-
-			if (empty($errors) && !empty($profile))
-			{
-				$settings->set_profile_cookie($profile);
-				$profile = '';
-			}
 		}
-
-		if ($alt_env_missing && $mode !== 'update_settings')
+		else if ($alt_env_missing)
 		{
 			$errors[] = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
 		}
@@ -83,7 +76,7 @@ class qi_settings
 			'U_UPDATE_SETTINGS'	=> qi::url('settings', array('mode' => 'update_settings')),
 			'U_CHOOSE_PROFILE'	=> qi::url('settings', array('mode' => 'change_profile')),
 
-			'SAVE_PROFILE'	=> $profile,
+			'SAVE_PROFILE'	=> $settings->get_profile(),
 			'TABLE_PREFIX'	=> htmlspecialchars($settings->get_config('table_prefix')),
 			'SITE_NAME'		=> $settings->get_config('site_name'),
 			'SITE_DESC'		=> $settings->get_config('site_desc'),

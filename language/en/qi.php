@@ -246,7 +246,7 @@ $lang = array_merge($lang, array(
 
 	'SAVE'					=> 'Save',
 	'SAVE_PROFILE'			=> 'Save as new profile',
-	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd><br /><br />Note: If a profile of the same name already exists, it will be overwritten.',
+	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile. If a profile of the same name already exists, it will be overwritten.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd>',
 	'SAVE_SETTINGS'			=> 'Save profile',
 	'SEARCH_HERE'			=> 'Search here...',
 	'SET_DEFAULT_STYLE'		=> 'Set default style',
