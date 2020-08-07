@@ -217,7 +217,7 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 	return $tz_select;
 }
 
-function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '', $update_profiles = false)
+function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '')
 {
 	global $quickinstall_path, $user, $phpEx;
 
@@ -245,14 +245,12 @@ function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '
 		'MSG_TITLE'            => $lang[$msg_title],
 		'MSG_TEXT'             => $lang[$msg_text],
 		'MSG_EXPLAIN'          => $lang[$msg_explain],
-		'SETTINGS_FORM'        => $update_profiles,
 		'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 		'QI_VERSION'           => qi::current_version(),
 		'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
 		'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
 		'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
 		'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
-		'L_UPDATE_PROFILES'    => $lang['UPDATE_PROFILES'],
 	]);
 
 	$template->display('error');

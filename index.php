@@ -25,7 +25,7 @@ $level = E_ALL ^ E_NOTICE;
 require("{$quickinstall_path}includes/qi_constants.$phpEx");
 require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
 require("{$quickinstall_path}includes/class_qi.$phpEx");
-require("{$quickinstall_path}includes/class_qi_settings.$phpEx");
+require("{$quickinstall_path}includes/settings.$phpEx");
 require("{$quickinstall_path}includes/qi_functions.$phpEx");
 require("{$quickinstall_path}includes/functions_files.$phpEx");
 require("{$quickinstall_path}includes/functions_module.$phpEx");
@@ -88,7 +88,17 @@ $page		= qi_request_var('page', 'main');
 $mode		= qi_request_var('mode', '');
 $profile	= qi_request_var('qi_profile', '');
 
-$settings = new settings($profile, $mode);
+$settings = new settings($quickinstall_path);
+
+// delete settings profile if requested
+if (qi_request_var('delete-profile', false) !== false)
+{
+	$settings->delete_profile($profile);
+	$profile = '';
+}
+
+// load settings profile
+$settings->import_profile($profile);
 
 // We need some phpBB functions too.
 $alt_env = $settings->get_config('alt_env', '');
@@ -133,8 +143,6 @@ if (!function_exists('phpbb_email_hash'))
 {
 	define('PHPBB_33', true);
 }
-
-$delete_profile = (isset($_POST['delete-profile'])) ? true : false;
 
 // Need to set prefix here before constants.php are included.
 $table_prefix = $settings->get_config('table_prefix');
@@ -183,13 +191,6 @@ else
 // We need to set the template here.
 $template = new twig($user, $settings->get_cache_dir(), $quickinstall_path);
 
-$profiles = count($settings->get_profiles());
-$template->assign_var('PROFILE_COUNT', $profiles);
-if ($profiles === 0)
-{
-	$page = ($page === 'main' || $page === '') ? 'settings' : $page;
-}
-
 // If there is a language selected in the dropdown menu in settings it's sent as GET, then igonre the hidden POST field.
 if (isset($_GET['lang']))
 {
@@ -201,30 +202,11 @@ else if (!empty($_POST['sel_lang']))
 }
 else
 {
-	$language = '';
+	$language = $settings->get_config('qi_lang', '');
 }
+qi::apply_lang($language);
 
-$settings->apply_language($language);
-
-// Updated settings?
-if (qi_request_var('update_all', false))
-{
-	$settings->update_profiles();
-}
-else if (count($settings->get_update_text())) // PROFILE_UPDATED
-{
-	$update_title	= sprintf($user->lang['PROFILE_UPDATED'], $settings->get_profile());
-	$update_explain	= sprintf($user->lang['UPDATED_EXPLAIN'], qi::current_version());
-
-	$update_msg = '<ul>';
-	foreach ($settings->get_update_text() as $update)
-	{
-		$update_msg .= '<li>' . $user->lang[$update] . '</li>';
-	}
-	$update_msg .= '</ul>';
-
-	gen_error_msg($update_msg, $update_title, $update_explain, true);
-}
+$profiles = $settings->get_profiles();
 
 // Probably best place to validate the settings
 $settings->validate();
@@ -249,19 +231,15 @@ else
 // update cache path
 $template->set_cachepath($settings->get_cache_dir());
 
-$page = (empty($errors)) ? $page : 'settings';
-
-if ($page === 'main' || $page === 'settings' || $alt_env_missing)
+// force going to the settings page
+if (!empty($errors) || $alt_env_missing || (empty($profiles) && ($page === 'main' || $page === '')) || ($page === 'main' && $settings->is_install()))
 {
-	if ($settings->is_install() || $settings->is_converted() || $mode === 'update_settings' || $page === 'settings' || $alt_env_missing)
-	{
-		$page = 'settings';
-		require($quickinstall_path . 'includes/qi_settings.' . $phpEx);
-	}
+	$page = 'settings';
 }
 
 // Hide manage boards if there is no saved config.
 $template->assign_var('S_IN_INSTALL', $settings->is_install());
+$template->assign_var('S_HAS_PROFILES', $settings->get_profiles());
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');

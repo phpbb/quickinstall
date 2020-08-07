@@ -92,7 +92,7 @@ class qi_phpinfo
 		));
 
 		// Output page
-		qi::page_header($user->lang['PHPINFO']);
+		qi::page_header('PHPINFO');
 
 		qi::page_display('phpinfo_body');
 	}
