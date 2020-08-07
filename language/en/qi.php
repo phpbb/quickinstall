@@ -63,14 +63,15 @@ $lang = array_merge($lang, array(
 	'BOARDS'				=> 'Boards',
 	'BOARDS_DIR'			=> 'Boards directory',
 	'BOARDS_DIR_EXPLAIN'	=> 'The directory where your boards will be created. PHP needs to have write permissions to this directory.',
-	'BOARDS_DIR_MISSING'	=> 'The directory &quot;%s&quot; does not exist or is not writeable.',
+	'BOARDS_DIR_MISSING'	=> '<strong>Boards directory</strong> “<code>%s</code>” does not exist or is not writeable.',
+	'BOARDS_DIR_ERROR'		=> 'Boards directory “<code>%s</code>” could not be created.',
 	'BOARDS_LIST'			=> 'Installed boards',
 	'BOARDS_URL'			=> 'Boards URL prefix',
 	'BOARDS_URL_EXPLAIN'	=> 'URL prefix to the boards directory. If you specified an absolute directory in the boards directory setting above, you may need to provide a domain and/or path here that leads to the boards directory. If boards directory is a relative path, you may just copy it here.',
 
 	'CACHE_DIR'				=> 'Cache directory',
 	'CACHE_DIR_EXPLAIN'		=> 'The directory where QuickInstall stores temporary files. PHP needs to have write permissions to this directory.',
-	'CACHE_DIR_MISSING'		=> 'The directory &quot;%s&quot; does not exist or is not writeable.',
+	'CACHE_DIR_MISSING'		=> '<strong>Cache directory</strong> “<code>%s</code>” does not exist or is not writeable.',
 	'CANNOT_DELETE_LAST_PROFILE'	=> 'You can not delete the last profile.',
 	'CHANGELOG'				=> 'Changelog',
 	'CHECK_ALL'				=> 'Check all',
@@ -83,11 +84,10 @@ $lang = array_merge($lang, array(
 	'CHUNK_USER'			=> 'User chunk',
 	'CHUNK_USER_EXPLAIN'	=> 'The number of users that will be sent to the database in each query. Default: 5000.',
 	'CONFIG_BUTTON'			=> 'Click here to see the configuration.',
-	'CONFIG_CONVERTED'		=> 'Your configuration has been updated from the old style with one config file to the new style where you can save profiles. It has been saved with the name &quot;default&quot;.<br />You can now save settings for different profiles and load them when you create a board.',
 	'CONFIG_EMPTY'			=> 'The config array was empty. This is probably worth a bug report.',
-	'CONFIG_IS_DISPLAYED'	=> 'Configuration is displayed below. You can try manually writing it into a file in the settings direcotry.<br />Make sure the file name ends in &quot;.cfg&quot; for example &quot;settings/main.cfg&quot;.',
-	'CONFIG_NOT_WRITABLE'	=> 'The &quot;settings/&quot; directory is not writable.',
-	'CONFIG_NOT_WRITTEN'	=> 'The &quot;settings/%s.cfg&quot; file could not be written.',
+	'CONFIG_IS_DISPLAYED'	=> 'Configuration is displayed below. You can try manually writing it into a file in the settings direcotry.<br />Make sure the file name ends in <code>.json</code> for example <code>settings/main.json</code>.',
+	'CONFIG_NOT_WRITABLE'	=> 'The <code>settings/</code> directory is not writable.',
+	'CONFIG_NOT_WRITTEN'	=> 'The <code>settings/%s.json</code> file could not be written.',
 	'CONFIG_WARNING'		=> 'Click the button below to see the configuration. <strong>Warning:</strong> passwords you entered will be displayed.',
 	'COOKIE_DOMAIN'			=> 'Cookie domain',
 	'COOKIE_DOMAIN_EXPLAIN'	=> 'Usually <code>localhost</code>.',
@@ -139,6 +139,8 @@ $lang = array_merge($lang, array(
 	'ERRORS'				=> 'There were errors',
 	'ERROR_DEL_BOARDS'		=> 'The following boards could not be deleted',
 	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
+	'ERROR_PHP_UNSUPPORTED'	=> 'You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.4.7 and newer.',
+	'ERROR_PHPBB_NOT_FOUND'	=> 'phpBB could not be located.<br /><br />You must download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to QuickInstall‘s <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0.x, 3.1.x, 3.2.x, and 3.3.x.',
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
@@ -158,14 +160,15 @@ $lang = array_merge($lang, array(
 	'INSTALL_STYLES_EXPLAIN'	=> 'Install all styles found in <code>[source]/styles</code>. Styles missing their required parent style will be ignored.',
 	'INSTALL_QI'			=> 'Install QuickInstall',
 	'INSTALL_WELCOME'		=> 'Welcome to QuickInstall, a tool for quickly installing phpBB boards for testing and development.<br /><br />Some default settings have been loaded below. The only fields you should enter are <code>Database user</code> and <code>Database password</code> if you want those to be stored by QuickInstall. But it is also a good idea to check the rest of the settings.<br /><br />Make sure the <code>boards</code>, <code>cache</code> and <code>settings</code> directories exist in the QuickInstall root directory and are writable by PHP.<br /><br />Once you save these settings they will be stored as the &quot;default&quot; profile. Optionally, you may enter your own unique profile name in the <code>Save as new profile</code> field.',
-	'IS_NOT_VALID'			=> 'Is not valid.',
+	'IS_NOT_VALID'			=> '<strong>%s</strong> is not valid.',
+	'IS_REQUIRED'			=> '<strong>%s</strong> is required.',
 	'REQUIRED'				=> 'Required',
 
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',
 	'LOREM_IPSUM'			=> 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
 	'MAKE_WRITABLE'			=> 'Make files world writable',
-	'MAKE_WRITABLE_EXPLAIN'	=> 'Set files, &quot;config.php&quot;, and directories world writable by default.',
+	'MAKE_WRITABLE_EXPLAIN'	=> 'Set files, <code>config.php</code>, and directories world writable by default.',
 	'MAKE_WRITABLE_BOARD'	=> 'Make files world writable',
 	'MAKE_WRITABLE_BOARD_EXPLAIN'	=> 'Sets file permissions to 0666.',
 	'MANAGE_BOARDS'			=> 'Manage boards',
@@ -174,16 +177,16 @@ $lang = array_merge($lang, array(
 	'MIN'					=> 'Min',
 	'MINOR_MISHAP'			=> '🤔 This isn’t working',
 
-	'NEED_CONVERT'			=> 'Your config file needs to be converted to the new settings style with profiles. Make sure the &quot;settings&quot; directory exists and is writable by PHP. Then click submit.',
+	'NEED_CONVERT'			=> 'Your config file needs to be converted to the new settings style with profiles. Make sure the <code>settings</code> directory exists and is writable by PHP. Then click submit.',
 	'NEED_EMAIL_DOMAIN'		=> 'A e-mail domain is needed to create test users',
-	'NEED_WRITABLE'			=> 'QuickInstall needs the &quot;boards&quot; and &quot;cache&quot; directories to be writable all the time.<br />The &quot;settings&quot; directory needs to be in the QuickInstall root path and it also needs to be writable.',
+	'NEED_WRITABLE'			=> 'QuickInstall needs the <code>boards</code>, <code>cache</code> and <code>settings</code> directories to be writable all the time.<br />The <code>settings</code> directory must always be in the QuickInstall root path.',
 	'NO'					=> 'No',
 	'NO_ALT_ENV'			=> 'No alternative environments found.',
 	'NO_ALT_ENV_FOUND'		=> 'The specified alternative environment <strong>%s</strong> don’t exist.', // %s is the missing environment name
 	'NO_BOARDS'				=> 'You have no boards.',
 	'NO_DB'					=> 'No database selected.',
 	'NO_IMPACT_WIN'			=> 'This setting has no impact on Windows systems older than Win7.',
-	'NO_MODULE'				=> 'The module &quot;%s&quot; could not be loaded.',
+	'NO_MODULE'				=> 'The module <code>%s</code> could not be loaded.',
 	'NO_PASSWORD'			=> 'No password',
 	'NO_PHPINFO_AVAILABLE'	=> 'No PHP information could be collected.',
 	'NO_PROFILES'			=> 'No profiles found.',
@@ -243,13 +246,12 @@ $lang = array_merge($lang, array(
 
 	'SAVE'					=> 'Save',
 	'SAVE_PROFILE'			=> 'Save as new profile',
-	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd><br /><br />Note: If a profile of the same name already exists, it will be overwritten.',
+	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile. If a profile of the same name already exists, it will be overwritten.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd>',
 	'SAVE_SETTINGS'			=> 'Save profile',
 	'SEARCH_HERE'			=> 'Search here...',
 	'SET_DEFAULT_STYLE'		=> 'Set default style',
 	'SET_DEFAULT_STYLE_EXPLAIN'	=> 'Enter the name of the style you want to use as the default style. The name can be found in the <code>styles/[style name]/style.cfg</code> file. Defaults to prosilver if empty or the style can’t be installed.',
-	'SETTINGS_FAILURE'		=> 'The following errors were detected',
-	'SETTINGS_NOT_WRITABLE'	=> 'The settings directory does not exist, is not a directory or is not writable.',
+	'SETTINGS_FAILURE'		=> 'The following errors occurred:',
 	'SETTINGS_SECTIONS'		=> 'Settings',
 	'SETTINGS_SUCCESS'		=> 'Your settings were successfully saved.',
 	'SERVER_SETTINGS'		=> 'Server',
@@ -299,15 +301,6 @@ $lang = array_merge($lang, array(
 	'WORKING_ON_IT'		=> 'We’re working on it...',
 
 	'YES'	=> 'Yes',
-
-	// Config updated strings.
-	'UPDATED_EXPLAIN'	=> 'Your profile has been updated to this version of QuickInstall (%s). The changes made are defined below. They have been set to default values. also defined below.<br />You might want to look into the Settings page (link at the bottom) and set them to your desired values. If you have more than one profile, just press the button below to get all profiles updated.', // %s will be replaced with QI version.
-	'PROFILE_UPDATED'	=> 'Profile &quot;%s&quot; updated', // %s will be replaced by a profile name.
-	'PROFILES_UPDATED'	=> 'The following profiles has been updated',
-	'UPDATE_PROFILES'	=> 'Update profiles',
-
-	'DST_REMOVED'		=>	'The DST setting has been removed (qi_dst).',
-	'TIMEZONE_UPDATED'	=>	'Your timezone setting has been updated from numerical to string (qi_tz), default is UTC.',
 
 	'COLON'				=> ':',
 ));

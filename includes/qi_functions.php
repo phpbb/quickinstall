@@ -19,12 +19,10 @@ if (!defined('IN_QUICKINSTALL'))
  * Generate DBMS select options for the settings tab.
  * Checks that each extension is loaded.
  *
- * @todo add more DBMS to QI.
- *
- * @param $default string, the DBMS to set as selected
- * @return string with options.
+ * @param string $selected the DBMS to set as selected
+ * @return array the options
  */
-function gen_dbms_options($default = 'mysqli')
+function gen_dbms_options($selected = 'mysqli')
 {
 	$dbms_ary = array(
 		'mysqli'	=> array(
@@ -53,17 +51,20 @@ function gen_dbms_options($default = 'mysqli')
 		),
 	);
 
-	$options = '';
+	$options = [];
 	foreach ($dbms_ary as $dbms => $dbms_info)
 	{
 		if (extension_loaded($dbms_info['MODULE']))
 		{
-			$selected = ($dbms == $default) ? ' selected="selected"' : '';
-			$options .= "<option value='$dbms'$selected>{$dbms_info['LABEL']}</option>";
+			$options[] = [
+				'name' => $dbms_info['LABEL'],
+				'value' => $dbms,
+				'selected' => $dbms === $selected,
+			];
 		}
 	}
 
-	return($options);
+	return $options;
 }
 
 /**
@@ -91,8 +92,7 @@ function qi_format_timezone_offset($tz_offset, $show_null = false)
 	$offset_minutes	= $offset_seconds / 60;
 	$offset_hours	= ($time_offset - $offset_seconds) / 3600;
 
-	$offset_string	= sprintf("%s%02d:%02d", $sign, $offset_hours, $offset_minutes);
-	return $offset_string;
+	return sprintf("%s%02d:%02d", $sign, $offset_hours, $offset_minutes);
 }
 
 /**
@@ -109,7 +109,7 @@ function qi_tz_select_compare($a, $b)
 	$b_sign = $b[3];
 	if ($a_sign != $b_sign)
 	{
-		return $a_sign == '-' ? -1 : 1;
+		return $a_sign === '-' ? -1 : 1;
 	}
 
 	$a_offset = substr($a, 4, 5);
@@ -118,49 +118,44 @@ function qi_tz_select_compare($a, $b)
 	{
 		$a_name = substr($a, 12);
 		$b_name = substr($b, 12);
-		if ($a_name == $b_name)
+		if ($a_name === $b_name)
 		{
 			return 0;
 		}
-		else if ($a_name == 'UTC')
+
+		if ($a_name === 'UTC')
 		{
 			return -1;
 		}
-		else if ($b_name == 'UTC')
+
+		if ($b_name === 'UTC')
 		{
 			return 1;
 		}
-		else
-		{
-			return $a_name < $b_name ? -1 : 1;
-		}
+
+		return $a_name < $b_name ? -1 : 1;
 	}
-	else
+
+	if ($a_sign === '-')
 	{
-		if ($a_sign == '-')
-		{
-			return $a_offset > $b_offset ? -1 : 1;
-		}
-		else
-		{
-			return $a_offset < $b_offset ? -1 : 1;
-		}
+		return $a_offset > $b_offset ? -1 : 1;
 	}
+
+	return $a_offset < $b_offset ? -1 : 1;
 }
 
 /**
-* Mostly borrowed from phpBB 3.1 includes/functions.php/phpbb_timezone_select()
-* To have it available for 3.0.x too.
-*
-* Options to pick a timezone and date/time
-*
-* @param	\phpbb\template\template $template	phpBB template object
-* @param	\phpbb\user	$user				Object of the current user
-* @param	string		$default			A timezone to select
-* @param	boolean		$truncate			Shall we truncate the options text
-*
-* @return		array		Returns an array containing the options for the time selector.
-*/
+ * Mostly borrowed from phpBB 3.1 includes/functions.php/phpbb_timezone_select()
+ * To have it available for 3.0.x too.
+ *
+ * Options to pick a timezone and date/time
+ *
+ * @param \phpbb\user $user     Object of the current user
+ * @param string      $default  A timezone to select
+ * @param boolean     $truncate Shall we truncate the options text
+ *
+ * @return string Returns the options for the time selector.
+ */
 function qi_timezone_select($user, $default = '', $truncate = false)
 {
 	date_default_timezone_set('UTC');
@@ -222,36 +217,18 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 	return $tz_select;
 }
 
-function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '', $update_profiles = false)
+function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '')
 {
 	global $quickinstall_path, $user, $phpEx;
 
-	if ($update_profiles)
+	if ($user !== null && !empty($user->lang))
 	{
-		$settings_form = '<div style="margin: 10px 0 0 0; text-align: center;"><p><form action="" method="post"><input class="btn btn-primary text-white" type="submit" name="update_all" value="' . $user->lang['UPDATE_PROFILES'] . '" /></form></p></div>';
+		$lang = $user->lang;
 	}
 	else
 	{
-		$settings_form = '';
-	}
-
-	if (!empty($user) && !empty($user->lang))
-	{
-		$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
-		$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
-		$l_quickinstall = $user->lang['QUICKINSTALL'];
-		$l_phpbb_qi_text = $user->lang['PHPBB_QI_TEXT'];
-		$l_for_phpbb_versions = $user->lang['FOR_PHPBB_VERSIONS'];
-		$l_powered_by_phpbb = $user->lang['POWERED_BY_PHPBB'];
-	}
-	else
-	{
-		$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
-		$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a>';
-		$l_quickinstall = 'QuickInstall';
-		$l_phpbb_qi_text = 'phpBB QuickInstall';
-		$l_for_phpbb_versions = 'for phpBB 3.0 - 4.0';
-		$l_powered_by_phpbb = 'Powered by phpBB<sup>&reg;</sup> Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>';
+		$lang = [];
+		include "{$quickinstall_path}language/en/qi.$phpEx";
 	}
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
@@ -265,16 +242,15 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 
 	$template->assign_vars([
 		'QI_PATH'              => $quickinstall_path,
-		'MSG_TITLE'            => $msg_title,
-		'MSG_TEXT'             => $msg_text,
-		'MSG_EXPLAIN'          => $msg_explain,
-		'SETTINGS_FORM'        => $settings_form,
-		'RETURN_LINKS'         => $l_return_index,
+		'MSG_TITLE'            => $lang[$msg_title],
+		'MSG_TEXT'             => $lang[$msg_text],
+		'MSG_EXPLAIN'          => $lang[$msg_explain],
+		'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 		'QI_VERSION'           => qi::current_version(),
-		'L_QUICKINSTALL'       => $l_quickinstall,
-		'L_PHPBB_QI_TEXT'      => $l_phpbb_qi_text,
-		'L_FOR_PHPBB_VERSIONS' => $l_for_phpbb_versions,
-		'L_POWERED_BY_PHPBB'   => $l_powered_by_phpbb,
+		'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
+		'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
+		'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
+		'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
 	]);
 
 	$template->display('error');
@@ -284,7 +260,7 @@ function gen_error_msg($msg_text, $msg_title = 'General Error', $msg_explain = '
 
 function create_board_warning($msg_title, $msg_text, $page)
 {
-	global $settings, $phpEx;
+	global $phpEx;
 
 	$args =  'page='			. urlencode($page);
 	$args .= '&error_title='	. urlencode($msg_title);
@@ -312,7 +288,7 @@ function legacy_set_var(&$result, $var, $type, $multibyte = false)
 	settype($var, $type);
 	$result = $var;
 
-	if ($type == 'string')
+	if ($type === 'string')
 	{
 		$result = trim(htmlspecialchars(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $result), ENT_COMPAT, 'UTF-8'));
 
@@ -337,6 +313,13 @@ function legacy_set_var(&$result, $var, $type, $multibyte = false)
 	}
 }
 
+function qi_request_var($var_name, $default, $multibyte = false, $cookie = false)
+{
+	$method = (function_exists('request_var')) ? 'request_var' : 'legacy_request_var';
+
+	return $method($var_name, $default, $multibyte, $cookie);
+}
+
 function legacy_request_var($var_name, $default, $multibyte = false, $cookie = false)
 {
 	if (!$cookie && isset($_COOKIE[$var_name]))
@@ -349,7 +332,7 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 	}
 
 	$super_global = ($cookie) ? '_COOKIE' : '_REQUEST';
-	if (!isset($GLOBALS[$super_global][$var_name]) || is_array($GLOBALS[$super_global][$var_name]) != is_array($default))
+	if (!isset($GLOBALS[$super_global][$var_name]) || is_array($GLOBALS[$super_global][$var_name]) !== is_array($default))
 	{
 		return (is_array($default)) ? array() : $default;
 	}
@@ -364,13 +347,13 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 		list($key_type, $type) = each($default);
 		$type = gettype($type);
 		$key_type = gettype($key_type);
-		if ($type == 'array')
+		if ($type === 'array')
 		{
 			reset($default);
 			$default = current($default);
 			list($sub_key_type, $sub_type) = each($default);
 			$sub_type = gettype($sub_type);
-			$sub_type = ($sub_type == 'array') ? 'NULL' : $sub_type;
+			$sub_type = ($sub_type === 'array') ? 'NULL' : $sub_type;
 			$sub_key_type = gettype($sub_key_type);
 		}
 	}
@@ -383,7 +366,7 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 		foreach ($_var as $k => $v)
 		{
 			legacy_set_var($k, $k, $key_type);
-			if ($type == 'array' && is_array($v))
+			if ($type === 'array' && is_array($v))
 			{
 				foreach ($v as $_k => $_v)
 				{
@@ -397,7 +380,7 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 			}
 			else
 			{
-				if ($type == 'array' || is_array($v))
+				if ($type === 'array' || is_array($v))
 				{
 					$v = null;
 				}
@@ -425,7 +408,7 @@ function validate_dbname($dbname, $first_char = false, $path = false)
 	if (empty($dbname))
 	{
 		// Nothing to validate, this should already have been catched.
-		return('');
+		return '';
 	}
 
 	// Try to replace some chars whit their valid equivalents
@@ -443,20 +426,25 @@ function validate_dbname($dbname, $first_char = false, $path = false)
 	// make sure that the first char is not a underscore if set.
 	$prefix = ($first_char && $dbname[0] === '_') ? 'qi' : '';
 
-	return($prefix . $dbname);
+	return $prefix . $dbname;
 }
 
 /**
- * Get a list of alternative environments.
+ * Get an array of alternative environments for select menus.
  */
 function get_alternative_env($selected_option = '')
 {
 	global $user, $quickinstall_path;
 
-	$none_selected	= (empty($selected_option)) ? ' selected="selected"' : '';
-	$alt_env		= "<option value=''$none_selected>{$user->lang['DEFAULT_ENV']}</option>";
-	$dh				= dir($quickinstall_path . 'sources/phpBB3_alt');
+	$alt_envs = [
+		[
+			'name' => $user->lang['DEFAULT_ENV'],
+			'value' => '',
+			'selected' => empty($selected_option),
+		],
+	];
 
+	$dh = dir($quickinstall_path . 'sources/phpBB3_alt');
 	while (false !== ($file = $dh->read()))
 	{
 		// Ignore everything that starts with a dot.
@@ -465,14 +453,16 @@ function get_alternative_env($selected_option = '')
 			continue;
 		}
 
-		$selected	= ($file == $selected_option) ? ' selected="selected"' : '';
-		$file	= htmlspecialchars($file);
-
-		$alt_env .= "<option{$selected}>$file</option>";
+		$value = htmlspecialchars($file);
+		$alt_envs[] = [
+			'name' => $value,
+			'value' => $value,
+			'selected' => $file === $selected_option,
+		];
 	}
 	$dh->close();
 
-	return($alt_env);
+	return $alt_envs;
 }
 
 /**
@@ -504,7 +494,7 @@ function get_installed_boards()
 			{
 				if (($pos = strpos($row, "'PHPBB_VERSION', '")) !== false)
 				{
-					$pos = $pos + 18;
+					$pos += 18;
 					$version = substr($row, $pos, -3);
 					break;
 				}
@@ -585,7 +575,7 @@ function db_connect($db_data = '')
 
 	$db->sql_return_on_error(true);
 
-	return($db);
+	return $db;
 }
 
 /**
@@ -610,10 +600,8 @@ function qi_get_available_dbms($dbms)
 		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
 		return call_user_func(array($database, 'get_available_dbms'), $dbms);
 	}
-	else
-	{
-		return call_user_func('get_available_dbms', $dbms);
-	}
+
+	return call_user_func('get_available_dbms', $dbms);
 }
 
 function qi_get_phpbb_version()

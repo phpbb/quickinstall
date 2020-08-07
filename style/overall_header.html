@@ -20,7 +20,7 @@
 		</button>
 		<div class="collapse navbar-collapse justify-content-end" id="navbar">
 			<ul class="navbar-nav mt-2 mt-md-0">
-				{% if not S_IN_INSTALL and PROFILE_COUNT %}
+				{% if not S_IN_INSTALL and S_HAS_PROFILES %}
 					<li class="nav-item"><a class="nav-link{% if S_MAIN %} active{% endif %}"{% if S_MAIN %} aria-current="page"{% endif %} href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
 				{% endif %}
 				<li class="nav-item"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}"><span>{{ lang('PROFILES') }}</span></a></li>

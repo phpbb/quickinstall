@@ -30,12 +30,12 @@ class qi_create
 		// postgres uses remove_comments function which is defined in functions_admin
 		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
 
-		// phpBB 3.1.x is not compat with PHP 7
-		// phpBB 3.2.0-3.2.1 is not compat with PHP 7.2
-		// phpBB 3.2.x is not compat with PHP 7.3
-		if ((!defined('PHPBB_32') && phpbb_version_compare(PHP_VERSION, '7.0.0', '>=')) ||
-			(phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<') && phpbb_version_compare(PHP_VERSION, '7.2.0', '>=')) ||
-			(!defined('PHPBB_33') && phpbb_version_compare(PHP_VERSION, '7.3.0', '>='))
+		// phpBB 3.1.x is not compat with PHP 7 (700000)
+		// phpBB 3.2.0-3.2.1 is not compat with PHP 7.2 (702000)
+		// phpBB 3.2.x is not compat with PHP 7.3 (703000)
+		if ((PHP_VERSION_ID >= 70000 && !defined('PHPBB_32')) ||
+			(PHP_VERSION_ID >= 70200 && phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
+			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33'))
 		)
 		{
 			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['PHP7_INCOMPATIBLE'], PHPBB_VERSION, PHP_VERSION), 'main');
@@ -126,7 +126,14 @@ class qi_create
 		}
 
 		// copy all of our files
-		file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
+		try
+		{
+			file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
+		}
+		catch (RuntimeException $e)
+		{
+			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+		}
 
 		if (!defined('PHPBB_31'))
 		{
@@ -500,8 +507,9 @@ class qi_create
 		// Set other optional config data.
 		// Have it here to not having to do a query for each key
 		// to see if it is a update or insert.
-		if (($other_config = $settings->get_other_config(true)) != '')
+		if (($other_config = $settings->get_config('other_config')) !== '')
 		{
+			$other_config = explode("\n", $other_config);
 			foreach ($other_config as $config_row)
 			{
 				// First check if this is a comment.
@@ -794,7 +802,14 @@ class qi_create
 		file_functions::delete_dir($board_dir . 'umil/');
 
 		// copy extra user added files
-		file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+		try
+		{
+			file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+		}
+		catch (RuntimeException $e)
+		{
+			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+		}
 
 		// Install styles
 		if ($settings->get_config('install_styles', 0))

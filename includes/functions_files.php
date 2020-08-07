@@ -33,7 +33,7 @@ class file_functions
 			self::$error[] = $file;
 		}
 
-		return($success);
+		return $success;
 	}
 
 	public static function copy_file($src_file, $dst_file)
@@ -54,7 +54,10 @@ class file_functions
 
 		if (!is_dir($dst_dir))
 		{
-			mkdir($dst_dir);
+			if (!mkdir($dst_dir) && !is_dir($dst_dir))
+			{
+				throw new \RuntimeException('BOARDS_DIR_ERROR');
+			}
 		}
 
 		foreach (scandir($src_dir) as $file)
@@ -78,12 +81,9 @@ class file_functions
 					$ow = 1;
 				}
 
-				if ($ow > 0)
+				if (($ow > 0) && copy($src_file, $dst_file))
 				{
-					if (copy($src_file, $dst_file))
-					{
-						touch($dst_file, filemtime($src_file));
-					}
+					touch($dst_file, filemtime($src_file));
 				}
 			}
 			else if (is_dir($src_file))
@@ -157,7 +157,7 @@ class file_functions
 
 	public static function append_slash(&$dir)
 	{
-		if ($dir[strlen($dir) - 1] != '/')
+		if ($dir[strlen($dir) - 1] !== '/')
 		{
 			$dir .= '/';
 		}
@@ -176,8 +176,6 @@ class file_functions
 
 	public static function grant_permissions($dir, $add_perms, $root = true)
 	{
-		global $phpEx;
-
 		$old_perms = fileperms($dir);
 		$new_perms = $old_perms | $add_perms;
 		if ($new_perms != $old_perms)
@@ -192,7 +190,7 @@ class file_functions
 
 			foreach ($file_arr as $file)
 			{
-				if ($file == '.' || $file == '..')
+				if ($file === '.' || $file === '..')
 				{
 					continue;
 				}
@@ -207,6 +205,5 @@ class file_functions
 				self::grant_permissions($file, $add_perms, false);
 			}
 		}
-
 	}
 }

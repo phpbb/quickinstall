@@ -16,9 +16,9 @@ if (!defined('IN_QUICKINSTALL'))
 }
 
 /**
- * qi_about module
+ * qi_docs module
  */
-class qi_about
+class qi_docs
 {
 	public function __construct()
 	{
@@ -74,8 +74,8 @@ class qi_about
 		$template->assign_var('S_DOCS', true);
 
 		// Output page
-		qi::page_header($user->lang['DOCS_LONG']);
+		qi::page_header('DOCS_LONG');
 
-		qi::page_display('about_body');
+		qi::page_display('docs_body');
 	}
 }

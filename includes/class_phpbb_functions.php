@@ -47,7 +47,7 @@ class phpbb_functions
 	*/
 	public static function send_status_line($code, $message)
 	{
-		if (substr(strtolower(@php_sapi_name()), 0, 3) === 'cgi')
+		if (stripos(PHP_SAPI, 'cgi') === 0)
 		{
 			// in theory, we shouldn't need that due to php doing it. Reality offers a differing opinion, though
 			header("Status: $code $message", true, $code);
@@ -83,15 +83,18 @@ class phpbb_functions
 
 		if (empty($root_path))
 		{
-			$root_path = self::phpbb_realpath(dirname(__FILE__) . '/../');
+			$root_path = self::phpbb_realpath(__DIR__ . '/../');
 		}
 
 		return str_replace(array($root_path, '\\'), array('[ROOT]', '/'), $errfile);
 	}
 
 	/**
-	* A wrapper for realpath
-	*/
+	 * A wrapper for realpath
+	 *
+	 * @param string $path
+	 * @return bool|false|mixed|string
+	 */
 	public static function phpbb_realpath($path)
 	{
 		$realpath = realpath($path);
@@ -104,7 +107,7 @@ class phpbb_functions
 		}
 
 		// Check for DIRECTORY_SEPARATOR at the end (and remove it!)
-		if (substr($realpath, -1) == DIRECTORY_SEPARATOR)
+		if (substr($realpath, -1) === DIRECTORY_SEPARATOR)
 		{
 			$realpath = substr($realpath, 0, -1);
 		}
@@ -120,7 +123,7 @@ class phpbb_functions
 	*/
 	public static function is_absolute($path)
 	{
-		return ($path[0] == '/' || (DIRECTORY_SEPARATOR == '\\' && preg_match('#^[a-z]:[/\\\]#i', $path))) ? true : false;
+		return $path[0] === '/' || (DIRECTORY_SEPARATOR === '\\' && preg_match('#^[a-z]:[/\\\]#i', $path));
 	}
 
 	/**
@@ -135,14 +138,13 @@ class phpbb_functions
 
 		// Switch to use UNIX slashes
 		$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-		$path_prefix = '';
 
 		// Determine what sort of path we have
 		if (self::is_absolute($path))
 		{
 			$absolute = true;
 
-			if ($path[0] == '/')
+			if ($path[0] === '/')
 			{
 				// Absolute path, *NIX style
 				$path_prefix = '';
@@ -203,18 +205,17 @@ class phpbb_functions
 		$bits = array_values(array_diff($bits, array('.')));
 
 		// Lets get looping, run over and resolve any .. (up directory)
-		for ($i = 0, $max = sizeof($bits); $i < $max; $i++)
+		for ($i = 0, $max = count($bits); $i < $max; $i++)
 		{
 			// @todo Optimise
-			if ($bits[$i] == '..' )
+			if ($bits[$i] === '..' )
 			{
 				if (isset($bits[$i - 1]))
 				{
-					if ($bits[$i - 1] != '..')
+					if ($bits[$i - 1] !== '..')
 					{
 						// We found a .. and we are able to traverse upwards, lets do it!
-						unset($bits[$i]);
-						unset($bits[$i - 1]);
+						unset($bits[$i], $bits[$i - 1]);
 						$i -= 2;
 						$max -= 2;
 						$bits = array_values($bits);
@@ -234,10 +235,10 @@ class phpbb_functions
 
 		$resolved = '';
 
-		$max = sizeof($bits) - 1;
+		$max = count($bits) - 1;
 
 		// Check if we are able to resolve symlinks, Windows cannot.
-		$symlink_resolve = (function_exists('readlink')) ? true : false;
+		$symlink_resolve = function_exists('readlink');
 
 		foreach ($bits as $i => $bit)
 		{
@@ -272,7 +273,7 @@ class phpbb_functions
 		$resolved = str_replace('/', DIRECTORY_SEPARATOR, $resolved);
 
 		// Check for DIRECTORY_SEPARATOR at the end (and remove it!)
-		if (substr($resolved, -1) == DIRECTORY_SEPARATOR)
+		if (substr($resolved, -1) === DIRECTORY_SEPARATOR)
 		{
 			return substr($resolved, 0, -1);
 		}
@@ -294,9 +295,8 @@ class phpbb_functions
 		$backtrace = debug_backtrace();
 
 		// We skip the first two,
-		unset($backtrace[0]); // The first only shows this file/function.
-		unset($backtrace[1]); // The second shows qi::msg_handler().
-
+		unset($backtrace[0], $backtrace[1]); // The first only shows this file/function.
+		// The second shows qi::msg_handler().
 
 		foreach ($backtrace as $trace)
 		{
@@ -344,13 +344,10 @@ class phpbb_functions
 		$version1 = strtolower($version1);
 		$version2 = strtolower($version2);
 
-		if (is_null($operator))
+		if (null === $operator)
 		{
 			return version_compare($version1, $version2);
 		}
-		else
-		{
-			return version_compare($version1, $version2, $operator);
-		}
+		return version_compare($version1, $version2, $operator);
 	}
 }

@@ -31,12 +31,12 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user, $phpbb_root_path, $quickinstall_path, $settings, $page, $mode;
+		global $template, $user;
 
 		$update = self::get_update();
 
 		$template->assign_vars(array(
-			'PAGE_TITLE'	=> $page_title,
+			'PAGE_TITLE'	=> $user->lang[$page_title],
 			'T_THEME_PATH'	=> 'style',
 
 			'U_DOCS'		=> self::url('docs'),
@@ -90,7 +90,7 @@ class qi
 	*/
 	public static function redirect($page)
 	{
-		if (strpos($page, 'http://') == 0 || strpos($page, 'https://') == 0)
+		if (strpos($page, 'http://') === 0 || strpos($page, 'https://') === 0)
 		{
 			// Assume we have a fully qualified URL. And we are done.
 			header('Location: ' . $page);
@@ -99,7 +99,7 @@ class qi
 
 		$server_name = (!empty($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : getenv('SERVER_NAME');
 		$server_port = (!empty($_SERVER['SERVER_PORT'])) ? (int) $_SERVER['SERVER_PORT'] : (int) getenv('SERVER_PORT');
-		$secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 1 : 0;
+		$secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
 
 		$script_name = (!empty($_SERVER['PHP_SELF'])) ? $_SERVER['PHP_SELF'] : getenv('PHP_SELF');
 		if (!$script_name)
@@ -111,22 +111,40 @@ class qi
 		$script_name = str_replace(array('\\', '//'), '/', $script_name);
 		$script_path = trim(dirname($script_name));
 
-		$url = (($secure) ? 'https://' : 'http://') . $server_name;
+		$url = ($secure ? 'https://' : 'http://') . $server_name;
 
-		if ($server_port && (($secure && $server_port <> 443) || (!$secure && $server_port <> 80)))
+		if ($server_port && (($secure && $server_port !== 443) || (!$secure && $server_port !== 80)))
 		{
 			$url .= ':' . $server_port;
 		}
 
 		// Make sure script path ends with a slash.
-		$script_path .= (substr($script_path, -1) != '/') ? '/' : '';
+		$script_path .= (substr($script_path, -1) !== '/') ? '/' : '';
 
 		// Since $script_path ends with a slash we don't want $page to start with one.
-		$page = ($page[0] == '/') ? substr($page, 1) : $page;
+		$page = ltrim($page, '/');
 
 		$url .= $script_path . $page;
 		header('Location: ' . $url);
 		exit;
+	}
+
+	/**
+	 * Applies language selected by user to QI.
+	 *
+	 * @param string $lang
+	 */
+	public static function apply_lang($lang = '')
+	{
+		global $quickinstall_path;
+
+		$lang = empty($lang) ? 'en' : $lang;
+		if (!file_exists("{$quickinstall_path}language/$lang"))
+		{
+			trigger_error('Neither your selected language nor English could be found. Make sure that you have at least the English language files in QI_PATH/language/', E_USER_ERROR);
+		}
+
+		self::add_lang(['qi', 'phpbb'], "{$quickinstall_path}language/$lang/");
 	}
 
 	/**
@@ -192,6 +210,61 @@ class qi
 	}
 
 	/**
+	 * Generate a lang select for the settings page.
+	 *
+	 * @param string $lang_path
+	 * @param string $config_var
+	 * @param string $get_var
+	 * @return array
+	 */
+	public static function get_lang_select($lang_path, $config_var, $get_var = '')
+	{
+		global $settings;
+
+		// Make sure $source_path ends with a slash.
+		file_functions::append_slash($lang_path);
+
+		// Need to assume that English always is available.
+		if ($get_var && !empty($_GET[$get_var]))
+		{
+			$lang = qi_request_var($get_var, '');
+			$user_lang = ($lang && file_exists($lang_path . $lang)) ? $lang : 'en';
+		}
+		else
+		{
+			$user_lang = $settings->get_config($config_var, 'en');
+			$user_lang = (file_exists($lang_path . $user_lang)) ? $user_lang : 'en';
+		}
+
+		$lang_arr = scandir($lang_path);
+		$lang_options = [];
+
+		foreach ($lang_arr as $lang)
+		{
+			if ($lang[0] === '.' || !is_dir($lang_path . $lang))
+			{
+				continue;
+			}
+
+			$file = "$lang_path/$lang/iso.txt";
+
+			if (file_exists($file))
+			{
+				$rows = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+				// Always show the English language name, except for the "active" language.
+				$lang_options[] = [
+					'name' => ($lang === $user_lang) ? $rows[1] : $rows[0],
+					'value' => $lang,
+					'selected' => $lang === $user_lang,
+				];
+			}
+		}
+
+		return $lang_options;
+	}
+
+	/**
 	* Format user date
 	*/
 	public static function format_date($gmepoch, $format = false, $forcedate = false)
@@ -230,12 +303,14 @@ class qi
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
 			return str_replace('||', $user->lang['datetime']['TOMORROW'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
 		}
-		else if ($gmepoch > $midnight && !$forcedate)
+
+		if ($gmepoch > $midnight && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
 			return str_replace('||', $user->lang['datetime']['TODAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
 		}
-		else if ($gmepoch > $midnight - 86400 && !$forcedate)
+
+		if ($gmepoch > $midnight - 86400 && !$forcedate)
 		{
 			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
 			return str_replace('||', $user->lang['datetime']['YESTERDAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
@@ -264,8 +339,7 @@ class qi
 	 */
 	public static function msg_handler($errno, $msg_text, $errfile, $errline)
 	{
-		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path;
-		global $user;
+		global $phpEx, $phpbb_root_path, $msg_title, $msg_long_text, $quickinstall_path, $user;
 
 		// Do not display notices if we suppress them via @
 		if (error_reporting() == 0 && $errno != E_USER_ERROR && $errno != E_USER_WARNING && $errno != E_USER_NOTICE)
@@ -308,20 +382,17 @@ class qi
 			case E_USER_ERROR:
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
-				if (!empty($user) && !empty($user->lang))
+				if ($user !== null && !empty($user->lang))
 				{
-					$msg_text = (!empty($user->lang[$msg_text])) ? $user->lang[$msg_text] : $msg_text;
-					$msg_title = (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((!empty($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title);
-
-					$l_return_index = sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a> &bull; ');
-					$l_return_index .= sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>');
+					$lang = $user->lang;
 				}
 				else
 				{
-					$msg_title = 'General Error';
-					$l_return_index = '<a href="' . qi::url('main') . '">Go to QuickInstall main page</a> &bull; ';
-					$l_return_index .= '<a href="' . qi::url('settings') . '">Go to settings</a> &bull; ';
+					$lang = [];
+					include "{$quickinstall_path}language/en/qi.$phpEx";
 				}
+
+				$msg_text = isset($lang[$msg_text]) ? $lang[$msg_text] : $msg_text;
 
 				$backtrace = phpbb_functions::get_backtrace();
 				if ($backtrace)
@@ -340,16 +411,15 @@ class qi
 
 				$template->assign_vars([
 					'QI_PATH'              => $quickinstall_path,
-					'MSG_TITLE'            => $msg_title,
+					'MSG_TITLE'            => (!isset($msg_title)) ? $lang['GENERAL_ERROR'] : ((isset($lang[$msg_title])) ? $lang[$msg_title] : $msg_title),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'SETTINGS_FORM'        => '',
-					'RETURN_LINKS'         => $l_return_index,
+					'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
-					'L_QUICKINSTALL'       => $user->lang['QUICKINSTALL'],
-					'L_PHPBB_QI_TEXT'      => $user->lang['PHPBB_QI_TEXT'],
-					'L_FOR_PHPBB_VERSIONS' => $user->lang['FOR_PHPBB_VERSIONS'],
-					'L_POWERED_BY_PHPBB'   => $user->lang['POWERED_BY_PHPBB'],
+					'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
+					'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
+					'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
+					'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
 				]);
 
 				$template->display('error');
@@ -364,7 +434,7 @@ class qi
 
 		// If we notice an error not handled here we pass this back to PHP by returning false
 		// This may not work for all php versions
-		return(false);
+		return false;
 	}
 
 	/**

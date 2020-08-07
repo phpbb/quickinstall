@@ -22,12 +22,9 @@ class qi_main
 {
 	public function __construct()
 	{
-		global $db, $template, $user, $settings;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
+		global $template, $user, $settings;
 
 		get_installed_boards();
-
-		$profiles = $settings->get_profiles();
 
 		// Some error?
 		if ($settings->get_config('error', 0))
@@ -46,8 +43,7 @@ class qi_main
 			'DB_PERFIX'			=> htmlspecialchars($settings->get_config('db_prefix', '')),
 			'SITE_NAME'			=> $settings->get_config('site_name', ''),
 			'SITE_DESC'			=> $settings->get_config('site_desc', ''),
-			'PROFILE_COUNT'		=> $profiles['count'],
-			'PROFILE_OPTIONS'	=> $profiles['options'],
+			'PROFILES'			=> $settings->get_profiles(),
 			'DBNAME'			=> $settings->get_config('dbname', ''),
 			'INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
 			'DEFAULT_STYLE'		=> $settings->get_config('default_style', ''),
@@ -91,11 +87,11 @@ class qi_main
 			'NUM_REPLIES_MAX'	=> $settings->get_config('num_replies_max', 0),
 			'EMAIL_DOMAIN'		=> $settings->get_config('email_domain', ''),
 			'GRANT_PERMISSIONS'	=> $settings->get_config('grant_permissions', ''),
-			'OTHER_CONFIG'		=> $settings->get_other_config(),
+			'OTHER_CONFIG'		=> $settings->get_config('other_config', ''),
 		));
 
 		// Output page
-		qi::page_header($user->lang['QI_MANAGE']);
+		qi::page_header('QI_MANAGE');
 
 		qi::page_display('main_body');
 	}

@@ -9,17 +9,16 @@
 {% endif %}
 {% if S_SETTINGS_SUCCESS %}
 	<div class="alert alert-success" role="alert">{{ lang('SETTINGS_SUCCESS') }}</div>
-{% elseif S_SETTINGS_FAILURE %}
+{% elseif S_SETTINGS_ERRORS %}
 	<div class="alert alert-danger" role="alert">
 		<h5 class="alert-heading"><svg class="bi icon text-danger" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg>️ {{ lang('SETTINGS_FAILURE') }}</h5>
-		<p class="mb-0">{% if ERROR %}{{ ERROR }}{% endif %}</p>
+		<ol class="mb-0">
+			{% for ERROR in S_SETTINGS_ERRORS %}<li>{{ ERROR }}</li>{% endfor %}
+		</ol>
 	</div>
 {% endif %}
-{% if (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE or not S_SETTINGS_WRITABLE) and (not S_IN_INSTALL) %}
+{% if (not S_BOARDS_WRITABLE or not S_CACHE_WRITABLE or not S_CONFIG_WRITABLE) and (not S_IN_INSTALL) %}
 	<div class="alert alert-danger" role="alert">{{ lang('NEED_WRITABLE') }}</div>
-{% endif %}
-{% if ERROR and S_IS_CONVERTED %}
-	<div class="alert alert-success" role="alert">{{ ERROR }}</div>
 {% endif %}
 
 {% if CONFIG_TEXT %}
@@ -37,36 +36,44 @@
 	</div>
 {% endif %}
 
-{% if PROFILE_COUNT %}
+{% if PROFILES|length %}
 <form method="post" id="profile_form" action="{{ U_CHOOSE_PROFILE }}">
 	<section id="profiles" class="anchor">
 		<div class="card bg-light mb-3">
 			<div class="card-body">
 				<fieldset>
-				<legend>{{ lang('PROFILES') }}</legend>
-				<div class="mb-3 row">
-					<label for="qi_profile" class="col-md-5 form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
-					<div class="col-md-5">
-						<select id="qi_profile" name="qi_profile" class="form-select" data-form-submit="true">
-							{{ PROFILE_OPTIONS }}
-						</select>
+					<legend>{{ lang('PROFILES') }}</legend>
+					<div class="mb-3 row">
+						<label for="qi_profile" class="col-md-5 form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
+						<div class="col-md-5">
+							<select id="qi_profile" name="qi_profile" class="form-select" data-form-submit="true">
+								{% for name, selected in PROFILES %}
+									<option value="{{ name }}"{% if selected %} selected="selected"{% endif %}>{{ name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-md-2">
+							{% if PROFILES|length > 1 %}
+								<noscript>
+									<button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary text-white">
+										{{ lang('GO') }}
+									</button>
+								</noscript>
+							{% endif %}
+						</div>
 					</div>
-					<div class="col-md-2">
-						{% if PROFILE_COUNT > 1 %}<noscript><button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary text-white">{{ lang('GO') }}</button></noscript>{% endif %}
+					{% if PROFILES|length > 1 %}
+					<div class="mb-3 row">
+						<div class="col-md-7 offset-md-5">
+							<button type="submit" name="delete-profile" id="delete-profile" class="btn btn-danger" value="{{ lang('DELETE_PROFILE') }}" data-confirm="{{ lang('SURE_DELETE_PROFILE') }}">
+								<svg class="bi icon text-white" width="16" height="16" fill="currentColor">
+									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#trash"/>
+								</svg> {{ lang('DELETE_PROFILE') }}
+							</button>
+						</div>
 					</div>
-				</div>
-				{% if PROFILE_COUNT > 1 %}
-				<div class="mb-3 row">
-					<div class="col-md-7 offset-md-5">
-						<button type="submit" name="delete-profile" id="delete-profile" class="btn btn-danger" value="{{ lang('DELETE_PROFILE') }}" data-confirm="{{ lang('SURE_DELETE_PROFILE') }}">
-							<svg class="bi icon text-white" width="16" height="16" fill="currentColor">
-								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#trash"/>
-							</svg> {{ lang('DELETE_PROFILE') }}
-						</button>
-					</div>
-				</div>
-				{% endif %}
-			</fieldset>
+					{% endif %}
+				</fieldset>
 			</div>
 		</div>
 	</section>
@@ -83,7 +90,9 @@
 						<label for="qi_lang" class="col-md-5 form-label">{{ lang('QI_LANG') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('QI_LANG_EXPLAIN') }}</div></label>
 						<div class="col-md-7">
 							<select id="qi_lang" name="qi_config[qi_lang]" class="form-select" data-load-selection="index.php?page=settings&amp;lang=">
-								{{ QI_LANG }}
+								{% for lang in QI_LANG %}
+									<option value="{{ lang.value }}"{% if lang.selected %}selected="selected"{% endif %}>{{ lang.name }}</option>
+								{% endfor %}
 							</select>
 						</div>
 					</div>
@@ -129,7 +138,11 @@
 					<div class="mb-3 row">
 						<label for="dbms" class="col-md-5 form-label">{{ lang('DBMS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('DBMS_EXPLAIN') }}</div></label>
 						<div class="col-md-7">
-							<select name="qi_config[dbms]" id="dbms" class="form-select">{{ CONFIG_DBMS }}</select>
+							<select name="qi_config[dbms]" id="dbms" class="form-select">
+								{% for config_dbm in CONFIG_DBMS %}
+									<option value="{{ config_dbm.value }}"{% if config_dbm.selected %} selected="selected"{% endif %}>{{ config_dbm.name }}</option>
+								{% endfor %}
+							</select>
 						</div>
 					</div>
 					<div class="mb-3 row">
@@ -239,7 +252,13 @@
 					</div>
 					<div class="mb-3 row">
 						<label for="default_lang" class="col-md-5 form-label">{{ lang('DEFAULT_LANG') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('DEFAULT_LANG_EXPLAIN') }}</div></label>
-						<div class="col-md-7"><select class="form-select" id="default_lang" name="qi_config[default_lang]">{{ PHPBB_LANG }}</select></div>
+						<div class="col-md-7">
+							<select class="form-select" id="default_lang" name="qi_config[default_lang]">
+								{% for lang in PHPBB_LANG %}
+									<option value="{{ lang.value }}"{% if lang.selected %}selected="selected"{% endif %}>{{ lang.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
 					</div>
 					<div class="mb-3 row">
 						<label for="qi_tz" class="col-md-5 form-label">{{ lang('QI_TZ') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('QI_TZ_EXPLAIN') }}</div></label>
@@ -422,11 +441,13 @@
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="qi_config[num_replies_max]" value="{{ CONFIG_NUM_REPLIES_MAX }}"></label>
 						</div>
 					</div>
-					<div class="card text-white bg-secondary mb-3">
-						<div class="card-body">
-							<h5 class="card-title">{{ lang('CHUNK_SETTINGS') }}</h5>
-							<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
-						</div>
+					<div class="alert alert-info">
+						<h5 class="card-title">
+							<svg class="bi icon text-info" width="24" height="24" fill="currentColor">
+								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+							</svg> {{ lang('CHUNK_SETTINGS') }}
+						</h5>
+						<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
 					</div>
 					<div class="mb-3 row">
 						<label for="chunk_post" class="col-md-5 form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</div></label>
@@ -464,7 +485,13 @@
 					</div>
 					<div class="mb-3 row">
 						<label for="alt_env" class="col-md-5 form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</div></label>
-						<div class="col-md-7"><select name="qi_config[alt_env]" id="alt_env" class="form-select">{{ CONFIG_ALT_ENV }}</select></div>
+						<div class="col-md-7">
+							<select name="qi_config[alt_env]" id="alt_env" class="form-select">
+								{% for alt_env in CONFIG_ALT_ENV %}
+									<option value="{{ alt_env.value }}"{% if alt_env.selected %} selected="selected"{% endif %}>{{ alt_env.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
 					</div>
 					<div class="mb-3 row">
 						<label class="col-md-5 form-label">{{ lang('REDIRECT_BOARD') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('REDIRECT_EXPLAIN') }}</div></label>
