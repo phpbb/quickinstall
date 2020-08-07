@@ -15,13 +15,13 @@ class settings
 	/** @var array An array containing the QI settings */
 	protected $settings = [];
 
-	/** @var bool True if there is no config and the user needs to go to install */
-	protected $install = false;
-
-	/** @var array Holds language keys for any errors that occur */
+	/** @var array An array of errors (as language keys) that occur */
 	protected $errors = [];
 
-	/** @var \phpbb\user */
+	/** @var bool True if there are no settings and the user needs to go to install */
+	protected $install = false;
+
+	/** @var \phpbb\user A phpBB user object */
 	protected $user;
 
 	/** @var string Path to QI root */
