@@ -272,6 +272,8 @@ class settings
 					unset($files[$key]);
 				}
 			}
+
+			sort($files, SORT_NATURAL | SORT_FLAG_CASE);
 		}
 
 		return !empty($files) ? $files : false;
