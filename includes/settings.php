@@ -196,15 +196,15 @@ class settings
 
 		$profile_file = "{$this->qi_path}settings/{$profile}.json";
 
-		$saved = file_put_contents($profile_file, $this->encode_settings($settings));
+		$saved = file_functions::make_file($profile_file, $this->encode_settings($settings));
 
+		// Make install false if settings have been successfully saved.
 		if ($saved !== false)
 		{
-			// Make sure install is false when the settings have been successfully saved.
 			$this->install = false;
 		}
 
-		return (bool) $saved;
+		return $saved;
 	}
 
 	/**

@@ -22,6 +22,13 @@ class file_functions
 {
 	public static $error = array();
 
+	public static function make_file($file, $data)
+	{
+		$success = file_put_contents($file, $data);
+
+		return (bool) $success;
+	}
+
 	public static function delete_file($file)
 	{
 		chmod($file, 0755);
