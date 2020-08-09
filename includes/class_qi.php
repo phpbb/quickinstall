@@ -138,10 +138,10 @@ class qi
 	{
 		global $quickinstall_path;
 
-		$lang = empty($lang) ? 'en' : $lang;
-		if (!file_exists("{$quickinstall_path}language/$lang"))
+		$lang = ($lang !== '' && file_exists("{$quickinstall_path}language/$lang")) ? $lang : 'en';
+		if ($lang === 'en' && !file_exists("{$quickinstall_path}language/$lang"))
 		{
-			trigger_error('Neither your selected language nor English could be found. Make sure that you have at least the English language files in QI_PATH/language/', E_USER_ERROR);
+			trigger_error('Either your selected language or the English language files that came with QuickInstall could not be found. Make sure that you have at least the English language files in QI_PATH/language/', E_USER_ERROR);
 		}
 
 		self::add_lang(['qi', 'phpbb'], "{$quickinstall_path}language/$lang/");
