@@ -223,7 +223,7 @@ class populate
 		$users_needed = ($this->create_mod) ? $users_needed + 1 : $users_needed;
 		$users_needed = ($this->create_admin) ? $users_needed + 1 : $users_needed;
 
-		if (sizeof($this->user_arr) < $users_needed)
+		if (count($this->user_arr) < $users_needed)
 		{
 			return;
 		}
@@ -428,7 +428,7 @@ class populate
 					$this->user_arr[$poster_arr['user_id']]['user_lastpost_time'] = $post_time;
 					$this->user_arr[$poster_arr['user_id']]['user_lastmark'] = $post_time;
 
-					if (sizeof($sql_posts) >= $this->post_chunks)
+					if (count($sql_posts) >= $this->post_chunks)
 					{
 						// Save the array to the posts table
 						$db->sql_multi_insert(POSTS_TABLE, $sql_posts);
@@ -445,7 +445,7 @@ class populate
 
 				$sql_topics[] = $topic_arr;
 
-				if (sizeof($sql_topics) >= $this->topic_chunks)
+				if (count($sql_topics) >= $this->topic_chunks)
 				{
 					// Save the array to the topics table
 					$db->sql_multi_insert(TOPICS_TABLE, $sql_topics);
@@ -475,14 +475,14 @@ class populate
 			$db->sql_query($sql);
 		}
 
-		if (sizeof($sql_posts))
+		if (count($sql_posts))
 		{
 			// Save the array to the posts table
 			$db->sql_multi_insert(POSTS_TABLE, $sql_posts);
 			unset($sql_posts);
 		}
 
-		if (sizeof($sql_topics))
+		if (count($sql_topics))
 		{
 			// Save the array to the topics table
 			$db->sql_multi_insert(TOPICS_TABLE, $sql_topics);
@@ -532,7 +532,7 @@ class populate
 			$parent_arr[] = $this->_create_forums(FORUM_CAT, $i + 1, $acp_forums);
 		}
 
-		$parent_size = sizeof($parent_arr);
+		$parent_size = count($parent_arr);
 
 		// If we have more than one cat, let's start with the second.
 		$parent_cnt = ($parent_size > 1) ? 1 : 0;
@@ -604,7 +604,7 @@ class populate
 		// Create that thing.
 		$errors = $acp_forums->update_forum_data($forum_data);
 
-		if (sizeof($errors))
+		if (count($errors))
 		{
 			trigger_error(implode('<br />', $errors));
 		}
@@ -639,7 +639,7 @@ class populate
 			}
 		}
 
-		return($forum_data['forum_id']);
+		return $forum_data['forum_id'];
 	}
 
 	/**

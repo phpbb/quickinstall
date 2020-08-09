@@ -76,7 +76,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 
 	if ($install_dbms === false)
 	{
-		$dbms = $settings->get_config('dbms');
+		$dbms = $settings->get_config('dbms', '');
 		$install_dbms = $dbms;
 	}
 
@@ -247,7 +247,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 
 	if ($install_dbms === false)
 	{
-		$dbms = $settings->get_config('dbms');
+		$dbms = $settings->get_config('dbms', '');
 		$install_dbms = $dbms;
 	}
 

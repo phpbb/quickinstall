@@ -22,11 +22,10 @@ class qi_manage
 {
 	public function __construct()
 	{
-		global $template, $user, $settings;
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $config, $msg_title;
+		global $user, $settings, $phpEx, $msg_title;
 
-		$action = request_var('action', '');
-		$delete = request_var('delete', false);
+		$action = qi_request_var('action', '');
+		$delete = qi_request_var('delete', false);
 
 		if ($delete)
 		{
@@ -36,8 +35,8 @@ class qi_manage
 		switch ($action)
 		{
 			case 'delete':
-				$select = request_var('select', array(0 => ''), true);
-				$boards = sizeof($select);
+				$select = qi_request_var('select', array(0 => ''), true);
+				$boards = count($select);
 				$error = array();
 
 				foreach ($select as $item)

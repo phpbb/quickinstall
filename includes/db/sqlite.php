@@ -60,7 +60,7 @@ class dbal_sqlite_qi extends dbal_sqlite
 	{
 		if (!file_exists($dbname))
 		{
-			return(false);
+			return false;
 			// if file doesn't exist, attempt to create it.
 			if (!is_writable(dirname($dbname)))
 			{
