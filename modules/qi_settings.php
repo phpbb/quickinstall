@@ -77,7 +77,7 @@ class qi_settings
 			'U_CHOOSE_PROFILE'	=> qi::url('settings', array('mode' => 'change_profile')),
 
 			'SAVE_PROFILE'	=> $settings->get_profile(),
-			'TABLE_PREFIX'	=> htmlspecialchars($settings->get_config('table_prefix', '')),
+			'TABLE_PREFIX'	=> $settings->get_config('table_prefix', ''),
 			'SITE_NAME'		=> $settings->get_config('site_name', ''),
 			'SITE_DESC'		=> $settings->get_config('site_desc', ''),
 			'ALT_ENV'		=> !empty($alt_env) ? $alt_env : false,

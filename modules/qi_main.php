@@ -40,7 +40,7 @@ class qi_main
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
 
 			'TABLE_PREFIX'		=> $settings->get_config('table_prefix', ''),
-			'DB_PERFIX'			=> htmlspecialchars($settings->get_config('db_prefix', '')),
+			'DB_PERFIX'			=> $settings->get_config('db_prefix', ''),
 			'SITE_NAME'			=> $settings->get_config('site_name', ''),
 			'SITE_DESC'			=> $settings->get_config('site_desc', ''),
 			'PROFILES'			=> $settings->get_profiles(),
