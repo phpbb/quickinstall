@@ -127,6 +127,8 @@ class settings
 			return false;
 		}
 
+		$this->settings = array_map('htmlspecialchars_decode', $this->settings);
+
 		$validation_errors = [];
 
 		// Lets check simple required string settings...
