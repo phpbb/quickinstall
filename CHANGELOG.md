@@ -1,6 +1,6 @@
 # QuickInstall Changelog
 
-## Version 1.5.0-dev
+## Version 1.5.0
 - [Change] Config profiles in the `settings` directory are now in JSON format. Existing profiles in the old text format will automatically be converted to JSON.
 - [Change] Prettied up the documentation a bit.
 - [Change] Always show profiles in a drop-down menu, even when there is only one, for consistency. Also, naturally/case-insensitively sort them.
@@ -8,7 +8,7 @@
 - [Change] Relocated some error messages and alerts to the top of the page.
 - [Change] Improve appearances of some notices in the QI interface.
 - [Change] Literally countless code improvements, removing or fixing ancient code constructs and bad code smells, including completely rewriting the settings class from the ground up.
-- [Change] Updated Bootstrap to 4.5.2
+- [Change] Updated Bootstrap to 4.5.2.
 - [Fix] Improved appearance of the Installed boards list in the sidebar and fixed layout issues it had with really long or really short board names.
 
 ## Version 1.4.2
