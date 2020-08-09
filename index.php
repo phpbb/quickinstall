@@ -145,7 +145,7 @@ if (!function_exists('phpbb_email_hash'))
 }
 
 // Need to set prefix here before constants.php are included.
-$table_prefix = $settings->get_config('table_prefix');
+$table_prefix = $settings->get_config('table_prefix', '');
 
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 

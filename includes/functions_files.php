@@ -22,6 +22,13 @@ class file_functions
 {
 	public static $error = array();
 
+	public static function make_file($file, $data)
+	{
+		$success = file_put_contents($file, $data);
+
+		return (bool) $success;
+	}
+
 	public static function delete_file($file)
 	{
 		chmod($file, 0755);
@@ -56,7 +63,7 @@ class file_functions
 		{
 			if (!mkdir($dst_dir) && !is_dir($dst_dir))
 			{
-				throw new \RuntimeException('BOARDS_DIR_ERROR');
+				throw new \RuntimeException('COPY_DIR_ERROR');
 			}
 		}
 

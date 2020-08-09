@@ -3,7 +3,7 @@
 ## Version 1.5.0-dev
 - [Change] Config profiles in the `settings` directory are now in JSON format. Existing profiles in the old text format will automatically be converted to JSON.
 - [Change] Prettied up the documentation a bit.
-- [Change] Always show profiles in a drop-down menu, even when there is only one, for consistency.
+- [Change] Always show profiles in a drop-down menu, even when there is only one, for consistency. Also, naturally/case-insensitively sort them.
 - [Change] Now, when updating a saved profile, the name of the current profile will appear in the Save Profile's input field.
 - [Change] Relocated some error messages and alerts to the top of the page.
 - [Change] Improve appearances of some notices in the QI interface.

@@ -65,7 +65,7 @@ class qi_main
 			'S_DBUSER'		=> $settings->get_config('dbuser', false),
 			'S_MAIN'		=> true,
 
-			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
+			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env', '')),
 
 			'PHPBB_VERSION'	=> qi_get_phpbb_version(),
 
