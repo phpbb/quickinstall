@@ -63,7 +63,7 @@ class file_functions
 		{
 			if (!mkdir($dst_dir) && !is_dir($dst_dir))
 			{
-				throw new \RuntimeException('BOARDS_DIR_ERROR');
+				throw new \RuntimeException('COPY_DIR_ERROR');
 			}
 		}
 
