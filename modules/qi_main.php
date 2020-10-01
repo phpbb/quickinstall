@@ -40,7 +40,7 @@ class qi_main
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
 
 			'TABLE_PREFIX'		=> $settings->get_config('table_prefix', ''),
-			'DB_PERFIX'			=> htmlspecialchars($settings->get_config('db_prefix', '')),
+			'DB_PERFIX'			=> $settings->get_config('db_prefix', ''),
 			'SITE_NAME'			=> $settings->get_config('site_name', ''),
 			'SITE_DESC'			=> $settings->get_config('site_desc', ''),
 			'PROFILES'			=> $settings->get_profiles(),
@@ -65,7 +65,7 @@ class qi_main
 			'S_DBUSER'		=> $settings->get_config('dbuser', false),
 			'S_MAIN'		=> true,
 
-			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env')),
+			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env', '')),
 
 			'PHPBB_VERSION'	=> qi_get_phpbb_version(),
 
