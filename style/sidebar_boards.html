@@ -5,7 +5,7 @@
 	{% endif %}
 		<div class="form-check mb-2">
 			<input type="checkbox" class="form-check-input" data-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}">
-			<label class="form-check-label" for="del_board_{{ loop.index }}"><a class="d-inline-block" href="{{ board.BOARD_URL }}">{{ board.BOARD_NAME }}</a>{% if board.VERSION %} <span class="badge rounded-pill bg-secondary text-black-50 align-text-bottom ml-1">{{ board.VERSION }}</span>{% endif %}</label>
+			<label class="form-check-label" for="del_board_{{ loop.index }}"><a class="d-inline-block" href="{{ board.BOARD_URL }}">{{ board.BOARD_NAME }}</a></label>{% if board.VERSION %} <span class="badge rounded-pill bg-secondary text-black-50 align-text-bottom ml-1">{{ board.VERSION }}</span>{% endif %}
 		</div>
 	{% if loop.last %}
 		<div class="form-check form-switch mb-3">
