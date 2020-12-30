@@ -400,7 +400,7 @@ class qi_create
 			unset($tz_ary, $tz, $offset, $dst);
 		}
 
-		if (@extension_loaded('gd') || can_load_dll('gd'))
+		if (@extension_loaded('gd'))
 		{
 			$config_ary['captcha_gd'] = 1;
 		}
