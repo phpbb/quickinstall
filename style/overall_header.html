@@ -10,12 +10,12 @@
 <link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 </head>
 
-<body class="{{ S_CONTENT_DIRECTION }}" data-spy="scroll" data-target="#sidebar">
+<body class="{{ S_CONTENT_DIRECTION }}" data-bs-spy="scroll" data-bs-target="#sidebar">
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
 		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span> {% if U_VERSION_CHECK_URL %} &nbsp; <a href="{{ U_VERSION_CHECK_URL }}" title="{{ VERSION_CHECK_TITLE }}" class="btn btn-danger">{{ lang('UPDATE_AVAILABLE')}} <span class="badge bg-light text-dark">{{ VERSION_CHECK_CURRENT }}</span></a>{% endif %}</span>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse justify-content-end" id="navbar">
