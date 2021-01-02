@@ -31,7 +31,7 @@
 						}
 					});
 					if (validated) {
-						if ($form.getAttribute("data-submit-ajax") !== undefined) {
+						if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
 							ajaxSubmit($form);
 						} else {
 							$form.submit();
@@ -43,7 +43,7 @@
 
 		// submit form via ajax
 		let ajaxSubmit = function($form) {
-			let $modal = new bootstrap.Modal($("[data-submit-modal]"), {
+			let $modal = new bootstrap.Modal($("[data-qi-submit-modal]"), {
 				keyboard: false,
 				backdrop: "static"
 			});
@@ -71,17 +71,17 @@
 		};
 
 		// submit forms on change
-		$$("[data-form-submit=true]").forEach($select => {
+		$$("[data-qi-form-submit=true]").forEach($select => {
 			$select.addEventListener("change", (e) => {
 				e.target.closest("form").submit();
 			});
 		});
 
 		// Toggle all checkboxes
-		const $toggleAll = $("[data-mark-list]");
+		const $toggleAll = $("[data-qi-mark-list]");
 		if ($toggleAll) {
 			const $targetForm = $toggleAll.closest("form");
-			const $checkboxes = $$("[data-mark]", $targetForm);
+			const $checkboxes = $$("[data-qi-mark]", $targetForm);
 			const checkboxCount = $checkboxes.length;
 			$toggleAll.addEventListener("change", () => {
 				for (let i = 0; i < checkboxCount; i++) {
@@ -95,7 +95,7 @@
 						$toggleAll.checked = false;
 						return;
 					}
-					if ($$("[data-mark]:checked", $targetForm).length === checkboxCount) {
+					if ($$("[data-qi-mark]:checked", $targetForm).length === checkboxCount) {
 						$toggleAll.checked = true;
 					}
 				});
@@ -103,9 +103,9 @@
 		}
 
 		// confirm alert dialog
-		$$("[data-confirm]").forEach($confirmDelete => {
+		$$("[data-qi-confirm]").forEach($confirmDelete => {
 			$confirmDelete.addEventListener("click", (e) => {
-				const message = $confirmDelete.getAttribute("data-confirm");
+				const message = $confirmDelete.getAttribute("data-qi-confirm");
 				if (!confirm(message)) {
 					e.preventDefault();
 				}
@@ -113,10 +113,10 @@
 		})
 
 		// load new page from menu selection
-		const $loadSelection = $("[data-load-selection]");
+		const $loadSelection = $("[data-qi-load-selection]");
 		if ($loadSelection) {
 			$loadSelection.addEventListener("change", () => {
-				const url = $loadSelection.getAttribute("data-load-selection");
+				const url = $loadSelection.getAttribute("data-qi-load-selection");
 				const iso = $loadSelection.querySelector(":checked").value;
 				window.location.href = url + iso;
 			})
@@ -132,10 +132,10 @@
 		}
 
 		// Copy data from a textarea field
-		const $configField = $("[data-copy]");
+		const $configField = $("[data-qi-copy]");
 		if ($configField) {
 			$configField.addEventListener("click", (e) => {
-				const target = "#" + e.target.getAttribute("data-copy");
+				const target = "#" + e.target.getAttribute("data-qi-copy");
 				$(target).select();
 				document.execCommand("copy");
 			});

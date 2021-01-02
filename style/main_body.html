@@ -20,7 +20,7 @@
 						{% if PROFILES is empty %}
 							{{ lang('NO_PROFILES') }}
 						{% else %}
-							<select id="qi_profile" name="qi_profile" class="form-select mb-3" data-form-submit="true">
+							<select id="qi_profile" name="qi_profile" class="form-select mb-3" data-qi-form-submit="true">
 								{% for name, selected in PROFILES %}
 									<option value="{{ name }}"{% if selected %} selected="selected"{% endif %}>{{ name }}</option>
 								{% endfor %}
@@ -42,7 +42,7 @@
 	</div>
 </form>
 
-<form method="post" id="create-form" class="needs-validation" novalidate data-submit-ajax action="{{ U_CREATE }}">
+<form method="post" id="create-form" class="needs-validation" novalidate data-qi-submit-ajax action="{{ U_CREATE }}">
 	<div class="card bg-light mb-3">
 		<div class="card-body">
 			<fieldset>
@@ -387,7 +387,7 @@
 	</div>
 </form>
 
-<div class="modal fade" data-submit-modal tabindex="-1" role="dialog">
+<div class="modal fade" data-qi-submit-modal tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content py-4">
 			<div class="modal-body text-center">
