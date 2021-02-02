@@ -41,6 +41,7 @@
 			});
 		}
 
+		/* global bootstrap */
 		// submit form via ajax
 		let ajaxSubmit = function($form) {
 			let $modal = new bootstrap.Modal($("[data-qi-submit-modal]"), {
