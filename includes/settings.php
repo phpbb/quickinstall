@@ -141,7 +141,7 @@ class settings
 		}
 
 		// Validate database password setting
-		if ($this->settings['dbpasswd'] !== '' && $this->settings['no_dbpasswd'])
+		if ($this->settings['dbpasswd'] !== '' && !empty($this->settings['no_dbpasswd']))
 		{
 			$validation_errors[] = 'NO_DBPASSWD_ERR';
 		}
