@@ -33,11 +33,11 @@
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
-		<div class="col-md-3 col-lg-2 sidebar d-none d-md-block" id="sidebar" role="navigation">
-			{% if S_SETTINGS %}
-				{% include 'sidebar_settings.html' %}
-			{% elseif S_MAIN %}
+		<div class="col-md-3 col-lg-2 d-none d-md-block sidebar" id="sidebar" role="navigation">
+			{% if S_MAIN %}
 				{% include 'sidebar_boards.html' %}
+			{% elseif S_SETTINGS %}
+				{% include 'sidebar_settings.html' %}
 			{% elseif S_DOCS %}
 				{% include 'sidebar_docs.html' %}
 			{% elseif S_PHPINFO %}
