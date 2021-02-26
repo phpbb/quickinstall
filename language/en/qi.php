@@ -145,7 +145,7 @@ $lang = array_merge($lang, array(
 	'ERROR_DEL_BOARDS'		=> 'The following boards could not be deleted',
 	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
 	'ERROR_PHP_UNSUPPORTED'	=> 'You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.4.7 and newer.',
-	'ERROR_PHPBB_NOT_FOUND'	=> 'phpBB could not be located.<br /><br />You must download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to QuickInstall‘s <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0.x, 3.1.x, 3.2.x, and 3.3.x.',
+	'ERROR_PHPBB_NOT_FOUND'	=> 'phpBB could not be located.<br /><br />You must download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to QuickInstall‘s <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0 - 4.0.',
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
