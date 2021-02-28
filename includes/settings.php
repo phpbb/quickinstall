@@ -132,7 +132,7 @@ class settings
 		$validation_errors = [];
 
 		// Lets check simple required string settings...
-		foreach (['cache_dir', 'boards_dir', 'boards_url', 'dbms', 'dbhost', 'table_prefix', 'qi_lang', 'qi_tz', 'db_prefix', 'admin_email', 'site_name', 'server_name', 'server_port', 'board_email', 'default_lang'] as $setting)
+		foreach (['cache_dir', 'boards_dir', 'boards_url', 'dbms', 'dbhost', 'table_prefix', 'qi_lang', 'qi_tz', 'db_prefix', 'admin_email', 'email_domain', 'site_name', 'server_name', 'server_port', 'board_email', 'default_lang'] as $setting)
 		{
 			if ($this->settings[$setting] === '')
 			{
@@ -141,7 +141,7 @@ class settings
 		}
 
 		// Validate database password setting
-		if ($this->settings['dbpasswd'] !== '' && $this->settings['no_dbpasswd'])
+		if ($this->settings['dbpasswd'] !== '' && !empty($this->settings['no_dbpasswd']))
 		{
 			$validation_errors[] = 'NO_DBPASSWD_ERR';
 		}

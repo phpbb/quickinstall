@@ -235,16 +235,16 @@ function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '
 
 	if (!class_exists('twig'))
 	{
-		require("{$quickinstall_path}includes/twig.$phpEx");
+		require("{$quickinstall_path}includes/twig.{$phpEx}");
 	}
 
 	$template = new twig($user, false, $quickinstall_path);
 
 	$template->assign_vars([
 		'QI_PATH'              => $quickinstall_path,
-		'MSG_TITLE'            => $lang[$msg_title],
-		'MSG_TEXT'             => $lang[$msg_text],
-		'MSG_EXPLAIN'          => $lang[$msg_explain],
+		'MSG_TITLE'            => isset($lang[$msg_title]) ? $lang[$msg_title] : '',
+		'MSG_TEXT'             => isset($lang[$msg_text]) ? $lang[$msg_text] : '',
+		'MSG_EXPLAIN'          => isset($lang[$msg_explain]) ? $lang[$msg_explain] : '',
 		'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 		'QI_VERSION'           => qi::current_version(),
 		'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],

@@ -61,7 +61,7 @@ class qi_docs
 					$change = substr($row, 2);
 					$change = str_replace(
 						['[Fix]', '[Change]', '[Feature]'],
-						['<span class="badge badge-primary">Fix</span>', '<span class="badge badge-warning">Change</span>', '<span class="badge badge-success">Feature</span>'],
+						['<span class="badge bg-primary">Fix</span>', '<span class="badge bg-warning">Change</span>', '<span class="badge bg-success">Feature</span>'],
 						$change);
 
 					$template->assign_block_vars('history.changelog', array(

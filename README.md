@@ -31,10 +31,10 @@ QuickInstall was made to support the community of phpBB extension developers (an
 ##### Browsers
 QuickInstall is designed to run on all modern browsers. Please don't use old stuff anymore...seriously.
 
-|  |  |  |  |  |  |  |
-|-|-|-|-|-|-|-|
-| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/chrome/chrome_32x32.png) 45+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/firefox/firefox_32x32.png) 38+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/safari/safari_32x32.png) 9+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/edge/edge_32x32.png) 12+ | ![Explorer](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/archive/internet-explorer_9-11/internet-explorer_9-11_32x32.png) 10+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/opera/opera_32x32.png) 30+ |
-| Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/safari-ios/safari-ios_32x32.png) 9+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/67.0.1/android-webview/android-webview_32x32.png) 4.4+ |  |  |  |  |
+|  |  |  |  |  |  |
+|-|-|-|-|-|-|
+| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 10+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 30+ |
+| Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari-ios/safari-ios_32x32.png) 10+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/android-webview/android-webview_32x32.png) 6+ |  |  |  |
 <br>
 
 ##### Servers
