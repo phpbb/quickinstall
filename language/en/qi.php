@@ -297,6 +297,7 @@ $lang = array_merge($lang, array(
 	'THESE_CAN_CHANGE'		=> 'These settings can be changed when you create a board.',
 	'THIS_CAN_CHANGE'		=> 'This can be changed when you create a board.',
 	'TIME_SETTINGS'			=> 'Time settings',
+	'TOGGLE_NAVIGATION'		=> 'Toggle navigation',
 
 	'UNCHECK_ALL'			=> 'Uncheck all',
 	'UPDATE_AVAILABLE'		=> 'Update available',
