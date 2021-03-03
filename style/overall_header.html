@@ -15,13 +15,20 @@
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
 		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span> {% if U_VERSION_CHECK_URL %} &nbsp; <a href="{{ U_VERSION_CHECK_URL }}" title="{{ VERSION_CHECK_TITLE }}" class="btn btn-danger">{{ lang('UPDATE_AVAILABLE')}} <span class="badge bg-light text-dark">{{ VERSION_CHECK_CURRENT }}</span></a>{% endif %}</span>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+		<div>
+			{% if S_BOARDS %}
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			{% endif %}
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="{{ lang('TOGGLE_NAVIGATION') }}">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
 		<div class="collapse navbar-collapse justify-content-end" id="navbar">
 			<ul class="navbar-nav mt-2 mt-md-0">
 				{% if not S_IN_INSTALL and S_HAS_PROFILES %}
-					<li class="nav-item"><a class="nav-link{% if S_MAIN %} active{% endif %}"{% if S_MAIN %} aria-current="page"{% endif %} href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
+					<li class="nav-item"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
 				{% endif %}
 				<li class="nav-item"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}"><span>{{ lang('PROFILES') }}</span></a></li>
 				<li class="nav-item"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}"><span>{{ lang('DOCS_LONG') }}</span></a></li>
@@ -33,8 +40,8 @@
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
-		<div class="col-md-3 col-lg-2 d-none d-md-block sidebar" id="sidebar" role="navigation">
-			{% if S_MAIN %}
+		<div class="col-md-3 col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block sidebar" id="sidebar" role="navigation">
+			{% if S_BOARDS %}
 				{% include 'sidebar_boards.html' %}
 			{% elseif S_SETTINGS %}
 				{% include 'sidebar_settings.html' %}

@@ -35,25 +35,18 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 |-|-|-|-|-|-|
 | Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 10+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 30+ |
 | Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari-ios/safari-ios_32x32.png) 10+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/android-webview/android-webview_32x32.png) 6+ |  |  |  |
-<br>
 
 ##### Servers
 - Apache or Ngnix
-- PHP 5.4.7 or above, with the JSON module
 
-> Note that each version of phpBB has its own requirements and limitations:
->
-> PHP requirements:
-> - phpBB 3.0 and 3.1 will only work with PHP 5.4.7 through 5.6.40
-> - phpBB 3.2.0-3.2.1 will only work with PHP 5.4.7 through 7.1.x
-> - phpBB 3.2.2-3.2.x will only work with PHP 5.4.7 through 7.2.x
-> - phpBB 3.3.x will only work with PHP 7.1.3 or above
-> 
-> Database minimum requirements:
-> - phpBB 3.0 - MySQL 3.23+, MS SQL Server 2000, PostgreSQL 7.x, or SQLite 2
-> - phpBB 3.1 - MySQL 3.23+ (MySQLi supported), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 2 or 3
-> - phpBB 3.2 - MySQL 3.23+ (MySQLi supported), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 3.6.15+
-> - phpBB 3.3 - MySQL 4.1.3+ (MySQLi required), MariaDB 5.1+, MS SQL Server 2000+, PostgreSQL 8.3+, SQLite 3.6.15+
+##### phpBB requirements (each version of phpBB has its own requirements and limitations)
+| phpBB          | PHP            | MySQL  | MariaDB | PostgreSQL | SQLite         | MSSQL        |
+| -------------- | -------------- |------- |-------- |----------- |--------------- |------------- |
+| 3.0.x          | 5.4.7 - 5.6.40 | 3.23+  | n/a     | 7.x        | SQLite 2       | Server 2000  |
+| 3.1.x          | 5.4.7 - 5.6.40 | 3.23+  | 5.1+    | 8.3+       | SQLite 2 or 3  | Server 2000+ |
+| 3.2.0 - 3.2.1  | 5.4.7 - 7.1.x  | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 3.2.2 - 3.2.x  | 5.4.7 - 7.2.x  | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 3.3.x          | 7.1.3 - 8.1+   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
 
 ## 🐞 Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.

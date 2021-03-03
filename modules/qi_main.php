@@ -63,7 +63,7 @@ class qi_main
 			'S_DBPASSWD'	=> $settings->get_config('dbpasswd', false),
 			'S_NODBPASSWD'	=> $settings->get_config('no_dbpasswd', false),
 			'S_DBUSER'		=> $settings->get_config('dbuser', false),
-			'S_MAIN'		=> true,
+			'S_BOARDS'		=> true,
 
 			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env', '')),
 
