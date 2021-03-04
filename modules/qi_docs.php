@@ -28,8 +28,9 @@ class qi_docs
 		$doc_file = $quickinstall_path . 'README.md';
 		if (file_exists($doc_file))
 		{
-			$doc_body = file_get_contents($doc_file);
-			$template->assign_var('DOC_BODY', Parsedown::instance()->text($doc_body));
+			$doc_body = Parsedown::instance()->text(file_get_contents($doc_file));
+			$doc_body = str_replace('<table>', '<table class="table table-sm">', $doc_body);
+			$template->assign_var('DOC_BODY', $doc_body);
 		}
 
 		// GET CHANGELOG
