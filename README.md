@@ -35,20 +35,18 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 |-|-|-|-|-|-|
 | Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 10+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 30+ |
 | Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari-ios/safari-ios_32x32.png) 10+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/android-webview/android-webview_32x32.png) 6+ |  |  |  |
-<br>
 
 ##### Servers
 - Apache or Ngnix
 
-##### phpBB requirements (each version of phpBB has its own requirements and limitations)
+##### phpBB requirements (+ means any version after the listed minimum)
 | phpBB          | PHP            | MySQL  | MariaDB | PostgreSQL | SQLite         | MSSQL        |
 | -------------- | -------------- |------- |-------- |----------- |--------------- |------------- |
 | 3.0.x          | 5.4.7 - 5.6.40 | 3.23+  | n/a     | 7.x        | SQLite 2       | Server 2000  |
 | 3.1.x          | 5.4.7 - 5.6.40 | 3.23+  | 5.1+    | 8.3+       | SQLite 2 or 3  | Server 2000+ |
 | 3.2.0 - 3.2.1  | 5.4.7 - 7.1.x  | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
 | 3.2.2 - 3.2.x  | 5.4.7 - 7.2.x  | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
-| 3.3.x          | 7.1.3 - 8.1+   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
-<br>
+| 3.3.x          | 7.1.3+         | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
 
 ## 🐞 Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.
