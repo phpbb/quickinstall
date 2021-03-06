@@ -67,7 +67,7 @@ $lang = array_merge($lang, array(
 	'BOARDS_DIR'			=> 'Boards directory',
 	'BOARDS_DIR_EXPLAIN'	=> 'The directory where your boards will be created. PHP needs to have write permissions to this directory.',
 	'BOARDS_DIR_MISSING'	=> '<strong>Boards directory</strong> “<code>%s</code>” does not exist or is not writeable.',
-	'BOARDS_LIST'			=> 'Installed boards',
+	'BOARDS_LIST'			=> 'My Boards',
 	'BOARDS_URL'			=> 'Boards URL prefix',
 	'BOARDS_URL_EXPLAIN'	=> 'URL prefix to the boards directory. If you specified an absolute directory in the boards directory setting above, you may need to provide a domain and/or path here that leads to the boards directory. If boards directory is a relative path, you may just copy it here.',
 
@@ -76,7 +76,6 @@ $lang = array_merge($lang, array(
 	'CACHE_DIR_MISSING'		=> '<strong>Cache directory</strong> “<code>%s</code>” does not exist or is not writeable.',
 	'CANNOT_DELETE_LAST_PROFILE'	=> 'You can not delete the last profile.',
 	'CHANGELOG'				=> 'Changelog',
-	'CHECK_ALL'				=> 'Check all',
 	'CHUNK_POST'			=> 'Post chunk',
 	'CHUNK_POST_EXPLAIN'	=> 'The number of posts that will be sent to the database in each query. Default: 1000.',
 	'CHUNK_SETTINGS'	=> 'Chunk settings',
@@ -254,6 +253,7 @@ $lang = array_merge($lang, array(
 	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile. If a profile of the same name already exists, it will be overwritten.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd>',
 	'SAVE_SETTINGS'			=> 'Save profile',
 	'SEARCH_HERE'			=> 'Search here...',
+	'SELECT_ALL'			=> 'Select all',
 	'SET_DEFAULT_STYLE'		=> 'Set default style',
 	'SET_DEFAULT_STYLE_EXPLAIN'	=> 'Enter the name of the style you want to use as the default style. The name can be found in the <code>styles/[style name]/style.cfg</code> file. Defaults to prosilver if empty or the style can’t be installed.',
 	'SETTINGS_FAILURE'		=> 'The following errors occurred:',
@@ -299,7 +299,6 @@ $lang = array_merge($lang, array(
 	'TIME_SETTINGS'			=> 'Time settings',
 	'TOGGLE_NAVIGATION'		=> 'Toggle navigation',
 
-	'UNCHECK_ALL'			=> 'Uncheck all',
 	'UPDATE_AVAILABLE'		=> 'Update available',
 
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
