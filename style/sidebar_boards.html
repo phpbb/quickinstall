@@ -4,6 +4,7 @@
 	</svg>️
 	{{ lang('BOARDS_LIST') }}
 </h5>
+<hr>
 {% for board in board_row %}
 	{% if loop.first %}
 		<form id="del_board" class="overflow-hidden" method="post" action="{{ U_MANAGE }}">
@@ -13,17 +14,16 @@
 			<label class="form-check-label" for="del_board_{{ loop.index }}"><a class="d-inline-block" href="{{ board.BOARD_URL }}">{{ board.BOARD_NAME }}</a></label>{% if board.VERSION %} <span class="badge rounded-pill bg-secondary text-black-50 align-text-bottom ms-1">{{ board.VERSION }}</span>{% endif %}
 		</div>
 	{% if loop.last %}
+		<hr>
 		<div class="form-check form-switch mb-3">
 			<input type="checkbox" class="form-check-input" id="toggle_all" data-qi-mark-list="markall" data-qi-mark-target="#del_board">
-			<label class="form-check-label" for="toggle_all">{{ lang('CHECK_ALL') }}</label>
+			<label class="form-check-label" for="toggle_all">{{ lang('SELECT_ALL') }}</label>
 		</div>
-		<p>
-			<button class="btn btn-danger" name="delete" type="submit" value="delete" data-qi-confirm="{{ lang('SURE_DELETE_BOARDS') }}">
-				<svg class="bi icon text-white" width="16" height="16" fill="currentColor">
-					<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#trash"/>
-				</svg> {{ lang('DELETE') }}
-			</button>
-		</p>
+		<button class="btn btn-danger" name="delete" type="submit" value="delete" data-qi-confirm="{{ lang('SURE_DELETE_BOARDS') }}">
+			<svg class="bi icon text-white" width="16" height="16" fill="currentColor">
+				<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#trash"/>
+			</svg> {{ lang('DELETE') }}
+		</button>
 		</form>
 	{% endif %}
 {% else %}
