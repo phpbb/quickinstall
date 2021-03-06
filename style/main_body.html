@@ -127,7 +127,7 @@
 					</div>
 				</div>
 				<div class="mb-3 row">
-					<label class="col-md-5 form-label">{{ lang('ENABLE_DEBUG') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('ENABLE_DEBUG_EXPLAIN') }}</div></label>
+					<label class="col-md-5 form-label">{{ lang('ENABLE_DEBUG') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('ENABLE_DEBUG_EXPLAIN') }}</span></label>
 					<div class="col-md-7">
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="radio" name="debug" id="debug1" value="1"{% if S_DEBUG == 1 %} checked="checked"{% endif %}>
@@ -141,7 +141,7 @@
 				</div>
 
 				<div class="mb-3 row">
-					<label class="col-md-5 form-label">{{ lang('INSTALL_STYLES') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('INSTALL_STYLES_EXPLAIN') }}</div></label>
+					<label class="col-md-5 form-label">{{ lang('INSTALL_STYLES') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('INSTALL_STYLES_EXPLAIN') }}</span></label>
 					<div class="col-md-7">
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="radio" name="install_styles" id="install_styles1" value="1"{% if INSTALL_STYLES == 1 %} checked="checked"{% endif %}>
@@ -200,13 +200,13 @@
 				<div id="options_advanced" class="collapse">
 					{% if S_ADMIN_NAME %}
 					<div class="mb-3 row">
-						<label for="admin_name-2" class="col-md-5 form-label">{{ lang('ADMIN_NAME') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('IF_EMPTY_EXPLAIN') }}</div></label>
+						<label for="admin_name-2" class="col-md-5 form-label">{{ lang('ADMIN_NAME') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('IF_EMPTY_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="admin_name-2" name="admin_name"></div>
 					</div>
 					{% endif %}
 					{% if S_ADMIN_PASS %}
 					<div class="mb-3 row">
-						<label for="admin_pass-2" class="col-md-5 form-label">{{ lang('ADMIN_PASS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('IF_EMPTY_EXPLAIN') }}</div></label>
+						<label for="admin_pass-2" class="col-md-5 form-label">{{ lang('ADMIN_PASS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('IF_EMPTY_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="password" id="admin_pass-2" name="admin_pass"></div>
 					</div>
 					{% endif %}
@@ -245,7 +245,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('MAKE_WRITABLE_BOARD') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('MAKE_WRITABLE_BOARD_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</div></label>
+						<label class="col-md-5 form-label">{{ lang('MAKE_WRITABLE_BOARD') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('MAKE_WRITABLE_BOARD_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="make_writable" id="make_writable1" value="1"{% if S_MAKE_WRITABLE == 1 %} checked="checked"{% endif %}>
@@ -258,15 +258,15 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label for="grant_permissions" class="col-md-5 form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</div></label>
+						<label for="grant_permissions" class="col-md-5 form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="grant_permissions" value="{{ GRANT_PERMISSIONS }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="default_style" class="col-md-5 form-label">{{ lang('SET_DEFAULT_STYLE') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('SET_DEFAULT_STYLE_EXPLAIN') }}</div></label>
+						<label for="default_style" class="col-md-5 form-label">{{ lang('SET_DEFAULT_STYLE') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('SET_DEFAULT_STYLE_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="default_style" name="default_style" value="{{ DEFAULT_STYLE }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="alt_env" class="col-md-5 form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</div></label>
+						<label for="alt_env" class="col-md-5 form-label">{{ lang('ALT_ENV') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('ALT_ENV_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 						{% if ALT_ENV|length %}
 							<select class="form-select" name="alt_env" id="alt_env">
@@ -286,15 +286,15 @@
 				<legend><a href="#options_populate" data-bs-toggle="collapse">{{ lang('POPULATE_OPTIONS') }}</a></legend>
 				<div id="options_populate" class="collapse">
 					<div class="mb-3 row">
-						<label for="num_users" class="col-md-5 form-label">{{ lang('NUM_USERS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('NUM_USERS_EXPLAIN') }}</div></label>
+						<label for="num_users" class="col-md-5 form-label">{{ lang('NUM_USERS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_USERS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_users" name="num_users" value="{{ NUM_USERS }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="num_new_group" class="col-md-5 form-label">{{ lang('NUM_NEW_GROUP') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('NUM_NEW_GROUP_EXPLAIN') }}</div></label>
+						<label for="num_new_group" class="col-md-5 form-label">{{ lang('NUM_NEW_GROUP') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_NEW_GROUP_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_new_group" name="num_new_group" value="{{ NUM_NEW_GROUP }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="email_domain" class="col-md-5 form-label">{{ lang('EMAIL_DOMAIN') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('EMAIL_DOMAIN_EXPLAIN') }}</div></label>
+						<label for="email_domain" class="col-md-5 form-label">{{ lang('EMAIL_DOMAIN') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('EMAIL_DOMAIN_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="input-group">
 								<span class="input-group-text" id="basic-addon1">@</span>
@@ -303,7 +303,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('CREATE_ADMIN') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('CREATE_ADMIN_EXPLAIN') }}</div></label>
+						<label class="col-md-5 form-label">{{ lang('CREATE_ADMIN') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('CREATE_ADMIN_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="create_admin" id="create_admin1" value="1"{% if CREATE_ADMIN == 1 %} checked="checked"{% endif %}>
@@ -316,7 +316,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('CREATE_MOD') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('CREATE_MOD_EXPLAIN') }}</div></label>
+						<label class="col-md-5 form-label">{{ lang('CREATE_MOD') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('CREATE_MOD_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="create_mod" id="create_mod1" value="1"{% if CREATE_MOD == 1 %} checked="checked"{% endif %}>
@@ -329,22 +329,22 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label for="num_cats" class="col-md-5 form-label">{{ lang('NUM_CATS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('NUM_CATS_EXPLAIN') }}</div></label>
+						<label for="num_cats" class="col-md-5 form-label">{{ lang('NUM_CATS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_CATS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_cats" name="num_cats" value="{{ NUM_CATS }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="num_forums" class="col-md-5 form-label">{{ lang('NUM_FORUMS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('NUM_FORUMS_EXPLAIN') }}</div></label>
+						<label for="num_forums" class="col-md-5 form-label">{{ lang('NUM_FORUMS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_FORUMS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="num_forums" value="{{ NUM_FORUMS }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</div></label>
+						<label class="col-md-5 form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="num_topics_min" value="{{ NUM_TOPICS_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_topics_max" value="{{ NUM_TOPICS_MAX }}"></label>
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</div></label>
+						<label class="col-md-5 form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="pop_data" name="num_replies_min" value="{{ NUM_REPLIES_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_replies_max" value="{{ NUM_REPLIES_MAX }}"></label>
@@ -360,15 +360,15 @@
 					</div>
 
 					<div class="mb-3 row">
-						<label for="chunk_post" class="col-md-5 form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</div></label>
+						<label for="chunk_post" class="col-md-5 form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_post" name="chunk_post" value="{{ CHUNK_POST }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="chunk_topic" class="col-md-5 form-label">{{ lang('CHUNK_TOPIC') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('CHUNK_TOPIC_EXPLAIN') }}</div></label>
+						<label for="chunk_topic" class="col-md-5 form-label">{{ lang('CHUNK_TOPIC') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('CHUNK_TOPIC_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_topic" name="chunk_topic" value="{{ CHUNK_TOPIC }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="chunk_user" class="col-md-5 form-label">{{ lang('CHUNK_USER') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('CHUNK_USER_EXPLAIN') }}</div></label>
+						<label for="chunk_user" class="col-md-5 form-label">{{ lang('CHUNK_USER') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('CHUNK_USER_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="999999" id="chunk_user" name="chunk_user" value="{{ CHUNK_USER }}"></div>
 					</div>
 				</div>
@@ -378,7 +378,7 @@
 				<legend><a href="#options_config" data-bs-toggle="collapse">{{ lang('BOARD_CONFIG_OPTIONS') }}</a></legend>
 				<div id="options_config" class="collapse">
 					<div class="mb-3 row">
-						<label for="other_config" class="col-md-5 form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<div class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</div></label>
+						<label for="other_config" class="col-md-5 form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><textarea class="form-control" name="other_config" id="other_config" rows="10">{{ OTHER_CONFIG }}</textarea></div>
 					</div>
 				</div>
