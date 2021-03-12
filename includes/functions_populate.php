@@ -427,6 +427,7 @@ class populate
 					$this->user_arr[$poster_arr['user_id']]['user_posts']++;
 					$this->user_arr[$poster_arr['user_id']]['user_lastpost_time'] = $post_time;
 					$this->user_arr[$poster_arr['user_id']]['user_lastmark'] = $post_time;
+					$this->user_arr[$poster_arr['user_id']]['user_lastvisit'] = $post_time;
 
 					if (count($sql_posts) >= $this->post_chunks)
 					{
@@ -704,6 +705,7 @@ class populate
 				'username_clean'		=> $user['username_clean'],
 				'user_lastpost_time'	=> $user['user_lastpost_time'],
 				'user_lastmark'			=> $user['user_lastmark'],
+				'user_lastvisit'		=> $user['user_lastvisit'],
 				'user_posts'			=> $user['user_posts'],
 				'user_password'			=> $password,
 				'user_email'			=> $email,
@@ -879,7 +881,7 @@ class populate
 				'user_id'			=> $i,
 				'username'			=> 'tester_' . $cnt,
 				'username_clean'	=> 'tester_' . $cnt,
-				'user_lastpost_time'	=> 0,
+				'user_lastpost_time'=> 0,
 				'user_lastmark'		=> 0,
 				'user_lastvisit'	=> 0,
 				'user_posts'		=> 0,
@@ -903,7 +905,7 @@ class populate
 	{
 		global $db;
 		$user_row = array();
-		$sql = 'SELECT user_id, username, user_posts, user_lastpost_time, user_lastmark 
+		$sql = 'SELECT user_id, username, user_posts, user_lastpost_time, user_lastmark, user_lastvisit 
 			FROM ' . USERS_TABLE . '
 			WHERE user_id = ' . (int) $id;
 		$result = $db->sql_query_limit($sql, 1);
