@@ -29,7 +29,7 @@ class qi_docs
 		if (file_exists($doc_file))
 		{
 			$doc_body = Parsedown::instance()->text(file_get_contents($doc_file));
-			$doc_body = str_replace('<table>', '<table class="table table-sm">', $doc_body);
+			$doc_body = str_replace('<table>', '<table class="table table-sm table-striped">', $doc_body);
 			$template->assign_var('DOC_BODY', $doc_body);
 		}
 
