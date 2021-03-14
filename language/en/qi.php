@@ -130,6 +130,7 @@ $lang = array_merge($lang, array(
 	'DIR_EXISTS'		=> 'The directory &quot;<strong>%s</strong>&quot; already exists.',
 	'DIR_FILE_SETTINGS'	=> 'Directories and Files',
 	'DOCS_LONG'			=> 'Documentation',
+	'DOWNLOAD'			=> 'Download',
 	'DROP_DB_IF_EXISTS'	=> 'Drop database if it exists',
 	'DROP_DB_IF_EXISTS_EXPLAIN'	=> 'Have &quot;Drop database if it exists&quot; checked by default when creating boards.',
 
@@ -299,7 +300,7 @@ $lang = array_merge($lang, array(
 	'TIME_SETTINGS'			=> 'Time settings',
 	'TOGGLE_NAVIGATION'		=> 'Toggle navigation',
 
-	'UPDATE_AVAILABLE'		=> 'Update available',
+	'UPDATE_AVAILABLE'		=> 'A new version update is available.',
 
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 

@@ -160,6 +160,19 @@
 			});
 		}
 
+		// Notification of QI update (use sessionStorage for dismissed notification)
+		if (sessionStorage.getItem("qiupdate") === null) {
+			const qiUpdateToast = $("#qiUpdateToast");
+			if (qiUpdateToast) {
+				let toast = new bootstrap.Toast(qiUpdateToast, {
+					autohide: false
+				});
+				toast.show();
+				qiUpdateToast.addEventListener("hidden.bs.toast", () => {
+					sessionStorage.setItem("qiupdate", "1");
+				});
+			}
+		}
 	});
 
 	// select a list of matching elements, context is optional

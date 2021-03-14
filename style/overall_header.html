@@ -14,7 +14,7 @@
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span> {% if U_VERSION_CHECK_URL %} &nbsp; <a href="{{ U_VERSION_CHECK_URL }}" title="{{ VERSION_CHECK_TITLE }}" class="btn btn-danger">{{ lang('UPDATE_AVAILABLE')}} <span class="badge bg-light text-dark">{{ VERSION_CHECK_CURRENT }}</span></a>{% endif %}</span>
+		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span></span>
 		<div>
 			{% if S_BOARDS %}
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
@@ -37,6 +37,25 @@
 		</div>
 	</div>
 </nav>
+
+{% if U_VERSION_CHECK_URL %}
+<div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 50000">
+	<div id="qiUpdateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<strong class="me-auto">{{ lang('UPDATE_AVAILABLE') }}</strong>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">
+			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger btn-sm" title="{{ VERSION_CHECK_TITLE }}">
+				<svg class="bi icon text-white" width="16" height="16" fill="currentColor">
+					<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#download"/>
+				</svg>
+				{{ lang('DOWNLOAD') }} &nbsp; <span class="badge rounded-pill bg-warning text-dark">{{ VERSION_CHECK_CURRENT }}</span>
+			</a>
+		</div>
+	</div>
+</div>
+{% endif %}
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
