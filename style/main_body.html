@@ -163,7 +163,7 @@
 										<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/>
 									</svg>
 								</div>
-								<div class="col ps-2">
+								<div class="col ps-1">
 									{{ lang('MIGHT_TAKE_LONG') }}
 								</div>
 							</div>
@@ -189,7 +189,7 @@
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 						</svg>️
 					</div>
-					<div class="col ps-2">
+					<div class="col ps-1">
 						{{ lang('QI_MANAGE_HEADINGS') }}
 					</div>
 				</div>
@@ -351,12 +351,17 @@
 						</div>
 					</div>
 					<div class="alert alert-primary">
-						<h5 class="card-title">
-							<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
-								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
-							</svg> {{ lang('CHUNK_SETTINGS') }}
-						</h5>
-						<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
+						<div class="row">
+							<div class="col-auto align-self-start pr-2">
+								<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
+									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+								</svg>️
+							</div>
+							<div class="col ps-1">
+								<h5>{{ lang('CHUNK_SETTINGS') }}</h5>
+							</div>
+							<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
+						</div>
 					</div>
 
 					<div class="mb-3 row">

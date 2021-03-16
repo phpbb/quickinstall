@@ -1,5 +1,5 @@
 <h5 class="pb-3 mb-3 border-bottom">
-	<svg class="bi icon text-black-50" width="24" height="24" fill="currentColor">
+	<svg class="bi icon me-1 text-black-50" width="24" height="24" fill="currentColor">
 		<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#collection"/>
 	</svg>️
 	{{ lang('BOARDS_LIST') }}
@@ -10,12 +10,12 @@
 	{% endif %}
 		<div class="form-check mb-2">
 			<input type="checkbox" class="form-check-input" data-qi-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}">
-			<label class="form-check-label" for="del_board_{{ loop.index }}"><a class="d-inline-block" href="{{ board.BOARD_URL }}"><strong>{{ board.BOARD_NAME }}</strong></a></label>{% if board.VERSION %} <span class="badge rounded-pill bg-secondary text-black-50 align-text-bottom ms-1">{{ board.VERSION }}</span>{% endif %}
+			<label class="form-check-label" for="del_board_{{ loop.index }}"><a class="d-inline-block" href="{{ board.BOARD_URL }}" style="font-weight: 500">{{ board.BOARD_NAME }}</a></label>{% if board.VERSION %} <span class="badge rounded-pill bg-secondary text-black-50 align-text-bottom ms-1">{{ board.VERSION }}</span>{% endif %}
 		</div>
 	{% if loop.last %}
 		<div class="form-check form-switch mb-3 mt-3 pt-3 border-top">
 			<input type="checkbox" class="form-check-input" id="toggle_all" data-qi-mark-list="markall" data-qi-mark-target="#del_board">
-			<label class="form-check-label" for="toggle_all">{{ lang('SELECT_ALL') }}</label>
+			<label class="form-check-label text-muted" for="toggle_all">{{ lang('SELECT_ALL') }}</label>
 		</div>
 		<button class="btn btn-danger" name="delete" type="submit" value="delete" data-qi-confirm="{{ lang('SURE_DELETE_BOARDS') }}">
 			<svg class="bi icon text-white" width="16" height="16" fill="currentColor">

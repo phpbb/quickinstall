@@ -111,7 +111,7 @@
 					e.preventDefault();
 				}
 			});
-		})
+		});
 
 		// load new page from menu selection
 		const $loadSelection = $("[data-qi-load-selection]");
@@ -120,7 +120,7 @@
 				const url = $loadSelection.getAttribute("data-qi-load-selection");
 				const iso = $loadSelection.querySelector(":checked").value;
 				window.location.href = url + iso;
-			})
+			});
 		}
 
 		// show config
@@ -160,6 +160,19 @@
 			});
 		}
 
+		// Notification of QI update (use sessionStorage for dismissed notification)
+		if (sessionStorage.getItem("qiupdate") === null) {
+			const qiUpdateToast = $("#qiUpdateToast");
+			if (qiUpdateToast) {
+				let toast = new bootstrap.Toast(qiUpdateToast, {
+					autohide: false
+				});
+				toast.show();
+				qiUpdateToast.addEventListener("hidden.bs.toast", () => {
+					sessionStorage.setItem("qiupdate", "1");
+				});
+			}
+		}
 	});
 
 	// select a list of matching elements, context is optional

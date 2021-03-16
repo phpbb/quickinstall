@@ -164,7 +164,7 @@
 							<div class="form-check form-switch">
 								<input type="hidden" value="0" name="qi_config[no_dbpasswd]">
 								<input type="checkbox" class="form-check-input" id="qi_config[no_dbpasswd]" name="qi_config[no_dbpasswd]" value="1"{% if CONFIG_NO_PASSWORD == 1 %} checked="checked"{% endif %}>
-								<label class="form-check-label" for="qi_config[no_dbpasswd]">{{ lang('NO_PASSWORD') }}</label>
+								<label class="form-check-label text-muted" for="qi_config[no_dbpasswd]">{{ lang('NO_PASSWORD') }}</label>
 							</div>
 						</div>
 					</div>
@@ -359,7 +359,7 @@
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
-							<div class="col ps-2">
+							<div class="col ps-1">
 								{{ lang('THESE_CAN_CHANGE') }}
 							</div>
 						</div>
@@ -443,12 +443,17 @@
 						</div>
 					</div>
 					<div class="alert alert-primary">
-						<h5 class="card-title">
-							<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
-								<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
-							</svg> {{ lang('CHUNK_SETTINGS') }}
-						</h5>
-						<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
+						<div class="row">
+							<div class="col-auto align-self-start pr-2">
+								<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
+									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+								</svg>️
+							</div>
+							<div class="col ps-1">
+								<h5>{{ lang('CHUNK_SETTINGS') }}</h5>
+							</div>
+							<p class="card-text">{{ lang('CHUNK_SETTINGS_EXPLAIN') }}</p>
+						</div>
 					</div>
 					<div class="mb-3 row">
 						<label for="chunk_post" class="col-md-5 form-label">{{ lang('CHUNK_POST') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('CHUNK_POST_EXPLAIN') }}</span></label>
@@ -479,7 +484,7 @@
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
-							<div class="col ps-2">
+							<div class="col ps-1">
 								{{ lang('THESE_CAN_CHANGE') }}
 							</div>
 						</div>
