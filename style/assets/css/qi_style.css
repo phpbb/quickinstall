@@ -1,11 +1,25 @@
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-	position: relative; /* required for scrollspy */
+.fw-500 {
+	font-weight: 500;
 }
 
 legend {
 	border-bottom: 1px solid #e5e5e5;
 	margin-bottom: 20px;
+}
+
+/* navbar hacks */
+.navbar {
+	font-size: 1rem;
+}
+
+.phpbb-logo {
+	background-image: url("../img/logo_small_white.svg");
+	background-repeat: no-repeat;
+	padding-left: 70px;
+}
+
+.navbar-toggler-icon-qi-boards {
+	background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgba%28255, 255, 255, 0.55%29' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 3.5a.5.5 0 010-1h11a.5.5 0 010 1h-11zm2-2a.5.5 0 010-1h7a.5.5 0 010 1h-7zM0 13a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0016 13V6a1.5 1.5 0 00-1.5-1.5h-13A1.5 1.5 0 000 6v7zm1.5.5A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-13z'/></svg>") !important;
 }
 
 /* workaround to reposition anchor links under navbar */
@@ -14,19 +28,14 @@ legend {
 	padding-top: 64px;
 }
 
+/* sidebar hacks */
 .sidebar {
-	text-align: left;
-	border-right: 1px solid #eeeeee;
-	position: fixed;
 	top: 50px;
 	bottom: 0;
 	left: 0;
 	z-index: 1000;
-	overflow-x: hidden;
 	overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 	min-width: 200px;
-	padding: 20px;
-	background-color: #f5f5f5;
 }
 
 .sidebar .nav {
@@ -37,23 +46,12 @@ legend {
 
 .sidebar .nav-link {
 	padding: 2px 20px;
-	font-weight: 500;
 	color: #333;
 }
 
 .sidebar .nav-link.active {
 	color: #47A1EB;
 	background-color: #eeeeee;
-}
-
-.phpbb-logo {
-	background-image: url("../img/logo_small_white.svg");
-	background-repeat: no-repeat;
-	padding-left: 70px;
-}
-
-.navbar {
-	font-size: 1rem;
 }
 
 svg.icon {
@@ -63,10 +61,6 @@ svg.icon {
 .sidebar .nav-link:hover svg.icon,
 .sidebar .nav-link.active svg.icon {
 	color: inherit;
-}
-
-.navbar-toggler-icon-qi-boards {
-	background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgba%28255, 255, 255, 0.55%29' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 3.5a.5.5 0 010-1h11a.5.5 0 010 1h-11zm2-2a.5.5 0 010-1h7a.5.5 0 010 1h-7zM0 13a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0016 13V6a1.5 1.5 0 00-1.5-1.5h-13A1.5 1.5 0 000 6v7zm1.5.5A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-13z'/></svg>") !important;
 }
 
 /* Parsedown styling for docs */

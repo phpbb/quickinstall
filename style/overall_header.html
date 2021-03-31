@@ -10,7 +10,7 @@
 <link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 </head>
 
-<body class="{{ S_CONTENT_DIRECTION }}" data-bs-spy="scroll" data-bs-target="#sidebar">
+<body class="{{ S_CONTENT_DIRECTION }} position-relative" data-bs-spy="scroll" data-bs-target="#sidebar">
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
@@ -28,11 +28,11 @@
 		<div class="collapse navbar-collapse justify-content-end" id="navbar">
 			<ul class="navbar-nav mt-2 mt-md-0">
 				{% if not S_IN_INSTALL and S_HAS_PROFILES %}
-					<li class="nav-item"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}"><span>{{ lang('BOARDS') }}</span></a></li>
+					<li class="nav-item"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}">{{ lang('BOARDS') }}</a></li>
 				{% endif %}
-				<li class="nav-item"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}"><span>{{ lang('PROFILES') }}</span></a></li>
-				<li class="nav-item"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}"><span>{{ lang('DOCS_LONG') }}</span></a></li>
-				<li class="nav-item"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %}  href="{{ U_PHPINFO }}"><span>{{ lang('PHPINFO') }}</span></a></li>
+				<li class="nav-item"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
+				<li class="nav-item"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}">{{ lang('DOCS_LONG') }}</a></li>
+				<li class="nav-item"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %}  href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
 			</ul>
 		</div>
 	</div>
@@ -59,7 +59,7 @@
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
-		<div class="col-md-3 col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block sidebar" id="sidebar" role="navigation">
+		<div class="col-md-3 col-lg-2 bg-light {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block position-fixed border-end p-4 sidebar" id="sidebar" role="navigation">
 			{% if S_BOARDS %}
 				{% include 'sidebar_boards.html' %}
 			{% elseif S_SETTINGS %}

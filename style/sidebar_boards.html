@@ -14,7 +14,7 @@
 					<div class="d-flex w-100 align-items-center justify-content-between">
 						<div class="form-check m-1 overflow-hidden">
 							<input type="checkbox" class="form-check-input" data-qi-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}">
-							<label class="form-check-label" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}" style="font-weight: 500">{{ board.BOARD_NAME }}</a></label>
+							<label class="form-check-label fw-500" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}">{{ board.BOARD_NAME }}</a></label>
 						</div>
 						{% if board.VERSION %}<span class="badge rounded-pill bg-secondary text-black-50">{{ board.VERSION }}</span>{% endif %}
 					</div>
