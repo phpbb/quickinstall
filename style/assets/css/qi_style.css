@@ -4,10 +4,10 @@
 
 legend {
 	border-bottom: 1px solid #e5e5e5;
-	margin-bottom: 20px;
+	margin-bottom: 1.25rem;
 }
 
-/* navbar hacks */
+/* navbar styling */
 .navbar {
 	font-size: 1rem;
 }
@@ -28,7 +28,7 @@ legend {
 	padding-top: 64px;
 }
 
-/* sidebar hacks */
+/* sidebar styling */
 .sidebar {
 	top: 50px;
 	bottom: 0;
@@ -38,20 +38,15 @@ legend {
 	min-width: 200px;
 }
 
-.sidebar .nav {
-	margin-right: -21px; /* 20px padding + 1px border */
-	margin-bottom: 20px;
-	margin-left: -20px;
-}
-
 .sidebar .nav-link {
-	padding: 2px 20px;
+	padding: .2rem 1rem .2rem .5rem;
 	color: #333;
 }
 
 .sidebar .nav-link.active {
 	color: #47A1EB;
 	background-color: #eeeeee;
+	border-radius: .25rem;
 }
 
 svg.icon {
