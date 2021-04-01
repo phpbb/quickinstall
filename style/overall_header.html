@@ -14,7 +14,7 @@
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QUICKINSTALL') }}</span></span>
+		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QI_QUICK') }}<svg class="bi icon text-white" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>{{ lang('QI_INSTALL') }}</span></span>
 		<div>
 			{% if S_BOARDS %}
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">

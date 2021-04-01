@@ -243,6 +243,8 @@ $lang = array_merge($lang, array(
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for your boards.',
 	'QUICKINSTALL'		=> 'QuickInstall',
+	'QI_QUICK'			=> 'Quick',
+	'QI_INSTALL'		=> 'Install',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
