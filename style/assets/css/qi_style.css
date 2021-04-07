@@ -20,13 +20,13 @@ legend {
 
 /* workaround to reposition anchor links under navbar */
 .anchor {
-	margin-top: -64px;
-	padding-top: 64px;
+	margin-top: -4rem;
+	padding-top: 4rem;
 }
 
 /* sidebar styling */
 .sidebar {
-	top: 50px;
+	top: 3.375rem;
 	bottom: 0;
 	left: 0;
 	z-index: 1000;
