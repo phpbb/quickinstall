@@ -2,6 +2,10 @@
 	font-weight: 500;
 }
 
+.bg-phpbb {
+	background-color: #F5F7FA;
+}
+
 legend {
 	border-bottom: 1px solid #e5e5e5;
 	margin-bottom: 1.25rem;
@@ -30,19 +34,28 @@ legend {
 	bottom: 0;
 	left: 0;
 	z-index: 1000;
-	overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+	overflow-y: scroll; /* Scrollable contents if viewport is shorter than content. */
 	min-width: 200px;
+	background-color: #343131;
+	color: #b3b3b3;
+}
+
+.sidebar a {
+	color: #b3b3b3;
 }
 
 .sidebar .nav-link {
 	padding: .2rem 1rem .2rem .5rem;
-	color: #333;
 }
 
 .sidebar .nav-link.active {
-	color: #47A1EB;
-	background-color: #eeeeee;
+	background-color: #4e4a4a;
 	border-radius: .25rem;
+}
+
+.sidebar .list-group-item,
+.sidebar .border-bottom {
+	border-color: rgba(255, 255, 255, .125) !important;
 }
 
 svg.icon {

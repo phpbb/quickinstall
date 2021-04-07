@@ -10,7 +10,7 @@
 <link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 </head>
 
-<body class="{{ S_CONTENT_DIRECTION }} position-relative" data-bs-spy="scroll" data-bs-target="#sidebar">
+<body class="{{ S_CONTENT_DIRECTION }} position-relative{% if S_SETTINGS or S_BOARDS %} bg-phpbb{% endif %}" data-bs-spy="scroll" data-bs-target="#sidebar">
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
@@ -59,7 +59,7 @@
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
-		<div class="col-md-3 col-lg-2 bg-light {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block position-fixed border-end p-4 sidebar" id="sidebar" role="navigation">
+		<div class="col-md-3 col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block position-fixed border-end p-4 sidebar" id="sidebar" role="navigation">
 			{% if S_BOARDS %}
 				{% include 'sidebar_boards.html' %}
 			{% elseif S_SETTINGS %}
