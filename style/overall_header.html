@@ -14,7 +14,7 @@
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo">{{ lang('QI_QUICK') }}<svg class="bi icon text-white" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>{{ lang('QI_INSTALL') }}</span></span>
+		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QI_QUICK') }}<svg class="bi icon text-white" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>{{ lang('QI_INSTALL') }}</span></span>
 		<div>
 			{% if S_BOARDS %}
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
@@ -28,11 +28,11 @@
 		<div class="collapse navbar-collapse justify-content-end" id="navbar">
 			<ul class="navbar-nav mt-2 mt-md-0">
 				{% if not S_IN_INSTALL and S_HAS_PROFILES %}
-					<li class="nav-item"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}">{{ lang('BOARDS') }}</a></li>
+					<li class="nav-item fs-5"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}">{{ lang('BOARDS') }}</a></li>
 				{% endif %}
-				<li class="nav-item"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
-				<li class="nav-item"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}">{{ lang('DOCS_LONG') }}</a></li>
-				<li class="nav-item"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %}  href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}">{{ lang('DOCS_LONG') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %}  href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
 			</ul>
 		</div>
 	</div>

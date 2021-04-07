@@ -7,15 +7,11 @@ legend {
 	margin-bottom: 1.25rem;
 }
 
-/* navbar styling */
-.navbar {
-	font-size: 1rem;
-}
-
 .phpbb-logo {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
-	padding-left: 70px;
+	padding: 0.125rem 2.6rem;
+	margin-left: 0.5rem;
 }
 
 .navbar-toggler-icon-qi-boards {
