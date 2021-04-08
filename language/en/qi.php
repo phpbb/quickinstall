@@ -230,7 +230,7 @@ $lang = array_merge($lang, array(
 	'POPULATE'			=> 'Populate board',
 	'POPULATE_EXPLAIN'	=> 'Populates the board with the number of users, forums, posts and topics you specify below. Note that the more users, forums, posts and topics you specify, the longer it will take to process.',
 	'POPULATE_OPTIONS'	=> 'Populate options',
-	'POWERED_BY_PHPBB'	=> 'Powered by phpBB<sup>&reg;</sup> Forum Software &copy; <a href="https://www.phpbb.com/">phpBB Limited</a>',
+	'POWERED_BY_PHPBB'	=> 'Powered by <a href="https://www.phpbb.com/">phpBB</a><sup>&reg;</sup> Forum Software &copy; phpBB Limited',
 	'PROFILES'			=> 'Profiles',
 
 	'QI_LANG'			=> 'Select QuickInstall language',
