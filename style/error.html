@@ -8,15 +8,15 @@
 	<link href="{{ QI_PATH }}style/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="{{ QI_PATH }}style/assets/css/qi_style.css" rel="stylesheet" media="screen">
 </head>
-<body>
+<body class="bg-phpbb">
 <nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-primary flex-md-nowrap mb-2">
 	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo">{{ L_QUICKINSTALL }}</span></span>
+		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ L_QUICKINSTALL }}</span></span>
 	</div>
 </nav>
 <div class="container-fluid">
 	<div id="main" class="px-5">
-		<div class="card bg-light mb-3">
+		<div class="card bg-white mb-3">
 			<div class="card-body">
 				<h3>{{ MSG_TITLE }}</h3>
 				<div><strong>{{ MSG_EXPLAIN }}</strong></div>
@@ -28,8 +28,8 @@
 		</div>
 	</div>
 	<footer class="text-center py-3">
-		<p class="mb-0"><a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">{{ L_PHPBB_QI_TEXT }}</a> {{ QI_VERSION }} {{ L_FOR_PHPBB_VERSIONS }}</p>
-		<p class="mb-0">{{ L_POWERED_BY_PHPBB }}</p>
+		<p class="mb-0"><small><a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">{{ L_PHPBB_QI_TEXT }}</a> {{ QI_VERSION }} {{ L_FOR_PHPBB_VERSIONS }}</small></p>
+		<p class="mb-0"><small>{{ L_POWERED_BY_PHPBB }}</small></p>
 	</footer>
 </div>
 </body>
