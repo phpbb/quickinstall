@@ -6,6 +6,11 @@
 	background-color: #F5F7FA;
 }
 
+.bg-phpbb-badge {
+	background-color: #4e4a4a !important;
+	color: #b3b3b3 !important;
+}
+
 legend {
 	border-bottom: 1px solid #e5e5e5;
 	margin-bottom: 1.25rem;

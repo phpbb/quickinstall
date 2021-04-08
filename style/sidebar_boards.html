@@ -16,7 +16,7 @@
 							<input type="checkbox" class="form-check-input" data-qi-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}">
 							<label class="form-check-label fw-500" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}">{{ board.BOARD_NAME }}</a></label>
 						</div>
-						{% if board.VERSION %}<span class="badge rounded-pill bg-light text-black-50">{{ board.VERSION }}</span>{% endif %}
+						{% if board.VERSION %}<span class="badge rounded-pill bg-phpbb-badge m-1">{{ board.VERSION }}</span>{% endif %}
 					</div>
 				</div>
 			{% if loop.last %}
