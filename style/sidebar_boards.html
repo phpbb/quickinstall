@@ -1,10 +1,5 @@
 <div class="d-flex flex-column align-items-stretch">
-	<h5 class="mb-3">
-		<svg class="bi icon me-1" width="24" height="24" fill="currentColor">
-			<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#collection"/>
-		</svg>️
-		{{ lang('BOARDS_LIST') }}
-	</h5>
+	<h5 class="mb-3">{{ lang('BOARDS_LIST') }}</h5>
 	<div class="list-group list-group-flush">
 		{% for board in board_row %}
 			{% if loop.first %}
