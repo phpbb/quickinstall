@@ -73,7 +73,7 @@ svg.icon {
 }
 
 /* Parsedown styling for docs */
-#readme blockquote {
+#about-readme blockquote {
 	padding: 0 1rem;
 	color: #6a737d;
 	border-left: .25rem solid #dfe2e5;
