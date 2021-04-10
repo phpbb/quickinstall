@@ -243,8 +243,7 @@ $lang = array_merge($lang, array(
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for your boards.',
 	'QUICKINSTALL'		=> 'QuickInstall',
-	'QI_QUICK'			=> 'Quick',
-	'QI_INSTALL'		=> 'Install',
+	'QUICKINSTALL_LOGO'	=> 'Quick<svg class="bi icon text-white" width="16" height="16" fill="currentColor"><use xlink:href="%1$s/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>Install',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
