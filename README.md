@@ -4,7 +4,8 @@ QuickInstall is a developer tool used to create multiple local phpBB3 installati
 
 QuickInstall was built to support the community of phpBB extension developers (and previously MOD authors). It speeds up and simplifies the process of creating separate *vanilla* phpBB environments to safely install, develop and test extensions without having to worry about conflicts. 
 
-> ⚠️ **QuickInstall is not intended for use on a live production web site.** QuickInstall stores all board and database passwords in a plain text file. They are hidden in the user interface, but can be read by anyone with access to the QuickInstall folder. Therefor, if you do use QuickInstall on a public server, you do so at your own risk and must protect access to the folder where it resides from unauthorised users. No support is provided for QuickInstall other than local use.
+##### ⚠️ QuickInstall is not intended for use on a live production web site.
+QuickInstall stores all board and database passwords in a plain text file. They are hidden in the user interface, but can be read by anyone with access to the QuickInstall folder. Therefor, if you do use QuickInstall on a public server, you do so at your own risk and must protect access to the folder where it resides from unauthorised users. No support is provided for QuickInstall other than local use.
 
 ## 📦 Installation & Setup
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/).
@@ -15,16 +16,16 @@ QuickInstall was built to support the community of phpBB extension developers (a
 
 4. Point your browser to the QuickInstall folder (e.g., `https://localhost/quickinstall`). You should be taken directly to the "Install QuickInstall" page. Most default settings should be enough to get you going, but you must add your database connection settings. Click "Save" once you have configured all the settings to your liking and you are good to go. If you don't set a profile name, the name "default" will be used.
 
-> In `sources/phpBB3_alt/` you can store additional versions of phpBB, or boards with alternate styles or language packs. You can name these alternate phpBB folders whatever you want, e.g.:  `sources/phpBB3_alt/phpBB-3.0.12`, `sources/phpBB3_alt/phpBB-sv`, etc. They will then be available as alternative phpBB3 boards you can choose to install or create install Profiles for.
+> You can store additional versions of phpBB and boards with alternate styles or language packs in `sources/phpBB3_alt/` . You can name these alternate phpBB folders whatever you want, e.g.:  `sources/phpBB3_alt/phpBB-3.0.12`, `sources/phpBB3_alt/phpBB-sv`, etc. They will then be available as alternative phpBB3 boards you can choose to install or save as Profiles.
 
-> If you want additional files/folders to be copied to your boards when they are created (i.e., extensions), you can put them in the `sources/extra/` folder. By using the same folder structure in `sources/extra/` as phpBB, the files/folders should be mapped to the correct locations in your boards.
+> If you want additional files/folders, such as extensions, to be copied to your boards when they are created, you can put them in the `sources/extra/` folder. By using the same folder structure in `sources/extra/` as phpBB, the files/folders should be mapped to the correct locations in your boards.
 
 ## 🛠 Upgrading
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/) and extract it. 
 
 2. Copy everything into your existing QuickInstall folder **except for the `boards/`, `sources/` and `settings/` folders**. 
 
-> *If you are upgrading from a very old version of QuickInstall (1.1.8 or less) you MUST review and re-save your old Profile settings.*
+> If you are upgrading from a very old version of QuickInstall (1.1.8 or less) you MUST review and re-save your old Profile settings.
 
 ## 💻 Requirements
 
