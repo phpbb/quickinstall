@@ -13,7 +13,7 @@
 	<div class="card bg-white mb-3">
 		<div class="card-body">
 			<fieldset>
-				<legend>{{ lang('PROFILES') }}</legend>
+				<legend class="border-bottom">{{ lang('PROFILES') }}</legend>
 				<div class="row">
 					<label for="qi_profile" class="col-md-5 form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
 					<div class="col-md-5">
@@ -46,7 +46,7 @@
 	<div class="card bg-white mb-3">
 		<div class="card-body">
 			<fieldset>
-				<legend>{{ lang('CREATE_BOARD') }}</legend>
+				<legend class="border-bottom">{{ lang('CREATE_BOARD') }}</legend>
 				<div class="mb-3 row">
 					<label for="site_name" class="col-md-5 form-label">{{ lang('BOARD_NAME') ~ lang('COLON') }}</label>
 					<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="site_name" value="{{ SITE_NAME }}"></div>
@@ -196,7 +196,7 @@
 			</div>
 
 			<fieldset>
-				<legend><a href="#options_advanced" data-bs-toggle="collapse">{{ lang('INSTALL_OPTIONS') }}</a></legend>
+				<legend class="border-bottom"><a href="#options_advanced" data-bs-toggle="collapse">{{ lang('INSTALL_OPTIONS') }}</a></legend>
 				<div id="options_advanced" class="collapse">
 					{% if S_ADMIN_NAME %}
 					<div class="mb-3 row">
@@ -283,7 +283,7 @@
 			</fieldset>
 
 			<fieldset>
-				<legend><a href="#options_populate" data-bs-toggle="collapse">{{ lang('POPULATE_OPTIONS') }}</a></legend>
+				<legend class="border-bottom"><a href="#options_populate" data-bs-toggle="collapse">{{ lang('POPULATE_OPTIONS') }}</a></legend>
 				<div id="options_populate" class="collapse">
 					<div class="mb-3 row">
 						<label for="num_users" class="col-md-5 form-label">{{ lang('NUM_USERS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_USERS_EXPLAIN') }}</span></label>
@@ -380,7 +380,7 @@
 			</fieldset>
 
 			<fieldset>
-				<legend><a href="#options_config" data-bs-toggle="collapse">{{ lang('BOARD_CONFIG_OPTIONS') }}</a></legend>
+				<legend class="border-bottom"><a href="#options_config" data-bs-toggle="collapse">{{ lang('BOARD_CONFIG_OPTIONS') }}</a></legend>
 				<div id="options_config" class="collapse">
 					<div class="mb-3 row">
 						<label for="other_config" class="col-md-5 form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</span></label>

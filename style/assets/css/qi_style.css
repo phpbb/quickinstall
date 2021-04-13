@@ -2,20 +2,6 @@
 	font-weight: 500;
 }
 
-.bg-phpbb {
-	background-color: #F5F7FA;
-}
-
-.bg-phpbb-badge {
-	background-color: #4e4a4a !important;
-	color: #b3b3b3 !important;
-}
-
-legend {
-	border-bottom: 1px solid #e5e5e5;
-	margin-bottom: 1.25rem;
-}
-
 .phpbb-logo {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
@@ -54,7 +40,7 @@ legend {
 }
 
 .sidebar .nav-link.active {
-	background-color: #4e4a4a;
+	background-color: rgba(255, 255, 255, .125);
 	border-radius: .25rem;
 }
 
@@ -72,16 +58,7 @@ svg.icon {
 	color: inherit;
 }
 
-/* Parsedown styling for docs */
-#about-readme blockquote {
-	padding: 0 1rem;
-	color: #6a737d;
-	border-left: .25rem solid #dfe2e5;
-}
-
-#about-readme h2,
-#about-changelog h2 {
-	padding-bottom: .5rem;
-	padding-top: 1rem;
-	border-bottom: 1px solid #eaecef;
+.bg-phpbb-badge {
+	background-color: rgba(255, 255, 255, .125);
+	color: #b3b3b3;
 }
