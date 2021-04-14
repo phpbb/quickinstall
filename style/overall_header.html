@@ -1,13 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html dir="{{ S_CONTENT_DIRECTION }}" lang="{{ S_USER_LANG }}">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
-
-<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
-<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
 </head>
 
 <body class="{{ S_CONTENT_DIRECTION }} position-relative{% if S_SETTINGS or S_BOARDS %} bg-secondary{% endif %}" data-bs-spy="scroll" data-bs-target="#sidebar">
