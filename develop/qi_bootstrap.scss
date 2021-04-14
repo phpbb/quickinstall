@@ -1,12 +1,14 @@
 // Define QI theme variables for Bootstrap
-$primary: #009bdf;
-$secondary: #f5f7fa;
+$primary:   #009bdf !default;
+$secondary: #f5f7fa !default;
 
-$font-size-base: 0.875rem;
-$link-decoration: none;
 
-$legend-margin-bottom: 1.25rem;
-$card-border-radius: .5rem;
+$font-size-base:          0.875rem !default;
+
+$link-decoration:         none !default;
+
+$legend-margin-bottom:  1.25rem !default;
+$card-border-radius:    .5rem !default;
 
 // Import Bootstrap (do not change this line)
 @import "node_modules/bootstrap/scss/bootstrap.scss";
