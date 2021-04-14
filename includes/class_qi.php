@@ -382,14 +382,16 @@ class qi
 			case E_USER_ERROR:
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
-				if ($user !== null && !empty($user->lang))
+				if ($user === null)
 				{
-					$lang = $user->lang;
+					$user = new stdClass();
 				}
-				else
+
+				if (empty($user->lang))
 				{
 					$lang = [];
 					include "{$quickinstall_path}language/en/qi.$phpEx";
+					$user->lang = $lang;
 				}
 
 				$msg_text = isset($lang[$msg_text]) ? $lang[$msg_text] : $msg_text;
@@ -416,10 +418,6 @@ class qi
 					'MSG_EXPLAIN'          => '',
 					'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
-					'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
-					'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
-					'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
-					'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
 				]);
 
 				$template->display('error');
