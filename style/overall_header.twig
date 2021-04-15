@@ -61,13 +61,13 @@
 	<div class="row">
 		<div class="col-md-3 col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block position-fixed border-end p-4 sidebar" id="sidebar" role="navigation">
 			{% if S_BOARDS %}
-				{% include 'sidebar_boards.html' %}
+				{% include 'sidebar_boards.twig' %}
 			{% elseif S_SETTINGS %}
-				{% include 'sidebar_settings.html' %}
+				{% include 'sidebar_settings.twig' %}
 			{% elseif S_DOCS %}
-				{% include 'sidebar_docs.html' %}
+				{% include 'sidebar_docs.twig' %}
 			{% elseif S_PHPINFO %}
-				{% include 'sidebar_phpinfo.html' %}
+				{% include 'sidebar_phpinfo.twig' %}
 			{% endif %}
 		</div>
 		<div class="col-md-9 ms-sm-auto col-lg-10 px-5">

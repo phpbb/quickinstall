@@ -73,14 +73,15 @@ class twig
 	 * Render the template using Twig's render functionality
 	 *
 	 * @param string $templateFile Template file to load
+	 * @param string $templateExt  Template file extension (twig, html, etc)
 	 *
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function display($templateFile)
+	public function display($templateFile, $templateExt = 'twig')
 	{
-		echo $this->twig->render("$templateFile.html", $this->variables);
+		echo $this->twig->render("$templateFile.$templateExt", $this->variables);
 	}
 
 	/**
