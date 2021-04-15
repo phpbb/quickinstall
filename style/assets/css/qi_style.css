@@ -1,3 +1,10 @@
+:root {
+	--darkside-color: hsl(0, 0%, 70%);
+	--darkside-color-dim: hsl(0, 0%, 60%);
+	--darkside-bg-color: hsl(0, 3%, 20%);
+	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
+}
+
 .fw-500 {
 	font-weight: 500;
 }
@@ -27,12 +34,12 @@
 	z-index: 1000;
 	overflow-y: scroll; /* Scrollable contents if viewport is shorter than content. */
 	min-width: 200px;
-	background-color: #343131;
-	color: #b3b3b3;
+	background-color: var(--darkside-bg-color);
+	color: var(--darkside-color);
 }
 
 .sidebar a {
-	color: #b3b3b3;
+	color: var(--darkside-color);
 }
 
 .sidebar .nav-link {
@@ -40,17 +47,17 @@
 }
 
 .sidebar .nav-link.active {
-	background-color: rgba(255, 255, 255, .125);
+	background-color: var(--darkside-bg-hilight);
 	border-radius: .25rem;
 }
 
 .sidebar .list-group-item,
 .sidebar .border-bottom {
-	border-color: rgba(255, 255, 255, .125) !important;
+	border-color: var(--darkside-bg-hilight) !important;
 }
 
 svg.icon {
-	color: #999999;
+	color: var(--darkside-color-dim);
 }
 
 .sidebar .nav-link:hover svg.icon,
@@ -59,6 +66,6 @@ svg.icon {
 }
 
 .bg-phpbb-badge {
-	background-color: rgba(255, 255, 255, .125);
-	color: #b3b3b3;
+	background-color: var(--darkside-bg-hilight);
+	color: var(--darkside-color);
 }
