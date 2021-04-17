@@ -1,5 +1,16 @@
 # QuickInstall Changelog
 
+## Version 1.6.0-dev
+- [Change] Updated QI to Bootstrap 5 (Internet Explorer support removed).
+- [Change] Removed jQuery from QI.
+- [Change] Redesigned the theme of QI to match phpBB and phpBB dev docs a little more.
+- [Change] Redesigned the notification when a new version of QI is available.
+- [Change] Added a navbar toggle button to display the boards list when in mobile view.
+- [Change] Populated users will now have a last active date.
+- [Change] Enforce email domain requirement for populated users.
+- [Fix] Fixed potential PHP 8 issues.
+- [Fix] Fixed invalid HTML issues.
+
 ## Version 1.5.0
 - [Change] Config profiles in the `settings` directory are now in JSON format. Existing profiles in the old text format will automatically be converted to JSON.
 - [Change] Prettied up the documentation a bit.
