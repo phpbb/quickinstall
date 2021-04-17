@@ -1,7 +1,7 @@
 :root {
 	--darkside-color: hsl(0, 0%, 70%);
 	--darkside-color-dim: hsl(0, 0%, 60%);
-	--darkside-bg-color: hsl(0, 3%, 20%);
+	--darkside-bg-color: hsl(0, 0%, 20%);
 	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
 }
 
