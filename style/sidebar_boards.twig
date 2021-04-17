@@ -1,10 +1,10 @@
 <div class="d-flex flex-column align-items-stretch">
 	<h5 class="mb-3">{{ lang('BOARDS_LIST') }}</h5>
-	<div class="list-group list-group-flush">
-		{% for board in board_row %}
-			{% if loop.first %}
+	{% for board in board_row %}
+		{% if loop.first %}
+			<div class="list-group list-group-flush">
 				<form id="del_board" method="post" action="{{ U_MANAGE }}">
-			{% endif %}
+		{% endif %}
 				<div class="list-group-item py-2 px-0 bg-transparent border-end-0 border-start-0">
 					<div class="d-flex w-100 align-items-center justify-content-between">
 						<div class="form-check form-switch m-1 overflow-hidden">
@@ -14,7 +14,7 @@
 						{% if board.VERSION %}<span class="badge rounded-pill bg-phpbb-badge m-1">{{ board.VERSION }}</span>{% endif %}
 					</div>
 				</div>
-			{% if loop.last %}
+		{% if loop.last %}
 				<div class="form-check form-switch my-3 mx-1">
 					<input type="checkbox" class="form-check-input" id="toggle_all" data-qi-mark-list="markall" data-qi-mark-target="#del_board">
 					<label class="form-check-label text-muted" for="toggle_all">{{ lang('SELECT_ALL') }}</label>
@@ -25,9 +25,9 @@
 					</svg> {{ lang('DELETE') }}
 				</button>
 				</form>
-			{% endif %}
-		{% else %}
-			<p>{{ lang('NO_BOARDS') }}</p>
-		{% endfor %}
-	</div>
+			</div>
+		{% endif %}
+	{% else %}
+		<p class="border-top pt-3">{{ lang('NO_BOARDS') }}</p>
+	{% endfor %}
 </div>
