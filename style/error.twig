@@ -12,14 +12,14 @@
 <body class="bg-secondary">
 <nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-primary flex-md-nowrap mb-2">
 	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL') }}</span></span>
+		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', QI_PATH ~ 'style') }}</span></span>
 	</div>
 </nav>
 <div class="container-fluid">
 	<div id="main" class="px-5">
+		<h1>{{ MSG_TITLE }}</h1>
 		<div class="card bg-white mb-3">
 			<div class="card-body">
-				<h3>{{ MSG_TITLE }}</h3>
 				<div><strong>{{ MSG_EXPLAIN }}</strong></div>
 				<div>{{ MSG_TEXT }}</div>
 			</div>
