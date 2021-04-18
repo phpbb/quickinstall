@@ -58,11 +58,12 @@
 					if (typeof xhr.response.redirect !== "undefined" && xhr.response.redirect) {
 						window.location.replace(xhr.response.redirect);
 					}
-				} else {
-					if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
-						$("body").innerHTML = xhr.response.responseText;
-					}
 				}
+
+				if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
+					$("#main").innerHTML = xhr.response.responseText;
+				}
+
 				$modal.hide();
 			};
 

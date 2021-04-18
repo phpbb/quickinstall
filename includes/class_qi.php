@@ -402,6 +402,11 @@ class qi
 					$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
 				}
 
+				if (self::is_ajax())
+				{
+					self::ajax_response(['responseText' => $msg_text]);
+				}
+
 				phpbb_functions::send_status_line(503, 'Service Unavailable');
 
 				if (!class_exists('twig'))
