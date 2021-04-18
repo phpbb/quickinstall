@@ -392,9 +392,10 @@ class qi
 					$lang = [];
 					include "{$quickinstall_path}language/en/qi.$phpEx";
 					$user->lang = $lang;
+					unset($lang);
 				}
 
-				$msg_text = isset($lang[$msg_text]) ? $lang[$msg_text] : $msg_text;
+				$msg_text = isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : $msg_text;
 
 				$backtrace = phpbb_functions::get_backtrace();
 				if ($backtrace)
@@ -418,10 +419,10 @@ class qi
 
 				$template->assign_vars([
 					'QI_PATH'              => $quickinstall_path,
-					'MSG_TITLE'            => (!isset($msg_title)) ? $lang['GENERAL_ERROR'] : ((isset($lang[$msg_title])) ? $lang[$msg_title] : $msg_title),
+					'MSG_TITLE'            => (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((isset($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
+					'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
 				]);
 
