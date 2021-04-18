@@ -3,9 +3,6 @@
 	"use strict";
 
 	let ready = function(fn) {
-		if ("function" !== typeof fn) {
-			return;
-		}
 		if (document.readyState === "complete") {
 			return fn();
 		}
