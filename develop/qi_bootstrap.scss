@@ -1,14 +1,14 @@
 // Define QI theme variables for Bootstrap
-$primary:   #009bdf !default;
-$secondary: #f5f7fa !default;
+$primary: #009bdf;
+$secondary: #f5f7fa;
 
-$font-family-sans-serif: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-$font-size-base: 0.875rem !default;
+$font-family-sans-serif: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-size-base: 0.875rem;
 
-$link-decoration: none !default;
+$link-decoration: none;
 
-$legend-margin-bottom: 1.25rem !default;
-$card-border-radius: .5rem !default;
+$legend-margin-bottom: 1.25rem;
+$card-border-radius: .5rem;
 
 // Import Bootstrap (do not change this line)
 @import "node_modules/bootstrap/scss/bootstrap.scss";
