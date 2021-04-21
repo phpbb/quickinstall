@@ -10,5 +10,7 @@ $link-decoration: none;
 $legend-margin-bottom: 1.25rem;
 $card-border-radius: .5rem;
 
+$enable-gradients: true;
+
 // Import Bootstrap (do not change this line)
 @import "node_modules/bootstrap/scss/bootstrap.scss";
