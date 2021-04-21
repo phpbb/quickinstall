@@ -298,7 +298,7 @@
 						<div class="col-md-7">
 							<div class="input-group">
 								<span class="input-group-text" id="basic-addon1">@</span>
-								<input type="text" class="form-control" id="email_domain" name="email_domain" value="{{ EMAIL_DOMAIN }}">
+								<input class="form-control" type="text" id="email_domain" name="email_domain" value="{{ EMAIL_DOMAIN }}">
 							</div>
 						</div>
 					</div>
@@ -337,16 +337,16 @@
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="num_forums" value="{{ NUM_FORUMS }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
+						<label for="num_topics" class="col-md-5 form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="num_topics_min" value="{{ NUM_TOPICS_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_topics_max" value="{{ NUM_TOPICS_MAX }}"></label>
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
+						<label for="num_replies" class="col-md-5 form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
-							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="pop_data" name="num_replies_min" value="{{ NUM_REPLIES_MIN }}"></label>
+							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_replies" name="num_replies_min" value="{{ NUM_REPLIES_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_replies_max" value="{{ NUM_REPLIES_MAX }}"></label>
 						</div>
 					</div>
