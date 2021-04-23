@@ -152,7 +152,6 @@ $lang = array_merge($lang, array(
 	'FOR_PHPBB_VERSIONS'		=> 'for phpBB 3.0 - 4.0',
 
 	'GENERAL_ERROR'		=> 'General Error',
-	'GO'				=> 'Go',
 	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
 	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
@@ -169,6 +168,9 @@ $lang = array_merge($lang, array(
 	'IS_REQUIRED'			=> '<strong>%s</strong> is required.',
 	'REQUIRED'				=> 'Required',
 
+	'JAVASCRIPT_DISABLED_ALERT'	=> '<strong>Javascript is disabled!</strong> Please enable Javascript for full functionality.',
+
+	'LOAD'					=> 'Load',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',
 	'LOREM_IPSUM'			=> 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
