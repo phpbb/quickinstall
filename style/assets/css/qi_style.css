@@ -5,10 +5,6 @@
 	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
 }
 
-.fw-500 {
-	font-weight: 500;
-}
-
 .phpbb-logo {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
@@ -57,16 +53,16 @@
 	border-color: var(--darkside-bg-hilight) !important;
 }
 
-svg.icon {
+.sidebar .badge {
+	background-color: var(--darkside-bg-hilight);
+	color: var(--darkside-color);
+}
+
+.sidebar .nav-link svg.bi {
 	color: var(--darkside-color-dim);
 }
 
-.sidebar .nav-link:hover svg.icon,
-.sidebar .nav-link.active svg.icon {
+.sidebar .nav-link:hover svg.bi,
+.sidebar .nav-link.active svg.bi {
 	color: inherit;
-}
-
-.bg-phpbb-badge {
-	background-color: var(--darkside-bg-hilight);
-	color: var(--darkside-color);
 }

@@ -31,7 +31,7 @@ class qi_docs
 			$doc_body = Parsedown::instance()->text(file_get_contents($doc_file));
 			$doc_body = str_replace(
 				['<table>', '<blockquote>', '<h2>'],
-				['<table class="table table-sm table-striped">', '<blockquote class="alert alert-warning pb-0 mx-3">', '<h2 class="border-bottom pt-3 pb-2">'],
+				['<table class="table table-sm table-striped">', '<blockquote class="callout callout-warning">', '<h2 class="border-bottom pt-3 pb-2">'],
 				$doc_body
 			);
 			$template->assign_var('DOC_BODY', $doc_body);

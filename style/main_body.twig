@@ -159,7 +159,7 @@
 						<div class="alert alert-warning">
 							<div class="row">
 								<div class="col-auto align-self-start pr-2">
-									<svg class="bi icon text-warning" width="24" height="24" fill="currentColor">
+									<svg class="bi text-warning" width="24" height="24" fill="currentColor">
 										<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/>
 									</svg>
 								</div>
@@ -172,7 +172,7 @@
 					<div class="col-md-7">
 						<div class="d-grid gap-2 col-9">
 							<button type="submit" name="submituser" id="submituser" class="btn btn-primary btn-lg text-white">
-								<svg class="bi icon text-white" width="24" height="24" fill="currentColor">
+								<svg class="bi text-white" width="24" height="24" fill="currentColor">
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#lightning-fill"/>
 								</svg>️
 								{{ lang('CREATE_BOARD') }}
@@ -185,7 +185,7 @@
 			<div class="alert alert-primary">
 				<div class="row">
 					<div class="col-auto align-self-start pr-2">
-						<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
+						<svg class="bi text-primary" width="24" height="24" fill="currentColor">
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 						</svg>️
 					</div>
@@ -353,7 +353,7 @@
 					<div class="alert alert-primary">
 						<div class="row">
 							<div class="col-auto align-self-start pr-2">
-								<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
+								<svg class="bi text-primary" width="24" height="24" fill="currentColor">
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
@@ -397,7 +397,9 @@
 		<div class="modal-content py-4">
 			<div class="modal-body text-center">
 				<h1>{{ lang('WORKING_ON_IT') }}</h1>
-				<img src="{{ T_THEME_PATH }}/assets/img/loading.svg" alt="">
+				<div class="spinner-border text-primary mt-4 mb-2" style="width: 5rem; height: 5rem;" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
 			</div>
 		</div>
 	</div>

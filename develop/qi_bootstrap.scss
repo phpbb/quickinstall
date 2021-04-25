@@ -1,16 +1,62 @@
 // Define QI theme variables for Bootstrap
+
+// Colors for QI
 $primary: #009bdf;
 $secondary: #f5f7fa;
 
+// Fonts for QI
 $font-family-sans-serif: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 $font-size-base: 0.875rem;
 
+// Tweak BS defaults for QI
 $link-decoration: none;
-
 $legend-margin-bottom: 1.25rem;
 $card-border-radius: .5rem;
 
+// Theme stuff for QI
 $enable-gradients: true;
 
-// Import Bootstrap (do not change this line)
+// Import Bootstrap (do not change or move this line)
 @import "node_modules/bootstrap/scss/bootstrap.scss";
+
+// Extend Bootstrap with new components
+.fw-strong {
+  font-weight: 500;
+}
+
+.callout {
+  padding: $spacer 1.25rem;
+  margin: $spacer 0;
+  border-radius: $border-radius;
+  border: $border-width solid $gray-200;
+  border-left-width: $spacer / 4;
+  border-radius: $spacer / 4;
+}
+
+.callout h4 {
+  margin-bottom: $spacer / 4;
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.callout + .callout {
+  margin-top: -($spacer / 4);
+}
+
+.callout-primary {
+  border-left-color: $primary;
+}
+
+.callout-info {
+  border-left-color: $info;
+}
+
+.callout-warning {
+  border-left-color: $warning;
+}
+
+.callout-danger {
+  border-left-color: $danger;
+}

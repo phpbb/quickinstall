@@ -152,6 +152,7 @@ $lang = array_merge($lang, array(
 	'FOR_PHPBB_VERSIONS'		=> 'for phpBB 3.0 - 4.0',
 
 	'GENERAL_ERROR'		=> 'General Error',
+	'GOTO_BOARD'		=> 'Open “%s” in a new browser window',
 	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
 	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
@@ -179,6 +180,7 @@ $lang = array_merge($lang, array(
 	'MAKE_WRITABLE_BOARD'	=> 'Make files world writable',
 	'MAKE_WRITABLE_BOARD_EXPLAIN'	=> 'Sets file permissions to 0666.',
 	'MANAGE_BOARDS'			=> 'Manage boards',
+	'MARK_FOR_DELETION'		=> 'Mark for deletion',
 	'MAX'					=> 'Max',
 	'MIGHT_TAKE_LONG'		=> 'Creation of the board can take a while. Do not submit the form twice.',
 	'MIN'					=> 'Min',
@@ -245,7 +247,7 @@ $lang = array_merge($lang, array(
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for your boards.',
 	'QUICKINSTALL'		=> 'QuickInstall',
-	'QUICKINSTALL_LOGO'	=> 'Quick<svg class="bi icon text-white" width="16" height="16" fill="currentColor"><use xlink:href="%1$s/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>Install',
+	'QUICKINSTALL_LOGO'	=> 'Quick<svg class="bi text-white" width="16" height="16" fill="currentColor"><use xlink:href="%1$s/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>Install',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
