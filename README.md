@@ -14,7 +14,7 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 
 4. Point your browser to the QuickInstall directory (e.g., `http://localhost/quickinstall/index.php`). You should be taken directly to the "Install QuickInstall" page. Most default settings should be enough to get you started, but you must add your database connection settings. Click "Save" once you have configured all the settings to your liking, and you are good to go. If you don't set a profile name, the name "default" will be used.
 
-> **Alternate Installations:**<br>
+> **Alternate phpBB Profiles:**<br>
 > You can store additional versions of phpBB and boards with alternate styles or language packs in `sources/phpBB3_alt/` . You can name these alternate phpBB folders whatever you want, e.g.:  `sources/phpBB3_alt/phpBB-3.0.12`, `sources/phpBB3_alt/phpBB-sv`, etc. They will then be available as alternative phpBB3 boards you can choose to install or save as Profiles.
 
 > **Adding phpBB Extras**:<br>
@@ -58,10 +58,9 @@ Feel free to contribute to this project. Please read our [Contributing Guideline
 
 ## 💖 Credits
 The project is maintained by the phpBB Extensions Team.
-- Credits go to the phpBB team, especially the development team which 
-created such a wonderful piece of software.
+- Credits go to the phpBB team, especially the development team which created such a wonderful piece of software.
 - Originally created by Igor “igorw” Wiedler in the summer of 2007.
-- Mantained by Jari “tumba25” Kanerva from March 2010 to March 2015.
+- Maintained by Jari “tumba25” Kanerva from March 2010 to March 2015.
 - Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD.
 - Thanks to the beta testers!
 - Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!
