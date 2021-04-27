@@ -13,30 +13,26 @@
 
 		// create form validation and submit
 		const $form = $(".needs-validation");
-		if ($form) {
-			$form.addEventListener("click", (e) => {
-				if (e.target.matches("button[type='submit']")) {
-					e.preventDefault();
-					let validated = true;
-					$$("input[required]").forEach($input => {
-						const empty = $input.value === "";
-						if (empty) validated = false;
-						if (!empty && $input.validity.valid) {
-							$input.classList.add("is-valid");
-						} else {
-							$input.classList.add("is-invalid");
-						}
-					});
-					if (validated) {
-						if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
-							ajaxSubmit($form);
-						} else {
-							$form.submit();
-						}
-					}
+		$("button[type='submit']", $form).addEventListener("click", (e) => {
+			e.preventDefault();
+			let validated = true;
+			$$("input[required]").forEach($input => {
+				const empty = $input.value === "";
+				if (empty) validated = false;
+				if (!empty && $input.validity.valid) {
+					$input.classList.add("is-valid");
+				} else {
+					$input.classList.add("is-invalid");
 				}
 			});
-		}
+			if (validated) {
+				if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
+					ajaxSubmit($form);
+				} else {
+					$form.submit();
+				}
+			}
+		});
 
 		/* global bootstrap */
 		// submit form via ajax
