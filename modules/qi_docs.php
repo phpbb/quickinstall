@@ -22,7 +22,7 @@ class qi_docs
 {
 	public function __construct()
 	{
-		global $template, $user, $quickinstall_path;
+		global $template, $quickinstall_path;
 
 		// GET README
 		$doc_file = $quickinstall_path . 'README.md';

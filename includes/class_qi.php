@@ -46,7 +46,6 @@ class qi
 			'U_SETTINGS'	=> self::url('settings'),
 
 			'S_CONTENT_DIRECTION'	=> $user->lang['DIRECTION'],
-			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],

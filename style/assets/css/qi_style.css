@@ -59,6 +59,7 @@
 }
 
 .sidebar .nav-link svg.bi {
+	vertical-align: -.25em;
 	color: var(--darkside-color-dim);
 }
 
