@@ -2,48 +2,41 @@
 
 	"use strict";
 
-	let ready = function(fn) {
-		if ("function" !== typeof fn) {
-			return;
-		}
+	let ready = (fn) => {
 		if (document.readyState === "complete") {
 			return fn();
 		}
 		document.addEventListener("DOMContentLoaded", fn, false);
 	};
 
-	ready(function() {
+	ready(() => {
 
 		// create form validation and submit
 		const $form = $(".needs-validation");
-		if ($form) {
-			$form.addEventListener("click", (e) => {
-				if (e.target.matches("button[type='submit']")) {
-					e.preventDefault();
-					let validated = true;
-					$$("input[required]").forEach($input => {
-						const empty = $input.value === "";
-						if (empty) validated = false;
-						if (!empty && $input.validity.valid) {
-							$input.classList.add("is-valid");
-						} else {
-							$input.classList.add("is-invalid");
-						}
-					});
-					if (validated) {
-						if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
-							ajaxSubmit($form);
-						} else {
-							$form.submit();
-						}
-					}
+		$("button[type='submit']", $form).addEventListener("click", (e) => {
+			e.preventDefault();
+			let validated = true;
+			$$("input[required]").forEach($input => {
+				const empty = $input.value === "";
+				if (empty) validated = false;
+				if (!empty && $input.validity.valid) {
+					$input.classList.add("is-valid");
+				} else {
+					$input.classList.add("is-invalid");
 				}
 			});
-		}
+			if (validated) {
+				if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
+					ajaxSubmit($form);
+				} else {
+					$form.submit();
+				}
+			}
+		});
 
 		/* global bootstrap */
 		// submit form via ajax
-		let ajaxSubmit = function($form) {
+		let ajaxSubmit = ($form) => {
 			let $modal = new bootstrap.Modal($("[data-qi-submit-modal]"), {
 				keyboard: false,
 				backdrop: "static"
@@ -53,16 +46,17 @@
 			let xhr = new XMLHttpRequest();
 
 			xhr.responseType = "json";
-			xhr.onreadystatechange = function() {
-				if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+			xhr.onload = () => {
+				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
 					if (typeof xhr.response.redirect !== "undefined" && xhr.response.redirect) {
 						window.location.replace(xhr.response.redirect);
 					}
-				} else {
-					if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
-						$("body").innerHTML = xhr.response.responseText;
-					}
 				}
+
+				if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
+					$("#main").innerHTML = xhr.response.responseText;
+				}
+
 				$modal.hide();
 			};
 

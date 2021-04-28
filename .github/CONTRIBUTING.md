@@ -67,6 +67,6 @@ $ git push origin myNewbranch
 
 Be prepared for:
 - Constructive criticism of your code changes.
-- phpBB team members or the community at large may request changes to your code (repeat [step 2 from here](#computer-make-something-great)).
+- phpBB team members, or the community at large may request changes to your code (repeat [step 2 from here](#computer-make-something-great)).
 - That feeling when your Pull Request is accepted and merged. :sunglasses:
 

@@ -46,7 +46,6 @@ class qi
 			'U_SETTINGS'	=> self::url('settings'),
 
 			'S_CONTENT_DIRECTION'	=> $user->lang['DIRECTION'],
-			'S_CONTENT_ENCODING'	=> 'UTF-8',
 			'S_USER_LANG'			=> $user->lang['USER_LANG'],
 
 			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
@@ -382,22 +381,30 @@ class qi
 			case E_USER_ERROR:
 			case E_USER_WARNING:
 			case E_USER_NOTICE:
-				if ($user !== null && !empty($user->lang))
+				if ($user === null)
 				{
-					$lang = $user->lang;
+					$user = new stdClass();
 				}
-				else
+
+				if (empty($user->lang))
 				{
 					$lang = [];
 					include "{$quickinstall_path}language/en/qi.$phpEx";
+					$user->lang = $lang;
+					unset($lang);
 				}
 
-				$msg_text = isset($lang[$msg_text]) ? $lang[$msg_text] : $msg_text;
+				$msg_text = isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : $msg_text;
 
 				$backtrace = phpbb_functions::get_backtrace();
 				if ($backtrace)
 				{
 					$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
+				}
+
+				if (self::is_ajax())
+				{
+					self::ajax_response(['responseText' => $msg_text]);
 				}
 
 				phpbb_functions::send_status_line(503, 'Service Unavailable');
@@ -411,15 +418,11 @@ class qi
 
 				$template->assign_vars([
 					'QI_PATH'              => $quickinstall_path,
-					'MSG_TITLE'            => (!isset($msg_title)) ? $lang['GENERAL_ERROR'] : ((isset($lang[$msg_title])) ? $lang[$msg_title] : $msg_title),
+					'MSG_TITLE'            => (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((isset($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
+					'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
-					'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
-					'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
-					'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
-					'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
 				]);
 
 				$template->display('error');

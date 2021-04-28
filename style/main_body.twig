@@ -1,4 +1,4 @@
-{% include 'overall_header.html' %}
+{% include 'overall_header.twig' %}
 
 <h1>{{ lang('CREATE_BOARD') }}</h1>
 
@@ -13,7 +13,7 @@
 	<div class="card bg-white mb-3">
 		<div class="card-body">
 			<fieldset>
-				<legend>{{ lang('PROFILES') }}</legend>
+				<legend class="border-bottom">{{ lang('PROFILES') }}</legend>
 				<div class="row">
 					<label for="qi_profile" class="col-md-5 form-label">{{ lang('CURRENT_PROFILE') ~ lang('COLON') }}</label>
 					<div class="col-md-5">
@@ -30,8 +30,8 @@
 					<div class="col-md-2">
 						{% if PROFILES|length > 1 %}
 							<noscript>
-								<button type="submit" name="submit-profile" value="{{ lang('GO') }}" class="btn btn-primary text-white">
-									{{ lang('GO') }}
+								<button type="submit" name="submit-profile" value="{{ lang('LOAD') }}" class="btn btn-primary text-white">
+									{{ lang('LOAD') }}
 								</button>
 							</noscript>
 						{% endif %}
@@ -42,11 +42,11 @@
 	</div>
 </form>
 
-<form method="post" id="create-form" class="needs-validation" novalidate data-qi-submit-ajax action="{{ U_CREATE }}">
+<form method="post" id="create-form" class="needs-validation" novalidate data-qi-submit-ajax="true" action="{{ U_CREATE }}">
 	<div class="card bg-white mb-3">
 		<div class="card-body">
 			<fieldset>
-				<legend>{{ lang('CREATE_BOARD') }}</legend>
+				<legend class="border-bottom">{{ lang('CREATE_BOARD') }}</legend>
 				<div class="mb-3 row">
 					<label for="site_name" class="col-md-5 form-label">{{ lang('BOARD_NAME') ~ lang('COLON') }}</label>
 					<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="site_name" value="{{ SITE_NAME }}"></div>
@@ -155,24 +155,10 @@
 				</div>
 
 				<div class="mb-3 row">
-					<div class="col-md-5">
-						<div class="alert alert-warning">
-							<div class="row">
-								<div class="col-auto align-self-start pr-2">
-									<svg class="bi icon text-warning" width="24" height="24" fill="currentColor">
-										<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/>
-									</svg>
-								</div>
-								<div class="col ps-1">
-									{{ lang('MIGHT_TAKE_LONG') }}
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-7">
-						<div class="d-grid gap-2 col-9">
+					<div class="col-md-12">
+						<div class="d-grid gap-2 col-6 mx-auto mb-2">
 							<button type="submit" name="submituser" id="submituser" class="btn btn-primary btn-lg text-white">
-								<svg class="bi icon text-white" width="24" height="24" fill="currentColor">
+								<svg class="bi text-white" width="24" height="24" fill="currentColor">
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#lightning-fill"/>
 								</svg>️
 								{{ lang('CREATE_BOARD') }}
@@ -185,7 +171,7 @@
 			<div class="alert alert-primary">
 				<div class="row">
 					<div class="col-auto align-self-start pr-2">
-						<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
+						<svg class="bi text-primary" width="24" height="24" fill="currentColor">
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 						</svg>️
 					</div>
@@ -196,7 +182,7 @@
 			</div>
 
 			<fieldset>
-				<legend><a href="#options_advanced" data-bs-toggle="collapse">{{ lang('INSTALL_OPTIONS') }}</a></legend>
+				<legend class="border-bottom"><a href="#options_advanced" data-bs-toggle="collapse" role="button">{{ lang('INSTALL_OPTIONS') }}</a></legend>
 				<div id="options_advanced" class="collapse">
 					{% if S_ADMIN_NAME %}
 					<div class="mb-3 row">
@@ -283,7 +269,7 @@
 			</fieldset>
 
 			<fieldset>
-				<legend><a href="#options_populate" data-bs-toggle="collapse">{{ lang('POPULATE_OPTIONS') }}</a></legend>
+				<legend class="border-bottom"><a href="#options_populate" data-bs-toggle="collapse" role="button">{{ lang('POPULATE_OPTIONS') }}</a></legend>
 				<div id="options_populate" class="collapse">
 					<div class="mb-3 row">
 						<label for="num_users" class="col-md-5 form-label">{{ lang('NUM_USERS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_USERS_EXPLAIN') }}</span></label>
@@ -298,7 +284,7 @@
 						<div class="col-md-7">
 							<div class="input-group">
 								<span class="input-group-text" id="basic-addon1">@</span>
-								<input type="text" class="form-control" id="email_domain" name="email_domain" value="{{ EMAIL_DOMAIN }}">
+								<input class="form-control" type="text" id="email_domain" name="email_domain" value="{{ EMAIL_DOMAIN }}">
 							</div>
 						</div>
 					</div>
@@ -337,23 +323,23 @@
 						<div class="col-md-7"><input class="form-control" type="number" min="0" max="99999" id="num_forums" name="num_forums" value="{{ NUM_FORUMS }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
+						<label for="num_topics" class="col-md-5 form-label">{{ lang('NUM_TOPICS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_TOPICS_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
 							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_topics" name="num_topics_min" value="{{ NUM_TOPICS_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_topics_max" value="{{ NUM_TOPICS_MAX }}"></label>
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
+						<label for="num_replies" class="col-md-5 form-label">{{ lang('NUM_REPLIES') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('NUM_REPLIES_EXPLAIN') }}</span></label>
 						<div class="col-md-7">
-							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="pop_data" name="num_replies_min" value="{{ NUM_REPLIES_MIN }}"></label>
+							<label>{{ lang('MIN') }} <input class="form-control" type="number" min="0" max="99999" id="num_replies" name="num_replies_min" value="{{ NUM_REPLIES_MIN }}"></label>
 							<label>{{ lang('MAX') }} <input class="form-control" type="number" min="0" max="99999" name="num_replies_max" value="{{ NUM_REPLIES_MAX }}"></label>
 						</div>
 					</div>
 					<div class="alert alert-primary">
 						<div class="row">
 							<div class="col-auto align-self-start pr-2">
-								<svg class="bi icon text-primary" width="24" height="24" fill="currentColor">
+								<svg class="bi text-primary" width="24" height="24" fill="currentColor">
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
@@ -380,7 +366,7 @@
 			</fieldset>
 
 			<fieldset>
-				<legend><a href="#options_config" data-bs-toggle="collapse">{{ lang('BOARD_CONFIG_OPTIONS') }}</a></legend>
+				<legend class="border-bottom"><a href="#options_config" data-bs-toggle="collapse" role="button">{{ lang('BOARD_CONFIG_OPTIONS') }}</a></legend>
 				<div id="options_config" class="collapse">
 					<div class="mb-3 row">
 						<label for="other_config" class="col-md-5 form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</span></label>
@@ -397,10 +383,12 @@
 		<div class="modal-content py-4">
 			<div class="modal-body text-center">
 				<h1>{{ lang('WORKING_ON_IT') }}</h1>
-				<img src="{{ T_THEME_PATH }}/assets/img/loading.svg" alt="">
+				<div class="spinner-border text-primary mt-4 mb-2" style="width: 5rem; height: 5rem;" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-{% include 'overall_footer.html' %}
+{% include 'overall_footer.twig' %}

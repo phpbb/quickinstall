@@ -196,7 +196,7 @@ class settings
 		$profile  = $profile  !== '' ? $profile  : $this->profile;
 		$settings = $settings !== [] ? $settings : $this->settings;
 
-		$profile_file = "{$this->qi_path}settings/{$profile}.json";
+		$profile_file = "{$this->qi_path}settings/$profile.json";
 
 		$saved = file_functions::make_file($profile_file, $this->encode_settings($settings));
 

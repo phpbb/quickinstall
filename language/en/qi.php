@@ -152,7 +152,7 @@ $lang = array_merge($lang, array(
 	'FOR_PHPBB_VERSIONS'		=> 'for phpBB 3.0 - 4.0',
 
 	'GENERAL_ERROR'		=> 'General Error',
-	'GO'				=> 'Go',
+	'GOTO_BOARD'		=> 'Open “%s” in a new browser window',
 	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
 	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
@@ -162,13 +162,16 @@ $lang = array_merge($lang, array(
 	'IF_LEAVE_EMPTY'		=> 'If you leave this empty you will have to fill it in when you create a board.',
 	'INSTALL_OPTIONS'		=> 'Install options',
 	'INSTALL_STYLES'		=> 'Install additional styles',
-	'INSTALL_STYLES_EXPLAIN'	=> 'Install all styles found in <code>[source]/styles</code>. Styles missing their required parent style will be ignored.',
+	'INSTALL_STYLES_EXPLAIN'	=> 'Install all styles found in <code>sources/styles</code>. Styles missing their required parent style will be ignored.',
 	'INSTALL_QI'			=> 'Install QuickInstall',
 	'INSTALL_WELCOME'		=> 'Welcome to QuickInstall, a tool for quickly installing phpBB boards for testing and development.<br /><br />Some default settings have been loaded below. The only fields you should enter are <code>Database user</code> and <code>Database password</code> if you want those to be stored by QuickInstall. But it is also a good idea to check the rest of the settings.<br /><br />Make sure the <code>boards</code>, <code>cache</code> and <code>settings</code> directories exist in the QuickInstall root directory and are writable by PHP.<br /><br />Once you save these settings they will be stored as the &quot;default&quot; profile. Optionally, you may enter your own unique profile name in the <code>Save as new profile</code> field.',
 	'IS_NOT_VALID'			=> '<strong>%s</strong> is not valid.',
 	'IS_REQUIRED'			=> '<strong>%s</strong> is required.',
 	'REQUIRED'				=> 'Required',
 
+	'JAVASCRIPT_DISABLED_ALERT'	=> '<strong>Javascript is disabled!</strong> Please enable Javascript for full functionality.',
+
+	'LOAD'					=> 'Load',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB Quickinstall version %s</strong>',
 	'LOREM_IPSUM'			=> 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
@@ -177,6 +180,7 @@ $lang = array_merge($lang, array(
 	'MAKE_WRITABLE_BOARD'	=> 'Make files world writable',
 	'MAKE_WRITABLE_BOARD_EXPLAIN'	=> 'Sets file permissions to 0666.',
 	'MANAGE_BOARDS'			=> 'Manage boards',
+	'MARK_FOR_DELETION'		=> 'Mark for deletion',
 	'MAX'					=> 'Max',
 	'MIGHT_TAKE_LONG'		=> 'Creation of the board can take a while. Do not submit the form twice.',
 	'MIN'					=> 'Min',
@@ -243,8 +247,7 @@ $lang = array_merge($lang, array(
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for your boards.',
 	'QUICKINSTALL'		=> 'QuickInstall',
-	'QI_QUICK'			=> 'Quick',
-	'QI_INSTALL'		=> 'Install',
+	'QUICKINSTALL_LOGO'	=> 'Quick<svg class="bi text-white" width="16" height="16" fill="currentColor"><use xlink:href="%1$s/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>Install',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
@@ -273,7 +276,7 @@ $lang = array_merge($lang, array(
 	'SITE_DESC_EXPLAIN'		=> 'The default description for your boards.',
 	'SITE_NAME'				=> 'Site name',
 	'SITE_NAME_EXPLAIN'		=> 'The default site name that will be used for your boards.',
-	'SMTP_AUTH'				=> 'Authentication method for SMTP',
+	'SMTP_AUTH'				=> 'SMTP authentication method',
 	'SMTP_AUTH_EXPLAIN'		=> 'Only used if an SMTP username and password is set.',
 	'SMTP_DELIVERY'			=> 'Use SMTP server for e-mail',
 	'SMTP_DELIVERY_EXPLAIN'	=> 'Enable this if you want or have to send e-mail via a named server instead of the local mail function.',

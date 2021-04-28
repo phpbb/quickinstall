@@ -1,25 +1,14 @@
-.fw-500 {
-	font-weight: 500;
-}
-
-.bg-phpbb {
-	background-color: #F5F7FA;
-}
-
-.bg-phpbb-badge {
-	background-color: #4e4a4a !important;
-	color: #b3b3b3 !important;
-}
-
-legend {
-	border-bottom: 1px solid #e5e5e5;
-	margin-bottom: 1.25rem;
+:root {
+	--darkside-color: hsl(0, 0%, 70%);
+	--darkside-color-dim: hsl(0, 0%, 60%);
+	--darkside-bg-color: hsl(0, 0%, 20%);
+	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
 }
 
 .phpbb-logo {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
-	padding: 0.125rem 2.6rem;
+	padding: 0.125rem 3rem;
 	margin-left: 0.5rem;
 }
 
@@ -41,12 +30,12 @@ legend {
 	z-index: 1000;
 	overflow-y: scroll; /* Scrollable contents if viewport is shorter than content. */
 	min-width: 200px;
-	background-color: #343131;
-	color: #b3b3b3;
+	background-color: var(--darkside-bg-color);
+	color: var(--darkside-color);
 }
 
 .sidebar a {
-	color: #b3b3b3;
+	color: var(--darkside-color);
 }
 
 .sidebar .nav-link {
@@ -54,34 +43,27 @@ legend {
 }
 
 .sidebar .nav-link.active {
-	background-color: #4e4a4a;
+	background-color: var(--darkside-bg-hilight);
 	border-radius: .25rem;
 }
 
 .sidebar .list-group-item,
-.sidebar .border-bottom {
-	border-color: rgba(255, 255, 255, .125) !important;
+.sidebar .border-bottom,
+.sidebar .border-top {
+	border-color: var(--darkside-bg-hilight) !important;
 }
 
-svg.icon {
-	color: #999999;
+.sidebar .badge {
+	background-color: var(--darkside-bg-hilight);
+	color: var(--darkside-color);
 }
 
-.sidebar .nav-link:hover svg.icon,
-.sidebar .nav-link.active svg.icon {
+.sidebar .nav-link svg.bi {
+	vertical-align: -.25em;
+	color: var(--darkside-color-dim);
+}
+
+.sidebar .nav-link:hover svg.bi,
+.sidebar .nav-link.active svg.bi {
 	color: inherit;
-}
-
-/* Parsedown styling for docs */
-#readme blockquote {
-	padding: 0 1rem;
-	color: #6a737d;
-	border-left: .25rem solid #dfe2e5;
-}
-
-#about-readme h2,
-#about-changelog h2 {
-	padding-bottom: .5rem;
-	padding-top: 1rem;
-	border-bottom: 1px solid #eaecef;
 }
