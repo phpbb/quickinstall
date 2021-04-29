@@ -31,7 +31,7 @@
   "site_name": "Testing Board",
   "site_desc": "QuickInstall sandbox",
   "default_lang": "en",
-  "other_config": "session_length;999999\n#A comment...",
+  "other_config": "session_length;999999\n#load_tplcompile;1;1\n#This is a comment...",
   "chunk_post": 1000,
   "chunk_topic": 2000,
   "chunk_user": 5000,
