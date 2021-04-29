@@ -58,8 +58,8 @@ class qi_main
 			'S_POPULATE'	=> $settings->get_config('populate', 0),
 			'S_REDIRECT'	=> $settings->get_config('redirect', 0),
 
-			'S_ADMIN_NAME'	=> $settings->get_config('admin_name', false),
-			'S_ADMIN_PASS'	=> $settings->get_config('admin_pass', false),
+			'ADMIN_NAME'	=> $settings->get_config('admin_name', ''),
+			'ADMIN_PASS'	=> $settings->get_config('admin_pass', ''),
 			'S_DBPASSWD'	=> $settings->get_config('dbpasswd', false),
 			'S_NODBPASSWD'	=> $settings->get_config('no_dbpasswd', false),
 			'S_DBUSER'		=> $settings->get_config('dbuser', false),
