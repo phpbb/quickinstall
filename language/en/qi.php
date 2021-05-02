@@ -188,7 +188,7 @@ $lang = array_merge($lang, array(
 	'MAX'					=> 'Max',
 	'MIGHT_TAKE_LONG'		=> 'Creation of the board can take a while. Do not submit the form twice.',
 	'MIN'					=> 'Min',
-	'MINOR_MISHAP'			=> '🤔 This isn’t working',
+	'MINOR_MISHAP'			=> 'Something went wrong 🤔',
 
 	'NEED_CONVERT'			=> 'Your config file needs to be converted to the new settings style with profiles. Make sure the <code>settings</code> directory exists and is writable by PHP. Then click submit.',
 	'NEED_EMAIL_DOMAIN'		=> 'A e-mail domain is needed to create test users',

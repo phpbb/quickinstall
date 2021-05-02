@@ -2,12 +2,10 @@
 
 <h1>{{ lang('CREATE_BOARD') }}</h1>
 
-{% if S_ERROR %}
-	<div class="alert alert-danger" role="alert">
-		<h4 class="alert-heading">{{ ERROR_TITLE }}</h4>
-		<p class="mb-0">{{ ERROR_MSG }}</p>
-	</div>
-{% endif %}
+<div id="main-alert" class="alert alert-danger{% if S_ERROR %} d-block{% else %} d-none{% endif %}" role="alert">
+	<h4 class="alert-heading">{{ ERROR_TITLE ?: lang('MINOR_MISHAP') }}</h4>
+	<p class="mb-0">{{ ERROR_MSG }}</p>
+</div>
 
 <form method="post" id="profile_form" action="{{ U_CHOOSE_PROFILE }}">
 	<div class="card bg-white mb-3">

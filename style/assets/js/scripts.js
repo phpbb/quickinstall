@@ -52,11 +52,13 @@
 				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
 					if (typeof xhr.response.redirect !== "undefined" && xhr.response.redirect) {
 						window.location.replace(xhr.response.redirect);
+					} else if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
+						mainAlert(xhr.response.responseText);
 					}
 				}
 
-				if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
-					$("#main").innerHTML = xhr.response.responseText;
+				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 500) {
+					mainAlert(xhr.statusText);
 				}
 
 				$modal.hide();
@@ -170,6 +172,11 @@
 			}
 		}
 	});
+
+	let mainAlert = (text) => {
+		$("#main-alert > p").innerHTML = text;
+		$("#main-alert").classList.remove("d-none");
+	}
 
 	// select a list of matching elements, context is optional
 	function $$(selector, context) {
