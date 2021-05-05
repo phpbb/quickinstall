@@ -109,7 +109,7 @@
 						<div class="col-md-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{{ CONFIG_BOARDS_URL }}" placeholder="{{ lang('REQUIRED') }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('MAKE_WRITABLE') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('MAKE_WRITABLE_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
+						<label class="col-md-5 form-label">{{ lang('MAKE_WRITABLE') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('MAKE_WRITABLE_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]1" value="1"{% if CONFIG_MAKE_WRITABLE == 1 %} checked="checked"{% endif %}>
@@ -122,7 +122,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label for="grant_permissions" class="col-md-5 form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</span></label>
+						<label for="grant_permissions" class="col-md-5 form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{{ CONFIG_GRANT_PERMISSIONS }}"></div>
 					</div>
 				</fieldset>

@@ -160,7 +160,7 @@ $lang = array_merge($lang, array(
 	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
 	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
-	'GRANT_PERMISSIONS_EXPLAIN'	=> 'e.g., 0060 for group read/write.',
+	'GRANT_PERMISSIONS_EXPLAIN'	=> 'For example, 0060 for Group read/write permissions on all board files and directories.',
 
 	'IF_EMPTY_EXPLAIN'		=> 'If empty the value stored in the current profile will be used.',
 	'IF_LEAVE_EMPTY'		=> 'If you leave this empty you will have to fill it in when you create a board.',
@@ -180,9 +180,8 @@ $lang = array_merge($lang, array(
 	'LOREM_IPSUM'			=> 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
 	'MAKE_WRITABLE'			=> 'Make files world writable',
-	'MAKE_WRITABLE_EXPLAIN'	=> 'Set files, <code>config.php</code>, and directories world writable by default.',
+	'MAKE_WRITABLE_EXPLAIN'	=> 'Grants 0666 permission to all board files and directories, giving read and write access to everyone.',
 	'MAKE_WRITABLE_BOARD'	=> 'Make files world writable',
-	'MAKE_WRITABLE_BOARD_EXPLAIN'	=> 'Sets file permissions to 0666.',
 	'MANAGE_BOARDS'			=> 'Manage boards',
 	'MARK_FOR_DELETION'		=> 'Mark for deletion',
 	'MAX'					=> 'Max',
@@ -198,7 +197,6 @@ $lang = array_merge($lang, array(
 	'NO_ALT_ENV_FOUND'		=> 'The specified alternative environment <strong>%s</strong> don’t exist.', // %s is the missing environment name
 	'NO_BOARDS'				=> 'You have no boards.',
 	'NO_DB'					=> 'No database selected.',
-	'NO_IMPACT_WIN'			=> 'This setting has no impact on Windows systems older than Win7.',
 	'NO_MODULE'				=> 'The module <code>%s</code> could not be loaded.',
 	'NO_PASSWORD'			=> 'No password',
 	'NO_PHPINFO_AVAILABLE'	=> 'No PHP information could be collected.',
@@ -244,7 +242,7 @@ $lang = array_merge($lang, array(
 	'PROFILES'			=> 'Profiles',
 
 	'QI_LANG'			=> 'Select QuickInstall language',
-	'QI_LANG_EXPLAIN'	=> 'Select a language for QuickInstall. The available languages are stored in the directory <code>language/</code>',
+	'QI_LANG_EXPLAIN'	=> 'Select a language for QuickInstall. Languages are stored in the <code>language/</code> directory.',
 	'QI_MANAGE'			=> 'Manage boards',
 	'QI_MANAGE_ABOUT'	=> '&quot;Board database and directory name:&quot; is the only field you have to fill, the others get filled with values from the selected profile.',
 	'QI_MANAGE_HEADINGS'=> 'Click on the headings below to access optional configurations. Changes made below are not saved to the current profile.',
