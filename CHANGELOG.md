@@ -1,6 +1,6 @@
 # QuickInstall Changelog
 
-## Version 1.6.0-dev
+## Version 1.6.0
 - [Change] Updated QI to Bootstrap 5 (Internet Explorer support removed).
 - [Change] Removed jQuery from QI.
 - [Change] Redesigned the theme of QI to match phpBB3 and phpBB3 dev docs a little more.
