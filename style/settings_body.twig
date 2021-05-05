@@ -109,7 +109,7 @@
 						<div class="col-md-7"><input class="form-control" type="text" id="boards_url" name="qi_config[boards_url]" value="{{ CONFIG_BOARDS_URL }}" placeholder="{{ lang('REQUIRED') }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label class="col-md-5 form-label">{{ lang('MAKE_WRITABLE') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('MAKE_WRITABLE_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
+						<label class="col-md-5 form-label">{{ lang('MAKE_WRITABLE') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('MAKE_WRITABLE_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7">
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="qi_config[make_writable]" id="qi_config[make_writable]1" value="1"{% if CONFIG_MAKE_WRITABLE == 1 %} checked="checked"{% endif %}>
@@ -122,7 +122,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label for="grant_permissions" class="col-md-5 form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }} {{ lang('NO_IMPACT_WIN') }}</span></label>
+						<label for="grant_permissions" class="col-md-5 form-label">{{ lang('GRANT_PERMISSIONS') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('GRANT_PERMISSIONS_EXPLAIN') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="grant_permissions" name="qi_config[grant_permissions]" value="{{ CONFIG_GRANT_PERMISSIONS }}"></div>
 					</div>
 				</fieldset>
@@ -169,7 +169,7 @@
 						</div>
 					</div>
 					<div class="mb-3 row">
-						<label for="db_prefix" class="col-md-5 form-label">{{ lang('DB_PREFIX') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('DB_PREFIX_EXPLAIN') }}</span></label>
+						<label for="db_prefix" class="col-md-5 form-label">{{ lang('DB_PREFIX') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('DB_PREFIX_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="db_prefix" name="qi_config[db_prefix]" value="{{ CONFIG_DB_PREFIX }}" placeholder="{{ lang('REQUIRED') }}"></div>
 					</div>
 					<div class="mb-3 row">
@@ -244,11 +244,11 @@
 				<fieldset>
 					<legend class="border-bottom">{{ lang('BOARD_CONFIG_SETTINGS') }}</legend>
 					<div class="mb-3 row">
-						<label for="site_name" class="col-md-5 form-label">{{ lang('SITE_NAME') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('SITE_NAME_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
+						<label for="site_name" class="col-md-5 form-label">{{ lang('BOARD_NAME') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('BOARD_NAME_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="site_name" name="qi_config[site_name]" value="{{ CONFIG_SITE_NAME }}" placeholder="{{ lang('REQUIRED') }}"></div>
 					</div>
 					<div class="mb-3 row">
-						<label for="site_desc" class="col-md-5 form-label">{{ lang('SITE_DESC') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('SITE_DESC_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
+						<label for="site_desc" class="col-md-5 form-label">{{ lang('BOARD_DESC') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('BOARD_DESC_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="site_desc" name="qi_config[site_desc]" value="{{ CONFIG_SITE_DESC }}"></div>
 					</div>
 					<div class="mb-3 row">
@@ -272,7 +272,7 @@
 					</div>
 					<div class="mb-3 row">
 						<label for="other_config" class="col-md-5 form-label">{{ lang('OTHER_CONFIG') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('OTHER_CONFIG_EXPLAIN') }}</span></label>
-						<div class="col-md-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="10">{{ OTHER_CONFIG }}</textarea></div>
+						<div class="col-md-7"><textarea class="form-control" name="qi_config[other_config]" id="other_config" rows="12">{{ OTHER_CONFIG }}</textarea></div>
 					</div>
 				</fieldset>
 			</div>

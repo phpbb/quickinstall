@@ -3,9 +3,9 @@
 	{{ DOC_BODY }}
 </section>
 <section id="about-changelog" class="anchor">
-	<h2>{{ lang('CHANGELOG') }}</h2>
+	<h2 class="border-bottom my-3 pb-2">{{ lang('CHANGELOG') }}</h2>
 	{% for change in history %}
-		<div id="{{ change.U_CHANGES }}" class="anchor">
+		<div id="{{ change.U_CHANGES }}" class="anchor border-bottom mb-3">
 			<p><em>{{ change.CHANGES_SINCE }}</em></p>
 			<ul>
 				{% for changelog in change.changelog %}

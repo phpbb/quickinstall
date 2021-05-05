@@ -13,26 +13,28 @@
 
 		// create form validation and submit
 		const $form = $(".needs-validation");
-		$("button[type='submit']", $form).addEventListener("click", (e) => {
-			e.preventDefault();
-			let validated = true;
-			$$("input[required]").forEach($input => {
-				const empty = $input.value === "";
-				if (empty) validated = false;
-				if (!empty && $input.validity.valid) {
-					$input.classList.add("is-valid");
-				} else {
-					$input.classList.add("is-invalid");
+		if ($form) {
+			$("button[type='submit']", $form).addEventListener("click", (e) => {
+				e.preventDefault();
+				let validated = true;
+				$$("input[required]").forEach($input => {
+					const empty = $input.value === "";
+					if (empty) validated = false;
+					if (!empty && $input.validity.valid) {
+						$input.classList.add("is-valid");
+					} else {
+						$input.classList.add("is-invalid");
+					}
+				});
+				if (validated) {
+					if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
+						ajaxSubmit($form);
+					} else {
+						$form.submit();
+					}
 				}
 			});
-			if (validated) {
-				if ($form.getAttribute("data-qi-submit-ajax") !== undefined) {
-					ajaxSubmit($form);
-				} else {
-					$form.submit();
-				}
-			}
-		});
+		}
 
 		/* global bootstrap */
 		// submit form via ajax
@@ -50,11 +52,13 @@
 				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
 					if (typeof xhr.response.redirect !== "undefined" && xhr.response.redirect) {
 						window.location.replace(xhr.response.redirect);
+					} else if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
+						mainAlert(xhr.response.responseText);
 					}
 				}
 
-				if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
-					$("#main").innerHTML = xhr.response.responseText;
+				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 500) {
+					mainAlert(xhr.statusText);
 				}
 
 				$modal.hide();
@@ -168,6 +172,11 @@
 			}
 		}
 	});
+
+	let mainAlert = (text) => {
+		$("#main-alert > p").innerHTML = text;
+		$("#main-alert").classList.remove("d-none");
+	}
 
 	// select a list of matching elements, context is optional
 	function $$(selector, context) {
