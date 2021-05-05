@@ -1,8 +1,0 @@
-<h5>{{ lang('DOCS_LONG') }}</h5>
-<ul class="nav flex-column">
-	<li class="nav-item"><a class="nav-link" href="#back-top">{{ lang('PHPBB_QI_TEXT') }}</a></li>
-	<li class="nav-item"><a class="nav-link" href="#about-changelog">{{ lang('CHANGELOG') }}</a></li>
-	{% for change in history %}
-		<li class="nav-item"><a class="nav-link" href="#{{ change.U_CHANGES }}"><svg class="bi icon" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#journal-code"/></svg> {{ change.CHANGES_SINCE }}</a></li>
-	{% endfor %}
-</ul>

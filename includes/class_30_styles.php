@@ -17,7 +17,7 @@ if (!defined('IN_QUICKINSTALL'))
 
 class class_30_styles
 {
-	private $qi_default_style = '';
+	private $qi_default_style;
 
 	private $qi_styles = array();
 
@@ -58,7 +58,8 @@ class class_30_styles
 			// We don't have the parent skip this.
 			return;
 		}
-		else if (!empty($style['inherit_from']) && empty($this->qi_styles[$style['inherit_from']]['style_id']))
+
+		if (!empty($style['inherit_from']) && empty($this->qi_styles[$style['inherit_from']]['style_id']))
 		{
 			// Need to install the parent first.
 			$this->qi_install_style($this->qi_styles[$style['inherit_from']]);

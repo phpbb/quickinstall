@@ -221,36 +221,35 @@ function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '
 {
 	global $quickinstall_path, $user, $phpEx;
 
-	if ($user !== null && !empty($user->lang))
+	if ($user === null)
 	{
-		$lang = $user->lang;
+		$user = new stdClass();
 	}
-	else
+
+	if (empty($user->lang))
 	{
 		$lang = [];
 		include "{$quickinstall_path}language/en/qi.$phpEx";
+		$user->lang = $lang;
+		unset($lang);
 	}
 
 	phpbb_functions::send_status_line(503, 'Service Unavailable');
 
 	if (!class_exists('twig'))
 	{
-		require("{$quickinstall_path}includes/twig.$phpEx");
+		require("{$quickinstall_path}includes/twig.{$phpEx}");
 	}
 
 	$template = new twig($user, false, $quickinstall_path);
 
 	$template->assign_vars([
 		'QI_PATH'              => $quickinstall_path,
-		'MSG_TITLE'            => $lang[$msg_title],
-		'MSG_TEXT'             => $lang[$msg_text],
-		'MSG_EXPLAIN'          => $lang[$msg_explain],
-		'RETURN_LINKS'         => sprintf($lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
+		'MSG_TITLE'            => isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : '',
+		'MSG_TEXT'             => isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : '',
+		'MSG_EXPLAIN'          => isset($user->lang[$msg_explain]) ? $user->lang[$msg_explain] : '',
+		'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
 		'QI_VERSION'           => qi::current_version(),
-		'L_QUICKINSTALL'       => $lang['QUICKINSTALL'],
-		'L_PHPBB_QI_TEXT'      => $lang['PHPBB_QI_TEXT'],
-		'L_FOR_PHPBB_VERSIONS' => $lang['FOR_PHPBB_VERSIONS'],
-		'L_POWERED_BY_PHPBB'   => $lang['POWERED_BY_PHPBB'],
 	]);
 
 	$template->display('error');

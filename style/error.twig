@@ -1,22 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{{ MSG_TITLE }}</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
 	<link href="{{ QI_PATH }}style/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="{{ QI_PATH }}style/assets/css/qi_style.css" rel="stylesheet" media="screen">
+	<title>{{ MSG_TITLE }}</title>
 </head>
-<body>
+<body class="bg-secondary">
 <nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-primary flex-md-nowrap mb-2">
-	<span class="navbar-brand"><span class="phpbb-logo">{{ L_QUICKINSTALL }}</span></span>
+	<div class="container-fluid">
+		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', QI_PATH ~ 'style') }}</span></span>
+	</div>
 </nav>
 <div class="container-fluid">
 	<div id="main" class="px-5">
-		<div class="card bg-light mb-3">
+		<h1>{{ MSG_TITLE }}</h1>
+		<div class="card bg-white mb-3">
 			<div class="card-body">
-				<h3>{{ MSG_TITLE }}</h3>
 				<div><strong>{{ MSG_EXPLAIN }}</strong></div>
 				<div>{{ MSG_TEXT }}</div>
 			</div>
@@ -26,8 +29,8 @@
 		</div>
 	</div>
 	<footer class="text-center py-3">
-		<p class="mb-0"><a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">{{ L_PHPBB_QI_TEXT }}</a> {{ QI_VERSION }} {{ L_FOR_PHPBB_VERSIONS }}</p>
-		<p class="mb-0">{{ L_POWERED_BY_PHPBB }}</p>
+		<p class="mb-0"><small>{{ lang('PHPBB_QI_FULLLINK', QI_VERSION) }}</small></p>
+		<p class="mb-0"><small>{{ lang('POWERED_BY_PHPBB') }}</small></p>
 	</footer>
 </div>
 </body>

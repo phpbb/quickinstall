@@ -73,14 +73,15 @@ class twig
 	 * Render the template using Twig's render functionality
 	 *
 	 * @param string $templateFile Template file to load
+	 * @param string $templateExt  Template file extension (twig, html, etc)
 	 *
 	 * @throws \Twig\Error\LoaderError
 	 * @throws \Twig\Error\RuntimeError
 	 * @throws \Twig\Error\SyntaxError
 	 */
-	public function display($templateFile)
+	public function display($templateFile, $templateExt = 'twig')
 	{
-		echo $this->twig->render("$templateFile.html", $this->variables);
+		echo $this->twig->render("$templateFile.$templateExt", $this->variables);
 	}
 
 	/**
@@ -170,14 +171,34 @@ class twig
 	}
 
 	/**
-	 * Custom lang function translates a lang key from the template
+	 * Custom lang function returns a translated lang key from the template
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function lang()
 	{
-		$var = func_get_args();
+		$args = func_get_args();
+		$key = array_shift($args);
 
-		return isset($this->user->lang[$var[0]]) ? $this->user->lang[$var[0]] : $var[0];
+		return $this->lang_array($key, $args);
+	}
+
+	/**
+	 * Translate the language key. Perform substitution if args are provided.
+	 *
+	 * @param string $key  Language key
+	 * @param array  $args Optional arguments
+	 * @return string
+	 */
+	protected function lang_array($key, array $args = [])
+	{
+		if (!isset($this->user->lang[$key]))
+		{
+			return $key;
+		}
+
+		$lang = $this->user->lang[$key];
+
+		return count($args) ? vsprintf($lang, $args) : $lang;
 	}
 }

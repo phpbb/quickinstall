@@ -40,7 +40,7 @@ class qi_main
 			'U_CHOOSE_PROFILE'	=> qi::url('main', array('mode' => 'change_profile')),
 
 			'TABLE_PREFIX'		=> $settings->get_config('table_prefix', ''),
-			'DB_PERFIX'			=> $settings->get_config('db_prefix', ''),
+			'DB_PREFIX'			=> $settings->get_config('db_prefix', ''),
 			'SITE_NAME'			=> $settings->get_config('site_name', ''),
 			'SITE_DESC'			=> $settings->get_config('site_desc', ''),
 			'PROFILES'			=> $settings->get_profiles(),
@@ -58,12 +58,12 @@ class qi_main
 			'S_POPULATE'	=> $settings->get_config('populate', 0),
 			'S_REDIRECT'	=> $settings->get_config('redirect', 0),
 
-			'S_ADMIN_NAME'	=> $settings->get_config('admin_name', false),
-			'S_ADMIN_PASS'	=> $settings->get_config('admin_pass', false),
+			'ADMIN_NAME'	=> $settings->get_config('admin_name', ''),
+			'ADMIN_PASS'	=> $settings->get_config('admin_pass', ''),
 			'S_DBPASSWD'	=> $settings->get_config('dbpasswd', false),
 			'S_NODBPASSWD'	=> $settings->get_config('no_dbpasswd', false),
 			'S_DBUSER'		=> $settings->get_config('dbuser', false),
-			'S_MAIN'		=> true,
+			'S_BOARDS'		=> true,
 
 			'ALT_ENV'		=> get_alternative_env($settings->get_config('alt_env', '')),
 

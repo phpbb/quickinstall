@@ -1,0 +1,18 @@
+{% include 'overall_header.twig' %}
+<section id="about-readme" class="pt-2">
+	{{ DOC_BODY }}
+</section>
+<section id="about-changelog" class="anchor">
+	<h2 class="border-bottom my-3 pb-2">{{ lang('CHANGELOG') }}</h2>
+	{% for change in history %}
+		<div id="{{ change.U_CHANGES }}" class="anchor border-bottom mb-3">
+			<p><em>{{ change.CHANGES_SINCE }}</em></p>
+			<ul>
+				{% for changelog in change.changelog %}
+					<li>{{ changelog.CHANGE }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endfor %}
+</section>
+{% include 'overall_footer.twig' %}

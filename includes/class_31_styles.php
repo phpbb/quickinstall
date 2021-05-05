@@ -19,7 +19,7 @@ class class_31_styles extends acp_styles
 {
 	private $qi_styles = array();
 
-	private $qi_default_style = '';
+	private $qi_default_style;
 
 	public function __construct()
 	{
@@ -75,7 +75,8 @@ class class_31_styles extends acp_styles
 			// We don't have the parent skip this.
 			return;
 		}
-		else if (!empty($style['_inherit_name']) && empty($this->qi_styles[$style['_inherit_name']]['style_id']))
+
+		if (!empty($style['_inherit_name']) && empty($this->qi_styles[$style['_inherit_name']]['style_id']))
 		{
 			// Need to install the parent first.
 			$this->qi_install_style($this->qi_styles[$style['_inherit_name']]);

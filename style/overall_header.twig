@@ -1,0 +1,79 @@
+<!doctype html>
+<html dir="{{ S_CONTENT_DIRECTION }}" lang="{{ S_USER_LANG }}">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
+	<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
+</head>
+
+<body class="{{ S_CONTENT_DIRECTION }} position-relative{% if S_SETTINGS or S_BOARDS %} bg-secondary{% endif %}"{% if not S_BOARDS %} data-bs-spy="scroll" data-bs-target="#sidebar"{% endif %}>
+
+<nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
+	<div class="container-fluid">
+		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', T_THEME_PATH) }}</span></span>
+		<div>
+			{% if S_BOARDS %}
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
+				<span class="navbar-toggler-icon navbar-toggler-icon-qi-boards"></span>
+			</button>
+			{% endif %}
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="{{ lang('TOGGLE_NAVIGATION') }}">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse justify-content-end" id="navbar">
+			<ul class="navbar-nav mt-2 mt-md-0">
+				{% if not S_IN_INSTALL and S_HAS_PROFILES %}
+					<li class="nav-item fs-5"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}">{{ lang('BOARDS') }}</a></li>
+				{% endif %}
+				<li class="nav-item fs-5"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}">{{ lang('DOCS_LONG') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %}  href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+{% if U_VERSION_CHECK_URL %}
+<div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 1045">
+	<div id="qiUpdateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<strong class="me-auto">{{ lang('UPDATE_AVAILABLE') }}</strong>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">
+			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger btn-sm" title="{{ VERSION_CHECK_TITLE }}">
+				<svg class="bi text-white" width="16" height="16" fill="currentColor">
+					<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#download"/>
+				</svg>
+				{{ lang('DOWNLOAD') }} &nbsp; <span class="badge rounded-pill bg-warning text-dark">{{ VERSION_CHECK_CURRENT }}</span>
+			</a>
+		</div>
+	</div>
+</div>
+{% endif %}
+
+<div id="back-top" class="container-fluid anchor">
+	<div class="row">
+		<div class="col-md-3 col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block position-fixed border-end p-4 sidebar" id="sidebar" role="navigation">
+			{% if S_BOARDS %}
+				{% include 'sidebar_boards.twig' %}
+			{% elseif S_SETTINGS %}
+				{% include 'sidebar_settings.twig' %}
+			{% elseif S_DOCS %}
+				{% include 'sidebar_docs.twig' %}
+			{% elseif S_PHPINFO %}
+				{% include 'sidebar_phpinfo.twig' %}
+			{% endif %}
+		</div>
+		<div class="col-md-9 ms-sm-auto col-lg-10 px-5">
+			<div id="main">
+				<noscript>
+					<div class="alert alert-danger text-center" role="alert">
+						{{ lang('JAVASCRIPT_DISABLED_ALERT') }}
+					</div>
+				</noscript>

@@ -1,84 +1,69 @@
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-	position: relative; /* required for scrollspy */
-}
-
-legend {
-	border-bottom: 1px solid #e5e5e5;
-	margin-bottom: 20px;
-}
-
-/* workaround to reposition anchor links under navbar */
-.anchor {
-	margin-top: -64px;
-	padding-top: 64px;
-}
-
-.sidebar {
-	text-align: left;
-	border-right: 1px solid #eeeeee;
-	position: fixed;
-	top: 50px;
-	bottom: 0;
-	left: 0;
-	z-index: 1000;
-	overflow-x: hidden;
-	overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-	min-width: 200px;
-	padding: 20px;
-	background-color: #f5f5f5;
-}
-
-.sidebar .nav {
-	margin-right: -21px; /* 20px padding + 1px border */
-	margin-bottom: 20px;
-	margin-left: -20px;
-}
-
-.sidebar .nav-link {
-	padding: 2px 20px;
-	font-weight: 500;
-	color: #333;
-}
-
-.sidebar .nav-link.active {
-	color: #47A1EB;
-	background-color: #eeeeee;
+:root {
+	--darkside-color: hsl(0, 0%, 70%);
+	--darkside-color-dim: hsl(0, 0%, 50%);
+	--darkside-bg-color: hsl(219, 20%, 20%);
+	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
 }
 
 .phpbb-logo {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
-	padding-left: 70px;
+	padding: 0.125rem 3rem;
+	margin-left: 0.5rem;
 }
 
-.form-text {
-	font-size: 0.8rem;
+.navbar-toggler-icon-qi-boards {
+	background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgba%28255, 255, 255, 0.55%29' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 3.5a.5.5 0 010-1h11a.5.5 0 010 1h-11zm2-2a.5.5 0 010-1h7a.5.5 0 010 1h-7zM0 13a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0016 13V6a1.5 1.5 0 00-1.5-1.5h-13A1.5 1.5 0 000 6v7zm1.5.5A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-13z'/></svg>") !important;
 }
 
-.navbar {
-	font-size: 1rem;
+/* workaround to reposition anchor links under navbar */
+.anchor {
+	margin-top: -4rem;
+	padding-top: 4rem;
 }
 
-svg.icon {
-	color: #999999;
+/* sidebar styling */
+.sidebar {
+	top: 3.375rem;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+	overflow-y: scroll; /* Scrollable contents if viewport is shorter than content. */
+	min-width: 200px;
+	background-color: var(--darkside-bg-color);
+	color: var(--darkside-color);
 }
 
-.sidebar .nav-link:hover svg.icon,
-.sidebar .nav-link.active svg.icon {
+.sidebar a {
+	color: var(--darkside-color);
+}
+
+.sidebar .nav-link {
+	padding: .2rem 1rem .2rem .5rem;
+}
+
+.sidebar .nav-link.active {
+	background-color: var(--darkside-bg-hilight);
+	border-radius: .25rem;
+}
+
+.sidebar .list-group-item,
+.sidebar .border-bottom,
+.sidebar .border-top {
+	border-color: var(--darkside-bg-hilight) !important;
+}
+
+.sidebar .badge {
+	background-color: var(--darkside-bg-hilight);
+	color: var(--darkside-color);
+}
+
+.sidebar .nav-link svg.bi {
+	vertical-align: -.25em;
+	color: var(--darkside-color-dim);
+}
+
+.sidebar .nav-link:hover svg.bi,
+.sidebar .nav-link.active svg.bi {
 	color: inherit;
-}
-
-/* Parsedown styling for docs */
-#readme blockquote {
-	padding: 0 1rem;
-	color: #6a737d;
-	border-left: .25rem solid #dfe2e5;
-}
-
-#about-readme h2,
-#about-changelog h2 {
-	padding-bottom: .5rem;
-	padding-top: 1rem;
-	border-bottom: 1px solid #eaecef;
 }

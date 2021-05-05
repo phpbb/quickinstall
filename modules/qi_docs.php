@@ -22,14 +22,19 @@ class qi_docs
 {
 	public function __construct()
 	{
-		global $template, $user, $quickinstall_path;
+		global $template, $quickinstall_path;
 
 		// GET README
 		$doc_file = $quickinstall_path . 'README.md';
 		if (file_exists($doc_file))
 		{
-			$doc_body = file_get_contents($doc_file);
-			$template->assign_var('DOC_BODY', Parsedown::instance()->text($doc_body));
+			$doc_body = Parsedown::instance()->text(file_get_contents($doc_file));
+			$doc_body = str_replace(
+				['<table>', '<blockquote>', '<h2>'],
+				['<table class="table table-sm table-striped">', '<blockquote class="callout callout-warning">', '<h2 class="border-bottom pt-3 pb-2">'],
+				$doc_body
+			);
+			$template->assign_var('DOC_BODY', $doc_body);
 		}
 
 		// GET CHANGELOG
@@ -61,7 +66,7 @@ class qi_docs
 					$change = substr($row, 2);
 					$change = str_replace(
 						['[Fix]', '[Change]', '[Feature]'],
-						['<span class="badge badge-primary">Fix</span>', '<span class="badge badge-warning">Change</span>', '<span class="badge badge-success">Feature</span>'],
+						['<span class="badge bg-primary">Fix</span>', '<span class="badge bg-warning">Change</span>', '<span class="badge bg-success">Feature</span>'],
 						$change);
 
 					$template->assign_block_vars('history.changelog', array(
