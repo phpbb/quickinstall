@@ -103,6 +103,8 @@ class qi_create
 			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_DB'], 'main');
 		}
 
+		$dbname = $db_prefix . $dbname;
+
 		// Set the new board as root path.
 		$board_dir = $settings->get_boards_dir() . $site_dir . '/';
 		$board_url = $settings->get_boards_url() . $site_dir . '/';
@@ -151,7 +153,7 @@ class qi_create
 
 		if (in_array($dbms, array('sqlite', 'sqlite3')))
 		{
-			$dbhost = $dbhost . $db_prefix . $dbname;
+			$dbhost .= $dbname;
 		}
 
 		// Set the new board as language path to get language files from outside phpBB
@@ -170,7 +172,7 @@ class qi_create
 		$config_data_array = array(
 			'$dbhost' => $dbhost,
 			'$dbport' => $settings->get_config('dbport'),
-			'$dbname' =>  $db_prefix . $dbname,
+			'$dbname' => $dbname,
 			'$dbuser' => $dbuser,
 			'$dbpasswd' => htmlspecialchars_decode($dbpasswd),
 			'$table_prefix' => $table_prefix,
@@ -263,7 +265,7 @@ class qi_create
 
 		if ($settings->get_config('drop_db', 0))
 		{
-			$db->sql_query('DROP DATABASE IF EXISTS ' . $db_prefix . $dbname);
+			$db->sql_query('DROP DATABASE IF EXISTS ' . $dbname);
 		}
 		else
 		{
@@ -287,18 +289,18 @@ class qi_create
 					$error_collector = new $error_collector_class;
 					$error_collector->install();
 					$db_check_conn = new $sql_db();
-					$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
+					$db_check_conn->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, false);
 					$error_collector->uninstall();
 					$db_check = count($error_collector->errors) == 0;
 				break;
 				default:
-					$db_check = $db->sql_select_db($db_prefix . $dbname);
+					$db_check = $db->sql_select_db($dbname);
 				break;
 			}
 
 			if ($db_check)
 			{
-				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DB_EXISTS'], $db_prefix . $dbname), 'main');
+				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DB_EXISTS'], $dbname), 'main');
 			}
 		}
 
@@ -311,14 +313,14 @@ class qi_create
 			break;
 			case 'postgres':
 				global $sql_db;
-				$db->sql_query('CREATE DATABASE ' . $db_prefix . $dbname);
+				$db->sql_query('CREATE DATABASE ' . $dbname);
 				$db = new $sql_db();
-				$db->sql_connect($dbhost, $dbuser, $dbpasswd, $db_prefix . $dbname, $dbport, false, false);
+				$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, false);
 				$db->sql_return_on_error(true);
 			break;
 			default:
-				$db->sql_query('CREATE DATABASE ' . $db_prefix . $dbname);
-				$db->sql_select_db($db_prefix . $dbname);
+				$db->sql_query('CREATE DATABASE ' . $dbname);
+				$db->sql_select_db($dbname);
 			break;
 		}
 
@@ -597,11 +599,28 @@ class qi_create
 			$container->set('installer.install_finish.notify_user', null);
 			$container->compile();
 
+			/** @var \phpbb\language\language $language */
 			$language = $container->get('language');
 			$language->add_lang(array('common', 'acp/common', 'acp/board', 'install', 'posting'));
 
+			if (defined('PHPBB_40'))
+			{
+				/** @var \phpbb\install\helper\config $installer_config */
+				$installer_config = $container->get('installer.helper.config');
+				$installer_config->set('dbms', $dbms);
+				$installer_config->set('dbhost', $dbhost);
+				$installer_config->set('dbuser', $dbuser);
+				$installer_config->set('dbpasswd', $dbpasswd);
+				$installer_config->set('dbname', $dbname);
+				$installer_config->set('dbport', $dbport);
+				$installer_config->set('table_prefix', $table_prefix);
+			}
+
+			/** @var \phpbb\install\helper\iohandler\factory $iohandler_factory */
 			$iohandler_factory = $container->get('installer.helper.iohandler_factory');
 			$iohandler_factory->set_environment('cli');
+
+			/** @var \phpbb\install\helper\iohandler\cli_iohandler $iohandler */
 			$iohandler = $iohandler_factory->get();
 
 			$output = new \Symfony\Component\Console\Output\NullOutput();
@@ -611,6 +630,7 @@ class qi_create
 			);
 			$iohandler->set_style($style, $output);
 
+			/** @var \phpbb\install\installer $installer */
 			$installer = $container->get('installer.installer.install');
 			$installer->set_iohandler($iohandler);
 
@@ -665,6 +685,11 @@ class qi_create
 			@$container->get('installer.install_data.add_languages')->run();
 			@$container->get('installer.install_data.add_bots')->run();
 
+			if (defined('PHPBB_33'))
+			{
+				@$container->get('installer.install_data.create_search_index')->run();
+			}
+
 			$container->reset();
 
 			// Set some services in the container that may be needed later
@@ -687,8 +712,11 @@ class qi_create
 			unset($current_user);
 
 			// get search for 3.2.x
-			$search_error_msg = false;
-			$search = new \phpbb\search\fulltext_native($search_error_msg, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
+			if (!defined('PHPBB_33'))
+			{
+				$search_error_msg = false;
+				$search = new \phpbb\search\fulltext_native($search_error_msg, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
+			}
 		}
 		else if (defined('PHPBB_31'))
 		{
@@ -746,18 +774,21 @@ class qi_create
 			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
 		}
 
-		// get search for 3.0
-		if (!isset($search))
+		if (!defined('PHPBB_33'))
 		{
-			if (!class_exists('fulltext_native'))
+			// get search for 3.0 (and possible 31 or 3.2)
+			if (!isset($search))
 			{
-				include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
+				if (!class_exists('fulltext_native'))
+				{
+					include_once($phpbb_root_path . 'includes/search/fulltext_native.' . $phpEx);
+				}
+
+				$search = new fulltext_native($error = false);
 			}
 
-			$search = new fulltext_native($error = false);
+			$this->build_search_index($db, $search);
 		}
-
-		$this->build_search_index($db, $search);
 
 		if (!defined('PHPBB_32'))
 		{
