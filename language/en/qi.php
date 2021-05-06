@@ -150,7 +150,7 @@ $lang = array_merge($lang, array(
 	'ERROR_DEL_BOARDS'		=> 'The following boards could not be deleted',
 	'ERROR_DEL_FILES'		=> 'The following files could not be deleted',
 	'ERROR_PHP_UNSUPPORTED'	=> 'You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.4.7 and newer.',
-	'ERROR_PHPBB_NOT_FOUND'	=> 'phpBB could not be located.<br /><br />You must download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to QuickInstall‘s <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0 - 3.3.',
+	'ERROR_PHPBB_NOT_FOUND'	=> 'phpBB could not be located.<br /><br />You must download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to QuickInstall‘s <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0 - 4.0.',
 
 	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
 	'FORGOT_THIS'				=> 'You forgot this!',
@@ -226,7 +226,7 @@ $lang = array_merge($lang, array(
 	'OTHER_CONFIG_EXPLAIN'	=> 'Config settings entered here will be updated in the config table or added to the config table if they don’t exist yet. <u>Make sure to spell correctly.</u> This can also be edited when creating the boards.<br /><br />Type one config setting per line in a semicolon <kbd>;</kbd> separated list e.g.: <kbd>config-name;config-setting;is-dynamic</kbd>. If the setting is not dynamic then the dynamic part is not needed. Lines starting with a <kbd>#</kbd> are considered comments and not added to the DB.<br /><br />Example:<br /><kbd>session_length;999999</kbd><br /><kbd>load_tplcompile;1;1</kbd><br /><kbd># This is a comment</kbd>',
 
 	'PHPBB_QI_TEXT'		=> 'phpBB<small><sup>&reg;</sup></small> QuickInstall',
-	'PHPBB_QI_FULLLINK'	=> '<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB<small><sup>&reg;</sup></small> QuickInstall</a> %s for phpBB 3.x.x',
+	'PHPBB_QI_FULLLINK'	=> '<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB<small><sup>&reg;</sup></small> QuickInstall</a> %s for phpBB 3.0 - 4.0',
 	'PHPBB_QI_TITLE'	=> 'phpBB&reg; QuickInstall',
 
 	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install, phpBB %1$s, is not compatible with PHP %2$s.',

@@ -47,6 +47,18 @@
 	border-radius: .25rem;
 }
 
+.sidebar .nav-link svg.bi {
+	line-height: 1.5rem;
+	vertical-align: -.125rem;
+	color: var(--darkside-color-dim);
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link:hover svg.bi,
+.sidebar .nav-link.active svg.bi {
+	color: inherit !important;
+}
+
 .sidebar .list-group-item,
 .sidebar .border-bottom,
 .sidebar .border-top {
@@ -56,14 +68,4 @@
 .sidebar .badge {
 	background-color: var(--darkside-bg-hilight);
 	color: var(--darkside-color);
-}
-
-.sidebar .nav-link svg.bi {
-	vertical-align: -.25em;
-	color: var(--darkside-color-dim);
-}
-
-.sidebar .nav-link:hover svg.bi,
-.sidebar .nav-link.active svg.bi {
-	color: inherit;
 }
