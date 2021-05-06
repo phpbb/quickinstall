@@ -469,7 +469,7 @@ function get_alternative_env($selected_option = '')
  */
 function get_installed_boards()
 {
-	global $settings, $template, $phpEx;
+	global $settings, $template;
 
 	// list of boards
 	$boards_dir = $settings->get_boards_dir();
@@ -483,30 +483,43 @@ function get_installed_boards()
 			continue;
 		}
 
-		$version = '';
-		// Try to find out phpBB version.
-		if (file_exists("{$boards_dir}$board/includes/constants.$phpEx"))
-		{
-			$rows = file("{$boards_dir}$board/includes/constants.$phpEx", FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
-
-			foreach ($rows as $row)
-			{
-				if (($pos = strpos($row, "'PHPBB_VERSION', '")) !== false)
-				{
-					$pos += 18;
-					$version = substr($row, $pos, -3);
-					break;
-				}
-			}
-			unset($rows);
-		}
-
 		$template->assign_block_vars('board_row', array(
 			'BOARD_NAME'	=> htmlspecialchars($board),
 			'BOARD_URL'		=> $settings->get_boards_url() . urlencode($board),
-			'VERSION'		=> $version,
+			'VERSION'		=> get_phpbb_version($boards_dir . $board),
 		));
 	}
+}
+
+/**
+ * Returns the version of a phpBB board (acquired from its constant.php file)
+ *
+ * @param string $board_path Path to a phpbb board root directory
+ * @return string A phpbb version, e.g.: '3.3.0'
+ */
+function get_phpbb_version($board_path)
+{
+	global $phpEx;
+
+	$version = '';
+	// Try to find out phpBB version.
+	if (file_exists("$board_path/includes/constants.$phpEx"))
+	{
+		$rows = file("$board_path/includes/constants.$phpEx", FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+
+		foreach ($rows as $row)
+		{
+			if (strpos($row, 'PHPBB_VERSION') !== false)
+			{
+				preg_match("/'PHPBB_VERSION', '(.*)'/", $row, $matches);
+				$version = isset($matches[1]) ? $matches[1] : '';
+				break;
+			}
+		}
+		unset($rows);
+	}
+
+	return $version;
 }
 
 function db_connect($db_data = '')
