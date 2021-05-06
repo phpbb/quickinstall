@@ -115,6 +115,8 @@ if ($alt_env !== '')
 	}
 }
 
+$phpbb_version = get_phpbb_version($phpbb_root_path);
+
 if (file_exists($phpbb_root_path . 'phpbb/class_loader.' . $phpEx))
 {
 	define('PHPBB_31', true);
@@ -126,12 +128,12 @@ if (file_exists($phpbb_root_path . 'phpbb/class_loader.' . $phpEx))
 	require($phpbb_root_path . 'vendor/autoload.' . $phpEx);
 }
 
-if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'includes/functions_install.' . $phpEx) || version_compare($phpbb_version, '3.2', '>='))
 {
 	define('PHPBB_32', true);
 }
 
-if (file_exists($phpbb_root_path . 'vendor-ext'))
+if (file_exists($phpbb_root_path . 'vendor-ext') || version_compare($phpbb_version, '4.0', '>='))
 {
 	define('PHPBB_40', true);
 }
@@ -139,7 +141,7 @@ if (file_exists($phpbb_root_path . 'vendor-ext'))
 require($phpbb_root_path . 'includes/functions.' . $phpEx);
 require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);
 
-if (!function_exists('phpbb_email_hash'))
+if (!function_exists('phpbb_email_hash') || version_compare($phpbb_version, '3.3', '>='))
 {
 	define('PHPBB_33', true);
 }
