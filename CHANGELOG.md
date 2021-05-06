@@ -1,5 +1,10 @@
 # QuickInstall Changelog
 
+## Version 1.6.1
+- [Fix] Fixed problems that prevented phpBB 4.0.0-alpha builds from successfully installing.
+- [Fix] Fixed unintended side effects on styling of the sidebar after updating Bootstrap 5 from the beta-3 version.
+- [Fix] Strengthened how QI checks for the version number of a phpBB board.
+
 ## Version 1.6.0
 - [Change] Updated QI to Bootstrap 5 (Internet Explorer support removed).
 - [Change] Removed jQuery from QI.
