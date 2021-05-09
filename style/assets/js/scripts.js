@@ -39,34 +39,35 @@
 		/* global bootstrap */
 		// submit form via ajax
 		let ajaxSubmit = ($form) => {
-			let $modal = new bootstrap.Modal($("[data-qi-submit-modal]"), {
+			let modal = $("[data-qi-submit-modal]");
+			let $modal = new bootstrap.Modal(modal, {
 				keyboard: false,
 				backdrop: "static"
 			});
-			$modal.show();
+			modal.addEventListener("shown.bs.modal", () => {
+				let xhr = new XMLHttpRequest();
 
-			let xhr = new XMLHttpRequest();
-
-			xhr.responseType = "json";
-			xhr.onload = () => {
-				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-					if (typeof xhr.response.redirect !== "undefined" && xhr.response.redirect) {
-						window.location.replace(xhr.response.redirect);
-					} else if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
-						mainAlert(xhr.response.responseText);
+				xhr.responseType = "json";
+				xhr.onload = () => {
+					if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+						if (typeof xhr.response.redirect !== "undefined" && xhr.response.redirect) {
+							window.location.replace(xhr.response.redirect);
+						} else if (typeof xhr.response.responseText !== "undefined" && xhr.response.responseText) {
+							mainAlert(xhr.response.responseText);
+						}
+					} else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 500) {
+						mainAlert(xhr.statusText);
 					}
-				}
 
-				if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 500) {
-					mainAlert(xhr.statusText);
-				}
+					$modal.hide();
+					window.scrollTo(0, 0);
+				};
 
-				$modal.hide();
-			};
-
-			xhr.open("POST", $form.getAttribute("action").replace("&amp;", "&"));
-			xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-			xhr.send(new FormData($form));
+				xhr.open("POST", $form.getAttribute("action").replace("&amp;", "&"));
+				xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+				xhr.send(new FormData($form));
+			})
+			$modal.show();
 		};
 
 		// submit forms on change

@@ -257,31 +257,6 @@ function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '
 	exit;
 }
 
-function create_board_warning($msg_title, $msg_text, $page)
-{
-	global $phpEx;
-
-	$args =  'page='			. urlencode($page);
-	$args .= '&error_title='	. urlencode($msg_title);
-	$args .= '&error_msg='		. urlencode($msg_text);
-	$args .= '&error='	. 1;
-
-	foreach ($_POST as $key => $value)
-	{
-		if (!empty($value))
-		{
-			$args .= "&$key=" . urlencode($value);
-		}
-	}
-
-	$url = "index.$phpEx?$args";
-	if (qi::is_ajax())
-	{
-		qi::ajax_response(array('redirect' => $url));
-	}
-	qi::redirect($url);
-}
-
 function legacy_set_var(&$result, $var, $type, $multibyte = false)
 {
 	settype($var, $type);

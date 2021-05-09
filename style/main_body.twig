@@ -2,9 +2,9 @@
 
 <h1>{{ lang('CREATE_BOARD') }}</h1>
 
-<div id="main-alert" class="alert alert-danger{% if S_ERROR %} d-block{% else %} d-none{% endif %}" role="alert">
-	<h4 class="alert-heading">{{ ERROR_TITLE ?: lang('MINOR_MISHAP') }}</h4>
-	<p class="mb-0">{{ ERROR_MSG }}</p>
+<div id="main-alert" class="alert alert-danger d-none" role="alert">
+	<h4 class="alert-heading">{{ lang('MINOR_MISHAP') }}</h4>
+	<p class="mb-0"></p>
 </div>
 
 <form method="post" id="profile_form" action="{{ U_CHOOSE_PROFILE }}">

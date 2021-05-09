@@ -38,7 +38,7 @@ class qi_create
 			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33'))
 		)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['PHP7_INCOMPATIBLE'], PHPBB_VERSION, PHP_VERSION), 'main');
+			trigger_error(sprintf($user->lang['PHP7_INCOMPATIBLE'], PHPBB_VERSION, PHP_VERSION));
 		}
 
 		if (defined('PHPBB_31'))
@@ -83,7 +83,7 @@ class qi_create
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_ALT_ENV_FOUND'], 'main');
+			trigger_error($user->lang['NO_ALT_ENV_FOUND']);
 		}
 
 		// Set up our basic founder.
@@ -100,7 +100,7 @@ class qi_create
 		// check if we have a board db (and directory) name
 		if (!$dbname)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_DB'], 'main');
+			trigger_error($user->lang['NO_DB']);
 		}
 
 		$dbname = $db_prefix . $dbname;
@@ -123,7 +123,7 @@ class qi_create
 			}
 			else
 			{
-				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DIR_EXISTS'], $board_dir), 'main');
+				trigger_error(sprintf($user->lang['DIR_EXISTS'], $board_dir));
 			}
 		}
 
@@ -134,7 +134,7 @@ class qi_create
 		}
 		catch (RuntimeException $e)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+			trigger_error(sprintf($user->lang[$e->getMessage()], $board_dir));
 		}
 
 		if (!defined('PHPBB_31'))
@@ -300,7 +300,7 @@ class qi_create
 
 			if ($db_check)
 			{
-				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DB_EXISTS'], $dbname), 'main');
+				trigger_error(sprintf($user->lang['DB_EXISTS'], $dbname));
 			}
 		}
 
@@ -839,7 +839,7 @@ class qi_create
 		}
 		catch (RuntimeException $e)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+			trigger_error(sprintf($user->lang[$e->getMessage()], $board_dir));
 		}
 
 		// Install styles
