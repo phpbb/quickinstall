@@ -396,10 +396,13 @@ class qi
 
 				$msg_text = isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : $msg_text;
 
-				$backtrace = phpbb_functions::get_backtrace();
-				if ($backtrace)
+				if ($errno === E_USER_ERROR)
 				{
-					$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
+					$backtrace = phpbb_functions::get_backtrace();
+					if ($backtrace)
+					{
+						$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
+					}
 				}
 
 				if (self::is_ajax())

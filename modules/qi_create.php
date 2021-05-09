@@ -482,7 +482,7 @@ class qi_create
 			if (!$db->sql_query($sql))
 			{
 				$error = $db->sql_error();
-				trigger_error($error['message']);
+				trigger_error($error['message'], E_USER_ERROR);
 			}
 		}
 
@@ -546,7 +546,7 @@ class qi_create
 					if (!$db->sql_query($sql))
 					{
 						$error = $db->sql_error();
-						trigger_error($error['message']);
+						trigger_error($error['message'], E_USER_ERROR);
 					}
 				}
 				else
@@ -556,7 +556,7 @@ class qi_create
 					if (!$db->sql_query($sql))
 					{
 						$error = $db->sql_error();
-						trigger_error($error['message']);
+						trigger_error($error['message'], E_USER_ERROR);
 					}
 				}
 
