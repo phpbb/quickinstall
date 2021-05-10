@@ -33,7 +33,7 @@ class module_handler
 
 	public function load($module, $default)
 	{
-		global $phpEx, $user;
+		global $phpEx;
 
 		// just some security (thanks lordlebrand)
 		$module = basename($module);
@@ -45,7 +45,7 @@ class module_handler
 
 		if (false === @include($this->modules_path . $this->modules_prefix . $module . '.' . $phpEx))
 		{
-			trigger_error(sprintf($user->lang['NO_MODULE'], $module), E_USER_ERROR);
+			trigger_error(qi::lang('NO_MODULE', $module), E_USER_ERROR);
 		}
 
 		$class_name = $this->modules_prefix . $module;

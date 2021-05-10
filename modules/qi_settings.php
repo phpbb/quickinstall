@@ -41,15 +41,15 @@ class qi_settings
 					}
 					else
 					{
-						$errors[] = sprintf($user->lang['CONFIG_NOT_WRITTEN'], $profile);
-						$errors[] = $user->lang['CONFIG_IS_DISPLAYED'];
+						$errors[] = qi::lang('CONFIG_NOT_WRITTEN', $profile);
+						$errors[] = qi::lang('CONFIG_IS_DISPLAYED');
 						$config_text = $settings->get_config_text();
 					}
 				}
 				else
 				{
-					$errors[] = $user->lang['CONFIG_NOT_WRITABLE'];
-					$errors[] = $user->lang['CONFIG_IS_DISPLAYED'];
+					$errors[] = qi::lang('CONFIG_NOT_WRITABLE');
+					$errors[] = qi::lang('CONFIG_IS_DISPLAYED');
 					$config_text = $settings->get_config_text();
 				}
 			}
@@ -60,7 +60,7 @@ class qi_settings
 		}
 		else if ($alt_env_missing)
 		{
-			$errors[] = sprintf($user->lang['NO_ALT_ENV_FOUND'], $alt_env);
+			$errors[] = qi::lang('NO_ALT_ENV_FOUND', $alt_env);
 		}
 
 		$template->assign_vars(array(

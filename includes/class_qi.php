@@ -31,12 +31,12 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user;
+		global $template;
 
 		$update = self::get_update();
 
 		$template->assign_vars(array(
-			'PAGE_TITLE'	=> $user->lang[$page_title],
+			'PAGE_TITLE'	=> self::lang($page_title),
 			'T_THEME_PATH'	=> 'style',
 
 			'U_DOCS'		=> self::url('docs'),
@@ -45,13 +45,13 @@ class qi
 			'U_PHPINFO'		=> self::url('phpinfo'),
 			'U_SETTINGS'	=> self::url('settings'),
 
-			'S_CONTENT_DIRECTION'	=> $user->lang['DIRECTION'],
-			'S_USER_LANG'			=> $user->lang['USER_LANG'],
+			'S_CONTENT_DIRECTION'	=> self::lang('DIRECTION'),
+			'S_USER_LANG'			=> self::lang('USER_LANG'),
 
-			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
+			'TRANSLATION_INFO'	=> self::lang('TRANSLATION_INFO'),
 			'QI_VERSION'		=> self::current_version(),
 
-			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], self::current_version()) : '',
+			'VERSION_CHECK_TITLE'	=> !empty($update) ? self::lang('VERSION_CHECK_TITLE', $update['current'], self::current_version()) : '',
 			'VERSION_CHECK_CURRENT'	=> !empty($update) ? $update['current'] : '',
 			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['download'] : '',
 		));
@@ -126,6 +126,41 @@ class qi
 		$url .= $script_path . $page;
 		header('Location: ' . $url);
 		exit;
+	}
+
+	/**
+	 * Translate the language key. Perform substitution if args are provided.
+	 *
+	 * @return string
+	 */
+	public static function lang()
+	{
+		global $user;
+
+		$args = func_get_args();
+		$key = array_shift($args);
+
+		if (!self::lang_key_exists($key))
+		{
+			return $key;
+		}
+
+		$lang = $user->lang[$key];
+
+		return count($args) ? vsprintf($lang, $args) : $lang;
+	}
+
+	/**
+	 * Check if a lang key exists
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public static function lang_key_exists($key)
+	{
+		global $user;
+
+		return isset($user->lang[$key]);
 	}
 
 	/**
@@ -275,8 +310,8 @@ class qi
 		$tz_ary	= $tz->getTransitions(time());
 		$offset	= (float) $tz_ary[0]['offset'];
 		unset($tz_ary, $tz);
-		$lang_dates = $user->lang['datetime'];
-		$format = (!$format) ? $user->lang['default_dateformat'] : $format;
+		$lang_dates = self::lang('datetime');
+		$format = (!$format) ? self::lang('default_dateformat') : $format;
 
 		// Short representation of month in format
 		if ((strpos($format, '\M') === false && strpos($format, 'M') !== false) || (strpos($format, '\r') === false && strpos($format, 'r') !== false))
@@ -394,7 +429,7 @@ class qi
 					unset($lang);
 				}
 
-				$msg_text = isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : $msg_text;
+				$msg_text = self::lang($msg_text);
 
 				if ($errno === E_USER_ERROR)
 				{
@@ -421,10 +456,10 @@ class qi
 
 				$template->assign_vars([
 					'QI_PATH'              => $quickinstall_path,
-					'MSG_TITLE'            => (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((isset($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title),
+					'MSG_TITLE'            => isset($msg_title) ? self::lang($msg_title) : self::lang('GENERAL_ERROR'),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
+					'RETURN_LINKS'         => self::lang('GO_QI_MAIN', '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . self::lang('GO_QI_SETTINGS', '<a href="' . qi::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
 				]);
 

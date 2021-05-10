@@ -29,8 +29,6 @@ if (!defined('IN_QUICKINSTALL'))
  */
 function validate_range($value_ary, &$error)
 {
-	global $user;
-
 	$column_types = array(
 		'BOOL'	=> array('php_type' => 'int', 		'min' => 0, 				'max' => 1),
 		'USINT'	=> array('php_type' => 'int',		'min' => 0, 				'max' => 65535),
@@ -56,7 +54,7 @@ function validate_range($value_ary, &$error)
 				$max = (isset($column[1])) ? min($column[1],$type['max']) : $type['max'];
 				if (strlen($value['value']) > $max)
 				{
-					$error[] = sprintf($user->lang['SETTING_TOO_LONG'], $user->lang[$value['lang']], $max);
+					$error[] = qi::lang('SETTING_TOO_LONG', qi::lang($value['lang']), $max);
 				}
 			break;
 
@@ -65,11 +63,11 @@ function validate_range($value_ary, &$error)
 				$max = (isset($column[2])) ? min($column[2],$type['max']) : $type['max'];
 				if ($value['value'] < $min)
 				{
-					$error[] = sprintf($user->lang['SETTING_TOO_LOW'], $user->lang[$value['lang']], $min);
+					$error[] = qi::lang('SETTING_TOO_LOW', qi::lang($value['lang']), $min);
 				}
 				else if ($value['value'] > $max)
 				{
-					$error[] = sprintf($user->lang['SETTING_TOO_BIG'], $user->lang[$value['lang']], $max);
+					$error[] = qi::lang('SETTING_TOO_BIG', qi::lang($value['lang']), $max);
 				}
 			break;
 		}

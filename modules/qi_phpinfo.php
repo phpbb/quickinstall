@@ -24,7 +24,7 @@ class qi_phpinfo
 {
 	public function __construct()
 	{
-		global $template, $user;
+		global $template;
 
 		ob_start();
 		phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_VARIABLES);
@@ -35,7 +35,7 @@ class qi_phpinfo
 
 		if (empty($phpinfo) || empty($output))
 		{
-			trigger_error($user->lang['NO_PHPINFO_AVAILABLE'], E_USER_WARNING);
+			trigger_error(qi::lang('NO_PHPINFO_AVAILABLE'), E_USER_WARNING);
 		}
 
 		$output = $output[1][0];
@@ -78,7 +78,7 @@ class qi_phpinfo
 
 		if (empty($output))
 		{
-			trigger_error($user->lang['NO_PHPINFO_AVAILABLE'], E_USER_WARNING);
+			trigger_error(qi::lang('NO_PHPINFO_AVAILABLE'), E_USER_WARNING);
 		}
 
 		$orig_output = $output;

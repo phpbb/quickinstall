@@ -22,7 +22,7 @@ class qi_manage
 {
 	public function __construct()
 	{
-		global $user, $settings, $phpEx, $msg_title;
+		global $settings, $phpEx, $msg_title;
 
 		$action = qi_request_var('action', '');
 		$delete = qi_request_var('delete', false);
@@ -112,9 +112,9 @@ class qi_manage
 				}
 				else
 				{
-					$msg_title = $user->lang['GENERAL_ERROR'];
+					$msg_title = qi::lang('GENERAL_ERROR');
 
-					$msg_explain = $boards > 1 ? $user->lang['ERROR_DEL_BOARDS'] : $user->lang['ERROR_DEL_FILES'];
+					$msg_explain = $boards > 1 ? qi::lang('ERROR_DEL_BOARDS') : qi::lang('ERROR_DEL_FILES');
 
 					$msg_text = '';
 					foreach ($error as $row)

@@ -245,10 +245,10 @@ function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '
 
 	$template->assign_vars([
 		'QI_PATH'              => $quickinstall_path,
-		'MSG_TITLE'            => isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : '',
-		'MSG_TEXT'             => isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : '',
-		'MSG_EXPLAIN'          => isset($user->lang[$msg_explain]) ? $user->lang[$msg_explain] : '',
-		'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
+		'MSG_TITLE'            => qi::lang_key_exists($msg_title) ? qi::lang($msg_title) : qi::lang('GENERAL_ERROR'),
+		'MSG_TEXT'             => qi::lang_key_exists($msg_text) ? qi::lang($msg_text) : '',
+		'MSG_EXPLAIN'          => qi::lang_key_exists($msg_explain) ? qi::lang($msg_explain) : '',
+		'RETURN_LINKS'         => qi::lang('GO_QI_MAIN', '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . qi::lang('GO_QI_SETTINGS', '<a href="' . qi::url('settings') . '">', '</a>'),
 		'QI_VERSION'           => qi::current_version(),
 	]);
 
@@ -408,11 +408,11 @@ function validate_dbname($dbname, $first_char = false, $path = false)
  */
 function get_alternative_env($selected_option = '')
 {
-	global $user, $quickinstall_path;
+	global $quickinstall_path;
 
 	$alt_envs = [
 		[
-			'name' => $user->lang['DEFAULT_ENV'],
+			'name' => qi::lang('DEFAULT_ENV'),
 			'value' => '',
 			'selected' => empty($selected_option),
 		],
