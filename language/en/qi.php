@@ -310,6 +310,7 @@ $lang = array_merge($lang, array(
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 
 	'WORKING_ON_IT'		=> 'We’re working on it...',
+	'WORKING_ON_IT_EXPLAIN'	=> 'This may take a few minutes.',
 
 	'YES'	=> 'Yes',
 
