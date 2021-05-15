@@ -12,8 +12,8 @@
 	margin-left: 0.5rem;
 }
 
-.navbar-toggler-icon-qi-boards {
-	background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgba%28255, 255, 255, 0.55%29' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 3.5a.5.5 0 010-1h11a.5.5 0 010 1h-11zm2-2a.5.5 0 010-1h7a.5.5 0 010 1h-7zM0 13a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0016 13V6a1.5 1.5 0 00-1.5-1.5h-13A1.5 1.5 0 000 6v7zm1.5.5A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-13z'/></svg>") !important;
+.navbar-dark .navbar-toggler-icon-qi-boards {
+	background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgba%28255, 255, 255, 0.55%29' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 3.5a.5.5 0 010-1h11a.5.5 0 010 1h-11zm2-2a.5.5 0 010-1h7a.5.5 0 010 1h-7zM0 13a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0016 13V6a1.5 1.5 0 00-1.5-1.5h-13A1.5 1.5 0 000 6v7zm1.5.5A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-13z'/></svg>");
 }
 
 /* workaround to reposition anchor links under navbar */
@@ -56,13 +56,13 @@
 .sidebar .nav-link:hover,
 .sidebar .nav-link:hover svg.bi,
 .sidebar .nav-link.active svg.bi {
-	color: inherit !important;
+	color: inherit;
 }
 
 .sidebar .list-group-item,
 .sidebar .border-bottom,
 .sidebar .border-top {
-	border-color: var(--darkside-bg-hilight) !important;
+	border-color: var(--darkside-bg-hilight) !important; /* !important to override bootstrap's !important */
 }
 
 .sidebar .badge {
