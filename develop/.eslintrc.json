@@ -30,7 +30,7 @@
         ],
         "callback-return": "error",
         "camelcase": "error",
-        "capitalized-comments": "off",
+        "capitalized-comments": "error",
         "class-methods-use-this": "error",
         "comma-dangle": "error",
         "comma-spacing": [
@@ -141,7 +141,7 @@
         "no-label-var": "error",
         "no-labels": "error",
         "no-lone-blocks": "error",
-        "no-lonely-if": "off",
+        "no-lonely-if": "error",
         "no-loop-func": "error",
         "no-loss-of-precision": "error",
         "no-magic-numbers": "off",
@@ -152,7 +152,7 @@
         "no-multi-str": "error",
         "no-multiple-empty-lines": "error",
         "no-native-reassign": "error",
-        "no-negated-condition": "off",
+        "no-negated-condition": "error",
         "no-negated-in-lhs": "error",
         "no-nested-ternary": "error",
         "no-new": "error",
@@ -229,8 +229,8 @@
         "operator-linebreak": "error",
         "padded-blocks": "off",
         "padding-line-between-statements": "error",
-        "prefer-arrow-callback": "off",
-        "prefer-const": "off",
+        "prefer-arrow-callback": "error",
+        "prefer-const": "error",
         "prefer-destructuring": "error",
         "prefer-exponentiation-operator": "error",
         "prefer-named-capture-group": "error",
@@ -245,7 +245,7 @@
         "quote-props": "off",
         "quotes": [
             "error",
-            "double"
+            "single"
         ],
         "radix": "error",
         "require-atomic-updates": "error",
@@ -294,7 +294,10 @@
         ],
         "valid-jsdoc": "error",
         "vars-on-top": "error",
-        "wrap-iife": "error",
+        "wrap-iife": [
+            "error",
+            "inside"
+        ],
         "wrap-regex": "error",
         "yield-star-spacing": "error"
     }
