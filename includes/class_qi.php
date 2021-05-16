@@ -186,7 +186,7 @@ class qi
 	*
 	* @param mixed $lang_set specifies the language entries to include
 	*/
-	public static function add_lang($lang_set, $lang_path = false)
+	public static function add_lang($lang_set, $lang_path = '')
 	{
 		global $user;
 
@@ -220,7 +220,7 @@ class qi
 	* Set language entry (called by add_lang)
 	* @access private
 	*/
-	protected static function set_lang(&$lang, $lang_file, $lang_path = false)
+	protected static function set_lang(&$lang, $lang_file, $lang_path = '')
 	{
 		global $phpEx, $settings, $quickinstall_path;
 
@@ -459,7 +459,7 @@ class qi
 					'MSG_TITLE'            => isset($msg_title) ? self::lang($msg_title) : self::lang('GENERAL_ERROR'),
 					'MSG_TEXT'             => $msg_text,
 					'MSG_EXPLAIN'          => '',
-					'RETURN_LINKS'         => self::lang('GO_QI_MAIN', '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . self::lang('GO_QI_SETTINGS', '<a href="' . qi::url('settings') . '">', '</a>'),
+					'RETURN_LINKS'         => self::lang('GO_QI_MAIN', '<a href="' . self::url('main') . '">', '</a>') . ' &bull; ' . self::lang('GO_QI_SETTINGS', '<a href="' . self::url('settings') . '">', '</a>'),
 					'QI_VERSION'           => self::current_version(),
 				]);
 

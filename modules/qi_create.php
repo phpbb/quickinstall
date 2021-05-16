@@ -771,7 +771,8 @@ class qi_create
 			unset($install);
 
 			// get search for 3.1
-			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
+			$error = false;
+			$search = new \phpbb\search\fulltext_native($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
 		}
 
 		if (!defined('PHPBB_33'))
