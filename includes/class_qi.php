@@ -298,61 +298,6 @@ class qi
 		return $lang_options;
 	}
 
-	/**
-	* Format user date
-	*/
-	public static function format_date($gmepoch, $format = false, $forcedate = false)
-	{
-		global $user, $settings;
-		static $midnight;
-
-		$tz		= new DateTimeZone($settings->get_config('qi_tz', ''));
-		$tz_ary	= $tz->getTransitions(time());
-		$offset	= (float) $tz_ary[0]['offset'];
-		unset($tz_ary, $tz);
-		$lang_dates = self::lang('datetime');
-		$format = (!$format) ? self::lang('default_dateformat') : $format;
-
-		// Short representation of month in format
-		if ((strpos($format, '\M') === false && strpos($format, 'M') !== false) || (strpos($format, '\r') === false && strpos($format, 'r') !== false))
-		{
-			$lang_dates['May'] = $lang_dates['May_short'];
-		}
-
-		unset($lang_dates['May_short']);
-
-		if (!$midnight)
-		{
-			list($d, $m, $y) = explode(' ', gmdate('j n Y', time() + $offset));
-			$midnight = gmmktime(0, 0, 0, $m, $d, $y) - $offset;
-		}
-
-		if (strpos($format, '|') === false || ($gmepoch < $midnight - 86400 && !$forcedate) || ($gmepoch > $midnight + 172800 && !$forcedate))
-		{
-			return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $offset), $lang_dates);
-		}
-
-		if ($gmepoch > $midnight + 86400 && !$forcedate)
-		{
-			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['TOMORROW'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
-		}
-
-		if ($gmepoch > $midnight && !$forcedate)
-		{
-			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['TODAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
-		}
-
-		if ($gmepoch > $midnight - 86400 && !$forcedate)
-		{
-			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['YESTERDAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
-		}
-
-		return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $offset), $lang_dates);
-	}
-
 	public static function url($page, $params = array())
 	{
 		global $quickinstall_path, $phpEx;
