@@ -69,3 +69,7 @@
 	background-color: var(--darkside-bg-hilight);
 	color: var(--darkside-color);
 }
+
+.badge {
+	line-height: 1em;
+}
