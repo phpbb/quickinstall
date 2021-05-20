@@ -73,3 +73,22 @@
 .badge {
 	line-height: 1em;
 }
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .navbar.bg-primary {
+    background-color: var(--darkside-bg-color) !important; /* !important to override bootstrap's !important */
+  }
+
+  body.bg-secondary {
+    background-color: #0d1117 !important; /* !important to override bootstrap's !important */
+  }
+
+  .callout-warning {
+	  border-left-color: #f39c12;
+  }
+
+  .phpbb-cosmos-logo > path {
+	  fill: #ffffff;
+  }
+}

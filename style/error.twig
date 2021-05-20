@@ -3,9 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- The page supports both light and dark color schemes, with light being default -->
+	<meta name="color-scheme" content="light dark">
+
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
+	<!-- Bootstrap CSS -->
 	<link href="{{ QI_PATH }}style/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
+	<!-- Bootstrap-Dark Variant CSS (the media attribute is for dark auto-switching) -->
+	<link href="{{ QI_PATH }}style/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
 	<link href="{{ QI_PATH }}style/assets/css/qi_style.css" rel="stylesheet" media="screen">
 	<title>{{ MSG_TITLE }}</title>
 </head>
