@@ -49,7 +49,6 @@
 
 .sidebar .nav-link svg.bi {
 	line-height: 1.5rem;
-	vertical-align: -.125rem;
 	color: var(--darkside-color-dim);
 }
 
@@ -72,6 +71,14 @@
 
 .badge {
 	line-height: 1em;
+}
+
+svg.bi {
+	vertical-align: -.125em;
+}
+
+.lh-0 {
+	line-height: 0;
 }
 
 /* Dark mode adjustments */

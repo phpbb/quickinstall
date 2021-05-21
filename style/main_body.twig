@@ -142,7 +142,7 @@
 					<div class="col-md-12">
 						<div class="d-grid gap-2 col-6 mx-auto mb-2">
 							<button type="submit" name="submituser" id="submituser" class="btn btn-primary btn-lg text-white">
-								{{ lang('QUICKINSTALL_LOGO', T_THEME_PATH) }}
+								{{ lang('QUICKINSTALL_LOGO', '<svg class="bi text-white" width="16" height="16" fill="currentColor"><use xlink:href="' ~ T_THEME_PATH ~ '/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>') }}
 							</button>
 						</div>
 					</div>
@@ -151,7 +151,7 @@
 
 			<div class="alert alert-primary">
 				<div class="row">
-					<div class="col-auto align-self-start pr-2">
+					<div class="col-auto align-self-start lh-0">
 						<svg class="bi text-primary" width="24" height="24" fill="currentColor">
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 						</svg>️
@@ -165,7 +165,7 @@
 			<fieldset>
 				<legend class="border-bottom">
 					<a href="#options_advanced" data-bs-toggle="collapse" role="button">
-						<svg class="bi" width="20" height="20" fill="currentColor" style="vertical-align:-.1em;">
+						<svg class="bi" width="20" height="20" fill="currentColor">
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#gear"/>
 						</svg> {{ lang('INSTALL_OPTIONS') }}
 					</a>
@@ -271,7 +271,7 @@
 			<fieldset>
 				<legend class="border-bottom">
 					<a href="#options_populate" data-bs-toggle="collapse" role="button">
-						<svg class="bi" width="20" height="20" fill="currentColor" style="vertical-align:-.1em;">
+						<svg class="bi" width="20" height="20" fill="currentColor">
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#people"/>
 						</svg> {{ lang('POPULATE_OPTIONS') }}
 					</a>
@@ -344,7 +344,7 @@
 					</div>
 					<div class="alert alert-primary">
 						<div class="row">
-							<div class="col-auto align-self-start pr-2">
+							<div class="col-auto align-self-start lh-0">
 								<svg class="bi text-primary" width="24" height="24" fill="currentColor">
 									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
@@ -374,7 +374,7 @@
 			<fieldset>
 				<legend class="border-bottom">
 					<a href="#options_config" data-bs-toggle="collapse" role="button">
-						<svg class="bi" width="20" height="20" fill="currentColor" style="vertical-align:-.1em;">
+						<svg class="bi" width="20" height="20" fill="currentColor">
 							<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#sliders"/>
 						</svg> {{ lang('BOARD_CONFIG_SETTINGS') }}
 					</a>

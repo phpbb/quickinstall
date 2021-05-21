@@ -21,7 +21,7 @@
 
 <nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
 	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', T_THEME_PATH) }}</span></span>
+		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', '<svg class="bi text-white" width="20" height="20" fill="currentColor"><use xlink:href="' ~ T_THEME_PATH ~ '/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>') }}</span></span>
 		<div>
 			{% if S_BOARDS %}
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
@@ -53,7 +53,7 @@
 			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 		</div>
 		<div class="toast-body">
-			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger btn-sm" title="{{ VERSION_CHECK_TITLE }}">
+			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger" title="{{ VERSION_CHECK_TITLE }}">
 				<svg class="bi text-white" width="16" height="16" fill="currentColor">
 					<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#download"/>
 				</svg>
