@@ -37,9 +37,10 @@
 				{% if not S_IN_INSTALL and S_HAS_PROFILES %}
 					<li class="nav-item fs-5"><a class="nav-link{% if S_BOARDS %} active{% endif %}"{% if S_BOARDS %} aria-current="page"{% endif %} href="{{ U_MAIN }}">{{ lang('BOARDS') }}</a></li>
 				{% endif %}
-				<li class="nav-item fs-5"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %}  href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
-				<li class="nav-item fs-5"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %}  href="{{ U_DOCS }}">{{ lang('DOCS_LONG') }}</a></li>
-				<li class="nav-item fs-5"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %}  href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %} href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %} href="{{ U_DOCS }}">{{ lang('DOCS_SHORT') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %} href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
+				<li class="nav-item fs-5"><a class="nav-link" href="https://github.com/phpbb/quickinstall" title="{{ lang('GITHUB') }}"><svg class="bi" width="20" height="20" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#github"/></svg></a></li>
 			</ul>
 		</div>
 	</div>

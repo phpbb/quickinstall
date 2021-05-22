@@ -135,6 +135,7 @@ $lang = array_merge($lang, array(
 	'DIR_EXISTS'		=> 'The directory &quot;<strong>%s</strong>&quot; already exists.',
 	'DIR_FILE_SETTINGS'	=> 'Directories and Files',
 	'DOCS_LONG'			=> 'Documentation',
+	'DOCS_SHORT'		=> 'Docs',
 	'DOWNLOAD'			=> 'Download',
 	'DROP_DB_IF_EXISTS'	=> 'Drop database if it exists',
 	'DROP_DB_IF_EXISTS_EXPLAIN'	=> 'Have &quot;Drop database if it exists&quot; checked by default when creating boards.',
@@ -156,6 +157,7 @@ $lang = array_merge($lang, array(
 	'FORGOT_THIS'				=> 'You forgot this!',
 
 	'GENERAL_ERROR'		=> 'General Error',
+	'GITHUB'			=> 'GitHub',
 	'GOTO_BOARD'		=> 'Open “%s” in a new browser window',
 	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
 	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
