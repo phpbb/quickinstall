@@ -44,6 +44,7 @@ class qi_manage
 					$current_item = $settings->get_boards_dir() . $item;
 
 					// Need to get the dbname from the board.
+					$dbhost = $dbport = $dbname = $dbuser = $dbpasswd = $dbms = '';
 					@include($current_item . '/config.php');
 
 					// Attempt to delete the board from filesystem
@@ -119,7 +120,7 @@ class qi_manage
 					$msg_text = '';
 					foreach ($error as $row)
 					{
-						$msg_text = '<p>' . htmlspecialchars($row) . '</p>';
+						$msg_text .= '<p>' . htmlspecialchars($row) . '</p>';
 					}
 
 					gen_error_msg($msg_text, $msg_title, $msg_explain);
