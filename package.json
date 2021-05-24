@@ -9,6 +9,7 @@
     "bootstrap-icons": "^1.4.0",
     "clean-css-cli": "^5.3.0",
     "copyfiles": "^2.4.0",
+    "eslint": "^7.27.0",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^8.3.1",
     "sass": "^1.32.13"
@@ -24,6 +25,49 @@
     "copy-bs-icons": "copyfiles --flat node_modules/bootstrap-icons/bootstrap-icons.svg style/assets/img",
     "copy-bs-dark": "copyfiles --flat node_modules/bootstrap-dark-5/dist/css/bootstrap-nightfall.min.css style/assets/css",
     "all": "npm-run-all css copy",
-    "test": "eslint style/assets/js/scripts.js -c .eslintrc.json"
+    "test": "eslint style/assets/js/scripts.js"
+  },
+  "eslintConfig": {
+    "ignorePatterns": [
+      "style/assets/js/bootstrap.*.js"
+    ],
+    "rules": {
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "max-params": [
+        "error",
+        6
+      ],
+      "block-spacing": "error",
+      "array-bracket-spacing": [
+        "error",
+        "always"
+      ],
+      "multiline-comment-style": "error",
+      "computed-property-spacing": "off",
+      "space-in-parens": "off",
+      "capitalized-comments": "off",
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "no-lonely-if": "off",
+      "unicorn/prefer-module": "off",
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ]
+    },
+    "env": {
+      "es2021": true,
+      "browser": true,
+      "node": true
+    }
   }
 }

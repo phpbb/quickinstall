@@ -28,7 +28,6 @@
 		<delete file="${dir}/vendor/twig/twig/README.rst" />
 		<delete file="${dir}/.gitignore" />
 		<delete file="${dir}/.gitattributes" />
-		<delete file="${dir}/.eslintrc.json" />
 		<delete file="${dir}/build.xml" />
 		<delete file="${dir}/composer.lock" />
 		<delete file="${dir}/composer.phar" />

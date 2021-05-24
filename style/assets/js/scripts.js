@@ -1,4 +1,4 @@
-(function (document, window) {
+(function(document, window) {
 	'use strict';
 
 	const ready = fn => {
@@ -45,7 +45,7 @@
 			const modal = $('[data-qi-submit-modal]');
 			const $modal = new bootstrap.Modal(modal, {
 				keyboard: false,
-				backdrop: 'static'
+				backdrop: 'static',
 			});
 			modal.addEventListener('shown.bs.modal', () => {
 				const xhr = new XMLHttpRequest();
@@ -169,7 +169,7 @@
 			const qiUpdateToast = $('#qiUpdateToast');
 			if (qiUpdateToast) {
 				const toast = new bootstrap.Toast(qiUpdateToast, {
-					autohide: false
+					autohide: false,
 				});
 				toast.show();
 				qiUpdateToast.addEventListener('hidden.bs.toast', () => {
