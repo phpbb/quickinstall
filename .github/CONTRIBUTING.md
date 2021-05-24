@@ -33,9 +33,8 @@ $ php composer.phar install
 
 > Optional: QuickInstall uses the Bootstrap framework which is compiled via NPM. To update or customise QuickInstall's Bootstrap files you must:
 > - Have [Node JS](https://nodejs.org/) installed.
-> - Navigate to the `quickinstall/develop` folder: `$ cd develop`.
 > - Run `$ npm install` to install its node dependencies.
-> - Edit the `qi_bootstrap.scss` file to customise Bootstrap variables.
+> - Edit the `scss/qi_bootstrap.scss` file to customise Bootstrap variables.
 > - Run `$ npm run all` to compile and deploy new Bootstrap CSS/JS files to QuickInstall.
 
 
@@ -56,11 +55,9 @@ $ git push origin myNewbranch
 
 ## :tophat: Submit a Pull Request
 
-1. Got to your repository on GitHub.com.
+1. Go to your repository on GitHub.com.
 
 2. Click the Pull Request button.
-
-3. Make sure the **develop** branch is selected in the base branch dropdown menu.
 
 
 ## :thumbsup: Collaborate

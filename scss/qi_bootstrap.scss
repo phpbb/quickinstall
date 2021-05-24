@@ -17,7 +17,7 @@ $card-border-radius: .5rem;
 $enable-gradients: true;
 
 // Import Bootstrap (do not change or move this line)
-@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 // Extend Bootstrap with new components
 .fw-strong {
