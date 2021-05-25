@@ -5,7 +5,7 @@
 	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
 }
 
-.phpbb-logo {
+.phpbb-logo-nb {
 	background-image: url("../img/logo_small_white.svg");
 	background-repeat: no-repeat;
 	padding: 0.125rem 3rem;
@@ -77,34 +77,27 @@ svg.bi {
 	vertical-align: -.125em;
 }
 
-.lh-0 {
-	line-height: 0;
-}
-
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
-  .navbar.bg-primary {
-    background-color: var(--darkside-bg-color) !important; /* !important to override bootstrap's !important */
-  }
+	.navbar.bg-primary {
+		background-color: var(--darkside-bg-color) !important; /* !important to override bootstrap's !important */
+	}
 
-  body.bg-secondary {
-    background-color: #0d1117 !important; /* !important to override bootstrap's !important */
-  }
+	body.bg-secondary {
+		background-color: #0d1117 !important; /* !important to override bootstrap's !important */
+	}
 
-  .callout-warning {
-	  border-left-color: #f39c12;
-  }
+	.callout-primary { border-left-color: #375a7f; }
+	.callout-info { border-left-color: #17a2b8; }
+	.callout-warning { border-left-color: #f39c12; }
+	.callout-danger { border-left-color: #e74c3c; }
 
-  .phpbb-cosmos-logo > path {
-	  fill: #ffffff;
-  }
+	/* https://codepen.io/sosuke/pen/Pjoqqp */
+	.phpbb-logo-rm {
+		filter: brightness(0) saturate(100%) invert(74%) sepia(97%) saturate(1%) hue-rotate(315deg) brightness(98%) contrast(103%); /* #E1E1E1 */
+	}
 
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  .dark-filter {
-	  filter: brightness(0) saturate(100%) invert(74%) sepia(97%) saturate(1%) hue-rotate(315deg) brightness(98%) contrast(103%); /* #E1E1E1 */
-  }
-
-  .phpbb-logo {
-	  filter: brightness(0) saturate(100%) invert(100%) sepia(5%) saturate(23%) hue-rotate(84deg) brightness(104%) contrast(96%); /* #FAFAFA */
-  }
+	.phpbb-logo-nb {
+		filter: brightness(0) saturate(100%) invert(100%) sepia(5%) saturate(23%) hue-rotate(84deg) brightness(104%) contrast(96%); /* #FAFAFA */
+	}
 }

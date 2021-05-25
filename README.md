@@ -1,4 +1,4 @@
-# <img class="dark-filter" height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB"> QuickInstall
+# <img class="phpbb-logo-rm" height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB"> QuickInstall
 
 QuickInstall is a tool we built to support the community of phpBB extension developers (and previously MOD authors). It simplifies and accelerates the process of creating and configuring local phpBB3 forum installations. These boards can then be used to safely install, develop and test extensions in isolation without having to worry about external conflicts.
 

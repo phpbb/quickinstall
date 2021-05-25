@@ -39,7 +39,6 @@
 			});
 		}
 
-		/* global bootstrap */
 		// Submit form via ajax
 		const ajaxSubmit = $form => {
 			const modal = $('[data-qi-submit-modal]');

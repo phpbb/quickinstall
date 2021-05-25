@@ -24,6 +24,10 @@ $enable-gradients: true;
   font-weight: 500;
 }
 
+.lh-0 {
+  line-height: 0;
+}
+
 .callout {
   padding: $spacer 1.25rem;
   margin: $spacer 0;
