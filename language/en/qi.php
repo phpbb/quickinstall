@@ -159,8 +159,6 @@ $lang = array_merge($lang, array(
 	'GENERAL_ERROR'		=> 'General Error',
 	'GITHUB'			=> 'GitHub',
 	'GOTO_BOARD'		=> 'Open “%s” in a new browser window',
-	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
-	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
 	'GRANT_PERMISSIONS_EXPLAIN'	=> 'For example, 0060 for Group read/write permissions on all board files and directories.',
 
