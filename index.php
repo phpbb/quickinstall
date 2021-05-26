@@ -62,11 +62,6 @@ if (PHP_VERSION_ID >= 50500)
 }
 error_reporting($level);
 
-if (PHP_VERSION_ID < 50407)
-{
-	gen_error_msg('ERROR_PHP_UNSUPPORTED');
-}
-
 // If we are on PHP5 we may need to define STRIP to strip slashes
 define('STRIP', PHP_VERSION_ID < 60000 && get_magic_quotes_gpc());
 
@@ -77,10 +72,16 @@ define('STRIP', PHP_VERSION_ID < 60000 && get_magic_quotes_gpc());
 // Set PHP error handler to ours
 set_error_handler(array('qi', 'msg_handler'), E_ALL);
 
+// Check PHP version
+if (PHP_VERSION_ID < 50407)
+{
+	trigger_error('ERROR_PHP_UNSUPPORTED');
+}
+
 // Make sure we have phpBB.
 if (!file_exists($quickinstall_path . 'sources/phpBB3/common.' . $phpEx))
 {
-	gen_error_msg('ERROR_PHPBB_NOT_FOUND');
+	trigger_error('ERROR_PHPBB_NOT_FOUND');
 }
 
 // Let's get the config.
@@ -241,7 +242,7 @@ if (!empty($errors) || $alt_env_missing || (empty($profiles) && ($page === 'main
 
 // Hide manage boards if there is no saved config.
 $template->assign_var('S_IN_INSTALL', $settings->is_install());
-$template->assign_var('S_HAS_PROFILES', $settings->get_profiles());
+$template->assign_var('S_HAS_PROFILES', $profiles);
 
 // now create a module_handler object
 $module	= new module_handler($quickinstall_path . 'modules/', 'qi_');

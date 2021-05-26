@@ -400,12 +400,15 @@ class qi
 				$template = new twig($user, false, $quickinstall_path);
 
 				$template->assign_vars([
-					'T_THEME_PATH'	=> $quickinstall_path . 'style',
-					'MSG_TITLE'		=> isset($msg_title) ? self::lang($msg_title) : self::lang('GENERAL_ERROR'),
-					'MSG_TEXT'		=> $msg_text,
-					'MSG_EXPLAIN'	=> '',
-					'RETURN_LINKS'	=> self::lang('GO_QI_MAIN', '<a href="' . self::url('main') . '">', '</a>') . ' &bull; ' . self::lang('GO_QI_SETTINGS', '<a href="' . self::url('settings') . '">', '</a>'),
-					'QI_VERSION'	=> self::current_version(),
+					'ERROR_MSG_TITLE'	=> isset($msg_title) ? self::lang($msg_title) : self::lang('GENERAL_ERROR'),
+					'ERROR_MSG_TEXT'	=> $msg_text,
+					'QI_VERSION'		=> self::current_version(),
+					'U_MAIN'			=> self::url('main'),
+					'U_SETTINGS'		=> self::url('settings'),
+					'U_DOCS'			=> self::url('docs'),
+					'U_PHPINFO'			=> self::url('phpinfo'),
+					'T_THEME_PATH'		=> $quickinstall_path . 'style',
+					'S_HAS_PROFILES'	=> true,
 				]);
 
 				$template->display('error');

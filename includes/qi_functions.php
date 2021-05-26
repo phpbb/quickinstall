@@ -217,46 +217,6 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 	return $tz_select;
 }
 
-function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '')
-{
-	global $quickinstall_path, $user, $phpEx;
-
-	if ($user === null)
-	{
-		$user = new stdClass();
-	}
-
-	if (empty($user->lang))
-	{
-		$lang = [];
-		include "{$quickinstall_path}language/en/qi.$phpEx";
-		$user->lang = $lang;
-		unset($lang);
-	}
-
-	phpbb_functions::send_status_line(503, 'Service Unavailable');
-
-	if (!class_exists('twig'))
-	{
-		require("{$quickinstall_path}includes/twig.{$phpEx}");
-	}
-
-	$template = new twig($user, false, $quickinstall_path);
-
-	$template->assign_vars([
-		'T_THEME_PATH'	=> $quickinstall_path . 'style',
-		'MSG_TITLE'		=> qi::lang_key_exists($msg_title) ? qi::lang($msg_title) : qi::lang('GENERAL_ERROR'),
-		'MSG_TEXT'		=> qi::lang_key_exists($msg_text) ? qi::lang($msg_text) : '',
-		'MSG_EXPLAIN'	=> qi::lang_key_exists($msg_explain) ? qi::lang($msg_explain) : '',
-		'RETURN_LINKS'	=> qi::lang('GO_QI_MAIN', '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . qi::lang('GO_QI_SETTINGS', '<a href="' . qi::url('settings') . '">', '</a>'),
-		'QI_VERSION'	=> qi::current_version(),
-	]);
-
-	$template->display('error');
-
-	exit;
-}
-
 function legacy_set_var(&$result, $var, $type, $multibyte = false)
 {
 	settype($var, $type);

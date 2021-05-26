@@ -113,17 +113,24 @@ class qi_manage
 				}
 				else
 				{
-					$msg_title = qi::lang('GENERAL_ERROR');
+					$header = $boards > 1 ? 'ERROR_DEL_BOARDS' : 'ERROR_DEL_FILES';
 
-					$msg_explain = $boards > 1 ? qi::lang('ERROR_DEL_BOARDS') : qi::lang('ERROR_DEL_FILES');
-
-					$msg_text = '';
+					$message = '<h5>' . qi::lang($header) . '</h5>';
 					foreach ($error as $row)
 					{
-						$msg_text .= '<p>' . htmlspecialchars($row) . '</p>';
+						$message .= '<p>' . htmlspecialchars($row) . '</p>';
 					}
 
-					gen_error_msg($msg_text, $msg_title, $msg_explain);
+					if (strlen($message) > 1024)
+					{
+						// We need to define $msg_long_text here to circumvent text stripping.
+						global $msg_long_text;
+						$msg_long_text = $message;
+
+						trigger_error(false, E_USER_NOTICE);
+					}
+
+					trigger_error($message, E_USER_NOTICE);
 				}
 			break;
 		}
