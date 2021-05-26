@@ -244,12 +244,12 @@ function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '
 	$template = new twig($user, false, $quickinstall_path);
 
 	$template->assign_vars([
-		'QI_PATH'              => $quickinstall_path,
-		'MSG_TITLE'            => qi::lang_key_exists($msg_title) ? qi::lang($msg_title) : qi::lang('GENERAL_ERROR'),
-		'MSG_TEXT'             => qi::lang_key_exists($msg_text) ? qi::lang($msg_text) : '',
-		'MSG_EXPLAIN'          => qi::lang_key_exists($msg_explain) ? qi::lang($msg_explain) : '',
-		'RETURN_LINKS'         => qi::lang('GO_QI_MAIN', '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . qi::lang('GO_QI_SETTINGS', '<a href="' . qi::url('settings') . '">', '</a>'),
-		'QI_VERSION'           => qi::current_version(),
+		'T_THEME_PATH'	=> $quickinstall_path . 'style',
+		'MSG_TITLE'		=> qi::lang_key_exists($msg_title) ? qi::lang($msg_title) : qi::lang('GENERAL_ERROR'),
+		'MSG_TEXT'		=> qi::lang_key_exists($msg_text) ? qi::lang($msg_text) : '',
+		'MSG_EXPLAIN'	=> qi::lang_key_exists($msg_explain) ? qi::lang($msg_explain) : '',
+		'RETURN_LINKS'	=> qi::lang('GO_QI_MAIN', '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . qi::lang('GO_QI_SETTINGS', '<a href="' . qi::url('settings') . '">', '</a>'),
+		'QI_VERSION'	=> qi::current_version(),
 	]);
 
 	$template->display('error');
