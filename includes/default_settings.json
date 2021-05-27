@@ -50,5 +50,9 @@
   "num_replies_max": 50,
   "no_dbpasswd": 0,
   "install_styles": 0,
-  "default_style": ""
+  "default_style": "",
+  "drop_db": "0",
+  "delete_files": "0",
+  "debug": "0",
+  "alt_env": ""
 }
