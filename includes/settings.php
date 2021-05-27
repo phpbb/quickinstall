@@ -288,8 +288,7 @@ class settings
 	 */
 	public function set_profile_cookie($value)
 	{
-		$time = $value === '' ? '-1 year' : '+1 year';
-		setcookie('qi_profile', $value, strtotime($time));
+		qi::set_cookie('qi_profile', $value);
 	}
 
 	/**

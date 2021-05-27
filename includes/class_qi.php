@@ -488,4 +488,38 @@ class qi
 
 		return $composerJson["version"];
 	}
+
+	/**
+	 * Set/unset a cookie
+	 *
+	 * @param string $name The name of the cookie to set/unset
+	 * @param string $value The value to give the cookie. No value will delete cookie.
+	 */
+	public static function set_cookie($name, $value = '')
+	{
+		$time = $value === '' ? '-1 year' : '+1 year';
+		setcookie($name, $value, strtotime($time));
+	}
+
+	/**
+	 * Delete all cookies by name
+	 *
+	 * @param string $name The cookie name; whole name or just the beginning
+	 */
+	public static function delete_cookies($name)
+	{
+		if (isset($_SERVER['HTTP_COOKIE']) && $name)
+		{
+			$cookies = explode(';', $_SERVER['HTTP_COOKIE']);
+			foreach($cookies as $cookie)
+			{
+				$crumbs = explode('=', $cookie);
+				$crumb = trim($crumbs[0]);
+				if (strpos($crumb, $name) === 0)
+				{
+					self::set_cookie($name);
+				}
+			}
+		}
+	}
 }
