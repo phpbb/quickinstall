@@ -1,5 +1,18 @@
 # QuickInstall Changelog
 
+## Version 1.6.2
+- [Feature] Dark mode added. When your OS or browser is in dark mode, QI will display its dark mode theme.
+- [Change] Added a wait time message to the "We're working on it" modal while building boards.
+- [Change] QI's error handling improved. Only one internal error handler now (using trigger_error).
+- [Change] QI's error page will have the same Navbar as the rest of QI, and will work as expected in responsive views.
+- [Change] QI will no longer pass any error messages to the user via URL parameters. Instead, AJAX will be used to handle certain error messages.
+- [Change] QI will no longer display backtraces in minor error notices. Backtraces will only be shown for serious errors and warnings.
+- [Change] QI's internal language translation system has been updated to support substitution variables.
+- [Change] Moved QI's NPM development files to the project/repository root.
+- [Change] A small batch of optimisations and code improvements.
+- [Fix] Fixed CSS mapping to source files (for development). Maps are no longer embedded in the minified CSS either.
+- [Fix] Minor alignment tweaks to the icons and phpBB board version number badge in the "My Boards" sidebar.
+
 ## Version 1.6.1
 - [Fix] Fixed problems that prevented phpBB 4.0.0-alpha builds from successfully installing.
 - [Fix] Fixed unintended side effects on styling of the sidebar after updating Bootstrap 5 from the beta-3 version.
