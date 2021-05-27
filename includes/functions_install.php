@@ -24,12 +24,12 @@ class p_master_dummy
 
 	public function db_error($message, $sql = false, $line = false, $file = false)
 	{
-		trigger_error($message);
+		trigger_error($message, E_USER_ERROR);
 	}
 
 	public function error($message, $sql = false, $line = false, $file = false)
 	{
-		trigger_error($message);
+		trigger_error($message, E_USER_ERROR);
 	}
 
 	public function redirect($url)

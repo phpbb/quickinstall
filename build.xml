@@ -13,7 +13,8 @@
 		Remove some unnecessary files/directories
 		-->
 		<delete dir="${dir}/.github" />
-		<delete dir="${dir}/develop" />
+		<delete dir="${dir}/node_modules" />
+		<delete dir="${dir}/scss" />
 		<delete dir="${dir}/vendor/twig/twig/doc" />
 		<delete dir="${dir}/vendor/twig/twig/ext" />
 		<delete dir="${dir}/vendor/twig/twig/test" />
@@ -30,6 +31,8 @@
 		<delete file="${dir}/build.xml" />
 		<delete file="${dir}/composer.lock" />
 		<delete file="${dir}/composer.phar" />
+		<delete file="${dir}/package.json" />
+		<delete file="${dir}/package-lock.json" />
 	</target>
 
 	<!--

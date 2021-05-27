@@ -3,29 +3,30 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- The page supports both light and dark color schemes, with light being default -->
+	<meta name="color-scheme" content="light dark">
+
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
-	<link href="{{ QI_PATH }}style/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="{{ QI_PATH }}style/assets/css/qi_style.css" rel="stylesheet" media="screen">
-	<title>{{ MSG_TITLE }}</title>
+	<!-- Bootstrap CSS -->
+	<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
+	<!-- Bootstrap-Dark Variant CSS (the media attribute is for dark auto-switching) -->
+	<link href="{{ T_THEME_PATH }}/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
+	<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css" rel="stylesheet" media="screen">
+	<title>{{ ERROR_MSG_TITLE }}</title>
 </head>
 <body class="bg-secondary">
-<nav class="navbar navbar-dark sticky-top navbar-expand-lg bg-primary flex-md-nowrap mb-2">
-	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', QI_PATH ~ 'style') }}</span></span>
-	</div>
-</nav>
+
+{% include 'navbar.twig' %}
+
 <div class="container-fluid">
 	<div id="main" class="px-5">
-		<h1>{{ MSG_TITLE }}</h1>
-		<div class="card bg-white mb-3">
+		<h1>{{ ERROR_MSG_TITLE }}</h1>
+		<div class="card mb-3">
 			<div class="card-body">
-				<div><strong>{{ MSG_EXPLAIN }}</strong></div>
-				<div>{{ MSG_TEXT }}</div>
+				<div>{{ ERROR_MSG_TEXT }}</div>
 			</div>
-		</div>
-		<div>
-			{{ RETURN_LINKS }}
 		</div>
 	</div>
 	<footer class="text-center py-3">
@@ -33,5 +34,7 @@
 		<p class="mb-0"><small>{{ lang('POWERED_BY_PHPBB') }}</small></p>
 	</footer>
 </div>
+<script src="{{ T_THEME_PATH }}/assets/js/bootstrap.min.js"></script>
+<script src="{{ T_THEME_PATH }}/assets/js/scripts.js?v={{ QI_VERSION }}"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-# <img height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB">  QuickInstall
+# <img class="phpbb-logo-rm" height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB"> QuickInstall
 
 QuickInstall is a tool we built to support the community of phpBB extension developers (and previously MOD authors). It simplifies and accelerates the process of creating and configuring local phpBB3 forum installations. These boards can then be used to safely install, develop and test extensions in isolation without having to worry about external conflicts.
 
@@ -34,7 +34,7 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 
 |  |  |  |  |  |  |
 |-|-|-|-|-|-|
-| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 12+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 36+ |
+| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 12+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 40+ |
 | Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari-ios/safari-ios_32x32.png) 12+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/android-webview/android-webview_32x32.png) 6+ |  |  |  |
 
 ##### phpBB Requirements

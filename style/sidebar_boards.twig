@@ -6,7 +6,7 @@
 				<form id="del_board" method="post" action="{{ U_MANAGE }}">
 		{% endif %}
 				<div class="list-group-item py-2 px-0 bg-transparent border-end-0 border-start-0">
-					<div class="d-flex w-100 justify-content-between">
+					<div class="d-flex w-100 align-items-center justify-content-between">
 						<div class="form-check form-switch m-1 overflow-hidden">
 							<input type="checkbox" class="form-check-input" data-qi-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}" title="{{ lang('MARK_FOR_DELETION') }}">
 							<label class="form-check-label fw-strong" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}" title="{{ lang('GOTO_BOARD', board.BOARD_NAME) }}">{{ board.BOARD_NAME }}</a></label>

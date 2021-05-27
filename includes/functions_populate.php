@@ -91,7 +91,7 @@ class populate
 
 	public function populate()
 	{
-		global $quickinstall_path, $phpbb_root_path, $phpEx, $settings, $user;
+		global $quickinstall_path, $phpbb_root_path, $phpEx, $settings;
 
 		// Need to include some files.
 		if (!function_exists('gen_sort_selects'))
@@ -167,7 +167,7 @@ class populate
 
 			if (empty($this->email_domain))
 			{
-				trigger_error($user->lang['NEED_EMAIL_DOMAIN'], E_USER_ERROR);
+				trigger_error(qi::lang('NEED_EMAIL_DOMAIN'), E_USER_ERROR);
 			}
 
 			// Make sure the email domain starts with a @ and is lower case.
@@ -289,7 +289,7 @@ class populate
 	 */
 	private function fill_forums()
 	{
-		global $db, $user;
+		global $db;
 
 		// Statistics
 		$topic_cnt = $post_cnt = 0;
@@ -333,7 +333,7 @@ class populate
 				$topic_arr = array(
 					'topic_id'		=> (int) ++$topic_id,
 					'forum_id'		=> (int) $forum['forum_id'],
-					'topic_title'	=> sprintf($user->lang['TEST_TOPIC_TITLE'], $topic_cnt),
+					'topic_title'	=> qi::lang('TEST_TOPIC_TITLE', $topic_cnt),
 				);
 
 				if (defined('PHPBB_31'))
@@ -365,7 +365,7 @@ class populate
 					$poster_id	= mt_rand($mt_min, $mt_max);
 					$poster_arr	= $this->user_arr[$poster_id];
 					$post_time	= $this->post_time++;
-					$post_text	= sprintf($user->lang['TEST_POST_START'], $post_cnt) . "\n" . $user->lang['LOREM_IPSUM'];
+					$post_text	= qi::lang('TEST_POST_START', $post_cnt) . "\n" . qi::lang('LOREM_IPSUM');
 					$subject	= (($j > 0) ? 'Re: ' : '') . $topic_arr['topic_title'];
 
 					$bbcode_uid = $bbcode_bitfield = '';
@@ -553,10 +553,10 @@ class populate
 	 */
 	private function _create_forums($forum_type, $cnt, $acp_forums, $parent_id = 0)
 	{
-		global $user, $auth;
+		global $auth;
 
-		$forum_name = ($forum_type == FORUM_CAT) ? sprintf($user->lang['TEST_CAT_NAME'], $cnt) : sprintf($user->lang['TEST_FORUM_NAME'], $cnt);
-		$forum_desc = ($forum_type == FORUM_CAT) ? sprintf($user->lang['TEST_FORUM_NAME'], $cnt) : '';
+		$forum_name = ($forum_type == FORUM_CAT) ? qi::lang('TEST_CAT_NAME', $cnt) : qi::lang('TEST_FORUM_NAME', $cnt);
+		$forum_desc = ($forum_type == FORUM_CAT) ? qi::lang('TEST_FORUM_NAME', $cnt) : '';
 
 		// Setting up the data to be used
 		$forum_data = array(

@@ -1,0 +1,73 @@
+{
+  "name": "quickinstall",
+  "version": "1.6.1",
+  "license": "GPL-2.0-only",
+  "dependencies": {
+    "autoprefixer": "^10.2.5",
+    "bootstrap": "^5.0.0",
+    "bootstrap-dark-5": "^1.0.1",
+    "bootstrap-icons": "^1.4.0",
+    "clean-css-cli": "^5.3.0",
+    "copyfiles": "^2.4.0",
+    "eslint": "^7.27.0",
+    "npm-run-all": "^4.1.5",
+    "postcss-cli": "^8.3.1",
+    "sass": "^1.32.13"
+  },
+  "scripts": {
+    "css": "npm-run-all css-compile css-prefix css-minify",
+    "css-compile": "sass scss/qi_bootstrap.scss scss/qi_bootstrap.css",
+    "css-prefix": "postcss --use autoprefixer --replace scss/qi_bootstrap.css",
+    "css-minify": "cleancss -O1 --format breakWith=lf --with-rebase --source-map --source-map-inline-sources --output scss/qi_bootstrap.min.css scss/qi_bootstrap.css",
+    "copy": "npm-run-all copy-bs-css copy-bs-js copy-bs-icons copy-bs-dark",
+    "copy-bs-css": "copyfiles --flat scss/qi_bootstrap.min.css scss/qi_bootstrap.min.css.map style/assets/css",
+    "copy-bs-js": "copyfiles --flat node_modules/bootstrap/dist/js/bootstrap.min.js node_modules/bootstrap/dist/js/bootstrap.min.js.map style/assets/js",
+    "copy-bs-icons": "copyfiles --flat node_modules/bootstrap-icons/bootstrap-icons.svg style/assets/img",
+    "copy-bs-dark": "copyfiles --flat node_modules/bootstrap-dark-5/dist/css/bootstrap-nightfall.min.css style/assets/css",
+    "all": "npm-run-all css copy",
+    "test": "eslint style/assets/js/scripts.js"
+  },
+  "eslintConfig": {
+    "ignorePatterns": [
+      "style/assets/js/bootstrap.*.js"
+    ],
+    "rules": {
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "max-params": [
+        "error",
+        6
+      ],
+      "block-spacing": "error",
+      "array-bracket-spacing": [
+        "error",
+        "always"
+      ],
+      "multiline-comment-style": "error",
+      "computed-property-spacing": "off",
+      "space-in-parens": "off",
+      "capitalized-comments": "off",
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "no-lonely-if": "off",
+      "unicorn/prefer-module": "off",
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ]
+    },
+    "env": {
+      "es2021": true,
+      "browser": true,
+      "node": true
+    }
+  }
+}

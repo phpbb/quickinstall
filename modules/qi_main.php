@@ -22,17 +22,9 @@ class qi_main
 {
 	public function __construct()
 	{
-		global $template, $user, $settings;
+		global $template, $settings;
 
 		get_installed_boards();
-
-		// Some error?
-		if ($settings->get_config('error', 0))
-		{
-			$error_msg = $settings->get_config('error_msg', '', true);
-			$error_msg = htmlspecialchars_decode($error_msg);
-			$template->assign_var('ERROR_MSG', $error_msg);
-		}
 
 		// Assign index specific vars
 		$template->assign_vars(array(
@@ -47,9 +39,6 @@ class qi_main
 			'DBNAME'			=> $settings->get_config('dbname', ''),
 			'INSTALL_STYLES'	=> $settings->get_config('install_styles', 0),
 			'DEFAULT_STYLE'		=> $settings->get_config('default_style', ''),
-
-			'S_ERROR'		=> $settings->get_config('error', 0),
-			'ERROR_TITLE'	=> $settings->get_config('error_title', '', true),
 
 			'S_DELETE_FILES'=> $settings->get_config('delete_files', 0),
 			'S_DEBUG'		=> $settings->get_config('debug', 0),

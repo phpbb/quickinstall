@@ -135,6 +135,7 @@ $lang = array_merge($lang, array(
 	'DIR_EXISTS'		=> 'The directory &quot;<strong>%s</strong>&quot; already exists.',
 	'DIR_FILE_SETTINGS'	=> 'Directories and Files',
 	'DOCS_LONG'			=> 'Documentation',
+	'DOCS_SHORT'		=> 'Docs',
 	'DOWNLOAD'			=> 'Download',
 	'DROP_DB_IF_EXISTS'	=> 'Drop database if it exists',
 	'DROP_DB_IF_EXISTS_EXPLAIN'	=> 'Have &quot;Drop database if it exists&quot; checked by default when creating boards.',
@@ -156,9 +157,8 @@ $lang = array_merge($lang, array(
 	'FORGOT_THIS'				=> 'You forgot this!',
 
 	'GENERAL_ERROR'		=> 'General Error',
+	'GITHUB'			=> 'GitHub',
 	'GOTO_BOARD'		=> 'Open “%s” in a new browser window',
-	'GO_QI_MAIN'		=> '%sGo to QuickInstall main page%s',
-	'GO_QI_SETTINGS'	=> '%sGo to settings%s',
 	'GRANT_PERMISSIONS'	=> 'Grant additional permissions',
 	'GRANT_PERMISSIONS_EXPLAIN'	=> 'For example, 0060 for Group read/write permissions on all board files and directories.',
 
@@ -194,7 +194,7 @@ $lang = array_merge($lang, array(
 	'NEED_WRITABLE'			=> 'QuickInstall needs the <code>boards</code>, <code>cache</code> and <code>settings</code> directories to be writable all the time.<br />The <code>settings</code> directory must always be in the QuickInstall root path.',
 	'NO'					=> 'No',
 	'NO_ALT_ENV'			=> 'No alternative environments found.',
-	'NO_ALT_ENV_FOUND'		=> 'The specified alternative environment <strong>%s</strong> don’t exist.', // %s is the missing environment name
+	'NO_ALT_ENV_FOUND'		=> 'The specified alternative environment <strong>%s</strong> could not be found.', // %s is the missing environment name
 	'NO_BOARDS'				=> 'You have no boards.',
 	'NO_DB'					=> 'No database selected.',
 	'NO_MODULE'				=> 'The module <code>%s</code> could not be loaded.',
@@ -251,7 +251,7 @@ $lang = array_merge($lang, array(
 	'QI_TZ'				=> 'Time zone',
 	'QI_TZ_EXPLAIN'		=> 'Set the default time zone for your boards.',
 	'QUICKINSTALL'		=> 'QuickInstall',
-	'QUICKINSTALL_LOGO'	=> 'Quick<svg class="bi text-white" width="16" height="16" fill="currentColor"><use xlink:href="%1$s/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>Install',
+	'QUICKINSTALL_LOGO'	=> 'Quick%sInstall',
 
 	'REDIRECT'			=> 'Redirect',
 	'REDIRECT_EXPLAIN'	=> 'Redirect to new board after it is created.',
@@ -305,11 +305,12 @@ $lang = array_merge($lang, array(
 	'TIME_SETTINGS'			=> 'Time settings',
 	'TOGGLE_NAVIGATION'		=> 'Toggle navigation',
 
-	'UPDATE_AVAILABLE'		=> 'A new version update is available.',
+	'UPDATE_AVAILABLE'		=> 'A new version is available.',
 
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 
 	'WORKING_ON_IT'		=> 'We’re working on it...',
+	'WORKING_ON_IT_EXPLAIN'	=> 'This may take a few minutes.',
 
 	'YES'	=> 'Yes',
 

@@ -288,8 +288,7 @@ class settings
 	 */
 	public function set_profile_cookie($value)
 	{
-		$time = $value === '' ? '-1 year' : '+1 year';
-		setcookie('qi_profile', $value, strtotime($time));
+		qi::set_cookie('qi_profile', $value);
 	}
 
 	/**
@@ -492,19 +491,18 @@ class settings
 
 		if (count($this->errors))
 		{
-			$user = $this->get_user();
 			foreach ($this->errors as $error)
 			{
 				if (is_array($error))
 				{
 					$key = array_shift($error);
-					$errors[] = vsprintf($user->lang[$key], array_map(function($i) use($user) {
-						return isset($user->lang[$i]) ? $user->lang[$i] : $i;
+					$errors[] = vsprintf(qi::lang($key), array_map(static function($i) {
+						return qi::lang($i);
 					}, $error));
 				}
 				else
 				{
-					$errors[] = $user->lang[$error];
+					$errors[] = qi::lang($error);
 				}
 			}
 
@@ -531,24 +529,5 @@ class settings
 	public function is_install()
 	{
 		return $this->install;
-	}
-
-	/**
-	 * Get the global user object. Should be called whenever the user is needed,
-	 * since in this procedural code base, it doesn't exist when this class is
-	 * instantiated but could exist later on when it's member methods are called.
-	 * This is gross!
-	 *
-	 * @return \phpbb\user
-	 */
-	protected function get_user()
-	{
-		if ($this->user === null)
-		{
-			global $user;
-			$this->user = $user;
-		}
-
-		return $this->user;
 	}
 }

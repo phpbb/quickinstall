@@ -38,7 +38,7 @@ class qi_create
 			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33'))
 		)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['PHP7_INCOMPATIBLE'], PHPBB_VERSION, PHP_VERSION), 'main');
+			trigger_error(qi::lang('PHP7_INCOMPATIBLE', PHPBB_VERSION, PHP_VERSION));
 		}
 
 		if (defined('PHPBB_31'))
@@ -83,7 +83,7 @@ class qi_create
 
 		if ($alt_env !== '' && (!file_exists("{$quickinstall_path}sources/phpBB3_alt/$alt_env") || is_file("{$quickinstall_path}sources/phpBB3_alt/$alt_env")))
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_ALT_ENV_FOUND'], 'main');
+			trigger_error(qi::lang('NO_ALT_ENV_FOUND'));
 		}
 
 		// Set up our basic founder.
@@ -100,7 +100,7 @@ class qi_create
 		// check if we have a board db (and directory) name
 		if (!$dbname)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], $user->lang['NO_DB'], 'main');
+			trigger_error(qi::lang('NO_DB'));
 		}
 
 		$dbname = $db_prefix . $dbname;
@@ -123,7 +123,7 @@ class qi_create
 			}
 			else
 			{
-				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DIR_EXISTS'], $board_dir), 'main');
+				trigger_error(qi::lang('DIR_EXISTS', $board_dir));
 			}
 		}
 
@@ -134,7 +134,7 @@ class qi_create
 		}
 		catch (RuntimeException $e)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+			trigger_error(qi::lang($e->getMessage(), $board_dir));
 		}
 
 		if (!defined('PHPBB_31'))
@@ -300,7 +300,7 @@ class qi_create
 
 			if ($db_check)
 			{
-				create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang['DB_EXISTS'], $dbname), 'main');
+				trigger_error(qi::lang('DB_EXISTS', $dbname));
 			}
 		}
 
@@ -367,7 +367,7 @@ class qi_create
 			'board_email'		=> $settings->get_config('board_email'),
 			'board_contact'		=> $settings->get_config('board_email'),
 			'cookie_domain'		=> $settings->get_config('cookie_domain'),
-			'default_dateformat'=> $user->lang['default_dateformat'],
+			'default_dateformat'=> qi::lang('default_dateformat'),
 			'email_enable'		=> $settings->get_config('email_enable', 0),
 			'smtp_delivery'		=> $settings->get_config('smtp_delivery', 0),
 			'smtp_host'			=> $settings->get_config('smtp_host'),
@@ -432,7 +432,7 @@ class qi_create
 					user_ip			= '" . $db->sql_escape($user_ip) . "',
 					user_lang		= '" . $db->sql_escape($default_lang) . "',
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
-					user_dateformat	= '" . $db->sql_escape($user->lang['default_dateformat']) . "',
+					user_dateformat	= '" . $db->sql_escape(qi::lang('default_dateformat')) . "',
 					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "',
 					" . (!defined('PHPBB_33') || $db_tools->sql_column_exists("{$table_prefix}users", 'user_email_hash') ? 'user_email_hash = ' . phpbb_email_hash($settings->get_config('board_email')) . ',' : '') . "
 					$tz_data
@@ -482,7 +482,7 @@ class qi_create
 			if (!$db->sql_query($sql))
 			{
 				$error = $db->sql_error();
-				trigger_error($error['message']);
+				trigger_error($error['message'], E_USER_ERROR);
 			}
 		}
 
@@ -546,7 +546,7 @@ class qi_create
 					if (!$db->sql_query($sql))
 					{
 						$error = $db->sql_error();
-						trigger_error($error['message']);
+						trigger_error($error['message'], E_USER_ERROR);
 					}
 				}
 				else
@@ -556,7 +556,7 @@ class qi_create
 					if (!$db->sql_query($sql))
 					{
 						$error = $db->sql_error();
-						trigger_error($error['message']);
+						trigger_error($error['message'], E_USER_ERROR);
 					}
 				}
 
@@ -771,7 +771,8 @@ class qi_create
 			unset($install);
 
 			// get search for 3.1
-			$search = new \phpbb\search\fulltext_native($error = false, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
+			$error = false;
+			$search = new \phpbb\search\fulltext_native($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
 		}
 
 		if (!defined('PHPBB_33'))
@@ -839,7 +840,7 @@ class qi_create
 		}
 		catch (RuntimeException $e)
 		{
-			create_board_warning($user->lang['MINOR_MISHAP'], sprintf($user->lang[$e->getMessage()], $board_dir), 'main');
+			trigger_error(qi::lang($e->getMessage(), $board_dir));
 		}
 
 		// Install styles
@@ -877,7 +878,7 @@ class qi_create
 		$user->ip = &$user_ip;
 		if (defined('PHPBB_31'))
 		{
-			add_log('admin', sprintf($user->lang['LOG_INSTALL_INSTALLED_QI'], qi::current_version()));
+			add_log('admin', qi::lang('LOG_INSTALL_INSTALLED_QI', qi::current_version()));
 		}
 		else
 		{

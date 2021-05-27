@@ -31,12 +31,12 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template, $user;
+		global $template;
 
 		$update = self::get_update();
 
 		$template->assign_vars(array(
-			'PAGE_TITLE'	=> $user->lang[$page_title],
+			'PAGE_TITLE'	=> self::lang($page_title),
 			'T_THEME_PATH'	=> 'style',
 
 			'U_DOCS'		=> self::url('docs'),
@@ -45,13 +45,13 @@ class qi
 			'U_PHPINFO'		=> self::url('phpinfo'),
 			'U_SETTINGS'	=> self::url('settings'),
 
-			'S_CONTENT_DIRECTION'	=> $user->lang['DIRECTION'],
-			'S_USER_LANG'			=> $user->lang['USER_LANG'],
+			'S_CONTENT_DIRECTION'	=> self::lang('DIRECTION'),
+			'S_USER_LANG'			=> self::lang('USER_LANG'),
 
-			'TRANSLATION_INFO'	=> $user->lang['TRANSLATION_INFO'],
+			'TRANSLATION_INFO'	=> self::lang('TRANSLATION_INFO'),
 			'QI_VERSION'		=> self::current_version(),
 
-			'VERSION_CHECK_TITLE'	=> !empty($update) ? sprintf($user->lang['VERSION_CHECK_TITLE'], $update['current'], self::current_version()) : '',
+			'VERSION_CHECK_TITLE'	=> !empty($update) ? self::lang('VERSION_CHECK_TITLE', $update['current'], self::current_version()) : '',
 			'VERSION_CHECK_CURRENT'	=> !empty($update) ? $update['current'] : '',
 			'U_VERSION_CHECK_URL'	=> !empty($update) ? $update['download'] : '',
 		));
@@ -129,6 +129,41 @@ class qi
 	}
 
 	/**
+	 * Translate the language key. Perform substitution if args are provided.
+	 *
+	 * @return string
+	 */
+	public static function lang()
+	{
+		global $user;
+
+		$args = func_get_args();
+		$key = array_shift($args);
+
+		if (!self::lang_key_exists($key))
+		{
+			return $key;
+		}
+
+		$lang = $user->lang[$key];
+
+		return count($args) ? vsprintf($lang, $args) : $lang;
+	}
+
+	/**
+	 * Check if a lang key exists
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public static function lang_key_exists($key)
+	{
+		global $user;
+
+		return isset($user->lang[$key]);
+	}
+
+	/**
 	 * Applies language selected by user to QI.
 	 *
 	 * @param string $lang
@@ -151,7 +186,7 @@ class qi
 	*
 	* @param mixed $lang_set specifies the language entries to include
 	*/
-	public static function add_lang($lang_set, $lang_path = false)
+	public static function add_lang($lang_set, $lang_path = '')
 	{
 		global $user;
 
@@ -185,7 +220,7 @@ class qi
 	* Set language entry (called by add_lang)
 	* @access private
 	*/
-	protected static function set_lang(&$lang, $lang_file, $lang_path = false)
+	protected static function set_lang(&$lang, $lang_file, $lang_path = '')
 	{
 		global $phpEx, $settings, $quickinstall_path;
 
@@ -261,61 +296,6 @@ class qi
 		}
 
 		return $lang_options;
-	}
-
-	/**
-	* Format user date
-	*/
-	public static function format_date($gmepoch, $format = false, $forcedate = false)
-	{
-		global $user, $settings;
-		static $midnight;
-
-		$tz		= new DateTimeZone($settings->get_config('qi_tz', ''));
-		$tz_ary	= $tz->getTransitions(time());
-		$offset	= (float) $tz_ary[0]['offset'];
-		unset($tz_ary, $tz);
-		$lang_dates = $user->lang['datetime'];
-		$format = (!$format) ? $user->lang['default_dateformat'] : $format;
-
-		// Short representation of month in format
-		if ((strpos($format, '\M') === false && strpos($format, 'M') !== false) || (strpos($format, '\r') === false && strpos($format, 'r') !== false))
-		{
-			$lang_dates['May'] = $lang_dates['May_short'];
-		}
-
-		unset($lang_dates['May_short']);
-
-		if (!$midnight)
-		{
-			list($d, $m, $y) = explode(' ', gmdate('j n Y', time() + $offset));
-			$midnight = gmmktime(0, 0, 0, $m, $d, $y) - $offset;
-		}
-
-		if (strpos($format, '|') === false || ($gmepoch < $midnight - 86400 && !$forcedate) || ($gmepoch > $midnight + 172800 && !$forcedate))
-		{
-			return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $offset), $lang_dates);
-		}
-
-		if ($gmepoch > $midnight + 86400 && !$forcedate)
-		{
-			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['TOMORROW'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
-		}
-
-		if ($gmepoch > $midnight && !$forcedate)
-		{
-			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['TODAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
-		}
-
-		if ($gmepoch > $midnight - 86400 && !$forcedate)
-		{
-			$format = substr($format, 0, strpos($format, '|')) . '||' . substr(strrchr($format, '|'), 1);
-			return str_replace('||', $user->lang['datetime']['YESTERDAY'], strtr(@gmdate($format, $gmepoch + $offset), $lang_dates));
-		}
-
-		return strtr(@gmdate(str_replace('|', '', $format), $gmepoch + $offset), $lang_dates);
 	}
 
 	public static function url($page, $params = array())
@@ -394,12 +374,15 @@ class qi
 					unset($lang);
 				}
 
-				$msg_text = isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : $msg_text;
+				$msg_text = self::lang($msg_text);
 
-				$backtrace = phpbb_functions::get_backtrace();
-				if ($backtrace)
+				if ($errno === E_USER_ERROR)
 				{
-					$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
+					$backtrace = phpbb_functions::get_backtrace();
+					if ($backtrace)
+					{
+						$msg_text .= '<br /><br />BACKTRACE<br />' . $backtrace;
+					}
 				}
 
 				if (self::is_ajax())
@@ -417,12 +400,15 @@ class qi
 				$template = new twig($user, false, $quickinstall_path);
 
 				$template->assign_vars([
-					'QI_PATH'              => $quickinstall_path,
-					'MSG_TITLE'            => (!isset($msg_title)) ? $user->lang['GENERAL_ERROR'] : ((isset($user->lang[$msg_title])) ? $user->lang[$msg_title] : $msg_title),
-					'MSG_TEXT'             => $msg_text,
-					'MSG_EXPLAIN'          => '',
-					'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
-					'QI_VERSION'           => self::current_version(),
+					'ERROR_MSG_TITLE'	=> isset($msg_title) ? self::lang($msg_title) : self::lang('GENERAL_ERROR'),
+					'ERROR_MSG_TEXT'	=> $msg_text,
+					'QI_VERSION'		=> self::current_version(),
+					'U_MAIN'			=> self::url('main'),
+					'U_SETTINGS'		=> self::url('settings'),
+					'U_DOCS'			=> self::url('docs'),
+					'U_PHPINFO'			=> self::url('phpinfo'),
+					'T_THEME_PATH'		=> $quickinstall_path . 'style',
+					'S_HAS_PROFILES'	=> true,
 				]);
 
 				$template->display('error');
@@ -501,5 +487,39 @@ class qi
 		}
 
 		return $composerJson["version"];
+	}
+
+	/**
+	 * Set/unset a cookie
+	 *
+	 * @param string $name The name of the cookie to set/unset
+	 * @param string $value The value to give the cookie. No value will delete cookie.
+	 */
+	public static function set_cookie($name, $value = '')
+	{
+		$time = $value === '' ? '-1 year' : '+1 year';
+		setcookie($name, $value, strtotime($time));
+	}
+
+	/**
+	 * Delete all cookies by name
+	 *
+	 * @param string $name The cookie name; whole name or just the beginning
+	 */
+	public static function delete_cookies($name)
+	{
+		if (isset($_SERVER['HTTP_COOKIE']) && $name)
+		{
+			$cookies = explode(';', $_SERVER['HTTP_COOKIE']);
+			foreach($cookies as $cookie)
+			{
+				$crumbs = explode('=', $cookie);
+				$crumb = trim($crumbs[0]);
+				if (strpos($crumb, $name) === 0)
+				{
+					self::set_cookie($name);
+				}
+			}
+		}
 	}
 }

@@ -217,71 +217,6 @@ function qi_timezone_select($user, $default = '', $truncate = false)
 	return $tz_select;
 }
 
-function gen_error_msg($msg_text, $msg_title = 'GENERAL_ERROR', $msg_explain = '')
-{
-	global $quickinstall_path, $user, $phpEx;
-
-	if ($user === null)
-	{
-		$user = new stdClass();
-	}
-
-	if (empty($user->lang))
-	{
-		$lang = [];
-		include "{$quickinstall_path}language/en/qi.$phpEx";
-		$user->lang = $lang;
-		unset($lang);
-	}
-
-	phpbb_functions::send_status_line(503, 'Service Unavailable');
-
-	if (!class_exists('twig'))
-	{
-		require("{$quickinstall_path}includes/twig.{$phpEx}");
-	}
-
-	$template = new twig($user, false, $quickinstall_path);
-
-	$template->assign_vars([
-		'QI_PATH'              => $quickinstall_path,
-		'MSG_TITLE'            => isset($user->lang[$msg_title]) ? $user->lang[$msg_title] : '',
-		'MSG_TEXT'             => isset($user->lang[$msg_text]) ? $user->lang[$msg_text] : '',
-		'MSG_EXPLAIN'          => isset($user->lang[$msg_explain]) ? $user->lang[$msg_explain] : '',
-		'RETURN_LINKS'         => sprintf($user->lang['GO_QI_MAIN'], '<a href="' . qi::url('main') . '">', '</a>') . ' &bull; ' . sprintf($user->lang['GO_QI_SETTINGS'], '<a href="' . qi::url('settings') . '">', '</a>'),
-		'QI_VERSION'           => qi::current_version(),
-	]);
-
-	$template->display('error');
-
-	exit;
-}
-
-function create_board_warning($msg_title, $msg_text, $page)
-{
-	global $phpEx;
-
-	$args =  'page='			. urlencode($page);
-	$args .= '&error_title='	. urlencode($msg_title);
-	$args .= '&error_msg='		. urlencode($msg_text);
-	$args .= '&error='	. 1;
-
-	foreach ($_POST as $key => $value)
-	{
-		if (!empty($value))
-		{
-			$args .= "&$key=" . urlencode($value);
-		}
-	}
-
-	$url = "index.$phpEx?$args";
-	if (qi::is_ajax())
-	{
-		qi::ajax_response(array('redirect' => $url));
-	}
-	qi::redirect($url);
-}
-
 function legacy_set_var(&$result, $var, $type, $multibyte = false)
 {
 	settype($var, $type);
@@ -433,11 +368,11 @@ function validate_dbname($dbname, $first_char = false, $path = false)
  */
 function get_alternative_env($selected_option = '')
 {
-	global $user, $quickinstall_path;
+	global $quickinstall_path;
 
 	$alt_envs = [
 		[
-			'name' => $user->lang['DEFAULT_ENV'],
+			'name' => qi::lang('DEFAULT_ENV'),
 			'value' => '',
 			'selected' => empty($selected_option),
 		],
