@@ -36,6 +36,14 @@ class qi_manage
 			{
 				$current_item = $settings->get_boards_dir() . $item;
 
+				// First get config-file data for the board
+				$cfg_file = $current_item . '/config.' . $phpEx;
+				$dbhost = $dbport = $dbname = $dbuser = $dbpasswd = $dbms = '';
+				if (file_exists($cfg_file))
+				{
+					include $cfg_file;
+				}
+
 				// Attempt to delete the board from filesystem
 				if (!file_exists($current_item) || !is_dir($current_item))
 				{
@@ -58,13 +66,6 @@ class qi_manage
 				}
 
 				// Attempt to delete the database
-				$cfg_file = $current_item . '/config.' . $phpEx;
-				$dbhost = $dbport = $dbname = $dbuser = $dbpasswd = $dbms = '';
-				if (file_exists($cfg_file))
-				{
-					include $cfg_file;
-				}
-
 				if (!empty($dbname) && !empty($dbhost) && !empty($dbms) && empty($error))
 				{
 					$dbms = (strpos($dbms, '\\') !== false) ? substr(strrchr($dbms, '\\'), 1) : $dbms;
