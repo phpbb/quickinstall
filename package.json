@@ -1,6 +1,6 @@
 {
   "name": "quickinstall",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "license": "GPL-2.0-only",
   "dependencies": {
     "autoprefixer": "^10.2.5",
@@ -25,7 +25,10 @@
     "copy-bs-icons": "copyfiles --flat node_modules/bootstrap-icons/bootstrap-icons.svg style/assets/img",
     "copy-bs-dark": "copyfiles --flat node_modules/bootstrap-dark-5/dist/css/bootstrap-nightfall.min.css style/assets/css",
     "all": "npm-run-all css copy",
-    "test": "eslint style/assets/js/scripts.js"
+    "test": "eslint style/assets/js/scripts.js",
+    "bump-major": "npm version major --git-tag-version=false",
+    "bump-minor": "npm version minor --git-tag-version=false",
+    "bump-patch": "npm version patch --git-tag-version=false"
   },
   "eslintConfig": {
     "ignorePatterns": [
