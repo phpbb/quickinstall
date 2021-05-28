@@ -19,7 +19,7 @@ class qi_settings
 {
 	public function __construct()
 	{
-		global $settings, $template, $user, $quickinstall_path, $mode, $alt_env, $alt_env_missing;
+		global $settings, $template, $user, $quickinstall_path, $phpbb_root_path, $mode, $alt_env, $alt_env_missing;
 
 		$saved = false;
 		$config_text = '';
@@ -83,7 +83,7 @@ class qi_settings
 			'ALT_ENV'		=> !empty($alt_env) ? $alt_env : false,
 			'PROFILES'		=> $settings->get_profiles(),
 			'QI_LANG'		=> qi::get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
-			'PHPBB_LANG'	=> qi::get_lang_select("{$quickinstall_path}sources/phpBB3/language/", 'default_lang'),
+			'PHPBB_LANG'	=> qi::get_lang_select("{$phpbb_root_path}/language/", 'default_lang'),
 
 			'CONFIG_TEXT'   => htmlspecialchars($config_text),
 

@@ -6,12 +6,13 @@
 - [Change] QI's error handling improved. Only one internal error handler now (using trigger_error).
 - [Change] QI's error page will have the same Navbar as the rest of QI, and will work as expected in responsive views.
 - [Change] QI will no longer pass any error messages to the user via URL parameters. Instead, AJAX will be used to handle certain error messages.
-- [Change] QI will no longer display backtraces in minor error notices. Backtraces will only be shown for serious errors and warnings.
+- [Change] QI will no longer display backtraces in warnings or notices. Backtraces will only be shown for errors.
 - [Change] QI's internal language translation system has been updated to support substitution variables.
 - [Change] Moved QI's NPM development files to the project/repository root.
 - [Change] A small batch of optimisations and code improvements.
 - [Fix] Fixed CSS mapping to source files (for development). Maps are no longer embedded in the minified CSS either.
 - [Fix] Minor alignment tweaks to the icons and phpBB board version number badge in the "My Boards" sidebar.
+- [Fix] Fixed failure to load language files from phpBB 4.0.0-a1.
 
 ## Version 1.6.1
 - [Fix] Fixed problems that prevented phpBB 4.0.0-alpha builds from successfully installing.

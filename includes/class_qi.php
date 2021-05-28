@@ -280,19 +280,45 @@ class qi
 				continue;
 			}
 
-			$file = "$lang_path/$lang/iso.txt";
+			$lang_iso = $lang_path . $lang . DIRECTORY_SEPARATOR . 'iso.txt'; // for phpBB 3.x languages
+			$lang_composer = $lang_path . $lang . DIRECTORY_SEPARATOR . 'composer.json'; // for phpBB 4.0 languages
 
-			if (file_exists($file))
+			if (file_exists($lang_iso))
 			{
-				$rows = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+				$rows = file($lang_iso, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-				// Always show the English language name, except for the "active" language.
-				$lang_options[] = [
-					'name' => ($lang === $user_lang) ? $rows[1] : $rows[0],
-					'value' => $lang,
-					'selected' => $lang === $user_lang,
-				];
+				$english_name = $rows[0];
+				$local_name = $rows[1];
 			}
+			else if (file_exists($lang_composer))
+			{
+				global $phpbb_root_path;
+				$language_helper = new \phpbb\language\language_file_helper($phpbb_root_path);
+
+				try
+				{
+					$lang_pack = $language_helper->get_language_data_from_composer_file($lang_composer);
+				}
+				catch (\DomainException $e)
+				{
+					trigger_error('LANGUAGE_PACK_MISSING', E_USER_WARNING);
+				}
+
+				$english_name = $lang_pack['name'];
+				$local_name = $lang_pack['local_name'];
+			}
+			else
+			{
+				// worst case just use the iso name if nothing above worked
+				$local_name = $english_name = $lang;
+			}
+
+			// Always show the English language name, except for the "active" language.
+			$lang_options[] = [
+				'name' => ($lang === $user_lang) ? $local_name : $english_name,
+				'value' => $lang,
+				'selected' => $lang === $user_lang,
+			];
 		}
 
 		return $lang_options;
