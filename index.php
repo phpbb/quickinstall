@@ -26,7 +26,7 @@ require("{$quickinstall_path}includes/qi_constants.$phpEx");
 require("{$quickinstall_path}includes/class_qi.$phpEx");
 require("{$quickinstall_path}includes/settings.$phpEx");
 require("{$quickinstall_path}includes/qi_functions.$phpEx");
-require("{$quickinstall_path}includes/functions_files.$phpEx");
+require("{$quickinstall_path}includes/qi_file.$phpEx");
 require("{$quickinstall_path}includes/functions_module.$phpEx");
 require("{$quickinstall_path}includes/twig.$phpEx");
 require("{$quickinstall_path}vendor/autoload.$phpEx");

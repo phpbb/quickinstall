@@ -119,7 +119,7 @@ class qi_create
 		{
 			if ($settings->get_config('delete_files', false))
 			{
-				file_functions::delete_dir($board_dir);
+				qi_file::delete_dir($board_dir);
 			}
 			else
 			{
@@ -130,7 +130,7 @@ class qi_create
 		// copy all of our files
 		try
 		{
-			file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
+			qi_file::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 		}
 		catch (RuntimeException $e)
 		{
@@ -826,17 +826,17 @@ class qi_create
 		}
 
 		// clean up
-		file_functions::delete_files($board_dir, array('Thumbs.db', 'DS_Store', 'CVS', '.svn', '.git'));
+		qi_file::delete_files($board_dir, array('Thumbs.db', 'DS_Store', 'CVS', '.svn', '.git'));
 
 		// remove install dir, develop and umil
-		file_functions::delete_dir($board_dir . 'install/');
-		file_functions::delete_dir($board_dir . 'develop/');
-		file_functions::delete_dir($board_dir . 'umil/');
+		qi_file::delete_dir($board_dir . 'install/');
+		qi_file::delete_dir($board_dir . 'develop/');
+		qi_file::delete_dir($board_dir . 'umil/');
 
 		// copy extra user added files
 		try
 		{
-			file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+			qi_file::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 		}
 		catch (RuntimeException $e)
 		{
@@ -892,13 +892,13 @@ class qi_create
 		// Make all files world writable.
 		if ($settings->get_config('make_writable', false))
 		{
-			file_functions::make_writable($board_dir);
+			qi_file::make_writable($board_dir);
 		}
 
 		// Grant additional permissions
 		if (($grant_permissions = octdec($settings->get_config('grant_permissions', 0))) != 0)
 		{
-			file_functions::grant_permissions($board_dir, $grant_permissions);
+			qi_file::grant_permissions($board_dir, $grant_permissions);
 		}
 
 		// if he/she wants to be redirected, we'll do that.

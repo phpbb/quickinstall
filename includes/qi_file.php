@@ -8,17 +8,9 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * Useful class for directory and file actions
  */
-class file_functions
+class qi_file
 {
 	public static $error = array();
 

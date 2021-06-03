@@ -256,7 +256,7 @@ class qi
 		global $settings;
 
 		// Make sure $source_path ends with a slash.
-		file_functions::append_slash($lang_path);
+		qi_file::append_slash($lang_path);
 
 		// Need to assume that English always is available.
 		if ($get_var && !empty($_GET[$get_var]))
