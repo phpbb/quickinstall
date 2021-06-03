@@ -106,7 +106,10 @@ class qi_populate
 			include($phpbb_root_path . 'includes/acp/acp_permissions.' . $phpEx);
 		}
 
-		include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
+		if (!function_exists('validate_range'))
+		{
+			include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
+		}
 
 		// Get the chunk sizes. Make sure they are integers and set to something.
 		$this->post_chunks	= $settings->get_config('chunk_post', 0);
