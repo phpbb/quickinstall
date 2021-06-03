@@ -8,15 +8,7 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
- * Class with functions usefull for qi. Some stuff is from the install functions, this class is to be used statically.
+ * Class with functions useful for qi. Some stuff is from the install functions, this class is to be used statically.
  */
 class qi
 {
