@@ -23,7 +23,6 @@ $level = E_ALL ^ E_NOTICE;
 
 // Include scripts for quickinstall
 require("{$quickinstall_path}includes/qi_constants.$phpEx");
-require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
 require("{$quickinstall_path}includes/class_qi.$phpEx");
 require("{$quickinstall_path}includes/settings.$phpEx");
 require("{$quickinstall_path}includes/qi_functions.$phpEx");

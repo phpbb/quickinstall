@@ -120,7 +120,7 @@ class qi_version_helper
 	 */
 	public function compare($version1, $version2, $operator = null)
 	{
-		return phpbb_functions::phpbb_version_compare($version1, $version2, $operator);
+		return qi::phpbb_version_compare($version1, $version2, $operator);
 	}
 
 	/**
