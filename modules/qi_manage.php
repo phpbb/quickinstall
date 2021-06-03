@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_manage module
  */
 class qi_manage
 {
-	public function __construct()
+	public function run()
 	{
 		global $settings, $phpEx;
 

@@ -8,21 +8,13 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_phpinfo module
  *
  * Shamelessly borrowed from phpBB.
  */
 class qi_phpinfo
 {
-	public function __construct()
+	public function run()
 	{
 		global $template;
 

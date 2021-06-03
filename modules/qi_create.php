@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_create module
  */
 class qi_create
 {
-	public function __construct()
+	public function run()
 	{
 		global $db, $db_tools, $user, $auth, $cache, $settings, $table_prefix;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;

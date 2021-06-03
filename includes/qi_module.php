@@ -41,6 +41,7 @@ class qi_module
 		}
 
 		$class_name = $this->modules_prefix . $module;
-		return new $class_name();
+		$module = new $class_name();
+		return $module->run();
 	}
 }

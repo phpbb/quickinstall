@@ -7,17 +7,9 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
 class qi_settings
 {
-	public function __construct()
+	public function run()
 	{
 		global $settings, $template, $user, $quickinstall_path, $phpbb_root_path, $mode, $alt_env, $alt_env_missing;
 
