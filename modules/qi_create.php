@@ -870,8 +870,9 @@ class qi_create
 		// Add some random users and posts. Revisit.
 		if ($settings->get_config('populate', false))
 		{
-			include($quickinstall_path . 'includes/functions_populate.' . $phpEx);
-			new populate();
+			include($quickinstall_path . 'includes/qi_populate.' . $phpEx);
+			$populate = new qi_populate();
+			$populate->run();
 		}
 
 		// add log entry :D

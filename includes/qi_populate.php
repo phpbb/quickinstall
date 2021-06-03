@@ -7,15 +7,7 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-class populate
+class qi_populate
 {
 	// Populate settings
 	private $create_mod = false;
@@ -89,7 +81,7 @@ class populate
 	private $def_cat_id = 0;
 	private $def_forum_id = 0;
 
-	public function populate()
+	public function run()
 	{
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $settings;
 
