@@ -845,18 +845,9 @@ class qi_create
 				include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
 			}
 
-			if (defined('PHPBB_31'))
-			{
-				include($quickinstall_path . 'includes/class_31_styles.' . $phpEx);
-
-				new class_31_styles();
-			}
-			else
-			{
-				include($quickinstall_path . 'includes/class_30_styles.' . $phpEx);
-
-				new class_30_styles();
-			}
+			$styles_class = (defined('PHPBB_31')) ? 'class_31_styles' : 'class_30_styles';
+			include "{$quickinstall_path}includes/$styles_class.{$phpEx}";
+			new $styles_class();
 		}
 
 		// Add some random users and posts. Revisit.
