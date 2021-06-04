@@ -74,8 +74,8 @@ class qi_settings
 			'SITE_DESC'		=> $settings->get_config('site_desc', ''),
 			'ALT_ENV'		=> !empty($alt_env) ? $alt_env : false,
 			'PROFILES'		=> $settings->get_profiles(),
-			'QI_LANG'		=> qi::get_lang_select("{$quickinstall_path}language/", 'qi_lang', 'lang'),
-			'PHPBB_LANG'	=> qi::get_lang_select("{$phpbb_root_path}/language/", 'default_lang'),
+			'QI_LANG'		=> qi::get_lang_select($quickinstall_path . 'language/', 'qi_lang', 'lang'),
+			'PHPBB_LANG'	=> qi::get_lang_select($phpbb_root_path . '/language/', 'default_lang'),
 
 			'CONFIG_TEXT'   => htmlspecialchars($config_text),
 

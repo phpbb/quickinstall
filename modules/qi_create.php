@@ -151,7 +151,7 @@ class qi_create
 		// Set the new board as language path to get language files from outside phpBB
 		//$user->set_custom_lang_path($phpbb_root_path . 'language/');
 		$user->lang_path = $phpbb_root_path . 'language/';
-		if (substr($user->lang_path, -1) != '/')
+		if (substr($user->lang_path, -1) !== '/')
 		{
 			$user->lang_path .= '/';
 		}
@@ -348,7 +348,7 @@ class qi_create
 		$script_path = str_replace(array('\\', '//'), '/', $script_path);
 
 		// Make sure $script_path ends with a slash (/).
-		$script_path = (substr($script_path, -1) != '/') ? $script_path . '/' : $script_path;
+		$script_path = (substr($script_path, -1) !== '/') ? $script_path . '/' : $script_path;
 		$script_path .= $settings->get_boards_dir() . $site_dir . '/';
 
 		$config_ary = array(
@@ -534,22 +534,16 @@ class qi_create
 					$sql = "UPDATE {$table_prefix}config
 						SET " . $db->sql_build_array('UPDATE', $sql_ary) . "
 						WHERE config_name = '$config_name'";
-
-					if (!$db->sql_query($sql))
-					{
-						$error = $db->sql_error();
-						trigger_error($error['message'], E_USER_ERROR);
-					}
 				}
 				else
 				{
 					$sql = "INSERT INTO {$table_prefix}config " . $db->sql_build_array('INSERT', $sql_ary);
+				}
 
-					if (!$db->sql_query($sql))
-					{
-						$error = $db->sql_error();
-						trigger_error($error['message'], E_USER_ERROR);
-					}
+				if (!$db->sql_query($sql))
+				{
+					$error = $db->sql_error();
+					trigger_error($error['message'], E_USER_ERROR);
 				}
 
 				// Update the config array.
@@ -846,7 +840,7 @@ class qi_create
 			}
 
 			$styles_class = (defined('PHPBB_31')) ? 'class_31_styles' : 'class_30_styles';
-			include "{$quickinstall_path}includes/$styles_class.{$phpEx}";
+			include "{$quickinstall_path}includes/$styles_class.$phpEx";
 			new $styles_class();
 		}
 
