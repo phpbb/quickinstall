@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_manage module
  */
 class qi_manage
 {
-	public function __construct()
+	public function run()
 	{
 		global $settings, $phpEx;
 
@@ -50,18 +42,18 @@ class qi_manage
 					continue;
 				}
 
-				file_functions::delete_dir($current_item);
+				qi_file::delete_dir($current_item);
 
-				if (!empty(file_functions::$error))
+				if (!empty(qi_file::$error))
 				{
 					if ($boards > 1)
 					{
 						$error[] = $current_item;
-						file_functions::$error = array();
+						qi_file::$error = array();
 					}
 					else
 					{
-						$error = file_functions::$error;
+						$error = qi_file::$error;
 					}
 				}
 

@@ -153,26 +153,26 @@ class settings
 		}
 
 		// Validate cache directory
-		file_functions::append_slash($this->settings['cache_dir']);
+		qi_file::append_slash($this->settings['cache_dir']);
 		if (!file_exists($this->get_cache_dir()) || !is_writable($this->get_cache_dir()))
 		{
 			$validation_errors[] = ['CACHE_DIR_MISSING', $this->get_cache_dir()];
 		}
 
 		// Validate boards directory
-		file_functions::append_slash($this->settings['boards_dir']);
+		qi_file::append_slash($this->settings['boards_dir']);
 		if (!file_exists($this->get_boards_dir()) || !is_writable($this->get_boards_dir()))
 		{
 			$validation_errors[] = ['BOARDS_DIR_MISSING', $this->get_boards_dir()];
 		}
 
 		// Adjust boards URL path
-		file_functions::append_slash($this->settings['boards_url']);
+		qi_file::append_slash($this->settings['boards_url']);
 
 		// SQLite needs a writable and existing directory
 		if (in_array($this->settings['dbms'], ['sqlite', 'sqlite3']))
 		{
-			file_functions::append_slash($this->settings['dbhost']);
+			qi_file::append_slash($this->settings['dbhost']);
 			if (!file_exists($this->settings['dbhost']) || !is_writable($this->settings['dbhost']) || !is_dir($this->settings['dbhost']))
 			{
 				$validation_errors[] = 'SQLITE_PATH_MISSING';
@@ -198,7 +198,7 @@ class settings
 
 		$profile_file = "{$this->qi_path}settings/$profile.json";
 
-		$saved = file_functions::make_file($profile_file, $this->encode_settings($settings));
+		$saved = qi_file::make_file($profile_file, $this->encode_settings($settings));
 
 		// Make install false if settings have been successfully saved.
 		if ($saved !== false)
@@ -217,7 +217,7 @@ class settings
 	 */
 	public function delete_profile($profile, $ext = 'json')
 	{
-		file_functions::delete_file("{$this->qi_path}settings/$profile.$ext");
+		qi_file::delete_file("{$this->qi_path}settings/$profile.$ext");
 	}
 
 	/**

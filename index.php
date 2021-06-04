@@ -23,12 +23,11 @@ $level = E_ALL ^ E_NOTICE;
 
 // Include scripts for quickinstall
 require("{$quickinstall_path}includes/qi_constants.$phpEx");
-require("{$quickinstall_path}includes/class_phpbb_functions.$phpEx");
-require("{$quickinstall_path}includes/class_qi.$phpEx");
+require("{$quickinstall_path}includes/qi.$phpEx");
 require("{$quickinstall_path}includes/settings.$phpEx");
 require("{$quickinstall_path}includes/qi_functions.$phpEx");
-require("{$quickinstall_path}includes/functions_files.$phpEx");
-require("{$quickinstall_path}includes/functions_module.$phpEx");
+require("{$quickinstall_path}includes/qi_file.$phpEx");
+require("{$quickinstall_path}includes/qi_module.$phpEx");
 require("{$quickinstall_path}includes/twig.$phpEx");
 require("{$quickinstall_path}vendor/autoload.$phpEx");
 
@@ -244,8 +243,8 @@ if (!empty($errors) || $alt_env_missing || (empty($profiles) && ($page === 'main
 $template->assign_var('S_IN_INSTALL', $settings->is_install());
 $template->assign_var('S_HAS_PROFILES', $profiles);
 
-// now create a module_handler object
-$module	= new module_handler($quickinstall_path . 'modules/', 'qi_');
+// now create a qi_module object
+$module	= new qi_module($quickinstall_path . 'modules/', 'qi_');
 
 // Load the main module
 $module->load($page, 'qi_main');

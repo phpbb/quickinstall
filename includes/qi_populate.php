@@ -7,15 +7,7 @@
 *
 */
 
-/**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-class populate
+class qi_populate
 {
 	// Populate settings
 	private $create_mod = false;
@@ -89,7 +81,7 @@ class populate
 	private $def_cat_id = 0;
 	private $def_forum_id = 0;
 
-	public function populate()
+	public function run()
 	{
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $settings;
 
@@ -114,7 +106,10 @@ class populate
 			include($phpbb_root_path . 'includes/acp/acp_permissions.' . $phpEx);
 		}
 
-		include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
+		if (!function_exists('validate_range'))
+		{
+			include($quickinstall_path . 'includes/functions_forum_create.' . $phpEx);
+		}
 
 		// Get the chunk sizes. Make sure they are integers and set to something.
 		$this->post_chunks	= $settings->get_config('chunk_post', 0);

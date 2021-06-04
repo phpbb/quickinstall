@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_docs module
  */
 class qi_docs
 {
-	public function __construct()
+	public function run()
 	{
 		global $template, $quickinstall_path;
 

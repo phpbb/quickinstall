@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_main module
  */
 class qi_main
 {
-	public function __construct()
+	public function run()
 	{
 		global $template, $settings;
 

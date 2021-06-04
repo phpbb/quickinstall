@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
  * qi_create module
  */
 class qi_create
 {
-	public function __construct()
+	public function run()
 	{
 		global $db, $db_tools, $user, $auth, $cache, $settings, $table_prefix;
 		global $quickinstall_path, $phpbb_root_path, $phpEx, $config;
@@ -34,7 +26,7 @@ class qi_create
 		// phpBB 3.2.0-3.2.1 is not compat with PHP 7.2 (702000)
 		// phpBB 3.2.x is not compat with PHP 7.3 (703000)
 		if ((PHP_VERSION_ID >= 70000 && !defined('PHPBB_32')) ||
-			(PHP_VERSION_ID >= 70200 && phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
+			(PHP_VERSION_ID >= 70200 && qi::phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
 			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33'))
 		)
 		{
@@ -119,7 +111,7 @@ class qi_create
 		{
 			if ($settings->get_config('delete_files', false))
 			{
-				file_functions::delete_dir($board_dir);
+				qi_file::delete_dir($board_dir);
 			}
 			else
 			{
@@ -130,7 +122,7 @@ class qi_create
 		// copy all of our files
 		try
 		{
-			file_functions::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
+			qi_file::copy_dir($quickinstall_path . 'sources/' . ($alt_env === '' ? 'phpBB3/' : "phpBB3_alt/$alt_env/"), $board_dir);
 		}
 		catch (RuntimeException $e)
 		{
@@ -159,7 +151,7 @@ class qi_create
 		// Set the new board as language path to get language files from outside phpBB
 		//$user->set_custom_lang_path($phpbb_root_path . 'language/');
 		$user->lang_path = $phpbb_root_path . 'language/';
-		if (substr($user->lang_path, -1) != '/')
+		if (substr($user->lang_path, -1) !== '/')
 		{
 			$user->lang_path .= '/';
 		}
@@ -356,7 +348,7 @@ class qi_create
 		$script_path = str_replace(array('\\', '//'), '/', $script_path);
 
 		// Make sure $script_path ends with a slash (/).
-		$script_path = (substr($script_path, -1) != '/') ? $script_path . '/' : $script_path;
+		$script_path = (substr($script_path, -1) !== '/') ? $script_path . '/' : $script_path;
 		$script_path .= $settings->get_boards_dir() . $site_dir . '/';
 
 		$config_ary = array(
@@ -542,22 +534,16 @@ class qi_create
 					$sql = "UPDATE {$table_prefix}config
 						SET " . $db->sql_build_array('UPDATE', $sql_ary) . "
 						WHERE config_name = '$config_name'";
-
-					if (!$db->sql_query($sql))
-					{
-						$error = $db->sql_error();
-						trigger_error($error['message'], E_USER_ERROR);
-					}
 				}
 				else
 				{
 					$sql = "INSERT INTO {$table_prefix}config " . $db->sql_build_array('INSERT', $sql_ary);
+				}
 
-					if (!$db->sql_query($sql))
-					{
-						$error = $db->sql_error();
-						trigger_error($error['message'], E_USER_ERROR);
-					}
+				if (!$db->sql_query($sql))
+				{
+					$error = $db->sql_error();
+					trigger_error($error['message'], E_USER_ERROR);
 				}
 
 				// Update the config array.
@@ -826,17 +812,17 @@ class qi_create
 		}
 
 		// clean up
-		file_functions::delete_files($board_dir, array('Thumbs.db', 'DS_Store', 'CVS', '.svn', '.git'));
+		qi_file::delete_files($board_dir, array('Thumbs.db', 'DS_Store', 'CVS', '.svn', '.git'));
 
 		// remove install dir, develop and umil
-		file_functions::delete_dir($board_dir . 'install/');
-		file_functions::delete_dir($board_dir . 'develop/');
-		file_functions::delete_dir($board_dir . 'umil/');
+		qi_file::delete_dir($board_dir . 'install/');
+		qi_file::delete_dir($board_dir . 'develop/');
+		qi_file::delete_dir($board_dir . 'umil/');
 
 		// copy extra user added files
 		try
 		{
-			file_functions::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
+			qi_file::copy_dir($quickinstall_path . 'sources/extra/', $board_dir);
 		}
 		catch (RuntimeException $e)
 		{
@@ -853,25 +839,17 @@ class qi_create
 				include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
 			}
 
-			if (defined('PHPBB_31'))
-			{
-				include($quickinstall_path . 'includes/class_31_styles.' . $phpEx);
-
-				new class_31_styles();
-			}
-			else
-			{
-				include($quickinstall_path . 'includes/class_30_styles.' . $phpEx);
-
-				new class_30_styles();
-			}
+			$styles_class = (defined('PHPBB_31')) ? 'class_31_styles' : 'class_30_styles';
+			include "{$quickinstall_path}includes/$styles_class.$phpEx";
+			new $styles_class();
 		}
 
 		// Add some random users and posts. Revisit.
 		if ($settings->get_config('populate', false))
 		{
-			include($quickinstall_path . 'includes/functions_populate.' . $phpEx);
-			new populate();
+			include($quickinstall_path . 'includes/qi_populate.' . $phpEx);
+			$populate = new qi_populate();
+			$populate->run();
 		}
 
 		// add log entry :D
@@ -891,13 +869,13 @@ class qi_create
 		// Make all files world writable.
 		if ($settings->get_config('make_writable', false))
 		{
-			file_functions::make_writable($board_dir);
+			qi_file::make_writable($board_dir);
 		}
 
 		// Grant additional permissions
 		if (($grant_permissions = octdec($settings->get_config('grant_permissions', 0))) != 0)
 		{
-			file_functions::grant_permissions($board_dir, $grant_permissions);
+			qi_file::grant_permissions($board_dir, $grant_permissions);
 		}
 
 		// if he/she wants to be redirected, we'll do that.

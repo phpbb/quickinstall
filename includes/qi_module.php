@@ -8,19 +8,11 @@
 */
 
 /**
-* @ignore
-*/
-if (!defined('IN_QUICKINSTALL'))
-{
-	exit;
-}
-
-/**
 * Module handler from wiedler.ch, optimized for phpbb
 * @package quickinstall
 */
 
-class module_handler
+class qi_module
 {
 	protected $modules_path;
 	protected $modules_prefix;
@@ -49,6 +41,7 @@ class module_handler
 		}
 
 		$class_name = $this->modules_prefix . $module;
-		return new $class_name();
+		$module = new $class_name();
+		return $module->run();
 	}
 }
