@@ -220,8 +220,8 @@ if (defined('PHPBB_31'))
 	$config = new \phpbb\config\config(array(
 		'load_tplcompile'	=> '1',
 	));
-	set_config(false, false, false, $config);
-	set_config_count(null, null, null, $config);
+	qi_set_config(false, false, false, $config);
+	qi_set_config_count(null, null, null, $config);
 }
 else
 {

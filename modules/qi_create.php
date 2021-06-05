@@ -403,7 +403,7 @@ class qi_create
 		{
 			$current_config = $config;
 			$config = new \phpbb\config\db($db, $cache, "{$table_prefix}config");
-			set_config(false, false, false, $config);
+			qi_set_config(false, false, false, $config);
 
 			foreach ($current_config as $key => $value)
 			{
@@ -413,7 +413,7 @@ class qi_create
 
 		foreach ($config_ary as $config_name => $config_value)
 		{
-			set_config($config_name, $config_value);
+			qi_set_config($config_name, $config_value);
 		}
 
 		// Set default config and post data, this applies to all DB's

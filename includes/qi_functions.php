@@ -573,3 +573,83 @@ function qi_get_phpbb_version()
 
 	return '3.0';
 }
+
+/**
+ * Sets a configuration option's value.
+ *
+ * QI uses this for legacy reasons. In 3.0.x set_config() is used to set config
+ * object values. In 3.1.x, 3.2.x and 3.3.x it is deprecated. This function
+ * emulates the deprecated function in case it is ever removed from 4.x.x.
+ *
+ * Please note that this function does not update the is_dynamic value for
+ * an already existing config option.
+ *
+ * @param string $config_name   The configuration option's name
+ * @param string $config_value  New configuration value
+ * @param bool   $is_dynamic    Whether this variable should be cached (false) or
+ *                              if it changes too frequently (true) to be
+ *                              efficiently cached.
+ * @param null   $set_config    The config object
+ * @return void
+ */
+function qi_set_config($config_name, $config_value, $is_dynamic = false, $set_config = null)
+{
+	if (function_exists('set_config'))
+	{
+		set_config($config_name, $config_value, $is_dynamic, $set_config);
+		return;
+	}
+
+	static $config = null;
+
+	if ($set_config !== null)
+	{
+		$config = $set_config;
+
+		if (empty($config_name))
+		{
+			return;
+		}
+	}
+
+	$config->set($config_name, $config_value, !$is_dynamic);
+}
+
+/**
+ * Increments an integer config value directly in the database.
+ *
+ * QI uses this for legacy reasons. In 3.0.x set_config_count() is used to
+ * increment config values. In 3.1.x, 3.2.x and 3.3.x it is deprecated. This
+ * function emulates the deprecated function in case it is ever removed from 4.x.x.
+ *
+ * @param string $config_name   The configuration option's name
+ * @param int    $increment     Amount to increment by
+ * @param bool   $is_dynamic    Whether this variable should be cached (false) or
+ *                              if it changes too frequently (true) to be
+ *                              efficiently cached.
+ * @param null   $set_config    The config object
+ *
+ * @return void
+ */
+function qi_set_config_count($config_name, $increment, $is_dynamic = false, $set_config = null)
+{
+	if (function_exists('set_config_count'))
+	{
+		set_config_count($config_name, $increment, $is_dynamic, $set_config);
+		return;
+	}
+
+	static $config = null;
+
+	if ($set_config !== null)
+	{
+		$config = $set_config;
+
+		if (empty($config_name))
+		{
+			return;
+		}
+	}
+
+	$config->increment($config_name, $increment, !$is_dynamic);
+}

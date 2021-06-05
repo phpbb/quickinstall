@@ -100,7 +100,7 @@ class class_31_styles extends acp_styles
 
 	private function qi_set_default($id)
 	{
-		set_config('default_style', $id);
+		qi_set_config('default_style', $id);
 
 		// Set it for guests and the admin too.
 		$sql = 'UPDATE ' . USERS_TABLE . '
