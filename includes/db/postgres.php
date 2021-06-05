@@ -19,7 +19,7 @@ if (!defined('IN_QUICKINSTALL'))
 * Postgres dbal extension
 * @package dbal
 */
-class dbal_postgres_qi extends dbal_postgres
+class dbal_postgres_qi extends \phpbb\db\driver\postgres
 {
 	public function sql_connect($dbhost, $dbuser, $dbpass, $dbname, $dbport = false, $persistency = false, $new_link=  false)
 	{

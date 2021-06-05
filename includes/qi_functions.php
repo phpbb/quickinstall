@@ -490,25 +490,23 @@ function db_connect($db_data = '')
 		if (!class_exists('dbal_' . $dbal . '_qi'))
 		{
 			// now the quickinstall dbal extension
-			include($quickinstall_path . 'includes/db/31/' . $dbal . '.' . $phpEx);
+			include($quickinstall_path . 'includes/db/' . $dbal . '.' . $phpEx);
 		}
-
-		$sql_db = 'dbal_' . $dbal  . '_qi';
 	}
 	else
 	{
+		$dbal = $available_dbms[$dbms]['DRIVER'];
 		// Load the appropriate database class if not already loaded.
-		if (!class_exists('dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi'))
+		if (!class_exists('dbal_' . $dbal . '_qi'))
 		{
 			// phpBB dbal class.
-			include($phpbb_root_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+			include($phpbb_root_path . 'includes/db/' . $dbal . '.' . $phpEx);
 
 			// now the quickinstall dbal extension
-			include($quickinstall_path . 'includes/db/' . $available_dbms[$dbms]['DRIVER'] . '.' . $phpEx);
+			include($quickinstall_path . 'includes/db/30x/' . $dbal . '.' . $phpEx);
 		}
-		$sql_db = 'dbal_' . $available_dbms[$dbms]['DRIVER'] . '_qi';
 	}
-
+	$sql_db = 'dbal_' . $dbal . '_qi';
 	$db = new $sql_db();
 
 	if (defined('PHPBB_31'))
