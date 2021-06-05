@@ -2,7 +2,7 @@
   "name": "phpbb/quickinstall",
   "description": "QuickInstall is a developer tool used to create multiple phpBB3 installations.",
   "homepage": "https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "license": "GPL-2.0-only",
   "authors": [
     {
