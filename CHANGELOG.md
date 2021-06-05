@@ -1,5 +1,12 @@
 # QuickInstall Changelog
 
+## Version 1.6.3
+- [Fix] Fixed a problem where boards would not populate when using PHP 8.
+- [Fix] Clarified how the option to install additional styles should be used.
+- [Fix] Fixed an issue where “Additional board config settings“ would be ignored if they tried to set a config to a value of 0, false or an empty string.
+- [Fix] Fixed a few more issues in the code base which could pose problems with future versions of PHP and phpBB.
+- [Change] Small internal change to QI's SCSS file, moved away from using division to avoid issues with SASS 1.33.
+
 ## Version 1.6.2
 - [Feature] Dark mode added. When your OS or browser is in dark mode, QI will display its dark mode theme.
 - [Change] Added a wait time message to the "We're working on it" modal while building boards.
@@ -7,7 +14,7 @@
 - [Change] QI's error page will have the same Navbar as the rest of QI, and will work as expected in responsive views.
 - [Change] QI will no longer pass any error messages to the user via URL parameters. Instead, AJAX will be used to handle certain error messages.
 - [Change] QI will no longer display backtraces in warnings or notices. Backtraces will only be shown for errors.
-- [Change] QI's internal language translation system has been updated to support substitution variables.
+- [Change] QI's internal language system has been updated to support substitution variables.
 - [Change] Moved QI's NPM development files to the project/repository root.
 - [Change] A small batch of optimisations and code improvements.
 - [Fix] Fixed CSS mapping to source files (for development). Maps are no longer embedded in the minified CSS either.
@@ -64,7 +71,7 @@
 - [Change] Dropped support for installing AutoMOD into 3.0.x boards from QuickInstall. AutoMOD can still be installed manually for 3.0.x boards.
 - [Change] Dropped the *subsilver2 only* option from the 'Install additional styles' setting.
 - [Change] Added a `DEBUG` constant to `qi_constants.php`. Contributors can un-comment it while developing QI to disable template caching.
-- [Fix] Fixed an issue with the migration schema generator that blocked QI from working with phpBB 4.0.0-dev.
+- [Fix] Fixed an issue with the migration-schema generator that blocked QI from working with phpBB 4.0.0-dev.
 - [Fix] Fixed some issues with language vars not working on error pages.
 
 ## Version 1.3.7
@@ -198,7 +205,7 @@
 - [Change] No need to add session and `$user` to only store language keys. Changed `$user->lang[]` to `qi::lang()`.
 - [Change] Removed "powered by phpBB" from the footer. That would not be true anymore.
 - [Change] Suppress E_DEPRECATED from php >=5.5.0 to still work with php 4
-- [Change]	Removed CSS hack for Mac IE since the last version was released in 2003
+- [Change] Removed CSS hacks for Mac and IE, since the last version was released in 2003
 - [Change] Added CSS hack for Opera.
 - [Change] Removed the "Manage boards" tab and moved board delete to the main tab, which where renamed to "Manage boards".
 - [Change] Made some modifications to the settings tab and changed some wording.
@@ -299,7 +306,7 @@
 - [Feature] Added option so set how many users, forums, topics and posts that will be created.
 
 ## Version 1.1.5
-- [Fix] Set the new board language directory as a custom language path.
+- [Fix] Set the new board-language directory as a custom language path.
 - [Change] Moved to GitHub.
 - [Change] Deleted phpBB from the `sources` dir. It now needs to be downloaded from http://www.phpbb.com/.
 
