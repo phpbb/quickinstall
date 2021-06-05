@@ -848,12 +848,12 @@ class qi
 	 *
 	 * See http://www.php.net/manual/en/function.version-compare.php
 	 *
-	 * @param string $version1		First version number
-	 * @param string $version2		Second version number
-	 * @param string $operator		Comparison operator (optional)
+	 * @param string $version1 First version number
+	 * @param string $version2 Second version number
+	 * @param string $operator Comparison operator (optional)
 	 *
-	 * @return mixed					Boolean (true, false) if comparison operator is specified.
-	 *								Integer (-1, 0, 1) otherwise.
+	 * @return bool|int        Boolean (true, false) if comparison operator is specified.
+	 *                         Integer (-1, 0, 1) otherwise.
 	 */
 	public static function phpbb_version_compare($version1, $version2, $operator = null)
 	{

@@ -19,7 +19,7 @@ if (!defined('IN_QUICKINSTALL'))
 * SQLite dbal extension
 * @package dbal
 */
-class dbal_sqlite_qi extends dbal_sqlite
+class dbal_sqlite_qi extends \phpbb\db\driver\sqlite
 {
 	/**
 	 * Connection error

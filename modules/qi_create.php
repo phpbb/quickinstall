@@ -403,7 +403,7 @@ class qi_create
 		{
 			$current_config = $config;
 			$config = new \phpbb\config\db($db, $cache, "{$table_prefix}config");
-			set_config(false, false, false, $config);
+			qi_set_config(false, false, false, $config);
 
 			foreach ($current_config as $key => $value)
 			{
@@ -413,7 +413,7 @@ class qi_create
 
 		foreach ($config_ary as $config_name => $config_value)
 		{
-			set_config($config_name, $config_value);
+			qi_set_config($config_name, $config_value);
 		}
 
 		// Set default config and post data, this applies to all DB's
@@ -514,14 +514,15 @@ class qi_create
 
 				$row_ary = explode(';', $config_row);
 
-				if (empty($row_ary[0]) || empty($row_ary[1]))
+				// $row_ary must be at least 2 items. $row_ary[0] must be a valid string. $row_ary[1] must exist.
+				if (count($row_ary) < 2 || empty($row_ary[0]) || !isset($row_ary[1]))
 				{
 					continue;
 				}
 
 				$config_name	= trim($row_ary[0]);
 				$config_value	= trim($row_ary[1]);
-				$is_dynamic		= (!empty($row_ary[2])) ? 1 : 0;
+				$is_dynamic		= isset($row_ary[2]) ? 1 : 0;
 
 				$sql_ary = array(
 					'config_name'	=> $config_name,

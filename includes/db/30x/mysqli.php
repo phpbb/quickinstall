@@ -19,18 +19,18 @@ if (!defined('IN_QUICKINSTALL'))
 * MySQLi dbal extension
 * @package dbal
 */
-class dbal_mysqli_qi extends \phpbb\db\driver\mysqli
+class dbal_mysqli_qi extends dbal_mysqli
 {
 	/**
 	* Connect to server
 	*/
-	public function sql_connect($sqlserver, $sqluser, $sqlpassword, $database, $port = false, $persistency = false , $new_link = false)
+	function sql_connect($sqlserver, $sqluser, $sqlpassword, $database, $port = false, $persistency = false , $new_link = false)
 	{
 		$this->persistency = $persistency;
 		$this->user = $sqluser;
 		$this->server = $sqlserver;
 		$this->dbname = $database;
-		$port = (!$port) ? null : $port;
+		$port = (!$port) ? NULL : $port;
 
 		$this->sql_layer = 'mysql_41';
 
@@ -50,9 +50,8 @@ class dbal_mysqli_qi extends \phpbb\db\driver\mysqli
 	 * Select a database
 	 *
 	 * @param string $dbname
-	 * @return bool
 	 */
-	public function sql_select_db($dbname)
+	function sql_select_db($dbname)
 	{
 		return @mysqli_select_db($this->db_connect_id, $dbname);
 	}

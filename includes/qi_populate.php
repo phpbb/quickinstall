@@ -487,8 +487,8 @@ class qi_populate
 		}
 
 		// phpBB installs the forum with one topic and one post.
-		set_config('num_topics', $topic_cnt + 1);
-		set_config('num_posts', $post_cnt + 1);
+		qi_set_config('num_topics', $topic_cnt + 1);
+		qi_set_config('num_posts', $post_cnt + 1);
 
 		$this->update_sequence(TOPICS_TABLE . '_seq', $topic_cnt + 1);
 		$this->update_sequence(POSTS_TABLE . '_seq', $post_cnt + 1);
@@ -799,12 +799,12 @@ class qi_populate
 
 		// Get the last user
 		$user = end($this->user_arr);
-		set_config('newest_user_id', $user['user_id']);
-		set_config('newest_username', $user['username']);
-		set_config('newest_user_colour', '');
+		qi_set_config('newest_user_id', $user['user_id']);
+		qi_set_config('newest_username', $user['username']);
+		qi_set_config('newest_user_colour', '');
 
 		// phpBB installs the forum with one user.
-		set_config('num_users', $this->num_users + 1);
+		qi_set_config('num_users', $this->num_users + 1);
 	}
 
 	/**
@@ -928,7 +928,7 @@ class qi_populate
 		$original_startdate = $config['board_startdate'];
 
 		// update board's start date
-		set_config('board_startdate', $this->start_time);
+		qi_set_config('board_startdate', $this->start_time);
 
 		$db->sql_transaction('begin');
 
