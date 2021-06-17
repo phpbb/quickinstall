@@ -40,7 +40,7 @@
 
 <div id="back-top" class="container-fluid anchor">
 	<div class="row">
-		<div class="col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-lg-block position-fixed px-3 py-2 sidebar" id="sidebar" role="navigation">
+		<div class="col-md-3 col-lg-2 {% if S_BOARDS %}collapse{% else %}d-none{% endif %} d-md-block position-fixed px-3 py-2 sidebar" id="sidebar" role="navigation">
 			{% if S_BOARDS %}
 				{% include 'sidebar_boards.twig' %}
 			{% elseif S_SETTINGS %}
@@ -51,7 +51,7 @@
 				{% include 'sidebar_phpinfo.twig' %}
 			{% endif %}
 		</div>
-		<div class="ms-sm-auto col-lg-10 px-4">
+		<div class="ms-sm-auto col-md-9 col-lg-10 px-4">
 			{% include 'navbar.twig' %}
 			<div id="main" class="px-2">
 				<noscript>

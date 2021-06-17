@@ -3,7 +3,7 @@
 		<span class="navbar-brand"><span class="phpbb-logo-nb"></span><span class="fs-4 text-primary">{{ lang('QUICKINSTALL_LOGO', '<svg class="bi" width="20" height="20" fill="currentColor"><use xlink:href="' ~ T_THEME_PATH ~ '/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>') }}</span></span>
 		<div>
 			{% if S_BOARDS %}
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
+				<button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
 					<span class="navbar-toggler-icon navbar-toggler-icon-qi-boards"></span>
 				</button>
 			{% endif %}
