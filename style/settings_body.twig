@@ -11,7 +11,7 @@
 	<div class="alert alert-success" role="alert">{{ lang('SETTINGS_SUCCESS') }}</div>
 {% elseif S_SETTINGS_ERRORS %}
 	<div class="alert alert-danger" role="alert">
-		<h5 class="alert-heading"><svg class="bi text-danger" width="24" height="24" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg>️ {{ lang('SETTINGS_FAILURE') }}</h5>
+		<h5 class="alert-heading"><svg class="bi text-danger" width="24" height="24" fill="currentColor"><use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg>️ {{ lang('SETTINGS_FAILURE') }}</h5>
 		<ol class="mb-0">
 			{% for ERROR in S_SETTINGS_ERRORS %}<li>{{ ERROR }}</li>{% endfor %}
 		</ol>
@@ -29,7 +29,7 @@
 		</div>
 		<div id="config_text_container" class="d-none">
 			<label for="config_text">
-				<a href="#" class="text-decoration-none text-black-50" data-qi-copy="config_text"><svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#clipboard-plus"/></svg> {{ lang('COPY_CONFIG') }}</a>
+				<a href="#" class="text-decoration-none text-black-50" data-qi-copy="config_text"><svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#clipboard-plus"/></svg> {{ lang('COPY_CONFIG') }}</a>
 			</label>
 			<textarea id="config_text" class="form-control" readonly="readonly" rows="10">{{ CONFIG_TEXT }}</textarea>
 		</div>
@@ -67,7 +67,7 @@
 						<div class="col-md-7 offset-md-5">
 							<button type="submit" name="delete-profile" id="delete-profile" class="btn btn-danger" value="{{ lang('DELETE_PROFILE') }}" data-qi-confirm="{{ lang('SURE_DELETE_PROFILE') }}">
 								<svg class="bi text-white" width="16" height="16" fill="currentColor">
-									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#trash"/>
+									<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#trash"/>
 								</svg> {{ lang('DELETE_PROFILE') }}
 							</button>
 						</div>
@@ -356,7 +356,7 @@
 						<div class="row">
 							<div class="col-auto align-self-start lh-1">
 								<svg class="bi text-primary" width="24" height="24" fill="currentColor">
-									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+									<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
 							<div class="col ps-1">
@@ -446,7 +446,7 @@
 						<div class="row">
 							<div class="col-auto align-self-start lh-0">
 								<svg class="bi text-primary" width="24" height="24" fill="currentColor">
-									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+									<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
 							<div class="col ps-1">
@@ -481,7 +481,7 @@
 						<div class="row">
 							<div class="col-auto align-self-start lh-0">
 								<svg class="bi text-primary" width="24" height="24" fill="currentColor">
-									<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#info-square-fill"/>
+									<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#info-square-fill"/>
 								</svg>️
 							</div>
 							<div class="col ps-1">

@@ -10,10 +10,10 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
 	<!-- Bootstrap CSS -->
-	<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 	<!-- Bootstrap-Dark Variant CSS (the media attribute is for dark auto-switching) -->
-	<link href="{{ T_THEME_PATH }}/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
-	<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 	<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
 </head>
 
@@ -29,7 +29,7 @@
 		<div class="toast-body">
 			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger" title="{{ VERSION_CHECK_TITLE }}">
 				<svg class="bi text-white" width="16" height="16" fill="currentColor">
-					<use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#download"/>
+					<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#download"/>
 				</svg>
 				{{ lang('DOWNLOAD') }} &nbsp; <span class="badge rounded-pill bg-warning text-dark">{{ VERSION_CHECK_CURRENT }}</span>
 			</a>
