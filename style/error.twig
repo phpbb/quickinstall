@@ -17,10 +17,8 @@
 	<title>{{ ERROR_MSG_TITLE }}</title>
 </head>
 <body class="bg-secondary">
-
-{% include 'navbar.twig' %}
-
 <div class="container-fluid">
+	{% include 'navbar.twig' with {'S_ERROR': true} %}
 	<div id="main" class="px-5">
 		<h1>{{ ERROR_MSG_TITLE }}</h1>
 		<div class="card mb-3">
