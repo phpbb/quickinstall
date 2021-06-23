@@ -50,7 +50,7 @@
 				const xhr = new XMLHttpRequest();
 
 				xhr.responseType = 'json';
-				xhr.addEventListener('load', () => {
+				xhr.addEventListener('loadend', () => {
 					if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
 						if (typeof xhr.response.redirect !== 'undefined' && xhr.response.redirect) {
 							window.location.replace(xhr.response.redirect);
