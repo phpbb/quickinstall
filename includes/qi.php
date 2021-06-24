@@ -23,13 +23,13 @@ class qi
 		}
 
 		define('HEADER_INC', true);
-		global $template;
+		global $template, $quickinstall_path;
 
 		$update = self::get_update();
 
 		$template->assign_vars(array(
 			'PAGE_TITLE'	=> self::lang($page_title),
-			'T_THEME_PATH'	=> 'style',
+			'QI_ROOT_PATH'	=> $quickinstall_path,
 
 			'U_DOCS'		=> self::url('docs'),
 			'U_MANAGE'		=> self::url('manage'),
@@ -425,7 +425,7 @@ class qi
 					'U_SETTINGS'		=> self::url('settings'),
 					'U_DOCS'			=> self::url('docs'),
 					'U_PHPINFO'			=> self::url('phpinfo'),
-					'T_THEME_PATH'		=> $quickinstall_path . 'style',
+					'QI_ROOT_PATH'		=> $quickinstall_path,
 					'S_HAS_PROFILES'	=> true,
 				]);
 

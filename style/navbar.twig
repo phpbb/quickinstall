@@ -1,9 +1,9 @@
-<nav class="navbar navbar-dark sticky-top navbar-expand-md bg-primary mb-2">
-	<div class="container-fluid">
-		<span class="navbar-brand"><span class="phpbb-logo-nb"></span><span class="fs-4">{{ lang('QUICKINSTALL_LOGO', '<svg class="bi text-white" width="20" height="20" fill="currentColor"><use xlink:href="' ~ T_THEME_PATH ~ '/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>') }}</span></span>
+<nav class="navbar navbar-light sticky-top navbar-expand-lg {% if S_SETTINGS or S_BOARDS or S_ERROR %}bg-secondary{% else %}bg-body{% endif %} mb-2 border-bottom">
+	<div class="container-fluid px-0">
+		<span class="navbar-brand"><span class="phpbb-logo-nb"></span><span class="fs-4 text-primary">{{ lang('QUICKINSTALL_LOGO', '<svg class="bi" width="20" height="20" fill="currentColor"><use xlink:href="' ~ QI_ROOT_PATH ~ 'style/assets/img/bootstrap-icons.svg#lightning-fill"/></svg>') }}</span></span>
 		<div>
 			{% if S_BOARDS %}
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
+				<button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="{{ lang('BOARDS_LIST') }}">
 					<span class="navbar-toggler-icon navbar-toggler-icon-qi-boards"></span>
 				</button>
 			{% endif %}
@@ -19,7 +19,7 @@
 				<li class="nav-item fs-5"><a class="nav-link{% if S_SETTINGS %} active{% endif %}"{% if S_SETTINGS %} aria-current="page"{% endif %} href="{{ U_SETTINGS }}">{{ lang('PROFILES') }}</a></li>
 				<li class="nav-item fs-5"><a class="nav-link{% if S_DOCS %} active{% endif %}"{% if S_DOCS %} aria-current="page"{% endif %} href="{{ U_DOCS }}">{{ lang('DOCS_SHORT') }}</a></li>
 				<li class="nav-item fs-5"><a class="nav-link{% if S_PHPINFO %} active{% endif %}"{% if S_PHPINFO %} aria-current="page"{% endif %} href="{{ U_PHPINFO }}">{{ lang('PHPINFO') }}</a></li>
-				<li class="nav-item fs-5"><a class="nav-link" href="https://github.com/phpbb/quickinstall" title="{{ lang('GITHUB') }}"><svg class="bi" width="20" height="20" fill="currentColor"><use xlink:href="{{ T_THEME_PATH }}/assets/img/bootstrap-icons.svg#github"/></svg></a></li>
+				<li class="nav-item fs-5"><a class="nav-link" href="https://github.com/phpbb/quickinstall" title="{{ lang('GITHUB') }}"><svg class="bi" width="20" height="20" fill="currentColor"><use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#github"/></svg></a></li>
 			</ul>
 		</div>
 	</div>

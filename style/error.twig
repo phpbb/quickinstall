@@ -10,17 +10,15 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
 	<!-- Bootstrap CSS -->
-	<link href="{{ T_THEME_PATH }}/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
 	<!-- Bootstrap-Dark Variant CSS (the media attribute is for dark auto-switching) -->
-	<link href="{{ T_THEME_PATH }}/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
-	<link href="{{ T_THEME_PATH }}/assets/css/qi_style.css" rel="stylesheet" media="screen">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_style.css" rel="stylesheet" media="screen">
 	<title>{{ ERROR_MSG_TITLE }}</title>
 </head>
 <body class="bg-secondary">
-
-{% include 'navbar.twig' %}
-
 <div class="container-fluid">
+	{% include 'navbar.twig' with {'S_ERROR': true} %}
 	<div id="main" class="px-5">
 		<h1>{{ ERROR_MSG_TITLE }}</h1>
 		<div class="card mb-3">
@@ -34,7 +32,7 @@
 		<p class="mb-0"><small>{{ lang('POWERED_BY_PHPBB') }}</small></p>
 	</footer>
 </div>
-<script src="{{ T_THEME_PATH }}/assets/js/bootstrap.min.js"></script>
-<script src="{{ T_THEME_PATH }}/assets/js/scripts.js?v={{ QI_VERSION }}"></script>
+<script src="{{ QI_ROOT_PATH }}style/assets/js/bootstrap.min.js"></script>
+<script src="{{ QI_ROOT_PATH }}style/assets/js/scripts.js?v={{ QI_VERSION }}"></script>
 </body>
 </html>
