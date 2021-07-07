@@ -166,6 +166,26 @@ class settings
 			$validation_errors[] = ['BOARDS_DIR_MISSING', $this->get_boards_dir()];
 		}
 
+		// Validate alt environment boards
+		if ($this->settings['alt_env'])
+		{
+			$phpbb_version = get_phpbb_version($this->qi_path . 'sources/phpBB3_alt/' . $this->settings['alt_env']);
+			// phpBB 3.1.x is not compat with PHP >= 7 (700000)
+			// phpBB 3.2.0-3.2.1 is not compat with PHP >= 7.2 (702000)
+			// phpBB 3.2.x is not compat with PHP >= 7.3 (703000)
+			// phpBB 3.3.x is not compat with PHP < 7.1.3 (70103)
+			// phpBB 4.0.x is not compat with PHP < 7.3 (703000)
+			if ((PHP_VERSION_ID >= 70000 && qi::phpbb_version_compare($phpbb_version, '3.2', '<')) ||
+				(PHP_VERSION_ID >= 70200 && qi::phpbb_version_compare($phpbb_version, '3.2.2', '<')) ||
+				(PHP_VERSION_ID >= 70300 && qi::phpbb_version_compare($phpbb_version, '3.3', '<')) ||
+				(PHP_VERSION_ID < 70103 && qi::phpbb_version_compare($phpbb_version, '3.3', '>=')) ||
+				(PHP_VERSION_ID < 70300 && qi::phpbb_version_compare($phpbb_version, '4.0', '>='))
+			)
+			{
+				$validation_errors[] = ['PHP_INCOMPATIBLE', $phpbb_version, PHP_VERSION];
+			}
+		}
+
 		// Adjust boards URL path
 		qi_file::append_slash($this->settings['boards_url']);
 

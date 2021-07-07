@@ -230,7 +230,7 @@ $lang = array_merge($lang, array(
 	'PHPBB_QI_FULLLINK'	=> '<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/">phpBB<small><sup>&reg;</sup></small> QuickInstall</a> %s for phpBB 3.0 - 4.0',
 	'PHPBB_QI_TITLE'	=> 'phpBB&reg; QuickInstall',
 
-	'PHP7_INCOMPATIBLE'	=> 'The board you are trying to install, phpBB %1$s, is not compatible with PHP %2$s.',
+	'PHP_INCOMPATIBLE'	=> 'The board you are trying to use, phpBB %1$s, is not compatible with PHP %2$s. Refer to the Documentation for our compatibility grid.',
 	'PHPINFO'			=> 'PHP info',
 	'PHPINFO_TITLE'		=> 'PHP information',
 	'PHPINFO_EXPLAIN'	=> 'This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems.<br /><br />Please be aware that some hosting companies will limit what information is displayed here for security reasons.<br /><br />You are advised to only give out details on this page on a need to know basis.',
