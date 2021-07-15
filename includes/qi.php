@@ -866,4 +866,39 @@ class qi
 		}
 		return version_compare($version1, $version2, $operator);
 	}
+
+	/**
+	 * Check phpBB compatibility with the PHP environment
+	 *
+	 * phpBB 3.1.x is not compat with PHP >= 7 (700000)
+	 * phpBB 3.2.0-3.2.1 is not compat with PHP >= 7.2 (702000)
+	 * phpBB 3.2.x is not compat with PHP >= 7.3 (703000)
+	 * phpBB 3.3.x is not compat with PHP < 7.1.3 (70103)
+	 * phpBB 4.0.x is not compat with PHP < 7.3 (703000)
+	 *
+	 * @param string $phpbb_version Check a given phpBB version. If none given, will check QI's loaded phpBB.
+	 *
+	 * @return bool
+	 */
+	public static function php_phpbb_incompatible($phpbb_version = '')
+	{
+		if ($phpbb_version)
+		{
+			return
+				(PHP_VERSION_ID >= 70000 && self::phpbb_version_compare($phpbb_version, '3.2', '<')) ||
+				(PHP_VERSION_ID >= 70200 && self::phpbb_version_compare($phpbb_version, '3.2.2', '<')) ||
+				(PHP_VERSION_ID >= 70300 && self::phpbb_version_compare($phpbb_version, '3.3', '<')) ||
+				(PHP_VERSION_ID < 70103 && self::phpbb_version_compare($phpbb_version, '3.3', '>=')) ||
+				(PHP_VERSION_ID < 70300 && self::phpbb_version_compare($phpbb_version, '4.0', '>='))
+			;
+		}
+
+		return
+			(PHP_VERSION_ID >= 70000 && !defined('PHPBB_32')) ||
+			(PHP_VERSION_ID >= 70200 && self::phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
+			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33')) ||
+			(PHP_VERSION_ID < 70103 && defined('PHPBB_33')) ||
+			(PHP_VERSION_ID < 70300 && defined('PHPBB_40'))
+		;
+	}
 }
