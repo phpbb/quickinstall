@@ -15,7 +15,7 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 4. Point your web browser to the QuickInstall directory (`http://localhost/quickinstall` for instance) and follow the setup instructions.
 
 > **Alternate phpBB Profiles:**<br>
-> You can store additional versions of phpBB and boards with alternate styles or language packs in `sources/phpBB3_alt/` . You can name these alternate phpBB folders whatever you want, e.g.:  `sources/phpBB3_alt/phpBB-3.0.12`, `sources/phpBB3_alt/phpBB-sv`, etc. They will then be available as alternative phpBB3 boards you can choose to install or save as Profiles.
+> You can store additional versions of phpBB and boards with alternate styles or language packs in `sources/phpBB3_alt/` . You can name these alternate phpBB folders whatever you want, e.g.:  `sources/phpBB3_alt/phpBB-3.0.12`, `sources/phpBB3_alt/phpBB-sv`, etc. They will then be available as alternative phpBB3 boards you can choose to install or save as Profiles. [Past releases of phpBB can be downloaded here](https://download.phpbb.com/pub/release/).
 
 > **Adding phpBB Extras**:<br>
 > If you want additional files/folders, such as extensions, to be copied to your boards when they are created, you can put them in the `sources/extra/` directory. By using the same directory structure in `sources/extra/` as phpBB, the files/folders should be mapped to the correct locations in your boards. For example: `sources/extra/ext/phpbb/pages`.

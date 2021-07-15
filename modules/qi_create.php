@@ -22,15 +22,10 @@ class qi_create
 		// postgres uses remove_comments function which is defined in functions_admin
 		include($phpbb_root_path . 'includes/functions_admin.' . $phpEx);
 
-		// phpBB 3.1.x is not compat with PHP 7 (700000)
-		// phpBB 3.2.0-3.2.1 is not compat with PHP 7.2 (702000)
-		// phpBB 3.2.x is not compat with PHP 7.3 (703000)
-		if ((PHP_VERSION_ID >= 70000 && !defined('PHPBB_32')) ||
-			(PHP_VERSION_ID >= 70200 && qi::phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
-			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33'))
-		)
+		// Validate board's compatibility with current PHP environment
+		if (qi::php_phpbb_incompatible())
 		{
-			trigger_error(qi::lang('PHP7_INCOMPATIBLE', PHPBB_VERSION, PHP_VERSION));
+			trigger_error(qi::lang('PHP_INCOMPATIBLE', PHPBB_VERSION, PHP_VERSION));
 		}
 
 		if (defined('PHPBB_31'))

@@ -166,6 +166,16 @@ class settings
 			$validation_errors[] = ['BOARDS_DIR_MISSING', $this->get_boards_dir()];
 		}
 
+		// Validate alt environment board's compatibility with current PHP environment
+		if ($this->settings['alt_env'])
+		{
+			$phpbb_version = get_phpbb_version($this->qi_path . 'sources/phpBB3_alt/' . $this->settings['alt_env']);
+			if (qi::php_phpbb_incompatible($phpbb_version))
+			{
+				$validation_errors[] = ['PHP_INCOMPATIBLE', $phpbb_version, PHP_VERSION];
+			}
+		}
+
 		// Adjust boards URL path
 		qi_file::append_slash($this->settings['boards_url']);
 
