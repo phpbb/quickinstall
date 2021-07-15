@@ -83,7 +83,7 @@ $lang = array_merge($lang, array(
 	'CHANGELOG'				=> 'Changelog',
 	'CHUNK_POST'			=> 'Post chunk',
 	'CHUNK_POST_EXPLAIN'	=> 'The number of posts that will be sent to the database in each query. Default: 1000.',
-	'CHUNK_SETTINGS'	=> 'Chunk settings',
+	'CHUNK_SETTINGS'		=> 'Chunk settings',
 	'CHUNK_SETTINGS_EXPLAIN'	=> 'QuickInstall tries to reduce the number of queries generated from creating posts, topics and users by using chunks. The chunk size affects the time it takes to populate a board. There is no general setting that is perfect for everybody. If you do a lot of populating with QuickInstall you might want to experiment with these settings. Larger chunks may use too much memory while smaller chunks will query the DB more often. We have found the default settings to be the best compromise.',
 	'CHUNK_TOPIC'			=> 'Topic chunk',
 	'CHUNK_TOPIC_EXPLAIN'	=> 'The number of topics that will be sent to the database in each query. Default: 2000.',
@@ -153,9 +153,6 @@ $lang = array_merge($lang, array(
 	'ERROR_PHP_UNSUPPORTED'	=> 'You are running an unsupported PHP version. phpBB QuickInstall only supports PHP version 5.4.7 and newer.',
 	'ERROR_PHPBB_NOT_FOUND'	=> 'phpBB could not be located.<br /><br />You must download a copy of phpBB from <a href="https://www.phpbb.com/downloads/">https://www.phpbb.com/downloads/</a>, extract it and copy the phpBB3 folder to QuickInstall‘s <code>sources</code> directory.<br /><br />QuickInstall supports phpBB 3.0 - 4.0.',
 
-	'FUNCTIONS_MODS_MISSING'	=> '&quot;includes/functions_mods.php&quot; not found.',
-	'FORGOT_THIS'				=> 'You forgot this!',
-
 	'GENERAL_ERROR'		=> 'General Error',
 	'GITHUB'			=> 'GitHub',
 	'GOTO_BOARD'		=> 'Open “%s” in a new browser window',
@@ -183,14 +180,11 @@ $lang = array_merge($lang, array(
 	'MAKE_WRITABLE'			=> 'Make files world writable',
 	'MAKE_WRITABLE_EXPLAIN'	=> 'Grants 0666 permission to all board files and directories, giving read and write access to everyone.',
 	'MAKE_WRITABLE_BOARD'	=> 'Make files world writable',
-	'MANAGE_BOARDS'			=> 'Manage boards',
 	'MARK_FOR_DELETION'		=> 'Mark for deletion',
 	'MAX'					=> 'Max',
-	'MIGHT_TAKE_LONG'		=> 'Creation of the board can take a while. Do not submit the form twice.',
 	'MIN'					=> 'Min',
 	'MINOR_MISHAP'			=> 'Something went wrong 🤔',
 
-	'NEED_CONVERT'			=> 'Your config file needs to be converted to the new settings style with profiles. Make sure the <code>settings</code> directory exists and is writable by PHP. Then click submit.',
 	'NEED_EMAIL_DOMAIN'		=> 'A e-mail domain is needed to create test users',
 	'NEED_WRITABLE'			=> 'QuickInstall needs the <code>boards</code>, <code>cache</code> and <code>settings</code> directories to be writable all the time.<br />The <code>settings</code> directory must always be in the QuickInstall root path.',
 	'NO'					=> 'No',
@@ -233,7 +227,7 @@ $lang = array_merge($lang, array(
 	'PHP_INCOMPATIBLE'	=> 'The board you are trying to use, phpBB %1$s, is not compatible with PHP %2$s. Refer to the Documentation for our compatibility grid.',
 	'PHPINFO'			=> 'PHP info',
 	'PHPINFO_TITLE'		=> 'PHP information',
-	'PHPINFO_EXPLAIN'	=> 'This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems.<br /><br />Please be aware that some hosting companies will limit what information is displayed here for security reasons.<br /><br />You are advised to only give out details on this page on a need to know basis.',
+	'PHPINFO_EXPLAIN'	=> 'This page lists information on the version of PHP installed on this server. It includes details of loaded modules, available variables and default settings. This information may be useful when diagnosing problems. Please be aware that some hosting companies will limit what information is displayed here for security reasons. You are advised to not give out any details on this page except when asked by official phpBB team members.',
 	'PLAIN_TEXT'		=> 'Note: QuickInstall stores passwords and usernames as plain text.',
 	'POPULATE'			=> 'Populate board',
 	'POPULATE_EXPLAIN'	=> 'Populates the board with the number of users, forums, posts and topics you specify below. Note that the more users, forums, posts and topics you specify, the longer it will take to process.',
@@ -244,8 +238,6 @@ $lang = array_merge($lang, array(
 
 	'QI_LANG'			=> 'Select QuickInstall language',
 	'QI_LANG_EXPLAIN'	=> 'Select a language for QuickInstall. Languages are stored in the <code>language/</code> directory.',
-	'QI_MANAGE'			=> 'Manage boards',
-	'QI_MANAGE_ABOUT'	=> '&quot;Board database and directory name:&quot; is the only field you have to fill, the others get filled with values from the selected profile.',
 	'QI_MANAGE_HEADINGS'=> 'Click on the headings below to access optional configurations. Changes made below are not saved to the current profile.',
 	'QI_MANAGE_PROFILE'	=> 'Manage profiles',
 	'QI_SETTINGS'		=> 'QuickInstall settings',
@@ -310,10 +302,10 @@ $lang = array_merge($lang, array(
 
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 
-	'WORKING_ON_IT'		=> 'We’re working on it...',
+	'WORKING_ON_IT'			=> 'We’re working on it...',
 	'WORKING_ON_IT_EXPLAIN'	=> 'This may take a few minutes.',
 
 	'YES'	=> 'Yes',
 
-	'COLON'				=> ':',
+	'COLON'	=> ':',
 ));
