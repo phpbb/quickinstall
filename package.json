@@ -1,6 +1,6 @@
 {
   "name": "quickinstall",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "license": "GPL-2.0-only",
   "dependencies": {
     "autoprefixer": "^10.3.1",

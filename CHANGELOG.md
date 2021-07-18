@@ -1,5 +1,12 @@
 # QuickInstall Changelog
 
+## Version 1.6.4
+- [Fix] Switched AJAX from `onload` to `loadend` to _hopefully_ prevent potential hangs when creating a board.
+- [Change] Redesigned appearance of the navigation bar for a more streamlined look.
+- [Change] Improved checks for compatible phpBB and PHP environments when creating boards and saving profiles.
+- [Change] Added a link to download older phpBB releases to the Docs/Readme.
+- [Change] Updated Bootstrap to 5.0.2 and other internal dependencies.
+
 ## Version 1.6.3
 - [Fix] Fixed a problem where boards would not populate when using PHP 8.
 - [Fix] Clarified how the option to install additional styles should be used.
