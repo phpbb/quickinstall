@@ -2,9 +2,3 @@
 .gitignore        export-ignore
 */.gitkeep        export-ignore
 */*/.gitkeep      export-ignore
-build.xml         export-ignore
-composer.lock     export-ignore
-composer.phar     export-ignore
-package-lock.json export-ignore
-package.json      export-ignore
-scss/             export-ignore
