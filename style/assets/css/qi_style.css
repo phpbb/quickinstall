@@ -13,6 +13,10 @@
 	filter: brightness(0) saturate(100%) invert(46%) sepia(52%) saturate(3716%) hue-rotate(170deg) brightness(96%) contrast(101%); /* #009bdf */
 }
 
+.navbar-light {
+	background-color: #ffffff;
+}
+
 .navbar-light .navbar-toggler-icon-qi-boards {
 	background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgba%280, 0, 0, 0.55%29' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 3.5a.5.5 0 010-1h11a.5.5 0 010 1h-11zm2-2a.5.5 0 010-1h7a.5.5 0 010 1h-7zM0 13a1.5 1.5 0 001.5 1.5h13A1.5 1.5 0 0016 13V6a1.5 1.5 0 00-1.5-1.5h-13A1.5 1.5 0 000 6v7zm1.5.5A.5.5 0 011 13V6a.5.5 0 01.5-.5h13a.5.5 0 01.5.5v7a.5.5 0 01-.5.5h-13z'/></svg>");
 }
@@ -80,6 +84,10 @@ svg.bi {
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
+	.navbar-light {
+		background-color: #222222;
+	}
+
 	body.bg-secondary,
 	.navbar.bg-secondary {
 		background-color: #0d1117 !important; /* !important to override bootstrap's !important */
