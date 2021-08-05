@@ -17,7 +17,7 @@
 	<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
 </head>
 
-<body class="{{ S_CONTENT_DIRECTION }} position-relative {% if S_SETTINGS or S_BOARDS %}bg-secondary{% else %}bg-body{% endif %}"{% if not S_BOARDS %} data-bs-spy="scroll" data-bs-target="#sidebar"{% endif %}>
+<body class="{{ S_CONTENT_DIRECTION }} position-relative {% if S_SETTINGS or S_BOARDS %}bg-secondary{% endif %}"{% if not S_BOARDS %} data-bs-spy="scroll" data-bs-target="#sidebar"{% endif %}>
 
 {% if U_VERSION_CHECK_URL %}
 <div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 1045">
