@@ -115,7 +115,7 @@ class qi_version_helper
 	 * @param string $version2		Second version number
 	 * @param string $operator		Comparison operator (optional)
 	 *
-	 * @return mixed				Boolean (true, false) if comparison operator is specified.
+	 * @return bool|int				Boolean (true, false) if comparison operator is specified.
 	 *								Integer (-1, 0, 1) otherwise.
 	 */
 	public function compare($version1, $version2, $operator = null)

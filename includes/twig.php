@@ -87,7 +87,7 @@ class twig
 	/**
 	 * Assign a single scalar value to a single key.
 	 *
-	 * Value can be a string, an integer or a boolean.
+	 * Value can be a string, an integer or boolean.
 	 *
 	 * @param string $varname Variable name
 	 * @param string $varval Value to assign to variable
