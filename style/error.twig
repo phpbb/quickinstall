@@ -10,10 +10,10 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
 	<!-- Bootstrap CSS -->
-	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 	<!-- Bootstrap-Dark Variant CSS (the media attribute is for dark auto-switching) -->
-	<link href="{{ QI_ROOT_PATH }}style/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
-	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_style.css" rel="stylesheet" media="screen">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/bootstrap-nightfall.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="(prefers-color-scheme: dark)">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 	<title>{{ ERROR_MSG_TITLE }}</title>
 </head>
 <body class="bg-secondary">
@@ -32,7 +32,7 @@
 		<p class="mb-0"><small>{{ lang('POWERED_BY_PHPBB') }}</small></p>
 	</footer>
 </div>
-<script src="{{ QI_ROOT_PATH }}style/assets/js/bootstrap.min.js"></script>
+<script src="{{ QI_ROOT_PATH }}style/assets/js/bootstrap.min.js?v={{ QI_VERSION }}"></script>
 <script src="{{ QI_ROOT_PATH }}style/assets/js/scripts.js?v={{ QI_VERSION }}"></script>
 </body>
 </html>
