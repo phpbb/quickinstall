@@ -85,6 +85,10 @@ svg.bi {
 		background-color: #0d1117 !important; /* !important to override bootstrap's !important */
 	}
 
+	.navbar.bg-body {
+		background-color: #1f1f1f !important; /* !important to override bootstrap's !important */
+	}
+
 	.callout-primary { border-left-color: #375a7f; }
 	.callout-info { border-left-color: #17a2b8; }
 	.callout-warning { border-left-color: #f39c12; }
