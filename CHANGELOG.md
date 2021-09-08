@@ -1,5 +1,12 @@
 # QuickInstall Changelog
 
+## Version 1.6.5
+- [Feature] Added support for browser interface theme-color, currently used in Safari 15.
+- [Fix] Fixed an issue where refreshing the Settings, Docs or PHP info pages would result in the sidebar not correctly highlighting the current section being viewed.
+- [Fix] Fixed an issue to ensure new versions of QI will load the newest JS and CSS instead of older cached files.
+- [Change] Updated the date-time format for new boards to use phpBB's default format instead of a custom format.
+- [Change] Updated Bootstrap to 5.1.1 and other internal dependencies.
+
 ## Version 1.6.4
 - [Fix] Switched AJAX from `onload` to `loadend` to _hopefully_ prevent potential hangs when creating a board.
 - [Change] Redesigned appearance of the navigation bar for a more streamlined look.
