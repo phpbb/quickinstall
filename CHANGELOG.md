@@ -166,7 +166,7 @@
 - [Fix] Issue #38 Subsilver2 was not installed for 3.1.x boards.
 - [Fix] The "boards" tab was not hidden when there were errors in submitting first/only config.
 - [Fix] QI tried to write to the `settings` folder even if it was not writable.
-- [Fix] The explanation text for the Boards tab was not up to date.
+- [Fix] The explanation text for the Boards tab was not up-to-date.
 - [Fix] Issue #42 the installation note box got more or less unreadable in some screen resolutions.
 - [Fix] "schema.json" was removed in phpBB 3.1.3. QI used it to create the 3.1 DB. Now install of 3.1.x works again.
 - [Fix] Ticket #44 QI removed uppercase letters from directory names due to a missing Hyphen "-".
