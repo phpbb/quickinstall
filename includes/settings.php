@@ -131,7 +131,7 @@ class settings
 
 		$validation_errors = [];
 
-		// Lets check simple required string settings...
+		// Let's check simple required string settings...
 		foreach (['cache_dir', 'boards_dir', 'boards_url', 'dbms', 'dbhost', 'table_prefix', 'qi_lang', 'qi_tz', 'db_prefix', 'admin_email', 'email_domain', 'site_name', 'server_name', 'server_port', 'board_email', 'default_lang'] as $setting)
 		{
 			if ($this->settings[$setting] === '')
@@ -422,7 +422,7 @@ class settings
 	}
 
 	/**
-	 * Get the boards directory path
+	 * Get the board's directory path
 	 *
 	 * @return string Board directory path from settings, otherwise QI's default
 	 */
@@ -458,7 +458,7 @@ class settings
 	 */
 	public function get_server_protocol()
 	{
-		//There is no setting for server_protocol ATM, but there might be in the future so let's keep this for now.
+		// There is no setting for server_protocol ATM, but there might be in the future so let's keep this for now.
 		return empty($this->settings['server_protocol']) ? 'http://' : $this->settings['server_protocol'];
 	}
 

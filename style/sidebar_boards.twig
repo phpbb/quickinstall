@@ -8,7 +8,7 @@
 				<div class="list-group-item py-2 px-0 bg-transparent">
 					<div class="d-flex w-100 align-items-center justify-content-between">
 						<div class="form-check form-switch m-1 overflow-hidden">
-							<input type="checkbox" class="form-check-input" data-qi-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}" title="{{ lang('MARK_FOR_DELETION') }}">
+							<input type="checkbox" role="switch" class="form-check-input" data-qi-mark id="del_board_{{ loop.index }}" name="select[]" value="{{ board.BOARD_NAME }}" title="{{ lang('MARK_FOR_DELETION') }}">
 							<label class="form-check-label fw-strong" for="del_board_{{ loop.index }}"><a href="{{ board.BOARD_URL }}" title="{{ lang('GOTO_BOARD', board.BOARD_NAME) }}">{{ board.BOARD_NAME }}</a></label>
 						</div>
 						{% if board.VERSION %}<span class="badge rounded-pill fw- m-1">{{ board.VERSION }}</span>{% endif %}
@@ -16,7 +16,7 @@
 				</div>
 		{% if loop.last %}
 				<div class="form-check form-switch my-3 mx-1">
-					<input type="checkbox" class="form-check-input" id="toggle_all" data-qi-mark-list="markall" data-qi-mark-target="#del_board">
+					<input type="checkbox" role="switch" class="form-check-input" id="toggle_all" data-qi-mark-list="markall" data-qi-mark-target="#del_board">
 					<label class="form-check-label text-muted" for="toggle_all">{{ lang('SELECT_ALL') }}</label>
 				</div>
 				<div>

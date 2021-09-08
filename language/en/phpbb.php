@@ -82,7 +82,7 @@ $lang = array_merge($lang, array(
 
 	// The default dateformat which will be used on new installs in this language
 	// Translators should change this if a the usual date format is different
-	'default_dateformat'	=> 'M jS, ’y, H:i', // Mon Jan 01, 2007 1:37 pm
+	'default_dateformat'	=> 'D M d, Y g:i a', // Mon Jan 01, 2007 1:37 pm
 
 	// From phpBB 3.1.2 language/en/common.php
 	// Timezones can be translated. We use this for the Etc/GMT timezones here,

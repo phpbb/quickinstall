@@ -1,6 +1,6 @@
 {
   "name": "quickinstall",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "license": "GPL-2.0-only",
   "dependencies": {
     "autoprefixer": "^10.3.4",
@@ -19,7 +19,7 @@
     "css-compile": "sass scss/qi_bootstrap.scss scss/qi_bootstrap.css",
     "css-prefix": "postcss --use autoprefixer --replace scss/qi_bootstrap.css",
     "css-minify": "cleancss -O1 --format breakWith=lf --with-rebase --source-map --source-map-inline-sources --output scss/qi_bootstrap.min.css scss/qi_bootstrap.css",
-    "copy": "npm-run-all copy-bs-css copy-bs-js copy-bs-icons copy-bs-dark",
+    "copy": "npm-run-all --parallel copy-*",
     "copy-bs-css": "copyfiles --flat scss/qi_bootstrap.min.css scss/qi_bootstrap.min.css.map style/assets/css",
     "copy-bs-js": "copyfiles --flat node_modules/bootstrap/dist/js/bootstrap.min.js node_modules/bootstrap/dist/js/bootstrap.min.js.map style/assets/js",
     "copy-bs-icons": "copyfiles --flat node_modules/bootstrap-icons/bootstrap-icons.svg style/assets/img",

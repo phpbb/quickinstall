@@ -84,21 +84,20 @@
 		if ($toggleAll) {
 			const $targetForm = $toggleAll.closest('form');
 			const $checkboxes = $$('[data-qi-mark]', $targetForm);
-			const checkboxCount = $checkboxes.length;
 			$toggleAll.addEventListener('change', () => {
-				for (let i = 0; i < checkboxCount; i++) {
-					$checkboxes[i].checked = $toggleAll.checked;
+				for (const box of $checkboxes) {
+					box.checked = $toggleAll.checked;
 				}
 			});
-			for (let i = 0; i < checkboxCount; i++) {
-				$checkboxes[i].addEventListener('change', event => {
+			for (const box of $checkboxes) {
+				box.addEventListener('change', event => {
 					const $check = event.target;
 					if ($check.checked === false) {
 						$toggleAll.checked = false;
 						return;
 					}
 
-					if ($$('[data-qi-mark]:checked', $targetForm).length === checkboxCount) {
+					if ($$('[data-qi-mark]:checked', $targetForm).length === $checkboxes.length) {
 						$toggleAll.checked = true;
 					}
 				});

@@ -3,21 +3,21 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<!-- The page supports both light and dark color schemes, with light being default -->
 	<meta name="color-scheme" content="light dark">
-
+	<!-- Defines them color of browser interface, if supported -->
+	<meta name="theme-color" content="#29303D">
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=auto" rel="stylesheet">
 	<!-- Bootstrap CSS -->
 	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_bootstrap.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 	<!-- Bootstrap-Dark Variant CSS (the media attribute is for dark auto-switching) -->
-	<link href="{{ QI_ROOT_PATH }}style/assets/css/bootstrap-nightfall.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)">
+	<link href="{{ QI_ROOT_PATH }}style/assets/css/bootstrap-nightfall.min.css?v={{ QI_VERSION }}" rel="stylesheet" media="(prefers-color-scheme: dark)">
 	<link href="{{ QI_ROOT_PATH }}style/assets/css/qi_style.css?v={{ QI_VERSION }}" rel="stylesheet" media="screen">
 	<title>{{ PAGE_TITLE }} &bull; {{ lang('PHPBB_QI_TITLE') }}</title>
 </head>
 
-<body class="{{ S_CONTENT_DIRECTION }} position-relative {% if S_SETTINGS or S_BOARDS %}bg-secondary{% endif %}"{% if not S_BOARDS %} data-bs-spy="scroll" data-bs-target="#sidebar"{% endif %}>
+<body class="{{ S_CONTENT_DIRECTION }} position-relative{% if S_SETTINGS or S_BOARDS %} bg-secondary{% endif %}"{% if not S_BOARDS %} data-bs-spy="scroll" data-bs-target="#sidebar"{% endif %}>
 
 {% if U_VERSION_CHECK_URL %}
 <div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 1045">
