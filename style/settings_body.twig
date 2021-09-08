@@ -163,7 +163,7 @@
 							<input class="form-control" type="password" id="dbpasswd" name="qi_config[dbpasswd]" value="{{ CONFIG_DBPASSWD }}">
 							<div class="form-check form-switch">
 								<input type="hidden" value="0" name="qi_config[no_dbpasswd]">
-								<input type="checkbox" class="form-check-input" id="qi_config[no_dbpasswd]" name="qi_config[no_dbpasswd]" value="1"{% if CONFIG_NO_PASSWORD == 1 %} checked="checked"{% endif %}>
+								<input type="checkbox" role="switch" class="form-check-input" id="qi_config[no_dbpasswd]" name="qi_config[no_dbpasswd]" value="1"{% if CONFIG_NO_PASSWORD == 1 %} checked="checked"{% endif %}>
 								<label class="form-check-label text-muted" for="qi_config[no_dbpasswd]">{{ lang('NO_PASSWORD') }}</label>
 							</div>
 						</div>
