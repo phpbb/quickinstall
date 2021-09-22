@@ -3,6 +3,9 @@
 	--darkside-color-dim: hsl(0, 0%, 50%);
 	--darkside-bg-color: hsl(219, 20%, 20%);
 	--darkside-bg-hilight: rgba(255, 255, 255, 0.12);
+	--night-bg-color: hsl(216, 28%, 7%);
+	--night-color: hsl(210, 17%, 82%);
+	--night-color-muted: hsl(212, 9%, 58%);
 }
 
 .phpbb-logo-nb {
@@ -80,13 +83,16 @@ svg.bi {
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
+	body,
 	body.bg-secondary,
+	.navbar,
 	.navbar.bg-secondary {
-		background-color: #0d1117 !important; /* !important to override bootstrap's !important */
+		background-color: var(--night-bg-color) !important; /* !important to override bootstrap's !important */
+		color: var(--night-color) !important;
 	}
 
-	.navbar.bg-body {
-		background-color: #1f1f1f !important; /* !important to override bootstrap's !important */
+	.text-muted {
+		color: var(--night-color-muted) !important;
 	}
 
 	.callout-primary { border-left-color: #375a7f; }
