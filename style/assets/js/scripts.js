@@ -157,7 +157,7 @@
 					return regex.test(text);
 				});
 				for (const row of filtered) {
-					row.style.display = 'block';
+					row.style.display = 'table-row';
 				}
 			});
 		}
