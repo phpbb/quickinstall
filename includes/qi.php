@@ -535,7 +535,7 @@ class qi
 				$crumb = trim($crumbs[0]);
 				if (strpos($crumb, $name) === 0)
 				{
-					self::set_cookie($name);
+					self::set_cookie($crumb);
 				}
 			}
 		}
