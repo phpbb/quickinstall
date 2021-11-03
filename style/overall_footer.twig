@@ -1,8 +1,9 @@
 
 			</div>
 			<footer class="text-center py-3">
-				<p class="mb-0"><small>{{ lang('PHPBB_QI_FULLLINK', QI_VERSION) }}</small></p>
-				<p class="mb-0"><small>{{ lang('POWERED_BY_PHPBB') }}</small></p>
+				{% if U_DELETE_COOKIES %}<p class="small">[ <a title="{{ lang('DELETE_COOKIES_TITLE') }}" href="{{ U_DELETE_COOKIES }}" data-qi-confirm="{{ lang('DELETE_COOKIES_CONFIRM') }}">{{ lang('DELETE_COOKIES') }}</a> ]</p>{% endif %}
+				<p class="mb-0 small">{{ lang('PHPBB_QI_FULLLINK', QI_VERSION) }}</p>
+				<p class="mb-0 small">{{ lang('POWERED_BY_PHPBB') }}</p>
 				{% if TRANSLATION_INFO %}<p class="mb-0">{{ TRANSLATION_INFO }}</p>{% endif %}
 			</footer>
 		</div>

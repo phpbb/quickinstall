@@ -12,6 +12,9 @@
  */
 class qi
 {
+	/** @var string The prefix name of phpBB board cookies */
+	const PHPBB_COOKIE_PREFIX = 'phpbb3_';
+
 	/**
 	* Output the standard page header
 	*/

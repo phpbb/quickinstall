@@ -81,6 +81,7 @@ class qi_phpinfo
 		$template->assign_vars(array(
 			'S_PHPINFO'	=> true,
 			'PHPINFO'	=> $output,
+			'U_DELETE_COOKIES' => qi::url('phpinfo') . '&amp;delete-cookies=' . qi::PHPBB_COOKIE_PREFIX,
 		));
 
 		// Output page
