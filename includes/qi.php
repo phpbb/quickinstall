@@ -12,6 +12,9 @@
  */
 class qi
 {
+	/** @var string The prefix name of phpBB board cookies */
+	const PHPBB_COOKIE_PREFIX = 'phpbb3_';
+
 	/**
 	* Output the standard page header
 	*/
@@ -535,7 +538,7 @@ class qi
 				$crumb = trim($crumbs[0]);
 				if (strpos($crumb, $name) === 0)
 				{
-					self::set_cookie($name);
+					self::set_cookie($crumb);
 				}
 			}
 		}

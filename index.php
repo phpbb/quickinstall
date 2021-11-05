@@ -97,6 +97,12 @@ if (qi_request_var('delete-profile', false) !== false)
 	$profile = '';
 }
 
+// delete all phpbb cookies if requested
+if (qi_request_var('delete-cookies', '') === qi::PHPBB_COOKIE_PREFIX)
+{
+	qi::delete_cookies(qi::PHPBB_COOKIE_PREFIX);
+}
+
 // load settings profile
 $settings->import_profile($profile);
 

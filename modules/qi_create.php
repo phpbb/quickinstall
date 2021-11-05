@@ -367,7 +367,7 @@ class qi_create
 			'server_protocol'	=> $settings->get_server_protocol(),
 			'newest_username'	=> $admin_name,
 			'avatar_salt'		=> md5(mt_rand()),
-			'cookie_name'		=> 'phpbb3_' . strtolower(gen_rand_string(5)),
+			'cookie_name'		=> qi::PHPBB_COOKIE_PREFIX . strtolower(gen_rand_string(5)),
 		);
 
 		if (defined('PHPBB_31'))
