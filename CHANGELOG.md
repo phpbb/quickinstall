@@ -1,5 +1,10 @@
 # QuickInstall Changelog
 
+## Version 1.6.6
+- [Feature] Added an option to delete all phpBB cookies on the server (found in the PHP info page's footer).
+- [Fix] Using the search filter feature on the PHP info page no longer breaks the table-layout on the page.
+- [Change] Slight tweaks to the dark mode theme.
+
 ## Version 1.6.5
 - [Feature] Added support for browser interface theme-color, currently used in Safari 15.
 - [Fix] Fixed an issue where refreshing the Settings, Docs or PHP info pages would result in the sidebar not correctly highlighting the current section being viewed.
