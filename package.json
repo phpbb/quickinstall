@@ -3,7 +3,7 @@
   "version": "1.6.6",
   "license": "GPL-2.0-only",
   "dependencies": {
-    "autoprefixer": "^10.3.6",
+    "autoprefixer": "^10.4.1",
     "bootstrap": "^5.0.0",
     "bootstrap-dark-5": "^1.0.1",
     "bootstrap-icons": "^1.4.0",
