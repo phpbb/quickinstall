@@ -477,6 +477,7 @@ class settings
 			$this->get_config('dbuser'),
 			$this->get_config('dbpasswd'),
 			$this->get_config('dbport'),
+			$this->get_config('db_prefix'),
 		];
 	}
 

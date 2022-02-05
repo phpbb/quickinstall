@@ -463,16 +463,18 @@ function db_connect($db_data = '')
 
 	if (empty($db_data))
 	{
-		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $settings->get_db_data();
+		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport, $db_prefix) = $settings->get_db_data();
 		// When db_data is empty, it means the db does not exist yet, so for postgres
 		// we need to set dbname to false so the driver can connect to the postgres db
 		$dbname = ($dbms !== 'postgres') ? $settings->get_config('dbname') : false;
 	}
 	else
 	{
-		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $db_data;
+		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport, $db_prefix) = $db_data;
 		$dbname = $settings->get_config('dbname');
 	}
+
+	$dbname = $dbname ? $db_prefix . $dbname : $dbname;
 
 	// If we get here and the extension isn't loaded it should be safe to just go ahead and load it
 	$available_dbms = qi_get_available_dbms($dbms);
