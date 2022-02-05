@@ -543,13 +543,30 @@ function get_db_doctrine()
 {
 	global $settings;
 
+	$dbms = $settings->get_config('dbms');
+	$dbhost = $settings->get_config('dbhost');
+	$dbuser = $settings->get_config('dbuser');
+	$dbpasswd = $settings->get_config('dbpasswd');
+	$dbname = $settings->get_config('dbname');
+	$dbport = $settings->get_config('dbport');
+	$db_prefix = $settings->get_config('db_prefix');
+
+	// We need the db prefix to be prepended to the database name
+	$dbname = $db_prefix . $dbname;
+
+	// SQLite needs the dbname appended to the dbhost
+	if (in_array($dbms, array('sqlite', 'sqlite3')))
+	{
+		$dbhost .= $dbname;
+	}
+
 	return \phpbb\db\doctrine\connection_factory::get_connection_from_params(
-		$settings->get_config('dbms'),
-		$settings->get_config('dbhost'),
-		$settings->get_config('dbuser'),
-		$settings->get_config('dbpasswd'),
-		$settings->get_config('db_prefix') . $settings->get_config('dbname'),
-		$settings->get_config('dbport')
+		$dbms,
+		$dbhost,
+		$dbuser,
+		$dbpasswd,
+		$dbname,
+		$dbport
 	);
 }
 
