@@ -539,6 +539,20 @@ function db_close($db = false)
 	$db->sql_close();
 }
 
+function get_db_doctrine()
+{
+	global $settings;
+
+	return \phpbb\db\doctrine\connection_factory::get_connection_from_params(
+		$settings->get_config('dbms'),
+		$settings->get_config('dbhost'),
+		$settings->get_config('dbuser'),
+		$settings->get_config('dbpasswd'),
+		$settings->get_config('db_prefix') . $settings->get_config('dbname'),
+		$settings->get_config('dbport')
+	);
+}
+
 function qi_get_available_dbms($dbms)
 {
 	if (defined('PHPBB_32'))

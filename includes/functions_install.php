@@ -47,6 +47,12 @@ class module
 
 function get_db_tools($db)
 {
+	if (defined('PHPBB_40'))
+	{
+		$factory = new \phpbb\db\tools\factory();
+		return $factory->get(get_db_doctrine());
+	}
+
 	if (defined('PHPBB_32'))
 	{
 		$factory = new \phpbb\db\tools\factory();
