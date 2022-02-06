@@ -144,7 +144,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 
 		if (defined('PHPBB_40'))
 		{
-			$finder = new \phpbb\finder($phpbb_root_path, null, $phpEx);
+			$finder = new \phpbb\finder\finder(null, true, $phpbb_root_path, $phpEx);
 		}
 		else
 		{
