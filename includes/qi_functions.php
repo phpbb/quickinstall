@@ -463,16 +463,18 @@ function db_connect($db_data = '')
 
 	if (empty($db_data))
 	{
-		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $settings->get_db_data();
+		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport, $db_prefix) = $settings->get_db_data();
 		// When db_data is empty, it means the db does not exist yet, so for postgres
 		// we need to set dbname to false so the driver can connect to the postgres db
 		$dbname = ($dbms !== 'postgres') ? $settings->get_config('dbname') : false;
 	}
 	else
 	{
-		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport) = $db_data;
+		list($dbms, $dbhost, $dbuser, $dbpasswd, $dbport, $db_prefix) = $db_data;
 		$dbname = $settings->get_config('dbname');
 	}
+
+	$dbname = $dbname ? $db_prefix . $dbname : $dbname;
 
 	// If we get here and the extension isn't loaded it should be safe to just go ahead and load it
 	$available_dbms = qi_get_available_dbms($dbms);
@@ -535,6 +537,37 @@ function db_close($db = false)
 	}
 
 	$db->sql_close();
+}
+
+function get_db_doctrine()
+{
+	global $settings;
+
+	$dbms = $settings->get_config('dbms');
+	$dbhost = $settings->get_config('dbhost');
+	$dbuser = $settings->get_config('dbuser');
+	$dbpasswd = $settings->get_config('dbpasswd');
+	$dbname = $settings->get_config('dbname');
+	$dbport = $settings->get_config('dbport');
+	$db_prefix = $settings->get_config('db_prefix');
+
+	// We need the db prefix to be prepended to the database name
+	$dbname = $db_prefix . $dbname;
+
+	// SQLite needs the dbname appended to the dbhost
+	if (in_array($dbms, array('sqlite', 'sqlite3')))
+	{
+		$dbhost .= $dbname;
+	}
+
+	return \phpbb\db\doctrine\connection_factory::get_connection_from_params(
+		$dbms,
+		$dbhost,
+		$dbuser,
+		$dbpasswd,
+		$dbname,
+		$dbport
+	);
 }
 
 function qi_get_available_dbms($dbms)

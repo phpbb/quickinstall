@@ -232,7 +232,12 @@ class qi_create
 
 		$db = db_connect();
 
-		if (defined('PHPBB_32'))
+		if (defined('PHPBB_40'))
+		{
+			$factory = new \phpbb\db\tools\factory();
+			$db_tools = $factory->get(get_db_doctrine());
+		}
+		else if (defined('PHPBB_32'))
 		{
 			$factory = new \phpbb\db\tools\factory();
 			$db_tools = $factory->get($db);

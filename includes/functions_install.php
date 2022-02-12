@@ -47,6 +47,12 @@ class module
 
 function get_db_tools($db)
 {
+	if (defined('PHPBB_40'))
+	{
+		$factory = new \phpbb\db\tools\factory();
+		return $factory->get(get_db_doctrine());
+	}
+
 	if (defined('PHPBB_32'))
 	{
 		$factory = new \phpbb\db\tools\factory();
@@ -138,7 +144,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 
 		if (defined('PHPBB_40'))
 		{
-			$finder = new \phpbb\finder($phpbb_root_path, null, $phpEx);
+			$finder = new \phpbb\finder\finder(null, true, $phpbb_root_path, $phpEx);
 		}
 		else
 		{
