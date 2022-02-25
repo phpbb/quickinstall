@@ -1,5 +1,8 @@
 # QuickInstall Changelog
 
+## Version 1.6.7
+- [Fix] Fixed compatibility issues with the latest build of phpBB-4.0-dev.
+
 ## Version 1.6.6
 - [Feature] Added an option to delete all phpBB cookies on the server (found in the PHP info page's footer).
 - [Fix] Using the search filter feature on the PHP info page no longer breaks the table-layout on the page.
