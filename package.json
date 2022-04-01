@@ -7,7 +7,7 @@
     "bootstrap-icons": "^1.8.0",
     "clean-css-cli": "^5.5.2",
     "copyfiles": "^2.4.0",
-    "eslint": "^8.8.0",
+    "eslint": "^8.12.0",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^9.0.1",
     "sass": "^1.49.4"
