@@ -19,15 +19,7 @@ $enable-gradients: true;
 // Import Bootstrap (do not change or move this line)
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
-// Extend Bootstrap with new components
-.fw-strong {
-  font-weight: 500;
-}
-
-.lh-0 {
-  line-height: 0;
-}
-
+// Extend Bootstrap with new Callout component
 .callout {
   padding: $spacer 1.25rem;
   margin: $spacer 0;
@@ -35,32 +27,27 @@ $enable-gradients: true;
   border: $border-width solid $gray-200;
   border-left-width: $spacer * .25;
   border-radius: $spacer * .25;
-}
-
-.callout h4 {
-  margin-bottom: $spacer * .25;
-}
-
-.callout p:last-child {
-  margin-bottom: 0;
-}
-
-.callout + .callout {
-  margin-top: -($spacer * .25);
-}
-
-.callout-primary {
-  border-left-color: $primary;
-}
-
-.callout-info {
-  border-left-color: $info;
-}
-
-.callout-warning {
-  border-left-color: $warning;
-}
-
-.callout-danger {
-  border-left-color: $danger;
+  h4 {
+    margin-bottom: $spacer * .25;
+  }
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  + .callout {
+    margin-top: -($spacer * .25);
+  }
+  &-primary {
+    border-left-color: $primary;
+  }
+  &-info {
+    border-left-color: $info;
+  }
+  &-warning {
+    border-left-color: $warning;
+  }
+  &-danger {
+    border-left-color: $danger;
+  }
 }
