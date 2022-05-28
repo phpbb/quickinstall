@@ -170,7 +170,7 @@ class qi_populate
 			$this->email_domain = strtolower($this->email_domain);
 
 			// Populate the users array with some initial data.
-			// I'm sure there where a reason to split this up to two functions.
+			// I'm sure there was a reason to split this up to two functions.
 			// Need to have a closer look at that later. The second one might need to move.
 			$this->pop_user_arr();
 		}
@@ -304,14 +304,25 @@ class qi_populate
 		// Use the default user if no new users are being populated
 		if (!$this->num_users && empty($this->user_arr))
 		{
-			$this->user_arr = $this->get_user(1);
+			$this->user_arr = $users = $this->get_user(1);
+		}
+		// If there are going to be newly registered users, we need to not use them when filling forums
+		else if ($this->num_new_group)
+		{
+			$users = array_slice($this->user_arr, 0, -$this->num_new_group, true);
+		}
+		else
+		{
+			$users = $this->user_arr;
 		}
 
 		// Get the min and max for mt_rand.
-		end($this->user_arr);
-		$mt_max	= (int) key($this->user_arr);
-		reset($this->user_arr);
-		$mt_min	= (int) key($this->user_arr);
+		end($users);
+		$mt_max	= (int) key($users);
+		reset($users);
+		$mt_min	= (int) key($users);
+
+		unset($users);
 
 		// Flags for BBCodes.
 		$flags = 7;
@@ -756,7 +767,7 @@ class qi_populate
 		unset($sql_ary);
 
 		// Put them in groups.
-		$chunk_cnt = $newly_registered = $skip = 0;
+		$chunk_cnt = $skip = 0;
 
 		// Don't add the first users to the newly registered group if a moderator and/or an admin is needed.
 		$skip = ($this->create_mod) ? $skip + 1 : $skip;
@@ -767,22 +778,10 @@ class qi_populate
 		{
 			$sql_ary[] = array(
 				'user_id'		=> (int) $user['user_id'],
-				'group_id'		=> (int) $registered_group,
+				'group_id'		=> $this->num_new_group && $user['user_posts'] < 1 && $skip < 1 ? $newly_registered_group : $registered_group,
 				'group_leader'	=> 0, // No group leaders.
 				'user_pending'	=> 0, // User is not pending.
 			);
-
-			if ($newly_registered < $this->num_new_group && $skip < 1)
-			{
-				$sql_ary[] = array(
-					'user_id'		=> (int) $user['user_id'],
-					'group_id'		=> (int) $newly_registered_group,
-					'group_leader'	=> 0, // No group leaders.
-					'user_pending'	=> 0, // User is not pending.
-				);
-
-				$newly_registered++;
-			}
 
 			$skip--;
 
