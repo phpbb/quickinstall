@@ -33,11 +33,6 @@ class qi_populate
 	private $topic_chunks = 0;
 
 	/**
-	 * Lorem ipsum, a placeholder for the posts.
-	 */
-	private $lorem_ipsum = '';
-
-	/**
 	 * $user_arr = array(
 	 *   (int) $user_id => array(
 	 *     'user_ud' => (int) $user_id,
@@ -66,16 +61,6 @@ class qi_populate
 	 * );
 	 */
 	private $forum_arr = array();
-
-	/**
-	 * $topc_arr = array(
-	 *   (int) $topic_id => array(
-	 *     'topic_id' => (int) $topic_id,
-	 *     'forum_id' => (int) $forum_id,
-	 * 	 ),
-	 * );
-	 */
-	private $topc_arr = array();
 
 	// The default forums. To copy permissions from.
 	private $def_cat_id = 0;
@@ -157,7 +142,7 @@ class qi_populate
 
 		if ($this->num_users)
 		{
-			// If we have users we also need a e-mail domain.
+			// If we have users we also need an e-mail domain.
 			$this->email_domain = trim($settings->get_config('email_domain', ''));
 
 			if (empty($this->email_domain))
@@ -207,11 +192,11 @@ class qi_populate
 	}
 
 	/**
-	 * Make the first two users a admin and a global moderator.
+	 * Make the first two users an admin and a global moderator.
 	 */
 	private function create_management()
 	{
-		global $db, $phpbb_root_path, $phpEx, $settings;
+		global $phpbb_root_path, $phpEx, $settings;
 
 		// Don't do anything if there is not enough users.
 		$users_needed = 0;
@@ -226,8 +211,10 @@ class qi_populate
 		// Get group id for admins and moderators.
 		$user_groups = $this->get_groups();
 		$admin_group = (int) array_search('ADMINISTRATORS', $user_groups, true);
-		$mod_group = (int) array_search('GLOBAL_MODERATORS', $user_groups, true);;
+		$mod_group = (int) array_search('GLOBAL_MODERATORS', $user_groups, true);
 
+		// Load language file array
+		$lang = [];
 		if (file_exists("{$phpbb_root_path}language/" . $settings->get_config('default_lang') . "/common.$phpEx"))
 		{
 			include("{$phpbb_root_path}language/" . $settings->get_config('default_lang') . "/common.$phpEx");
@@ -261,6 +248,8 @@ class qi_populate
 				group_user_add($mod_group, $user['user_id'], false,  $lang['G_GLOBAL_MODERATORS'], true, 1);
 			}
 		}
+
+		unset($lang); // Free memory
 	}
 
 	/**
@@ -282,7 +271,7 @@ class qi_populate
 		$post_id	= (int) $row['post_id'];
 		$db->sql_freeresult($result);
 
-		// Put topics and posts in their arrays so they can be sent to the database when the limit is reached.
+		// Put topics and posts in their arrays, so they can be sent to the database when the limit is reached.
 		$sql_topics = $sql_posts = array();
 
 		// Use the default user if no new users are being populated
@@ -317,11 +306,11 @@ class qi_populate
 
 			for ($i = 0; $i < $topics; $i++)
 			{
-				// Increase this here so we get the number for the topic title.
+				// Increase this here, so we get the number for the topic title.
 				$topic_cnt++;
 
 				$topic_arr = array(
-					'topic_id'		=> (int) ++$topic_id,
+					'topic_id'		=> ++$topic_id,
 					'forum_id'		=> (int) $forum['forum_id'],
 					'topic_title'	=> qi::lang('TEST_TOPIC_TITLE', $topic_cnt),
 				);
@@ -380,7 +369,7 @@ class qi_populate
 						$sql_posts[count($sql_posts) - 1]['post_visibility']	= ITEM_APPROVED;
 					}
 
-					if ($j == 0)
+					if ($j === 0)
 					{
 						// Put some first post info to the topic array.
 						$topic_arr['topic_first_post_id']	= $post_id;
@@ -466,6 +455,8 @@ class qi_populate
 			$db->sql_query($sql);
 		}
 
+		unset($forum);
+
 		if (count($sql_posts))
 		{
 			// Save the array to the posts table
@@ -519,7 +510,7 @@ class qi_populate
 
 		for ($i = 0; $i < $this->num_cats; $i++)
 		{
-			// Create catergories and fill a array with parent ids.
+			// Create categories and fill an array with parent ids.
 			$parent_arr[] = $this->_create_forums(FORUM_CAT, $i + 1, $acp_forums);
 		}
 
@@ -657,7 +648,7 @@ class qi_populate
 		$registered_group = (int) array_search('REGISTERED', $user_groups, true);
 		$newly_registered_group = (int) array_search('NEWLY_REGISTERED', $user_groups, true);
 
-		$s_chunks = ($this->num_users > $this->user_chunks) ? true : false;
+		$s_chunks = $this->num_users > $this->user_chunks;
 		$end = $this->num_users + 1;
 		$chunk_cnt = 0;
 		$sql_ary = array();
