@@ -170,7 +170,7 @@ class qi_populate
 			$this->email_domain = strtolower($this->email_domain);
 
 			// Populate the users array with some initial data.
-			// I'm sure there where a reason to split this up to two functions.
+			// I'm sure there was a reason to split this up to two functions.
 			// Need to have a closer look at that later. The second one might need to move.
 			$this->pop_user_arr();
 		}
@@ -223,26 +223,10 @@ class qi_populate
 			return;
 		}
 
-		$admin_group = $mod_group = 0;
-
 		// Get group id for admins and moderators.
-		$sql = 'SELECT group_id, group_name
-				FROM ' . GROUPS_TABLE . "
-				WHERE group_name = 'ADMINISTRATORS'
-				OR group_name = 'GLOBAL_MODERATORS'";
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			if ($row['group_name'] == 'ADMINISTRATORS')
-			{
-				$admin_group = (int) $row['group_id'];
-			}
-			else if ($row['group_name'] == 'GLOBAL_MODERATORS')
-			{
-				$mod_group = (int) $row['group_id'];
-			}
-		}
-		$db->sql_freeresult($result);
+		$user_groups = $this->get_groups();
+		$admin_group = (int) array_search('ADMINISTRATORS', $user_groups, true);
+		$mod_group = (int) array_search('GLOBAL_MODERATORS', $user_groups, true);;
 
 		if (file_exists("{$phpbb_root_path}language/" . $settings->get_config('default_lang') . "/common.$phpEx"))
 		{
@@ -304,14 +288,25 @@ class qi_populate
 		// Use the default user if no new users are being populated
 		if (!$this->num_users && empty($this->user_arr))
 		{
-			$this->user_arr = $this->get_user(1);
+			$this->user_arr = $users = $this->get_user(1);
+		}
+		// If there are going to be newly registered users, we need to not use them when filling forums
+		else if ($this->num_new_group && $this->num_new_group < $this->num_users)
+		{
+			$users = array_slice($this->user_arr, 0, -$this->num_new_group, true);
+		}
+		else
+		{
+			$users = $this->user_arr;
 		}
 
 		// Get the min and max for mt_rand.
-		end($this->user_arr);
-		$mt_max	= (int) key($this->user_arr);
-		reset($this->user_arr);
-		$mt_min	= (int) key($this->user_arr);
+		end($users);
+		$mt_max	= (int) key($users);
+		reset($users);
+		$mt_min	= (int) key($users);
+
+		unset($users);
 
 		// Flags for BBCodes.
 		$flags = 7;
@@ -657,25 +652,10 @@ class qi_populate
 			$password = phpbb_hash('123456');
 		}
 
-		$registered_group = $newly_registered_group = 0;
 		// Get the group id for registered users and newly registered.
-		$sql = 'SELECT group_id, group_name FROM ' . GROUPS_TABLE . '
-			WHERE group_name = \'REGISTERED\'
-			OR group_name = \'NEWLY_REGISTERED\'';
-		$result = $db->sql_query($sql);
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			if ($row['group_name'] == 'REGISTERED')
-			{
-				$registered_group = (int) $row['group_id'];
-			}
-			else
-			{
-				$newly_registered_group = (int) $row['group_id'];
-			}
-		}
-		$db->sql_freeresult($result);
+		$user_groups = $this->get_groups();
+		$registered_group = (int) array_search('REGISTERED', $user_groups, true);
+		$newly_registered_group = (int) array_search('NEWLY_REGISTERED', $user_groups, true);
 
 		$s_chunks = ($this->num_users > $this->user_chunks) ? true : false;
 		$end = $this->num_users + 1;
@@ -756,35 +736,20 @@ class qi_populate
 		unset($sql_ary);
 
 		// Put them in groups.
-		$chunk_cnt = $newly_registered = $skip = 0;
+		$chunk_cnt = 0;
 
-		// Don't add the first users to the newly registered group if a moderator and/or an admin is needed.
-		$skip = ($this->create_mod) ? $skip + 1 : $skip;
-		$skip = ($this->create_admin) ? $skip + 1 : $skip;
+		// This is to skip adding mods and admins to the newly registered user group
+		$managers = array_intersect($user_groups, ['ADMINISTRATORS', 'GLOBAL_MODERATORS']);
 
 		// First the registered group.
 		foreach ($this->user_arr as $user)
 		{
 			$sql_ary[] = array(
 				'user_id'		=> (int) $user['user_id'],
-				'group_id'		=> (int) $registered_group,
+				'group_id'		=> $this->num_new_group && $user['user_posts'] < 1 && !array_key_exists($user['group_id'], $managers) ? $newly_registered_group : $registered_group,
 				'group_leader'	=> 0, // No group leaders.
 				'user_pending'	=> 0, // User is not pending.
 			);
-
-			if ($newly_registered < $this->num_new_group && $skip < 1)
-			{
-				$sql_ary[] = array(
-					'user_id'		=> (int) $user['user_id'],
-					'group_id'		=> (int) $newly_registered_group,
-					'group_leader'	=> 0, // No group leaders.
-					'user_pending'	=> 0, // User is not pending.
-				);
-
-				$newly_registered++;
-			}
-
-			$skip--;
 
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
 			{
@@ -958,5 +923,26 @@ class qi_populate
 		$db->sql_query($sql);
 
 		$db->sql_transaction('commit');
+	}
+
+	/**
+	 * Get an array of the user groups
+	 * @return array group_id => group_name
+	 */
+	private function get_groups()
+	{
+		global $db;
+
+		$groups = [];
+
+		$sql = 'SELECT group_id, group_name FROM ' . GROUPS_TABLE;
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$groups[$row['group_id']] = $row['group_name'];
+		}
+		$db->sql_freeresult($result);
+
+		return $groups;
 	}
 }
