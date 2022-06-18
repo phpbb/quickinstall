@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Version 1.6.8
+- [Fix] Fixed handling of Newly Registered Users. Populated users added to the NRU group will now have zero posts and zero activity.
+- [Fix] Minor PHP and CSS fixes.
+
 ## Version 1.6.7
 - [Fix] Fixed compatibility issues with the latest build of phpBB-4.0-dev.
 
