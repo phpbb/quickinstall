@@ -727,20 +727,23 @@ class qi_populate
 		unset($sql_ary);
 
 		// Put them in groups.
-		$chunk_cnt = 0;
+		$chunk_cnt = $skip = 0;
 
-		// This is to skip adding mods and admins to the newly registered user group
-		$managers = array_intersect($user_groups, ['ADMINISTRATORS', 'GLOBAL_MODERATORS']);
+		// Don't add the first users to the newly registered group if a moderator and/or an admin is needed.
+		$skip = ($this->create_mod) ? $skip + 1 : $skip;
+		$skip = ($this->create_admin) ? $skip + 1 : $skip;
 
 		// First the registered group.
 		foreach ($this->user_arr as $user)
 		{
 			$sql_ary[] = array(
 				'user_id'		=> (int) $user['user_id'],
-				'group_id'		=> $this->num_new_group && $user['user_posts'] < 1 && !array_key_exists($user['group_id'], $managers) ? $newly_registered_group : $registered_group,
+				'group_id'		=> $this->num_new_group && $user['user_posts'] < 1 && $skip < 1 ? $newly_registered_group : $registered_group,
 				'group_leader'	=> 0, // No group leaders.
 				'user_pending'	=> 0, // User is not pending.
 			);
+
+			$skip--;
 
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
 			{
