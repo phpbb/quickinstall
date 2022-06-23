@@ -1,5 +1,8 @@
 # QuickInstall Changelog
 
+## Version 1.6.9
+- [Fix] Fixed a bug introduced in version 1.6.8 that caused a fatal error in PHP8 when populating a board with users.
+
 ## Version 1.6.8
 - [Fix] Fixed handling of Newly Registered Users. Populated users added to the NRU group will now have zero posts and zero activity.
 - [Fix] Minor PHP and CSS fixes.
