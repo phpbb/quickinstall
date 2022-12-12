@@ -32,7 +32,7 @@
 ## Version 1.6.3
 - [Fix] Fixed a problem where boards would not populate when using PHP 8.
 - [Fix] Clarified how the option to install additional styles should be used.
-- [Fix] Fixed an issue where “Additional board config settings“ would be ignored if they tried to set a config to a value of 0, false or an empty string.
+- [Fix] Fixed an issue where “Additional board config settings” would be ignored if they tried to set a config to a value of 0, false or an empty string.
 - [Fix] Fixed a few more issues in the code base which could pose problems with future versions of PHP and phpBB.
 - [Change] Small internal change to QI's SCSS file, moved away from using division to avoid issues with SASS 1.33.
 
@@ -64,8 +64,8 @@
 - [Change] Populated users will now have a last active date.
 - [Change] Enforce email domain requirement for populated users.
 - [Change] QI’s TWIG templates can now support language substitution variables.
-- [Change] Moved “Install additional styles” option on main page to the “Install options” sub-section.
-- [Change] Show the admin name and password in their respective fields in the “Install options” sub-section.  
+- [Change] Moved “Install additional styles” option on main page to the “Install options” subsection.
+- [Change] Show the admin name and password in their respective fields in the “Install options” subsection.  
 - [Fix] Fixed potential PHP 8 issues (Issues #157, #160, #162).
 - [Fix] Fixed invalid HTML issues.
 
@@ -285,7 +285,7 @@
 - [Fix] Ticket #63305 `$language` was null when sent as default to request_var.
 - [Fix] Ticket #63306 QI needs to correctly handle an empty qi_config.cfg.
 - [Change] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.
-- [Change] Include functions_admin.php for postgres' benefit.
+- [Change] Include functions_admin.php for postgres benefit.
 - [Change] Use `get_cache_dir()` in sqlite dbal.
 - [Change] Delay database connection until it is necessary.
 - [Change] Cleaned up the JS in the main html file.

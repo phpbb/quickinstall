@@ -649,7 +649,6 @@ class qi_populate
 		$newly_registered_group = (int) array_search('NEWLY_REGISTERED', $user_groups, true);
 
 		$s_chunks = $this->num_users > $this->user_chunks;
-		$end = $this->num_users + 1;
 		$chunk_cnt = 0;
 		$sql_ary = array();
 
@@ -745,6 +744,7 @@ class qi_populate
 
 			$skip--;
 
+			$chunk_cnt++;
 			if ($s_chunks && $chunk_cnt >= $this->user_chunks)
 			{
 				// throw the array to the users table
@@ -754,7 +754,11 @@ class qi_populate
 				$chunk_cnt = 0;
 			}
 		}
-		$db->sql_multi_insert(USER_GROUP_TABLE, $sql_ary);
+		// If there are any remaining users we need to throw them in too.
+		if (!empty($sql_ary))
+		{
+			$db->sql_multi_insert(USER_GROUP_TABLE, $sql_ary);
+		}
 
 		// Get the last user
 		$user = end($this->user_arr);
