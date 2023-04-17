@@ -26,6 +26,16 @@ class dbal_mysqli_qi extends \phpbb\db\driver\mysqli
 	*/
 	public function sql_connect($sqlserver, $sqluser, $sqlpassword, $database, $port = false, $persistency = false , $new_link = false)
 	{
+		/*
+		 * As of PHP 8.1 MySQLi default error mode is set to MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT
+		 * See https://wiki.php.net/rfc/mysqli_default_errmode
+		 * Since phpBB implements own SQL errors handling, explicitly set it back to MYSQLI_REPORT_OFF
+		 */
+		if (PHP_VERSION_ID >= 80100)
+		{
+			@mysqli_report(MYSQLI_REPORT_OFF);
+		}
+
 		$this->persistency = $persistency;
 		$this->user = $sqluser;
 		$this->server = $sqlserver;
@@ -34,7 +44,7 @@ class dbal_mysqli_qi extends \phpbb\db\driver\mysqli
 
 		$this->sql_layer = 'mysql_41';
 
-		// Persistant connections not supported by the mysqli extension?
+		// Persistent connections not supported by the mysqli extension?
 		$this->db_connect_id = @mysqli_connect($this->server, $this->user, $sqlpassword, null, $port);
 
 		if ($this->db_connect_id)
