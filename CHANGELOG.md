@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Version 1.6.10
+- [Fix] Fixed a fatal PHP error that could occur when creating new boards under PHP 8.1 or newer.
+- [Fix] Fixed some minor issues that could occur when populating user data.
+
 ## Version 1.6.9
 - [Fix] Fixed a bug introduced in version 1.6.8 that caused a fatal error in PHP8 when populating a board with users.
 
