@@ -684,7 +684,7 @@ class qi_create
 			global $symfony_request, $phpbb_filesystem;
 
 			$phpbb_container = $container->get('installer.helper.container_factory');
-			$phpbb_dispatcher = $phpbb_container->get('dispatcher');
+			$phpbb_dispatcher = $phpbb_container->get(defined('PHPBB_40') ? 'event_dispatcher' : 'dispatcher');
 			$phpbb_log = $phpbb_container->get('log');
 
 			$request = $phpbb_container->get('request');
