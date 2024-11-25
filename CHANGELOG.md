@@ -1,7 +1,11 @@
 # QuickInstall Changelog
 
+## Version 1.6.12
+- [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4.
+- [Fix] Fixed a fatal PHP error that could occur when creating new boards under PHP 8.
+
 ## Version 1.6.11
-- [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4 ()
+- [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4.
 
 ## Version 1.6.10
 - [Fix] Fixed a fatal PHP error that could occur when creating new boards under PHP 8.1 or newer.
@@ -181,7 +185,7 @@
 - [Feature] Supports phpBB 3.2 boards
 - [Fix] Issue #55 Improve compatibility with PHP 7
 - [Fix] Issue #49 Removed closing php tag from generated config.php file
-- [Fix] Fix for UTF-8 characters `$error_msg`
+- [Fix] A Fix for UTF-8 characters `$error_msg`
 - [Fix] Issue #45 Fix compatibility for installing phpBB 3.1.5 boards.
 - [Change] Sort boards in a natural order (10 > 9).
 - [Change] Added a scroll bar to the boards list.
@@ -198,7 +202,7 @@
 - [Fix] The explanation text for the Boards tab was not up-to-date.
 - [Fix] Issue #42 the installation note box got more or less unreadable in some screen resolutions.
 - [Fix] "schema.json" was removed in phpBB 3.1.3. QI used it to create the 3.1 DB. Now install of 3.1.x works again.
-- [Fix] Ticket #44 QI removed uppercase letters from directory names due to a missing Hyphen "-".
+- [Fix] Ticket #44 QI removed uppercase letters from directory names due to a missing Hyphen.
 - [Fix] Ticket #43 when run in server root `dirname()` on Windows returns a backslash QI did not handle that correct. (By Skouat)
 - [Change] Moved the "can take a while" warning box, and the options/settings boxes.
 - [Change] Moved the header text to the sidebar in the PHP info tab.
