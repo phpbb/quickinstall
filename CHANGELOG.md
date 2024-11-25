@@ -1,5 +1,8 @@
 # QuickInstall Changelog
 
+## Version 1.6.13
+- [Fix] Restored functionality to QI's version checking.
+
 ## Version 1.6.12
 - [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4.
 - [Fix] Fixed a fatal PHP error that could occur when creating new boards under PHP 8.
