@@ -278,14 +278,20 @@ function legacy_request_var($var_name, $default, $multibyte = false, $cookie = f
 	}
 	else
 	{
-		list($key_type, $type) = each($default);
+		// Get first key and value
+		$key_type = key($default);
+		$type = current($default);
 		$type = gettype($type);
 		$key_type = gettype($key_type);
+
 		if ($type === 'array')
 		{
 			reset($default);
 			$default = current($default);
-			list($sub_key_type, $sub_type) = each($default);
+
+			// Get first key and value of the nested array
+			$sub_key_type = key($default);
+			$sub_type = current($default);
 			$sub_type = gettype($sub_type);
 			$sub_type = ($sub_type === 'array') ? 'NULL' : $sub_type;
 			$sub_key_type = gettype($sub_key_type);
