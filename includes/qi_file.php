@@ -51,12 +51,9 @@ class qi_file
 		self::append_slash($src_dir);
 		self::append_slash($dst_dir);
 
-		if (!is_dir($dst_dir))
+		if (!is_dir($dst_dir) && !mkdir($dst_dir) && !is_dir($dst_dir))
 		{
-			if (!mkdir($dst_dir) && !is_dir($dst_dir))
-			{
-				throw new \RuntimeException('COPY_DIR_ERROR');
-			}
+			throw new RuntimeException('COPY_DIR_ERROR');
 		}
 
 		foreach (scandir($src_dir) as $file)
