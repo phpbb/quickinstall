@@ -855,7 +855,12 @@ class qi_create
 
 		// add log entry :D
 		$user->ip = &$user_ip;
-		if (defined('PHPBB_31'))
+		if (defined('PHPBB_40'))
+		{
+			global $phpbb_log;
+			$phpbb_log->add('admin', 2, $user->ip, qi::lang('LOG_INSTALL_INSTALLED_QI', qi::current_version()));
+		}
+		else if (defined('PHPBB_31'))
 		{
 			add_log('admin', qi::lang('LOG_INSTALL_INSTALLED_QI', qi::current_version()));
 		}
