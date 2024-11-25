@@ -22,17 +22,11 @@
 {% if U_VERSION_CHECK_URL %}
 <div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 1045">
 	<div id="qiUpdateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-		<div class="toast-header">
-			<span class="me-auto">{{ lang('UPDATE_AVAILABLE') }}</span>
+		<div class="toast-body d-flex align-items-center justify-content-between">
+			<span>{{ lang('UPDATE_AVAILABLE') }}</span>
+			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger btn-sm ms-3" title="{{ VERSION_CHECK_TITLE }}">{{ lang('DOWNLOAD') }}</a>
+			<span class="vr mx-3"></span>
 			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-		</div>
-		<div class="toast-body">
-			<a href="{{ U_VERSION_CHECK_URL }}" class="btn btn-danger" title="{{ VERSION_CHECK_TITLE }}">
-				<svg class="bi text-white" width="16" height="16" fill="currentColor">
-					<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#download"/>
-				</svg>
-				{{ lang('DOWNLOAD') }} &nbsp; <span class="badge rounded-pill bg-warning text-dark">{{ VERSION_CHECK_CURRENT }}</span>
-			</a>
 		</div>
 	</div>
 </div>
