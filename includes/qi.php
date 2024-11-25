@@ -487,7 +487,7 @@ class qi
 		return $version_helper
 			->set_current_version(self::current_version())
 			->force_stability('stable')
-			->set_file_location('www.phpbb.com', '/customise/db/official_tool/phpbb3_quickinstall', 'version_check')
+			->set_file_location('www.phpbb.com', '/customise/db/official_tool/phpbb3_quickinstall', 'version_check', true)
 			->get_update();
 	}
 
