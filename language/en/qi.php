@@ -301,7 +301,7 @@ $lang = array_merge($lang, array(
 	'TIME_SETTINGS'			=> 'Time settings',
 	'TOGGLE_NAVIGATION'		=> 'Toggle navigation',
 
-	'UPDATE_AVAILABLE'		=> 'A new version is available.',
+	'UPDATE_AVAILABLE'		=> 'An update is available.',
 
 	'VERSION_CHECK_TITLE'	=> 'QI %1$s is available. You are using QI %2$s. Click to download the latest version.',
 
