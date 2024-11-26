@@ -47,13 +47,13 @@ class module
 
 function get_db_tools($db)
 {
-	if (defined('PHPBB_40'))
+	if (qi::phpbb_branch('40'))
 	{
 		$factory = new \phpbb\db\tools\factory();
 		return $factory->get(get_db_doctrine());
 	}
 
-	if (defined('PHPBB_32'))
+	if (qi::phpbb_branch('32'))
 	{
 		$factory = new \phpbb\db\tools\factory();
 		return $factory->get($db);
@@ -64,7 +64,7 @@ function get_db_tools($db)
 
 function load_schema($install_path = '', $install_dbms = false)
 {
-	if (defined('PHPBB_31'))
+	if (qi::phpbb_branch('31'))
 	{
 		load_schema_31($install_path, $install_dbms);
 	}
@@ -142,7 +142,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 			include($phpbb_root_path . 'includes/constants.' . $phpEx);
 		}
 
-		if (defined('PHPBB_40'))
+		if (qi::phpbb_branch('40'))
 		{
 			$finder = new \phpbb\finder\finder(null, true, $phpbb_root_path, $phpEx);
 		}
@@ -166,7 +166,7 @@ function load_schema_31($install_path = '', $install_dbms = false)
 		$db_tools = get_db_tools($sqlite_db);
 
 		$args = array($classes, new \phpbb\config\config(array()), $sqlite_db, $db_tools, $phpbb_root_path, $phpEx, $table_prefix);
-		if (defined('PHPBB_40'))
+		if (qi::phpbb_branch('40'))
 		{
 			$tables_data = \Symfony\Component\Yaml\Yaml::parseFile($phpbb_root_path . '/config/default/container/tables.yml');
 			$tables = [];
@@ -257,7 +257,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 		$install_dbms = $dbms;
 	}
 
-	if (!function_exists('get_available_dbms') && !defined('PHPBB_32'))
+	if (!function_exists('get_available_dbms') && !qi::phpbb_branch('32'))
 	{
 		global $phpbb_root_path, $phpEx;
 		include($phpbb_root_path . 'includes/functions_install.' . $phpEx);
@@ -335,7 +335,7 @@ function load_schema_30($install_path = '', $install_dbms = false)
 
 function qi_split_sql_file($sql, $delimiter)
 {
-	if (defined('PHPBB_32'))
+	if (qi::phpbb_branch('32'))
 	{
 		global $phpbb_root_path;
 		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
@@ -349,7 +349,7 @@ function qi_split_sql_file($sql, $delimiter)
 
 function qi_remove_comments($input)
 {
-	if (defined('PHPBB_32'))
+	if (qi::phpbb_branch('32'))
 	{
 		global $phpbb_root_path;
 		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);

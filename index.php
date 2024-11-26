@@ -157,14 +157,14 @@ $table_prefix = $settings->get_config('table_prefix', '');
 
 require($phpbb_root_path . 'includes/constants.' . $phpEx);
 
-if (!defined('PHPBB_32'))
+if (!qi::phpbb_branch('32'))
 {
 	require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 }
 
-if (defined('PHPBB_31'))
+if (qi::phpbb_branch('31'))
 {
-	if (defined('PHPBB_32'))
+	if (qi::phpbb_branch('32'))
 	{
 		$cache_dir = $quickinstall_path . $settings->get_config('cache_dir', '');
 		$cache	   = new \phpbb\cache\driver\file($cache_dir);
@@ -221,7 +221,7 @@ $settings->validate();
 $errors = $settings->get_errors();
 
 // Set some standard variables we want to force
-if (defined('PHPBB_31'))
+if (qi::phpbb_branch('31'))
 {
 	$config = new \phpbb\config\config(array(
 		'load_tplcompile'	=> '1',
