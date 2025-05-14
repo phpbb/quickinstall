@@ -28,7 +28,7 @@ class qi_create
 			trigger_error(qi::lang('PHP_INCOMPATIBLE', PHPBB_VERSION, PHP_VERSION));
 		}
 
-		if (qi::phpbb_branch('31'))
+		if (qi::phpbb_branch('3.1'))
 		{
 			$config->set('rand_seed', md5(mt_rand()));
 			$config->set('rand_seed_last_update', time());
@@ -124,7 +124,7 @@ class qi_create
 			trigger_error(qi::lang($e->getMessage(), $board_dir));
 		}
 
-		if (!qi::phpbb_branch('31'))
+		if (!qi::phpbb_branch('3.1'))
 		{
 			// copy qi's lang file for the log
 			$qi_lang = $settings->get_config('qi_lang');
@@ -165,7 +165,7 @@ class qi_create
 			'$table_prefix' => $table_prefix,
 		);
 
-		if (qi::phpbb_branch('31'))
+		if (qi::phpbb_branch('3.1'))
 		{
 			$config_data_array['$dbms'] = "phpbb\\\\db\\\\driver\\\\$dbms";
 			$config_data_array['$acm_type'] = 'phpbb\\\\cache\\\\driver\\\\file';
@@ -187,7 +187,7 @@ class qi_create
 		$s_debug = !$settings->get_config('debug', 0) ? '//' : '';
 
 		$config_data .= "\n@define('PHPBB_INSTALLED', true);\n";
-		if (qi::phpbb_branch('33'))
+		if (qi::phpbb_branch('3.3'))
 		{
 			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
@@ -210,13 +210,13 @@ class qi_create
 				file_put_contents($board_dir . 'config/production/config.yml', $dump, FILE_APPEND);
 			}
 		}
-		else if (qi::phpbb_branch('32'))
+		else if (qi::phpbb_branch('3.2'))
 		{
 			$config_data .= "@define('PHPBB_ENVIRONMENT', 'production');\n";
 			$config_data .= "$s_debug@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
 			$config_data .= "//@define('DEBUG_CONTAINER', true);\n";
 		}
-		else if (qi::phpbb_branch('31'))
+		else if (qi::phpbb_branch('3.1'))
 		{
 			$config_data .= "$s_debug@define('PHPBB_DISPLAY_LOAD_TIME', true);\n";
 			$config_data .= "$s_debug@define('DEBUG', true);\n";
@@ -232,17 +232,17 @@ class qi_create
 
 		$db = db_connect();
 
-		if (qi::phpbb_branch('40'))
+		if (qi::phpbb_branch('4.0'))
 		{
 			$factory = new \phpbb\db\tools\factory();
 			$db_tools = $factory->get(get_db_doctrine());
 		}
-		else if (qi::phpbb_branch('32'))
+		else if (qi::phpbb_branch('3.2'))
 		{
 			$factory = new \phpbb\db\tools\factory();
 			$db_tools = $factory->get($db);
 		}
-		else if (qi::phpbb_branch('31'))
+		else if (qi::phpbb_branch('3.1'))
 		{
 			$db_tools = new \phpbb\db\tools($db);
 		}
@@ -271,7 +271,7 @@ class qi_create
 				case 'postgres':
 					global $sql_db;
 
-					$error_collector_class = (qi::phpbb_branch('31')) ? '\phpbb\error_collector' : 'phpbb_error_collector';
+					$error_collector_class = (qi::phpbb_branch('3.1')) ? '\phpbb\error_collector' : 'phpbb_error_collector';
 
 					if (!class_exists($error_collector_class))
 					{
@@ -375,7 +375,7 @@ class qi_create
 			'cookie_name'		=> qi::PHPBB_COOKIE_PREFIX . strtolower(gen_rand_string(5)),
 		);
 
-		if (qi::phpbb_branch('31'))
+		if (qi::phpbb_branch('3.1'))
 		{
 			$config_ary['board_timezone'] = $settings->get_config('qi_tz', '');
 			$tz_data = "user_timezone = '{$config_ary['board_timezone']}'";
@@ -399,7 +399,7 @@ class qi_create
 			$config_ary['captcha_gd'] = 1;
 		}
 
-		if (qi::phpbb_branch('31'))
+		if (qi::phpbb_branch('3.1'))
 		{
 			$current_config = $config;
 			$config = new \phpbb\config\db($db, $cache, "{$table_prefix}config");
@@ -426,7 +426,7 @@ class qi_create
 					user_email		= '" . $db->sql_escape($settings->get_config('board_email')) . "',
 					user_dateformat	= '" . $db->sql_escape(qi::lang('default_dateformat')) . "',
 					username_clean	= '" . $db->sql_escape(utf8_clean_string($admin_name)) . "',
-					" . (!qi::phpbb_branch('33') || $db_tools->sql_column_exists("{$table_prefix}users", 'user_email_hash') ? 'user_email_hash = ' . phpbb_email_hash($settings->get_config('board_email')) . ',' : '') . "
+					" . (!qi::phpbb_branch('3.3') || $db_tools->sql_column_exists("{$table_prefix}users", 'user_email_hash') ? 'user_email_hash = ' . phpbb_email_hash($settings->get_config('board_email')) . ',' : '') . "
 					$tz_data
 				WHERE username = 'Admin'",
 
@@ -483,7 +483,7 @@ class qi_create
 			FROM ' . CONFIG_TABLE;
 		$result = $db->sql_query($sql);
 
-		if (qi::phpbb_branch('31'))
+		if (qi::phpbb_branch('3.1'))
 		{
 			$config = new \phpbb\config\config(array());
 		}
@@ -530,7 +530,7 @@ class qi_create
 					'is_dynamic'	=> $is_dynamic,
 				);
 
-				if ((qi::phpbb_branch('31') && $config->offsetExists($config_name)) || (!qi::phpbb_branch('31') && array_key_exists($config_name, $config)))
+				if ((qi::phpbb_branch('3.1') && $config->offsetExists($config_name)) || (!qi::phpbb_branch('3.1') && array_key_exists($config_name, $config)))
 				{
 					$sql = "UPDATE {$table_prefix}config
 						SET " . $db->sql_build_array('UPDATE', $sql_ary) . "
@@ -558,13 +558,13 @@ class qi_create
 		$config['load_tplcompile'] = '1';
 
 		// extended phpbb install script
-		if (!qi::phpbb_branch('32'))
+		if (!qi::phpbb_branch('3.2'))
 		{
 			include($phpbb_root_path . 'install/install_install.' . $phpEx);
 			include($quickinstall_path . 'includes/install_install_qi.' . $phpEx);
 		}
 
-		if (qi::phpbb_branch('32'))
+		if (qi::phpbb_branch('3.2'))
 		{
 			$container_builder = new \phpbb\di\container_builder($phpbb_root_path, $phpEx);
 			$container = $container_builder
@@ -590,7 +590,7 @@ class qi_create
 			$language = $container->get('language');
 			$language->add_lang(array('common', 'acp/common', 'acp/board', 'install', 'posting'));
 
-			if (qi::phpbb_branch('40'))
+			if (qi::phpbb_branch('4.0'))
 			{
 				/** @var \phpbb\install\helper\config $installer_config */
 				$installer_config = $container->get('installer.helper.config');
@@ -672,7 +672,7 @@ class qi_create
 			@$container->get('installer.install_data.add_languages')->run();
 			@$container->get('installer.install_data.add_bots')->run();
 
-			if (qi::phpbb_branch('33'))
+			if (qi::phpbb_branch('3.3'))
 			{
 				@$container->get('installer.install_data.create_search_index')->run();
 			}
@@ -684,7 +684,7 @@ class qi_create
 			global $symfony_request, $phpbb_filesystem;
 
 			$phpbb_container = $container->get('installer.helper.container_factory');
-			$phpbb_dispatcher = $phpbb_container->get(qi::phpbb_branch('40') ? 'event_dispatcher' : 'dispatcher');
+			$phpbb_dispatcher = $phpbb_container->get(qi::phpbb_branch('4.0') ? 'event_dispatcher' : 'dispatcher');
 			$phpbb_log = $phpbb_container->get('log');
 
 			$request = $phpbb_container->get('request');
@@ -699,13 +699,13 @@ class qi_create
 			unset($current_user);
 
 			// get search for 3.2.x
-			if (!qi::phpbb_branch('33'))
+			if (!qi::phpbb_branch('3.3'))
 			{
 				$search_error_msg = false;
 				$search = new \phpbb\search\fulltext_native($search_error_msg, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, $phpbb_dispatcher);
 			}
 		}
-		else if (qi::phpbb_branch('31'))
+		else if (qi::phpbb_branch('3.1'))
 		{
 			global $phpbb_container, $phpbb_config_php_file, $phpbb_log, $phpbb_dispatcher, $request, $passwords_manager;
 			global $symfony_request, $phpbb_filesystem;
@@ -762,7 +762,7 @@ class qi_create
 			$search = new \phpbb\search\fulltext_native($error, $phpbb_root_path, $phpEx, $auth, $config, $db, $user, null);
 		}
 
-		if (!qi::phpbb_branch('33'))
+		if (!qi::phpbb_branch('3.3'))
 		{
 			// get search for 3.0 (and possible 31 or 3.2)
 			if (!isset($search))
@@ -778,7 +778,7 @@ class qi_create
 			$this->build_search_index($db, $search);
 		}
 
-		if (!qi::phpbb_branch('32'))
+		if (!qi::phpbb_branch('3.2'))
 		{
 			$install = new install_install_qi($p_master = new p_master_dummy());
 			$install->set_data(array(
@@ -840,7 +840,7 @@ class qi_create
 				include($phpbb_root_path . 'includes/functions_content.' . $phpEx);
 			}
 
-			$styles_class = (qi::phpbb_branch('31')) ? 'class_31_styles' : 'class_30_styles';
+			$styles_class = (qi::phpbb_branch('3.1')) ? 'class_31_styles' : 'class_30_styles';
 			include "{$quickinstall_path}includes/$styles_class.$phpEx";
 			new $styles_class();
 		}
@@ -855,12 +855,12 @@ class qi_create
 
 		// add log entry :D
 		$user->ip = &$user_ip;
-		if (qi::phpbb_branch('40'))
+		if (qi::phpbb_branch('4.0'))
 		{
 			global $phpbb_log;
 			$phpbb_log->add('admin', 2, $user->ip, qi::lang('LOG_INSTALL_INSTALLED_QI', qi::current_version()));
 		}
-		else if (qi::phpbb_branch('31'))
+		else if (qi::phpbb_branch('3.1'))
 		{
 			add_log('admin', qi::lang('LOG_INSTALL_INSTALLED_QI', qi::current_version()));
 		}

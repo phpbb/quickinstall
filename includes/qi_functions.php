@@ -491,7 +491,7 @@ function db_connect($db_data = '')
 	}
 
 	// Instantiate the database
-	if (qi::phpbb_branch('31'))
+	if (qi::phpbb_branch('3.1'))
 	{
 		$dbal = substr($available_dbms[$dbms]['DRIVER'], strrpos($available_dbms[$dbms]['DRIVER'], '\\') + 1);
 		// Load the appropriate database class if not already loaded.
@@ -517,7 +517,7 @@ function db_connect($db_data = '')
 	$sql_db = 'dbal_' . $dbal . '_qi';
 	$db = new $sql_db();
 
-	if (qi::phpbb_branch('31'))
+	if (qi::phpbb_branch('3.1'))
 	{
 		$db->sql_connect($dbhost, $dbuser, $dbpasswd, $dbname, $dbport, false, false);
 	}
@@ -578,7 +578,7 @@ function get_db_doctrine()
 
 function qi_get_available_dbms($dbms)
 {
-	if (qi::phpbb_branch('32'))
+	if (qi::phpbb_branch('3.2'))
 	{
 		global $phpbb_root_path;
 		$database = new \phpbb\install\helper\database(new \phpbb\filesystem\filesystem(), $phpbb_root_path);
@@ -590,22 +590,22 @@ function qi_get_available_dbms($dbms)
 
 function qi_get_phpbb_version()
 {
-	if (qi::phpbb_branch('40'))
+	if (qi::phpbb_branch('4.0'))
 	{
 		return '4.0';
 	}
 
-	if (qi::phpbb_branch('33'))
+	if (qi::phpbb_branch('3.3'))
 	{
 		return '3.3';
 	}
 
-	if (qi::phpbb_branch('32'))
+	if (qi::phpbb_branch('3.2'))
 	{
 		return '3.2';
 	}
 
-	if (qi::phpbb_branch('31'))
+	if (qi::phpbb_branch('3.1'))
 	{
 		return '3.1';
 	}

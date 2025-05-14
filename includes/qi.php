@@ -900,11 +900,11 @@ class qi
 		}
 
 		return
-			(PHP_VERSION_ID >= 70000 && !self::phpbb_branch('32')) ||
+			(PHP_VERSION_ID >= 70000 && !self::phpbb_branch('3.2')) ||
 			(PHP_VERSION_ID >= 70200 && self::phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
-			(PHP_VERSION_ID >= 70300 && !self::phpbb_branch('33')) ||
-			(PHP_VERSION_ID < 70103 && self::phpbb_branch('33')) ||
-			(PHP_VERSION_ID < 70300 && self::phpbb_branch('40'))
+			(PHP_VERSION_ID >= 70300 && !self::phpbb_branch('3.3')) ||
+			(PHP_VERSION_ID < 70103 && self::phpbb_branch('3.3')) ||
+			(PHP_VERSION_ID < 70300 && self::phpbb_branch('4.0'))
 		;
 	}
 
@@ -916,6 +916,9 @@ class qi
 	 */
 	public static function phpbb_branch($branch)
 	{
+		// Remove any dots from the branch number
+		$branch = str_replace('.', '', $branch);
+
 		if (!isset(self::$branchCache[$branch])) {
 			self::$branchCache[$branch] = defined('PHPBB_' . $branch);
 		}

@@ -315,7 +315,7 @@ class qi_populate
 					'topic_title'	=> qi::lang('TEST_TOPIC_TITLE', $topic_cnt),
 				);
 
-				if (qi::phpbb_branch('31'))
+				if (qi::phpbb_branch('3.1'))
 				{
 					$topic_arr['topic_posts_approved'] = 1;
 
@@ -361,10 +361,10 @@ class qi_populate
 						'post_text'			=> $post_text,
 						'post_checksum'		=> md5($post_text),
 						'bbcode_bitfield'	=> $bbcode_bitfield,
-						'bbcode_uid'		=> qi::phpbb_branch('32') ? gen_rand_string() : $bbcode_uid,
+						'bbcode_uid'		=> qi::phpbb_branch('3.2') ? gen_rand_string() : $bbcode_uid,
 					);
 
-					if (qi::phpbb_branch('31'))
+					if (qi::phpbb_branch('3.1'))
 					{
 						$sql_posts[count($sql_posts) - 1]['post_visibility']	= ITEM_APPROVED;
 					}
@@ -377,14 +377,14 @@ class qi_populate
 						$topic_arr['topic_time']		= $post_time;
 						$topic_arr['topic_poster']		= $poster_arr['user_id'];
 
-						if (qi::phpbb_branch('31'))
+						if (qi::phpbb_branch('3.1'))
 						{
 							$topic_arr['topic_visibility']	= ITEM_APPROVED;
 						}
 					}
 					else
 					{
-						if (qi::phpbb_branch('31'))
+						if (qi::phpbb_branch('3.1'))
 						{
 							$topic_arr['topic_posts_approved']++;
 							$forum['forum_posts_approved']++;
@@ -435,8 +435,8 @@ class qi_populate
 			}
 
 			$sql_ary = array(
-				'forum_posts' . (qi::phpbb_branch('31') ? '_approved' : '' )	=> $forum['forum_posts' . (qi::phpbb_branch('31') ? '_approved' : '' )],
-				'forum_topics' . (qi::phpbb_branch('31') ? '_approved' : '' )	=> $forum['forum_topics' . (qi::phpbb_branch('31') ? '_approved' : '' )],
+				'forum_posts' . (qi::phpbb_branch('3.1') ? '_approved' : '' )	=> $forum['forum_posts' . (qi::phpbb_branch('3.1') ? '_approved' : '' )],
+				'forum_topics' . (qi::phpbb_branch('3.1') ? '_approved' : '' )	=> $forum['forum_topics' . (qi::phpbb_branch('3.1') ? '_approved' : '' )],
 				'forum_last_post_id'		=> $forum['forum_last_post_id'],
 				'forum_last_poster_id'		=> $forum['forum_last_poster_id'],
 				'forum_last_post_subject'	=> $forum['forum_last_post_subject'],
@@ -445,7 +445,7 @@ class qi_populate
 				'forum_last_poster_colour'	=> '',
 			);
 
-			if (!qi::phpbb_branch('31'))
+			if (!qi::phpbb_branch('3.1'))
 			{
 				$sql_ary['forum_topics_real'] = $forum['forum_topics_real'];
 			}
@@ -609,7 +609,7 @@ class qi_populate
 				'forum_last_poster_name'	=> '',
 			);
 
-			if (qi::phpbb_branch('31'))
+			if (qi::phpbb_branch('3.1'))
 			{
 				$this->forum_arr[$forum_data['forum_id']]['forum_posts_approved']	= 0;
 				$this->forum_arr[$forum_data['forum_id']]['forum_topics_approved']	= 0;
@@ -633,7 +633,7 @@ class qi_populate
 		global $db, $db_tools, $config, $settings;
 
 		// Hash the password.
-		if (qi::phpbb_branch('31'))
+		if (qi::phpbb_branch('3.1'))
 		{
 			global $passwords_manager;
 			$password = $passwords_manager->hash('123456');
@@ -652,7 +652,7 @@ class qi_populate
 		$chunk_cnt = 0;
 		$sql_ary = array();
 
-		if (!qi::phpbb_branch('31'))
+		if (!qi::phpbb_branch('3.1'))
 		{
 			$tz		= new DateTimeZone($settings->get_config('qi_tz', ''));
 			$tz_ary	= $tz->getTransitions(time());
@@ -690,7 +690,7 @@ class qi_populate
 			);
 
 			$count = count($sql_ary) - 1;
-			if (qi::phpbb_branch('31'))
+			if (qi::phpbb_branch('3.1'))
 			{
 				$sql_ary[$count]['user_timezone'] = $settings->get_config('qi_tz', '');
 			}
@@ -703,7 +703,7 @@ class qi_populate
 				$sql_ary[$count]['user_dst'] = $qi_dst;
 			}
 
-			if (!qi::phpbb_branch('33') || $db_tools->sql_column_exists(USERS_TABLE, 'user_email_hash'))
+			if (!qi::phpbb_branch('3.3') || $db_tools->sql_column_exists(USERS_TABLE, 'user_email_hash'))
 			{
 				$sql_ary[$count]['user_email_hash'] = phpbb_email_hash($email);
 			}
@@ -780,7 +780,7 @@ class qi_populate
 
 		// We are the only ones messing with this database so far.
 		// So the latest user_id + 1 should be the user id for the first test user.
-		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts' . (qi::phpbb_branch('31') ? '_approved' : '' ) . ', forum_topics' . (qi::phpbb_branch('31') ? '_approved' : ', forum_topics_real' ) . ', forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
+		$sql = 'SELECT forum_id, parent_id, forum_type, forum_posts' . (qi::phpbb_branch('3.1') ? '_approved' : '' ) . ', forum_topics' . (qi::phpbb_branch('3.1') ? '_approved' : ', forum_topics_real' ) . ', forum_last_post_id, forum_last_poster_id, forum_last_post_subject, forum_last_post_time, forum_last_poster_name FROM ' . FORUMS_TABLE;
 		$result = $db->sql_query($sql);
 
 		while ($row = $db->sql_fetchrow($result))
@@ -795,8 +795,8 @@ class qi_populate
 				$this->forum_arr[$row['forum_id']] = array(
 					'forum_id'					=> $row['forum_id'],
 					'parent_id'					=> $row['parent_id'],
-					'forum_posts' . (qi::phpbb_branch('31') ? '_approved' : '' )	=> $row['forum_posts' . (qi::phpbb_branch('31') ? '_approved' : '' )],
-					'forum_topics' . (qi::phpbb_branch('31') ? '_approved' : '' )	=> $row['forum_topics' . (qi::phpbb_branch('31') ? '_approved' : '' )],
+					'forum_posts' . (qi::phpbb_branch('3.1') ? '_approved' : '' )	=> $row['forum_posts' . (qi::phpbb_branch('3.1') ? '_approved' : '' )],
+					'forum_topics' . (qi::phpbb_branch('3.1') ? '_approved' : '' )	=> $row['forum_topics' . (qi::phpbb_branch('3.1') ? '_approved' : '' )],
 					'forum_last_post_id'		=> $row['forum_last_post_id'],
 					'forum_last_poster_id'		=> $row['forum_last_poster_id'],
 					'forum_last_post_subject'	=> $row['forum_last_post_subject'],
@@ -804,7 +804,7 @@ class qi_populate
 					'forum_last_poster_name'	=> $row['forum_last_poster_name'],
 				);
 
-				if (!qi::phpbb_branch('31'))
+				if (!qi::phpbb_branch('3.1'))
 				{
 					$this->forum_arr[$row['forum_id']]['forum_topics_real'] = $row['forum_topics_real'];
 				}
