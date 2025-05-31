@@ -15,6 +15,9 @@ class qi
 	/** @var string The prefix name of phpBB board cookies */
 	const PHPBB_COOKIE_PREFIX = 'phpbb3_';
 
+	/** @var array The list of phpbb branches supported by the loaded source board */
+	private static $branchCache = [];
+
 	/**
 	* Output the standard page header
 	*/
@@ -897,11 +900,28 @@ class qi
 		}
 
 		return
-			(PHP_VERSION_ID >= 70000 && !defined('PHPBB_32')) ||
+			(PHP_VERSION_ID >= 70000 && !self::phpbb_branch('3.2')) ||
 			(PHP_VERSION_ID >= 70200 && self::phpbb_version_compare(PHPBB_VERSION, '3.2.2', '<')) ||
-			(PHP_VERSION_ID >= 70300 && !defined('PHPBB_33')) ||
-			(PHP_VERSION_ID < 70103 && defined('PHPBB_33')) ||
-			(PHP_VERSION_ID < 70300 && defined('PHPBB_40'))
+			(PHP_VERSION_ID >= 70300 && !self::phpbb_branch('3.3')) ||
+			(PHP_VERSION_ID < 70103 && self::phpbb_branch('3.3')) ||
+			(PHP_VERSION_ID < 70300 && self::phpbb_branch('4.0'))
 		;
+	}
+
+	/**
+	 * Is the given phpBB branch defined?
+	 *
+	 * @param string $branch '3.0', '3.1', '3.2', '3.3', '4.0'
+	 * @return bool
+	 */
+	public static function phpbb_branch($branch)
+	{
+		// Remove any dots from the branch number
+		$branch = str_replace('.', '', $branch);
+
+		if (!isset(self::$branchCache[$branch])) {
+			self::$branchCache[$branch] = defined('PHPBB_' . $branch);
+		}
+		return self::$branchCache[$branch];
 	}
 }
