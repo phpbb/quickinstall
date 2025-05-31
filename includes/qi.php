@@ -911,7 +911,7 @@ class qi
 	/**
 	 * Is the given phpBB branch defined?
 	 *
-	 * @param string $branch 30, 31, 32, 33, 40
+	 * @param string $branch '3.0', '3.1', '3.2', '3.3', '4.0'
 	 * @return bool
 	 */
 	public static function phpbb_branch($branch)
