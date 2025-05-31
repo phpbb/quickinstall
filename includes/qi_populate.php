@@ -664,7 +664,7 @@ class qi_populate
 		foreach ($this->user_arr as $user)
 		{
 			$email = $user['username_clean'] . $this->email_domain;
-			$sql_ary[] = array(
+			$sql_ary[] = array_merge([
 				'user_id'				=> $user['user_id'],
 				'username'				=> $user['username'],
 				'username_clean'		=> $user['username_clean'],
@@ -684,9 +684,11 @@ class qi_populate
 				'user_passchg'			=> $user['user_passchg'],
 				'user_options'			=> 230271,
 				'user_full_folder'		=> PRIVMSGS_NO_BOX,
-				'user_notify_type'		=> NOTIFY_EMAIL,
 				'user_dateformat'		=> 'M jS, ’y, H:i',
 				'user_sig'				=> '',
+			], !qi::phpbb_branch('4.0') ?
+				['user_notify_type' => defined('NOTIFY_EMAIL') ? NOTIFY_EMAIL : 0] :
+				[]
 			);
 
 			$count = count($sql_ary) - 1;
