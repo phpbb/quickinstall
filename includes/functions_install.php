@@ -194,6 +194,10 @@ function load_schema_31($install_path = '', $install_dbms = false)
 	}
 
 	$db_tools = get_db_tools($db);
+	if (qi::phpbb_branch('4.0'))
+	{
+		$db_tools->set_table_prefix($table_prefix);
+	}
 	foreach ($db_table_schema as $table_name => $table_data)
 	{
 		$db_tools->sql_create_table(
