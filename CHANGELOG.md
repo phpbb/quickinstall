@@ -1,5 +1,8 @@
 # QuickInstall Changelog
 
+## Version 1.6.15
+- [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4.
+
 ## Version 1.6.14
 - [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4.
 
