@@ -166,7 +166,7 @@ class qi_settings
 		
 		if (empty($dbms))
 		{
-			echo json_encode(['success' => false, 'message' => 'Database type is required']);
+			echo json_encode(['success' => false, 'message' => qi::lang('DB_TEST_TYPE_REQUIRED')]);
 			return;
 		}
 
@@ -178,25 +178,25 @@ class qi_settings
 				if ($dbms === 'sqlite3')
 				{
 					new \SQLite3(':memory:');
-					echo json_encode(['success' => true, 'message' => 'SQLite3 extension is available']);
+					echo json_encode(['success' => true, 'message' => qi::lang('DB_TEST_SQLITE3_AVAILABLE')]);
 				}
 				else
 				{
 					$error = null;
 					@sqlite_open(':memory:', 0666, $error);
-					echo json_encode(['success' => true, 'message' => 'SQLite extension is available']);
+					echo json_encode(['success' => true, 'message' => qi::lang('DB_TEST_SQLITE_AVAILABLE')]);
 				}
 			}
 			catch (Exception $e)
 			{
-				echo json_encode(['success' => false, 'message' => 'SQLite extension not available: ' . $e->getMessage()]);
+				echo json_encode(['success' => false, 'message' => qi::lang('DB_TEST_SQLITE_NOT_AVAILABLE')]);
 			}
 			return;
 		}
 
 		if (empty($dbhost))
 		{
-			echo json_encode(['success' => false, 'message' => 'Database host is required']);
+			echo json_encode(['success' => false, 'message' => qi::lang('DB_TEST_HOST_REQUIRED')]);
 			return;
 		}
 
@@ -214,18 +214,18 @@ class qi_settings
 			{
 				$db->sql_close();
 				restore_error_handler();
-				echo json_encode(['success' => true, 'message' => 'Database connection successful']);
+				echo json_encode(['success' => true, 'message' => qi::lang('DB_TEST_CONNECTION_SUCCESS')]);
 			}
 			else
 			{
 				restore_error_handler();
-				echo json_encode(['success' => false, 'message' => 'Connection failed']);
+				echo json_encode(['success' => false, 'message' => qi::lang('DB_TEST_CONNECTION_FAILED')]);
 			}
 		}
 		catch (Exception $e)
 		{
 			restore_error_handler();
-			echo json_encode(['success' => false, 'message' => 'Connection failed']);
+			echo json_encode(['success' => false, 'message' => qi::lang('DB_TEST_CONNECTION_FAILED')]);
 		}
 	}
 }
