@@ -16,7 +16,13 @@ class qi_settings
 		$saved = false;
 		$config_text = '';
 		$errors = [];
-		if ($mode === 'update_settings')
+		
+		if ($mode === 'test_db_connection')
+		{
+			$this->test_db_connection();
+			return;
+		}
+		else if ($mode === 'update_settings')
 		{
 			$qi_config = @utf8_normalize_nfc(qi_request_var('qi_config', array('' => ''), true));
 
@@ -146,5 +152,80 @@ class qi_settings
 		qi::page_header('PROFILES');
 
 		qi::page_display('settings_body');
+	}
+
+	private function test_db_connection()
+	{
+		header('Content-Type: application/json');
+		
+		$dbms = qi_request_var('dbms', '');
+		$dbhost = qi_request_var('dbhost', '');
+		$dbport = qi_request_var('dbport', '');
+		$dbuser = qi_request_var('dbuser', '');
+		$dbpasswd = qi_request_var('dbpasswd', '');
+		
+		if (empty($dbms))
+		{
+			echo json_encode(['success' => false, 'message' => 'Database type is required']);
+			return;
+		}
+
+		// SQLite doesn't use server connections, just test if extension is available
+		if (in_array($dbms, ['sqlite', 'sqlite3']))
+		{
+			try
+			{
+				if ($dbms === 'sqlite3')
+				{
+					new \SQLite3(':memory:');
+					echo json_encode(['success' => true, 'message' => 'SQLite3 extension is available']);
+				}
+				else
+				{
+					$error = null;
+					@sqlite_open(':memory:', 0666, $error);
+					echo json_encode(['success' => true, 'message' => 'SQLite extension is available']);
+				}
+			}
+			catch (Exception $e)
+			{
+				echo json_encode(['success' => false, 'message' => 'SQLite extension not available: ' . $e->getMessage()]);
+			}
+			return;
+		}
+
+		if (empty($dbhost))
+		{
+			echo json_encode(['success' => false, 'message' => 'Database host is required']);
+			return;
+		}
+
+		// we need to capture trigger_error() calls to be able to continue
+		set_error_handler(function() {
+			return true;
+		});
+
+		try
+		{
+			$db_data = [$dbms, $dbhost, $dbuser, $dbpasswd, $dbport, ''];
+			$db = db_connect($db_data);
+			
+			if ($db && $db->db_connect_id)
+			{
+				$db->sql_close();
+				restore_error_handler();
+				echo json_encode(['success' => true, 'message' => 'Database connection successful']);
+			}
+			else
+			{
+				restore_error_handler();
+				echo json_encode(['success' => false, 'message' => 'Connection failed']);
+			}
+		}
+		catch (Exception $e)
+		{
+			restore_error_handler();
+			echo json_encode(['success' => false, 'message' => 'Connection failed']);
+		}
 	}
 }
