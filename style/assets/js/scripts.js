@@ -162,6 +162,48 @@
 			});
 		}
 
+		// Database connection test
+		const $testDbBtn = $('#test-db-connection');
+		if ($testDbBtn) {
+			$testDbBtn.addEventListener('click', () => {
+				const $result = $('#db-test-result');
+				$testDbBtn.disabled = true;
+				$testDbBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Testing...';
+
+				const formData = new FormData();
+				formData.append('dbms', $('#dbms').value);
+				formData.append('dbhost', $('#dbhost').value);
+				formData.append('dbport', $('#dbport').value);
+				formData.append('dbuser', $('#dbuser').value);
+				formData.append('dbpasswd', $('#dbpasswd').value);
+
+				const xhr = new XMLHttpRequest();
+				xhr.responseType = 'json';
+				xhr.addEventListener('loadend', () => {
+					$testDbBtn.disabled = false;
+					$testDbBtn.innerHTML = '<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="style/assets/img/bootstrap-icons.svg#database-check"/></svg> Test Database Connection';
+
+					if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+						const response = xhr.response;
+						if (response.success) {
+							$result.className = 'mt-2 alert alert-success';
+							$result.innerHTML = '<svg class="bi text-success" width="16" height="16" fill="currentColor"><use xlink:href="style/assets/img/bootstrap-icons.svg#check-circle-fill"/></svg> ' + response.message;
+						} else {
+							$result.className = 'mt-2 alert alert-danger';
+							$result.innerHTML = '<svg class="bi text-danger" width="16" height="16" fill="currentColor"><use xlink:href="style/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg> ' + response.message;
+						}
+					} else {
+						$result.className = 'mt-2 alert alert-danger';
+						$result.innerHTML = '<svg class="bi text-danger" width="16" height="16" fill="currentColor"><use xlink:href="style/assets/img/bootstrap-icons.svg#exclamation-triangle-fill"/></svg> Connection test failed';
+					}
+				});
+
+				xhr.open('POST', 'index.php?page=settings&mode=test_db_connection');
+				xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+				xhr.send(formData);
+			});
+		}
+
 		// Notification of QI update (use sessionStorage for dismissed notification)
 		if (sessionStorage.getItem('qiupdate') === null) {
 			const qiUpdateToast = $('#qiUpdateToast');

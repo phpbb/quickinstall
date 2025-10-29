@@ -311,4 +311,14 @@ $lang = array_merge($lang, array(
 	'YES'	=> 'Yes',
 
 	'COLON'	=> ':',
+
+	// Database connection test
+	'DB_TEST_TYPE_REQUIRED'		=> 'Database type is required',
+	'DB_TEST_HOST_REQUIRED'		=> 'Database host is required',
+	'DB_TEST_CONNECTION_SUCCESS'	=> 'Database connection successful',
+	'DB_TEST_CONNECTION_FAILED'	=> 'Connection failed',
+	'DB_TEST_SQLITE3_AVAILABLE'	=> 'SQLite3 extension is available',
+	'DB_TEST_SQLITE_AVAILABLE'	=> 'SQLite extension is available',
+	'DB_TEST_SQLITE_NOT_AVAILABLE'	=> 'SQLite extension not available',
+	'TEST_DATABASE_CONNECTION'	=> 'Test Database Connection',
 ));
