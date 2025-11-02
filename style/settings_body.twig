@@ -176,6 +176,15 @@
 						<label for="table_prefix" class="col-md-5 form-label">{{ lang('TABLE_PREFIX') ~ lang('COLON') }}<br><span class="form-text text-muted">{{ lang('TABLE_PREFIX_EXPLAIN') }} {{ lang('THIS_CAN_CHANGE') }}</span></label>
 						<div class="col-md-7"><input class="form-control" type="text" id="table_prefix" name="qi_config[table_prefix]" value="{{ CONFIG_TABLE_PREFIX }}" placeholder="{{ lang('REQUIRED') }}"></div>
 					</div>
+					<div class="mb-3 row">
+						<div class="col-md-7 offset-md-5">
+							<button type="button" id="test-db-connection" class="btn btn-outline-primary">
+								<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#database-check"/></svg>
+								{{ lang('TEST_DATABASE_CONNECTION') }}
+							</button>
+							<div id="db-test-result" class="mt-2 d-none"></div>
+						</div>
+					</div>
 				</fieldset>
 			</div>
 		</div>
