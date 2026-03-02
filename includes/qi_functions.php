@@ -557,8 +557,8 @@ function get_db_doctrine()
 	$dbport = $settings->get_config('dbport');
 	$db_prefix = $settings->get_config('db_prefix');
 
-	// We need the db prefix to be prepended to the database name
-	$dbname = $db_prefix . $dbname;
+	// Validate and prepend the db prefix to the database name
+	$dbname = $db_prefix . validate_dbname($dbname, true);
 
 	// SQLite needs the dbname appended to the dbhost
 	if (in_array($dbms, array('sqlite', 'sqlite3')))
