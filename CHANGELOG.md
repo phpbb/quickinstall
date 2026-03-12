@@ -1,5 +1,9 @@
 # QuickInstall Changelog
 
+## Version 1.6.16
+- [Feature] Added a simple database connection test button to the Database section in Profiles.
+- [Fix] Fixed an issue where phpBB 4 installs would fail if hyphens (and other potential special characters) were used for the board/database name.
+
 ## Version 1.6.15
 - [Fix] Fixed a fatal PHP error that could occur when creating new boards from the latest build of phpBB 4.
 
@@ -52,7 +56,7 @@
 ## Version 1.6.3
 - [Fix] Fixed a problem where boards would not populate when using PHP 8.
 - [Fix] Clarified how the option to install additional styles should be used.
-- [Fix] Fixed an issue where “Additional board config settings” would be ignored if they tried to set a config to a value of 0, false or an empty string.
+- [Fix] Fixed an issue where “Additional board config settings” would be ignored if they tried to set a config to a value of 0, false, or an empty string.
 - [Fix] Fixed a few more issues in the code base which could pose problems with future versions of PHP and phpBB.
 - [Change] Small internal change to QI's SCSS file, moved away from using division to avoid issues with SASS 1.33.
 
@@ -60,7 +64,7 @@
 - [Feature] Dark mode added. When your OS or browser is in dark mode, QI will display its dark mode theme.
 - [Change] Added a wait time message to the "We're working on it" modal while building boards.
 - [Change] QI's error handling improved. Only one internal error handler now (using trigger_error).
-- [Change] QI's error page will have the same Navbar as the rest of QI, and will work as expected in responsive views.
+- [Change] QI's error page will have the same Navbar as the rest of QI and will work as expected in responsive views.
 - [Change] QI will no longer pass any error messages to the user via URL parameters. Instead, AJAX will be used to handle certain error messages.
 - [Change] QI will no longer display backtraces in warnings or notices. Backtraces will only be shown for errors.
 - [Change] QI's internal language system has been updated to support substitution variables.
@@ -84,7 +88,7 @@
 - [Change] Populated users will now have a last active date.
 - [Change] Enforce email domain requirement for populated users.
 - [Change] QI’s TWIG templates can now support language substitution variables.
-- [Change] Moved “Install additional styles” option on main page to the “Install options” subsection.
+- [Change] Moved “Install additional styles” option on the main page to the “Install options” subsection.
 - [Change] Show the admin name and password in their respective fields in the “Install options” subsection.  
 - [Fix] Fixed potential PHP 8 issues (Issues #157, #160, #162).
 - [Fix] Fixed invalid HTML issues.
@@ -92,7 +96,7 @@
 ## Version 1.5.0
 - [Change] Config profiles in the `settings` directory are now in JSON format. Existing profiles in the old text format will automatically be converted to JSON.
 - [Change] Prettied up the documentation a bit.
-- [Change] Always show profiles in a drop-down menu, even when there is only one, for consistency. Also, naturally/case-insensitively sort them.
+- [Change] Always shows profiles in a drop-down menu, even when there is only one, for consistency. Also, naturally/case-insensitively sort them.
 - [Change] Now, when updating a saved profile, the name of the current profile will appear in the Save Profile's input field.
 - [Change] Relocated some error messages and alerts to the top of the page.
 - [Change] Improve appearances of some notices in the QI interface.
@@ -113,13 +117,13 @@
 - [Fix] Fixed responsive issues with the nav bar at the top of QI.
 
 ## Version 1.4.0
-- [Change] Re-styled some of QI’s UI elements including sidebar menus, buttons and various other form elements.
+- [Change] Re-styled some of QI’s UI elements, including sidebar menus, buttons, and various other form elements.
 - [Change] Migrated QI’s Bootstrap framework to version 4.5.
-- [Change] Bootstrap framework now managed as an NPM library, located in the new `develop` folder. Contributors can use NPM commands to update, customise, compile and deploy Bootstrap to QI (see README).
-- [Change] Migrated QI’s templating framework to Twig. All QI html files now use Twig syntax. Contributors can use Composer commands to update Twig, located in the `vendor` directory.
+- [Change] Bootstrap framework now managed as an NPM library, located in the new `develop` folder. Contributors can use NPM commands to update, customise, compile, and deploy Bootstrap to QI (see README).
+- [Change] Migrated QI’s templating framework to Twig. All QI HTML files now use Twig syntax. Contributors can use Composer commands to update Twig, located in the `vendor` directory.
 - [Change] Dropped support for installing AutoMOD into 3.0.x boards from QuickInstall. AutoMOD can still be installed manually for 3.0.x boards.
 - [Change] Dropped the *subsilver2 only* option from the 'Install additional styles' setting.
-- [Change] Added a `DEBUG` constant to `qi_constants.php`. Contributors can un-comment it while developing QI to disable template caching.
+- [Change] Added a `DEBUG` constant to `qi_constants.php`. Contributors can uncomment it while developing QI to disable template caching.
 - [Fix] Fixed an issue with the migration-schema generator that blocked QI from working with phpBB 4.0.0-dev.
 - [Fix] Fixed some issues with language vars not working on error pages.
 
@@ -129,7 +133,7 @@
 - [Change] Official phpBB logos have been added to QI’s headers and page titles.
 
 ## Version 1.3.6
-- [Feature] Added a new setting to enable/disable Debug mode on boards. Disable it for a production board, or enable it for a development board.
+- [Feature] Added a new setting to enable/disable Debug mode on boards. Disable it for a production board or enable it for a development board.
 - [Fix] Fixed compatibility issues with phpBB 3.3.0-b2.
 - [Fix] Fixed compatibility issues with phpBB 4.0.0-a1-dev.
 - [Fix] Fixed compatibility issues with SQLite and phpBB 3.2 (or newer).
@@ -147,16 +151,16 @@
 - [Fix] phpBB 3.2.3 can now be installed with QI without failing and getting hung up.
 
 ## Version 1.3.2
-- [Change] Sort profiles naturally in drop down lists.
+- [Change] Sort profiles naturally in drop-down lists.
 - [Fix] Corrected potential problems with how URLs are generated internally.
 
 ## Version 1.3.1
 - [Feature] Added QI version update check. New version notifications will be available in the header nav-bar.
-- [Fix] Correctly allow dot in board directory name.
+- [Fix] Correctly allow dot in the board directory name.
 
 ## Version 1.3.0
 - [Change] QuickInstall has a new paint-job, with a fresh modern look...a flat, responsive, prosilver inspired theme.
-- [Change] Rewrote all javascript functionality from the ground up, using jQuery.
+- [Change] Rewrote all JavaScript functionality from the ground up, using jQuery.
 - [Change] Updated the README/Documentation and About information.
 - [Change] Updated most of the language files to fix typos and improve clarity.
 - [Change] Use a common template file for general error message handling.
@@ -168,13 +172,13 @@
 - [Change] Removed duplicated phpBB copyright from the page footers.
 - [Change] Moved "Set default style" setting from main options to Misc options as it isn't commonly used.
 - [Fix] Fixed several probable bugs discovered (undefined/unused variables, etc.).
-- [Fix] Fixed an issue where the Boards tab would not appear after initial installation was saved.
+- [Fix] Fixed an issue where the Boards tab would not appear after the initial installation was saved.
 - [Fix] Fixed an issue where the setting's template was not being stored in the cache as expected nor allowed to recompile.
 - [Fix] Removed dots from anchor links in the changelog as they caused problems with ScrollSpy.
 - [Feature] Added a new AJAX working/loading indicator when creating boards for a better UX.
 - [Feature] PHP Info page now has sidebar navigation, and a new live search feature, making it much easier to navigate.
 - [Feature] Use ScrollSpy to highlight sidebar nav links that correspond with the visible page sections.
-- [Feature] Added ability to copy the raw config data that is presented when the settings.cfg can not be written.
+- [Feature] Added the ability to copy the raw config data that is presented when the settings.cfg cannot be written.
 - [Feature] Use cache busting for CSS and JS using QI version to ensure upgrades get fresh assets.
 
 ## Version 1.2.5
@@ -182,18 +186,18 @@
 - [Fix] Corrected an issue where clicking the Documentation tabs led to PHP errors.
 
 ## Version 1.2.4
-- [Fix] Issue #71 Converted README and CHANGELOG to markdown. Correctly parse markdown in the Documentation and About tabs.
+- [Fix] Issue #71 Converted README and CHANGELOG to Markdown. Correctly parse Markdown in the Documentation and About tabs.
 - [Fix] Issue #69 Correctly handle backslashes in the generated config.php file for phpBB >= 3.1.
 
 ## Version 1.2.3
-- [Fix] Issue #64 Fix incorrect post count totals.
-- [Fix] Issue #63 Correctly calculate dates for users, posts, and the board start date when populating the board.
+- [Fix] Issue #64 Fix incorrect post-count totals.
+- [Fix] Issue #63 Correctly calculates dates for users, posts, and the board start date when populating the board.
 - [Fix] Issue #62 Fix display issues with the setting's menu sidebar on smaller screens/windows.
 
 ## Version 1.2.2
 - [Feature] Supports phpBB 3.2 boards
 - [Fix] Issue #55 Improve compatibility with PHP 7
-- [Fix] Issue #49 Removed closing php tag from generated config.php file
+- [Fix] Issue #49 Removed closing php tag from the generated config.php file
 - [Fix] A Fix for UTF-8 characters `$error_msg`
 - [Fix] Issue #45 Fix compatibility for installing phpBB 3.1.5 boards.
 - [Change] Sort boards in a natural order (10 > 9).
@@ -202,13 +206,13 @@
 ## Version 1.2.1
 - [Fix] Bug in the routine to purge the cache.
 - [Fix] Ticket #EXTTOOLS-655 The redirect got two slashes in the URL when QI was installed in localhost root.
-- [Fix] Write correct phpBB version (3.1 or 3.0) in config.php.
-- [Fix] Error messaging in main did not support multibyte chars. (By Skouat)
+- [Fix] Write the correct phpBB version (3.1 or 3.0) in config.php.
+- [Fix] Error messaging in the main did not support multibyte chars. (By Skouat)
 - [Fix] Issue #37 Style for "Chunk settings" title was messed up.
 - [Fix] Issue #38 Subsilver2 was not installed for 3.1.x boards.
 - [Fix] The "boards" tab was not hidden when there were errors in submitting first/only config.
 - [Fix] QI tried to write to the `settings` folder even if it was not writable.
-- [Fix] The explanation text for the Boards tab was not up-to-date.
+- [Fix] The explanation text for the Boards tab was not up to date.
 - [Fix] Issue #42 the installation note box got more or less unreadable in some screen resolutions.
 - [Fix] "schema.json" was removed in phpBB 3.1.3. QI used it to create the 3.1 DB. Now install of 3.1.x works again.
 - [Fix] Ticket #44 QI removed uppercase letters from directory names due to a missing Hyphen.
@@ -221,18 +225,18 @@
 - [Change] Changed default DBMS to MySQLi.
 - [Change] Use the same name for the directory as the DB. Links to the boards get messed up with spaces.
 - [Change] Allow hyphen and dot in directory names.
-- [Change] Always try to log in if redirect is set.
+- [Change] Always try to log in if a redirect is set.
 - [Change] Don't error out when the selected alt environment can't be found.
-- [Change] Removed CHUNK_POST, CHUNK_TOPIC and CHUNK_USER constants. They have been in the settings for a while
+- [Change] Removed CHUNK_POST, CHUNK_TOPIC, and CHUNK_USER constants. They have been in the settings for a while
 - [Feature] Added better error reporting and handling to more places.
 - [Feature] Don't show the select menu for alternative environments if the `phpBB3_alt` folder is empty.
-- [Feature] Show board version in boards list.
-- [Feature] Make sure cache_dir, boards_dir and boards_url ends with a slash (/)
+- [Feature] Show the board version in the boards list.
+- [Feature] Make sure cache_dir, boards_dir, and boards_url end with a slash (/)
 - [Feature] Now all available styles can be installed. In both 3.0.x and 3.1.x.
-- [Feature] Any style can be set as default style.
-- [Feature] Automagically update settings. With link to update all profiles (only for 1.2.1 and up).
+- [Feature] Any style can be set as the default style.
+- [Feature] Automagically update settings. With a link to update all profiles (only for 1.2.1 and up).
 - [Feature] Added a documentation tab, with info currently from readme.txt.
-- [Feature] Only display the DBMS whose extensions are loaded on the settings page.
+- [Feature] Only displays the DBMS whose extensions are loaded on the settings page.
 
 ## Version 1.2.0
 - [Fix] Ticket #63309 The first release in the changelog was broken.
@@ -243,11 +247,11 @@
 - [Fix] Ticket #63321 Check that both the config file and settings directory are writable.
 - [Fix] Ticket #63311 The error message had the wrong file name when the config file could not be written.
 - [Fix] Need to set `$profile` before trying to use it.
-- [Fix] Ticket #63320 all left/right mentions in css need a ".rtl" equivalent that specifies the other direction.
-- [Fix] Ticket #63308 Combining language strings don't  work in all languages.
+- [Fix] Ticket #63320 all left/right mentions in CSS need a ".rtl" equivalent that specifies the other direction.
+- [Fix] Ticket #63308 Combining language strings doesn't work in all languages.
 - [Fix] Ticket #EXTTOOLS-649 QI did not delete the DB when deleting phpBB 3.1 boards.
 - [Fix] Ticket #EXTTOOLS-650 QI did not populate migrations table.
-- [Fix] Ticket #EXTTOOLS-621 Always check that default language is available before installation.
+- [Fix] Ticket #EXTTOOLS-621 Always check that the default language is available before installation.
 - [Fix] The button to see the configuration if the `settings` directory was not visible.
 - [Change] Removed the cache usage. The `cache` directory is for now used to store file based databases.
 - [Change] Had `load_tplcompile` in several places, one should be enough.
@@ -260,7 +264,7 @@
 - [Change] Made some modifications to the settings tab and changed some wording.
 - [Change] Better error reporting and handling. For now only when AutoMOD is missing.
 - [Change] Removed the ability to show passwords when the user hovers over the input.
-- [Change] Changed background color for the time note on the main page, to distinguish it from an error box.
+- [Change] Changed background color for the time note on the main page to distinguish it from an error box.
 - [Change] Ticket #EXTTOOLS-654 Replaced phpBB Group with phpBB Limited. (By Skouat)
 - [Feature] Ticket #63300 Show back trace on errors.
 - [Feature] Added a php info tab.
@@ -272,14 +276,14 @@
 - [Fix] Some language edits and spelling fixes.
 - [Fix] Check that the `boards` directory exists and is writeable.
 - [Fix] Create one user per minute and one post per second, or actually change the timestamp.
-- [Fix] Set a default value for user_sig, user_occ and user_interests to not error out there.
+- [Fix] Set a default value for user_sig, user_occ, and user_interests to not error out there.
 - [Fix] Take `cache` directory from settings if possible.
 - [Fix] Use boards_dir from configuration if it is set.
 - [Fix] Added missing settings globalization
 - [Fix] Fixes to permission granting.
 - [Fix] Made QuickInstall functional on postgres.
 - [Fix] Make sure boards_url ends with a slash.
-- [Fix] Bug #62694 Clarify that it is QI that do not support PHP older than 5.2.0 and not phpBB.
+- [Fix] Bug #62694 Clarify that it is QI that does not support PHP older than 5.2.0 and not phpBB.
 - [Fix] Bug #62700 Put the config through `htmlspecialchars_decode()` instead of remove `request_var()`.
 - [Fix] Bug #62704 Mention the upload directory for AutoMOD 1.0.0.
 - [Fix] Bug #62739 Check for `phpBB3/common.php` instead of the `phpBB3` directory.
@@ -296,20 +300,20 @@
 - [Fix] Ticket #63293 Changed `forum/forums` to `board/boards` in several places.
 - [Fix] Fixed some spelling and wording errors.
 - [Fix] Set the profile cookie when saving new profiles too.
-- [Fix] Ticket #63293 Admin, board and all test users now gets the correct timezone and DST setting.
-- [Fix] Ticket #63290 Make sure QI script path ends with one and only one slash.
+- [Fix] Ticket #63293 Admin, board, and all test users now get the correct timezone and DST setting.
+- [Fix] Ticket #63290 Make sure the QI script path ends with one and only one slash.
 - [Fix] Ticket #63297 If a new profile name is entered; prefill the new profile name if settings validation fails.
-- [Fix] Ticket #63298 Error text was not shown when there were errors on first config save.
+- [Fix] Ticket #63298 Error text was not shown when there were errors on the first config save.
 - [Fix] Ticket #63303 The wrong sidebar was shown in settings when installing QI.
-- [Fix] Ticket #63301 Removed some globalization which got some variables to be empty.
+- [Fix] Ticket #63301 Removed some globalization that made some variables empty.
 - [Fix] Ticket #63305 `$language` was null when sent as default to request_var.
 - [Fix] Ticket #63306 QI needs to correctly handle an empty qi_config.cfg.
 - [Change] Added checking for functions_mods.php. It will be moved in AutoMOD in the future.
 - [Change] Include functions_admin.php for postgres benefit.
 - [Change] Use `get_cache_dir()` in sqlite dbal.
 - [Change] Delay database connection until it is necessary.
-- [Change] Cleaned up the JS in the main html file.
-- [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with most recent versions at top.
+- [Change] Cleaned up the JS in the main HTML file.
+- [Change] Changed the changelog to have the same format as the rest of our tools have. A text file with the most recent versions at the top.
 - [Change] QI pages are now in `$page` instead of `$mode`. We needed `$mode` for setting vars, and it got kind of crowded.
 - [Change] Only try to connect to DB when saving settings or creating/deleting a board.
 - [Change] Removed version check from the About page and moved the changelog stuff a bit.
@@ -318,26 +322,26 @@
 - [Change] Deleted qi_config_sample.cfg since it's not used anymore.
 - [Change] The note about not removing the copyright is removed, as it is in phpBB.
 - [Change] Removed some unused language strings.
-- [Change] Added in-page links to the about page instead of big brother.
+- [Change] Added in-page links to the about page.
 - [Change] Set class="radio" for all radio buttons.
-- [Change] Ticket #63299 and #63296 Leave cookie domain empty for new installs and don't require it either.
+- [Change] Ticket #63299 and #63296 Leave cookie domain empty for new installations and don't require it either.
 - [Feature] Made QuickInstall not require write access to qi_config.php
 - [Feature] Added UI for setting `cache` directory.
 - [Feature] Added a separate notion of boards url.
-- [Feature] Added ability to grant specific permissions when creating boards.
+- [Feature] Added the ability to grant specific permissions when creating boards.
 - [Feature] Added hover-over on the manage tab.
 - [Feature] Added support for PostgreSQL
 - [Feature] Added possibility to set phpBB config fields before creating a board.
 - [Feature] Ticket #62796 Added config settings for chunk sizes when populating a board.
 - [Feature] Ticket #62774 and #62792 Added a `settings` directory to replace the config file.
 - [Feature] Ticket #62774 and #62792 Added profiles with config files in a directory instead of one configuration file.
-- [Feature] Added confirm to the delete button. Don't show it if there are no boards to delete.
+- [Feature] Added confirmation to the delete button. Don't show it if there are no boards to delete.
 - [Feature] Added save/reset buttons after each section on the settings page. For convenience.
 - [Feature] Added anchors and internal links to the settings tab.
 - [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkboxes default state.
-- [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirm alert or not.
-- [Feature] A setting for default "Alternate environment" now that profiles exists.
-- [Feature] Added option to not save passwords and/or admin/db-user names. They will be required when creating a board.
+- [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirmation alert or not.
+- [Feature] A setting for default "Alternate environment" now that profiles exist.
+- [Feature] Added an option to not save passwords and/or admin/db-user names. They will be required when creating a board.
 - [Feature] Use JS to check that the required fields are filled.
 
 ## Version 1.1.6
@@ -352,7 +356,7 @@
 - [Change] Removed AutoMOD from the QI package.
 - [Change] Moved QI’s language file for phpBB.
 - [Change] Moved some AutoMOD installation to QI instead of MODding UMIL or AutoMOD.
-- [Feature] Added option so set how many users, forums, topics and posts that will be created.
+- [Feature] Added option so set how many users, forums, topics, and posts that will be created.
 
 ## Version 1.1.5
 - [Fix] Set the new board-language directory as a custom language path.
@@ -378,7 +382,7 @@
 
 ## Version 1.1.0
 - [Feature] Option to make files writable.
-- [Feature] Option to populate forum with users and posts.
+- [Feature] Option to populate the forum with users and posts.
 - [Change] Updated to AutoMOD 1.0.0-RC4
 - [Change] Updated for phpBB 3.0.7-PL1
 - [Change] The Redirect option now works as intended
@@ -403,7 +407,7 @@
 - [Feature] Allow users to choose an alternate environment
 
 ## Version 1.0.9
-- [Change] Put default site_name and site_desc on main page (thanks exreaction)
+- [Change] Put default site_name and site_desc on the main page (thanks exreaction)
 - [Change] Updating for phpBB 3.0.2
 
 ## Version 1.0.8
