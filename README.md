@@ -42,7 +42,7 @@ phpBB boards require a web server running PHP and one of the following database 
 
 | phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |
 |----------------|---------------|--------|---------|------------|----------------|--------------|
-| 4.0.0 (alpha)  | 8.1+          | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 4.0.0 (alpha)  | 8.2+          | 8.0+   | 10.2.7+ | 9.5+       | SQLite 3.8.3+  | Server 2012+ |
 | 3.3.11 - 3.3.x | 7.2.0 - 8.x   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
 | 3.3.0 - 3.3.10 | 7.1.3 - 8.x   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
 | 3.2.2 - 3.2.11 | 5.4.7 - 7.2.x | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
