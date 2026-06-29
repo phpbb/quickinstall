@@ -268,14 +268,19 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N]');
+			throw new \InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]');
 		}
 
 		$preset = $cli->option('preset', 'extension-dev');
 		$seed = (int) $cli->option('seed', '1');
+		if ($cli->has('reset') && $cli->has('replace'))
+		{
+			throw new \InvalidArgumentException('Use --reset or --replace, not both.');
+		}
+		$action = $cli->has('reset') ? 'reset' : ($cli->has('replace') ? 'replace' : 'seed');
 
-		(new BoardRunner($this->project))->seed($name, $preset, $seed);
-		echo "Seeded board: $name\n";
+		(new BoardRunner($this->project))->seed($name, $preset, $seed, $action);
+		echo ucfirst($action) . " completed for board: $name\n";
 		return 0;
 	}
 
@@ -307,7 +312,7 @@ Commands:
   qi board:start <name>
   qi board:stop <name>
   qi board:destroy <name>
-  qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N]
+  qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]
 
 Examples:
   qi source:add 3.3.17

@@ -99,10 +99,25 @@ class BoardRunner
 		return $running > 0 ? 'partial' : 'stopped';
 	}
 
-	public function seed(string $name, string $preset, int $seed): void
+	public function seed(string $name, string $preset, int $seed, string $action = 'seed'): void
 	{
 		$this->project->board($name);
-		$this->runSeeder($name, $preset, $seed);
+		if (!in_array($action, ['seed', 'reset', 'replace'], true))
+		{
+			throw new \InvalidArgumentException("Unknown seed action: $action");
+		}
+
+		if ($action === 'reset' || $action === 'replace')
+		{
+			$this->deleteSeedMarker($name, $preset);
+		}
+
+		$this->runSeeder($name, $preset, $seed, $action);
+
+		if ($action === 'replace')
+		{
+			$this->writeSeedMarker($name, $preset);
+		}
 	}
 
 	private function seedIfNeeded(string $name, string $preset): void
@@ -112,7 +127,7 @@ class BoardRunner
 			return;
 		}
 
-		$marker = $this->project->runtimePath($name) . '/seeded-' . preg_replace('/[^A-Za-z0-9._-]/', '_', $preset);
+		$marker = $this->seedMarker($name, $preset);
 		if (file_exists($marker))
 		{
 			echo "Populate preset already applied: $preset\n";
@@ -120,7 +135,7 @@ class BoardRunner
 		}
 
 		$this->runSeeder($name, $preset, 1);
-		file_put_contents($marker, gmdate('c') . "\n");
+		$this->writeSeedMarker($name, $preset);
 	}
 
 	private function waitUntilInstalled(string $name): void
@@ -142,13 +157,32 @@ class BoardRunner
 		throw new \RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
 	}
 
-	private function runSeeder(string $name, string $preset, int $seed): void
+	private function runSeeder(string $name, string $preset, int $seed, string $action = 'seed'): void
 	{
 		$writer = new SeederWriter($this->project);
 		$script = $writer->write($name);
 
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $script, 'web:/tmp/qi_seed.php']);
-		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'php', '/tmp/qi_seed.php', $preset, (string) $seed]);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'php', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
+	}
+
+	private function seedMarker(string $name, string $preset): string
+	{
+		return $this->project->runtimePath($name) . '/seeded-' . preg_replace('/[^A-Za-z0-9._-]/', '_', $preset);
+	}
+
+	private function deleteSeedMarker(string $name, string $preset): void
+	{
+		$marker = $this->seedMarker($name, $preset);
+		if (file_exists($marker))
+		{
+			unlink($marker);
+		}
+	}
+
+	private function writeSeedMarker(string $name, string $preset): void
+	{
+		file_put_contents($this->seedMarker($name, $preset), gmdate('c') . "\n");
 	}
 
 	private function run(array $command): void

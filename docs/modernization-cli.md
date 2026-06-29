@@ -119,9 +119,15 @@ Seed an installed, running board:
 
 ```bash
 php bin/qi board:seed test --preset extension-dev --seed 1
+php bin/qi board:seed test --seed 1 --reset
+php bin/qi board:seed test --preset extension-dev --seed 1 --replace
 ```
 
 This is separate from `board:create --populate`. Manual `board:seed` always runs when called. Automatic `--populate` runs once on `board:start` and writes a marker under `.qi/runtime/<board>/`.
+
+`--reset` removes seed-generated users, forums/categories, topics, and replies for the selected `--seed`.
+
+`--replace` runs `--reset` first, then creates fresh data with the selected preset and seed.
 
 Available presets:
 
@@ -144,5 +150,4 @@ The seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` 
 
 ## Next Implementation Steps
 
-1. Add `board:seed --reset` / `--replace` controls for removing or replacing seed-generated data.
-2. Put web UI behind the same board/source services.
+1. Put web UI behind the same board/source services.

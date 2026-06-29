@@ -29,6 +29,7 @@ class SeederWriter
 
 $preset = $argv[1] ?? 'extension-dev';
 $seed = (int) ($argv[2] ?? 1);
+$action = $argv[3] ?? 'seed';
 
 $presets = [
 	'tiny' => ['users' => 3, 'categories' => 1, 'forums_per_category' => 2, 'topics' => 2, 'replies' => 2],
@@ -40,6 +41,12 @@ $presets = [
 if (!isset($presets[$preset]))
 {
 	fwrite(STDERR, "Unknown seed preset: $preset\n");
+	exit(1);
+}
+
+if (!in_array($action, ['seed', 'reset', 'replace'], true))
+{
+	fwrite(STDERR, "Unknown seed action: $action\n");
 	exit(1);
 }
 
@@ -65,6 +72,16 @@ $user->data['is_registered'] = true;
 mt_srand($seed);
 $counts = qi_seed_resolve_counts($presets[$preset]);
 
+if ($action === 'reset' || $action === 'replace')
+{
+	$reset = qi_seed_reset($db, $seed);
+	echo "Reset seed $seed: {$reset['topics']} topics, {$reset['forums']} forums, {$reset['users']} users\n";
+	if ($action === 'reset')
+	{
+		exit(0);
+	}
+}
+
 $users = qi_seed_users($db, $phpbb_container, $counts['users'], $seed);
 $forums = qi_seed_forums($db, $counts['categories'], $counts['forums_per_category'], $seed);
 if (!$forums)
@@ -82,6 +99,60 @@ if (!$forums)
 $created_topics = qi_seed_posts($forums, $users, $counts['topics'], $counts['replies'], $seed);
 
 echo "Seeded preset $preset: " . count($users) . " users available, " . count($forums) . " forums available, $created_topics topics\n";
+
+function qi_seed_reset($db, int $seed): array
+{
+	$topic_ids = qi_seed_ids_by_like($db, TOPICS_TABLE, 'topic_id', 'topic_title', sprintf('QI seeded topic %d-', $seed) . '%');
+	$forum_ids = qi_seed_ids_by_like($db, FORUMS_TABLE, 'forum_id', 'forum_name', sprintf('QI seed %d ', $seed) . '%');
+	$user_ids = qi_seed_ids_by_like($db, USERS_TABLE, 'user_id', 'username', sprintf('qi_user_%d_', $seed) . '%');
+
+	if ($topic_ids)
+	{
+		delete_topics('topic_id', $topic_ids, true, true, true);
+	}
+
+	if ($forum_ids)
+	{
+		$db->sql_query('DELETE FROM ' . ACL_GROUPS_TABLE . ' WHERE ' . $db->sql_in_set('forum_id', $forum_ids));
+		$db->sql_query('DELETE FROM ' . ACL_USERS_TABLE . ' WHERE ' . $db->sql_in_set('forum_id', $forum_ids));
+		$db->sql_query('DELETE FROM ' . FORUMS_TRACK_TABLE . ' WHERE ' . $db->sql_in_set('forum_id', $forum_ids));
+		$db->sql_query('DELETE FROM ' . FORUMS_WATCH_TABLE . ' WHERE ' . $db->sql_in_set('forum_id', $forum_ids));
+		$db->sql_query('DELETE FROM ' . FORUMS_ACCESS_TABLE . ' WHERE ' . $db->sql_in_set('forum_id', $forum_ids));
+		$db->sql_query('DELETE FROM ' . FORUMS_TABLE . ' WHERE ' . $db->sql_in_set('forum_id', $forum_ids));
+
+		$new_id = 1;
+		recalc_nested_sets($new_id, 'forum_id', FORUMS_TABLE);
+	}
+
+	if ($user_ids)
+	{
+		user_delete('remove', $user_ids);
+	}
+
+	qi_seed_clear_caches();
+
+	return [
+		'topics' => count($topic_ids),
+		'forums' => count($forum_ids),
+		'users' => count($user_ids),
+	];
+}
+
+function qi_seed_ids_by_like($db, string $table, string $id_column, string $text_column, string $pattern): array
+{
+	$sql = "SELECT $id_column
+		FROM $table
+		WHERE $text_column LIKE '" . $db->sql_escape($pattern) . "'";
+	$result = $db->sql_query($sql);
+	$ids = [];
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$ids[] = (int) $row[$id_column];
+	}
+	$db->sql_freeresult($result);
+
+	return $ids;
+}
 
 function qi_seed_resolve_counts(array $preset): array
 {
