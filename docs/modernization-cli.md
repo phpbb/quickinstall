@@ -138,7 +138,7 @@ load-test     100 users, 4 categories, 20 forums, 100 topics, 20 replies per top
 random        up to 100 users, up to 4 categories, up to 20 forums, up to 100 topics, up to 20 replies per topic
 ```
 
-The seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` container. It creates categories/forums directly, creates users through `user_add()`, and creates topics/replies through `submit_post()`. Topic and reply authors are chosen randomly from the seeded users for the selected seed. Seeded topic titles use the DB topic ID suffix, so phpBB's default demo topic is reflected in numbering. The `random` preset uses `load-test` as caps and chooses counts from `1..cap` for users/categories/forums/topics and `0..cap` for replies.
+The seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` container. It creates categories/forums directly, creates users through `user_add()`, and creates topics/replies through `submit_post()`. Topic and reply authors are chosen randomly from the seeded users for the selected seed. Seeded topic titles use the DB topic ID suffix, so phpBB's default demo topic is reflected in numbering. After seed/reset, user post totals are recalculated from approved counted posts. The `random` preset uses `load-test` as caps and chooses counts from `1..cap` for users/categories/forums/topics and `0..cap` for replies.
 
 ## Current Limits
 

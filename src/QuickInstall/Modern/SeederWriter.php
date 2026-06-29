@@ -78,6 +78,7 @@ if ($action === 'reset' || $action === 'replace')
 	echo "Reset seed $seed: {$reset['topics']} topics, {$reset['forums']} forums, {$reset['users']} users\n";
 	if ($action === 'reset')
 	{
+		qi_seed_sync_user_post_counts($db);
 		exit(0);
 	}
 }
@@ -97,6 +98,8 @@ if (!$forums)
 }
 
 $created_topics = qi_seed_posts($forums, $users, $counts['topics'], $counts['replies'], $seed);
+qi_seed_mark_posts_counted($db, $seed);
+qi_seed_sync_user_post_counts($db);
 
 echo "Seeded preset $preset: " . count($users) . " users available, " . count($forums) . " forums available, $created_topics topics\n";
 
@@ -129,6 +132,7 @@ function qi_seed_reset($db, int $seed): array
 		user_delete('remove', $user_ids);
 	}
 
+	qi_seed_sync_user_post_counts($db);
 	qi_seed_clear_caches();
 
 	return [
@@ -152,6 +156,35 @@ function qi_seed_ids_by_like($db, string $table, string $id_column, string $text
 	$db->sql_freeresult($result);
 
 	return $ids;
+}
+
+function qi_seed_sync_user_post_counts($db): void
+{
+	$db->sql_query('UPDATE ' . USERS_TABLE . '
+		SET user_posts = 0');
+
+	$sql = 'SELECT poster_id, COUNT(post_id) AS post_count
+		FROM ' . POSTS_TABLE . '
+		WHERE poster_id > 1
+			AND post_postcount = 1
+			AND post_visibility = ' . ITEM_APPROVED . '
+		GROUP BY poster_id';
+	$result = $db->sql_query($sql);
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$db->sql_query('UPDATE ' . USERS_TABLE . '
+			SET user_posts = ' . (int) $row['post_count'] . '
+			WHERE user_id = ' . (int) $row['poster_id']);
+	}
+	$db->sql_freeresult($result);
+}
+
+function qi_seed_mark_posts_counted($db, int $seed): void
+{
+	$pattern = sprintf('%%QI seeded topic %d-%%', $seed);
+	$db->sql_query('UPDATE ' . POSTS_TABLE . '
+		SET post_postcount = 1
+		WHERE post_subject LIKE \'' . $db->sql_escape($pattern) . '\'');
 }
 
 function qi_seed_resolve_counts(array $preset): array
