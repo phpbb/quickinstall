@@ -43,6 +43,21 @@ class Application
 				case 'board:create':
 					return $this->boardCreate($argv);
 
+				case 'board:list':
+					return $this->boardList();
+
+				case 'board:start':
+					return $this->boardStart($argv);
+
+				case 'board:stop':
+					return $this->boardStop($argv);
+
+				case 'board:destroy':
+					return $this->boardDestroy($argv);
+
+				case 'board:seed':
+					return $this->boardSeed($argv);
+
 				default:
 					fwrite(STDERR, "Unknown command: $command\n\n");
 					$this->help();
@@ -186,6 +201,80 @@ class Application
 		return 0;
 	}
 
+	private function boardList(): int
+	{
+		$boards = $this->project->boards();
+		if (!$boards)
+		{
+			echo "No boards created\n";
+			return 0;
+		}
+
+		$runner = new BoardRunner($this->project);
+		foreach ($boards as $board)
+		{
+			$status = $runner->status($board['name']);
+			echo "{$board['name']}\t$status\t{$board['phpbb']}\tPHP {$board['php']}\t{$board['db']}\t{$board['url']}\n";
+		}
+
+		return 0;
+	}
+
+	private function boardStart(array $args): int
+	{
+		$name = $this->boardName($args, 'Usage: qi board:start <name>');
+		(new BoardRunner($this->project))->start($name);
+		$board = $this->project->board($name);
+		echo "Started board: $name\n";
+		echo "URL: {$board['url']}\n";
+		return 0;
+	}
+
+	private function boardStop(array $args): int
+	{
+		$name = $this->boardName($args, 'Usage: qi board:stop <name>');
+		(new BoardRunner($this->project))->stop($name);
+		echo "Stopped board: $name\n";
+		return 0;
+	}
+
+	private function boardDestroy(array $args): int
+	{
+		$name = $this->boardName($args, 'Usage: qi board:destroy <name>');
+		(new BoardRunner($this->project))->destroy($name);
+		echo "Destroyed board: $name\n";
+		return 0;
+	}
+
+	private function boardSeed(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$name = $cli->argument(0);
+		if ($name === null)
+		{
+			throw new \InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test] [--seed N]');
+		}
+
+		$preset = $cli->option('preset', 'extension-dev');
+		$seed = (int) $cli->option('seed', '1');
+
+		(new BoardRunner($this->project))->seed($name, $preset, $seed);
+		echo "Seeded board: $name\n";
+		return 0;
+	}
+
+	private function boardName(array $args, string $usage): string
+	{
+		$cli = CommandLine::parse($args);
+		$name = $cli->argument(0);
+		if ($name === null)
+		{
+			throw new \InvalidArgumentException($usage);
+		}
+
+		return $name;
+	}
+
 	private function help(): void
 	{
 		echo <<<TXT
@@ -197,11 +286,18 @@ Commands:
   qi source:fetch <version|branch>
   qi source:list
   qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET]
+  qi board:list
+  qi board:start <name>
+  qi board:stop <name>
+  qi board:destroy <name>
+  qi board:seed <name> [--preset tiny|extension-dev|load-test] [--seed N]
 
 Examples:
   qi source:add 3.3.17
   qi source:add master --git --url https://github.com/phpbb/phpbb.git
   qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
+  qi board:start test
+  qi board:seed test --preset extension-dev --seed 1
 
 TXT;
 	}
