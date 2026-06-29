@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../src/QuickInstall/Modern/Application.php';
+require __DIR__ . '/../src/QuickInstall/Modern/CommandLine.php';
+require __DIR__ . '/../src/QuickInstall/Modern/Project.php';
+require __DIR__ . '/../src/QuickInstall/Modern/VersionMatrix.php';
+require __DIR__ . '/../src/QuickInstall/Modern/SourceProvider.php';
+require __DIR__ . '/../src/QuickInstall/Modern/DockerComposeWriter.php';
+
+use QuickInstall\Modern\Application;
+
+exit((new Application(dirname(__DIR__)))->run($argv));

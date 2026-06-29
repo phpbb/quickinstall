@@ -40,6 +40,20 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 ##### phpBB Requirements
 phpBB boards require a web server running PHP and one of the following database management systems.
 
+## Modern CLI Prototype
+
+QuickInstall now includes an experimental CLI scaffold for a Docker-based board factory. It writes generated state to `.qi/` and leaves the legacy web UI unchanged.
+
+```bash
+php bin/qi init
+php bin/qi source:add 3.3.17
+php bin/qi source:fetch 3.3.17
+php bin/qi board:create test --phpbb 3.3.17 --db mariadb --port 8081
+docker compose -f .qi/runtime/test/compose.yml up -d
+```
+
+See [docs/modernization-cli.md](docs/modernization-cli.md).
+
 | phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |
 |----------------|---------------|--------|---------|------------|----------------|--------------|
 | 4.0.0 (alpha)  | 8.2+          | 8.0+   | 10.2.7+ | 9.5+       | SQLite 3.8.3+  | Server 2012+ |

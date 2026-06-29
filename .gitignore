@@ -6,6 +6,7 @@ cache/*
 sources/*
 vendor/*
 build/*
+.qi/*
 *~
 .idea
 node_modules
