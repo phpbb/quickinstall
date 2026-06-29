@@ -35,6 +35,25 @@ class SourceProvider
 		return $record;
 	}
 
+	public function ensure(string $version): array
+	{
+		$sources = $this->project->readJson('sources.json', []);
+		if (!isset($sources[$version]))
+		{
+			echo "Registering phpBB source: $version\n";
+			$sources[$version] = $this->add($version, 'composer', null);
+		}
+
+		$source = $sources[$version];
+		if (!file_exists($source['path'] . '/common.php'))
+		{
+			echo "Fetching phpBB source: $version\n";
+			$this->fetch($source);
+		}
+
+		return $source;
+	}
+
 	public function fetch(array $source): void
 	{
 		$path = $source['path'];
@@ -72,14 +91,19 @@ class SourceProvider
 			rmdir($path);
 		}
 
-		$this->run([
+		$command = [
 			'composer',
 			'create-project',
 			'phpbb/phpbb',
 			$path,
-			$source['version'],
 			'--no-interaction',
-		], dirname($path));
+		];
+		if ($source['version'] !== 'latest')
+		{
+			array_splice($command, 4, 0, [$source['version']]);
+		}
+
+		$this->run($command, dirname($path));
 	}
 
 	private function hasFiles(string $path): bool

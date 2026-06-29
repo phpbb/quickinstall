@@ -46,12 +46,11 @@ QuickInstall now includes an experimental CLI scaffold for a Docker-based board 
 
 ```bash
 php bin/qi init
-php bin/qi source:add 3.3.17
-php bin/qi source:fetch 3.3.17
-php bin/qi board:create test --phpbb 3.3.17 --db mariadb --port 8081
+php bin/qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
 php bin/qi board:start test
-php bin/qi board:seed test --preset extension-dev --seed 1
 ```
+
+The modern CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for this Docker CLI.
 
 See [docs/modernization-cli.md](docs/modernization-cli.md).
 

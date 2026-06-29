@@ -13,8 +13,10 @@ class BoardRunner
 
 	public function start(string $name): void
 	{
-		$this->project->board($name);
+		$board = $this->project->board($name);
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '--build', '-d']);
+		$this->waitUntilInstalled($name);
+		$this->seedIfNeeded($name, $board['populate'] ?? 'none');
 	}
 
 	public function stop(string $name): void
@@ -100,6 +102,48 @@ class BoardRunner
 	public function seed(string $name, string $preset, int $seed): void
 	{
 		$this->project->board($name);
+		$this->runSeeder($name, $preset, $seed);
+	}
+
+	private function seedIfNeeded(string $name, string $preset): void
+	{
+		if ($preset === 'none' || $preset === '')
+		{
+			return;
+		}
+
+		$marker = $this->project->runtimePath($name) . '/seeded-' . preg_replace('/[^A-Za-z0-9._-]/', '_', $preset);
+		if (file_exists($marker))
+		{
+			echo "Populate preset already applied: $preset\n";
+			return;
+		}
+
+		$this->runSeeder($name, $preset, 1);
+		file_put_contents($marker, gmdate('c') . "\n");
+	}
+
+	private function waitUntilInstalled(string $name): void
+	{
+		$boardPath = $this->project->boardPath($name);
+		$deadline = time() + 120;
+
+		while (time() <= $deadline)
+		{
+			$config = $boardPath . '/config.php';
+			if (file_exists($boardPath . '/includes/startup.php') && file_exists($config) && filesize($config) > 0 && !is_dir($boardPath . '/install'))
+			{
+				return;
+			}
+
+			usleep(500000);
+		}
+
+		throw new \RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
+	}
+
+	private function runSeeder(string $name, string $preset, int $seed): void
+	{
 		$writer = new SeederWriter($this->project);
 		$script = $writer->write($name);
 

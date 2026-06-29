@@ -158,11 +158,7 @@ class Application
 		$this->project->init();
 		$matrix = new VersionMatrix();
 		$runtime = $matrix->runtimeFor($version);
-		$sourcePath = $this->project->sourcePath($version);
-		if (!file_exists($sourcePath . '/common.php'))
-		{
-			throw new \RuntimeException("phpBB source is missing for $version. Run: php bin/qi source:fetch $version");
-		}
+		(new SourceProvider($this->project))->ensure($version);
 
 		$boardDir = $this->project->boardPath($name);
 		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true))
@@ -190,6 +186,7 @@ class Application
 			'db' => $db,
 			'url' => "http://localhost:$port/",
 			'path' => $boardDir,
+			'populate' => $populate,
 			'created_at' => gmdate('c'),
 		]);
 
@@ -197,7 +194,11 @@ class Application
 		echo "Compose: {$paths['compose']}\n";
 		echo "Install config: {$paths['install_config']}\n";
 		echo "URL after start: http://localhost:$port/\n";
-		echo "Next: docker compose -f {$paths['compose']} up -d\n";
+		if ($populate !== 'none')
+		{
+			echo "Populate preset: $populate (runs on board:start)\n";
+		}
+		echo "Next: php bin/qi board:start $name\n";
 		return 0;
 	}
 
@@ -214,7 +215,8 @@ class Application
 		foreach ($boards as $board)
 		{
 			$status = $runner->status($board['name']);
-			echo "{$board['name']}\t$status\t{$board['phpbb']}\tPHP {$board['php']}\t{$board['db']}\t{$board['url']}\n";
+			$populate = $board['populate'] ?? 'none';
+			echo "{$board['name']}\t$status\t{$board['phpbb']}\tPHP {$board['php']}\t{$board['db']}\tpopulate:$populate\t{$board['url']}\n";
 		}
 
 		return 0;
@@ -252,7 +254,7 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test] [--seed N]');
+			throw new \InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N]');
 		}
 
 		$preset = $cli->option('preset', 'extension-dev');
@@ -290,7 +292,7 @@ Commands:
   qi board:start <name>
   qi board:stop <name>
   qi board:destroy <name>
-  qi board:seed <name> [--preset tiny|extension-dev|load-test] [--seed N]
+  qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N]
 
 Examples:
   qi source:add 3.3.17

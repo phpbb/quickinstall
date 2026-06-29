@@ -31,9 +31,10 @@ $preset = $argv[1] ?? 'extension-dev';
 $seed = (int) ($argv[2] ?? 1);
 
 $presets = [
-	'tiny' => ['users' => 3, 'topics' => 2, 'replies' => 2],
-	'extension-dev' => ['users' => 10, 'topics' => 5, 'replies' => 4],
-	'load-test' => ['users' => 50, 'topics' => 25, 'replies' => 10],
+	'tiny' => ['users' => 3, 'categories' => 1, 'forums_per_category' => 2, 'topics' => 2, 'replies' => 2],
+	'extension-dev' => ['users' => 10, 'categories' => 2, 'forums_per_category' => 3, 'topics' => 25, 'replies' => 10],
+	'load-test' => ['users' => 100, 'categories' => 4, 'forums_per_category' => 5, 'topics' => 100, 'replies' => 20],
+	'random' => ['users' => 100, 'categories' => 4, 'forums_per_category' => 5, 'topics' => 100, 'replies' => 20, 'randomize' => true],
 ];
 
 if (!isset($presets[$preset]))
@@ -50,6 +51,7 @@ require_once $phpbb_root_path . 'common.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_user.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_content.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_posting.' . $phpEx;
+require_once $phpbb_root_path . 'includes/functions_admin.' . $phpEx;
 
 $user->session_begin();
 $auth->acl($user->data);
@@ -60,20 +62,42 @@ $user->data['user_id'] = $admin_id;
 $user->data['username'] = 'admin';
 $user->data['is_registered'] = true;
 
-$forum_id = qi_seed_first_postable_forum($db);
-if (!$forum_id)
+mt_srand($seed);
+$counts = qi_seed_resolve_counts($presets[$preset]);
+
+$users = qi_seed_users($db, $phpbb_container, $counts['users'], $seed);
+$forums = qi_seed_forums($db, $counts['categories'], $counts['forums_per_category'], $seed);
+if (!$forums)
+{
+	$forum_id = qi_seed_first_postable_forum($db);
+	$forums = $forum_id ? [$forum_id] : [];
+}
+
+if (!$forums)
 {
 	fwrite(STDERR, "No postable forum found\n");
 	exit(1);
 }
 
-$counts = $presets[$preset];
-mt_srand($seed);
+$created_topics = qi_seed_posts($forums, $users, $counts['topics'], $counts['replies'], $seed);
 
-$created_users = qi_seed_users($db, $phpbb_container, $counts['users'], $seed);
-$created_topics = qi_seed_posts($forum_id, $counts['topics'], $counts['replies'], $seed);
+echo "Seeded preset $preset: " . count($users) . " users available, " . count($forums) . " forums available, $created_topics topics\n";
 
-echo "Seeded preset $preset: $created_users users, $created_topics topics\n";
+function qi_seed_resolve_counts(array $preset): array
+{
+	if (empty($preset['randomize']))
+	{
+		return $preset;
+	}
+
+	return [
+		'users' => mt_rand(1, $preset['users']),
+		'categories' => mt_rand(1, $preset['categories']),
+		'forums_per_category' => mt_rand(1, $preset['forums_per_category']),
+		'topics' => mt_rand(1, $preset['topics']),
+		'replies' => mt_rand(0, $preset['replies']),
+	];
+}
 
 function qi_seed_first_postable_forum($db): int
 {
@@ -85,9 +109,9 @@ function qi_seed_first_postable_forum($db): int
 	return $row ? (int) $row['forum_id'] : 0;
 }
 
-function qi_seed_users($db, $phpbb_container, int $count, int $seed): int
+function qi_seed_users($db, $phpbb_container, int $count, int $seed): array
 {
-	$created = 0;
+	$users = [];
 	$passwords = $phpbb_container->get('passwords.manager');
 
 	for ($i = 1; $i <= $count; $i++)
@@ -95,11 +119,16 @@ function qi_seed_users($db, $phpbb_container, int $count, int $seed): int
 		$username = sprintf('qi_user_%d_%02d', $seed, $i);
 		$sql = 'SELECT user_id FROM ' . USERS_TABLE . " WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'";
 		$result = $db->sql_query_limit($sql, 1);
-		$exists = (bool) $db->sql_fetchrow($result);
+		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if ($exists)
+		if ($row)
 		{
+			$users[] = [
+				'user_id' => (int) $row['user_id'],
+				'username' => $username,
+				'user_colour' => '',
+			];
 			continue;
 		}
 
@@ -115,21 +144,152 @@ function qi_seed_users($db, $phpbb_container, int $count, int $seed): int
 
 		if ($user_id !== false)
 		{
-			$created++;
+			$users[] = [
+				'user_id' => (int) $user_id,
+				'username' => $username,
+				'user_colour' => '',
+			];
 		}
 	}
 
-	return $created;
+	return $users ?: [[
+		'user_id' => 2,
+		'username' => 'admin',
+		'user_colour' => 'AA0000',
+	]];
 }
 
-function qi_seed_posts(int $forum_id, int $topics, int $replies, int $seed): int
+function qi_seed_forums($db, int $categories, int $forums_per_category, int $seed): array
+{
+	$forum_ids = [];
+	$category_ids = [];
+	$permission_source = qi_seed_first_postable_forum($db);
+
+	for ($category = 1; $category <= $categories; $category++)
+	{
+		$category_name = sprintf('QI seed %d category %02d', $seed, $category);
+		$category_id = qi_seed_forum_id_by_name($db, $category_name);
+		if (!$category_id)
+		{
+			$category_id = qi_seed_insert_forum($db, [
+				'parent_id' => 0,
+				'forum_type' => FORUM_CAT,
+				'forum_name' => $category_name,
+				'forum_desc' => sprintf('Generated category for seed %d.', $seed),
+			]);
+		}
+		$category_ids[] = $category_id;
+
+		for ($forum = 1; $forum <= $forums_per_category; $forum++)
+		{
+			$forum_name = sprintf('QI seed %d forum %02d-%02d', $seed, $category, $forum);
+			$forum_id = qi_seed_forum_id_by_name($db, $forum_name);
+			if (!$forum_id)
+			{
+				$forum_id = qi_seed_insert_forum($db, [
+					'parent_id' => $category_id,
+					'forum_type' => FORUM_POST,
+					'forum_name' => $forum_name,
+					'forum_desc' => sprintf('Generated forum %02d in category %02d.', $forum, $category),
+				]);
+			}
+
+			$forum_ids[] = $forum_id;
+		}
+	}
+
+	$new_id = 1;
+	recalc_nested_sets($new_id, 'forum_id', FORUMS_TABLE);
+
+	$forum_ids = array_values(array_unique(array_map('intval', $forum_ids)));
+	$permission_targets = array_values(array_unique(array_merge(array_map('intval', $category_ids), $forum_ids)));
+	if ($permission_source && $permission_targets)
+	{
+		copy_forum_permissions($permission_source, $permission_targets, true, false);
+	}
+
+	qi_seed_clear_caches();
+
+	return $forum_ids;
+}
+
+function qi_seed_clear_caches(): void
+{
+	global $auth, $cache;
+
+	if (is_object($auth) && method_exists($auth, 'acl_clear_prefetch'))
+	{
+		$auth->acl_clear_prefetch();
+	}
+
+	if (is_object($cache) && method_exists($cache, 'purge'))
+	{
+		$cache->purge();
+	}
+}
+
+function qi_seed_forum_id_by_name($db, string $name): int
+{
+	$sql = 'SELECT forum_id FROM ' . FORUMS_TABLE . " WHERE forum_name = '" . $db->sql_escape($name) . "'";
+	$result = $db->sql_query_limit($sql, 1);
+	$row = $db->sql_fetchrow($result);
+	$db->sql_freeresult($result);
+
+	return $row ? (int) $row['forum_id'] : 0;
+}
+
+function qi_seed_insert_forum($db, array $data): int
+{
+	$desc = $data['forum_desc'];
+	$desc_uid = $desc_bitfield = '';
+	$desc_options = 7;
+	generate_text_for_storage($desc, $desc_uid, $desc_bitfield, $desc_options, true, true, true);
+
+	$sql_ary = [
+		'parent_id' => (int) $data['parent_id'],
+		'left_id' => 0,
+		'right_id' => 0,
+		'forum_parents' => '',
+		'forum_name' => $data['forum_name'],
+		'forum_desc' => $desc,
+		'forum_desc_bitfield' => $desc_bitfield,
+		'forum_desc_options' => $desc_options,
+		'forum_desc_uid' => $desc_uid,
+		'forum_link' => '',
+		'forum_password' => '',
+		'forum_image' => '',
+		'forum_rules' => '',
+		'forum_rules_link' => '',
+		'forum_rules_bitfield' => '',
+		'forum_rules_options' => 7,
+		'forum_rules_uid' => '',
+		'forum_type' => (int) $data['forum_type'],
+		'forum_status' => ITEM_UNLOCKED,
+		'forum_flags' => 48,
+		'display_on_index' => 1,
+		'enable_indexing' => 1,
+		'enable_icons' => 1,
+		'display_subforum_list' => 1,
+	];
+
+	$db->sql_query('INSERT INTO ' . FORUMS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));
+	return (int) $db->sql_nextid();
+}
+
+function qi_seed_posts(array $forum_ids, array $authors, int $topics, int $replies, int $seed): int
 {
 	$created = 0;
+	$existing = qi_seed_existing_topic_count($seed);
 
-	for ($topic = 1; $topic <= $topics; $topic++)
+	for ($topic = $existing + 1; $topic <= $topics; $topic++)
 	{
-		$subject = sprintf('QI seeded topic %d-%02d', $seed, $topic);
-		$data = qi_seed_post_data($forum_id, 0, $subject, sprintf("Seeded topic body %d.%02d\n\nUseful test content for extension development.", $seed, $topic));
+		$forum_id = $forum_ids[array_rand($forum_ids)];
+		$author = $authors[array_rand($authors)];
+		$topic_id_hint = qi_seed_next_topic_id();
+		$subject = sprintf('QI seeded topic %d-%02d', $seed, $topic_id_hint);
+
+		qi_seed_set_author($author);
+		$data = qi_seed_post_data($forum_id, 0, $subject, sprintf("Seeded topic body %d.%02d\n\nUseful test content for extension development.", $seed, $topic_id_hint));
 		$poll = [];
 		submit_post('post', $subject, '', POST_NORMAL, $poll, $data, true, true);
 		$created++;
@@ -142,8 +302,10 @@ function qi_seed_posts(int $forum_id, int $topics, int $replies, int $seed): int
 
 		for ($reply = 1; $reply <= $replies; $reply++)
 		{
+			$reply_author = $authors[array_rand($authors)];
 			$reply_subject = 'Re: ' . $subject;
-			$reply_data = qi_seed_post_data($forum_id, $topic_id, $subject, sprintf('Seeded reply %d for topic %d.', $reply, $topic));
+			qi_seed_set_author($reply_author);
+			$reply_data = qi_seed_post_data($forum_id, $topic_id, $subject, sprintf('Seeded reply %d for topic %d.', $reply, $topic_id_hint));
 			$reply_poll = [];
 			submit_post('reply', $reply_subject, '', POST_NORMAL, $reply_poll, $reply_data, true, true);
 		}
@@ -152,8 +314,48 @@ function qi_seed_posts(int $forum_id, int $topics, int $replies, int $seed): int
 	return $created;
 }
 
+function qi_seed_existing_topic_count(int $seed): int
+{
+	global $db;
+
+	$sql = 'SELECT COUNT(topic_id) AS topic_count
+		FROM ' . TOPICS_TABLE . "
+		WHERE topic_title LIKE '" . $db->sql_escape(sprintf('QI seeded topic %d-', $seed)) . "%'";
+	$result = $db->sql_query($sql);
+	$count = (int) $db->sql_fetchfield('topic_count');
+	$db->sql_freeresult($result);
+
+	return $count;
+}
+
+function qi_seed_next_topic_id(): int
+{
+	global $db;
+
+	$sql = 'SELECT MAX(topic_id) AS max_topic_id
+		FROM ' . TOPICS_TABLE;
+	$result = $db->sql_query($sql);
+	$next_id = (int) $db->sql_fetchfield('max_topic_id') + 1;
+	$db->sql_freeresult($result);
+
+	return max(1, $next_id);
+}
+
+function qi_seed_set_author(array $author): void
+{
+	global $user;
+
+	$user->data['user_id'] = (int) $author['user_id'];
+	$user->data['username'] = $author['username'];
+	$user->data['username_clean'] = utf8_clean_string($author['username']);
+	$user->data['user_colour'] = $author['user_colour'] ?? '';
+	$user->data['is_registered'] = true;
+}
+
 function qi_seed_post_data(int $forum_id, int $topic_id, string $topic_title, string $message): array
 {
+	global $user;
+
 	$uid = $bitfield = '';
 	$options = 0;
 	generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
@@ -164,7 +366,7 @@ function qi_seed_post_data(int $forum_id, int $topic_id, string $topic_title, st
 		'icon_id' => 0,
 		'topic_title' => $topic_title,
 		'topic_time_limit' => 0,
-		'poster_id' => 2,
+		'poster_id' => (int) $user->data['user_id'],
 		'enable_bbcode' => true,
 		'enable_smilies' => true,
 		'enable_urls' => true,

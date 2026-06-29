@@ -8,14 +8,13 @@ The legacy web app remains unchanged. The new CLI writes all generated state to 
 
 ```bash
 php bin/qi init
-php bin/qi source:add 3.3.17
-php bin/qi source:fetch 3.3.17
 php bin/qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
 php bin/qi board:start test
-php bin/qi board:seed test --preset extension-dev --seed 1
 ```
 
-`source:fetch` runs Composer or Git and downloads phpBB into `.qi/sources/phpbb-<version>`.
+`board:create --phpbb <version>` automatically registers and fetches missing Composer-based phpBB sources into `.qi/sources/phpbb-<version>`.
+
+`--populate extension-dev` seeds the board once during `board:start`, after phpBB has installed successfully. Use `--populate none` to skip automatic seeding.
 
 After Docker starts, open:
 
@@ -31,9 +30,9 @@ admin / password
 
 ## Source Model
 
-Registered sources are stored in `.qi/sources.json`.
+Registered sources are stored in `.qi/sources.json`. For normal released versions, you can skip source commands and let `board:create --phpbb <version>` register/fetch automatically.
 
-Composer sources use `phpbb/phpbb`:
+Composer sources use `phpbb/phpbb`. Explicit source commands are still useful when you want to fetch source ahead of time:
 
 ```bash
 php bin/qi source:add 3.3.17
@@ -43,7 +42,10 @@ Git sources use the phpBB repository:
 
 ```bash
 php bin/qi source:add master --git --url https://github.com/phpbb/phpbb.git
+php bin/qi source:fetch master
 ```
+
+Use explicit `source:add --git` for branches, forks, and custom URLs. Automatic `board:create` fetching assumes Composer release sources.
 
 Fetched source code is expected at:
 
@@ -80,7 +82,7 @@ php bin/qi board:destroy test
 `board:list` shows each registered board plus Docker status:
 
 ```text
-test  running  3.3.17  PHP 8.1  mariadb  http://localhost:8081/
+test  running  3.3.17  PHP 8.1  mariadb  populate:extension-dev  http://localhost:8081/
 ```
 
 Statuses are `running`, `stopped`, `partial`, `missing`, or `error`.
@@ -93,26 +95,29 @@ Seed an installed, running board:
 php bin/qi board:seed test --preset extension-dev --seed 1
 ```
 
+This is separate from `board:create --populate`. Manual `board:seed` always runs when called. Automatic `--populate` runs once on `board:start` and writes a marker under `.qi/runtime/<board>/`.
+
 Available presets:
 
 ```text
-tiny           3 users, 2 topics, 2 replies per topic
-extension-dev 10 users, 5 topics, 4 replies per topic
-load-test     50 users, 25 topics, 10 replies per topic
+tiny           3 users, 1 category, 2 forums, 2 topics, 2 replies per topic
+extension-dev 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
+load-test     100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
+random        up to 100 users, up to 4 categories, up to 20 forums, up to 100 topics, up to 20 replies per topic
 ```
 
-The first seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` container: `user_add()` for users and `submit_post()` for topics/replies.
+The seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` container. It creates categories/forums directly, creates users through `user_add()`, and creates topics/replies through `submit_post()`. Topic and reply authors are chosen randomly from the seeded users for the selected seed. Seeded topic titles use the DB topic ID suffix, so phpBB's default demo topic is reflected in numbering. The `random` preset uses `load-test` as caps and chooses counts from `1..cap` for users/categories/forums/topics and `0..cap` for replies.
 
 ## Current Limits
 
 - phpBB source fetch requires `composer` for release sources and `git` plus `composer` for Git sources.
 - Docker images are generic `php:<version>-apache` builds with DB extensions installed at build time.
-- phpBB 3.2+ installer CLI is the intended path. Older branches still need a legacy installer adapter.
-- Fixture population currently supports users, topics, and replies. It does not yet cover categories, permissions matrices, custom groups, styles, or attachments.
+- phpBB 3.2+ installer CLI is the supported path. phpBB 3.0/3.1 are intentionally out of scope for this modern CLI.
+- Fixture population currently supports categories, forums, users, topics, and replies. It does not cover groups, permissions matrices, styles, or attachments.
 - The web UI does not call the CLI yet.
 
 ## Next Implementation Steps
 
-1. Add branch-specific installer adapters for phpBB 3.0/3.1.
-2. Expand `board:seed` for categories, forums, groups, permissions, styles, and attachments.
+1. Expand source/version selection around supported phpBB branches only.
+2. Improve `board:seed` reset/idempotency controls.
 3. Put web UI behind the same board/source services.
