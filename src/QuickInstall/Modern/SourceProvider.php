@@ -13,23 +13,29 @@ class SourceProvider
 
 	public function add(string $version, string $type, ?string $url): array
 	{
-		$this->project->assertName($version, 'version');
 		if (!in_array($type, ['composer', 'git'], true))
 		{
 			throw new \InvalidArgumentException("Unsupported source type: $type");
 		}
+		$selection = (new VersionMatrix())->resolve($version, $type === 'git');
 
 		$sources = $this->project->readJson('sources.json', []);
 		$record = [
-			'version' => $version,
+			'version' => $selection['version'],
+			'source_key' => $selection['source_key'],
+			'constraint' => $selection['constraint'],
+			'branch' => $selection['branch'],
+			'phpbb_branch' => $selection['phpbb_branch'],
+			'php' => $selection['php'],
+			'status' => $selection['status'],
 			'type' => $type,
 			'package' => $type === 'composer' ? 'phpbb/phpbb' : null,
 			'url' => $url ?: ($type === 'git' ? 'https://github.com/phpbb/phpbb.git' : null),
-			'path' => $this->project->sourcePath($version),
+			'path' => $this->project->sourcePath($selection['source_key']),
 			'registered_at' => gmdate('c'),
 		];
 
-		$sources[$version] = $record;
+		$sources[$selection['source_key']] = $record;
 		$this->project->writeJson('sources.json', $sources);
 
 		return $record;
@@ -37,14 +43,16 @@ class SourceProvider
 
 	public function ensure(string $version): array
 	{
+		$selection = (new VersionMatrix())->resolve($version);
 		$sources = $this->project->readJson('sources.json', []);
-		if (!isset($sources[$version]))
+		if (!isset($sources[$selection['source_key']]))
 		{
 			echo "Registering phpBB source: $version\n";
-			$sources[$version] = $this->add($version, 'composer', null);
+			$sources[$selection['source_key']] = $this->add($version, 'composer', null);
 		}
 
-		$source = $sources[$version];
+		$source = $sources[$selection['source_key']];
+		$source = $this->withSelectionDefaults($source, $selection);
 		if (!file_exists($source['path'] . '/common.php'))
 		{
 			echo "Fetching phpBB source: $version\n";
@@ -52,6 +60,20 @@ class SourceProvider
 		}
 
 		return $source;
+	}
+
+	private function withSelectionDefaults(array $source, array $selection): array
+	{
+		return $source + [
+			'version' => $selection['version'],
+			'source_key' => $selection['source_key'],
+			'constraint' => $selection['constraint'],
+			'branch' => $selection['branch'],
+			'phpbb_branch' => $selection['phpbb_branch'],
+			'php' => $selection['php'],
+			'status' => $selection['status'],
+			'path' => $this->project->sourcePath($selection['source_key']),
+		];
 	}
 
 	public function fetch(array $source): void
@@ -75,7 +97,7 @@ class SourceProvider
 				'git',
 				'clone',
 				'--branch',
-				$source['version'],
+				$source['branch'] ?: $source['version'],
 				'--depth',
 				'1',
 				$url,
@@ -98,9 +120,9 @@ class SourceProvider
 			$path,
 			'--no-interaction',
 		];
-		if ($source['version'] !== 'latest')
+		if (!empty($source['constraint']))
 		{
-			array_splice($command, 4, 0, [$source['version']]);
+			array_splice($command, 4, 0, [$source['constraint']]);
 		}
 
 		$this->run($command, dirname($path));

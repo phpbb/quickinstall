@@ -40,6 +40,9 @@ class Application
 				case 'source:fetch':
 					return $this->sourceFetch($argv);
 
+				case 'phpbb:list':
+					return $this->phpbbList();
+
 				case 'board:create':
 					return $this->boardCreate($argv);
 
@@ -113,7 +116,10 @@ class Application
 
 		foreach ($sources as $source)
 		{
-			echo "{$source['version']}\t{$source['type']}\t{$source['path']}\n";
+			$sourceKey = $source['source_key'] ?? $source['version'];
+			$constraint = $source['constraint'] ?? '-';
+			$status = $source['status'] ?? '-';
+			echo "$sourceKey\t{$source['version']}\t$constraint\t{$source['type']}\t$status\t{$source['path']}\n";
 		}
 
 		return 0;
@@ -128,16 +134,20 @@ class Application
 			throw new \InvalidArgumentException('Usage: qi source:fetch <version|branch>');
 		}
 
-		$sources = $this->project->readJson('sources.json', []);
-		if (!isset($sources[$version]))
+		$source = new SourceProvider($this->project);
+		$record = $source->ensure($version);
+
+		echo "Fetched phpBB source: {$record['path']}\n";
+		return 0;
+	}
+
+	private function phpbbList(): int
+	{
+		foreach ((new VersionMatrix())->list() as $row)
 		{
-			throw new \InvalidArgumentException("Source is not registered: $version");
+			echo "{$row['selector']}\t{$row['status']}\tPHP {$row['php']}\t{$row['resolves_to']}\t{$row['notes']}\n";
 		}
 
-		$source = new SourceProvider($this->project);
-		$source->fetch($sources[$version]);
-
-		echo "Fetched phpBB source: {$sources[$version]['path']}\n";
 		return 0;
 	}
 
@@ -157,8 +167,9 @@ class Application
 
 		$this->project->init();
 		$matrix = new VersionMatrix();
-		$runtime = $matrix->runtimeFor($version);
-		(new SourceProvider($this->project))->ensure($version);
+		$selection = $matrix->resolve($version);
+		$runtime = ['php' => $selection['php']];
+		$source = (new SourceProvider($this->project))->ensure($version);
 
 		$boardDir = $this->project->boardPath($name);
 		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true))
@@ -169,6 +180,7 @@ class Application
 		$writer = new DockerComposeWriter($this->project);
 		$paths = $writer->write($name, [
 			'phpbb' => $version,
+			'phpbb_source' => $source['source_key'],
 			'php' => $runtime['php'],
 			'db' => $db,
 			'port' => $port,
@@ -181,7 +193,9 @@ class Application
 
 		$this->project->appendBoard([
 			'name' => $name,
-			'phpbb' => $version,
+			'phpbb' => $source['version'],
+			'phpbb_source' => $source['source_key'],
+			'phpbb_branch' => $source['phpbb_branch'],
 			'php' => $runtime['php'],
 			'db' => $db,
 			'url' => "http://localhost:$port/",
@@ -287,6 +301,7 @@ Commands:
   qi source:add <version|branch> [--git] [--url URL]
   qi source:fetch <version|branch>
   qi source:list
+  qi phpbb:list
   qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET]
   qi board:list
   qi board:start <name>

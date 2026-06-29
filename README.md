@@ -46,7 +46,7 @@ QuickInstall now includes an experimental CLI scaffold for a Docker-based board 
 
 ```bash
 php bin/qi init
-php bin/qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
 php bin/qi board:start test
 ```
 

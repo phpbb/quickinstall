@@ -8,11 +8,11 @@ The legacy web app remains unchanged. The new CLI writes all generated state to 
 
 ```bash
 php bin/qi init
-php bin/qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
 php bin/qi board:start test
 ```
 
-`board:create --phpbb <version>` automatically registers and fetches missing Composer-based phpBB sources into `.qi/sources/phpbb-<version>`.
+`board:create --phpbb <version>` validates supported phpBB selectors, then automatically registers and fetches missing Composer-based phpBB sources into `.qi/sources/phpbb-<source>`.
 
 `--populate extension-dev` seeds the board once during `board:start`, after phpBB has installed successfully. Use `--populate none` to skip automatic seeding.
 
@@ -51,6 +51,32 @@ Fetched source code is expected at:
 
 ```text
 .qi/sources/phpbb-<version>
+```
+
+## Version Selection
+
+Show supported selectors:
+
+```bash
+php bin/qi phpbb:list
+```
+
+Supported selectors:
+
+```text
+latest        Supported stable line, currently constrained to 3.3.*
+3.3           Latest 3.3.x Composer release
+3.3.x         Exact 3.3 tag, such as 3.3.17
+3.2           Latest 3.2.x Composer release
+3.2.x         Exact 3.2 tag, such as 3.2.11
+4.0.x/master  Experimental
+3.0/3.1       Unsupported by modern Docker CLI
+```
+
+Unsupported versions fail before source download:
+
+```text
+phpBB 3.1.12 is not supported by the modern Docker CLI. Use phpBB 3.2+ or the legacy web app for phpBB 3.0/3.1.
 ```
 
 ## Board Model
@@ -118,6 +144,5 @@ The seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` 
 
 ## Next Implementation Steps
 
-1. Expand source/version selection around supported phpBB branches only.
-2. Improve `board:seed` reset/idempotency controls.
-3. Put web UI behind the same board/source services.
+1. Add `board:seed --reset` / `--replace` controls for removing or replacing seed-generated data.
+2. Put web UI behind the same board/source services.

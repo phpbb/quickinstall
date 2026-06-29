@@ -85,7 +85,7 @@ YAML;
 	private function compose(string $name, array $config): string
 	{
 		$dbService = $this->databaseService($config['db'], $name);
-		$sourcePath = $this->project->sourcePath($config['phpbb']);
+		$sourcePath = $this->project->sourcePath($config['phpbb_source'] ?? $config['phpbb']);
 		$boardPath = $this->project->boardPath($name);
 		$dbPath = $this->project->workspacePath('db/' . $name);
 		if (!is_dir($dbPath) && !mkdir($dbPath, 0775, true))
