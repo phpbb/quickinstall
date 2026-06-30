@@ -367,6 +367,11 @@ class Application
 		{
 			$this->validatePreset($populate);
 		}
+
+		if ($db === 'sqlite' && $populate !== 'none')
+		{
+			throw new \InvalidArgumentException('SQLite boards currently support --populate none only. Use mariadb, mysql, or postgres for fixture seeding.');
+		}
 	}
 
 	private function validatePreset(string $preset): void

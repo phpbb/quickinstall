@@ -32,7 +32,7 @@ Admin login:
 admin / password
 ```
 
-That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts Docker, installs phpBB, and applies the selected seed preset once.
+That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts Docker, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
 
 ## Common Recipes
 
@@ -62,6 +62,13 @@ Create an experimental master branch board:
 ```bash
 php bin/qi board:create alpha --phpbb master --db mariadb --port 8084 --populate tiny
 php bin/qi board:start alpha
+```
+
+Create an SQLite board without fixtures:
+
+```bash
+php bin/qi board:create sqlite --phpbb 3.3 --db sqlite --port 8085 --populate none
+php bin/qi board:start sqlite
 ```
 
 List boards:
@@ -96,6 +103,8 @@ extension-dev 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
 load-test     100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
 random        random counts up to load-test size
 ```
+
+Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
 
 You can seed again manually:
 

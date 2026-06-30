@@ -309,12 +309,41 @@ function qi_seed_forums($db, int $categories, int $forums_per_category, int $see
 	$permission_targets = array_values(array_unique(array_merge(array_map('intval', $category_ids), $forum_ids)));
 	if ($permission_source && $permission_targets)
 	{
-		copy_forum_permissions($permission_source, $permission_targets, true, false);
+		qi_seed_copy_forum_permissions($db, $permission_source, $permission_targets);
 	}
 
 	qi_seed_clear_caches();
 
 	return $forum_ids;
+}
+
+function qi_seed_copy_forum_permissions($db, int $source_forum_id, array $target_forum_ids): void
+{
+	foreach ($target_forum_ids as $target_forum_id)
+	{
+		$target_forum_id = (int) $target_forum_id;
+		if ($target_forum_id === $source_forum_id)
+		{
+			continue;
+		}
+
+		$db->sql_query('DELETE FROM ' . ACL_GROUPS_TABLE . ' WHERE forum_id = ' . $target_forum_id);
+		$db->sql_query('DELETE FROM ' . ACL_USERS_TABLE . ' WHERE forum_id = ' . $target_forum_id);
+
+		qi_seed_copy_acl_rows($db, ACL_GROUPS_TABLE, $source_forum_id, $target_forum_id);
+		qi_seed_copy_acl_rows($db, ACL_USERS_TABLE, $source_forum_id, $target_forum_id);
+	}
+}
+
+function qi_seed_copy_acl_rows($db, string $table, int $source_forum_id, int $target_forum_id): void
+{
+	$result = $db->sql_query('SELECT * FROM ' . $table . ' WHERE forum_id = ' . $source_forum_id);
+	while ($row = $db->sql_fetchrow($result))
+	{
+		$row['forum_id'] = $target_forum_id;
+		$db->sql_query('INSERT INTO ' . $table . ' ' . $db->sql_build_array('INSERT', $row));
+	}
+	$db->sql_freeresult($result);
 }
 
 function qi_seed_clear_caches(): void

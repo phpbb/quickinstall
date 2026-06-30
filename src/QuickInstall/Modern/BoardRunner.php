@@ -14,9 +14,14 @@ class BoardRunner
 	public function start(string $name): void
 	{
 		$board = $this->project->board($name);
-		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '--build', '-d']);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '--build', '-d', '--force-recreate', '--remove-orphans', 'web']);
 		$this->waitUntilInstalled($name);
+		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
+		{
+			throw new \RuntimeException('SQLite boards currently support populate:none only. Use mariadb, mysql, or postgres for seeded boards.');
+		}
 		$this->seedIfNeeded($name, $board['populate'] ?? 'none');
+		$this->waitUntilHttpReady($name, $board['url'] ?? '');
 	}
 
 	public function stop(string $name): void
@@ -152,6 +157,49 @@ class BoardRunner
 		throw new \RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
 	}
 
+	private function waitUntilHttpReady(string $name, string $url): void
+	{
+		if ($url === '')
+		{
+			return;
+		}
+
+		echo "Waiting for board URL: $url\n";
+		$deadline = time() + 30;
+		while (time() <= $deadline)
+		{
+			$status = $this->httpStatus($url);
+			if ($status >= 200 && $status < 500)
+			{
+				return;
+			}
+
+			usleep(500000);
+		}
+
+		echo "Warning: board container started, but $url was not reachable from the host after 30 seconds.\n";
+		echo "Try opening it again in a few seconds, or run: docker compose -f " . $this->project->composePath($name) . " logs web\n";
+	}
+
+	private function httpStatus(string $url): int
+	{
+		$context = stream_context_create([
+			'http' => [
+				'method' => 'GET',
+				'timeout' => 2,
+				'ignore_errors' => true,
+			],
+		]);
+
+		$headers = @get_headers($url, false, $context);
+		if (!is_array($headers) || !isset($headers[0]))
+		{
+			return 0;
+		}
+
+		return preg_match('/\s(\d{3})\s/', $headers[0], $matches) ? (int) $matches[1] : 0;
+	}
+
 	private function serviceState(string $name, string $service): string
 	{
 		$result = $this->capture(['docker', 'compose', '-f', $this->project->composePath($name), 'ps', $service, '--format', 'json']);
@@ -175,7 +223,7 @@ class BoardRunner
 		$script = $writer->write($name);
 
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $script, 'web:/tmp/qi_seed.php']);
-		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'php', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
 	}
 
 	private function seedMarker(string $name, string $preset): string
@@ -216,7 +264,7 @@ class BoardRunner
 		$status = proc_close($process);
 		if ($status !== 0)
 		{
-			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command[0]));
+			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command, $status));
 		}
 	}
 
@@ -252,9 +300,14 @@ class BoardRunner
 		}));
 	}
 
-	private function commandHint(string $command): string
+	private function commandHint(array $command, int $status): string
 	{
-		if ($command === 'docker')
+		if (in_array('timeout', $command, true) && $status === 124)
+		{
+			return "\nThe operation timed out. For seeding, try a smaller preset or use mariadb/mysql/postgres instead of sqlite.";
+		}
+
+		if (($command[0] ?? '') === 'docker')
 		{
 			return "\nCheck that Docker Desktop is running and that the docker command works in this terminal.";
 		}
