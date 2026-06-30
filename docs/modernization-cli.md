@@ -1,10 +1,18 @@
-# QuickInstall Modern CLI Prototype
+# QuickInstall CLI
 
-This is the first step toward making QuickInstall a board factory instead of a web request that directly drives phpBB internals.
+QuickInstall CLI creates disposable local phpBB boards for extension, style, and compatibility testing.
 
-The legacy web app remains unchanged. The new CLI writes all generated state to `.qi/`.
+You do not need MAMP, WAMP, XAMPP, or a local Apache/MySQL setup. QuickInstall uses Docker for the board runtime and stores generated boards under `.qi/`.
 
-## Commands
+## Quick Start
+
+Install requirements:
+
+- Docker Desktop
+- PHP CLI
+- Composer, used to download phpBB source packages
+
+From the QuickInstall project root:
 
 ```bash
 php bin/qi init
@@ -12,48 +20,172 @@ php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate ext
 php bin/qi board:start test
 ```
 
-`board:create --phpbb <version>` validates supported phpBB selectors, then automatically registers and fetches missing Composer-based phpBB sources into `.qi/sources/phpbb-<source>`.
-
-`--populate extension-dev` seeds the board once during `board:start`, after phpBB has installed successfully. Use `--populate none` to skip automatic seeding.
-
-After Docker starts, open:
+Open:
 
 ```text
 http://localhost:8081/
 ```
 
-Admin login defaults:
+Admin login:
 
 ```text
 admin / password
 ```
 
-## Source Model
+That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts Docker, installs phpBB, and applies the selected seed preset once.
 
-Registered sources are stored in `.qi/sources.json`. For normal released versions, you can skip source commands and let `board:create --phpbb <version>` register/fetch automatically.
+## Common Recipes
 
-Composer sources use `phpbb/phpbb`. Explicit source commands are still useful when you want to fetch source ahead of time:
-
-```bash
-php bin/qi source:add 3.3.17
-```
-
-Git sources use the phpBB repository:
+Create a small empty board:
 
 ```bash
-php bin/qi source:add master --git --url https://github.com/phpbb/phpbb.git
-php bin/qi source:fetch master
+php bin/qi board:create clean --phpbb 3.3 --db mariadb --port 8081 --populate none
+php bin/qi board:start clean
 ```
 
-Use explicit `source:add --git` for branches, forks, and custom URLs. Automatic `board:create` fetching assumes Composer release sources.
+Create a board with extension-development fixtures:
 
-Fetched source code is expected at:
+```bash
+php bin/qi board:create extdev --phpbb 3.3.17 --db mariadb --port 8082 --populate extension-dev
+php bin/qi board:start extdev
+```
+
+Create an older supported phpBB 3.2 board:
+
+```bash
+php bin/qi board:create old --phpbb 3.2 --db mariadb --port 8083 --populate tiny
+php bin/qi board:start old
+```
+
+Create an experimental master branch board:
+
+```bash
+php bin/qi board:create alpha --phpbb master --db mariadb --port 8084 --populate tiny
+php bin/qi board:start alpha
+```
+
+List boards:
+
+```bash
+php bin/qi board:list
+```
+
+Stop or remove a board:
+
+```bash
+php bin/qi board:stop test
+php bin/qi board:destroy test
+```
+
+`board:destroy` removes the board files, Docker runtime files, database files, and board registry entry.
+
+## Fixture Presets
+
+Use `--populate <preset>` during `board:create`:
+
+```bash
+php bin/qi board:create test --populate extension-dev
+```
+
+Available presets:
 
 ```text
-.qi/sources/phpbb-<version>
+none           no seed data
+tiny           3 users, 1 category, 2 forums, 2 topics, 2 replies per topic
+extension-dev 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
+load-test     100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
+random        random counts up to load-test size
 ```
 
-## Version Selection
+You can seed again manually:
+
+```bash
+php bin/qi board:seed test --preset extension-dev --seed 1
+```
+
+Replace seed data:
+
+```bash
+php bin/qi board:seed test --preset extension-dev --seed 1 --replace
+```
+
+Remove seed data:
+
+```bash
+php bin/qi board:seed test --preset extension-dev --seed 1 --reset
+```
+
+`--seed` is a repeatable random seed number. Use the same seed to get the same fixture shape.
+
+## Extensions
+
+Put downloaded extensions under `extensions/`:
+
+```text
+extensions/vendor/extname/composer.json
+```
+
+Mount into a board:
+
+```bash
+php bin/qi ext:mount test extensions/vendor/extname
+```
+
+QuickInstall reads the extension `composer.json` name, such as `vendor/extname`, and bind-mounts it to:
+
+```text
+/var/www/html/ext/vendor/extname
+```
+
+Edits in `extensions/vendor/extname` are reflected in the board immediately. If the board is running, QuickInstall recreates the web container and purges phpBB cache.
+
+List and unmount extensions:
+
+```bash
+php bin/qi ext:list test
+php bin/qi ext:unmount test vendor/extname
+```
+
+Copy instead of bind-mount:
+
+```bash
+php bin/qi ext:mount test extensions/vendor/extname --copy
+```
+
+## Styles
+
+Put downloaded styles under `styles/`:
+
+```text
+styles/stylename/style.cfg
+```
+
+Mount into a board:
+
+```bash
+php bin/qi style:mount test styles/stylename
+```
+
+QuickInstall uses the style folder name and bind-mounts it to:
+
+```text
+/var/www/html/styles/stylename
+```
+
+List and unmount styles:
+
+```bash
+php bin/qi style:list test
+php bin/qi style:unmount test stylename
+```
+
+Copy instead of bind-mount:
+
+```bash
+php bin/qi style:mount test styles/stylename --copy
+```
+
+## Supported phpBB Versions
 
 Show supported selectors:
 
@@ -64,184 +196,99 @@ php bin/qi phpbb:list
 Supported selectors:
 
 ```text
-latest        Supported stable line, currently constrained to 3.3.*
-3.3           Latest 3.3.x Composer release
-3.3.x         Exact 3.3 tag, such as 3.3.17
-3.2           Latest 3.2.x Composer release
-3.2.x         Exact 3.2 tag, such as 3.2.11
-4.0.x/master  Experimental
-3.0/3.1       Unsupported by modern Docker CLI
+latest        defaults to the supported 3.3 line
+3.3           latest 3.3.x Composer release
+3.3.x         exact 3.3 tag, such as 3.3.17
+3.2           latest 3.2.x Composer release
+3.2.x         exact 3.2 tag, such as 3.2.11
+4.0.x/master  experimental
+3.0/3.1       unsupported by the modern Docker CLI
 ```
 
-Unsupported versions fail before source download:
+phpBB 3.0 and 3.1 are intentionally not supported by the Docker CLI. They are too old for this modern installer-based flow.
 
-```text
-phpBB 3.1.12 is not supported by the modern Docker CLI. Use phpBB 3.2+ or the legacy web app for phpBB 3.0/3.1.
-```
+## Sources
 
-## Board Model
+Most users do not need source commands. `board:create --phpbb <version>` automatically registers and downloads normal Composer release sources.
 
-`board:create` creates:
-
-```text
-.qi/boards/<name>
-.qi/runtime/<name>/compose.yml
-.qi/runtime/<name>/Dockerfile
-.qi/runtime/<name>/entrypoint.sh
-.qi/runtime/<name>/install-config.yml
-.qi/db/<name>
-```
-
-The container copies the selected phpBB source into the board directory on first boot. If `install/phpbbcli.php` exists, it runs phpBB's installer CLI with the generated YAML config.
-
-Useful board commands:
+Useful source commands:
 
 ```bash
-php bin/qi board:list
-php bin/qi board:start test
-php bin/qi board:stop test
-php bin/qi board:destroy test
+php bin/qi source:list
+php bin/qi source:fetch 3.3.17
 ```
 
-`board:destroy` stops containers and removes generated board files, runtime files, database files, and registry metadata for that board.
+Use explicit Git sources for custom branches or forks:
 
-`board:list` shows each registered board plus Docker status:
+```bash
+php bin/qi source:add master --git --url https://github.com/phpbb/phpbb.git
+php bin/qi source:fetch master
+```
+
+Fetched sources live under:
 
 ```text
-test  running  3.3.17  PHP 8.1  mariadb  populate:extension-dev  http://localhost:8081/
+.qi/sources/phpbb-<source>
 ```
 
-Statuses are `running`, `stopped`, `partial`, `missing`, or `error`.
+## Where Files Go
 
-## Extension Drop Zone
+Generated state:
 
-Downloaded extensions can be unzipped into the visible local extension library:
+```text
+.qi/boards/<name>       installed phpBB board files
+.qi/runtime/<name>      Docker Compose, Dockerfile, installer config
+.qi/db/<name>           database files
+.qi/sources/<source>    downloaded phpBB source
+```
+
+User-managed drop zones:
 
 ```text
 extensions/
-```
-
-Example layout:
-
-```text
-extensions/phpbb/pages/composer.json
-extensions/vendor/extname/composer.json
-```
-
-Mount an extension into a board:
-
-```bash
-php bin/qi ext:mount test extensions/phpbb/pages
-```
-
-The CLI reads `composer.json` and uses its `name`, such as `phpbb/pages`, to create the normal phpBB target inside the board container:
-
-```text
-/var/www/html/ext/phpbb/pages
-```
-
-Mounts use Docker bind mounts by default, so edits in `extensions/phpbb/pages` are reflected in the board immediately and phpBB generates normal web asset paths. To copy files instead:
-
-```bash
-php bin/qi ext:mount test extensions/phpbb/pages --copy
-```
-
-When a running board is mounted/unmounted, the CLI purges phpBB's cache so the ACP extension list refreshes.
-
-List mounted extensions:
-
-```bash
-php bin/qi ext:list test
-```
-
-Unmount an extension from a board:
-
-```bash
-php bin/qi ext:unmount test phpbb/pages
-```
-
-## Style Drop Zone
-
-Downloaded styles can be unzipped into the visible local style library:
-
-```text
 styles/
 ```
 
-Example layout:
+## Troubleshooting
+
+Docker command fails:
 
 ```text
-styles/prosilver_se/style.cfg
-styles/stylename/style.cfg
+Check that Docker Desktop is running and that the docker command works in this terminal.
 ```
 
-Mount a style into a board:
-
-```bash
-php bin/qi style:mount test styles/stylename
-```
-
-The CLI uses the style folder name and creates the normal phpBB target inside the board container:
+Composer command fails:
 
 ```text
-/var/www/html/styles/stylename
+Install Composer or make sure composer is available in PATH.
 ```
 
-Mounts use Docker bind mounts by default, so edits in `styles/stylename` are reflected in the board immediately and phpBB generates normal web asset paths. To copy files instead:
+Port already in use:
 
 ```bash
-php bin/qi style:mount test styles/stylename --copy
+php bin/qi board:create test --port 8090
 ```
 
-When a running board is mounted/unmounted, the CLI recreates the web container and purges phpBB's cache so the ACP style list refreshes.
-
-List mounted styles:
+See container logs:
 
 ```bash
-php bin/qi style:list test
+docker compose -f .qi/runtime/test/compose.yml logs web
+docker compose -f .qi/runtime/test/compose.yml logs db
 ```
 
-Unmount a style from a board:
+Reset a board completely:
 
 ```bash
-php bin/qi style:unmount test stylename
+php bin/qi board:destroy test
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:start test
 ```
-
-## Fixture Seeding
-
-Seed an installed, running board:
-
-```bash
-php bin/qi board:seed test --preset extension-dev --seed 1
-php bin/qi board:seed test --seed 1 --reset
-php bin/qi board:seed test --preset extension-dev --seed 1 --replace
-```
-
-This is separate from `board:create --populate`. Manual `board:seed` always runs when called. Automatic `--populate` runs once on `board:start` and writes a marker under `.qi/runtime/<board>/`.
-
-`--reset` removes seed-generated users, forums/categories, topics, and replies for the selected `--seed`.
-
-`--replace` runs `--reset` first, then creates fresh data with the selected preset and seed.
-
-Available presets:
-
-```text
-tiny           3 users, 1 category, 2 forums, 2 topics, 2 replies per topic
-extension-dev 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
-load-test     100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
-random        up to 100 users, up to 4 categories, up to 20 forums, up to 100 topics, up to 20 replies per topic
-```
-
-The seeder targets phpBB 3.2+ style boards and uses phpBB APIs inside the `web` container. It creates categories/forums directly, creates users through `user_add()`, and creates topics/replies through `submit_post()`. Topic and reply authors are chosen randomly from the seeded users for the selected seed. Seeded topic titles use the DB topic ID suffix, so phpBB's default demo topic is reflected in numbering. After seed/reset, user post totals are recalculated from approved counted posts. The `random` preset uses `load-test` as caps and chooses counts from `1..cap` for users/categories/forums/topics and `0..cap` for replies.
 
 ## Current Limits
 
-- phpBB source fetch requires `composer` for release sources and `git` plus `composer` for Git sources.
-- Docker images are generic `php:<version>-apache` builds with DB extensions installed at build time.
-- phpBB 3.2+ installer CLI is the supported path. phpBB 3.0/3.1 are intentionally out of scope for this modern CLI.
-- Fixture population currently supports categories, forums, users, topics, and replies. It does not cover groups, permissions matrices, styles, or attachments.
-- The web UI does not call the CLI yet.
-
-## Next Implementation Steps
-
-1. Put web UI behind the same board/source services.
+- The CLI is the supported modern interface.
+- Docker Desktop must be running.
+- Composer is required for normal phpBB release downloads.
+- Git is required for Git sources.
+- phpBB 3.2+ installer CLI is the supported install path.
+- Fixture seeding covers categories, forums, users, topics, and replies. It does not cover groups, permission matrices, or attachments.
