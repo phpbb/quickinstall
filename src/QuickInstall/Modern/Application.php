@@ -116,7 +116,7 @@ class Application
 		$record = (new SourceService($this->project))->add($version, $cli->has('git'), $cli->option('url'));
 
 		echo "Registered phpBB source {$record['version']} ({$record['type']})\n";
-		echo "Next: fetch it with Composer/Git into {$record['path']}\n";
+		$this->nextStep("fetch it with Composer/Git into {$record['path']}");
 		return 0;
 	}
 
@@ -193,7 +193,7 @@ class Application
 		{
 			echo "Populate preset: $populate (runs on board:start)\n";
 		}
-		echo "Next: php bin/qi board:start $name\n";
+		$this->nextStep("php bin/qi board:start $name");
 		return 0;
 	}
 
@@ -206,14 +206,85 @@ class Application
 			return 0;
 		}
 
-		foreach ($boards as $board)
-		{
-			$status = $board['status'];
-			$populate = $board['populate'] ?? 'none';
-			echo "{$board['name']}\t$status\t{$board['phpbb']}\tPHP {$board['php']}\t{$board['db']}\tpopulate:$populate\t{$board['url']}\n";
-		}
+		$this->printTable(
+			['Name', 'Status', 'phpBB', 'PHP', 'DB', 'Populate', 'URL'],
+			array_map(static function ($board) {
+				return [
+					$board['name'],
+					$board['status'],
+					$board['phpbb'],
+					$board['php'],
+					$board['db'],
+					$board['populate'] ?? 'none',
+					$board['url'],
+				];
+			}, $boards)
+		);
 
 		return 0;
+	}
+
+	private function printTable(array $headers, array $rows): void
+	{
+		$widths = array_map('strlen', $headers);
+		foreach ($rows as $row)
+		{
+			foreach ($row as $index => $value)
+			{
+				$widths[$index] = max($widths[$index], strlen((string) $value));
+			}
+		}
+
+		$this->printTableRow($headers, $widths);
+		$this->printTableRow(array_map(static function ($width) {
+			return str_repeat('-', $width);
+		}, $widths), $widths);
+
+		foreach ($rows as $row)
+		{
+			$this->printTableRow($row, $widths);
+		}
+	}
+
+	private function printTableRow(array $row, array $widths): void
+	{
+		$cells = [];
+		foreach ($row as $index => $value)
+		{
+			$cells[] = str_pad((string) $value, $widths[$index]);
+		}
+
+		echo implode('  ', $cells) . "\n";
+	}
+
+	private function nextStep(string $text): void
+	{
+		echo "\n" . $this->style('NEXT:', '1;33') . " " . $this->style($text, '1') . "\n";
+	}
+
+	private function style(string $text, string $code): string
+	{
+		if (!$this->supportsAnsi())
+		{
+			return $text;
+		}
+
+		return "\033[" . $code . "m" . $text . "\033[0m";
+	}
+
+	private function supportsAnsi(): bool
+	{
+		if (getenv('NO_COLOR') !== false)
+		{
+			return false;
+		}
+
+		if (function_exists('posix_isatty') && defined('STDOUT'))
+		{
+			return posix_isatty(STDOUT);
+		}
+
+		return PHP_SAPI === 'cli';
 	}
 
 	private function boardStart(array $args): int
