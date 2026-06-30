@@ -70,6 +70,15 @@ class Application
 				case 'ext:list':
 					return $this->extList($argv);
 
+				case 'style:mount':
+					return $this->styleMount($argv);
+
+				case 'style:unmount':
+					return $this->styleUnmount($argv);
+
+				case 'style:list':
+					return $this->styleList($argv);
+
 				default:
 					fwrite(STDERR, "Unknown command: $command\n\n");
 					$this->help();
@@ -199,6 +208,7 @@ class Application
 			'admin_email' => 'admin@example.test',
 			'board_email' => 'board@example.test',
 			'extensions' => [],
+			'styles' => [],
 		]);
 
 		$this->project->appendBoard([
@@ -213,6 +223,7 @@ class Application
 			'path' => $boardDir,
 			'populate' => $populate,
 			'extensions' => [],
+			'styles' => [],
 			'created_at' => gmdate('c'),
 		]);
 
@@ -371,6 +382,7 @@ class Application
 			'board_email' => 'board@example.test',
 			'populate' => 'none',
 			'extensions' => [],
+			'styles' => [],
 		];
 	}
 
@@ -388,6 +400,62 @@ class Application
 		foreach ($mounted as $extension)
 		{
 			echo "{$extension['name']}\t{$extension['mode']}\t{$extension['source']}\n";
+		}
+
+		return 0;
+	}
+
+	private function styleMount(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$board = $cli->argument(0);
+		$source = $cli->argument(1);
+		if ($board === null || $source === null)
+		{
+			throw new \InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy]');
+		}
+
+		$mounted = (new StyleManager($this->project))->mount($board, $source, $cli->has('copy'));
+		$this->refreshBoardIfRunning($board);
+		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
+		echo "Source: {$mounted['source']}\n";
+		echo "Target: {$mounted['target']}\n";
+		return 0;
+	}
+
+	private function styleUnmount(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$board = $cli->argument(0);
+		$name = $cli->argument(1);
+		if ($board === null || $name === null)
+		{
+			throw new \InvalidArgumentException('Usage: qi style:unmount <board> <style>');
+		}
+
+		$styles = new StyleManager($this->project);
+		$target = $styles->unmount($board, $name);
+		$this->refreshBoardIfRunning($board);
+		$styles->cleanupStaleTarget($board, $name);
+		echo "Unmounted $name from $board\n";
+		echo "Removed: $target\n";
+		return 0;
+	}
+
+	private function styleList(array $args): int
+	{
+		$board = $this->boardName($args, 'Usage: qi style:list <board>');
+		$mounted = (new StyleManager($this->project))->list($board);
+
+		if (!$mounted)
+		{
+			echo "No styles mounted for board: $board\n";
+			return 0;
+		}
+
+		foreach ($mounted as $style)
+		{
+			echo "{$style['name']}\t{$style['mode']}\t{$style['source']}\n";
 		}
 
 		return 0;
@@ -413,6 +481,9 @@ Commands:
   qi ext:mount <board> <path> [--copy]
   qi ext:unmount <board> <vendor/extension>
   qi ext:list <board>
+  qi style:mount <board> <path> [--copy]
+  qi style:unmount <board> <style>
+  qi style:list <board>
 
 Examples:
   qi source:add 3.3.17
@@ -421,6 +492,7 @@ Examples:
   qi board:start test
   qi board:seed test --preset extension-dev --seed 1
   qi ext:mount test extensions/vendor/extname
+  qi style:mount test styles/stylename
 
 TXT;
 	}

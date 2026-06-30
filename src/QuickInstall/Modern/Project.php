@@ -21,6 +21,12 @@ class Project
 			throw new \RuntimeException("Unable to create $extensionsPath");
 		}
 
+		$stylesPath = $this->stylesPath();
+		if (!is_dir($stylesPath) && !mkdir($stylesPath, 0775, true))
+		{
+			throw new \RuntimeException("Unable to create $stylesPath");
+		}
+
 		foreach (['', '/sources', '/boards', '/runtime', '/db', '/cache'] as $dir)
 		{
 			$path = $this->workspace . $dir;
@@ -53,6 +59,11 @@ class Project
 	public function extensionsPath(): string
 	{
 		return $this->rootPath('extensions');
+	}
+
+	public function stylesPath(): string
+	{
+		return $this->rootPath('styles');
 	}
 
 	public function boardPath(string $name): string

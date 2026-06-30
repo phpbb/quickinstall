@@ -10,6 +10,7 @@ require __DIR__ . '/../src/QuickInstall/Modern/DockerComposeWriter.php';
 require __DIR__ . '/../src/QuickInstall/Modern/BoardRunner.php';
 require __DIR__ . '/../src/QuickInstall/Modern/SeederWriter.php';
 require __DIR__ . '/../src/QuickInstall/Modern/ExtensionManager.php';
+require __DIR__ . '/../src/QuickInstall/Modern/StyleManager.php';
 
 use QuickInstall\Modern\Application;
 

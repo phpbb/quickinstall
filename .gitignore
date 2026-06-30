@@ -9,6 +9,8 @@ build/*
 .qi/*
 extensions/*
 !extensions/.gitkeep
+styles/*
+!styles/.gitkeep
 *~
 .idea
 node_modules

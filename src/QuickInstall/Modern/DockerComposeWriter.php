@@ -87,6 +87,7 @@ YAML;
 		$sourcePath = $this->project->sourcePath($config['phpbb_source'] ?? $config['phpbb']);
 		$boardPath = $this->project->boardPath($name);
 		$extensionVolumes = $this->extensionVolumes($config['extensions'] ?? []);
+		$styleVolumes = $this->styleVolumes($config['styles'] ?? []);
 		$dbPath = $this->project->workspacePath('db/' . $name);
 		if (!is_dir($dbPath) && !mkdir($dbPath, 0775, true))
 		{
@@ -106,7 +107,7 @@ services:
     volumes:
       - {$sourcePath}:/opt/phpbb-source:ro
       - {$boardPath}:/var/www/html
-{$extensionVolumes}      - ./install-config.yml:/opt/quickinstall/install-config.yml:ro
+{$extensionVolumes}{$styleVolumes}      - ./install-config.yml:/opt/quickinstall/install-config.yml:ro
       - ./entrypoint.sh:/opt/quickinstall/entrypoint.sh:ro
     entrypoint: ["/bin/sh", "/opt/quickinstall/entrypoint.sh"]
     depends_on:
@@ -138,6 +139,29 @@ YAML;
 			}
 
 			$target = '/var/www/html/ext/' . $name;
+			$volumes .= '      - ' . $this->yamlString($source . ':' . $target) . "\n";
+		}
+
+		return $volumes;
+	}
+
+	private function styleVolumes(array $styles): string
+	{
+		$volumes = '';
+		foreach ($styles as $name => $style)
+		{
+			if (($style['mode'] ?? '') !== 'bind')
+			{
+				continue;
+			}
+
+			$source = $style['source'] ?? '';
+			if ($source === '')
+			{
+				continue;
+			}
+
+			$target = '/var/www/html/styles/' . $name;
 			$volumes .= '      - ' . $this->yamlString($source . ':' . $target) . "\n";
 		}
 

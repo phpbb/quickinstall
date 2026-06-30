@@ -160,6 +160,53 @@ Unmount an extension from a board:
 php bin/qi ext:unmount test phpbb/pages
 ```
 
+## Style Drop Zone
+
+Downloaded styles can be unzipped into the visible local style library:
+
+```text
+styles/
+```
+
+Example layout:
+
+```text
+styles/prosilver_se/style.cfg
+styles/stylename/style.cfg
+```
+
+Mount a style into a board:
+
+```bash
+php bin/qi style:mount test styles/stylename
+```
+
+The CLI uses the style folder name and creates the normal phpBB target inside the board container:
+
+```text
+/var/www/html/styles/stylename
+```
+
+Mounts use Docker bind mounts by default, so edits in `styles/stylename` are reflected in the board immediately and phpBB generates normal web asset paths. To copy files instead:
+
+```bash
+php bin/qi style:mount test styles/stylename --copy
+```
+
+When a running board is mounted/unmounted, the CLI recreates the web container and purges phpBB's cache so the ACP style list refreshes.
+
+List mounted styles:
+
+```bash
+php bin/qi style:list test
+```
+
+Unmount a style from a board:
+
+```bash
+php bin/qi style:unmount test stylename
+```
+
 ## Fixture Seeding
 
 Seed an installed, running board:

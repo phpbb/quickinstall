@@ -58,6 +58,12 @@ Downloaded extensions can be unzipped into `extensions/` and mounted into boards
 php bin/qi ext:mount test extensions/vendor/extname
 ```
 
+Downloaded styles can be unzipped into `styles/` and mounted into boards:
+
+```bash
+php bin/qi style:mount test styles/stylename
+```
+
 See [docs/modernization-cli.md](docs/modernization-cli.md).
 
 | phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |
