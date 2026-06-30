@@ -84,7 +84,7 @@ php bin/qi board:stop test
 php bin/qi board:destroy test
 ```
 
-`board:destroy` removes the board files, Docker runtime files, database files, and board registry entry.
+`board:destroy` removes the board files, Docker runtime files, database files, local Docker containers, local Docker image, and board registry entry.
 
 ## Fixture Presets
 

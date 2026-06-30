@@ -36,7 +36,7 @@ class BoardRunner
 		$compose = $this->project->composePath($name);
 		if (file_exists($compose))
 		{
-			$this->run(['docker', 'compose', '-f', $compose, 'down', '--volumes', '--remove-orphans']);
+			$this->run(['docker', 'compose', '-f', $compose, 'down', '--volumes', '--remove-orphans', '--rmi', 'local']);
 		}
 
 		$this->project->deleteTree($this->project->boardPath($name));
