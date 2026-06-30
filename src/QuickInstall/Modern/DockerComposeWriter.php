@@ -152,17 +152,32 @@ YAML;
 	private function dockerfile(array $config): string
 	{
 		$extensionInstall = $config['db'] === 'postgres' ? 'docker-php-ext-install pgsql pdo_pgsql' : 'docker-php-ext-install mysqli pdo_mysql';
+		$aptSourceSetup = $this->aptSourceSetup($config['php']);
 
 		return <<<DOCKERFILE
 ARG PHP_VERSION=8.1
 FROM php:\${PHP_VERSION}-apache
 
-RUN apt-get update \\
+RUN $aptSourceSetup\\
+    apt-get update \\
     && apt-get install -y --no-install-recommends git unzip libpq-dev \\
     && $extensionInstall \\
     && rm -rf /var/lib/apt/lists/*
 
 DOCKERFILE;
+	}
+
+	private function aptSourceSetup(string $phpVersion): string
+	{
+		if (version_compare($phpVersion, '7.4', '>='))
+		{
+			return '';
+		}
+
+		return "sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list \\\n"
+			. "    && sed -i '/debian-security/d' /etc/apt/sources.list \\\n"
+			. "    && echo 'Acquire::Check-Valid-Until \"false\";' > /etc/apt/apt.conf.d/99quickinstall-archive \\\n"
+			. "    && ";
 	}
 
 	private function entrypoint(array $config): string

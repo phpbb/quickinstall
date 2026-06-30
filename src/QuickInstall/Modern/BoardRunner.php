@@ -48,55 +48,32 @@ class BoardRunner
 			return 'missing';
 		}
 
-		$result = $this->capture(['docker', 'compose', '-f', $compose, 'ps', '--format', 'json']);
-		if ($result['exit_code'] !== 0)
+		$all = $this->capture(['docker', 'compose', '-f', $compose, 'ps', '-a', '--services']);
+		if ($all['exit_code'] !== 0)
 		{
 			return 'error';
 		}
 
-		$output = trim($result['output']);
-		if ($output === '')
+		$services = $this->lines($all['output']);
+		if (!$services)
 		{
 			return 'stopped';
 		}
 
-		$containers = [];
-		foreach (explode("\n", $output) as $line)
+		$running = $this->capture(['docker', 'compose', '-f', $compose, 'ps', '--services', '--filter', 'status=running']);
+		if ($running['exit_code'] !== 0)
 		{
-			$data = json_decode($line, true);
-			if (is_array($data))
-			{
-				$containers[] = $data;
-			}
+			return 'error';
 		}
 
-		if (!$containers)
-		{
-			$data = json_decode($output, true);
-			$containers = is_array($data) && isset($data[0]) ? $data : [];
-		}
+		$runningServices = $this->lines($running['output']);
 
-		if (!$containers)
-		{
-			return 'stopped';
-		}
-
-		$running = 0;
-		foreach ($containers as $container)
-		{
-			$state = strtolower((string) ($container['State'] ?? ''));
-			if ($state === 'running')
-			{
-				$running++;
-			}
-		}
-
-		if ($running === count($containers))
+		if (count($runningServices) === count($services))
 		{
 			return 'running';
 		}
 
-		return $running > 0 ? 'partial' : 'stopped';
+		return $runningServices ? 'partial' : 'stopped';
 	}
 
 	public function seed(string $name, string $preset, int $seed, string $action = 'seed'): void
@@ -266,5 +243,12 @@ class BoardRunner
 			'exit_code' => proc_close($process),
 			'output' => $output . $error,
 		];
+	}
+
+	private function lines(string $output): array
+	{
+		return array_values(array_filter(array_map('trim', explode("\n", $output)), static function ($line) {
+			return $line !== '';
+		}));
 	}
 }
