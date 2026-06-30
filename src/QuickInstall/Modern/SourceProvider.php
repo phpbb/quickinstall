@@ -146,9 +146,9 @@ class SourceProvider
 		echo '$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n";
 
 		$descriptor = [
-			0 => STDIN,
-			1 => STDOUT,
-			2 => STDERR,
+			0 => ['file', '/dev/null', 'r'],
+			1 => defined('STDOUT') ? constant('STDOUT') : ['file', 'php://output', 'w'],
+			2 => defined('STDERR') ? constant('STDERR') : ['file', 'php://stderr', 'w'],
 		];
 
 		$process = proc_open($command, $descriptor, $pipes, $cwd);
@@ -160,7 +160,22 @@ class SourceProvider
 		$status = proc_close($process);
 		if ($status !== 0)
 		{
-			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}");
+			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command[0]));
 		}
+	}
+
+	private function commandHint(string $command): string
+	{
+		if ($command === 'composer')
+		{
+			return "\nInstall Composer or make sure composer is available in PATH.";
+		}
+
+		if ($command === 'git')
+		{
+			return "\nInstall Git or make sure git is available in PATH.";
+		}
+
+		return '';
 	}
 }

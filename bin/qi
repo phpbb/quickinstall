@@ -6,6 +6,8 @@ require __DIR__ . '/../src/QuickInstall/Modern/CommandLine.php';
 require __DIR__ . '/../src/QuickInstall/Modern/Project.php';
 require __DIR__ . '/../src/QuickInstall/Modern/VersionMatrix.php';
 require __DIR__ . '/../src/QuickInstall/Modern/SourceProvider.php';
+require __DIR__ . '/../src/QuickInstall/Modern/SourceService.php';
+require __DIR__ . '/../src/QuickInstall/Modern/BoardService.php';
 require __DIR__ . '/../src/QuickInstall/Modern/DockerComposeWriter.php';
 require __DIR__ . '/../src/QuickInstall/Modern/BoardRunner.php';
 require __DIR__ . '/../src/QuickInstall/Modern/SeederWriter.php';

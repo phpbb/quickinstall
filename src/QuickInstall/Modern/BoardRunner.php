@@ -202,9 +202,9 @@ class BoardRunner
 		echo '$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n";
 
 		$descriptor = [
-			0 => STDIN,
-			1 => STDOUT,
-			2 => STDERR,
+			0 => ['file', '/dev/null', 'r'],
+			1 => defined('STDOUT') ? constant('STDOUT') : ['file', 'php://output', 'w'],
+			2 => defined('STDERR') ? constant('STDERR') : ['file', 'php://stderr', 'w'],
 		];
 
 		$process = proc_open($command, $descriptor, $pipes);
@@ -216,14 +216,14 @@ class BoardRunner
 		$status = proc_close($process);
 		if ($status !== 0)
 		{
-			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}");
+			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command[0]));
 		}
 	}
 
 	private function capture(array $command): array
 	{
 		$descriptor = [
-			0 => STDIN,
+			0 => ['file', '/dev/null', 'r'],
 			1 => ['pipe', 'w'],
 			2 => ['pipe', 'w'],
 		];
@@ -250,5 +250,15 @@ class BoardRunner
 		return array_values(array_filter(array_map('trim', explode("\n", $output)), static function ($line) {
 			return $line !== '';
 		}));
+	}
+
+	private function commandHint(string $command): string
+	{
+		if ($command === 'docker')
+		{
+			return "\nCheck that Docker Desktop is running and that the docker command works in this terminal.";
+		}
+
+		return '';
 	}
 }

@@ -113,9 +113,7 @@ class Application
 			throw new \InvalidArgumentException('Usage: qi source:add <version|branch> [--git] [--url URL]');
 		}
 
-		$this->project->init();
-		$source = new SourceProvider($this->project);
-		$record = $source->add($version, $cli->has('git') ? 'git' : 'composer', $cli->option('url'));
+		$record = (new SourceService($this->project))->add($version, $cli->has('git'), $cli->option('url'));
 
 		echo "Registered phpBB source {$record['version']} ({$record['type']})\n";
 		echo "Next: fetch it with Composer/Git into {$record['path']}\n";
@@ -124,7 +122,7 @@ class Application
 
 	private function sourceList(): int
 	{
-		$sources = $this->project->readJson('sources.json', []);
+		$sources = (new SourceService($this->project))->list();
 
 		if (!$sources)
 		{
@@ -152,8 +150,7 @@ class Application
 			throw new \InvalidArgumentException('Usage: qi source:fetch <version|branch>');
 		}
 
-		$source = new SourceProvider($this->project);
-		$record = $source->ensure($version);
+		$record = (new SourceService($this->project))->fetch($version);
 
 		echo "Fetched phpBB source: {$record['path']}\n";
 		return 0;
@@ -161,7 +158,7 @@ class Application
 
 	private function phpbbList(): int
 	{
-		foreach ((new VersionMatrix())->list() as $row)
+		foreach ((new SourceService($this->project))->supportedVersions() as $row)
 		{
 			echo "{$row['selector']}\t{$row['status']}\tPHP {$row['php']}\t{$row['resolves_to']}\t{$row['notes']}\n";
 		}
@@ -180,52 +177,13 @@ class Application
 
 		$version = $cli->option('phpbb', 'latest');
 		$db = $cli->option('db', 'mariadb');
+		$db = $db === 'sqlite3' ? 'sqlite' : $db;
 		$port = (int) $cli->option('port', '8080');
 		$populate = $cli->option('populate', 'none');
+		$this->validateBoardCreateOptions($db, $port, $populate);
 
-		$this->project->init();
-		$matrix = new VersionMatrix();
-		$selection = $matrix->resolve($version);
-		$runtime = ['php' => $selection['php']];
-		$source = (new SourceProvider($this->project))->ensure($version);
-
-		$boardDir = $this->project->boardPath($name);
-		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true))
-		{
-			throw new \RuntimeException("Unable to create board directory: $boardDir");
-		}
-
-		$writer = new DockerComposeWriter($this->project);
-		$paths = $writer->write($name, [
-			'phpbb' => $version,
-			'phpbb_source' => $source['source_key'],
-			'php' => $runtime['php'],
-			'db' => $db,
-			'port' => $port,
-			'populate' => $populate,
-			'admin_name' => 'admin',
-			'admin_pass' => 'password',
-			'admin_email' => 'admin@example.test',
-			'board_email' => 'board@example.test',
-			'extensions' => [],
-			'styles' => [],
-		]);
-
-		$this->project->appendBoard([
-			'name' => $name,
-			'phpbb' => $source['version'],
-			'phpbb_source' => $source['source_key'],
-			'phpbb_branch' => $source['phpbb_branch'],
-			'php' => $runtime['php'],
-			'db' => $db,
-			'port' => $port,
-			'url' => "http://localhost:$port/",
-			'path' => $boardDir,
-			'populate' => $populate,
-			'extensions' => [],
-			'styles' => [],
-			'created_at' => gmdate('c'),
-		]);
+		$created = (new BoardService($this->project))->create($name, $version, $db, $port, $populate);
+		$paths = $created['paths'];
 
 		echo "Created board scaffold: $name\n";
 		echo "Compose: {$paths['compose']}\n";
@@ -241,17 +199,16 @@ class Application
 
 	private function boardList(): int
 	{
-		$boards = $this->project->boards();
+		$boards = (new BoardService($this->project))->list();
 		if (!$boards)
 		{
 			echo "No boards created\n";
 			return 0;
 		}
 
-		$runner = new BoardRunner($this->project);
 		foreach ($boards as $board)
 		{
-			$status = $runner->status($board['name']);
+			$status = $board['status'];
 			$populate = $board['populate'] ?? 'none';
 			echo "{$board['name']}\t$status\t{$board['phpbb']}\tPHP {$board['php']}\t{$board['db']}\tpopulate:$populate\t{$board['url']}\n";
 		}
@@ -262,8 +219,7 @@ class Application
 	private function boardStart(array $args): int
 	{
 		$name = $this->boardName($args, 'Usage: qi board:start <name>');
-		(new BoardRunner($this->project))->start($name);
-		$board = $this->project->board($name);
+		$board = (new BoardService($this->project))->start($name);
 		echo "Started board: $name\n";
 		echo "URL: {$board['url']}\n";
 		return 0;
@@ -272,7 +228,7 @@ class Application
 	private function boardStop(array $args): int
 	{
 		$name = $this->boardName($args, 'Usage: qi board:stop <name>');
-		(new BoardRunner($this->project))->stop($name);
+		(new BoardService($this->project))->stop($name);
 		echo "Stopped board: $name\n";
 		return 0;
 	}
@@ -280,7 +236,7 @@ class Application
 	private function boardDestroy(array $args): int
 	{
 		$name = $this->boardName($args, 'Usage: qi board:destroy <name>');
-		(new BoardRunner($this->project))->destroy($name);
+		(new BoardService($this->project))->destroy($name);
 		echo "Destroyed board: $name\n";
 		return 0;
 	}
@@ -296,13 +252,18 @@ class Application
 
 		$preset = $cli->option('preset', 'extension-dev');
 		$seed = (int) $cli->option('seed', '1');
+		$this->validatePreset($preset);
+		if ($seed < 1)
+		{
+			throw new \InvalidArgumentException('--seed must be a positive integer.');
+		}
 		if ($cli->has('reset') && $cli->has('replace'))
 		{
 			throw new \InvalidArgumentException('Use --reset or --replace, not both.');
 		}
 		$action = $cli->has('reset') ? 'reset' : ($cli->has('replace') ? 'replace' : 'seed');
 
-		(new BoardRunner($this->project))->seed($name, $preset, $seed, $action);
+		(new BoardService($this->project))->seed($name, $preset, $seed, $action);
 		echo ucfirst($action) . " completed for board: $name\n";
 		return 0;
 	}
@@ -317,6 +278,32 @@ class Application
 		}
 
 		return $name;
+	}
+
+	private function validateBoardCreateOptions(string $db, int $port, string $populate): void
+	{
+		if (!in_array($db, ['mariadb', 'mysql', 'postgres', 'sqlite'], true))
+		{
+			throw new \InvalidArgumentException('--db must be one of: mariadb, mysql, postgres, sqlite.');
+		}
+
+		if ($port < 1 || $port > 65535)
+		{
+			throw new \InvalidArgumentException('--port must be between 1 and 65535.');
+		}
+
+		if ($populate !== 'none')
+		{
+			$this->validatePreset($populate);
+		}
+	}
+
+	private function validatePreset(string $preset): void
+	{
+		if (!in_array($preset, ['tiny', 'extension-dev', 'load-test', 'random'], true))
+		{
+			throw new \InvalidArgumentException('Preset must be one of: tiny, extension-dev, load-test, random.');
+		}
 	}
 
 	private function extMount(array $args): int
