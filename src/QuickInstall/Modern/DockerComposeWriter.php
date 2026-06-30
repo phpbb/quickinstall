@@ -86,6 +86,7 @@ YAML;
 		$dbService = $this->databaseService($config['db'], $name);
 		$sourcePath = $this->project->sourcePath($config['phpbb_source'] ?? $config['phpbb']);
 		$boardPath = $this->project->boardPath($name);
+		$extensionVolumes = $this->extensionVolumes($config['extensions'] ?? []);
 		$dbPath = $this->project->workspacePath('db/' . $name);
 		if (!is_dir($dbPath) && !mkdir($dbPath, 0775, true))
 		{
@@ -105,7 +106,7 @@ services:
     volumes:
       - {$sourcePath}:/opt/phpbb-source:ro
       - {$boardPath}:/var/www/html
-      - ./install-config.yml:/opt/quickinstall/install-config.yml:ro
+{$extensionVolumes}      - ./install-config.yml:/opt/quickinstall/install-config.yml:ro
       - ./entrypoint.sh:/opt/quickinstall/entrypoint.sh:ro
     entrypoint: ["/bin/sh", "/opt/quickinstall/entrypoint.sh"]
     depends_on:
@@ -118,6 +119,34 @@ services:
 $dbService
 
 YAML;
+	}
+
+	private function extensionVolumes(array $extensions): string
+	{
+		$volumes = '';
+		foreach ($extensions as $name => $extension)
+		{
+			if (($extension['mode'] ?? '') !== 'bind')
+			{
+				continue;
+			}
+
+			$source = $extension['source'] ?? '';
+			if ($source === '')
+			{
+				continue;
+			}
+
+			$target = '/var/www/html/ext/' . $name;
+			$volumes .= '      - ' . $this->yamlString($source . ':' . $target) . "\n";
+		}
+
+		return $volumes;
+	}
+
+	private function yamlString(string $value): string
+	{
+		return '"' . str_replace(['\\', '"'], ['\\\\', '\\"'], $value) . '"';
 	}
 
 	private function dockerfile(array $config): string

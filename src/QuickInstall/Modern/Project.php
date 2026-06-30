@@ -15,6 +15,12 @@ class Project
 
 	public function init(): void
 	{
+		$extensionsPath = $this->extensionsPath();
+		if (!is_dir($extensionsPath) && !mkdir($extensionsPath, 0775, true))
+		{
+			throw new \RuntimeException("Unable to create $extensionsPath");
+		}
+
 		foreach (['', '/sources', '/boards', '/runtime', '/db', '/cache'] as $dir)
 		{
 			$path = $this->workspace . $dir;
@@ -37,6 +43,16 @@ class Project
 	public function workspacePath(string $path = ''): string
 	{
 		return $this->workspace . ($path === '' ? '' : '/' . ltrim($path, '/'));
+	}
+
+	public function rootPath(string $path = ''): string
+	{
+		return $this->root . ($path === '' ? '' : '/' . ltrim($path, '/'));
+	}
+
+	public function extensionsPath(): string
+	{
+		return $this->rootPath('extensions');
 	}
 
 	public function boardPath(string $name): string

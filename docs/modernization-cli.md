@@ -113,6 +113,53 @@ test  running  3.3.17  PHP 8.1  mariadb  populate:extension-dev  http://localhos
 
 Statuses are `running`, `stopped`, `partial`, `missing`, or `error`.
 
+## Extension Drop Zone
+
+Downloaded extensions can be unzipped into the visible local extension library:
+
+```text
+extensions/
+```
+
+Example layout:
+
+```text
+extensions/phpbb/pages/composer.json
+extensions/vendor/extname/composer.json
+```
+
+Mount an extension into a board:
+
+```bash
+php bin/qi ext:mount test extensions/phpbb/pages
+```
+
+The CLI reads `composer.json` and uses its `name`, such as `phpbb/pages`, to create the normal phpBB target inside the board container:
+
+```text
+/var/www/html/ext/phpbb/pages
+```
+
+Mounts use Docker bind mounts by default, so edits in `extensions/phpbb/pages` are reflected in the board immediately and phpBB generates normal web asset paths. To copy files instead:
+
+```bash
+php bin/qi ext:mount test extensions/phpbb/pages --copy
+```
+
+When a running board is mounted/unmounted, the CLI purges phpBB's cache so the ACP extension list refreshes.
+
+List mounted extensions:
+
+```bash
+php bin/qi ext:list test
+```
+
+Unmount an extension from a board:
+
+```bash
+php bin/qi ext:unmount test phpbb/pages
+```
+
 ## Fixture Seeding
 
 Seed an installed, running board:

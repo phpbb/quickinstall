@@ -120,6 +120,18 @@ class BoardRunner
 		}
 	}
 
+	public function purgeCache(string $name): void
+	{
+		$this->project->board($name);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'sh', '-lc', 'php bin/phpbbcli.php cache:purge']);
+	}
+
+	public function recreateWeb(string $name): void
+	{
+		$this->project->board($name);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '-d', '--force-recreate', 'web']);
+	}
+
 	private function seedIfNeeded(string $name, string $preset): void
 	{
 		if ($preset === 'none' || $preset === '')

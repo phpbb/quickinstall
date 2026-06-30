@@ -52,6 +52,12 @@ php bin/qi board:start test
 
 The modern CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for this Docker CLI.
 
+Downloaded extensions can be unzipped into `extensions/` and mounted into boards:
+
+```bash
+php bin/qi ext:mount test extensions/vendor/extname
+```
+
 See [docs/modernization-cli.md](docs/modernization-cli.md).
 
 | phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |

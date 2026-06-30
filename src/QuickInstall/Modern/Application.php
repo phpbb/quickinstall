@@ -61,6 +61,15 @@ class Application
 				case 'board:seed':
 					return $this->boardSeed($argv);
 
+				case 'ext:mount':
+					return $this->extMount($argv);
+
+				case 'ext:unmount':
+					return $this->extUnmount($argv);
+
+				case 'ext:list':
+					return $this->extList($argv);
+
 				default:
 					fwrite(STDERR, "Unknown command: $command\n\n");
 					$this->help();
@@ -189,6 +198,7 @@ class Application
 			'admin_pass' => 'password',
 			'admin_email' => 'admin@example.test',
 			'board_email' => 'board@example.test',
+			'extensions' => [],
 		]);
 
 		$this->project->appendBoard([
@@ -198,9 +208,11 @@ class Application
 			'phpbb_branch' => $source['phpbb_branch'],
 			'php' => $runtime['php'],
 			'db' => $db,
+			'port' => $port,
 			'url' => "http://localhost:$port/",
 			'path' => $boardDir,
 			'populate' => $populate,
+			'extensions' => [],
 			'created_at' => gmdate('c'),
 		]);
 
@@ -296,6 +308,91 @@ class Application
 		return $name;
 	}
 
+	private function extMount(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$board = $cli->argument(0);
+		$source = $cli->argument(1);
+		if ($board === null || $source === null)
+		{
+			throw new \InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy]');
+		}
+
+		$mounted = (new ExtensionManager($this->project))->mount($board, $source, $cli->has('copy'));
+		$this->refreshBoardIfRunning($board);
+		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
+		echo "Source: {$mounted['source']}\n";
+		echo "Target: {$mounted['target']}\n";
+		return 0;
+	}
+
+	private function extUnmount(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$board = $cli->argument(0);
+		$name = $cli->argument(1);
+		if ($board === null || $name === null)
+		{
+			throw new \InvalidArgumentException('Usage: qi ext:unmount <board> <vendor/extension>');
+		}
+
+		$extensions = new ExtensionManager($this->project);
+		$target = $extensions->unmount($board, $name);
+		$this->refreshBoardIfRunning($board);
+		$extensions->cleanupStaleTarget($board, $name);
+		echo "Unmounted $name from $board\n";
+		echo "Removed: $target\n";
+		return 0;
+	}
+
+	private function refreshBoardIfRunning(string $board): void
+	{
+		$runner = new BoardRunner($this->project);
+		(new DockerComposeWriter($this->project))->write($board, $this->runtimeConfig($this->project->board($board)));
+		if ($runner->status($board) === 'running')
+		{
+			$runner->recreateWeb($board);
+			$runner->purgeCache($board);
+		}
+	}
+
+	private function runtimeConfig(array $board): array
+	{
+		if (empty($board['port']) && !empty($board['url']))
+		{
+			$port = parse_url($board['url'], PHP_URL_PORT);
+			$board['port'] = $port ?: 80;
+		}
+
+		return $board + [
+			'admin_name' => 'admin',
+			'admin_pass' => 'password',
+			'admin_email' => 'admin@example.test',
+			'board_email' => 'board@example.test',
+			'populate' => 'none',
+			'extensions' => [],
+		];
+	}
+
+	private function extList(array $args): int
+	{
+		$board = $this->boardName($args, 'Usage: qi ext:list <board>');
+		$mounted = (new ExtensionManager($this->project))->list($board);
+
+		if (!$mounted)
+		{
+			echo "No extensions mounted for board: $board\n";
+			return 0;
+		}
+
+		foreach ($mounted as $extension)
+		{
+			echo "{$extension['name']}\t{$extension['mode']}\t{$extension['source']}\n";
+		}
+
+		return 0;
+	}
+
 	private function help(): void
 	{
 		echo <<<TXT
@@ -313,6 +410,9 @@ Commands:
   qi board:stop <name>
   qi board:destroy <name>
   qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]
+  qi ext:mount <board> <path> [--copy]
+  qi ext:unmount <board> <vendor/extension>
+  qi ext:list <board>
 
 Examples:
   qi source:add 3.3.17
@@ -320,6 +420,7 @@ Examples:
   qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
   qi board:start test
   qi board:seed test --preset extension-dev --seed 1
+  qi ext:mount test extensions/vendor/extname
 
 TXT;
 	}
