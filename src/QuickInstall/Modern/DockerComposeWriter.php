@@ -67,7 +67,6 @@ installer:
     smtp_delivery: false
     smtp_host: ""
     smtp_port: 25
-    smtp_auth: PLAIN
     smtp_user: ""
     smtp_pass: ""
   server:

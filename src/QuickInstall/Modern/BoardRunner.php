@@ -151,10 +151,33 @@ class BoardRunner
 				return;
 			}
 
+			$state = $this->serviceState($name, 'web');
+			if (in_array($state, ['exited', 'dead'], true))
+			{
+				throw new \RuntimeException("Web container exited before phpBB install completed for board: $name. Run: docker compose -f " . $this->project->composePath($name) . " logs web");
+			}
+
 			usleep(500000);
 		}
 
 		throw new \RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
+	}
+
+	private function serviceState(string $name, string $service): string
+	{
+		$result = $this->capture(['docker', 'compose', '-f', $this->project->composePath($name), 'ps', $service, '--format', 'json']);
+		if ($result['exit_code'] !== 0 || trim($result['output']) === '')
+		{
+			return '';
+		}
+
+		$data = json_decode(trim($result['output']), true);
+		if (isset($data[0]) && is_array($data[0]))
+		{
+			$data = $data[0];
+		}
+
+		return strtolower((string) ($data['State'] ?? ''));
 	}
 
 	private function runSeeder(string $name, string $preset, int $seed, string $action = 'seed'): void

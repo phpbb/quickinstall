@@ -87,7 +87,13 @@ class SourceProvider
 
 		if (is_dir($path) && $this->hasFiles($path))
 		{
-			throw new \RuntimeException("Source path already exists and is not empty: $path");
+			if (file_exists($path . '/common.php'))
+			{
+				return;
+			}
+
+			echo "Removing incomplete source path: $path\n";
+			$this->project->deleteTree($path);
 		}
 
 		if ($source['type'] === 'git')
@@ -104,7 +110,7 @@ class SourceProvider
 				$path,
 			], dirname($path));
 
-			$this->run(['composer', 'install', '--no-interaction'], $path);
+			$this->run(['composer', 'install', '--no-interaction', '--ignore-platform-reqs'], $path);
 			return;
 		}
 
@@ -119,6 +125,7 @@ class SourceProvider
 			'phpbb/phpbb',
 			$path,
 			'--no-interaction',
+			'--ignore-platform-reqs',
 		];
 		if (!empty($source['constraint']))
 		{
