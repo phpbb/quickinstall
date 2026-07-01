@@ -8,9 +8,10 @@ You do not need MAMP, WAMP, XAMPP, or a local Apache/MySQL setup. QuickInstall u
 
 Install requirements:
 
-- Docker Desktop
+- Docker Desktop (must be running)
 - PHP CLI
 - Composer, used to download phpBB source packages
+- Git, required for Git sources
 
 From the QuickInstall project root:
 
@@ -87,6 +88,8 @@ php bin/qi board:destroy test
 `board:destroy` removes the board files, Docker runtime files, database files, local Docker containers, local Docker image, and board registry entry.
 
 ## Fixture Presets
+
+Fixture seeding populates a board with categories, forums, users, topics, and replies. It does not cover groups, permission matrices, or attachments.
 
 Use `--populate <preset>` during `board:create`:
 
@@ -292,12 +295,3 @@ php bin/qi board:destroy test
 php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
 php bin/qi board:start test
 ```
-
-## Current Limits
-
-- The CLI is the supported modern interface.
-- Docker Desktop must be running.
-- Composer is required for normal phpBB release downloads.
-- Git is required for Git sources.
-- phpBB 3.2+ installer CLI is the supported install path.
-- Fixture seeding covers categories, forums, users, topics, and replies. It does not cover groups, permission matrices, or attachments.
