@@ -1,8 +1,8 @@
 # QuickInstall CLI
 
-QuickInstall CLI creates disposable local phpBB boards for extension, style, and compatibility testing.
+QuickInstall CLI creates disposable local phpBB boards for extension, style, and development testing.
 
-You do not need MAMP, WAMP, XAMPP, or a local Apache/MySQL setup. QuickInstall uses Docker for the board runtime and stores generated boards under `.qi/`.
+You do not need MAMP, WAMP, XAMPP, or any local Apache/MySQL setup. QuickInstall uses Docker for the board runtime and stores generated boards under `.qi/`.
 
 ## Quick Start
 
@@ -10,8 +10,7 @@ Install requirements:
 
 - Docker Desktop (must be running)
 - PHP CLI
-- Composer, used to download phpBB source packages
-- Git, required for Git sources
+- Git, only required for Git sources
 
 From the QuickInstall project root:
 
@@ -117,9 +116,9 @@ Available presets:
 ```text
 none           no seed data
 tiny           3 users, 1 category, 2 forums, 2 topics, 2 replies per topic
-extension-dev 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
-load-test     100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
-random        random counts up to load-test size
+extension-dev  10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
+load-test      100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
+random         random counts up to load-test size
 ```
 
 Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
@@ -320,7 +319,7 @@ Check that Docker Desktop is running and that the docker command works in this t
 Composer command fails:
 
 ```text
-Install Composer or make sure composer is available in PATH.
+QuickInstall uses composer from PATH first, then composer.phar from the project root. Restore composer.phar or install Composer if both are missing.
 ```
 
 Port already in use:

@@ -115,7 +115,7 @@ class SourceProvider
 				$path,
 			], dirname($path));
 
-			$this->run(['composer', 'install', '--no-interaction', '--ignore-platform-reqs'], $path);
+			$this->run($this->composerCommand(['install', '--no-interaction', '--ignore-platform-reqs']), $path);
 			return;
 		}
 
@@ -124,17 +124,17 @@ class SourceProvider
 			rmdir($path);
 		}
 
-		$command = [
-			'composer',
+		$command = $this->composerCommand([
 			'create-project',
 			'phpbb/phpbb',
 			$path,
 			'--no-interaction',
 			'--ignore-platform-reqs',
-		];
+		]);
 		if (!empty($source['constraint']))
 		{
-			array_splice($command, 4, 0, [$source['constraint']]);
+			$insertAt = count($command) - 2;
+			array_splice($command, $insertAt, 0, [$source['constraint']]);
 		}
 
 		$this->run($command, dirname($path));
@@ -144,6 +144,36 @@ class SourceProvider
 	{
 		$files = scandir($path);
 		return $files !== false && count(array_diff($files, ['.', '..'])) > 0;
+	}
+
+	private function composerCommand(array $arguments): array
+	{
+		if ($this->isCommandAvailable('composer'))
+		{
+			return array_merge(['composer'], $arguments);
+		}
+
+		$phar = $this->project->rootPath('composer.phar');
+		if (is_file($phar))
+		{
+			return array_merge([PHP_BINARY, $phar], $arguments);
+		}
+
+		throw new \RuntimeException('Composer is not available. Install Composer or restore composer.phar in the QuickInstall project root.');
+	}
+
+	private function isCommandAvailable(string $command): bool
+	{
+		foreach (explode(PATH_SEPARATOR, (string) getenv('PATH')) as $path)
+		{
+			$candidate = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $command;
+			if (is_file($candidate) && is_executable($candidate))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function run(array $command, string $cwd): void
@@ -165,18 +195,18 @@ class SourceProvider
 		$status = proc_close($process);
 		if ($status !== 0)
 		{
-			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command[0]));
+			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command));
 		}
 	}
 
-	private function commandHint(string $command): string
+	private function commandHint(array $command): string
 	{
-		if ($command === 'composer')
+		if (($command[0] ?? '') === 'composer' || basename((string) ($command[1] ?? '')) === 'composer.phar')
 		{
-			return "\nInstall Composer or make sure composer is available in PATH.";
+			return "\nInstall Composer, make sure composer is available in PATH, or restore composer.phar in the QuickInstall project root.";
 		}
 
-		if ($command === 'git')
+		if (($command[0] ?? '') === 'git')
 		{
 			return "\nInstall Git or make sure git is available in PATH.";
 		}
