@@ -110,10 +110,10 @@ class Application
 		$version = $cli->argument(0);
 		if ($version === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi source:add <version|branch> [--git] [--url URL]');
+			throw new \InvalidArgumentException('Usage: qi source:add <version|branch> [--git] [--url URL] [--allow-external]');
 		}
 
-		$record = (new SourceService($this->project))->add($version, $cli->has('git'), $cli->option('url'));
+		$record = (new SourceService($this->project))->add($version, $cli->has('git'), $cli->option('url'), $cli->has('allow-external'));
 
 		echo "Registered phpBB source {$record['version']} ({$record['type']})\n";
 		$this->nextStep("fetch it with Composer/Git into {$record['path']}");
@@ -172,7 +172,7 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET]');
+			throw new \InvalidArgumentException('Usage: qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]');
 		}
 
 		$version = $cli->option('phpbb', 'latest');
@@ -182,7 +182,7 @@ class Application
 		$populate = $cli->option('populate', 'none');
 		$this->validateBoardCreateOptions($db, $port, $populate);
 
-		$created = (new BoardService($this->project))->create($name, $version, $db, $port, $populate);
+		$created = (new BoardService($this->project))->create($name, $version, $db, $port, $populate, $cli->has('replace'));
 		$paths = $created['paths'];
 
 		echo "Created board scaffold: $name\n";
@@ -389,10 +389,10 @@ class Application
 		$source = $cli->argument(1);
 		if ($board === null || $source === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy]');
+			throw new \InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy] [--allow-external]');
 		}
 
-		$mounted = (new ExtensionManager($this->project))->mount($board, $source, $cli->has('copy'));
+		$mounted = (new ExtensionManager($this->project))->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
 		$this->refreshBoardIfRunning($board);
 		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
 		echo "Source: {$mounted['source']}\n";
@@ -475,10 +475,10 @@ class Application
 		$source = $cli->argument(1);
 		if ($board === null || $source === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy]');
+			throw new \InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy] [--allow-external]');
 		}
 
-		$mounted = (new StyleManager($this->project))->mount($board, $source, $cli->has('copy'));
+		$mounted = (new StyleManager($this->project))->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
 		$this->refreshBoardIfRunning($board);
 		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
 		echo "Source: {$mounted['source']}\n";
@@ -531,20 +531,20 @@ QuickInstall CLI prototype
 
 Commands:
   qi init
-  qi source:add <version|branch> [--git] [--url URL]
+  qi source:add <version|branch> [--git] [--url URL] [--allow-external]
   qi source:fetch <version|branch>
   qi source:list
   qi phpbb:list
-  qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET]
+  qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]
   qi board:list
   qi board:start <name>
   qi board:stop <name>
   qi board:destroy <name>
   qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]
-  qi ext:mount <board> <path> [--copy]
+  qi ext:mount <board> <path> [--copy] [--allow-external]
   qi ext:unmount <board> <vendor/extension>
   qi ext:list <board>
-  qi style:mount <board> <path> [--copy]
+  qi style:mount <board> <path> [--copy] [--allow-external]
   qi style:unmount <board> <style>
   qi style:list <board>
 

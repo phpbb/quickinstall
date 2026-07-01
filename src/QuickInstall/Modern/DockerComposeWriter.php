@@ -103,10 +103,10 @@ services:
         PHP_VERSION: "{$config['php']}"
     working_dir: /var/www/html
     ports:
-      - "{$config['port']}:80"
+      - "127.0.0.1:{$config['port']}:80"
     volumes:
-      - {$sourcePath}:/opt/phpbb-source:ro
-      - {$boardPath}:/var/www/html
+      - {$this->yamlString($sourcePath . ':/opt/phpbb-source:ro')}
+      - {$this->yamlString($boardPath . ':/var/www/html')}
 {$extensionVolumes}{$styleVolumes}      - ./install-config.yml:/opt/quickinstall/install-config.yml:ro
       - ./entrypoint.sh:/opt/quickinstall/entrypoint.sh:ro
     entrypoint: ["/bin/sh", "/opt/quickinstall/entrypoint.sh"]
@@ -250,7 +250,7 @@ SH;
       POSTGRES_USER: phpbb
       POSTGRES_PASSWORD: phpbb
     volumes:
-      - $dbPath:/var/lib/postgresql/data
+      - {$this->yamlString($dbPath . ':/var/lib/postgresql/data')}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U phpbb -d phpbb"]
       interval: 5s
@@ -273,6 +273,7 @@ YAML;
 				$image = 'mariadb:10.11';
 				break;
 		}
+		$dbVolume = $this->yamlString($dbPath . ':/var/lib/mysql');
 
 		return <<<YAML
   db:
@@ -283,7 +284,7 @@ YAML;
       MYSQL_PASSWORD: phpbb
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - $dbPath:/var/lib/mysql
+      - $dbVolume
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
       interval: 5s

@@ -11,10 +11,10 @@ class SourceService
 		$this->project = $project;
 	}
 
-	public function add(string $version, bool $git = false, ?string $url = null): array
+	public function add(string $version, bool $git = false, ?string $url = null, bool $allowExternal = false): array
 	{
 		$this->project->init();
-		return (new SourceProvider($this->project))->add($version, $git ? 'git' : 'composer', $url);
+		return (new SourceProvider($this->project))->add($version, $git ? 'git' : 'composer', $url, $allowExternal);
 	}
 
 	public function list(): array

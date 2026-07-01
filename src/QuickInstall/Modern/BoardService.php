@@ -11,10 +11,34 @@ class BoardService
 		$this->project = $project;
 	}
 
-	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none'): array
+	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none', bool $replace = false): array
 	{
 		$this->project->init();
 		$selection = (new VersionMatrix())->resolve($version);
+		$boards = $this->project->boards();
+		if (isset($boards[$name]))
+		{
+			if (!$replace)
+			{
+				throw new \InvalidArgumentException("Board already exists: $name. Use board:destroy first, or pass --replace to recreate it.");
+			}
+
+			(new BoardRunner($this->project))->destroy($name);
+		}
+
+		foreach ($this->project->boards() as $board)
+		{
+			if (($board['name'] ?? '') !== $name && (int) ($board['port'] ?? 0) === $port)
+			{
+				throw new \InvalidArgumentException("Port $port is already used by board: {$board['name']}");
+			}
+		}
+
+		if ($this->isPortInUse($port))
+		{
+			throw new \InvalidArgumentException("Port $port is already in use on this host.");
+		}
+
 		$source = (new SourceProvider($this->project))->ensure($version);
 
 		$boardDir = $this->project->boardPath($name);
@@ -58,6 +82,18 @@ class BoardService
 		$this->project->appendBoard($board);
 
 		return ['board' => $board, 'paths' => $paths];
+	}
+
+	private function isPortInUse(int $port): bool
+	{
+		$socket = @stream_socket_server("tcp://127.0.0.1:$port", $errno, $errstr);
+		if ($socket === false)
+		{
+			return true;
+		}
+
+		fclose($socket);
+		return false;
 	}
 
 	public function list(): array

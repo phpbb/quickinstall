@@ -35,6 +35,8 @@ admin / password
 
 That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts Docker, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
 
+Board ports are bound to `127.0.0.1`, so generated boards are intended for this machine only.
+
 ## Common Recipes
 
 Create a small empty board:
@@ -86,6 +88,19 @@ php bin/qi board:destroy test
 ```
 
 `board:destroy` removes the board files, Docker runtime files, database files, local Docker containers, local Docker image, and board registry entry.
+
+Board names are unique. To reuse a name with a different setup, destroy it first:
+
+```bash
+php bin/qi board:destroy test
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+```
+
+Or recreate it in one command:
+
+```bash
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev --replace
+```
 
 ## Fixture Presets
 
@@ -164,6 +179,12 @@ Copy instead of bind-mount:
 php bin/qi ext:mount test extensions/vendor/extname --copy
 ```
 
+By default, extension sources must live under `extensions/`. To mount a trusted extension from somewhere else on your machine:
+
+```bash
+php bin/qi ext:mount test /path/to/vendor/extname --allow-external
+```
+
 ## Styles
 
 Put downloaded styles under `styles/`:
@@ -195,6 +216,12 @@ Copy instead of bind-mount:
 
 ```bash
 php bin/qi style:mount test styles/stylename --copy
+```
+
+By default, style sources must live under `styles/`. To mount a trusted style from somewhere else on your machine:
+
+```bash
+php bin/qi style:mount test /path/to/stylename --allow-external
 ```
 
 ## Supported phpBB Versions
@@ -237,6 +264,13 @@ php bin/qi source:add master --git --url https://github.com/phpbb/phpbb.git
 php bin/qi source:fetch master
 ```
 
+Custom Git URLs can run Composer code on your host during fetch. QuickInstall only accepts the official phpBB Git URL by default. For a trusted fork, opt in explicitly:
+
+```bash
+php bin/qi source:add my-branch --git --url https://github.com/example/phpbb.git --allow-external
+php bin/qi source:fetch my-branch
+```
+
 Fetched sources live under:
 
 ```text
@@ -260,6 +294,14 @@ User-managed drop zones:
 extensions/
 styles/
 ```
+
+## Safety Defaults
+
+- Board web ports bind to `127.0.0.1`, not every network interface.
+- `board:create` refuses to overwrite an existing board unless `--replace` is used.
+- `board:create` rejects ports already registered to another board or already in use on the host.
+- `ext:mount` and `style:mount` only use `extensions/` and `styles/` unless `--allow-external` is used.
+- Custom Git source URLs require `--allow-external`; only use trusted forks.
 
 ## Troubleshooting
 

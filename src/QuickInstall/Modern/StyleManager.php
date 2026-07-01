@@ -11,10 +11,10 @@ class StyleManager
 		$this->project = $project;
 	}
 
-	public function mount(string $board, string $source, bool $copy = false): array
+	public function mount(string $board, string $source, bool $copy = false, bool $allowExternal = false): array
 	{
 		$boardConfig = $this->project->board($board);
-		$sourcePath = $this->resolvePath($source);
+		$sourcePath = $this->resolvePath($source, $allowExternal);
 		if (!is_dir($sourcePath))
 		{
 			throw new \InvalidArgumentException("Style source is not a directory: $source");
@@ -120,7 +120,7 @@ class StyleManager
 		return array_values($mounted);
 	}
 
-	private function resolvePath(string $path): string
+	private function resolvePath(string $path, bool $allowExternal): string
 	{
 		$candidates = [
 			$path,
@@ -131,13 +131,19 @@ class StyleManager
 		foreach ($candidates as $candidate)
 		{
 			$real = realpath($candidate);
-			if ($real !== false)
+			if ($real !== false && ($allowExternal || $this->isUnder($real, $this->project->stylesPath())))
 			{
 				return $real;
 			}
 		}
 
-		throw new \InvalidArgumentException("Path not found: $path");
+		throw new \InvalidArgumentException("Style path must be under styles/. Use --allow-external only for trusted local paths.");
+	}
+
+	private function isUnder(string $path, string $parent): bool
+	{
+		$parent = realpath($parent);
+		return $parent !== false && ($path === $parent || strpos($path, $parent . '/') === 0);
 	}
 
 	private function styleName(string $sourcePath): string

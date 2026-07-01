@@ -149,10 +149,11 @@ class Project
 
 	public function deleteTree(string $path): void
 	{
-		if (!file_exists($path))
+		if (!file_exists($path) && !is_link($path))
 		{
 			return;
 		}
+		$this->assertWorkspacePath($path);
 
 		if (is_file($path) || is_link($path))
 		{
@@ -183,6 +184,45 @@ class Project
 		{
 			throw new \RuntimeException("Unable to delete $path");
 		}
+	}
+
+	private function assertWorkspacePath(string $path): void
+	{
+		$path = $this->normalizeAbsolutePath($path);
+		$workspace = $this->normalizeAbsolutePath($this->workspace);
+		if ($path !== $workspace && strpos($path, $workspace . '/') !== 0)
+		{
+			throw new \RuntimeException("Refusing to delete path outside QuickInstall workspace: $path");
+		}
+	}
+
+	private function normalizeAbsolutePath(string $path): string
+	{
+		if ($path === '')
+		{
+			return $this->root;
+		}
+		if ($path[0] !== '/')
+		{
+			$path = $this->rootPath($path);
+		}
+
+		$parts = [];
+		foreach (explode('/', $path) as $part)
+		{
+			if ($part === '' || $part === '.')
+			{
+				continue;
+			}
+			if ($part === '..')
+			{
+				array_pop($parts);
+				continue;
+			}
+			$parts[] = $part;
+		}
+
+		return '/' . implode('/', $parts);
 	}
 
 	public function assertName(string $name, string $label): void

@@ -11,13 +11,18 @@ class SourceProvider
 		$this->project = $project;
 	}
 
-	public function add(string $version, string $type, ?string $url): array
+	public function add(string $version, string $type, ?string $url, bool $allowExternal = false): array
 	{
 		if (!in_array($type, ['composer', 'git'], true))
 		{
 			throw new \InvalidArgumentException("Unsupported source type: $type");
 		}
 		$selection = (new VersionMatrix())->resolve($version, $type === 'git');
+		$url = $url ?: ($type === 'git' ? 'https://github.com/phpbb/phpbb.git' : null);
+		if ($type === 'git' && !$allowExternal && $url !== 'https://github.com/phpbb/phpbb.git')
+		{
+			throw new \InvalidArgumentException('Custom Git source URLs can run Composer code on your host. Use --allow-external only for trusted phpBB forks.');
+		}
 
 		$sources = $this->project->readJson('sources.json', []);
 		$record = [
@@ -30,7 +35,7 @@ class SourceProvider
 			'status' => $selection['status'],
 			'type' => $type,
 			'package' => $type === 'composer' ? 'phpbb/phpbb' : null,
-			'url' => $url ?: ($type === 'git' ? 'https://github.com/phpbb/phpbb.git' : null),
+			'url' => $url,
 			'path' => $this->project->sourcePath($selection['source_key']),
 			'registered_at' => gmdate('c'),
 		];
