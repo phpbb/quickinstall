@@ -40,7 +40,7 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 ##### phpBB Requirements
 phpBB boards require a web server running PHP and one of the following database management systems.
 
-## Modern CLI Prototype
+## Sandbox CLI Prototype
 
 QuickInstall now includes an experimental CLI scaffold for a Docker-based board factory. It writes generated state to `.qi/` and leaves the legacy web UI unchanged.
 
@@ -50,7 +50,7 @@ php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate ext
 php bin/qi board:start test
 ```
 
-The modern CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for this Docker CLI.
+The Sandbox CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for this Docker CLI.
 
 Downloaded extensions can be unzipped into `extensions/` and mounted into boards:
 
@@ -64,7 +64,7 @@ Downloaded styles can be unzipped into `styles/` and mounted into boards:
 php bin/qi style:mount test styles/stylename
 ```
 
-See [docs/modernization-cli.md](docs/modernization-cli.md).
+See [docs/sandbox-cli.md](docs/sandbox-cli.md).
 
 | phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |
 |----------------|---------------|--------|---------|------------|----------------|--------------|

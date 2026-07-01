@@ -1,19 +1,19 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../src/QuickInstall/Modern/Application.php';
-require __DIR__ . '/../src/QuickInstall/Modern/CommandLine.php';
-require __DIR__ . '/../src/QuickInstall/Modern/Project.php';
-require __DIR__ . '/../src/QuickInstall/Modern/VersionMatrix.php';
-require __DIR__ . '/../src/QuickInstall/Modern/SourceProvider.php';
-require __DIR__ . '/../src/QuickInstall/Modern/SourceService.php';
-require __DIR__ . '/../src/QuickInstall/Modern/BoardService.php';
-require __DIR__ . '/../src/QuickInstall/Modern/DockerComposeWriter.php';
-require __DIR__ . '/../src/QuickInstall/Modern/BoardRunner.php';
-require __DIR__ . '/../src/QuickInstall/Modern/SeederWriter.php';
-require __DIR__ . '/../src/QuickInstall/Modern/ExtensionManager.php';
-require __DIR__ . '/../src/QuickInstall/Modern/StyleManager.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/Application.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/CommandLine.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/Project.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/VersionMatrix.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/SourceProvider.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/SourceService.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/BoardService.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/DockerComposeWriter.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/BoardRunner.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/SeederWriter.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/ExtensionManager.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/StyleManager.php';
 
-use QuickInstall\Modern\Application;
+use QuickInstall\Sandbox\Application;
 
 exit((new Application(dirname(__DIR__)))->run($argv));
