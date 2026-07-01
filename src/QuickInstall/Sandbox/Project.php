@@ -27,7 +27,7 @@ class Project
 			throw new \RuntimeException("Unable to create $stylesPath");
 		}
 
-		foreach (['', '/sources', '/boards', '/runtime', '/db', '/cache'] as $dir)
+		foreach (['', '/sources', '/boards', '/runtime', '/db'] as $dir)
 		{
 			$path = $this->workspace . $dir;
 			if (!is_dir($path) && !mkdir($path, 0775, true))
