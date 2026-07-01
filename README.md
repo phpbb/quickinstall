@@ -23,7 +23,13 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 ## 🛠 Upgrading
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/) and extract it. 
 
-2. Copy everything into your existing QuickInstall directory **except for the 📁`boards/`, 📁`sources/` and 📁`settings/` directories**. 
+2. Copy everything into your existing QuickInstall directory **except for:**
+  - 📁`.qi/` (may be hidden by your operating system)
+  - 📁`boards/`
+  - 📁`extensions/`
+  - 📁`sources/`
+  - 📁`settings/`
+  - 📁`styles/`
 
 > If you are upgrading from QuickInstall 1.1.8 (or older) you MUST review and re-save your old Profile settings.
 
@@ -39,6 +45,16 @@ QuickInstall is designed to run on all modern browsers. Please don't use old stu
 
 ##### phpBB Requirements
 phpBB boards require a web server running PHP and one of the following database management systems.
+
+| phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |
+|----------------|---------------|--------|---------|------------|----------------|--------------|
+| 4.0.0 (alpha)  | 8.2+          | 8.0+   | 10.2.7+ | 9.5+       | SQLite 3.8.3+  | Server 2012+ |
+| 3.3.11 - 3.3.x | 7.2.0 - 8.x   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 3.3.0 - 3.3.10 | 7.1.3 - 8.x   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 3.2.2 - 3.2.11 | 5.4.7 - 7.2.x | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 3.2.0 - 3.2.1  | 5.4.7 - 7.1.x | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
+| 3.1.x          | 5.4.7 - 5.6.x | 3.23+  | 5.1+    | 8.3+       | SQLite 2 or 3  | Server 2000+ |
+| 3.0.x          | 5.4.7 - 5.6.x | 3.23+  | -       | 7.x        | SQLite 2       | Server 2000  |
 
 ## Sandbox CLI Prototype
 
@@ -65,16 +81,6 @@ php bin/qi style:mount test styles/stylename
 ```
 
 See [docs/sandbox-cli.md](docs/sandbox-cli.md).
-
-| phpBB          | PHP           | MySQL  | MariaDB | PostgreSQL | SQLite         | MS SQL       |
-|----------------|---------------|--------|---------|------------|----------------|--------------|
-| 4.0.0 (alpha)  | 8.2+          | 8.0+   | 10.2.7+ | 9.5+       | SQLite 3.8.3+  | Server 2012+ |
-| 3.3.11 - 3.3.x | 7.2.0 - 8.x   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
-| 3.3.0 - 3.3.10 | 7.1.3 - 8.x   | 4.1.3+ | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
-| 3.2.2 - 3.2.11 | 5.4.7 - 7.2.x | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
-| 3.2.0 - 3.2.1  | 5.4.7 - 7.1.x | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
-| 3.1.x          | 5.4.7 - 5.6.x | 3.23+  | 5.1+    | 8.3+       | SQLite 2 or 3  | Server 2000+ |
-| 3.0.x          | 5.4.7 - 5.6.x | 3.23+  | -       | 7.x        | SQLite 2       | Server 2000  |
 
 ## 🐞 Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.
