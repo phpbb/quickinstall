@@ -103,7 +103,7 @@ php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate ext
 
 ## Fixture Presets
 
-Fixture seeding populates a board with categories, forums, users, topics, and replies. It does not cover groups, permission matrices, or attachments.
+Fixture seeding populates a board with categories, forums, users, topics, and replies. For non-tiny presets, it also adds a few seeded users to Global Moderators and Newly Registered Users. Newly registered users are kept at zero posts. It does not create custom groups, permission matrices, or attachments.
 
 Use `--populate <preset>` during `board:create`:
 

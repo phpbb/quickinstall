@@ -32,10 +32,10 @@ $seed = (int) ($argv[2] ?? 1);
 $action = $argv[3] ?? 'seed';
 
 $presets = [
-	'tiny' => ['users' => 3, 'categories' => 1, 'forums_per_category' => 2, 'topics' => 2, 'replies' => 2],
-	'extension-dev' => ['users' => 10, 'categories' => 2, 'forums_per_category' => 3, 'topics' => 25, 'replies' => 10],
-	'load-test' => ['users' => 100, 'categories' => 4, 'forums_per_category' => 5, 'topics' => 100, 'replies' => 20],
-	'random' => ['users' => 100, 'categories' => 4, 'forums_per_category' => 5, 'topics' => 100, 'replies' => 20, 'randomize' => true],
+	'tiny' => ['users' => 3, 'categories' => 1, 'forums_per_category' => 2, 'topics' => 2, 'replies' => 2, 'groups' => false],
+	'extension-dev' => ['users' => 10, 'categories' => 2, 'forums_per_category' => 3, 'topics' => 25, 'replies' => 10, 'groups' => true],
+	'load-test' => ['users' => 100, 'categories' => 4, 'forums_per_category' => 5, 'topics' => 100, 'replies' => 20, 'groups' => true],
+	'random' => ['users' => 100, 'categories' => 4, 'forums_per_category' => 5, 'topics' => 100, 'replies' => 20, 'groups' => true, 'randomize' => true],
 ];
 
 if (!isset($presets[$preset]))
@@ -84,6 +84,7 @@ if ($action === 'reset' || $action === 'replace')
 }
 
 $users = qi_seed_users($db, $phpbb_container, $counts['users'], $seed);
+$posting_users = qi_seed_apply_group_variety($db, $users, !empty($counts['groups']));
 $forums = qi_seed_forums($db, $counts['categories'], $counts['forums_per_category'], $seed);
 if (!$forums)
 {
@@ -97,7 +98,7 @@ if (!$forums)
 	exit(1);
 }
 
-$created_topics = qi_seed_posts($forums, $users, $counts['topics'], $counts['replies'], $seed);
+$created_topics = qi_seed_posts($forums, $posting_users, $counts['topics'], $counts['replies'], $seed);
 qi_seed_mark_posts_counted($db, $seed);
 qi_seed_sync_user_post_counts($db);
 
@@ -194,12 +195,14 @@ function qi_seed_resolve_counts(array $preset): array
 		return $preset;
 	}
 
+	$users = mt_rand(1, $preset['users']);
 	return [
-		'users' => mt_rand(1, $preset['users']),
+		'users' => $users,
 		'categories' => mt_rand(1, $preset['categories']),
 		'forums_per_category' => mt_rand(1, $preset['forums_per_category']),
 		'topics' => mt_rand(1, $preset['topics']),
 		'replies' => mt_rand(0, $preset['replies']),
+		'groups' => $users >= 5,
 	];
 }
 
@@ -261,6 +264,120 @@ function qi_seed_users($db, $phpbb_container, int $count, int $seed): array
 		'username' => 'admin',
 		'user_colour' => 'AA0000',
 	]];
+}
+
+function qi_seed_apply_group_variety($db, array $users, bool $enabled): array
+{
+	if (!$enabled || count($users) < 5)
+	{
+		return $users;
+	}
+
+	$moderators = array_slice($users, 0, min(2, count($users)));
+	$newly_registered = array_slice($users, -min(2, max(1, count($users) - count($moderators))));
+
+	qi_seed_add_users_to_group($db, $moderators, 'GLOBAL_MODERATORS');
+	qi_seed_set_default_group($db, $moderators, 'GLOBAL_MODERATORS');
+	qi_seed_add_users_to_group($db, $newly_registered, 'NEWLY_REGISTERED');
+
+	$newly_registered_ids = array_fill_keys(array_map(static function ($user) {
+		return (int) $user['user_id'];
+	}, $newly_registered), true);
+
+	$posting_users = array_values(array_filter($users, static function ($user) use ($newly_registered_ids) {
+		return empty($newly_registered_ids[(int) $user['user_id']]);
+	}));
+
+	return $posting_users ?: $users;
+}
+
+function qi_seed_add_users_to_group($db, array $users, string $group_name): void
+{
+	if (!$users)
+	{
+		return;
+	}
+
+	$group_id = qi_seed_group_id($db, $group_name);
+	if (!$group_id)
+	{
+		return;
+	}
+
+	foreach ($users as $user_row)
+	{
+		$user_id = (int) $user_row['user_id'];
+		$sql = 'SELECT user_id FROM ' . USER_GROUP_TABLE . '
+			WHERE group_id = ' . $group_id . '
+				AND user_id = ' . $user_id;
+		$result = $db->sql_query_limit($sql, 1);
+		$exists = (bool) $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+		if ($exists)
+		{
+			continue;
+		}
+
+		$db->sql_query('INSERT INTO ' . USER_GROUP_TABLE . ' ' . $db->sql_build_array('INSERT', [
+			'group_id' => $group_id,
+			'user_id' => $user_id,
+			'group_leader' => 0,
+			'user_pending' => 0,
+		]));
+	}
+}
+
+function qi_seed_set_default_group($db, array $users, string $group_name): void
+{
+	if (!$users)
+	{
+		return;
+	}
+
+	$group_id = qi_seed_group_id($db, $group_name);
+	if (!$group_id)
+	{
+		return;
+	}
+
+	$colour = qi_seed_group_field($db, $group_id, 'group_colour');
+	$rank = (int) qi_seed_group_field($db, $group_id, 'group_rank');
+	foreach ($users as $user_row)
+	{
+		$db->sql_query('UPDATE ' . USERS_TABLE . '
+			SET group_id = ' . $group_id . ",
+				user_colour = '" . $db->sql_escape($colour) . "',
+				user_rank = " . $rank . '
+			WHERE user_id = ' . (int) $user_row['user_id']);
+	}
+}
+
+function qi_seed_group_field($db, int $group_id, string $field): string
+{
+	if (!in_array($field, ['group_colour', 'group_rank'], true))
+	{
+		return '';
+	}
+
+	$sql = "SELECT $field
+		FROM " . GROUPS_TABLE . '
+		WHERE group_id = ' . $group_id;
+	$result = $db->sql_query_limit($sql, 1);
+	$value = (string) $db->sql_fetchfield($field);
+	$db->sql_freeresult($result);
+
+	return $value;
+}
+
+function qi_seed_group_id($db, string $group_name): int
+{
+	$sql = 'SELECT group_id FROM ' . GROUPS_TABLE . "
+		WHERE group_name = '" . $db->sql_escape($group_name) . "'";
+	$result = $db->sql_query_limit($sql, 1);
+	$group_id = (int) $db->sql_fetchfield('group_id');
+	$db->sql_freeresult($result);
+
+	return $group_id;
 }
 
 function qi_seed_forums($db, int $categories, int $forums_per_category, int $seed): array
