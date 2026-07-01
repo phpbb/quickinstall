@@ -40,6 +40,12 @@ class Application
 				case 'source:fetch':
 					return $this->sourceFetch($argv);
 
+				case 'source:remove':
+					return $this->sourceRemove($argv);
+
+				case 'source:prune':
+					return $this->sourcePrune();
+
 				case 'phpbb:list':
 					return $this->phpbbList();
 
@@ -130,12 +136,55 @@ class Application
 			return 0;
 		}
 
-		foreach ($sources as $source)
+		$this->printTable(
+			['Source', 'Version', 'Type', 'Status', 'Downloaded', 'Used By', 'Path'],
+			array_map(static function ($source) {
+				return [
+					$source['source_key'] ?? $source['version'],
+					$source['version'],
+					$source['type'],
+					$source['status'] ?? '-',
+					!empty($source['downloaded']) ? 'yes' : 'no',
+					!empty($source['used_by']) ? implode(', ', $source['used_by']) : '-',
+					$source['path'],
+				];
+			}, $sources)
+		);
+
+		return 0;
+	}
+
+	private function sourceRemove(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$version = $cli->argument(0);
+		if ($version === null)
 		{
-			$sourceKey = $source['source_key'] ?? $source['version'];
-			$constraint = $source['constraint'] ?? '-';
-			$status = $source['status'] ?? '-';
-			echo "$sourceKey\t{$source['version']}\t$constraint\t{$source['type']}\t$status\t{$source['path']}\n";
+			throw new \InvalidArgumentException('Usage: qi source:remove <version|source> [--force]');
+		}
+
+		$removed = (new SourceService($this->project))->remove($version, $cli->has('force'));
+		echo "Removed source: {$removed['source']['source_key']}\n";
+		if (!empty($removed['used_by']))
+		{
+			echo "Warning: source was referenced by board(s): " . implode(', ', $removed['used_by']) . "\n";
+		}
+
+		return 0;
+	}
+
+	private function sourcePrune(): int
+	{
+		$removed = (new SourceService($this->project))->prune();
+		if (!$removed)
+		{
+			echo "No unused sources to prune\n";
+			return 0;
+		}
+
+		foreach ($removed as $source)
+		{
+			echo "Removed source: {$source['source_key']}\n";
 		}
 
 		return 0;
@@ -534,6 +583,8 @@ Commands:
   qi source:add <version|branch> [--git] [--url URL] [--allow-external]
   qi source:fetch <version|branch>
   qi source:list
+  qi source:remove <version|source> [--force]
+  qi source:prune
   qi phpbb:list
   qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]
   qi board:list

@@ -255,7 +255,13 @@ Useful source commands:
 ```bash
 php bin/qi source:list
 php bin/qi source:fetch 3.3.17
+php bin/qi source:remove 3.3.17
+php bin/qi source:prune
 ```
+
+`source:list` shows whether each source has been downloaded and which boards use it. `source:remove` deletes one source from `.qi/sources/` and removes it from the source registry. It refuses to remove a source still used by a board unless `--force` is passed.
+
+`source:prune` removes all unused sources. It never removes sources referenced by existing boards.
 
 Use explicit Git sources for custom branches or forks:
 
