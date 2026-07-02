@@ -15,12 +15,10 @@ use RuntimeException;
 
 class Application
 {
-	private string $root;
 	private Project $project;
 
 	public function __construct(string $root)
 	{
-		$this->root = $root;
 		$this->project = new Project($root);
 	}
 
