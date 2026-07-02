@@ -84,6 +84,7 @@ $counts = qi_seed_resolve_counts($presets[$preset]);
 
 if ($action === 'reset' || $action === 'replace')
 {
+	qi_seed_status('Resetting seed data...');
 	$reset = qi_seed_reset($db, $seed);
 	echo "Reset seed $seed: {$reset['topics']} topics, {$reset['forums']} forums, {$reset['users']} users\n";
 	if ($action === 'reset')
@@ -93,6 +94,7 @@ if ($action === 'reset' || $action === 'replace')
 	}
 }
 
+qi_seed_status('Seeding board...');
 $users = qi_seed_users($db, $phpbb_container, $counts['users'], $seed);
 $posting_users = qi_seed_apply_group_variety($db, $users, !empty($counts['groups']));
 $forums = qi_seed_forums($db, $counts['categories'], $counts['forums_per_category'], $seed);
@@ -108,11 +110,19 @@ if (!$forums)
 	exit(1);
 }
 
+qi_seed_status('Creating seeded topics and replies...');
 $created_topics = qi_seed_posts($forums, $posting_users, $counts['topics'], $counts['replies'], $seed);
+qi_seed_status('Finalizing seed data...');
 qi_seed_mark_posts_counted($db, $seed);
 qi_seed_sync_user_post_counts($db);
 
 echo "Seeded preset $preset: " . count($users) . " users available, " . count($forums) . " forums available, $created_topics topics\n";
+
+function qi_seed_status(string $message): void
+{
+	echo $message . "\n";
+	flush();
+}
 
 function qi_seed_reset($db, int $seed): array
 {

@@ -26,6 +26,7 @@ class BoardRunner
 	{
 		$board = $this->project->board($name);
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '--build', '-d', '--force-recreate', '--remove-orphans', 'web']);
+		echo "Waiting for phpBB install to finish...\n";
 		$this->waitUntilInstalled($name);
 		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
 		{
@@ -175,7 +176,7 @@ class BoardRunner
 			return;
 		}
 
-		echo "Waiting for board URL: $url\n";
+		echo "Waiting for board URL...\n";
 		$deadline = time() + 30;
 		while (time() <= $deadline)
 		{
@@ -233,6 +234,7 @@ class BoardRunner
 		$writer = new SeederWriter($this->project);
 		$script = $writer->write($name);
 
+		echo "Running seed preset: $preset\n";
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $script, 'web:/tmp/qi_seed.php']);
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
 	}
