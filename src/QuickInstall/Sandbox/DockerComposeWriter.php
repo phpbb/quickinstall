@@ -24,7 +24,7 @@ class DockerComposeWriter
 	public function write(string $name, array $config): array
 	{
 		$runtimeDir = $this->project->workspacePath('runtime/' . $name);
-		if (!is_dir($runtimeDir) && !mkdir($runtimeDir, 0775, true))
+		if (!is_dir($runtimeDir) && !mkdir($runtimeDir, 0775, true) && !is_dir($runtimeDir))
 		{
 			throw new RuntimeException("Unable to create runtime directory: $runtimeDir");
 		}
@@ -99,7 +99,7 @@ YAML;
 		$extensionVolumes = $this->extensionVolumes($config['extensions'] ?? []);
 		$styleVolumes = $this->styleVolumes($config['styles'] ?? []);
 		$dbPath = $this->project->workspacePath('db/' . $name);
-		if (!is_dir($dbPath) && !mkdir($dbPath, 0775, true))
+		if (!is_dir($dbPath) && !mkdir($dbPath, 0775, true) && !is_dir($dbPath))
 		{
 			throw new RuntimeException("Unable to create database directory: $dbPath");
 		}

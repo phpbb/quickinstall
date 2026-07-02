@@ -23,7 +23,7 @@ class CommandLine
 		for ($i = 0; $i < $count; $i++)
 		{
 			$token = $tokens[$i];
-			if (strpos($token, '--') !== 0)
+			if (!str_starts_with($token, '--'))
 			{
 				$cli->args[] = $token;
 				continue;
@@ -32,11 +32,11 @@ class CommandLine
 			$option = substr($token, 2);
 			$value = true;
 
-			if (strpos($option, '=') !== false)
+			if (str_contains($option, '='))
 			{
 				[$option, $value] = explode('=', $option, 2);
 			}
-			else if (isset($tokens[$i + 1]) && strpos($tokens[$i + 1], '--') !== 0)
+			else if (isset($tokens[$i + 1]) && !str_starts_with($tokens[$i + 1], '--'))
 			{
 				$value = $tokens[++$i];
 			}

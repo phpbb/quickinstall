@@ -105,12 +105,7 @@ class Application
 					return 1;
 			}
 		}
-		catch (InvalidArgumentException $e)
-		{
-			fwrite(STDERR, $e->getMessage() . "\n");
-			return 1;
-		}
-		catch (RuntimeException $e)
+		catch (InvalidArgumentException|RuntimeException $e)
 		{
 			fwrite(STDERR, $e->getMessage() . "\n");
 			return 1;

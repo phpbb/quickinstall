@@ -96,7 +96,7 @@ class SourceProvider
 	{
 		$path = $source['path'];
 		$parent = dirname($path);
-		if (!is_dir($parent) && !mkdir($parent, 0775, true))
+		if (!is_dir($parent) && !mkdir($parent, 0775, true) && !is_dir($parent))
 		{
 			throw new RuntimeException("Unable to create source directory: $parent");
 		}

@@ -27,13 +27,13 @@ class Project
 	public function init(): void
 	{
 		$extensionsPath = $this->extensionsPath();
-		if (!is_dir($extensionsPath) && !mkdir($extensionsPath, 0775, true))
+		if (!is_dir($extensionsPath) && !mkdir($extensionsPath, 0775, true) && !is_dir($extensionsPath))
 		{
 			throw new RuntimeException("Unable to create $extensionsPath");
 		}
 
 		$stylesPath = $this->stylesPath();
-		if (!is_dir($stylesPath) && !mkdir($stylesPath, 0775, true))
+		if (!is_dir($stylesPath) && !mkdir($stylesPath, 0775, true) && !is_dir($stylesPath))
 		{
 			throw new RuntimeException("Unable to create $stylesPath");
 		}
@@ -41,7 +41,7 @@ class Project
 		foreach (['', '/sources', '/boards', '/runtime', '/db'] as $dir)
 		{
 			$path = $this->workspace . $dir;
-			if (!is_dir($path) && !mkdir($path, 0775, true))
+			if (!is_dir($path) && !mkdir($path, 0775, true) && !is_dir($path))
 			{
 				throw new RuntimeException("Unable to create $path");
 			}
@@ -204,7 +204,7 @@ class Project
 			throw new RuntimeException("Copy target already exists: $target");
 		}
 
-		if (!mkdir($target, 0775, true))
+		if (!mkdir($target, 0775, true) && !is_dir($target))
 		{
 			throw new RuntimeException("Unable to create copy target: $target");
 		}
@@ -261,14 +261,14 @@ class Project
 	public function isPathUnder(string $path, string $parent): bool
 	{
 		$parent = realpath($parent);
-		return $parent !== false && ($path === $parent || strpos($path, $parent . '/') === 0);
+		return $parent !== false && ($path === $parent || str_starts_with($path, $parent . '/'));
 	}
 
 	private function assertWorkspacePath(string $path): void
 	{
 		$path = $this->normalizeAbsolutePath($path);
 		$workspace = $this->normalizeAbsolutePath($this->workspace);
-		if ($path !== $workspace && strpos($path, $workspace . '/') !== 0)
+		if ($path !== $workspace && !str_starts_with($path, $workspace . '/'))
 		{
 			throw new RuntimeException("Refusing to delete path outside QuickInstall workspace: $path");
 		}

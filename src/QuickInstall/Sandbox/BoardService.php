@@ -53,7 +53,7 @@ class BoardService
 		$source = (new SourceProvider($this->project))->ensure($version);
 
 		$boardDir = $this->project->boardPath($name);
-		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true))
+		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true) && !is_dir($boardDir))
 		{
 			throw new RuntimeException("Unable to create board directory: $boardDir");
 		}

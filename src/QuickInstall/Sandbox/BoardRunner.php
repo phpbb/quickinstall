@@ -313,7 +313,7 @@ class BoardRunner
 
 	private function commandHint(array $command, int $status): string
 	{
-		if (in_array('timeout', $command, true) && $status === 124)
+		if ($status === 124 && in_array('timeout', $command, true))
 		{
 			return "\nThe operation timed out. For seeding, try a smaller preset or use mariadb/mysql/postgres instead of sqlite.";
 		}
