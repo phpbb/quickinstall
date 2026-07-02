@@ -17,6 +17,11 @@ class Application
 	{
 		array_shift($argv);
 		$command = array_shift($argv) ?: 'help';
+		if (!in_array($command, ['help', '--help', '-h'], true) && (in_array('--help', $argv, true) || in_array('-h', $argv, true)))
+		{
+			$this->help([$command]);
+			return 0;
+		}
 
 		try
 		{
@@ -25,7 +30,7 @@ class Application
 				case 'help':
 				case '--help':
 				case '-h':
-					$this->help();
+					$this->help($argv);
 					return 0;
 
 				case 'init':
@@ -652,41 +657,356 @@ class Application
 		}
 	}
 
-	private function help(): void
+	private function help(array $args = []): void
 	{
-		echo <<<TXT
-QuickInstall CLI prototype
+		$command = $args[0] ?? null;
+		$commands = $this->helpCommands();
+		if ($command !== null)
+		{
+			$this->helpCommand($command, $commands);
+			return;
+		}
 
-Commands:
-  qi init
-  qi source:add <version|branch> [--git] [--url URL] [--allow-external]
-  qi source:fetch <version|branch>
-  qi source:list
-  qi source:remove <version|source> [--force]
-  qi source:prune
-  qi phpbb:list
-  qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]
-  qi board:list
-  qi board:start <name>
-  qi board:stop <name>
-  qi board:destroy <name>
-  qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]
-  qi ext:mount <board> <path> [--copy] [--recursive] [--allow-external]
-  qi ext:unmount <board> <vendor/extension>
-  qi ext:list <board>
-  qi style:mount <board> <path> [--copy] [--recursive] [--allow-external]
-  qi style:unmount <board> <style>
-  qi style:list <board>
+		echo "QuickInstall CLI\n";
+		echo "Create disposable local phpBB boards with Docker.\n\n";
+		echo "Usage:\n";
+		echo "  qi <command> [arguments] [options]\n";
+		echo "  qi help [command]\n\n";
+		echo "Common workflow:\n";
+		echo "  qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev\n";
+		echo "  qi board:start demo\n\n";
 
-Examples:
-  qi source:add 3.3.17
-  qi source:add master --git --url https://github.com/phpbb/phpbb.git
-  qi board:create test --phpbb 3.3.17 --db mariadb --port 8081 --populate extension-dev
-  qi board:start test
-  qi board:seed test --preset extension-dev --seed 1
-  qi ext:mount test extensions/vendor/extname
-  qi style:mount test styles/stylename
+		foreach ($commands as $group => $items)
+		{
+			echo "$group:\n";
+			$width = max(array_map('strlen', array_keys($items)));
+			foreach ($items as $name => $help)
+			{
+				echo '  ' . str_pad($name, $width) . '  ' . $help['summary'] . "\n";
+			}
+			echo "\n";
+		}
 
-TXT;
+		echo "Run `qi help <command>` for usage and options.\n";
+		echo "Full guide: docs/sandbox-cli.md\n";
+	}
+
+	private function helpCommand(string $command, array $groups): void
+	{
+		foreach ($groups as $items)
+		{
+			if (!isset($items[$command]))
+			{
+				continue;
+			}
+
+			$help = $items[$command];
+			echo "{$help['title']}\n\n";
+			echo "Usage:\n";
+			echo "  qi {$help['usage']}\n\n";
+			echo "Description:\n";
+			echo "  {$help['description']}\n";
+			if (!empty($help['arguments']))
+			{
+				echo "\nArguments:\n";
+				$this->printHelpRows($help['arguments']);
+			}
+			if (!empty($help['options']))
+			{
+				echo "\nOptions:\n";
+				$this->printHelpRows($help['options']);
+			}
+			if (!empty($help['examples']))
+			{
+				echo "\nExamples:\n";
+				foreach ($help['examples'] as $example)
+				{
+					echo "  qi $example\n";
+				}
+			}
+			echo "\n";
+			return;
+		}
+
+		echo "Unknown command: $command\n\n";
+		$this->help();
+	}
+
+	private function printHelpRows(array $rows): void
+	{
+		$width = max(array_map('strlen', array_keys($rows)));
+		foreach ($rows as $name => $description)
+		{
+			echo '  ' . str_pad($name, $width) . '  ' . $description . "\n";
+		}
+	}
+
+	private function helpCommands(): array
+	{
+		return [
+			'Board commands' => [
+				'board:create' => [
+					'title' => 'board:create',
+					'usage' => 'board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]',
+					'summary' => 'Create a board scaffold and Docker runtime.',
+					'description' => 'Creates a local board definition, downloads the requested phpBB source if needed, and prepares Docker files. Run board:start after this.',
+					'arguments' => [
+						'<name>' => 'Required board name. Use a short local name such as demo or extdev.',
+					],
+					'options' => [
+						'--phpbb VERSION' => 'phpBB selector. Examples: latest, 3.3, 3.3.17, 3.2, master. Default: latest.',
+						'--db DB' => 'Database engine. One of: mariadb, mysql, postgres, sqlite. Default: mariadb.',
+						'--port PORT' => 'Local browser port. Default: 8080.',
+						'--populate PRESET' => 'Seed preset. One of: none, tiny, extension-dev, load-test, random. Default: none.',
+						'--replace' => 'Destroy an existing board with the same name before creating the new one.',
+					],
+					'examples' => [
+						'board:create demo --phpbb 3.3 --db mariadb --port 8081',
+						'board:create extdev --phpbb 3.3.17 --populate extension-dev',
+					],
+				],
+				'board:start' => [
+					'title' => 'board:start',
+					'usage' => 'board:start <name>',
+					'summary' => 'Start Docker and install the board if needed.',
+					'description' => 'Starts the board containers, runs phpBB install on first start, applies the configured populate preset once, and waits for the board URL to respond.',
+					'arguments' => [
+						'<name>' => 'Required board name.',
+					],
+					'examples' => [
+						'board:start demo',
+					],
+				],
+				'board:stop' => [
+					'title' => 'board:stop',
+					'usage' => 'board:stop <name>',
+					'summary' => 'Stop a running board.',
+					'description' => 'Stops the board containers without deleting board files or database files.',
+					'arguments' => [
+						'<name>' => 'Required board name.',
+					],
+					'examples' => [
+						'board:stop demo',
+					],
+				],
+				'board:destroy' => [
+					'title' => 'board:destroy',
+					'usage' => 'board:destroy <name>',
+					'summary' => 'Delete a board and its Docker image.',
+					'description' => 'Removes the board files, runtime files, database files, containers, local Docker image, and board registry entry.',
+					'arguments' => [
+						'<name>' => 'Required board name.',
+					],
+					'examples' => [
+						'board:destroy demo',
+					],
+				],
+				'board:list' => [
+					'title' => 'board:list',
+					'usage' => 'board:list',
+					'summary' => 'Show created boards and running status.',
+					'description' => 'Lists known boards with phpBB version, PHP version, database type, populate preset, URL, and running status.',
+					'examples' => [
+						'board:list',
+					],
+				],
+				'board:seed' => [
+					'title' => 'board:seed',
+					'usage' => 'board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]',
+					'summary' => 'Add, replace, or remove fixture content.',
+					'description' => 'Seeds categories, forums, users, topics, and replies on an installed board. SQLite boards only support reset.',
+					'arguments' => [
+						'<name>' => 'Required board name.',
+					],
+					'options' => [
+						'--preset PRESET' => 'Fixture preset. One of: tiny, extension-dev, load-test, random. Default: extension-dev.',
+						'--seed N' => 'Positive random seed number for repeatable fixture shape. Default: 1.',
+						'--replace' => 'Remove existing QuickInstall seed data, then seed again.',
+						'--reset' => 'Remove existing QuickInstall seed data without adding new data.',
+					],
+					'examples' => [
+						'board:seed demo --preset extension-dev --seed 1',
+						'board:seed demo --preset extension-dev --replace',
+					],
+				],
+			],
+			'Extension commands' => [
+				'ext:mount' => [
+					'title' => 'ext:mount',
+					'usage' => 'ext:mount <board> <path> [--copy] [--recursive] [--allow-external]',
+					'summary' => 'Mount one or more extensions into a board.',
+					'description' => 'Mounts a phpBB extension from the extensions drop zone. Running boards are refreshed automatically.',
+					'arguments' => [
+						'<board>' => 'Required board name.',
+						'<path>' => 'Extension path, or a directory to scan when --recursive is used.',
+					],
+					'options' => [
+						'--copy' => 'Copy one extension instead of bind-mounting it.',
+						'--recursive' => 'Find and bind-mount all extensions below <path>. Cannot be combined with --copy.',
+						'--allow-external' => 'Allow trusted paths outside the extensions drop zone.',
+					],
+					'examples' => [
+						'ext:mount demo extensions/vendor/extname',
+						'ext:mount demo extensions --recursive',
+					],
+				],
+				'ext:unmount' => [
+					'title' => 'ext:unmount',
+					'usage' => 'ext:unmount <board> <vendor/extension>',
+					'summary' => 'Remove a mounted extension from a board.',
+					'description' => 'Removes the extension mount or copied extension files, refreshes the board if running, and clears stale targets.',
+					'arguments' => [
+						'<board>' => 'Required board name.',
+						'<vendor/extension>' => 'Extension name from composer.json, such as phpbb/foo.',
+					],
+					'examples' => [
+						'ext:unmount demo vendor/extname',
+					],
+				],
+				'ext:list' => [
+					'title' => 'ext:list',
+					'usage' => 'ext:list <board>',
+					'summary' => 'Show extensions mounted on a board.',
+					'description' => 'Lists mounted extensions, mount mode, and source path for one board.',
+					'arguments' => [
+						'<board>' => 'Required board name.',
+					],
+					'examples' => [
+						'ext:list demo',
+					],
+				],
+			],
+			'Style commands' => [
+				'style:mount' => [
+					'title' => 'style:mount',
+					'usage' => 'style:mount <board> <path> [--copy] [--recursive] [--allow-external]',
+					'summary' => 'Mount one or more styles into a board.',
+					'description' => 'Mounts a phpBB style from the styles drop zone. Running boards are refreshed automatically.',
+					'arguments' => [
+						'<board>' => 'Required board name.',
+						'<path>' => 'Style path, or a directory to scan when --recursive is used.',
+					],
+					'options' => [
+						'--copy' => 'Copy one style instead of bind-mounting it.',
+						'--recursive' => 'Find and bind-mount all styles below <path>. Cannot be combined with --copy.',
+						'--allow-external' => 'Allow trusted paths outside the styles drop zone.',
+					],
+					'examples' => [
+						'style:mount demo styles/stylename',
+						'style:mount demo styles --recursive',
+					],
+				],
+				'style:unmount' => [
+					'title' => 'style:unmount',
+					'usage' => 'style:unmount <board> <style>',
+					'summary' => 'Remove a mounted style from a board.',
+					'description' => 'Removes the style mount or copied style files, refreshes the board if running, and clears stale targets.',
+					'arguments' => [
+						'<board>' => 'Required board name.',
+						'<style>' => 'Style folder name.',
+					],
+					'examples' => [
+						'style:unmount demo stylename',
+					],
+				],
+				'style:list' => [
+					'title' => 'style:list',
+					'usage' => 'style:list <board>',
+					'summary' => 'Show styles mounted on a board.',
+					'description' => 'Lists mounted styles, mount mode, and source path for one board.',
+					'arguments' => [
+						'<board>' => 'Required board name.',
+					],
+					'examples' => [
+						'style:list demo',
+					],
+				],
+			],
+			'Source commands' => [
+				'source:add' => [
+					'title' => 'source:add',
+					'usage' => 'source:add <version|branch> [--git] [--url URL] [--allow-external]',
+					'summary' => 'Register a phpBB source.',
+					'description' => 'Registers a phpBB release, branch, or Git source. Most users can skip this because board:create registers normal sources automatically.',
+					'arguments' => [
+						'<version|branch>' => 'Version selector or source name, such as 3.3.17 or master.',
+					],
+					'options' => [
+						'--git' => 'Register a Git source instead of a Composer release source.',
+						'--url URL' => 'Git repository URL. Defaults to the official phpBB repository for Git sources.',
+						'--allow-external' => 'Allow a trusted non-phpBB Git URL.',
+					],
+					'examples' => [
+						'source:add 3.3.17',
+						'source:add master --git --url https://github.com/phpbb/phpbb.git',
+					],
+				],
+				'source:fetch' => [
+					'title' => 'source:fetch',
+					'usage' => 'source:fetch <version|branch>',
+					'summary' => 'Download a registered source.',
+					'description' => 'Downloads or updates the source under .qi/sources. Normal board:create flows fetch automatically when needed.',
+					'arguments' => [
+						'<version|branch>' => 'Registered source selector.',
+					],
+					'examples' => [
+						'source:fetch 3.3.17',
+					],
+				],
+				'source:list' => [
+					'title' => 'source:list',
+					'usage' => 'source:list',
+					'summary' => 'Show registered and downloaded sources.',
+					'description' => 'Lists sources, download status, paths, and boards currently using each source.',
+					'examples' => [
+						'source:list',
+					],
+				],
+				'source:remove' => [
+					'title' => 'source:remove',
+					'usage' => 'source:remove <version|source> [--force]',
+					'summary' => 'Delete one source.',
+					'description' => 'Deletes one source from .qi/sources and removes it from the source registry.',
+					'arguments' => [
+						'<version|source>' => 'Registered source selector.',
+					],
+					'options' => [
+						'--force' => 'Remove even if existing boards reference the source.',
+					],
+					'examples' => [
+						'source:remove 3.3.17',
+					],
+				],
+				'source:prune' => [
+					'title' => 'source:prune',
+					'usage' => 'source:prune',
+					'summary' => 'Delete unused sources.',
+					'description' => 'Removes all downloaded sources that are not referenced by existing boards.',
+					'examples' => [
+						'source:prune',
+					],
+				],
+				'phpbb:list' => [
+					'title' => 'phpbb:list',
+					'usage' => 'phpbb:list',
+					'summary' => 'Show supported phpBB selectors.',
+					'description' => 'Lists supported phpBB version selectors, PHP compatibility, and resolution notes.',
+					'examples' => [
+						'phpbb:list',
+					],
+				],
+			],
+			'Workspace commands' => [
+				'init' => [
+					'title' => 'init',
+					'usage' => 'init',
+					'summary' => 'Create the .qi workspace folders.',
+					'description' => 'Initializes QuickInstall local state folders. Other commands also initialize the workspace when needed.',
+					'examples' => [
+						'init',
+					],
+				],
+			],
+		];
 	}
 }

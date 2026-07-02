@@ -23,8 +23,8 @@ php bin/qi init
 Create your first board:
 
 ```bash
-php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
-php bin/qi board:start test
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
+php bin/qi board:start demo
 ```
 
 Open:
@@ -86,8 +86,8 @@ php bin/qi board:list
 Stop or remove a board:
 
 ```bash
-php bin/qi board:stop test
-php bin/qi board:destroy test
+php bin/qi board:stop demo
+php bin/qi board:destroy demo
 ```
 
 `board:destroy` removes the board files, Docker runtime files, database files, local Docker containers, local Docker image, and board registry entry.
@@ -95,14 +95,14 @@ php bin/qi board:destroy test
 Board names are unique. To reuse a name with a different setup, destroy it first:
 
 ```bash
-php bin/qi board:destroy test
-php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:destroy demo
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
 ```
 
 Or recreate it in one command:
 
 ```bash
-php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev --replace
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev --replace
 ```
 
 ## Fixture Presets
@@ -112,7 +112,7 @@ Fixture seeding populates a board with categories, forums, users, topics, and re
 Use `--populate <preset>` during `board:create`:
 
 ```bash
-php bin/qi board:create test --populate extension-dev
+php bin/qi board:create demo --populate extension-dev
 ```
 
 Available presets:
@@ -130,19 +130,19 @@ Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite b
 You can seed again manually:
 
 ```bash
-php bin/qi board:seed test --preset extension-dev --seed 1
+php bin/qi board:seed demo --preset extension-dev --seed 1
 ```
 
 Replace seed data:
 
 ```bash
-php bin/qi board:seed test --preset extension-dev --seed 1 --replace
+php bin/qi board:seed demo --preset extension-dev --seed 1 --replace
 ```
 
 Remove seed data:
 
 ```bash
-php bin/qi board:seed test --preset extension-dev --seed 1 --reset
+php bin/qi board:seed demo --preset extension-dev --seed 1 --reset
 ```
 
 `--seed` is a repeatable random seed number. Use the same seed to get the same fixture shape.
@@ -158,13 +158,13 @@ extensions/vendor/extname/composer.json
 Mount into a board:
 
 ```bash
-php bin/qi ext:mount test extensions/vendor/extname
+php bin/qi ext:mount demo extensions/vendor/extname
 ```
 
 Mount every extension found under a directory:
 
 ```bash
-php bin/qi ext:mount test extensions --recursive
+php bin/qi ext:mount demo extensions --recursive
 ```
 
 QuickInstall reads the extension `composer.json` name, such as `vendor/extname`, and bind-mounts it to:
@@ -178,14 +178,14 @@ Edits in `extensions/vendor/extname` are reflected in the board immediately. If 
 List and unmount extensions:
 
 ```bash
-php bin/qi ext:list test
-php bin/qi ext:unmount test vendor/extname
+php bin/qi ext:list demo
+php bin/qi ext:unmount demo vendor/extname
 ```
 
 Copy instead of bind-mount:
 
 ```bash
-php bin/qi ext:mount test extensions/vendor/extname --copy
+php bin/qi ext:mount demo extensions/vendor/extname --copy
 ```
 
 `--copy` is only supported for one extension at a time. Recursive mounting always uses bind mounts.
@@ -193,7 +193,7 @@ php bin/qi ext:mount test extensions/vendor/extname --copy
 By default, extension sources must live under `extensions/`. To mount a trusted extension from somewhere else on your machine:
 
 ```bash
-php bin/qi ext:mount test /path/to/vendor/extname --allow-external
+php bin/qi ext:mount demo /path/to/vendor/extname --allow-external
 ```
 
 ## Styles
@@ -207,13 +207,13 @@ styles/stylename/style.cfg
 Mount into a board:
 
 ```bash
-php bin/qi style:mount test styles/stylename
+php bin/qi style:mount demo styles/stylename
 ```
 
 Mount every style found under a directory:
 
 ```bash
-php bin/qi style:mount test styles --recursive
+php bin/qi style:mount demo styles --recursive
 ```
 
 QuickInstall uses the style folder name and bind-mounts it to:
@@ -225,14 +225,14 @@ QuickInstall uses the style folder name and bind-mounts it to:
 List and unmount styles:
 
 ```bash
-php bin/qi style:list test
-php bin/qi style:unmount test stylename
+php bin/qi style:list demo
+php bin/qi style:unmount demo stylename
 ```
 
 Copy instead of bind-mount:
 
 ```bash
-php bin/qi style:mount test styles/stylename --copy
+php bin/qi style:mount demo styles/stylename --copy
 ```
 
 `--copy` is only supported for one style at a time. Recursive mounting always uses bind mounts.
@@ -240,7 +240,7 @@ php bin/qi style:mount test styles/stylename --copy
 By default, style sources must live under `styles/`. To mount a trusted style from somewhere else on your machine:
 
 ```bash
-php bin/qi style:mount test /path/to/stylename --allow-external
+php bin/qi style:mount demo /path/to/stylename --allow-external
 ```
 
 ## Supported phpBB Versions
@@ -345,20 +345,20 @@ QuickInstall uses composer from PATH first, then composer.phar from the project 
 Port already in use:
 
 ```bash
-php bin/qi board:create test --port 8090
+php bin/qi board:create demo --port 8090
 ```
 
 See container logs:
 
 ```bash
-docker compose -f .qi/runtime/test/compose.yml logs web
-docker compose -f .qi/runtime/test/compose.yml logs db
+docker compose -f .qi/runtime/demo/compose.yml logs web
+docker compose -f .qi/runtime/demo/compose.yml logs db
 ```
 
 Reset a board completely:
 
 ```bash
-php bin/qi board:destroy test
-php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
-php bin/qi board:start test
+php bin/qi board:destroy demo
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:start demo
 ```
