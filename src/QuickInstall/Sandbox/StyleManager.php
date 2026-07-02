@@ -69,6 +69,21 @@ class StyleManager
 		return ['name' => $name, 'source' => $sourcePath, 'target' => $target, 'mode' => $mode];
 	}
 
+	public function discover(string $source, bool $allowExternal = false): array
+	{
+		$sourcePath = $this->resolvePath($source, $allowExternal);
+		if (!is_dir($sourcePath))
+		{
+			throw new \InvalidArgumentException("Style search path is not a directory: $source");
+		}
+
+		$found = [];
+		$this->discoverStyles($sourcePath, $found);
+		sort($found);
+
+		return $found;
+	}
+
 	public function unmount(string $board, string $name): string
 	{
 		$boardConfig = $this->project->board($board);
@@ -169,6 +184,29 @@ class StyleManager
 		if (!preg_match('/^[A-Za-z0-9_-]+$/', $name))
 		{
 			throw new \InvalidArgumentException("Invalid style name: $name");
+		}
+	}
+
+	private function discoverStyles(string $path, array &$found): void
+	{
+		if ($this->isStylePath($path))
+		{
+			$found[] = $path;
+			return;
+		}
+
+		foreach (scandir($path) ?: [] as $item)
+		{
+			if ($item === '.' || $item === '..')
+			{
+				continue;
+			}
+
+			$child = $path . '/' . $item;
+			if (is_dir($child) && !is_link($child))
+			{
+				$this->discoverStyles($child, $found);
+			}
 		}
 	}
 

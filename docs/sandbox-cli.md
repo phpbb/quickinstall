@@ -161,6 +161,12 @@ Mount into a board:
 php bin/qi ext:mount test extensions/vendor/extname
 ```
 
+Mount every extension found under a directory:
+
+```bash
+php bin/qi ext:mount test extensions --recursive
+```
+
 QuickInstall reads the extension `composer.json` name, such as `vendor/extname`, and bind-mounts it to:
 
 ```text
@@ -182,6 +188,8 @@ Copy instead of bind-mount:
 php bin/qi ext:mount test extensions/vendor/extname --copy
 ```
 
+`--copy` is only supported for one extension at a time. Recursive mounting always uses bind mounts.
+
 By default, extension sources must live under `extensions/`. To mount a trusted extension from somewhere else on your machine:
 
 ```bash
@@ -202,6 +210,12 @@ Mount into a board:
 php bin/qi style:mount test styles/stylename
 ```
 
+Mount every style found under a directory:
+
+```bash
+php bin/qi style:mount test styles --recursive
+```
+
 QuickInstall uses the style folder name and bind-mounts it to:
 
 ```text
@@ -220,6 +234,8 @@ Copy instead of bind-mount:
 ```bash
 php bin/qi style:mount test styles/stylename --copy
 ```
+
+`--copy` is only supported for one style at a time. Recursive mounting always uses bind mounts.
 
 By default, style sources must live under `styles/`. To mount a trusted style from somewhere else on your machine:
 

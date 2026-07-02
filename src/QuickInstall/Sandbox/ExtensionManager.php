@@ -70,6 +70,21 @@ class ExtensionManager
 		return ['name' => $name, 'source' => $sourcePath, 'target' => $target, 'mode' => $mode];
 	}
 
+	public function discover(string $source, bool $allowExternal = false): array
+	{
+		$sourcePath = $this->resolvePath($source, $allowExternal);
+		if (!is_dir($sourcePath))
+		{
+			throw new \InvalidArgumentException("Extension search path is not a directory: $source");
+		}
+
+		$found = [];
+		$this->discoverExtensions($sourcePath, $found);
+		sort($found);
+
+		return $found;
+	}
+
 	public function unmount(string $board, string $name): string
 	{
 		$boardConfig = $this->project->board($board);
@@ -219,6 +234,29 @@ class ExtensionManager
 		if (!preg_match('/^[a-z0-9_.-]+\/[a-z0-9_.-]+$/', $name))
 		{
 			throw new \InvalidArgumentException("Invalid extension name: $name");
+		}
+	}
+
+	private function discoverExtensions(string $path, array &$found): void
+	{
+		if (is_file($path . '/composer.json'))
+		{
+			$found[] = $path;
+			return;
+		}
+
+		foreach (scandir($path) ?: [] as $item)
+		{
+			if ($item === '.' || $item === '..')
+			{
+				continue;
+			}
+
+			$child = $path . '/' . $item;
+			if (is_dir($child) && !is_link($child))
+			{
+				$this->discoverExtensions($child, $found);
+			}
 		}
 	}
 

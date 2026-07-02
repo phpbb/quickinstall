@@ -438,10 +438,40 @@ class Application
 		$source = $cli->argument(1);
 		if ($board === null || $source === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy] [--allow-external]');
+			throw new \InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy] [--recursive] [--allow-external]');
+		}
+		if ($cli->has('recursive') && $cli->has('copy'))
+		{
+			throw new \InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual extensions.');
 		}
 
-		$mounted = (new ExtensionManager($this->project))->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
+		$extensions = new ExtensionManager($this->project);
+		if ($cli->has('recursive'))
+		{
+			$this->project->board($board);
+			$mounted = [];
+			$errors = [];
+			foreach ($extensions->discover($source, $cli->has('allow-external')) as $path)
+			{
+				try
+				{
+					$mounted[] = $extensions->mount($board, $path, false, true);
+				}
+				catch (\RuntimeException | \InvalidArgumentException $e)
+				{
+					$errors[] = "$path: " . $e->getMessage();
+				}
+			}
+
+			if ($mounted)
+			{
+				$this->refreshBoardIfRunning($board);
+			}
+			$this->printBulkMountResult('extension', $board, $mounted, $errors);
+			return $errors ? 1 : 0;
+		}
+
+		$mounted = $extensions->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
 		$this->refreshBoardIfRunning($board);
 		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
 		echo "Source: {$mounted['source']}\n";
@@ -524,10 +554,40 @@ class Application
 		$source = $cli->argument(1);
 		if ($board === null || $source === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy] [--allow-external]');
+			throw new \InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy] [--recursive] [--allow-external]');
+		}
+		if ($cli->has('recursive') && $cli->has('copy'))
+		{
+			throw new \InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual styles.');
 		}
 
-		$mounted = (new StyleManager($this->project))->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
+		$styles = new StyleManager($this->project);
+		if ($cli->has('recursive'))
+		{
+			$this->project->board($board);
+			$mounted = [];
+			$errors = [];
+			foreach ($styles->discover($source, $cli->has('allow-external')) as $path)
+			{
+				try
+				{
+					$mounted[] = $styles->mount($board, $path, false, true);
+				}
+				catch (\RuntimeException | \InvalidArgumentException $e)
+				{
+					$errors[] = "$path: " . $e->getMessage();
+				}
+			}
+
+			if ($mounted)
+			{
+				$this->refreshBoardIfRunning($board);
+			}
+			$this->printBulkMountResult('style', $board, $mounted, $errors);
+			return $errors ? 1 : 0;
+		}
+
+		$mounted = $styles->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
 		$this->refreshBoardIfRunning($board);
 		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
 		echo "Source: {$mounted['source']}\n";
@@ -573,6 +633,25 @@ class Application
 		return 0;
 	}
 
+	private function printBulkMountResult(string $type, string $board, array $mounted, array $errors): void
+	{
+		if (!$mounted && !$errors)
+		{
+			echo "No {$type}s found for board: $board\n";
+			return;
+		}
+
+		foreach ($mounted as $item)
+		{
+			echo "Mounted {$item['name']} on $board ({$item['mode']})\n";
+		}
+
+		foreach ($errors as $error)
+		{
+			fwrite(STDERR, "Skipped $type: $error\n");
+		}
+	}
+
 	private function help(): void
 	{
 		echo <<<TXT
@@ -592,10 +671,10 @@ Commands:
   qi board:stop <name>
   qi board:destroy <name>
   qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]
-  qi ext:mount <board> <path> [--copy] [--allow-external]
+  qi ext:mount <board> <path> [--copy] [--recursive] [--allow-external]
   qi ext:unmount <board> <vendor/extension>
   qi ext:list <board>
-  qi style:mount <board> <path> [--copy] [--allow-external]
+  qi style:mount <board> <path> [--copy] [--recursive] [--allow-external]
   qi style:unmount <board> <style>
   qi style:list <board>
 
