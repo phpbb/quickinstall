@@ -57,13 +57,7 @@ class StyleManager
 
 		if ($copy)
 		{
-			$parent = dirname($target);
-			if (!is_dir($parent) && !mkdir($parent, 0775, true))
-			{
-				throw new \RuntimeException("Unable to create style target parent: $parent");
-			}
-
-			$this->copyTree($sourcePath, $target);
+			$this->project->copyTree($sourcePath, $target);
 			$mode = 'copy';
 			$styles[$name] = ['mode' => 'copy', 'source' => $target];
 		}
@@ -111,7 +105,7 @@ class StyleManager
 		if (!$isBind)
 		{
 			$this->project->deleteTree($target);
-			$this->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/styles');
+			$this->project->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/styles');
 		}
 
 		unset($styles[$name]);
@@ -126,7 +120,7 @@ class StyleManager
 		$this->assertStyleName($name);
 		$target = $this->project->boardPath($board) . '/styles/' . $name;
 		$this->project->deleteTree($target);
-		$this->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/styles');
+		$this->project->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/styles');
 	}
 
 	public function list(string $board): array
@@ -148,28 +142,12 @@ class StyleManager
 
 	private function resolvePath(string $path, bool $allowExternal): string
 	{
-		$candidates = [
+		return $this->project->resolveDropZonePath(
 			$path,
-			$this->project->rootPath($path),
-			$this->project->stylesPath() . '/' . ltrim($path, '/'),
-		];
-
-		foreach ($candidates as $candidate)
-		{
-			$real = realpath($candidate);
-			if ($real !== false && ($allowExternal || $this->isUnder($real, $this->project->stylesPath())))
-			{
-				return $real;
-			}
-		}
-
-		throw new \InvalidArgumentException("Style path must be under styles/. Use --allow-external only for trusted local paths.");
-	}
-
-	private function isUnder(string $path, string $parent): bool
-	{
-		$parent = realpath($parent);
-		return $parent !== false && ($path === $parent || strpos($path, $parent . '/') === 0);
+			$this->project->stylesPath(),
+			$allowExternal,
+			"Style path must be under styles/. Use --allow-external only for trusted local paths."
+		);
 	}
 
 	private function styleName(string $sourcePath): string
@@ -221,44 +199,4 @@ class StyleManager
 		}
 	}
 
-	private function copyTree(string $source, string $target): void
-	{
-		if (is_dir($target))
-		{
-			throw new \RuntimeException("Copy target already exists: $target");
-		}
-
-		if (!mkdir($target, 0775, true))
-		{
-			throw new \RuntimeException("Unable to create copy target: $target");
-		}
-
-		foreach (scandir($source) ?: [] as $item)
-		{
-			if ($item === '.' || $item === '..')
-			{
-				continue;
-			}
-
-			$src = $source . '/' . $item;
-			$dst = $target . '/' . $item;
-			if (is_dir($src) && !is_link($src))
-			{
-				$this->copyTree($src, $dst);
-			}
-			else if (!copy($src, $dst))
-			{
-				throw new \RuntimeException("Unable to copy $src to $dst");
-			}
-		}
-	}
-
-	private function removeEmptyParents(string $path, string $stop): void
-	{
-		while ($path !== $stop && is_dir($path) && count(array_diff(scandir($path) ?: [], ['.', '..'])) === 0)
-		{
-			rmdir($path);
-			$path = dirname($path);
-		}
-	}
 }

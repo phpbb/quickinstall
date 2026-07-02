@@ -197,6 +197,73 @@ class Project
 		}
 	}
 
+	public function copyTree(string $source, string $target): void
+	{
+		if (is_dir($target))
+		{
+			throw new RuntimeException("Copy target already exists: $target");
+		}
+
+		if (!mkdir($target, 0775, true))
+		{
+			throw new RuntimeException("Unable to create copy target: $target");
+		}
+
+		foreach (scandir($source) ?: [] as $item)
+		{
+			if ($item === '.' || $item === '..')
+			{
+				continue;
+			}
+
+			$src = $source . '/' . $item;
+			$dst = $target . '/' . $item;
+			if (is_dir($src) && !is_link($src))
+			{
+				$this->copyTree($src, $dst);
+			}
+			else if (!copy($src, $dst))
+			{
+				throw new RuntimeException("Unable to copy $src to $dst");
+			}
+		}
+	}
+
+	public function removeEmptyParents(string $path, string $stop): void
+	{
+		while ($path !== $stop && is_dir($path) && count(array_diff(scandir($path) ?: [], ['.', '..'])) === 0)
+		{
+			rmdir($path);
+			$path = dirname($path);
+		}
+	}
+
+	public function resolveDropZonePath(string $path, string $basePath, bool $allowExternal, string $error): string
+	{
+		$candidates = [
+			$path,
+			$this->rootPath($path),
+			$basePath . '/' . ltrim($path, '/'),
+		];
+
+		foreach ($candidates as $candidate)
+		{
+			$real = realpath($candidate);
+			if ($real !== false && ($allowExternal || $this->isPathUnder($real, $basePath)))
+			{
+				return $real;
+			}
+		}
+
+		throw new InvalidArgumentException($error);
+	}
+
+	public function isPathUnder(string $path, string $parent): bool
+	{
+		$parent = realpath($parent);
+		return $parent !== false && ($path === $parent || strpos($path, $parent . '/') === 0);
+	}
+
 	private function assertWorkspacePath(string $path): void
 	{
 		$path = $this->normalizeAbsolutePath($path);

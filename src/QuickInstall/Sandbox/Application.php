@@ -461,38 +461,7 @@ class Application
 			throw new InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual extensions.');
 		}
 
-		$extensions = new ExtensionManager($this->project);
-		if ($cli->has('recursive'))
-		{
-			$this->project->board($board);
-			$mounted = [];
-			$errors = [];
-			foreach ($extensions->discover($source, $cli->has('allow-external')) as $path)
-			{
-				try
-				{
-					$mounted[] = $extensions->mount($board, $path, false, true);
-				}
-				catch (\RuntimeException | \InvalidArgumentException $e)
-				{
-					$errors[] = "$path: " . $e->getMessage();
-				}
-			}
-
-			if ($mounted)
-			{
-				$this->refreshBoardIfRunning($board);
-			}
-			$this->printBulkMountResult('extension', $board, $mounted, $errors);
-			return $errors ? 1 : 0;
-		}
-
-		$mounted = $extensions->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
-		$this->refreshBoardIfRunning($board);
-		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
-		echo "Source: {$mounted['source']}\n";
-		echo "Target: {$mounted['target']}\n";
-		return 0;
+		return $this->mountResources('extension', new ExtensionManager($this->project), $board, $source, $cli->has('copy'), $cli->has('recursive'), $cli->has('allow-external'));
 	}
 
 	private function extUnmount(array $args): int
@@ -577,38 +546,7 @@ class Application
 			throw new InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual styles.');
 		}
 
-		$styles = new StyleManager($this->project);
-		if ($cli->has('recursive'))
-		{
-			$this->project->board($board);
-			$mounted = [];
-			$errors = [];
-			foreach ($styles->discover($source, $cli->has('allow-external')) as $path)
-			{
-				try
-				{
-					$mounted[] = $styles->mount($board, $path, false, true);
-				}
-				catch (\RuntimeException | \InvalidArgumentException $e)
-				{
-					$errors[] = "$path: " . $e->getMessage();
-				}
-			}
-
-			if ($mounted)
-			{
-				$this->refreshBoardIfRunning($board);
-			}
-			$this->printBulkMountResult('style', $board, $mounted, $errors);
-			return $errors ? 1 : 0;
-		}
-
-		$mounted = $styles->mount($board, $source, $cli->has('copy'), $cli->has('allow-external'));
-		$this->refreshBoardIfRunning($board);
-		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
-		echo "Source: {$mounted['source']}\n";
-		echo "Target: {$mounted['target']}\n";
-		return 0;
+		return $this->mountResources('style', new StyleManager($this->project), $board, $source, $cli->has('copy'), $cli->has('recursive'), $cli->has('allow-external'));
 	}
 
 	private function styleUnmount(array $args): int
@@ -666,6 +604,41 @@ class Application
 		{
 			fwrite(STDERR, "Skipped $type: $error\n");
 		}
+	}
+
+	private function mountResources(string $type, object $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int
+	{
+		if ($recursive)
+		{
+			$this->project->board($board);
+			$mounted = [];
+			$errors = [];
+			foreach ($manager->discover($source, $allowExternal) as $path)
+			{
+				try
+				{
+					$mounted[] = $manager->mount($board, $path, false, true);
+				}
+				catch (RuntimeException | InvalidArgumentException $e)
+				{
+					$errors[] = "$path: " . $e->getMessage();
+				}
+			}
+
+			if ($mounted)
+			{
+				$this->refreshBoardIfRunning($board);
+			}
+			$this->printBulkMountResult($type, $board, $mounted, $errors);
+			return $errors ? 1 : 0;
+		}
+
+		$mounted = $manager->mount($board, $source, $copy, $allowExternal);
+		$this->refreshBoardIfRunning($board);
+		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
+		echo "Source: {$mounted['source']}\n";
+		echo "Target: {$mounted['target']}\n";
+		return 0;
 	}
 
 	private function help(array $args = []): void

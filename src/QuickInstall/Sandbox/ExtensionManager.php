@@ -58,13 +58,7 @@ class ExtensionManager
 
 		if ($copy)
 		{
-			$parent = dirname($target);
-			if (!is_dir($parent) && !mkdir($parent, 0775, true))
-			{
-				throw new \RuntimeException("Unable to create extension target parent: $parent");
-			}
-
-			$this->copyTree($sourcePath, $target);
+			$this->project->copyTree($sourcePath, $target);
 			$mode = 'copy';
 			$extensions[$name] = ['mode' => 'copy', 'source' => $target];
 		}
@@ -112,7 +106,7 @@ class ExtensionManager
 		if (!$isBind)
 		{
 			$this->project->deleteTree($target);
-			$this->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/ext');
+			$this->project->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/ext');
 		}
 
 		unset($extensions[$name]);
@@ -127,9 +121,8 @@ class ExtensionManager
 		$this->assertExtensionName($name);
 		$target = $this->project->boardPath($board) . '/ext/' . $name;
 		$this->project->deleteTree($target);
-		$this->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/ext');
+		$this->project->removeEmptyParents(dirname($target), $this->project->boardPath($board) . '/ext');
 	}
-
 
 	public function list(string $board): array
 	{
@@ -196,28 +189,12 @@ class ExtensionManager
 
 	private function resolvePath(string $path, bool $allowExternal): string
 	{
-		$candidates = [
+		return $this->project->resolveDropZonePath(
 			$path,
-			$this->project->rootPath($path),
-			$this->project->extensionsPath() . '/' . ltrim($path, '/'),
-		];
-
-		foreach ($candidates as $candidate)
-		{
-			$real = realpath($candidate);
-			if ($real !== false && ($allowExternal || $this->isUnder($real, $this->project->extensionsPath())))
-			{
-				return $real;
-			}
-		}
-
-		throw new \InvalidArgumentException("Extension path must be under extensions/. Use --allow-external only for trusted local paths.");
-	}
-
-	private function isUnder(string $path, string $parent): bool
-	{
-		$parent = realpath($parent);
-		return $parent !== false && ($path === $parent || strpos($path, $parent . '/') === 0);
+			$this->project->extensionsPath(),
+			$allowExternal,
+			"Extension path must be under extensions/. Use --allow-external only for trusted local paths."
+		);
 	}
 
 	private function extensionName(string $sourcePath): string
@@ -271,44 +248,4 @@ class ExtensionManager
 		}
 	}
 
-	private function copyTree(string $source, string $target): void
-	{
-		if (is_dir($target))
-		{
-			throw new \RuntimeException("Copy target already exists: $target");
-		}
-
-		if (!mkdir($target, 0775, true))
-		{
-			throw new \RuntimeException("Unable to create copy target: $target");
-		}
-
-		foreach (scandir($source) ?: [] as $item)
-		{
-			if ($item === '.' || $item === '..')
-			{
-				continue;
-			}
-
-			$src = $source . '/' . $item;
-			$dst = $target . '/' . $item;
-			if (is_dir($src) && !is_link($src))
-			{
-				$this->copyTree($src, $dst);
-			}
-			else if (!copy($src, $dst))
-			{
-				throw new \RuntimeException("Unable to copy $src to $dst");
-			}
-		}
-	}
-
-	private function removeEmptyParents(string $path, string $stop): void
-	{
-		while ($path !== $stop && is_dir($path) && count(array_diff(scandir($path) ?: [], ['.', '..'])) === 0)
-		{
-			rmdir($path);
-			$path = dirname($path);
-		}
-	}
 }
