@@ -8,14 +8,21 @@ You do not need MAMP, WAMP, XAMPP, or any local Apache/MySQL setup. QuickInstall
 
 Install requirements:
 
-- Docker Desktop (must be running)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (must be installed and running)
 - PHP CLI
 - Git, only required for Git sources
 
 From the QuickInstall project root:
 
+Initialize if this is your first time:
+
 ```bash
 php bin/qi init
+```
+
+Create your first board:
+
+```bash
 php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
 php bin/qi board:start test
 ```
@@ -34,7 +41,11 @@ admin / password
 
 That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts Docker, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
 
-Board ports are bound to `127.0.0.1`, so generated boards are intended for this machine only.
+If you ever need help with commands, run:
+
+```bash
+php bin/qi help
+```
 
 ## Common Recipes
 
@@ -66,14 +77,7 @@ php bin/qi board:create alpha --phpbb master --db mariadb --port 8084 --populate
 php bin/qi board:start alpha
 ```
 
-Create an SQLite board without fixtures:
-
-```bash
-php bin/qi board:create sqlite --phpbb 3.3 --db sqlite --port 8085 --populate none
-php bin/qi board:start sqlite
-```
-
-List boards:
+List boards (shows all created boards and their statuses):
 
 ```bash
 php bin/qi board:list
