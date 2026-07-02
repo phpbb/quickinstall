@@ -9,7 +9,7 @@ You do not need MAMP, WAMP, XAMPP, or any local Apache/MySQL setup. QuickInstall
 Install requirements:
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (must be installed and running)
-- PHP CLI
+- PHP 8.0 or newer for the CLI command
 - Git, only required for Git sources
 
 From the QuickInstall project root:

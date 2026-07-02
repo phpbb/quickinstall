@@ -58,7 +58,7 @@ phpBB boards require a web server running PHP and one of the following database 
 
 ## Sandbox CLI Prototype
 
-QuickInstall now includes an experimental CLI scaffold for a Docker-based board factory. It writes generated state to `.qi/` and leaves the legacy web UI unchanged.
+QuickInstall now includes an experimental CLI scaffold for a Docker-based board factory. It writes generated state to `.qi/` and leaves the legacy web UI unchanged. The Sandbox CLI requires PHP 8.0 or newer for the `php bin/qi` command.
 
 ```bash
 php bin/qi init
