@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class ExtensionManager
 {
@@ -17,7 +28,7 @@ class ExtensionManager
 		$sourcePath = $this->resolvePath($source, $allowExternal);
 		if (!is_dir($sourcePath))
 		{
-			throw new \InvalidArgumentException("Extension source is not a directory: $source");
+			throw new InvalidArgumentException("Extension source is not a directory: $source");
 		}
 
 		$name = $this->extensionName($sourcePath);
@@ -41,7 +52,7 @@ class ExtensionManager
 			}
 			else
 			{
-				throw new \RuntimeException("Extension target already exists: $target");
+				throw new RuntimeException("Extension target already exists: $target");
 			}
 		}
 
@@ -75,7 +86,7 @@ class ExtensionManager
 		$sourcePath = $this->resolvePath($source, $allowExternal);
 		if (!is_dir($sourcePath))
 		{
-			throw new \InvalidArgumentException("Extension search path is not a directory: $source");
+			throw new InvalidArgumentException("Extension search path is not a directory: $source");
 		}
 
 		$found = [];
@@ -95,7 +106,7 @@ class ExtensionManager
 
 		if (!isset($extensions[$name]) && !file_exists($target) && !is_link($target))
 		{
-			throw new \InvalidArgumentException("Extension is not mounted: $name");
+			throw new InvalidArgumentException("Extension is not mounted: $name");
 		}
 
 		if (!$isBind)
@@ -214,13 +225,13 @@ class ExtensionManager
 		$composer = $sourcePath . '/composer.json';
 		if (!is_file($composer))
 		{
-			throw new \InvalidArgumentException("Extension source must contain composer.json: $sourcePath");
+			throw new InvalidArgumentException("Extension source must contain composer.json: $sourcePath");
 		}
 
 		$data = json_decode((string) file_get_contents($composer), true);
 		if (!is_array($data) || empty($data['name']))
 		{
-			throw new \InvalidArgumentException("Extension composer.json must contain a name like vendor/extension: $composer");
+			throw new InvalidArgumentException("Extension composer.json must contain a name like vendor/extension: $composer");
 		}
 
 		$name = strtolower((string) $data['name']);
@@ -233,7 +244,7 @@ class ExtensionManager
 	{
 		if (!preg_match('/^[a-z0-9_.-]+\/[a-z0-9_.-]+$/', $name))
 		{
-			throw new \InvalidArgumentException("Invalid extension name: $name");
+			throw new InvalidArgumentException("Invalid extension name: $name");
 		}
 	}
 

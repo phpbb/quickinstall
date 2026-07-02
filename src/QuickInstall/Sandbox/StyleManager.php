@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class StyleManager
 {
@@ -17,7 +28,7 @@ class StyleManager
 		$sourcePath = $this->resolvePath($source, $allowExternal);
 		if (!is_dir($sourcePath))
 		{
-			throw new \InvalidArgumentException("Style source is not a directory: $source");
+			throw new InvalidArgumentException("Style source is not a directory: $source");
 		}
 
 		$name = $this->styleName($sourcePath);
@@ -40,7 +51,7 @@ class StyleManager
 			}
 			else
 			{
-				throw new \RuntimeException("Style target already exists: $target");
+				throw new RuntimeException("Style target already exists: $target");
 			}
 		}
 
@@ -74,7 +85,7 @@ class StyleManager
 		$sourcePath = $this->resolvePath($source, $allowExternal);
 		if (!is_dir($sourcePath))
 		{
-			throw new \InvalidArgumentException("Style search path is not a directory: $source");
+			throw new InvalidArgumentException("Style search path is not a directory: $source");
 		}
 
 		$found = [];
@@ -94,7 +105,7 @@ class StyleManager
 
 		if (!isset($styles[$name]) && !file_exists($target) && !is_link($target))
 		{
-			throw new \InvalidArgumentException("Style is not mounted: $name");
+			throw new InvalidArgumentException("Style is not mounted: $name");
 		}
 
 		if (!$isBind)
@@ -165,7 +176,7 @@ class StyleManager
 	{
 		if (!$this->isStylePath($sourcePath))
 		{
-			throw new \InvalidArgumentException("Style source must contain style.cfg: $sourcePath");
+			throw new InvalidArgumentException("Style source must contain style.cfg: $sourcePath");
 		}
 
 		$name = basename($sourcePath);
@@ -183,7 +194,7 @@ class StyleManager
 	{
 		if (!preg_match('/^[A-Za-z0-9_-]+$/', $name))
 		{
-			throw new \InvalidArgumentException("Invalid style name: $name");
+			throw new InvalidArgumentException("Invalid style name: $name");
 		}
 	}
 

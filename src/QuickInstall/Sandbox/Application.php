@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class Application
 {
@@ -96,12 +107,12 @@ class Application
 					return 1;
 			}
 		}
-		catch (\InvalidArgumentException $e)
+		catch (InvalidArgumentException $e)
 		{
 			fwrite(STDERR, $e->getMessage() . "\n");
 			return 1;
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			fwrite(STDERR, $e->getMessage() . "\n");
 			return 1;
@@ -121,7 +132,7 @@ class Application
 		$version = $cli->argument(0);
 		if ($version === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi source:add <version|branch> [--git] [--url URL] [--allow-external]');
+			throw new InvalidArgumentException('Usage: qi source:add <version|branch> [--git] [--url URL] [--allow-external]');
 		}
 
 		$record = (new SourceService($this->project))->add($version, $cli->has('git'), $cli->option('url'), $cli->has('allow-external'));
@@ -165,7 +176,7 @@ class Application
 		$version = $cli->argument(0);
 		if ($version === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi source:remove <version|source> [--force]');
+			throw new InvalidArgumentException('Usage: qi source:remove <version|source> [--force]');
 		}
 
 		$removed = (new SourceService($this->project))->remove($version, $cli->has('force'));
@@ -201,7 +212,7 @@ class Application
 		$version = $cli->argument(0);
 		if ($version === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi source:fetch <version|branch>');
+			throw new InvalidArgumentException('Usage: qi source:fetch <version|branch>');
 		}
 
 		$record = (new SourceService($this->project))->fetch($version);
@@ -226,7 +237,7 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]');
+			throw new InvalidArgumentException('Usage: qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]');
 		}
 
 		$version = $cli->option('phpbb', 'latest');
@@ -372,7 +383,7 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]');
+			throw new InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]');
 		}
 
 		$preset = $cli->option('preset', 'extension-dev');
@@ -380,11 +391,11 @@ class Application
 		$this->validatePreset($preset);
 		if ($seed < 1)
 		{
-			throw new \InvalidArgumentException('--seed must be a positive integer.');
+			throw new InvalidArgumentException('--seed must be a positive integer.');
 		}
 		if ($cli->has('reset') && $cli->has('replace'))
 		{
-			throw new \InvalidArgumentException('Use --reset or --replace, not both.');
+			throw new InvalidArgumentException('Use --reset or --replace, not both.');
 		}
 		$action = $cli->has('reset') ? 'reset' : ($cli->has('replace') ? 'replace' : 'seed');
 
@@ -399,7 +410,7 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new \InvalidArgumentException($usage);
+			throw new InvalidArgumentException($usage);
 		}
 
 		return $name;
@@ -409,12 +420,12 @@ class Application
 	{
 		if (!in_array($db, ['mariadb', 'mysql', 'postgres', 'sqlite'], true))
 		{
-			throw new \InvalidArgumentException('--db must be one of: mariadb, mysql, postgres, sqlite.');
+			throw new InvalidArgumentException('--db must be one of: mariadb, mysql, postgres, sqlite.');
 		}
 
 		if ($port < 1 || $port > 65535)
 		{
-			throw new \InvalidArgumentException('--port must be between 1 and 65535.');
+			throw new InvalidArgumentException('--port must be between 1 and 65535.');
 		}
 
 		if ($populate !== 'none')
@@ -424,7 +435,7 @@ class Application
 
 		if ($db === 'sqlite' && $populate !== 'none')
 		{
-			throw new \InvalidArgumentException('SQLite boards currently support --populate none only. Use mariadb, mysql, or postgres for fixture seeding.');
+			throw new InvalidArgumentException('SQLite boards currently support --populate none only. Use mariadb, mysql, or postgres for fixture seeding.');
 		}
 	}
 
@@ -432,7 +443,7 @@ class Application
 	{
 		if (!in_array($preset, ['tiny', 'extension-dev', 'load-test', 'random'], true))
 		{
-			throw new \InvalidArgumentException('Preset must be one of: tiny, extension-dev, load-test, random.');
+			throw new InvalidArgumentException('Preset must be one of: tiny, extension-dev, load-test, random.');
 		}
 	}
 
@@ -443,11 +454,11 @@ class Application
 		$source = $cli->argument(1);
 		if ($board === null || $source === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy] [--recursive] [--allow-external]');
+			throw new InvalidArgumentException('Usage: qi ext:mount <board> <path> [--copy] [--recursive] [--allow-external]');
 		}
 		if ($cli->has('recursive') && $cli->has('copy'))
 		{
-			throw new \InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual extensions.');
+			throw new InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual extensions.');
 		}
 
 		$extensions = new ExtensionManager($this->project);
@@ -491,7 +502,7 @@ class Application
 		$name = $cli->argument(1);
 		if ($board === null || $name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi ext:unmount <board> <vendor/extension>');
+			throw new InvalidArgumentException('Usage: qi ext:unmount <board> <vendor/extension>');
 		}
 
 		$extensions = new ExtensionManager($this->project);
@@ -559,11 +570,11 @@ class Application
 		$source = $cli->argument(1);
 		if ($board === null || $source === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy] [--recursive] [--allow-external]');
+			throw new InvalidArgumentException('Usage: qi style:mount <board> <path> [--copy] [--recursive] [--allow-external]');
 		}
 		if ($cli->has('recursive') && $cli->has('copy'))
 		{
-			throw new \InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual styles.');
+			throw new InvalidArgumentException('--recursive cannot be combined with --copy. Mount recursively with bind mode, or copy individual styles.');
 		}
 
 		$styles = new StyleManager($this->project);
@@ -607,7 +618,7 @@ class Application
 		$name = $cli->argument(1);
 		if ($board === null || $name === null)
 		{
-			throw new \InvalidArgumentException('Usage: qi style:unmount <board> <style>');
+			throw new InvalidArgumentException('Usage: qi style:unmount <board> <style>');
 		}
 
 		$styles = new StyleManager($this->project);

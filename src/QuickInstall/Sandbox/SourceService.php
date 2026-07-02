@@ -1,6 +1,16 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
 
 class SourceService
 {
@@ -49,7 +59,7 @@ class SourceService
 		$usedBy = $this->usageBySource()[$source['source_key']] ?? [];
 		if ($usedBy && !$force)
 		{
-			throw new \InvalidArgumentException("Source {$source['source_key']} is used by board(s): " . implode(', ', $usedBy) . ". Destroy those boards first, or use --force.");
+			throw new InvalidArgumentException("Source {$source['source_key']} is used by board(s): " . implode(', ', $usedBy) . ". Destroy those boards first, or use --force.");
 		}
 
 		$this->removeRecordAndFiles($source);
@@ -90,7 +100,7 @@ class SourceService
 			return $sources[$selection['source_key']] + ['source_key' => $selection['source_key']];
 		}
 
-		throw new \InvalidArgumentException("Unknown source: $version");
+		throw new InvalidArgumentException("Unknown source: $version");
 	}
 
 	private function removeRecordAndFiles(array $source): void

@@ -1,6 +1,16 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
 
 class VersionMatrix
 {
@@ -20,12 +30,12 @@ class VersionMatrix
 		$requested = trim($requested);
 		if ($requested === '')
 		{
-			throw new \InvalidArgumentException('Missing phpBB version');
+			throw new InvalidArgumentException('Missing phpBB version');
 		}
 
 		if (preg_match('/^3\.[01](\.|$)/', $requested))
 		{
-			throw new \InvalidArgumentException("phpBB $requested is not supported by the modern Docker CLI. Use phpBB 3.2+ or the legacy web app for phpBB 3.0/3.1.");
+			throw new InvalidArgumentException("phpBB $requested is not supported by the modern Docker CLI. Use phpBB 3.2+ or the legacy web app for phpBB 3.0/3.1.");
 		}
 
 		if ($git)
@@ -132,7 +142,7 @@ class VersionMatrix
 			];
 		}
 
-		throw new \InvalidArgumentException("Unsupported phpBB selector: $requested. Use latest, 3.3, 3.3.x, 3.2, 3.2.x, 4.0.x, or master.");
+		throw new InvalidArgumentException("Unsupported phpBB selector: $requested. Use latest, 3.3, 3.3.x, 3.2, 3.2.x, 4.0.x, or master.");
 	}
 
 	public function runtimeFor(string $version): array

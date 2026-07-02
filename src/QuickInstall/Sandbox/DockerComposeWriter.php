@@ -1,6 +1,16 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use RuntimeException;
 
 class DockerComposeWriter
 {
@@ -16,7 +26,7 @@ class DockerComposeWriter
 		$runtimeDir = $this->project->workspacePath('runtime/' . $name);
 		if (!is_dir($runtimeDir) && !mkdir($runtimeDir, 0775, true))
 		{
-			throw new \RuntimeException("Unable to create runtime directory: $runtimeDir");
+			throw new RuntimeException("Unable to create runtime directory: $runtimeDir");
 		}
 
 		$installConfig = $runtimeDir . '/install-config.yml';
@@ -91,7 +101,7 @@ YAML;
 		$dbPath = $this->project->workspacePath('db/' . $name);
 		if (!is_dir($dbPath) && !mkdir($dbPath, 0775, true))
 		{
-			throw new \RuntimeException("Unable to create database directory: $dbPath");
+			throw new RuntimeException("Unable to create database directory: $dbPath");
 		}
 
 		return <<<YAML

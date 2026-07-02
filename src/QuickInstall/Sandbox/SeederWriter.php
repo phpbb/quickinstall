@@ -1,6 +1,16 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use RuntimeException;
 
 class SeederWriter
 {
@@ -16,7 +26,7 @@ class SeederWriter
 		$path = $this->project->runtimePath($name) . '/seed.php';
 		if (file_put_contents($path, $this->script()) === false)
 		{
-			throw new \RuntimeException("Unable to write $path");
+			throw new RuntimeException("Unable to write $path");
 		}
 
 		return $path;

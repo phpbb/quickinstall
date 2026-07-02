@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class BoardRunner
 {
@@ -18,7 +29,7 @@ class BoardRunner
 		$this->waitUntilInstalled($name);
 		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
 		{
-			throw new \RuntimeException('SQLite boards currently support populate:none only. Use mariadb, mysql, or postgres for seeded boards.');
+			throw new RuntimeException('SQLite boards currently support populate:none only. Use mariadb, mysql, or postgres for seeded boards.');
 		}
 		$this->seedIfNeeded($name, $board['populate'] ?? 'none');
 		$this->waitUntilHttpReady($name, $board['url'] ?? '');
@@ -86,7 +97,7 @@ class BoardRunner
 		$this->project->board($name);
 		if (!in_array($action, ['seed', 'reset', 'replace'], true))
 		{
-			throw new \InvalidArgumentException("Unknown seed action: $action");
+			throw new InvalidArgumentException("Unknown seed action: $action");
 		}
 
 		if ($action === 'reset' || $action === 'replace')
@@ -148,13 +159,13 @@ class BoardRunner
 			$state = $this->serviceState($name, 'web');
 			if (in_array($state, ['exited', 'dead'], true))
 			{
-				throw new \RuntimeException("Web container exited before phpBB install completed for board: $name. Run: docker compose -f " . $this->project->composePath($name) . " logs web");
+				throw new RuntimeException("Web container exited before phpBB install completed for board: $name. Run: docker compose -f " . $this->project->composePath($name) . " logs web");
 			}
 
 			usleep(500000);
 		}
 
-		throw new \RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
+		throw new RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
 	}
 
 	private function waitUntilHttpReady(string $name, string $url): void
@@ -258,13 +269,13 @@ class BoardRunner
 		$process = proc_open($command, $descriptor, $pipes);
 		if (!is_resource($process))
 		{
-			throw new \RuntimeException('Unable to start command: ' . $command[0]);
+			throw new RuntimeException('Unable to start command: ' . $command[0]);
 		}
 
 		$status = proc_close($process);
 		if ($status !== 0)
 		{
-			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command, $status));
+			throw new RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command, $status));
 		}
 	}
 

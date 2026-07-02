@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class SourceProvider
 {
@@ -15,13 +26,13 @@ class SourceProvider
 	{
 		if (!in_array($type, ['composer', 'git'], true))
 		{
-			throw new \InvalidArgumentException("Unsupported source type: $type");
+			throw new InvalidArgumentException("Unsupported source type: $type");
 		}
 		$selection = (new VersionMatrix())->resolve($version, $type === 'git');
 		$url = $url ?: ($type === 'git' ? 'https://github.com/phpbb/phpbb.git' : null);
 		if ($type === 'git' && !$allowExternal && $url !== 'https://github.com/phpbb/phpbb.git')
 		{
-			throw new \InvalidArgumentException('Custom Git source URLs can run Composer code on your host. Use --allow-external only for trusted phpBB forks.');
+			throw new InvalidArgumentException('Custom Git source URLs can run Composer code on your host. Use --allow-external only for trusted phpBB forks.');
 		}
 
 		$sources = $this->project->readJson('sources.json', []);
@@ -87,7 +98,7 @@ class SourceProvider
 		$parent = dirname($path);
 		if (!is_dir($parent) && !mkdir($parent, 0775, true))
 		{
-			throw new \RuntimeException("Unable to create source directory: $parent");
+			throw new RuntimeException("Unable to create source directory: $parent");
 		}
 
 		if (is_dir($path) && $this->hasFiles($path))
@@ -159,7 +170,7 @@ class SourceProvider
 			return array_merge([PHP_BINARY, $phar], $arguments);
 		}
 
-		throw new \RuntimeException('Composer is not available. Install Composer or restore composer.phar in the QuickInstall project root.');
+		throw new RuntimeException('Composer is not available. Install Composer or restore composer.phar in the QuickInstall project root.');
 	}
 
 	private function isCommandAvailable(string $command): bool
@@ -189,13 +200,13 @@ class SourceProvider
 		$process = proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
-			throw new \RuntimeException('Unable to start command: ' . $command[0]);
+			throw new RuntimeException('Unable to start command: ' . $command[0]);
 		}
 
 		$status = proc_close($process);
 		if ($status !== 0)
 		{
-			throw new \RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command));
+			throw new RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command));
 		}
 	}
 

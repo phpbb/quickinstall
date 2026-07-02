@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class BoardService
 {
@@ -20,7 +31,7 @@ class BoardService
 		{
 			if (!$replace)
 			{
-				throw new \InvalidArgumentException("Board already exists: $name. Use board:destroy first, or pass --replace to recreate it.");
+				throw new InvalidArgumentException("Board already exists: $name. Use board:destroy first, or pass --replace to recreate it.");
 			}
 
 			(new BoardRunner($this->project))->destroy($name);
@@ -30,13 +41,13 @@ class BoardService
 		{
 			if (($board['name'] ?? '') !== $name && (int) ($board['port'] ?? 0) === $port)
 			{
-				throw new \InvalidArgumentException("Port $port is already used by board: {$board['name']}");
+				throw new InvalidArgumentException("Port $port is already used by board: {$board['name']}");
 			}
 		}
 
 		if ($this->isPortInUse($port))
 		{
-			throw new \InvalidArgumentException("Port $port is already in use on this host.");
+			throw new InvalidArgumentException("Port $port is already in use on this host.");
 		}
 
 		$source = (new SourceProvider($this->project))->ensure($version);
@@ -44,7 +55,7 @@ class BoardService
 		$boardDir = $this->project->boardPath($name);
 		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true))
 		{
-			throw new \RuntimeException("Unable to create board directory: $boardDir");
+			throw new RuntimeException("Unable to create board directory: $boardDir");
 		}
 
 		$config = [
@@ -131,7 +142,7 @@ class BoardService
 		$board = $this->project->board($name);
 		if (($board['db'] ?? '') === 'sqlite' && $action !== 'reset')
 		{
-			throw new \InvalidArgumentException('SQLite boards do not support fixture seeding. Use --reset to remove partial seed data, or use mariadb, mysql, or postgres for seeded boards.');
+			throw new InvalidArgumentException('SQLite boards do not support fixture seeding. Use --reset to remove partial seed data, or use mariadb, mysql, or postgres for seeded boards.');
 		}
 
 		(new BoardRunner($this->project))->seed($name, $preset, $seed, $action);

@@ -1,6 +1,17 @@
 <?php
+/**
+ *
+ * QuickInstall CLI
+ *
+ * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
+ * @license       GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace QuickInstall\Sandbox;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class Project
 {
@@ -18,13 +29,13 @@ class Project
 		$extensionsPath = $this->extensionsPath();
 		if (!is_dir($extensionsPath) && !mkdir($extensionsPath, 0775, true))
 		{
-			throw new \RuntimeException("Unable to create $extensionsPath");
+			throw new RuntimeException("Unable to create $extensionsPath");
 		}
 
 		$stylesPath = $this->stylesPath();
 		if (!is_dir($stylesPath) && !mkdir($stylesPath, 0775, true))
 		{
-			throw new \RuntimeException("Unable to create $stylesPath");
+			throw new RuntimeException("Unable to create $stylesPath");
 		}
 
 		foreach (['', '/sources', '/boards', '/runtime', '/db'] as $dir)
@@ -32,7 +43,7 @@ class Project
 			$path = $this->workspace . $dir;
 			if (!is_dir($path) && !mkdir($path, 0775, true))
 			{
-				throw new \RuntimeException("Unable to create $path");
+				throw new RuntimeException("Unable to create $path");
 			}
 		}
 
@@ -96,7 +107,7 @@ class Project
 		$encoded = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
 		if (file_put_contents($path, $encoded) === false)
 		{
-			throw new \RuntimeException("Unable to write $path");
+			throw new RuntimeException("Unable to write $path");
 		}
 	}
 
@@ -117,7 +128,7 @@ class Project
 		$boards = $this->boards();
 		if (!isset($boards[$name]))
 		{
-			throw new \InvalidArgumentException("Unknown board: $name");
+			throw new InvalidArgumentException("Unknown board: $name");
 		}
 
 		return $boards[$name];
@@ -159,7 +170,7 @@ class Project
 		{
 			if (!unlink($path))
 			{
-				throw new \RuntimeException("Unable to delete $path");
+				throw new RuntimeException("Unable to delete $path");
 			}
 			return;
 		}
@@ -167,7 +178,7 @@ class Project
 		$items = scandir($path);
 		if ($items === false)
 		{
-			throw new \RuntimeException("Unable to scan $path");
+			throw new RuntimeException("Unable to scan $path");
 		}
 
 		foreach ($items as $item)
@@ -182,7 +193,7 @@ class Project
 
 		if (!rmdir($path))
 		{
-			throw new \RuntimeException("Unable to delete $path");
+			throw new RuntimeException("Unable to delete $path");
 		}
 	}
 
@@ -192,7 +203,7 @@ class Project
 		$workspace = $this->normalizeAbsolutePath($this->workspace);
 		if ($path !== $workspace && strpos($path, $workspace . '/') !== 0)
 		{
-			throw new \RuntimeException("Refusing to delete path outside QuickInstall workspace: $path");
+			throw new RuntimeException("Refusing to delete path outside QuickInstall workspace: $path");
 		}
 	}
 
@@ -229,7 +240,7 @@ class Project
 	{
 		if (!preg_match('/^[A-Za-z0-9._-]+$/', $name))
 		{
-			throw new \InvalidArgumentException("Invalid $label: $name");
+			throw new InvalidArgumentException("Invalid $label: $name");
 		}
 	}
 }
