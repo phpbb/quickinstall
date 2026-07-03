@@ -117,13 +117,13 @@ php bin/qi board:create demo --populate extension-dev
 
 Available presets:
 
-```text
-none           no seed data
-tiny           3 users, 1 category, 2 forums, 2 topics, 2 replies per topic
-extension-dev  10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic
-load-test      100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic
-random         random counts up to load-test size
-```
+| Preset          | Description                                                          |
+|-----------------|----------------------------------------------------------------------|
+| `none`          | No seed data                                                         |
+| `tiny`          | 3 users, 1 category, 2 forums, 2 topics, 2 replies per topic         |
+| `extension-dev` | 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic    |
+| `load-test`     | 100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic |
+| `random`        | Random counts up to load-test size                                   |
 
 Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
 
@@ -253,15 +253,15 @@ php bin/qi phpbb:list
 
 Supported selectors:
 
-```text
-latest        defaults to the supported 3.3 line
-3.3           latest 3.3.x Composer release
-3.3.x         exact 3.3 tag, such as 3.3.17
-3.2           latest 3.2.x Composer release
-3.2.x         exact 3.2 tag, such as 3.2.11
-4.0.x/master  experimental
-3.0/3.1       unsupported by the modern Docker CLI
-```
+| Selector           | Resolves to                          |
+|--------------------|--------------------------------------|
+| `latest`           | Defaults to the supported 3.3 line   |
+| `3.3`              | Latest 3.3.x Composer release        |
+| `3.3.x`            | Exact 3.3 tag, such as 3.3.17        |
+| `3.2`              | Latest 3.2.x Composer release        |
+| `3.2.x`            | Exact 3.2 tag, such as 3.2.11        |
+| `4.0.x` / `master` | Experimental                         |
+| `3.0` / `3.1`      | Unsupported by QuickInstall CLI      |
 
 phpBB 3.0 and 3.1 are intentionally not supported by QuickInstall CLI. They are too old for this modern installer-based flow.
 
@@ -306,12 +306,12 @@ Fetched sources live under:
 
 Generated state:
 
-```text
-.qi/boards/<name>       installed phpBB board files
-.qi/runtime/<name>      Docker Compose, Dockerfile, installer config
-.qi/db/<name>           database files
-.qi/sources/<source>    downloaded phpBB source
-```
+| Path                   | Contents                                     |
+|------------------------|----------------------------------------------|
+| `.qi/boards/<name>`    | Installed phpBB board files                  |
+| `.qi/runtime/<name>`   | Docker Compose, Dockerfile, installer config |
+| `.qi/db/<name>`        | Database files                               |
+| `.qi/sources/<source>` | Downloaded phpBB source                      |
 
 User-managed drop zones:
 
