@@ -610,7 +610,7 @@ class Application
 			{
 				try
 				{
-					$mounted[] = $manager->mount($board, $path, false, true);
+					$mounted[] = $manager->mount($board, $path, false, $allowExternal);
 				}
 				catch (RuntimeException | InvalidArgumentException $e)
 				{

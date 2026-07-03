@@ -64,7 +64,7 @@ class VersionMatrix
 			];
 		}
 
-		if ($requested === '3.3')
+		if ($requested === '3.3' || $requested === '3.3.x')
 		{
 			return [
 				'version' => '3.3',
@@ -77,7 +77,7 @@ class VersionMatrix
 			];
 		}
 
-		if ($requested === '3.2')
+		if ($requested === '3.2' || $requested === '3.2.x')
 		{
 			return [
 				'version' => '3.2',
@@ -90,7 +90,7 @@ class VersionMatrix
 			];
 		}
 
-		if ($requested === 'master' || $requested === 'main' || $requested === 'dev-master')
+		if ($requested === 'master' || $requested === 'main' || $requested === 'dev-master' || $requested === '4.0.x')
 		{
 			return [
 				'version' => $requested,
