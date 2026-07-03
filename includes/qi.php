@@ -37,6 +37,7 @@ class qi
 			'PAGE_TITLE'	=> self::lang($page_title),
 			'QI_ROOT_PATH'	=> $quickinstall_path,
 
+			'U_CLI'			=> self::url('cli'),
 			'U_DOCS'		=> self::url('docs'),
 			'U_MANAGE'		=> self::url('manage'),
 			'U_MAIN'		=> self::url('main'),
@@ -159,6 +160,110 @@ class qi
 		global $user;
 
 		return isset($user->lang[$key]);
+	}
+
+	public static function render_markdown($doc_body, $anchor_prefix = '')
+	{
+		if ($anchor_prefix !== '')
+		{
+			$doc_body = self::add_markdown_anchors($doc_body, $anchor_prefix);
+		}
+
+		$doc_body = Parsedown::instance()->text($doc_body);
+		$doc_body = preg_replace_callback('#<pre><code(?: class="language-([^"]+)")?>#', function ($matches) {
+			$language = !empty($matches[1]) ? $matches[1] : 'plain';
+			$language = preg_replace('/[^a-z0-9_-]/i', '', $language);
+
+			return '<pre class="codeblock codeblock-' . $language . '"><code>';
+		}, $doc_body);
+
+		return str_replace(
+			['<table>', '<blockquote>', '<h2>'],
+			['<table class="table table-sm table-striped">', '<blockquote class="callout callout-warning">', '<h2 class="border-bottom pt-3 pb-2">'],
+			$doc_body
+		);
+	}
+
+	public static function get_markdown_anchors($doc_body, $prefix)
+	{
+		$links = array();
+		$anchors = self::collect_markdown_anchors($doc_body, $prefix);
+
+		foreach ($anchors as $anchor)
+		{
+			$links[] = array(
+				'TITLE'		=> $anchor['title'],
+				'U_ANCHOR'	=> $anchor['anchor'],
+			);
+		}
+
+		return $links;
+	}
+
+	private static function add_markdown_anchors($doc_body, $prefix)
+	{
+		$lines = preg_split('/\R/', $doc_body);
+		$anchors = self::collect_markdown_anchors($doc_body, $prefix);
+
+		foreach ($anchors as $anchor)
+		{
+			$index = $anchor['line'];
+			$lines[$index] = '<div id="' . $anchor['anchor'] . '" class="anchor"></div>' . "\n\n" . $lines[$index];
+		}
+
+		return implode("\n", $lines);
+	}
+
+	private static function collect_markdown_anchors($doc_body, $prefix)
+	{
+		$seen = array();
+		$anchors = array();
+		$lines = preg_split('/\R/', $doc_body);
+		$in_code_block = false;
+
+		foreach ($lines as $index => $line)
+		{
+			if (preg_match('/^\s*(```|~~~)/', $line))
+			{
+				$in_code_block = !$in_code_block;
+			}
+
+			if ($in_code_block || !preg_match('/^ {0,3}##(?!#)[ \t]+(.+)$/', $line, $matches))
+			{
+				continue;
+			}
+
+			$title = preg_replace('/\s+#+\s*$/', '', trim($matches[1]));
+			$anchor = self::generate_markdown_anchor($title, $prefix);
+
+			if (isset($seen[$anchor]))
+			{
+				$seen[$anchor]++;
+				$anchor .= '-' . $seen[$anchor];
+			}
+			else
+			{
+				$seen[$anchor] = 1;
+			}
+
+			$anchors[] = array(
+				'line'		=> $index,
+				'title'		=> $title,
+				'anchor'	=> $anchor,
+			);
+		}
+
+		return $anchors;
+	}
+
+	private static function generate_markdown_anchor($title, $prefix)
+	{
+		$anchor = html_entity_decode(strip_tags($title), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		$anchor = strtolower($anchor);
+		$anchor = preg_replace('/[^\pL\pN]+/u', '-', $anchor);
+		$anchor = trim($anchor, '-');
+
+		return $prefix . '-' . ($anchor ?: 'section');
 	}
 
 	/**

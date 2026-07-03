@@ -80,7 +80,7 @@ Downloaded styles can be unzipped into `styles/` and mounted into boards:
 php bin/qi style:mount test styles/stylename
 ```
 
-See [docs/sandbox-cli.md](docs/sandbox-cli.md).
+See the complete [QuickInstall CLI docs](index.php?page=cli).
 
 ## 🐞 Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.

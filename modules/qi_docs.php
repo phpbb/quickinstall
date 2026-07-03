@@ -20,14 +20,7 @@ class qi_docs
 		$doc_file = $quickinstall_path . 'README.md';
 		if (file_exists($doc_file))
 		{
-			$doc_body = file_get_contents($doc_file);
-			$doc_body = $this->add_readme_anchors($doc_body);
-			$doc_body = Parsedown::instance()->text($doc_body);
-			$doc_body = str_replace(
-				['<table>', '<blockquote>', '<h2>'],
-				['<table class="table table-sm table-striped">', '<blockquote class="callout callout-warning">', '<h2 class="border-bottom pt-3 pb-2">'],
-				$doc_body
-			);
+			$doc_body = qi::render_markdown(file_get_contents($doc_file), 'readme');
 			$template->assign_var('DOC_BODY', $doc_body);
 		}
 
@@ -76,52 +69,5 @@ class qi_docs
 		qi::page_header('DOCS_LONG');
 
 		qi::page_display('docs_body');
-	}
-
-	private function add_readme_anchors($doc_body)
-	{
-		$anchors = array();
-		$lines = preg_split('/\R/', $doc_body);
-		$in_code_block = false;
-
-		foreach ($lines as $index => $line)
-		{
-			if (preg_match('/^\s*(```|~~~)/', $line))
-			{
-				$in_code_block = !$in_code_block;
-			}
-
-			if ($in_code_block || !preg_match('/^ {0,3}##(?!#)[ \t]+(.+)$/', $line, $matches))
-			{
-				continue;
-			}
-
-			$title = preg_replace('/\s+#+\s*$/', '', trim($matches[1]));
-			$anchor = $this->generate_anchor($title, 'readme');
-
-			if (isset($anchors[$anchor]))
-			{
-				$anchors[$anchor]++;
-				$anchor .= '-' . $anchors[$anchor];
-			}
-			else
-			{
-				$anchors[$anchor] = 1;
-			}
-
-			$lines[$index] = '<div id="' . $anchor . '" class="anchor"></div>' . "\n\n" . $line;
-		}
-
-		return implode("\n", $lines);
-	}
-
-	private function generate_anchor($title, $prefix)
-	{
-		$anchor = html_entity_decode(strip_tags($title), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-		$anchor = strtolower($anchor);
-		$anchor = preg_replace('/[^\pL\pN]+/u', '-', $anchor);
-		$anchor = trim($anchor, '-');
-
-		return $prefix . '-' . ($anchor ?: 'section');
 	}
 }
