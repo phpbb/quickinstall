@@ -24,12 +24,19 @@ class Project
 		$this->workspace = $this->root . '/.qi';
 	}
 
-	public function init(): void
+	public function init(): array
 	{
+		$created = [];
 		$customisationsPath = $this->customisationsPath();
-		if (!is_dir($customisationsPath) && !mkdir($customisationsPath, 0775, true) && !is_dir($customisationsPath))
+		$workspaceExists = is_dir($this->workspace);
+		if (!is_dir($customisationsPath))
 		{
-			throw new RuntimeException("Unable to create $customisationsPath");
+			if (!mkdir($customisationsPath, 0775, true) && !is_dir($customisationsPath))
+			{
+				throw new RuntimeException("Unable to create $customisationsPath");
+			}
+
+			$created[] = 'customisations drop zone';
 		}
 
 		foreach (['', '/sources', '/boards', '/runtime', '/db'] as $dir)
@@ -41,6 +48,11 @@ class Project
 			}
 		}
 
+		if (!$workspaceExists && is_dir($this->workspace))
+		{
+			$created[] = '.qi workspace';
+		}
+
 		foreach (['sources.json' => [], 'boards.json' => []] as $file => $default)
 		{
 			$path = $this->workspace . '/' . $file;
@@ -49,6 +61,8 @@ class Project
 				$this->writeJson($file, $default);
 			}
 		}
+
+		return $created;
 	}
 
 	public function workspacePath(string $path = ''): string

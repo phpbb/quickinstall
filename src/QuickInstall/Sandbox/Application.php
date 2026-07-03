@@ -114,8 +114,14 @@ class Application
 
 	private function init(): int
 	{
-		$this->project->init();
-		echo "Created .qi workspace\n";
+		$created = $this->project->init();
+		if (!$created)
+		{
+			echo "QuickInstall workspace already initialized\n";
+			return 0;
+		}
+
+		echo "Created " . implode(' and ', $created) . "\n";
 		return 0;
 	}
 
