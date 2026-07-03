@@ -96,13 +96,13 @@ Board names are unique. To reuse a name with a different setup, destroy it first
 
 ```bash
 php bin/qi board:destroy demo
-php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate tiny
 ```
 
 Or recreate it in one command:
 
 ```bash
-php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev --replace
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate tiny --replace
 ```
 
 ## Fixture Presets
@@ -330,35 +330,29 @@ styles/
 
 ## Troubleshooting
 
-Docker command fails:
+#### Docker command fails
 
-```text
 Check that Docker Desktop is running and that the docker command works in this terminal.
-```
 
-Composer command fails:
+#### Composer command fails
 
-```text
-QuickInstall uses composer from PATH first, then composer.phar from the project root. Restore composer.phar or install Composer if both are missing.
-```
+QuickInstall uses composer from PATH first, then `composer.phar` from the project root. Restore `composer.phar` or install Composer if both are missing.
 
-Port already in use:
+#### View container logs
 
-```bash
-php bin/qi board:create demo --port 8090
-```
-
-See container logs:
+If a board starts but the browser shows an error, or `board:start` waits longer than expected, inspect the Docker logs. The `web` logs usually show phpBB, PHP, or web server failures. The `db` logs show database startup and connection problems.
 
 ```bash
 docker compose -f .qi/runtime/demo/compose.yml logs web
 docker compose -f .qi/runtime/demo/compose.yml logs db
 ```
 
-Reset a board completely:
+#### Reset a board completely
+
+Use this when a board's files, database, or generated Docker runtime are no longer worth repairing. Destroying a board removes its generated state, so create and start it again afterward.
 
 ```bash
 php bin/qi board:destroy demo
-php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
 php bin/qi board:start demo
 ```
