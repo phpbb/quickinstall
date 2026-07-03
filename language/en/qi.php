@@ -255,7 +255,7 @@ $lang = array_merge($lang, array(
 	'REDIRECT_BOARD'	=> 'Redirect to new board',
 	'RESET'				=> 'Reset',
 
-	'SANDBOX_CLI_NOTICE'	=> 'QuickInstall now includes a Docker-based CLI for creating local phpBB test boards without the need for a local web sever or manual phpBB downloads.',
+	'QUICKINSTALL_CLI_NOTICE'	=> 'QuickInstall now includes a Docker-based CLI for creating local phpBB test boards without the need for a local web server or manual phpBB downloads.',
 	'SAVE'					=> 'Save',
 	'SAVE_PROFILE'			=> 'Save as new profile',
 	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile. If a profile of the same name already exists, it will be overwritten.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd>',

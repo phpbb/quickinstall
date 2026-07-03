@@ -3,7 +3,7 @@
 
 if (PHP_VERSION_ID < 80000)
 {
-	fwrite(STDERR, "QuickInstall Sandbox CLI requires PHP 8.0 or newer. You are running PHP " . PHP_VERSION . ".\n");
+	fwrite(STDERR, "QuickInstall CLI requires PHP 8.0 or newer. You are running PHP " . PHP_VERSION . ".\n");
 	fwrite(STDERR, "Run bin/qi with a PHP 8+ CLI binary, or use the legacy web UI with your older PHP runtime.\n");
 	exit(1);
 }

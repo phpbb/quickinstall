@@ -263,7 +263,7 @@ latest        defaults to the supported 3.3 line
 3.0/3.1       unsupported by the modern Docker CLI
 ```
 
-phpBB 3.0 and 3.1 are intentionally not supported by the Docker CLI. They are too old for this modern installer-based flow.
+phpBB 3.0 and 3.1 are intentionally not supported by QuickInstall CLI. They are too old for this modern installer-based flow.
 
 ## Sources
 

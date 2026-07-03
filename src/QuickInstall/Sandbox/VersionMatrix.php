@@ -35,7 +35,7 @@ class VersionMatrix
 
 		if (preg_match('/^3\.[01](\.|$)/', $requested))
 		{
-			throw new InvalidArgumentException("phpBB $requested is not supported by the modern Docker CLI. Use phpBB 3.2+ or the legacy web app for phpBB 3.0/3.1.");
+			throw new InvalidArgumentException("phpBB $requested is not supported by QuickInstall CLI. Use phpBB 3.2+ or the legacy web app for phpBB 3.0/3.1.");
 		}
 
 		if ($git)

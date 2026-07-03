@@ -56,9 +56,9 @@ phpBB boards require a web server running PHP and one of the following database 
 | 3.1.x          | 5.4.7 - 5.6.x | 3.23+  | 5.1+    | 8.3+       | SQLite 2 or 3  | Server 2000+ |
 | 3.0.x          | 5.4.7 - 5.6.x | 3.23+  | -       | 7.x        | SQLite 2       | Server 2000  |
 
-## Sandbox CLI Prototype
+## QuickInstall CLI
 
-QuickInstall now includes an experimental CLI scaffold for a Docker-based board factory. It writes generated state to `.qi/` and leaves the legacy web UI unchanged. The Sandbox CLI requires PHP 8.0 or newer for the `php bin/qi` command.
+QuickInstall now includes a Docker-based CLI for creating local phpBB test boards. It writes generated state to `.qi/` and leaves the legacy web UI unchanged. The QuickInstall CLI requires PHP 8.0 or newer for the `php bin/qi` command.
 
 ```bash
 php bin/qi init
@@ -66,7 +66,7 @@ php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate ext
 php bin/qi board:start test
 ```
 
-The Sandbox CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for this Docker CLI.
+The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.
 
 Downloaded extensions can be unzipped into `extensions/` and mounted into boards:
 
