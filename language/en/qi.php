@@ -176,6 +176,7 @@ $lang = array_merge($lang, array(
 	'JAVASCRIPT_DISABLED_ALERT'	=> '<strong>Javascript is disabled!</strong> Please enable Javascript for full functionality.',
 
 	'LANGUAGE_PACK_MISSING'	=> 'The source phpBB board does not have a valid language pack. Please download a fresh copy of phpBB and try again.',
+	'LEARN_MORE'			=> 'Learn more.',
 	'LOAD'					=> 'Load',
 	'LOG_INSTALL_INSTALLED_QI'	=> '<strong>Installed by phpBB QuickInstall version %s</strong>',
 	'LOREM_IPSUM'			=> 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
@@ -254,6 +255,7 @@ $lang = array_merge($lang, array(
 	'REDIRECT_BOARD'	=> 'Redirect to new board',
 	'RESET'				=> 'Reset',
 
+	'SANDBOX_CLI_NOTICE'	=> 'QuickInstall now includes a Docker-based CLI for creating local phpBB test boards without the need for a local web sever or manual phpBB downloads.',
 	'SAVE'					=> 'Save',
 	'SAVE_PROFILE'			=> 'Save as new profile',
 	'SAVE_PROFILE_EXPLAIN'	=> 'Enter a name to create a new profile with these settings, or leave this field blank to update the current profile. If a profile of the same name already exists, it will be overwritten.<br /><br />Allowed characters: <kbd>A-Z a-z 0-9 - _ .</kbd>',
