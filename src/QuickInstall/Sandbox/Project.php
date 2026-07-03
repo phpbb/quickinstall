@@ -26,16 +26,10 @@ class Project
 
 	public function init(): void
 	{
-		$extensionsPath = $this->extensionsPath();
-		if (!is_dir($extensionsPath) && !mkdir($extensionsPath, 0775, true) && !is_dir($extensionsPath))
+		$customisationsPath = $this->customisationsPath();
+		if (!is_dir($customisationsPath) && !mkdir($customisationsPath, 0775, true) && !is_dir($customisationsPath))
 		{
-			throw new RuntimeException("Unable to create $extensionsPath");
-		}
-
-		$stylesPath = $this->stylesPath();
-		if (!is_dir($stylesPath) && !mkdir($stylesPath, 0775, true) && !is_dir($stylesPath))
-		{
-			throw new RuntimeException("Unable to create $stylesPath");
+			throw new RuntimeException("Unable to create $customisationsPath");
 		}
 
 		foreach (['', '/sources', '/boards', '/runtime', '/db'] as $dir)
@@ -67,14 +61,9 @@ class Project
 		return $this->root . ($path === '' ? '' : '/' . ltrim($path, '/'));
 	}
 
-	public function extensionsPath(): string
+	public function customisationsPath(): string
 	{
-		return $this->rootPath('extensions');
-	}
-
-	public function stylesPath(): string
-	{
-		return $this->rootPath('styles');
+		return $this->rootPath('customisations');
 	}
 
 	public function boardPath(string $name): string

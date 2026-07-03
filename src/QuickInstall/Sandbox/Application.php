@@ -812,7 +812,7 @@ class Application
 					'title' => 'ext:mount',
 					'usage' => 'ext:mount <board> <path> [--copy] [--recursive] [--allow-external]',
 					'summary' => 'Mount one or more extensions into a board.',
-					'description' => 'Mounts a phpBB extension from the extensions drop zone. Running boards are refreshed automatically.',
+					'description' => 'Mounts a phpBB extension from the customisations drop zone. Running boards are refreshed automatically.',
 					'arguments' => [
 						'<board>' => 'Required board name.',
 						'<path>' => 'Extension path, or a directory to scan when --recursive is used.',
@@ -820,11 +820,11 @@ class Application
 					'options' => [
 						'--copy' => 'Copy one extension instead of bind-mounting it.',
 						'--recursive' => 'Find and bind-mount all extensions below <path>. Cannot be combined with --copy.',
-						'--allow-external' => 'Allow trusted paths outside the extensions drop zone.',
+						'--allow-external' => 'Allow trusted paths outside the customisations drop zone.',
 					],
 					'examples' => [
-						'ext:mount demo extensions/vendor/extname',
-						'ext:mount demo extensions --recursive',
+						'ext:mount demo customisations/vendor/extname',
+						'ext:mount demo customisations --recursive',
 					],
 				],
 				'ext:unmount' => [
@@ -858,7 +858,7 @@ class Application
 					'title' => 'style:mount',
 					'usage' => 'style:mount <board> <path> [--copy] [--recursive] [--allow-external]',
 					'summary' => 'Mount one or more styles into a board.',
-					'description' => 'Mounts a phpBB style from the styles drop zone. Running boards are refreshed automatically.',
+					'description' => 'Mounts a phpBB style from the customisations drop zone. Running boards are refreshed automatically.',
 					'arguments' => [
 						'<board>' => 'Required board name.',
 						'<path>' => 'Style path, or a directory to scan when --recursive is used.',
@@ -866,11 +866,11 @@ class Application
 					'options' => [
 						'--copy' => 'Copy one style instead of bind-mounting it.',
 						'--recursive' => 'Find and bind-mount all styles below <path>. Cannot be combined with --copy.',
-						'--allow-external' => 'Allow trusted paths outside the styles drop zone.',
+						'--allow-external' => 'Allow trusted paths outside the customisations drop zone.',
 					],
 					'examples' => [
-						'style:mount demo styles/stylename',
-						'style:mount demo styles --recursive',
+						'style:mount demo customisations/stylename',
+						'style:mount demo customisations --recursive',
 					],
 				],
 				'style:unmount' => [

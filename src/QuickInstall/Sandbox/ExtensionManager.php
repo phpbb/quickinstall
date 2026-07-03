@@ -191,9 +191,9 @@ class ExtensionManager
 	{
 		return $this->project->resolveDropZonePath(
 			$path,
-			$this->project->extensionsPath(),
+			$this->project->customisationsPath(),
 			$allowExternal,
-			"Extension path must be under extensions/. Use --allow-external only for trusted local paths."
+			"Extension path must be under customisations/. Use --allow-external only for trusted local paths."
 		);
 	}
 

@@ -144,9 +144,9 @@ class StyleManager
 	{
 		return $this->project->resolveDropZonePath(
 			$path,
-			$this->project->stylesPath(),
+			$this->project->customisationsPath(),
 			$allowExternal,
-			"Style path must be under styles/. Use --allow-external only for trusted local paths."
+			"Style path must be under customisations/. Use --allow-external only for trusted local paths."
 		);
 	}
 

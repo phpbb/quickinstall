@@ -7,10 +7,7 @@ sources/*
 vendor/*
 build/*
 .qi/*
-extensions/*
-!extensions/.gitkeep
-styles/*
-!styles/.gitkeep
+customisations/*
 *~
 .idea
 node_modules

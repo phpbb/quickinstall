@@ -26,10 +26,9 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 2. Copy everything into your existing QuickInstall directory **except for:**
   - 📁`.qi/` (may be hidden by your operating system)
   - 📁`boards/`
-  - 📁`extensions/`
+  - 📁`customisations/`
   - 📁`sources/`
   - 📁`settings/`
-  - 📁`styles/`
 
 > If you are upgrading from QuickInstall 1.1.8 (or older) you MUST review and re-save your old Profile settings.
 
@@ -68,16 +67,16 @@ php bin/qi board:start test
 
 The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.
 
-Downloaded extensions can be unzipped into `extensions/` and mounted into boards:
+Downloaded extensions can be unzipped into `customisations/` and mounted into boards:
 
 ```bash
-php bin/qi ext:mount test extensions/vendor/extname
+php bin/qi ext:mount test customisations/vendor/extname
 ```
 
-Downloaded styles can be unzipped into `styles/` and mounted into boards:
+Downloaded styles can be unzipped into `customisations/` and mounted into boards:
 
 ```bash
-php bin/qi style:mount test styles/stylename
+php bin/qi style:mount test customisations/stylename
 ```
 
 See the complete [QuickInstall CLI docs](index.php?page=cli).

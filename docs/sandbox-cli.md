@@ -149,22 +149,22 @@ php bin/qi board:seed demo --preset extension-dev --seed 1 --reset
 
 ## Extensions
 
-Put downloaded extensions under `extensions/`:
+Put downloaded extensions under `customisations/`:
 
 ```text
-extensions/vendor/extname/composer.json
+customisations/vendor/extname/composer.json
 ```
 
 Mount into a board:
 
 ```bash
-php bin/qi ext:mount demo extensions/vendor/extname
+php bin/qi ext:mount demo customisations/vendor/extname
 ```
 
 Mount every extension found under a directory:
 
 ```bash
-php bin/qi ext:mount demo extensions --recursive
+php bin/qi ext:mount demo customisations --recursive
 ```
 
 QuickInstall reads the extension `composer.json` name, such as `vendor/extname`, and bind-mounts it to:
@@ -173,7 +173,7 @@ QuickInstall reads the extension `composer.json` name, such as `vendor/extname`,
 /var/www/html/ext/vendor/extname
 ```
 
-Edits in `extensions/vendor/extname` are reflected in the board immediately. If the board is running, QuickInstall recreates the web container and purges phpBB cache.
+Edits in `customisations/vendor/extname` are reflected in the board immediately. If the board is running, QuickInstall recreates the web container and purges phpBB cache.
 
 List and unmount extensions:
 
@@ -185,12 +185,12 @@ php bin/qi ext:unmount demo vendor/extname
 Copy instead of bind-mount:
 
 ```bash
-php bin/qi ext:mount demo extensions/vendor/extname --copy
+php bin/qi ext:mount demo customisations/vendor/extname --copy
 ```
 
 `--copy` is only supported for one extension at a time. Recursive mounting always uses bind mounts.
 
-By default, extension sources must live under `extensions/`. To mount a trusted extension from somewhere else on your machine:
+By default, extension sources must live under `customisations/`. To mount a trusted extension from somewhere else on your machine:
 
 ```bash
 php bin/qi ext:mount demo /path/to/vendor/extname --allow-external
@@ -198,22 +198,22 @@ php bin/qi ext:mount demo /path/to/vendor/extname --allow-external
 
 ## Styles
 
-Put downloaded styles under `styles/`:
+Put downloaded styles under `customisations/`:
 
 ```text
-styles/stylename/style.cfg
+customisations/stylename/style.cfg
 ```
 
 Mount into a board:
 
 ```bash
-php bin/qi style:mount demo styles/stylename
+php bin/qi style:mount demo customisations/stylename
 ```
 
 Mount every style found under a directory:
 
 ```bash
-php bin/qi style:mount demo styles --recursive
+php bin/qi style:mount demo customisations --recursive
 ```
 
 QuickInstall uses the style folder name and bind-mounts it to:
@@ -232,12 +232,12 @@ php bin/qi style:unmount demo stylename
 Copy instead of bind-mount:
 
 ```bash
-php bin/qi style:mount demo styles/stylename --copy
+php bin/qi style:mount demo customisations/stylename --copy
 ```
 
 `--copy` is only supported for one style at a time. Recursive mounting always uses bind mounts.
 
-By default, style sources must live under `styles/`. To mount a trusted style from somewhere else on your machine:
+By default, style sources must live under `customisations/`. To mount a trusted style from somewhere else on your machine:
 
 ```bash
 php bin/qi style:mount demo /path/to/stylename --allow-external
@@ -313,11 +313,10 @@ Generated state:
 | `.qi/db/<name>`        | Database files                               |
 | `.qi/sources/<source>` | Downloaded phpBB source                      |
 
-User-managed drop zones:
+User-managed drop zone:
 
 ```text
-extensions/
-styles/
+customisations/
 ```
 
 ## Safety Defaults
@@ -325,7 +324,7 @@ styles/
 - Board web ports bind to `127.0.0.1`, not every network interface.
 - `board:create` refuses to overwrite an existing board unless `--replace` is used.
 - `board:create` rejects ports already registered to another board or already in use on the host.
-- `ext:mount` and `style:mount` only use `extensions/` and `styles/` unless `--allow-external` is used.
+- `ext:mount` and `style:mount` only use `customisations/` unless `--allow-external` is used.
 - Custom Git source URLs require `--allow-external`; only use trusted forks.
 
 ## Troubleshooting
