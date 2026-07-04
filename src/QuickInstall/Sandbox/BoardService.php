@@ -59,7 +59,7 @@ class BoardService
 		}
 
 		$config = [
-			'phpbb' => $version,
+			'phpbb' => $source['version'],
 			'phpbb_source' => $source['source_key'],
 			'php' => $selection['php'],
 			'db' => $db,

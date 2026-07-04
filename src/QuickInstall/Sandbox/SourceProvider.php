@@ -54,12 +54,22 @@ class SourceProvider
 		$sources[$selection['source_key']] = $record;
 		$this->project->writeJson('sources.json', $sources);
 
+		if ($type === 'composer' && $this->isFloatingSelection($selection))
+		{
+			return $this->ensure($version);
+		}
+
 		return $record;
 	}
 
 	public function ensure(string $version): array
 	{
 		$selection = (new VersionMatrix())->resolve($version);
+		if ($this->isFloatingSelection($selection))
+		{
+			return $this->ensureFloating($version, $selection);
+		}
+
 		$sources = $this->project->readJson('sources.json', []);
 		if (!isset($sources[$selection['source_key']]))
 		{
@@ -76,6 +86,137 @@ class SourceProvider
 		}
 
 		return $source;
+	}
+
+	private function ensureFloating(string $version, array $selection): array
+	{
+		$sources = $this->project->readJson('sources.json', []);
+		$source = $this->withSelectionDefaults($sources[$selection['source_key']] ?? [], $selection);
+		$source['type'] = $source['type'] ?? 'composer';
+		$source['package'] = $source['type'] === 'composer' ? 'phpbb/phpbb' : ($source['package'] ?? null);
+		$source['url'] = $source['url'] ?? ($source['type'] === 'git' ? 'https://github.com/phpbb/phpbb.git' : null);
+
+		if (!isset($sources[$selection['source_key']]))
+		{
+			echo "Resolving phpBB source: $version\n";
+		}
+
+		$resolvedVersion = null;
+		if ($source['type'] === 'composer' && $selection['constraint'] !== 'dev-master')
+		{
+			$resolvedVersion = $this->latestComposerVersion($selection['constraint']);
+			if ($resolvedVersion !== null)
+			{
+				$resolvedKey = $this->sourceKey($resolvedVersion);
+				$resolvedPath = $this->project->sourcePath($resolvedKey);
+				if (is_file($resolvedPath . '/common.php'))
+				{
+					if (!isset($sources[$resolvedKey]))
+					{
+						$sources[$resolvedKey] = $this->recordForResolvedSource($source, $selection, $version, $resolvedVersion, $resolvedKey, $resolvedPath);
+						$this->project->writeJson('sources.json', $sources);
+					}
+
+					$this->removeUnusedFloatingSource($sources, $selection['source_key'], $resolvedPath);
+					return $sources[$resolvedKey];
+				}
+			}
+		}
+
+		$tempKey = '_tmp-' . $selection['source_key'] . '-' . str_replace('.', '', uniqid('', true));
+		$tempSource = $source;
+		$tempSource['source_key'] = $tempKey;
+		$tempSource['path'] = $this->project->sourcePath($tempKey);
+		if ($resolvedVersion !== null)
+		{
+			$tempSource['constraint'] = $resolvedVersion;
+		}
+
+		echo "Fetching phpBB source: $version\n";
+		try
+		{
+			$this->fetch($tempSource);
+		}
+		catch (RuntimeException $e)
+		{
+			if (file_exists($tempSource['path']) || is_link($tempSource['path']))
+			{
+				$this->project->deleteTree($tempSource['path']);
+			}
+
+			throw $e;
+		}
+
+		$actualVersion = $this->installedPhpbbVersion($tempSource['path']);
+		$actualKey = $this->sourceKey($actualVersion);
+		$actualPath = $this->project->sourcePath($actualKey);
+
+		if (is_dir($actualPath) && file_exists($actualPath . '/common.php'))
+		{
+			$this->project->deleteTree($tempSource['path']);
+		}
+		else
+		{
+			if (file_exists($actualPath) || is_link($actualPath))
+			{
+				$this->project->deleteTree($actualPath);
+			}
+			if (!rename($tempSource['path'], $actualPath))
+			{
+				throw new RuntimeException("Unable to move source into place: $actualPath");
+			}
+		}
+
+		$sources = $this->project->readJson('sources.json', []);
+		$record = $this->recordForResolvedSource($source, $selection, $version, $actualVersion, $actualKey, $actualPath);
+		$record['registered_at'] = $sources[$actualKey]['registered_at'] ?? $record['registered_at'];
+
+		$sources[$actualKey] = $record;
+		if ($this->removeUnusedFloatingSource($sources, $selection['source_key'], $actualPath))
+		{
+			return $record;
+		}
+
+		$this->project->writeJson('sources.json', $sources);
+		return $record;
+	}
+
+	private function removeUnusedFloatingSource(array &$sources, string $sourceKey, string $resolvedPath): bool
+	{
+		if (!isset($sources[$sourceKey]) || $this->sourceInUse($sourceKey))
+		{
+			return false;
+		}
+
+		$floatingPath = $sources[$sourceKey]['path'] ?? $this->project->sourcePath($sourceKey);
+		unset($sources[$sourceKey]);
+		$this->project->writeJson('sources.json', $sources);
+		if ($floatingPath !== $resolvedPath && (file_exists($floatingPath) || is_link($floatingPath)))
+		{
+			$this->project->deleteTree($floatingPath);
+		}
+
+		return true;
+	}
+
+	private function recordForResolvedSource(array $source, array $selection, string $requested, string $actualVersion, string $actualKey, string $actualPath): array
+	{
+		return [
+			'version' => $actualVersion,
+			'source_key' => $actualKey,
+			'constraint' => $source['type'] === 'composer' && $selection['constraint'] !== 'dev-master' ? $actualVersion : $selection['constraint'],
+			'branch' => $selection['branch'],
+			'phpbb_branch' => $selection['phpbb_branch'],
+			'php' => $selection['php'],
+			'status' => $selection['status'],
+			'type' => $source['type'],
+			'package' => $source['type'] === 'composer' ? 'phpbb/phpbb' : null,
+			'url' => $source['url'],
+			'path' => $actualPath,
+			'resolved_from' => $requested,
+			'registered_at' => gmdate('c'),
+			'fetched_at' => gmdate('c'),
+		];
 	}
 
 	private function withSelectionDefaults(array $source, array $selection): array
@@ -157,6 +298,76 @@ class SourceProvider
 		return $files !== false && count(array_diff($files, ['.', '..'])) > 0;
 	}
 
+	private function installedPhpbbVersion(string $path): string
+	{
+		$phpbbCli = $path . '/install/phpbbcli.php';
+		if (is_file($phpbbCli) && preg_match("/define\\('PHPBB_VERSION',\\s*'([^']+)'\\)/", (string) file_get_contents($phpbbCli), $matches))
+		{
+			return $matches[1];
+		}
+
+		throw new RuntimeException("Unable to determine phpBB version from source: $path");
+	}
+
+	private function isFloatingSelection(array $selection): bool
+	{
+		return in_array($selection['constraint'], ['3.3.*', '3.2.*', 'dev-master'], true);
+	}
+
+	private function sourceInUse(string $sourceKey): bool
+	{
+		foreach ($this->project->boards() as $board)
+		{
+			if (($board['phpbb_source'] ?? null) === $sourceKey)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function sourceKey(string $value): string
+	{
+		return preg_replace('/[^A-Za-z0-9._-]/', '-', $value);
+	}
+
+	private function latestComposerVersion(string $constraint): ?string
+	{
+		if (!str_ends_with($constraint, '.*'))
+		{
+			return null;
+		}
+
+		$result = $this->capture($this->composerCommand(['show', 'phpbb/phpbb', $constraint, '--all', '--format=json']), $this->project->rootPath());
+		if ($result['status'] !== 0)
+		{
+			return null;
+		}
+
+		$data = json_decode($result['output'], true);
+		if (!is_array($data) || empty($data['versions']) || !is_array($data['versions']))
+		{
+			return null;
+		}
+
+		$prefix = substr($constraint, 0, -1);
+		$latest = null;
+		foreach ($data['versions'] as $version)
+		{
+			if (!is_string($version) || !str_starts_with($version, $prefix) || !preg_match('/^\d+\.\d+\.\d+$/', $version))
+			{
+				continue;
+			}
+			if ($latest === null || version_compare($version, $latest, '>'))
+			{
+				$latest = $version;
+			}
+		}
+
+		return $latest;
+	}
+
 	private function composerCommand(array $arguments): array
 	{
 		if ($this->isCommandAvailable('composer'))
@@ -208,6 +419,31 @@ class SourceProvider
 		{
 			throw new RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command));
 		}
+	}
+
+	private function capture(array $command, string $cwd): array
+	{
+		$descriptor = [
+			0 => ['file', '/dev/null', 'r'],
+			1 => ['pipe', 'w'],
+			2 => ['pipe', 'w'],
+		];
+
+		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		if (!is_resource($process))
+		{
+			return ['status' => 1, 'output' => ''];
+		}
+
+		$output = stream_get_contents($pipes[1]);
+		stream_get_contents($pipes[2]);
+		fclose($pipes[1]);
+		fclose($pipes[2]);
+
+		return [
+			'status' => proc_close($process),
+			'output' => (string) $output,
+		];
 	}
 
 	private function commandHint(array $command): string

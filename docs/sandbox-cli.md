@@ -263,6 +263,8 @@ Supported selectors:
 | `4.0.x` / `master` | Experimental                         |
 | `3.0` / `3.1`      | Unsupported by QuickInstall CLI      |
 
+In the `3.3.x` and `3.2.x` examples above, `x` is a placeholder. Use the exact phpBB release tag you want, such as `3.3.17`, whenever you know it. If you literally enter `3.3.x`, `3.2.x`, `3.3`, or `3.2`, QuickInstall treats that as a convenience fallback and resolves the newest matching release available from Composer.
+
 phpBB 3.0 and 3.1 are intentionally not supported by QuickInstall CLI. They are too old for this modern installer-based flow.
 
 ## Sources
