@@ -95,6 +95,7 @@ svg.bi {
 	line-height: 1.55;
 	margin: 1rem 0;
 	padding: .875rem 1rem;
+	position: relative;
 }
 
 #about-readme pre.codeblock-bash,
@@ -118,6 +119,38 @@ svg.bi {
 #about-readme pre code::selection,
 #about-cli pre code::selection {
 	background-color: rgba(0, 155, 223, 0.35);
+}
+
+.qi-code-copy {
+	align-items: center;
+	display: flex;
+	height: 2rem;
+	justify-content: center;
+	opacity: 0;
+	padding: 0;
+	position: absolute;
+	right: .5rem;
+	top: .5rem;
+	transition: opacity .15s ease-in-out;
+	width: 2rem;
+	z-index: 2;
+}
+
+#about-readme pre:hover .qi-code-copy,
+#about-readme pre:focus-within .qi-code-copy,
+#about-cli pre:hover .qi-code-copy,
+#about-cli pre:focus-within .qi-code-copy {
+	opacity: .9;
+}
+
+.qi-code-copy:focus,
+.qi-code-copy:hover,
+.qi-code-copy.is-copied {
+	opacity: 1;
+}
+
+.qi-code-copy.is-copied {
+	color: #198754;
 }
 
 /* Dark mode adjustments */
