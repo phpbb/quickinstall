@@ -193,8 +193,11 @@ ARG PHP_VERSION=8.1
 FROM php:\${PHP_VERSION}-apache
 
 RUN {$aptSourceSetup}apt-get update \\
-    && apt-get install -y --no-install-recommends git unzip libpq-dev \\
+    && apt-get install -y --no-install-recommends git unzip libonig-dev libpq-dev libsodium-dev libzip-dev zlib1g-dev \\
+    && docker-php-ext-install mbstring zip \\
+    && if ! php -m | grep -qi '^sodium$'; then docker-php-ext-install sodium; fi \\
     && $extensionInstall \\
+    && for extension in PDO zip zlib sodium json mbstring; do php -m | grep -qi "^\${extension}$"; done \\
     && rm -rf /var/lib/apt/lists/*
 
 DOCKERFILE;
