@@ -269,16 +269,34 @@ phpBB 3.0 and 3.1 are intentionally not supported by QuickInstall CLI. They are 
 
 Most users do not need source commands. `board:create --phpbb <version>` automatically registers and downloads normal Composer release sources.
 
-Useful source commands:
+Show downloaded phpBB sources:
 
 ```bash
 php bin/qi source:list
+```
+`source:list` shows whether each source has been downloaded and which boards use it
+
+Register and download a phpBB source:
+
+```bash
 php bin/qi source:fetch 3.3.17
-php bin/qi source:remove 3.3.17
-php bin/qi source:prune
 ```
 
-`source:list` shows whether each source has been downloaded and which boards use it. `source:remove` deletes one source from `.qi/sources/` and removes it from the source registry. It refuses to remove a source still used by a board unless `--force` is passed.
+`source:fetch` simultaneously registers and downloads a phpBB source into `.qi/sources`.
+
+Delete a phpBB source: 
+
+```bash
+php bin/qi source:remove 3.3.17
+```
+
+`source:remove` deletes one source from `.qi/sources/` and removes it from the source registry. It refuses to remove a source still used by a board unless `--force` is passed.
+
+Delete all unused phpBB sources: 
+
+```bash
+php bin/qi source:prune
+```
 
 `source:prune` removes all unused sources. It never removes sources referenced by existing boards.
 
