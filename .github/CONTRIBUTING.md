@@ -37,6 +37,18 @@ $ php composer.phar install
 > - Edit the `scss/qi_bootstrap.scss` file to customise Bootstrap variables.
 > - Run `$ npm run all` to compile and deploy new Bootstrap CSS/JS files to QuickInstall.
 
+### CLI tests
+
+The new CLI test suite uses an isolated Composer config so it can require PHPUnit without changing QuickInstall's legacy runtime dependency constraints.
+
+```
+$ cd tests
+$ COMPOSER=composer.cli-tests.json composer install
+$ cd ..
+$ tests/vendor/bin/phpunit -c phpunit.xml.dist
+```
+
+The CLI test dependencies install into `tests/vendor/`, leaving the main application `vendor/` directory unchanged.
 
 ## :computer: Make something great
 
@@ -66,4 +78,3 @@ Be prepared for:
 - Constructive criticism of your code changes.
 - phpBB team members, or the community at large may request changes to your code (repeat [step 2 from here](#computer-make-something-great)).
 - That feeling when your Pull Request is accepted and merged. :sunglasses:
-

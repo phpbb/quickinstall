@@ -5,6 +5,7 @@ settings/*
 cache/*
 sources/*
 vendor/*
+tests/vendor/*
 build/*
 .qi/*
 customisations/*

@@ -16,10 +16,12 @@ use RuntimeException;
 class Application
 {
 	private Project $project;
+	private $stderr;
 
-	public function __construct(string $root)
+	public function __construct(string $root, $stderr = null)
 	{
 		$this->project = new Project($root);
+		$this->stderr = $stderr ?: STDERR;
 	}
 
 	public function run(array $argv): int
@@ -97,14 +99,14 @@ class Application
 					return $this->styleList($argv);
 
 				default:
-					fwrite(STDERR, "Unknown command: $command\n\n");
+					$this->writeError("Unknown command: $command\n\n");
 					$this->help();
 					return 1;
 			}
 		}
 		catch (InvalidArgumentException|RuntimeException $e)
 		{
-			fwrite(STDERR, $e->getMessage() . "\n");
+			$this->writeError($e->getMessage() . "\n");
 			return 1;
 		}
 	}
@@ -609,8 +611,13 @@ class Application
 
 		foreach ($errors as $error)
 		{
-			fwrite(STDERR, "Skipped $type: $error\n");
+			$this->writeError("Skipped $type: $error\n");
 		}
+	}
+
+	private function writeError(string $message): void
+	{
+		fwrite($this->stderr, $message);
 	}
 
 	private function mountResources(string $type, object $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int
