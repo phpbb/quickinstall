@@ -171,6 +171,12 @@
 						$button.setAttribute('title', 'Copy code');
 						$button.innerHTML = copyIcon('clipboard');
 					}, 1500);
+				}).catch(error => {
+					console.error(error);
+					$button.classList.remove('is-copied');
+					$button.setAttribute('aria-label', 'Copy failed');
+					$button.setAttribute('title', 'Copy failed');
+					$button.innerHTML = copyIcon('exclamation-triangle');
 				});
 			});
 
@@ -288,6 +294,6 @@
 		const copied = document.execCommand('copy');
 		document.body.removeChild($textarea);
 
-		return copied ? Promise.resolve() : Promise.reject();
+		return copied ? Promise.resolve() : Promise.reject(new Error('Fallback clipboard copy failed.'));
 	}
 })(document, window);
