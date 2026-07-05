@@ -64,13 +64,26 @@ class SourceProvider
 
 	public function ensure(string $version): array
 	{
-		$selection = (new VersionMatrix())->resolve($version);
+		$sources = $this->project->readJson('sources.json', []);
+		try
+		{
+			$selection = (new VersionMatrix())->resolve($version);
+		}
+		catch (InvalidArgumentException $e)
+		{
+			if (isset($sources[$version]))
+			{
+				return $this->ensureRegisteredSource($sources[$version] + ['source_key' => $version]);
+			}
+
+			throw $e;
+		}
+
 		if ($this->isFloatingSelection($selection))
 		{
 			return $this->ensureFloating($version, $selection);
 		}
 
-		$sources = $this->project->readJson('sources.json', []);
 		if (!isset($sources[$selection['source_key']]))
 		{
 			echo "Registering phpBB source: $version\n";
@@ -84,6 +97,29 @@ class SourceProvider
 			echo "Fetching phpBB source: $version\n";
 			$this->fetch($source);
 		}
+		$source = $this->withInstalledSourceMetadata($source, $selection['php']);
+		$sources[$source['source_key']] = $source;
+		$this->project->writeJson('sources.json', $sources);
+
+		return $source;
+	}
+
+	private function ensureRegisteredSource(array $source): array
+	{
+		$source += [
+			'path' => $this->project->sourcePath($source['source_key']),
+			'php'  => '8.1',
+		];
+		if (!file_exists($source['path'] . '/common.php'))
+		{
+			echo "Fetching phpBB source: {$source['source_key']}\n";
+			$this->fetch($source);
+		}
+
+		$source = $this->withInstalledSourceMetadata($source, $source['php']);
+		$sources = $this->project->readJson('sources.json', []);
+		$sources[$source['source_key']] = $source;
+		$this->project->writeJson('sources.json', $sources);
 
 		return $source;
 	}
@@ -114,8 +150,9 @@ class SourceProvider
 					if (!isset($sources[$resolvedKey]))
 					{
 						$sources[$resolvedKey] = $this->recordForResolvedSource($source, $selection, $version, $resolvedVersion, $resolvedKey, $resolvedPath);
-						$this->project->writeJson('sources.json', $sources);
 					}
+					$sources[$resolvedKey] = $this->withInstalledSourceMetadata($sources[$resolvedKey], $selection['php']);
+					$this->project->writeJson('sources.json', $sources);
 
 					$this->removeUnusedFloatingSource($sources, $selection['source_key'], $resolvedPath);
 					return $sources[$resolvedKey];
@@ -201,7 +238,7 @@ class SourceProvider
 
 	private function recordForResolvedSource(array $source, array $selection, string $requested, string $actualVersion, string $actualKey, string $actualPath): array
 	{
-		return [
+		return $this->withInstalledSourceMetadata([
 			'version' => $actualVersion,
 			'source_key' => $actualKey,
 			'constraint' => $source['type'] === 'composer' && $selection['constraint'] !== 'dev-master' ? $actualVersion : $selection['constraint'],
@@ -216,7 +253,7 @@ class SourceProvider
 			'resolved_from' => $requested,
 			'registered_at' => gmdate('c'),
 			'fetched_at' => gmdate('c'),
-		];
+		], $selection['php']);
 	}
 
 	private function withSelectionDefaults(array $source, array $selection): array
@@ -307,6 +344,72 @@ class SourceProvider
 		}
 
 		throw new RuntimeException("Unable to determine phpBB version from source: $path");
+	}
+
+	private function withInstalledSourceMetadata(array $source, string $defaultPhp): array
+	{
+		$requirement = $this->phpRequirement($source['path'] ?? '');
+		if ($requirement !== null)
+		{
+			$source['php_requirement'] = $requirement;
+			$source['php'] = $this->runtimeForRequirement($defaultPhp, $requirement);
+		}
+
+		return $source;
+	}
+
+	private function phpRequirement(string $path): ?string
+	{
+		$composer = $path . '/composer.json';
+		if (!is_file($composer))
+		{
+			return null;
+		}
+
+		$data = json_decode((string) file_get_contents($composer), true);
+		if (!is_array($data) || empty($data['require']['php']) || !is_string($data['require']['php']))
+		{
+			return null;
+		}
+
+		return $data['require']['php'];
+	}
+
+	private function runtimeForRequirement(string $defaultPhp, string $requirement): string
+	{
+		$minimum = $this->minimumPhpFromRequirement($requirement);
+		if ($minimum === null || version_compare($defaultPhp, $minimum, '>='))
+		{
+			return $defaultPhp;
+		}
+
+		return $minimum;
+	}
+
+	private function minimumPhpFromRequirement(string $requirement): ?string
+	{
+		if (!preg_match_all('/(?<![0-9])(?:(>=|>|<=|<|!=|=|==|\\^|~)\\s*)?([0-9]+\\.[0-9]+)(?:\\.[0-9]+)?(?![0-9])/', $requirement, $matches, PREG_SET_ORDER))
+		{
+			return null;
+		}
+
+		$minimum = null;
+		foreach ($matches as $match)
+		{
+			$operator = $match[1] ?? '';
+			if (in_array($operator, ['<', '<=', '!='], true))
+			{
+				continue;
+			}
+
+			$version = $match[2];
+			if ($minimum === null || version_compare($version, $minimum, '<'))
+			{
+				$minimum = $version;
+			}
+		}
+
+		return $minimum;
 	}
 
 	private function isFloatingSelection(array $selection): bool

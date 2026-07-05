@@ -61,7 +61,7 @@ class BoardService
 		$config = [
 			'phpbb' => $source['version'],
 			'phpbb_source' => $source['source_key'],
-			'php' => $selection['php'],
+			'php' => $source['php'] ?? $selection['php'],
 			'db' => $db,
 			'port' => $port,
 			'populate' => $populate,
@@ -79,7 +79,7 @@ class BoardService
 			'phpbb' => $source['version'],
 			'phpbb_source' => $source['source_key'],
 			'phpbb_branch' => $source['phpbb_branch'],
-			'php' => $selection['php'],
+			'php' => $source['php'] ?? $selection['php'],
 			'db' => $db,
 			'port' => $port,
 			'url' => "http://localhost:$port/",
