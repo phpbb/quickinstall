@@ -305,15 +305,13 @@ php bin/qi source:prune
 Use explicit Git sources for custom branches or forks:
 
 ```bash
-php bin/qi source:add master --git --url https://github.com/phpbb/phpbb.git
-php bin/qi source:fetch master
+php bin/qi source:fetch master --git --url https://github.com/phpbb/phpbb.git
 ```
 
 Custom Git URLs can run Composer code on your host during fetch. QuickInstall only accepts the official phpBB Git URL by default. For a trusted fork, opt in explicitly:
 
 ```bash
-php bin/qi source:add my-branch --git --url https://github.com/example/phpbb.git --allow-external
-php bin/qi source:fetch my-branch
+php bin/qi source:fetch my-branch --git --url https://github.com/example/phpbb.git --allow-external
 ```
 
 Fetched sources live under:

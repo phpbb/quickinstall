@@ -21,12 +21,6 @@ class SourceService
 		$this->project = $project;
 	}
 
-	public function add(string $version, bool $git = false, ?string $url = null, bool $allowExternal = false): array
-	{
-		$this->project->init();
-		return (new SourceProvider($this->project))->add($version, $git ? 'git' : 'composer', $url, $allowExternal);
-	}
-
 	public function list(): array
 	{
 		$usage = $this->usageBySource();
@@ -43,9 +37,16 @@ class SourceService
 		return $sources;
 	}
 
-	public function fetch(string $version): array
+	public function fetch(string $version, bool $git = false, ?string $url = null, bool $allowExternal = false): array
 	{
-		return (new SourceProvider($this->project))->ensure($version);
+		$this->project->init();
+		$provider = new SourceProvider($this->project);
+		if ($git)
+		{
+			$provider->add($version, 'git', $url, $allowExternal);
+		}
+
+		return $provider->ensure($version);
 	}
 
 	public function supportedVersions(): array

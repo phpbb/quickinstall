@@ -45,9 +45,6 @@ class Application
 				case 'init':
 					return $this->init();
 
-				case 'source:add':
-					return $this->sourceAdd($argv);
-
 				case 'source:list':
 					return $this->sourceList();
 
@@ -125,30 +122,6 @@ class Application
 		return 0;
 	}
 
-	private function sourceAdd(array $args): int
-	{
-		$cli = CommandLine::parse($args);
-		$version = $cli->argument(0);
-		if ($version === null)
-		{
-			throw new InvalidArgumentException('Usage: qi source:add <version|branch> [--git] [--url URL] [--allow-external]');
-		}
-
-		$record = (new SourceService($this->project))->add($version, $cli->has('git'), $cli->option('url'), $cli->has('allow-external'));
-
-		if (is_file($record['path'] . '/common.php'))
-		{
-			echo "Fetched phpBB source {$record['version']} ({$record['type']})\n";
-			echo "Path: {$record['path']}\n";
-		}
-		else
-		{
-			echo "Registered phpBB source {$record['version']} ({$record['type']})\n";
-			$this->nextStep("fetch it with Composer/Git into {$record['path']}");
-		}
-		return 0;
-	}
-
 	private function sourceList(): int
 	{
 		$sources = (new SourceService($this->project))->list();
@@ -219,10 +192,10 @@ class Application
 		$version = $cli->argument(0);
 		if ($version === null)
 		{
-			throw new InvalidArgumentException('Usage: qi source:fetch <version|branch>');
+			throw new InvalidArgumentException('Usage: qi source:fetch <version|branch> [--git] [--url URL] [--allow-external]');
 		}
 
-		$record = (new SourceService($this->project))->fetch($version);
+		$record = (new SourceService($this->project))->fetch($version, $cli->has('git'), $cli->option('url'), $cli->has('allow-external'));
 
 		echo "Fetched phpBB source: {$record['path']}\n";
 		return 0;
@@ -934,34 +907,22 @@ class Application
 				],
 			],
 			'Source commands' => [
-				'source:add' => [
-					'title' => 'source:add',
-					'usage' => 'source:add <version|branch> [--git] [--url URL] [--allow-external]',
-					'summary' => 'Register a phpBB source.',
-					'description' => 'Registers a phpBB release, branch, or Git source. Most users can skip this because board:create registers normal sources automatically. Prefer exact tags such as 3.3.17; convenience Composer selectors such as 3.3, 3.3.x, latest, and master are fetched immediately and stored under the exact phpBB version that was resolved.',
+				'source:fetch' => [
+					'title' => 'source:fetch',
+					'usage' => 'source:fetch <version|branch> [--git] [--url URL] [--allow-external]',
+					'summary' => 'Register and download a phpBB source.',
+					'description' => 'Registers and downloads a source under .qi/sources. Normal board:create flows fetch automatically when needed. Prefer exact tags such as 3.3.17; convenience selectors such as 3.3, 3.3.x, latest, and master are stored under the exact phpBB version that was resolved.',
 					'arguments' => [
 						'<version|branch>' => 'Version selector or source name, such as 3.3.17 or master.',
 					],
 					'options' => [
-						'--git' => 'Register a Git source instead of a Composer release source.',
+						'--git' => 'Fetch a Git source instead of a Composer release source.',
 						'--url URL' => 'Git repository URL. Defaults to the official phpBB repository for Git sources.',
 						'--allow-external' => 'Allow a trusted non-phpBB Git URL.',
 					],
 					'examples' => [
-						'source:add 3.3.17',
-						'source:add master --git --url https://github.com/phpbb/phpbb.git',
-					],
-				],
-				'source:fetch' => [
-					'title' => 'source:fetch',
-					'usage' => 'source:fetch <version|branch>',
-					'summary' => 'Download a registered source.',
-					'description' => 'Downloads a source under .qi/sources. Normal board:create flows fetch automatically when needed. Prefer exact tags such as 3.3.17; convenience selectors such as 3.3, 3.3.x, latest, and master are stored under the exact phpBB version that was resolved.',
-					'arguments' => [
-						'<version|branch>' => 'Registered source selector.',
-					],
-					'examples' => [
 						'source:fetch 3.3.17',
+						'source:fetch master --git --url https://github.com/phpbb/phpbb.git',
 					],
 				],
 				'source:list' => [
