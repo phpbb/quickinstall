@@ -304,6 +304,7 @@ class SourceProvider
 				$path,
 			], dirname($path));
 
+			$this->normalizeGitSourceRoot($path);
 			$this->run($this->composerCommand(['install', '--no-interaction', '--ignore-platform-reqs']), $path);
 			return;
 		}
@@ -327,6 +328,61 @@ class SourceProvider
 		}
 
 		$this->run($command, dirname($path));
+	}
+
+	private function normalizeGitSourceRoot(string $path): void
+	{
+		if (is_file($path . '/composer.json') && is_file($path . '/common.php'))
+		{
+			return;
+		}
+
+		$appRoot = $path . '/phpBB';
+		if (!is_file($appRoot . '/composer.json') || !is_file($appRoot . '/common.php'))
+		{
+			throw new RuntimeException("Git source does not contain phpBB at the repository root or phpBB/ subdirectory: $path");
+		}
+
+		$temporaryAppRoot = $path . '/.quickinstall-app-root';
+		if (file_exists($temporaryAppRoot) || is_link($temporaryAppRoot))
+		{
+			$this->project->deleteTree($temporaryAppRoot);
+		}
+		if (!rename($appRoot, $temporaryAppRoot))
+		{
+			throw new RuntimeException("Unable to prepare Git source root: $appRoot");
+		}
+
+		foreach (scandir($path) ?: [] as $item)
+		{
+			if ($item === '.' || $item === '..' || $item === '.git' || $item === basename($temporaryAppRoot))
+			{
+				continue;
+			}
+
+			$this->project->deleteTree($path . '/' . $item);
+		}
+
+		foreach (scandir($temporaryAppRoot) ?: [] as $item)
+		{
+			if ($item === '.' || $item === '..')
+			{
+				continue;
+			}
+
+			$source = $temporaryAppRoot . '/' . $item;
+			$target = $path . '/' . $item;
+			if (file_exists($target) || is_link($target))
+			{
+				throw new RuntimeException("Unable to normalize Git source. Target already exists: $target");
+			}
+			if (!rename($source, $target))
+			{
+				throw new RuntimeException("Unable to move Git source file into place: $source");
+			}
+		}
+
+		$this->project->deleteTree($temporaryAppRoot);
 	}
 
 	private function hasFiles(string $path): bool
