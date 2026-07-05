@@ -58,6 +58,27 @@ class DockerComposeWriterTest extends TestCase
 		self::assertStringContainsString('dbhost: "/var/www/html/store/phpbb.sqlite"', file_get_contents($paths['install_config']));
 	}
 
+	public function testQuotesYamlSignificantInstallerValues(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		mkdir($project->boardPath('demo'), 0775, true);
+
+		$paths = (new DockerComposeWriter($project))->write('demo', $this->config([
+			'admin_name' => '*admin: #1',
+			'admin_pass' => 'pa:ss # "quoted"',
+			'admin_email' => "admin\t#tag@example.test",
+		]));
+
+		$installConfig = file_get_contents($paths['install_config']);
+
+		self::assertStringContainsString('    name: "*admin: #1"', $installConfig);
+		self::assertStringContainsString('    password: "pa:ss # \"quoted\""', $installConfig);
+		self::assertStringContainsString('    email: "admin\\t#tag@example.test"', $installConfig);
+		self::assertStringContainsString('    name: "demo"', $installConfig);
+	}
+
 	private function config(array $overrides = []): array
 	{
 		return $overrides + [

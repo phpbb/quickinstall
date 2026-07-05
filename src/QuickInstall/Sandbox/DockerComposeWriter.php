@@ -53,16 +53,20 @@ class DockerComposeWriter
 		$dbms = $this->dbms($config['db']);
 		$dbhost = $config['db'] === 'sqlite' ? '/var/www/html/store/phpbb.sqlite' : 'db';
 		$dbport = $config['db'] === 'postgres' ? '5432' : ($config['db'] === 'sqlite' ? '' : '3306');
+		$adminName = $this->yamlString($config['admin_name']);
+		$adminPass = $this->yamlString($config['admin_pass']);
+		$adminEmail = $this->yamlString($config['admin_email']);
+		$boardName = $this->yamlString($name);
 
 		return <<<YAML
 installer:
   admin:
-    name: {$config['admin_name']}
-    password: {$config['admin_pass']}
-    email: {$config['admin_email']}
+    name: $adminName
+    password: $adminPass
+    email: $adminEmail
   board:
     lang: en
-    name: "{$name}"
+    name: $boardName
     description: "QuickInstall sandbox"
   database:
     dbms: $dbms
@@ -180,7 +184,11 @@ YAML;
 
 	private function yamlString(string $value): string
 	{
-		return '"' . str_replace(['\\', '"'], ['\\\\', '\\"'], $value) . '"';
+		return '"' . str_replace(
+			["\\", '"', "\n", "\r", "\t"],
+			["\\\\", '\\"', "\\n", "\\r", "\\t"],
+			$value
+		) . '"';
 	}
 
 	private function dockerfile(array $config): string
