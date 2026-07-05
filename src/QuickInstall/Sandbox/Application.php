@@ -230,10 +230,18 @@ class Application
 
 	private function phpbbList(): int
 	{
-		foreach ((new SourceService($this->project))->supportedVersions() as $row)
-		{
-			echo "{$row['selector']}\t{$row['status']}\tPHP {$row['php']}\t{$row['resolves_to']}\t{$row['notes']}\n";
-		}
+		$this->printTable(
+			['Selector', 'Status', 'PHP', 'Resolves To', 'Notes'],
+			array_map(static function ($row) {
+				return [
+					$row['selector'],
+					$row['status'],
+					$row['php'] === '-' ? '-' : 'PHP ' . $row['php'],
+					$row['resolves_to'],
+					$row['notes'],
+				];
+			}, (new SourceService($this->project))->supportedVersions())
+		);
 
 		return 0;
 	}
@@ -531,10 +539,16 @@ class Application
 			return 0;
 		}
 
-		foreach ($mounted as $extension)
-		{
-			echo "{$extension['name']}\t{$extension['mode']}\t{$extension['source']}\n";
-		}
+		$this->printTable(
+			['Extension', 'Mode', 'Source'],
+			array_map(static function ($extension) {
+				return [
+					$extension['name'],
+					$extension['mode'],
+					$extension['source'],
+				];
+			}, $mounted)
+		);
 
 		return 0;
 	}
@@ -586,10 +600,16 @@ class Application
 			return 0;
 		}
 
-		foreach ($mounted as $style)
-		{
-			echo "{$style['name']}\t{$style['mode']}\t{$style['source']}\n";
-		}
+		$this->printTable(
+			['Style', 'Mode', 'Source'],
+			array_map(static function ($style) {
+				return [
+					$style['name'],
+					$style['mode'],
+					$style['source'],
+				];
+			}, $mounted)
+		);
 
 		return 0;
 	}
