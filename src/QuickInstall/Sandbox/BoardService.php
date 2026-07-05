@@ -22,7 +22,7 @@ class BoardService
 		$this->project = $project;
 	}
 
-	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none', bool $replace = false): array
+	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none', bool $debug = false, bool $replace = false): array
 	{
 		$this->project->init();
 		$selection = (new VersionMatrix())->resolve($version);
@@ -65,6 +65,7 @@ class BoardService
 			'db' => $db,
 			'port' => $port,
 			'populate' => $populate,
+			'debug' => $debug,
 			'admin_name' => 'admin',
 			'admin_pass' => 'password',
 			'admin_email' => 'admin@example.test',
@@ -85,6 +86,7 @@ class BoardService
 			'url' => "http://localhost:$port/",
 			'path' => $boardDir,
 			'populate' => $populate,
+			'debug' => $debug,
 			'extensions' => [],
 			'styles' => [],
 			'created_at' => gmdate('c'),
@@ -115,6 +117,7 @@ class BoardService
 		{
 			$board['status'] = $runner->status($board['name']);
 			$board['populate'] = $board['populate'] ?? 'none';
+			$board['debug'] = $board['debug'] ?? false;
 			$boards[] = $board;
 		}
 

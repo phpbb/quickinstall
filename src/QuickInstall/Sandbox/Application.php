@@ -225,7 +225,7 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new InvalidArgumentException('Usage: qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]');
+			throw new InvalidArgumentException('Usage: qi board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--debug] [--replace]');
 		}
 
 		$version = $cli->option('phpbb', 'latest');
@@ -233,9 +233,10 @@ class Application
 		$db = $db === 'sqlite3' ? 'sqlite' : $db;
 		$port = (int) $cli->option('port', '8080');
 		$populate = $cli->option('populate', 'none');
+		$debug = $cli->has('debug');
 		$this->validateBoardCreateOptions($db, $port, $populate);
 
-		$created = (new BoardService($this->project))->create($name, $version, $db, $port, $populate, $cli->has('replace'));
+		$created = (new BoardService($this->project))->create($name, $version, $db, $port, $populate, $debug, $cli->has('replace'));
 		$paths = $created['paths'];
 
 		echo "Created board scaffold: $name\n";
@@ -245,6 +246,10 @@ class Application
 		if ($populate !== 'none')
 		{
 			echo "Populate preset: $populate (runs on board:start)\n";
+		}
+		if ($debug)
+		{
+			echo "Debug mode: enabled on board:start\n";
 		}
 		$this->nextStep("php bin/qi board:start $name");
 		return 0;
@@ -260,7 +265,7 @@ class Application
 		}
 
 		$this->printTable(
-			['Name', 'Status', 'phpBB', 'PHP', 'DB', 'Populate', 'URL'],
+			['Name', 'Status', 'phpBB', 'PHP', 'DB', 'Populate', 'Debug', 'URL'],
 			array_map(static function ($board) {
 				return [
 					$board['name'],
@@ -269,6 +274,7 @@ class Application
 					$board['php'],
 					$board['db'],
 					$board['populate'] ?? 'none',
+					!empty($board['debug']) ? 'yes' : 'no',
 					$board['url'],
 				];
 			}, $boards)
@@ -496,6 +502,7 @@ class Application
 			'admin_email' => 'admin@example.test',
 			'board_email' => 'board@example.test',
 			'populate' => 'none',
+			'debug' => false,
 			'extensions' => [],
 			'styles' => [],
 		];
@@ -731,7 +738,7 @@ class Application
 			'Board commands' => [
 				'board:create' => [
 					'title' => 'board:create',
-					'usage' => 'board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--replace]',
+					'usage' => 'board:create <name> [--phpbb VERSION] [--db mariadb|mysql|postgres|sqlite] [--port PORT] [--populate PRESET] [--debug] [--replace]',
 					'summary' => 'Create a board scaffold and Docker runtime.',
 					'description' => 'Creates a local board definition, downloads the requested phpBB source if needed, and prepares Docker files. Run board:start after this.',
 					'arguments' => [
@@ -742,11 +749,12 @@ class Application
 						'--db DB' => 'Database engine. One of: mariadb, mysql, postgres, sqlite. Default: mariadb.',
 						'--port PORT' => 'Local browser port. Default: 8080.',
 						'--populate PRESET' => 'Seed preset. One of: none, tiny, extension-dev, load-test, random. Default: none.',
+						'--debug' => 'Enable phpBB debug settings after install.',
 						'--replace' => 'Destroy an existing board with the same name before creating the new one.',
 					],
 					'examples' => [
 						'board:create demo --phpbb 3.3 --db mariadb --port 8081',
-						'board:create extdev --phpbb 3.3.17 --populate extension-dev',
+						'board:create extdev --phpbb 3.3.17 --populate extension-dev --debug',
 					],
 				],
 				'board:start' => [
@@ -789,7 +797,7 @@ class Application
 					'title' => 'board:list',
 					'usage' => 'board:list',
 					'summary' => 'Show created boards and running status.',
-					'description' => 'Lists known boards with phpBB version, PHP version, database type, populate preset, URL, and running status.',
+					'description' => 'Lists known boards with phpBB version, PHP version, database type, populate preset, debug flag, URL, and running status.',
 					'examples' => [
 						'board:list',
 					],

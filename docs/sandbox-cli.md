@@ -63,6 +63,13 @@ php bin/qi board:create extdev --phpbb 3.3.17 --db mariadb --port 8082 --populat
 php bin/qi board:start extdev
 ```
 
+Create a board with phpBB debug output enabled:
+
+```bash
+php bin/qi board:create debug --phpbb 3.3 --db mariadb --port 8085 --populate extension-dev --debug
+php bin/qi board:start debug
+```
+
 Create an older supported phpBB 3.2 board:
 
 ```bash
@@ -126,6 +133,8 @@ Available presets:
 | `random`        | Random counts up to load-test size                                   |
 
 Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
+
+Use `board:create --debug` when you want phpBB debug output enabled for the created board. Debug mode is independent from fixture presets.
 
 You can seed again manually:
 

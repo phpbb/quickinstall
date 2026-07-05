@@ -28,6 +28,11 @@ class BoardRunner
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '--build', '-d', '--force-recreate', '--remove-orphans', 'web']);
 		echo "Waiting for phpBB install to finish...\n";
 		$this->waitUntilInstalled($name);
+		if (!empty($board['debug']))
+		{
+			echo "Enabling phpBB debug config...\n";
+			$this->enableDebug($name);
+		}
 		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
 		{
 			throw new RuntimeException('SQLite boards currently support populate:none only. Use mariadb, mysql, or postgres for seeded boards.');
@@ -142,6 +147,114 @@ class BoardRunner
 
 		$this->runSeeder($name, $preset, 1);
 		$this->writeSeedMarker($name, $preset);
+	}
+
+	private function enableDebug(string $name): void
+	{
+		$board = $this->project->board($name);
+		$branch = (string) ($board['phpbb_branch'] ?? '');
+		$boardPath = $this->project->boardPath($name);
+
+		if (in_array($branch, ['3.3', '4.0'], true))
+		{
+			$this->enableYamlDebug($boardPath);
+			return;
+		}
+
+		if ($branch === '3.2')
+		{
+			$this->enableConfigPhpDebug($boardPath, true);
+		}
+	}
+
+	private function enableConfigPhpDebug(string $boardPath, bool $displayLoadTime): void
+	{
+		$configPath = $boardPath . '/config.php';
+		if (!is_file($configPath))
+		{
+			return;
+		}
+
+		$contents = file_get_contents($configPath);
+		if ($contents === false)
+		{
+			throw new RuntimeException("Unable to read board config: $configPath");
+		}
+
+		$contents = $this->setConfigDefine($contents, 'PHPBB_ENVIRONMENT', "@define('PHPBB_ENVIRONMENT', 'production');");
+		$contents = $this->setConfigDefine($contents, 'DEBUG_CONTAINER', "// @define('DEBUG_CONTAINER', true);");
+
+		if ($displayLoadTime)
+		{
+			$contents = $this->setConfigDefine($contents, 'PHPBB_DISPLAY_LOAD_TIME', "@define('PHPBB_DISPLAY_LOAD_TIME', true);");
+		}
+
+		file_put_contents($configPath, $contents);
+	}
+
+	private function enableYamlDebug(string $boardPath): void
+	{
+		$configPath = $boardPath . '/config/production/config.yml';
+		if (!is_file($configPath))
+		{
+			return;
+		}
+
+		$contents = file_get_contents($configPath);
+		if ($contents === false)
+		{
+			throw new RuntimeException("Unable to read board config: $configPath");
+		}
+
+		if (str_contains($contents, 'debug.load_time:'))
+		{
+			return;
+		}
+
+		$debugConfig = [
+			'debug.load_time' => 'true',
+			'debug.memory' => 'true',
+			'debug.sql_explain' => 'true',
+			'debug.show_errors' => 'true',
+			'debug.exceptions' => 'true',
+			'twig.debug' => 'false',
+			'twig.auto_reload' => 'false',
+			'twig.enable_debug_extension' => 'false',
+		];
+
+		$lines = [];
+		foreach ($debugConfig as $key => $value)
+		{
+			$lines[] = "    $key: $value";
+		}
+
+		if (preg_match('/^parameters:\s*$/m', $contents))
+		{
+			$contents = preg_replace('/^parameters:\s*$/m', "parameters:\n" . implode("\n", $lines), $contents, 1) ?? $contents;
+		}
+		else
+		{
+			$contents = rtrim($contents) . "\n\nparameters:\n" . implode("\n", $lines) . "\n";
+		}
+
+		file_put_contents($configPath, $contents);
+	}
+
+	private function setConfigDefine(string $contents, string $name, string $line): string
+	{
+		$pattern = "/^[ \\t]*(?:\\/\\/\\s*)?@define\\('" . preg_quote($name, '/') . "'[^\\n]*;\\s*$/m";
+		if (preg_match($pattern, $contents))
+		{
+			return preg_replace($pattern, $line, $contents, 1) ?? $contents;
+		}
+
+		$insert = "\n$line\n";
+		if (preg_match('/\?>\s*$/', $contents))
+		{
+			return preg_replace('/\s*\?>\s*$/', $insert . "?>\n", $contents, 1) ?? $contents;
+		}
+
+		return rtrim($contents) . $insert;
 	}
 
 	private function waitUntilInstalled(string $name): void
