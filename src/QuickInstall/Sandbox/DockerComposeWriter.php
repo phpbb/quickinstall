@@ -97,7 +97,7 @@ YAML;
 
 	private function compose(string $name, array $config): string
 	{
-		$dbService = $this->databaseService($config['db'], $name);
+		$dbService = $this->databaseService($config['db'], $name, $config['php']);
 		$sourcePath = $this->project->sourcePath($config['phpbb_source'] ?? $config['phpbb']);
 		$boardPath = $this->project->boardPath($name);
 		$extensionVolumes = $this->extensionVolumes($config['extensions'] ?? []);
@@ -195,17 +195,19 @@ YAML;
 	{
 		$extensionInstall = $config['db'] === 'postgres' ? 'docker-php-ext-install pgsql pdo_pgsql' : 'docker-php-ext-install mysqli pdo_mysql';
 		$aptSourceSetup = $this->aptSourceSetup($config['php']);
+		$sodiumInstall = version_compare($config['php'], '7.2', '>=') ? "    && if ! php -m | grep -qi '^sodium$'; then docker-php-ext-install sodium; fi \\\n" : '';
+		$requiredExtensions = version_compare($config['php'], '7.2', '>=') ? 'PDO zip zlib sodium json mbstring' : 'PDO zip zlib json mbstring';
+		$packages = version_compare($config['php'], '7.2', '>=') ? 'git unzip libonig-dev libpq-dev libsodium-dev libzip-dev zlib1g-dev' : 'git unzip libonig-dev libpq-dev libzip-dev zlib1g-dev';
 
 		return <<<DOCKERFILE
 ARG PHP_VERSION=8.1
 FROM php:\${PHP_VERSION}-apache
 
 RUN {$aptSourceSetup}apt-get update \\
-    && apt-get install -y --no-install-recommends git unzip libonig-dev libpq-dev libsodium-dev libzip-dev zlib1g-dev \\
+    && apt-get install -y --no-install-recommends $packages \\
     && docker-php-ext-install mbstring zip \\
-    && if ! php -m | grep -qi '^sodium$'; then docker-php-ext-install sodium; fi \\
-    && $extensionInstall \\
-    && for extension in PDO zip zlib sodium json mbstring; do php -m | grep -qi "^\${extension}$"; done \\
+{$sodiumInstall}    && $extensionInstall \\
+    && for extension in $requiredExtensions; do php -m | grep -qi "^\${extension}$"; done \\
     && rm -rf /var/lib/apt/lists/*
 
 DOCKERFILE;
@@ -253,13 +255,14 @@ apache2-foreground
 SH;
 	}
 
-	private function databaseService(string $db, string $name): string
+	private function databaseService(string $db, string $name, string $phpVersion): string
 	{
 		$dbPath = '../../db/' . $name;
 		switch ($db)
 		{
 			case 'mysql':
 				$image = 'mysql:8.0';
+				$command = version_compare($phpVersion, '7.4.4', '<') ? "    command: [\"--default-authentication-plugin=mysql_native_password\"]\n" : '';
 				break;
 			case 'postgres':
 				return <<<YAML
@@ -291,6 +294,7 @@ YAML;
 			case 'mariadb':
 			default:
 				$image = 'mariadb:10.11';
+				$command = '';
 				break;
 		}
 		$dbVolume = $this->yamlString($dbPath . ':/var/lib/mysql');
@@ -298,7 +302,7 @@ YAML;
 		return <<<YAML
   db:
     image: $image
-    environment:
+{$command}    environment:
       MYSQL_DATABASE: phpbb
       MYSQL_USER: phpbb
       MYSQL_PASSWORD: phpbb

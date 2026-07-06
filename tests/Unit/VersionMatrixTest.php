@@ -14,7 +14,7 @@ class VersionMatrixTest extends TestCase
 
 		self::assertSame('3.3', $matrix->resolve('latest')['source_key']);
 		self::assertSame('8.1', $matrix->resolve('3.3.x')['php']);
-		self::assertSame('7.2', $matrix->resolve('3.2.11')['php']);
+		self::assertSame('7.1', $matrix->resolve('3.2.11')['php']);
 		self::assertSame('4.0', $matrix->resolve('master')['phpbb_branch']);
 		self::assertSame('8.2', $matrix->resolve('4.0.0')['php']);
 	}

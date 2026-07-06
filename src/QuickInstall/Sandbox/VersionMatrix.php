@@ -19,7 +19,7 @@ class VersionMatrix
 		return [
 			['selector' => 'latest', 'resolves_to' => '3.3.*', 'status' => 'supported', 'php' => '8.1', 'notes' => 'Default supported stable line'],
 			['selector' => '3.3 / 3.3.x', 'resolves_to' => '3.3.* or exact tag', 'status' => 'supported', 'php' => '8.1', 'notes' => 'Recommended'],
-			['selector' => '3.2 / 3.2.x', 'resolves_to' => '3.2.* or exact tag', 'status' => 'supported', 'php' => '7.2', 'notes' => 'Legacy-modern'],
+			['selector' => '3.2 / 3.2.x', 'resolves_to' => '3.2.* or exact tag', 'status' => 'supported', 'php' => '7.1', 'notes' => 'Legacy-modern'],
 			['selector' => '4.0.x / master', 'resolves_to' => 'exact tag or dev-master', 'status' => 'experimental', 'php' => '8.2', 'notes' => 'Installer may change upstream'],
 			['selector' => '3.0.x / 3.1.x', 'resolves_to' => '-', 'status' => 'unsupported', 'php' => '-', 'notes' => 'Use legacy web app'],
 		];
@@ -85,7 +85,7 @@ class VersionMatrix
 				'constraint' => '3.2.*',
 				'branch' => '3.2',
 				'phpbb_branch' => '3.2',
-				'php' => '7.2',
+				'php' => '7.1',
 				'status' => 'supported',
 			];
 		}
@@ -124,7 +124,7 @@ class VersionMatrix
 				'constraint' => $requested,
 				'branch' => '3.2',
 				'phpbb_branch' => '3.2',
-				'php' => '7.2',
+				'php' => '7.1',
 				'status' => 'supported',
 			];
 		}
