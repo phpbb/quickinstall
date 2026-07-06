@@ -39,7 +39,7 @@ Admin login:
 admin / password
 ```
 
-That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts Docker, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
+That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts the board containers with Docker Compose, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
 
 If you ever need help with commands, run:
 

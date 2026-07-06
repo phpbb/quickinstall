@@ -824,8 +824,8 @@ class Application
 				'board:start' => [
 					'title' => 'board:start',
 					'usage' => 'board:start <name>',
-					'summary' => 'Start Docker and install the board if needed.',
-					'description' => 'Starts the board containers, runs phpBB install on first start, applies the configured populate preset once, and waits for the board URL to respond.',
+					'summary' => 'Start the board containers and install the board if needed.',
+					'description' => 'Starts the board containers with Docker Compose, runs phpBB install on first start, applies the configured populate preset once, and waits for the board URL to respond. Docker must already be running.',
 					'arguments' => [
 						'<name>' => 'Required board name.',
 					],
