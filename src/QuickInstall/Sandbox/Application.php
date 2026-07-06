@@ -17,11 +17,13 @@ class Application
 {
 	private Project $project;
 	private $stderr;
+	private $stdin;
 
-	public function __construct(string $root, $stderr = null)
+	public function __construct(string $root, $stderr = null, $stdin = null)
 	{
 		$this->project = new Project($root);
 		$this->stderr = $stderr ?: STDERR;
+		$this->stdin = $stdin ?: (defined('STDIN') ? STDIN : null);
 	}
 
 	public function run(array $argv): int
@@ -254,6 +256,11 @@ class Application
 			echo "Debug mode: enabled on board:start\n";
 		}
 		$this->nextStep("php bin/qi board:start $name");
+		if ($this->confirm('Run this command now? [Y/n]: ', true))
+		{
+			return $this->boardStart([$name]);
+		}
+
 		return 0;
 	}
 
@@ -321,6 +328,56 @@ class Application
 	private function nextStep(string $text): void
 	{
 		echo "\n" . $this->style('NEXT:', '1;33') . " " . $this->style($text, '1') . "\n";
+	}
+
+	private function confirm(string $question, bool $default = false): bool
+	{
+		if (!$this->shouldPrompt())
+		{
+			return false;
+		}
+
+		while (true)
+		{
+			echo $question;
+			$answer = fgets($this->stdin);
+			if ($answer === false)
+			{
+				echo "\n";
+				return false;
+			}
+
+			$answer = strtolower(trim($answer));
+			if ($answer === '')
+			{
+				return $default;
+			}
+			if ($answer === 'y' || $answer === 'yes')
+			{
+				return true;
+			}
+			if ($answer === 'n' || $answer === 'no')
+			{
+				return false;
+			}
+
+			echo "Please answer y or n.\n";
+		}
+	}
+
+	private function shouldPrompt(): bool
+	{
+		if (!is_resource($this->stdin))
+		{
+			return false;
+		}
+
+		if (defined('STDIN') && $this->stdin === STDIN)
+		{
+			return !function_exists('posix_isatty') || posix_isatty(STDIN);
+		}
+
+		return true;
 	}
 
 	private function style(string $text, string $code): string
