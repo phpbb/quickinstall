@@ -145,11 +145,6 @@ class VersionMatrix
 		throw new InvalidArgumentException("Unsupported phpBB selector: $requested. Use latest, 3.3, 3.3.x, 3.2, 3.2.x, 4.0.x, or master.");
 	}
 
-	public function runtimeFor(string $version): array
-	{
-		return ['php' => $this->resolve($version)['php']];
-	}
-
 	private function sourceKey(string $value): string
 	{
 		return preg_replace('/[^A-Za-z0-9._-]/', '-', $value);

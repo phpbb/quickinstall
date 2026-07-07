@@ -20,6 +20,7 @@ class CommandLine
 		$cli = new self();
 		$count = count($tokens);
 
+		/** @noinspection ForeachInvariantsInspection */
 		for ($i = 0; $i < $count; $i++)
 		{
 			$token = $tokens[$i];

@@ -37,7 +37,7 @@ class DockerComposeWriter
 		file_put_contents($installConfig, $this->installConfig($name, $config));
 		file_put_contents($compose, $this->compose($name, $config));
 		file_put_contents($dockerfile, $this->dockerfile($config));
-		file_put_contents($entrypoint, $this->entrypoint($config));
+		file_put_contents($entrypoint, $this->entrypoint());
 		chmod($entrypoint, 0755);
 
 		return [
@@ -226,7 +226,7 @@ DOCKERFILE;
 			. "    && ";
 	}
 
-	private function entrypoint(array $config): string
+	private function entrypoint(): string
 	{
 		return <<<'SH'
 set -eu
