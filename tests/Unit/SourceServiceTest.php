@@ -43,6 +43,29 @@ class SourceServiceTest extends TestCase
 		(new SourceService($project))->remove('3.3.14');
 	}
 
+	public function testRemoveCanResolveSourceBySelectorAlias(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		$sourcePath = $this->addSource($project, '3.3');
+
+		$result = (new SourceService($project))->remove('latest');
+
+		self::assertSame('3.3', $result['source']['source_key']);
+		self::assertDirectoryDoesNotExist($sourcePath);
+	}
+
+	public function testRemoveRejectsUnknownSource(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('Unknown source: 3.3.14');
+
+		(new SourceService($project))->remove('3.3.14');
+	}
+
 	public function testRemoveWithForceDeletesRecordAndFiles(): void
 	{
 		[$project, $sourcePath] = $this->projectWithSource('3.3.14');
@@ -83,6 +106,14 @@ class SourceServiceTest extends TestCase
 		$this->expectExceptionMessage('Use --allow-external');
 
 		(new SourceProvider($project))->add('master', 'git', 'https://example.test/phpbb.git');
+	}
+
+	public function testSupportedVersionsReturnsVersionMatrix(): void
+	{
+		$versions = (new SourceService(new Project($this->createTempProjectRoot())))->supportedVersions();
+
+		self::assertSame('latest', $versions[0]['selector']);
+		self::assertSame('supported', $versions[0]['status']);
 	}
 
 	private function projectWithSource(string $version): array

@@ -55,6 +55,60 @@ class ExtensionManagerTest extends TestCase
 		self::assertSame([], $manager->list('demo'));
 	}
 
+	public function testUnmountBindExtensionRemovesMetadataOnly(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->extension($root, 'vendor/bound', 'customisations/vendor/bound');
+		$manager = new ExtensionManager($project);
+		$manager->mount('demo', $source);
+
+		$removed = $manager->unmount('demo', 'vendor/bound');
+
+		self::assertSame('/var/www/html/ext/vendor/bound', $removed);
+		self::assertDirectoryExists($source);
+		self::assertSame([], $manager->list('demo'));
+	}
+
+	public function testListDiscoversCopiedExtensionWithoutMetadata(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->extension($root, 'vendor/copied', 'customisations/vendor/copied');
+		$target = $project->boardPath('demo') . '/ext/vendor/copied';
+		$project->copyTree($source, $target);
+
+		$list = (new ExtensionManager($project))->list('demo');
+
+		self::assertSame('vendor/copied', $list[0]['name']);
+		self::assertSame('copy', $list[0]['mode']);
+		self::assertSame($target, $list[0]['source']);
+	}
+
+	public function testCleanupStaleTargetRemovesExtensionDirectoryAndParents(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->extension($root, 'vendor/stale', 'customisations/vendor/stale');
+		$target = $project->boardPath('demo') . '/ext/vendor/stale';
+		$project->copyTree($source, $target);
+
+		(new ExtensionManager($project))->cleanupStaleTarget('demo', 'vendor/stale');
+
+		self::assertDirectoryDoesNotExist($target);
+		self::assertDirectoryDoesNotExist($project->boardPath('demo') . '/ext/vendor');
+	}
+
+	public function testRejectsExtensionWithoutComposerName(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $root . '/customisations/vendor/noname';
+		mkdir($source, 0775, true);
+		file_put_contents($source . '/composer.json', '{}');
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('must contain a name');
+
+		(new ExtensionManager($project))->mount('demo', $source);
+	}
+
 	public function testRejectsExternalSourceUnlessAllowed(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');

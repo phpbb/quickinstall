@@ -11,24 +11,28 @@ class DockerComposeWriterTest extends TestCase
 {
 	use TempProjectTrait;
 
-	public function testWritesMysqlRuntimeFiles(): void
+	/**
+	 * @dataProvider databaseRuntimeProvider
+	 */
+	public function testWritesDatabaseRuntimeFiles(string $board, string $db, array $expectedContains, array $expectedNotContains = []): void
 	{
-		$root = $this->createTempProjectRoot();
-		$project = new Project($root);
-		$project->init();
-		mkdir($project->boardPath('demo'), 0775, true);
-
-		$paths = (new DockerComposeWriter($project))->write('demo', $this->config(['db' => 'mysql']));
+		[$project, $paths] = $this->writeBoard($board, ['db' => $db]);
 
 		self::assertFileExists($paths['compose']);
 		self::assertFileExists($paths['install_config']);
 		self::assertFileExists($paths['dockerfile']);
 		self::assertFileExists($paths['entrypoint']);
-		self::assertStringContainsString('image: mysql:8.0', file_get_contents($paths['compose']));
-		self::assertStringNotContainsString('default-authentication-plugin', file_get_contents($paths['compose']));
-		self::assertStringContainsString('server_port: 8081', file_get_contents($paths['install_config']));
-		self::assertStringContainsString('docker-php-ext-install mysqli pdo_mysql', file_get_contents($paths['dockerfile']));
 		self::assertStringContainsString('apache2-foreground', file_get_contents($paths['entrypoint']));
+
+		$output = file_get_contents($paths['compose']) . "\n" . file_get_contents($paths['install_config']) . "\n" . file_get_contents($paths['dockerfile']);
+		foreach ($expectedContains as $expected)
+		{
+			self::assertStringContainsString($expected, $output);
+		}
+		foreach ($expectedNotContains as $unexpected)
+		{
+			self::assertStringNotContainsString($unexpected, $output);
+		}
 	}
 
 	public function testLegacyPhpMysqlRuntimeUsesNativePasswordAuth(): void
@@ -50,47 +54,58 @@ class DockerComposeWriterTest extends TestCase
 		self::assertStringContainsString('dbms: mysqli', file_get_contents($paths['install_config']));
 	}
 
-	public function testWritesMariadbRuntimeFiles(): void
+	public function databaseRuntimeProvider(): array
 	{
-		$root = $this->createTempProjectRoot();
-		$project = new Project($root);
-		$project->init();
-		mkdir($project->boardPath('maria'), 0775, true);
-
-		$paths = (new DockerComposeWriter($project))->write('maria', $this->config(['db' => 'mariadb']));
-		$compose = file_get_contents($paths['compose']);
-
-		self::assertStringContainsString('image: mariadb:10.11', $compose);
-		self::assertStringNotContainsString('default-authentication-plugin', $compose);
-		self::assertStringContainsString('dbms: mysqli', file_get_contents($paths['install_config']));
-	}
-
-	public function testWritesPostgresRuntimeFiles(): void
-	{
-		$root = $this->createTempProjectRoot();
-		$project = new Project($root);
-		$project->init();
-		mkdir($project->boardPath('pg'), 0775, true);
-
-		$paths = (new DockerComposeWriter($project))->write('pg', $this->config(['db' => 'postgres']));
-
-		self::assertStringContainsString('image: postgres:16', file_get_contents($paths['compose']));
-		self::assertStringContainsString('dbms: postgres', file_get_contents($paths['install_config']));
-		self::assertStringContainsString('docker-php-ext-install pgsql pdo_pgsql', file_get_contents($paths['dockerfile']));
-	}
-
-	public function testWritesSqliteRuntimeFiles(): void
-	{
-		$root = $this->createTempProjectRoot();
-		$project = new Project($root);
-		$project->init();
-		mkdir($project->boardPath('lite'), 0775, true);
-
-		$paths = (new DockerComposeWriter($project))->write('lite', $this->config(['db' => 'sqlite']));
-
-		self::assertStringContainsString('image: busybox', file_get_contents($paths['compose']));
-		self::assertStringContainsString('dbms: sqlite3', file_get_contents($paths['install_config']));
-		self::assertStringContainsString('dbhost: "/var/www/html/store/phpbb.sqlite"', file_get_contents($paths['install_config']));
+		return [
+			'mysql' => [
+				'demo',
+				'mysql',
+				[
+					'image: mysql:8.0',
+					'server_port: 8081',
+					'dbms: mysqli',
+					'docker-php-ext-install mysqli pdo_mysql',
+				],
+				['default-authentication-plugin'],
+			],
+			'mariadb' => [
+				'maria',
+				'mariadb',
+				[
+					'image: mariadb:10.11',
+					'dbms: mysqli',
+					'docker-php-ext-install mysqli pdo_mysql',
+				],
+				['default-authentication-plugin'],
+			],
+			'postgres' => [
+				'pg',
+				'postgres',
+				[
+					'image: postgres:16',
+					'dbms: postgres',
+					'docker-php-ext-install pgsql pdo_pgsql',
+				],
+			],
+			'sqlite' => [
+				'lite',
+				'sqlite',
+				[
+					'image: busybox',
+					'dbms: sqlite3',
+					'dbhost: "/var/www/html/store/phpbb.sqlite"',
+				],
+			],
+			'unknown db falls back to mariadb-compatible mysqli' => [
+				'fallback',
+				'unknown',
+				[
+					'image: mariadb:10.11',
+					'dbms: mysqli',
+					'docker-php-ext-install mysqli pdo_mysql',
+				],
+			],
+		];
 	}
 
 	public function testPhp71RuntimeDoesNotRequireSodium(): void
@@ -156,5 +171,15 @@ class DockerComposeWriterTest extends TestCase
 				'clean' => ['mode' => 'bind', 'source' => '/tmp/clean-style'],
 			],
 		];
+	}
+
+	private function writeBoard(string $name, array $overrides = []): array
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		mkdir($project->boardPath($name), 0775, true);
+
+		return [$project, (new DockerComposeWriter($project))->write($name, $this->config($overrides))];
 	}
 }

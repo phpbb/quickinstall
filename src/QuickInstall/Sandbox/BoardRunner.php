@@ -131,7 +131,7 @@ class BoardRunner
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '-d', '--force-recreate', 'web']);
 	}
 
-	private function seedIfNeeded(string $name, string $preset): void
+	protected function seedIfNeeded(string $name, string $preset): void
 	{
 		if ($preset === 'none' || $preset === '')
 		{
@@ -149,7 +149,7 @@ class BoardRunner
 		$this->writeSeedMarker($name, $preset);
 	}
 
-	private function enableDebug(string $name): void
+	protected function enableDebug(string $name): void
 	{
 		$board = $this->project->board($name);
 		$branch = (string) ($board['phpbb_branch'] ?? '');
@@ -167,7 +167,7 @@ class BoardRunner
 		}
 	}
 
-	private function enableConfigPhpDebug(string $boardPath, bool $displayLoadTime): void
+	protected function enableConfigPhpDebug(string $boardPath, bool $displayLoadTime): void
 	{
 		$configPath = $boardPath . '/config.php';
 		if (!is_file($configPath))
@@ -192,7 +192,7 @@ class BoardRunner
 		file_put_contents($configPath, $contents);
 	}
 
-	private function enableYamlDebug(string $boardPath): void
+	protected function enableYamlDebug(string $boardPath): void
 	{
 		$configPath = $boardPath . '/config/production/config.yml';
 		if (!is_file($configPath))
@@ -240,7 +240,7 @@ class BoardRunner
 		file_put_contents($configPath, $contents);
 	}
 
-	private function setConfigDefine(string $contents, string $name, string $line): string
+	protected function setConfigDefine(string $contents, string $name, string $line): string
 	{
 		$pattern = "/^[ \\t]*(?:\\/\\/\\s*)?@define\\('" . preg_quote($name, '/') . "'[^\\n]*;\\s*$/m";
 		if (preg_match($pattern, $contents))
@@ -257,7 +257,7 @@ class BoardRunner
 		return rtrim($contents) . $insert;
 	}
 
-	private function waitUntilInstalled(string $name): void
+	protected function waitUntilInstalled(string $name): void
 	{
 		$boardPath = $this->project->boardPath($name);
 		$deadline = time() + 120;
@@ -282,7 +282,7 @@ class BoardRunner
 		throw new RuntimeException("Timed out waiting for phpBB install to complete for board: $name");
 	}
 
-	private function waitUntilHttpReady(string $name, string $url): void
+	protected function waitUntilHttpReady(string $name, string $url): void
 	{
 		if ($url === '')
 		{
@@ -306,7 +306,7 @@ class BoardRunner
 		echo "Try opening it again in a few seconds, or run: docker compose -f " . $this->project->composePath($name) . " logs web\n";
 	}
 
-	private function httpStatus(string $url): int
+	protected function httpStatus(string $url): int
 	{
 		$context = stream_context_create([
 			'http' => [
@@ -325,7 +325,7 @@ class BoardRunner
 		return preg_match('/\s(\d{3})\s/', $headers[0], $matches) ? (int) $matches[1] : 0;
 	}
 
-	private function serviceState(string $name, string $service): string
+	protected function serviceState(string $name, string $service): string
 	{
 		$result = $this->capture(['docker', 'compose', '-f', $this->project->composePath($name), 'ps', $service, '--format', 'json']);
 		if ($result['exit_code'] !== 0 || trim($result['output']) === '')
@@ -342,7 +342,7 @@ class BoardRunner
 		return strtolower((string) ($data['State'] ?? ''));
 	}
 
-	private function runSeeder(string $name, string $preset, int $seed, string $action = 'seed'): void
+	protected function runSeeder(string $name, string $preset, int $seed, string $action = 'seed'): void
 	{
 		$writer = new SeederWriter($this->project);
 		$script = $writer->write($name);
@@ -352,12 +352,12 @@ class BoardRunner
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
 	}
 
-	private function seedMarker(string $name, string $preset): string
+	protected function seedMarker(string $name, string $preset): string
 	{
 		return $this->project->runtimePath($name) . '/seeded-' . preg_replace('/[^A-Za-z0-9._-]/', '_', $preset);
 	}
 
-	private function deleteSeedMarker(string $name, string $preset): void
+	protected function deleteSeedMarker(string $name, string $preset): void
 	{
 		$marker = $this->seedMarker($name, $preset);
 		if (file_exists($marker))
@@ -366,12 +366,12 @@ class BoardRunner
 		}
 	}
 
-	private function writeSeedMarker(string $name, string $preset): void
+	protected function writeSeedMarker(string $name, string $preset): void
 	{
 		file_put_contents($this->seedMarker($name, $preset), gmdate('c') . "\n");
 	}
 
-	private function run(array $command): void
+	protected function run(array $command): void
 	{
 		echo '$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n";
 
@@ -394,7 +394,7 @@ class BoardRunner
 		}
 	}
 
-	private function capture(array $command): array
+	protected function capture(array $command): array
 	{
 		$descriptor = [
 			0 => ['file', '/dev/null', 'r'],
@@ -419,14 +419,14 @@ class BoardRunner
 		];
 	}
 
-	private function lines(string $output): array
+	protected function lines(string $output): array
 	{
 		return array_values(array_filter(array_map('trim', explode("\n", $output)), static function ($line) {
 			return $line !== '';
 		}));
 	}
 
-	private function commandHint(array $command, int $status): string
+	protected function commandHint(array $command, int $status): string
 	{
 		if ($status === 124 && in_array('timeout', $command, true))
 		{

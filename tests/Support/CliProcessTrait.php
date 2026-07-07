@@ -6,7 +6,17 @@ trait CliProcessTrait
 {
 	protected function runCli(array $args): array
 	{
-		$command = array_merge([PHP_BINARY, dirname(__DIR__, 2) . '/bin/qi'], $args);
+		$phpBinary = PHP_BINARY;
+		if (PHP_SAPI === 'phpdbg')
+		{
+			$siblingPhp = dirname(PHP_BINARY) . '/php';
+			if (is_file($siblingPhp) && is_executable($siblingPhp))
+			{
+				$phpBinary = $siblingPhp;
+			}
+		}
+
+		$command = array_merge([$phpBinary, dirname(__DIR__, 2) . '/bin/qi'], $args);
 		$descriptorSpec = [
 			0 => ['pipe', 'r'],
 			1 => ['pipe', 'w'],

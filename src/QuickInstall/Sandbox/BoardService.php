@@ -34,7 +34,7 @@ class BoardService
 				throw new InvalidArgumentException("Board already exists: $name. Use board:destroy first, or pass --replace to recreate it.");
 			}
 
-			(new BoardRunner($this->project))->destroy($name);
+			$this->createBoardRunner()->destroy($name);
 		}
 
 		foreach ($this->project->boards() as $board)
@@ -50,7 +50,7 @@ class BoardService
 			throw new InvalidArgumentException("Port $port is already in use on this host.");
 		}
 
-		$source = (new SourceProvider($this->project))->ensure($version);
+		$source = $this->createSourceProvider()->ensure($version);
 
 		$boardDir = $this->project->boardPath($name);
 		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true) && !is_dir($boardDir))
@@ -74,7 +74,7 @@ class BoardService
 			'styles' => [],
 		];
 
-		$paths = (new DockerComposeWriter($this->project))->write($name, $config);
+		$paths = $this->createDockerComposeWriter()->write($name, $config);
 		$board = [
 			'name' => $name,
 			'phpbb' => $source['version'],
@@ -97,7 +97,7 @@ class BoardService
 		return ['board' => $board, 'paths' => $paths];
 	}
 
-	private function isPortInUse(int $port): bool
+	protected function isPortInUse(int $port): bool
 	{
 		$socket = @stream_socket_server("tcp://127.0.0.1:$port", $errno, $errstr);
 		if ($socket === false)
@@ -111,7 +111,7 @@ class BoardService
 
 	public function list(): array
 	{
-		$runner = new BoardRunner($this->project);
+		$runner = $this->createBoardRunner();
 		$boards = [];
 		foreach ($this->project->boards() as $board)
 		{
@@ -126,18 +126,18 @@ class BoardService
 
 	public function start(string $name): array
 	{
-		(new BoardRunner($this->project))->start($name);
+		$this->createBoardRunner()->start($name);
 		return $this->project->board($name);
 	}
 
 	public function stop(string $name): void
 	{
-		(new BoardRunner($this->project))->stop($name);
+		$this->createBoardRunner()->stop($name);
 	}
 
 	public function destroy(string $name): void
 	{
-		(new BoardRunner($this->project))->destroy($name);
+		$this->createBoardRunner()->destroy($name);
 	}
 
 	public function seed(string $name, string $preset, int $seed, string $action): void
@@ -148,6 +148,21 @@ class BoardService
 			throw new InvalidArgumentException('SQLite boards do not support fixture seeding. Use --reset to remove partial seed data, or use mariadb, mysql, or postgres for seeded boards.');
 		}
 
-		(new BoardRunner($this->project))->seed($name, $preset, $seed, $action);
+		$this->createBoardRunner()->seed($name, $preset, $seed, $action);
+	}
+
+	protected function createBoardRunner(): BoardRunner
+	{
+		return new BoardRunner($this->project);
+	}
+
+	protected function createSourceProvider(): SourceProvider
+	{
+		return new SourceProvider($this->project);
+	}
+
+	protected function createDockerComposeWriter(): DockerComposeWriter
+	{
+		return new DockerComposeWriter($this->project);
 	}
 }

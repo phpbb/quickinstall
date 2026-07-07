@@ -104,7 +104,7 @@ class SourceProvider
 		return $source;
 	}
 
-	private function ensureRegisteredSource(array $source): array
+	protected function ensureRegisteredSource(array $source): array
 	{
 		$source += [
 			'path' => $this->project->sourcePath($source['source_key']),
@@ -124,7 +124,7 @@ class SourceProvider
 		return $source;
 	}
 
-	private function ensureFloating(string $version, array $selection): array
+	protected function ensureFloating(string $version, array $selection): array
 	{
 		$sources = $this->project->readJson('sources.json', []);
 		$source = $this->withSelectionDefaults($sources[$selection['source_key']] ?? [], $selection);
@@ -218,7 +218,7 @@ class SourceProvider
 		return $record;
 	}
 
-	private function removeUnusedFloatingSource(array &$sources, string $sourceKey, string $resolvedPath): bool
+	protected function removeUnusedFloatingSource(array &$sources, string $sourceKey, string $resolvedPath): bool
 	{
 		if (!isset($sources[$sourceKey]) || $this->sourceInUse($sourceKey))
 		{
@@ -236,7 +236,7 @@ class SourceProvider
 		return true;
 	}
 
-	private function recordForResolvedSource(array $source, array $selection, string $requested, string $actualVersion, string $actualKey, string $actualPath): array
+	protected function recordForResolvedSource(array $source, array $selection, string $requested, string $actualVersion, string $actualKey, string $actualPath): array
 	{
 		return $this->withInstalledSourceMetadata([
 			'version' => $actualVersion,
@@ -256,7 +256,7 @@ class SourceProvider
 		], $selection['php']);
 	}
 
-	private function withSelectionDefaults(array $source, array $selection): array
+	protected function withSelectionDefaults(array $source, array $selection): array
 	{
 		return $source + [
 			'version' => $selection['version'],
@@ -330,7 +330,7 @@ class SourceProvider
 		$this->run($command, dirname($path));
 	}
 
-	private function normalizeGitSourceRoot(string $path): void
+	protected function normalizeGitSourceRoot(string $path): void
 	{
 		if (is_file($path . '/composer.json') && is_file($path . '/common.php'))
 		{
@@ -385,13 +385,13 @@ class SourceProvider
 		$this->project->deleteTree($temporaryAppRoot);
 	}
 
-	private function hasFiles(string $path): bool
+	protected function hasFiles(string $path): bool
 	{
 		$files = scandir($path);
 		return $files !== false && count(array_diff($files, ['.', '..'])) > 0;
 	}
 
-	private function installedPhpbbVersion(string $path): string
+	protected function installedPhpbbVersion(string $path): string
 	{
 		$phpbbCli = $path . '/install/phpbbcli.php';
 		if (is_file($phpbbCli) && preg_match("/define\\('PHPBB_VERSION',\\s*'([^']+)'\\)/", (string) file_get_contents($phpbbCli), $matches))
@@ -402,7 +402,7 @@ class SourceProvider
 		throw new RuntimeException("Unable to determine phpBB version from source: $path");
 	}
 
-	private function withInstalledSourceMetadata(array $source, string $defaultPhp): array
+	protected function withInstalledSourceMetadata(array $source, string $defaultPhp): array
 	{
 		$requirement = $this->phpRequirement($source['path'] ?? '');
 		if ($requirement !== null)
@@ -414,7 +414,7 @@ class SourceProvider
 		return $source;
 	}
 
-	private function phpRequirement(string $path): ?string
+	protected function phpRequirement(string $path): ?string
 	{
 		$composer = $path . '/composer.json';
 		if (!is_file($composer))
@@ -431,7 +431,7 @@ class SourceProvider
 		return $data['require']['php'];
 	}
 
-	private function runtimeForRequirement(string $defaultPhp, string $requirement): string
+	protected function runtimeForRequirement(string $defaultPhp, string $requirement): string
 	{
 		$minimum = $this->minimumPhpFromRequirement($requirement);
 		if ($minimum === null || version_compare($defaultPhp, $minimum, '>='))
@@ -442,7 +442,7 @@ class SourceProvider
 		return $minimum;
 	}
 
-	private function minimumPhpFromRequirement(string $requirement): ?string
+	protected function minimumPhpFromRequirement(string $requirement): ?string
 	{
 		if (!preg_match_all('/(?<![0-9])(?:(>=|>|<=|<|!=|=|==|\\^|~)\\s*)?([0-9]+\\.[0-9]+)(?:\\.[0-9]+)?(?![0-9])/', $requirement, $matches, PREG_SET_ORDER))
 		{
@@ -468,12 +468,12 @@ class SourceProvider
 		return $minimum;
 	}
 
-	private function isFloatingSelection(array $selection): bool
+	protected function isFloatingSelection(array $selection): bool
 	{
 		return in_array($selection['constraint'], ['3.3.*', '3.2.*', 'dev-master'], true);
 	}
 
-	private function sourceInUse(string $sourceKey): bool
+	protected function sourceInUse(string $sourceKey): bool
 	{
 		foreach ($this->project->boards() as $board)
 		{
@@ -486,12 +486,12 @@ class SourceProvider
 		return false;
 	}
 
-	private function sourceKey(string $value): string
+	protected function sourceKey(string $value): string
 	{
 		return preg_replace('/[^A-Za-z0-9._-]/', '-', $value);
 	}
 
-	private function latestComposerVersion(string $constraint): ?string
+	protected function latestComposerVersion(string $constraint): ?string
 	{
 		if (!str_ends_with($constraint, '.*'))
 		{
@@ -527,7 +527,7 @@ class SourceProvider
 		return $latest;
 	}
 
-	private function composerCommand(array $arguments): array
+	protected function composerCommand(array $arguments): array
 	{
 		if ($this->isCommandAvailable('composer'))
 		{
@@ -543,7 +543,7 @@ class SourceProvider
 		throw new RuntimeException('Composer is not available. Install Composer or restore composer.phar in the QuickInstall project root.');
 	}
 
-	private function isCommandAvailable(string $command): bool
+	protected function isCommandAvailable(string $command): bool
 	{
 		foreach (explode(PATH_SEPARATOR, (string) getenv('PATH')) as $path)
 		{
@@ -557,7 +557,7 @@ class SourceProvider
 		return false;
 	}
 
-	private function run(array $command, string $cwd): void
+	protected function run(array $command, string $cwd): void
 	{
 		echo '$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n";
 
@@ -580,7 +580,7 @@ class SourceProvider
 		}
 	}
 
-	private function capture(array $command, string $cwd): array
+	protected function capture(array $command, string $cwd): array
 	{
 		$descriptor = [
 			0 => ['file', '/dev/null', 'r'],
@@ -605,7 +605,7 @@ class SourceProvider
 		];
 	}
 
-	private function commandHint(array $command): string
+	protected function commandHint(array $command): string
 	{
 		if (($command[0] ?? '') === 'composer' || basename((string) ($command[1] ?? '')) === 'composer.phar')
 		{

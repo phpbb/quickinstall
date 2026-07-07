@@ -40,6 +40,57 @@ class StyleManagerTest extends TestCase
 		self::assertFileExists($project->boardPath('demo') . '/styles/copied/template.html');
 	}
 
+	public function testUnmountRemovesCopiedStyleAndMetadata(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->style($root, 'remove', 'customisations/styles/remove');
+		file_put_contents($source . '/template.html', '<html>');
+		$manager = new StyleManager($project);
+		$manager->mount('demo', $source, true);
+
+		$removed = $manager->unmount('demo', 'remove');
+
+		self::assertSame($project->boardPath('demo') . '/styles/remove', $removed);
+		self::assertDirectoryDoesNotExist($project->boardPath('demo') . '/styles/remove');
+		self::assertSame([], $manager->list('demo'));
+	}
+
+	public function testUnmountBindStyleRemovesMetadataOnly(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->style($root, 'bound', 'customisations/styles/bound');
+		$manager = new StyleManager($project);
+		$manager->mount('demo', $source);
+
+		$removed = $manager->unmount('demo', 'bound');
+
+		self::assertSame('/var/www/html/styles/bound', $removed);
+		self::assertDirectoryExists($source);
+		self::assertSame([], $manager->list('demo'));
+	}
+
+	public function testCleanupStaleTargetRemovesStyleDirectoryAndParents(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->style($root, 'stale', 'customisations/styles/stale');
+		$target = $project->boardPath('demo') . '/styles/stale';
+		$project->copyTree($source, $target);
+
+		(new StyleManager($project))->cleanupStaleTarget('demo', 'stale');
+
+		self::assertDirectoryDoesNotExist($target);
+	}
+
+	public function testUnmountRejectsUnknownStyle(): void
+	{
+		[$project] = $this->projectWithBoard('demo');
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('Style is not mounted: missing');
+
+		(new StyleManager($project))->unmount('demo', 'missing');
+	}
+
 	public function testRejectsInvalidStyleName(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');

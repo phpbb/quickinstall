@@ -67,4 +67,41 @@ class ProjectTest extends TestCase
 		$this->expectExceptionMessage('blocked');
 		$project->resolveDropZonePath($external, $dropZone, false, 'blocked');
 	}
+
+	public function testCopyTreeCopiesNestedFilesAndRemoveEmptyParentsPrunesOnlyToStop(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$source = $root . '/source';
+		$target = $project->workspacePath('boards/demo/ext/vendor/package');
+		mkdir($source . '/nested', 0775, true);
+		file_put_contents($source . '/nested/file.txt', 'copied');
+
+		$project->copyTree($source, $target);
+
+		self::assertSame('copied', file_get_contents($target . '/nested/file.txt'));
+
+		$project->deleteTree($target);
+		$project->removeEmptyParents(dirname($target), $project->workspacePath('boards/demo/ext'));
+
+		self::assertDirectoryDoesNotExist($project->workspacePath('boards/demo/ext/vendor'));
+		self::assertDirectoryExists($project->workspacePath('boards/demo/ext'));
+	}
+
+	public function testCopyTreeRejectsExistingTarget(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$source = $root . '/source';
+		$target = $project->workspacePath('target');
+		mkdir($source);
+		mkdir($target);
+
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Copy target already exists');
+
+		$project->copyTree($source, $target);
+	}
 }

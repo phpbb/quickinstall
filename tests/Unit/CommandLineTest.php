@@ -7,32 +7,56 @@ use QuickInstall\Sandbox\CommandLine;
 
 class CommandLineTest extends TestCase
 {
-	public function testParsesArgumentsFlagsAndOptions(): void
+	/**
+	 * @dataProvider parseProvider
+	 */
+	public function testParsesArgumentsFlagsAndOptions(array $input, array $arguments, array $options, array $flags): void
 	{
-		$cli = CommandLine::parse([
-			'board',
-			'customisations/acme/demo',
-			'--copy',
-			'--port',
-			'8081',
-			'--db=mysql',
-		]);
+		$cli = CommandLine::parse($input);
 
-		self::assertSame('board', $cli->argument(0));
-		self::assertSame('customisations/acme/demo', $cli->argument(1));
-		self::assertTrue($cli->has('copy'));
-		self::assertSame('8081', $cli->option('port'));
-		self::assertSame('mysql', $cli->option('db'));
+		foreach ($arguments as $index => $value)
+		{
+			self::assertSame($value, $cli->argument($index));
+		}
+		foreach ($options as $name => $value)
+		{
+			self::assertSame($value, $cli->option($name));
+		}
+		foreach ($flags as $name)
+		{
+			self::assertTrue($cli->has($name));
+			self::assertNull($cli->option($name));
+		}
 		self::assertSame('fallback', $cli->option('missing', 'fallback'));
 	}
 
-	public function testFlagDoesNotConsumeFollowingOption(): void
+	public function parseProvider(): array
 	{
-		$cli = CommandLine::parse(['demo', '--debug', '--replace']);
-
-		self::assertSame('demo', $cli->argument(0));
-		self::assertTrue($cli->has('debug'));
-		self::assertTrue($cli->has('replace'));
-		self::assertNull($cli->option('debug'));
+		return [
+			'arguments, flag, separate option, equals option' => [
+				['board', 'customisations/acme/demo', '--copy', '--port', '8081', '--db=mysql'],
+				['board', 'customisations/acme/demo'],
+				['port' => '8081', 'db' => 'mysql'],
+				['copy'],
+			],
+			'adjacent flags do not consume each other' => [
+				['demo', '--debug', '--replace'],
+				['demo'],
+				[],
+				['debug', 'replace'],
+			],
+			'option value may look like a path' => [
+				['source:add', '--url', 'https://example.test/phpbb.git', '--allow-external'],
+				['source:add'],
+				['url' => 'https://example.test/phpbb.git'],
+				['allow-external'],
+			],
+			'option without value at end is a flag' => [
+				['board:create', 'demo', '--replace'],
+				['board:create', 'demo'],
+				[],
+				['replace'],
+			],
+		];
 	}
 }

@@ -8,31 +8,78 @@ use QuickInstall\Sandbox\VersionMatrix;
 
 class VersionMatrixTest extends TestCase
 {
-	public function testResolvesSupportedSelectors(): void
+	/**
+	 * @dataProvider supportedSelectorProvider
+	 */
+	public function testResolvesSupportedSelectors(string $selector, array $expected): void
 	{
-		$matrix = new VersionMatrix();
+		$selection = (new VersionMatrix())->resolve($selector);
 
-		self::assertSame('3.3', $matrix->resolve('latest')['source_key']);
-		self::assertSame('8.1', $matrix->resolve('3.3.x')['php']);
-		self::assertSame('7.1', $matrix->resolve('3.2.11')['php']);
-		self::assertSame('4.0', $matrix->resolve('master')['phpbb_branch']);
-		self::assertSame('8.2', $matrix->resolve('4.0.0')['php']);
+		foreach ($expected as $key => $value)
+		{
+			self::assertSame($value, $selection[$key]);
+		}
 	}
 
-	public function testRejectsUnsupportedSelectors(): void
+	/**
+	 * @dataProvider unsupportedSelectorProvider
+	 */
+	public function testRejectsUnsupportedSelectors(string $selector, string $message): void
 	{
 		$this->expectException(InvalidArgumentException::class);
-		$this->expectExceptionMessage('phpBB 3.1.12 is not supported');
+		$this->expectExceptionMessage($message);
 
-		(new VersionMatrix())->resolve('3.1.12');
+		(new VersionMatrix())->resolve($selector);
 	}
 
-	public function testGitSelectorUsesBranchAsSourceKey(): void
+	/**
+	 * @dataProvider gitSelectorProvider
+	 */
+	public function testGitSelectorUsesBranchAsSourceKey(string $selector, string $sourceKey, string $branch, string $phpbbBranch, string $php): void
 	{
-		$selection = (new VersionMatrix())->resolve('feature/foo', true);
+		$selection = (new VersionMatrix())->resolve($selector, true);
 
-		self::assertSame('feature/foo', $selection['branch']);
-		self::assertSame('feature-foo', $selection['source_key']);
+		self::assertSame($branch, $selection['branch']);
+		self::assertSame($sourceKey, $selection['source_key']);
+		self::assertSame($phpbbBranch, $selection['phpbb_branch']);
+		self::assertSame($php, $selection['php']);
 		self::assertSame('experimental', $selection['status']);
+	}
+
+	public function supportedSelectorProvider(): array
+	{
+		return [
+			'latest' => ['latest', ['source_key' => '3.3', 'constraint' => '3.3.*', 'php' => '8.1']],
+			'3.3 shorthand' => ['3.3', ['source_key' => '3.3', 'constraint' => '3.3.*', 'phpbb_branch' => '3.3']],
+			'3.3.x shorthand' => ['3.3.x', ['source_key' => '3.3', 'constraint' => '3.3.*', 'php' => '8.1']],
+			'exact 3.3 release' => ['3.3.14', ['source_key' => '3.3.14', 'constraint' => '3.3.14', 'php' => '8.1']],
+			'3.2 shorthand' => ['3.2', ['source_key' => '3.2', 'constraint' => '3.2.*', 'php' => '7.1']],
+			'exact 3.2 release' => ['3.2.11', ['source_key' => '3.2.11', 'constraint' => '3.2.11', 'php' => '7.1']],
+			'master' => ['master', ['source_key' => 'master', 'constraint' => 'dev-master', 'phpbb_branch' => '4.0']],
+			'main alias' => ['main', ['source_key' => 'master', 'constraint' => 'dev-master', 'phpbb_branch' => '4.0']],
+			'4.0.x alias' => ['4.0.x', ['source_key' => 'master', 'constraint' => 'dev-master', 'php' => '8.2']],
+			'exact 4.0 release' => ['4.0.0', ['source_key' => '4.0.0', 'constraint' => '4.0.0', 'php' => '8.2']],
+		];
+	}
+
+	public function unsupportedSelectorProvider(): array
+	{
+		return [
+			'empty' => ['', 'Missing phpBB version'],
+			'legacy 3.0' => ['3.0.14', 'phpBB 3.0.14 is not supported'],
+			'legacy 3.1' => ['3.1.12', 'phpBB 3.1.12 is not supported'],
+			'unknown' => ['2.0.23', 'Unsupported phpBB selector: 2.0.23'],
+			'invalid text' => ['banana', 'Unsupported phpBB selector: banana'],
+		];
+	}
+
+	public function gitSelectorProvider(): array
+	{
+		return [
+			'feature branch' => ['feature/foo', 'feature-foo', 'feature/foo', 'custom', '8.1'],
+			'master' => ['master', 'master', 'master', '4.0', '8.2'],
+			'main' => ['main', 'main', 'main', '4.0', '8.2'],
+			'exact 4.0 git tag' => ['4.0.0', '4.0.0', '4.0.0', '4.0', '8.2'],
+		];
 	}
 }
