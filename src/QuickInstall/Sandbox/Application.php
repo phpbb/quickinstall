@@ -22,7 +22,7 @@ class Application
 	public function __construct(string $root, $stderr = null, $stdin = null)
 	{
 		$this->project = new Project($root);
-		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'w'));
+		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'wb'));
 		$this->stdin = $stdin ?: (defined('STDIN') ? STDIN : null);
 	}
 
@@ -726,7 +726,6 @@ class Application
 			{
 				echo ": {$state['url']}";
 			}
-			echo "\n";
 		}
 		else
 		{
@@ -735,8 +734,8 @@ class Application
 			{
 				echo " (PID $pid)";
 			}
-			echo "\n";
 		}
+		echo "\n";
 
 		$this->deleteUiState();
 		return 0;
@@ -875,7 +874,7 @@ class Application
 		if (PHP_OS_FAMILY === 'Windows')
 		{
 			$result = (new ProcessRunner(new BufferedOutput()))->capture(['tasklist', '/FI', 'PID eq ' . $pid, '/NH']);
-			return $result['exit_code'] === 0 && strpos($result['output'], (string) $pid) !== false;
+			return $result['exit_code'] === 0 && str_contains($result['output'], (string) $pid);
 		}
 		if (function_exists('posix_kill'))
 		{
@@ -1030,7 +1029,7 @@ class Application
 
 	private function sandboxOutput(): Output
 	{
-		$stdout = defined('STDOUT') && defined('STDERR') && $this->stderr === STDERR ? STDOUT : fopen('php://output', 'w');
+		$stdout = defined('STDOUT') && defined('STDERR') && $this->stderr === STDERR ? STDOUT : fopen('php://output', 'wb');
 		return new StreamOutput($stdout, $this->stderr);
 	}
 

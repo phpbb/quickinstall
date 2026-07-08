@@ -112,7 +112,10 @@ button,
 	border-radius: var(--radius);
 	background: var(--button-bg);
 	color: var(--text);
-	font: 600 14px/20px inherit;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 20px;
+	font-family: inherit;
 	box-shadow: var(--shadow);
 	cursor: pointer;
 	text-decoration: none;
@@ -361,8 +364,10 @@ button:disabled { opacity: .65; cursor: wait; }
 	border-radius: var(--radius);
 	background: var(--input-bg);
 	color: var(--text);
-	padding: 5px 8px;
-	font: 14px/20px inherit;
+	padding: 5px 8px;;
+	font-size: 14px;
+	line-height: 20px;
+	font-family: inherit;
 }
 .field input[name=source],
 td:last-child {

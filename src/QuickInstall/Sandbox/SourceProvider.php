@@ -448,7 +448,7 @@ class SourceProvider
 
 	protected function minimumPhpFromRequirement(string $requirement): ?string
 	{
-		if (!preg_match_all('/(?<![0-9])(?:(>=|>|<=|<|!=|=|==|\\^|~)\\s*)?([0-9]+\\.[0-9]+)(?:\\.[0-9]+)?(?![0-9])/', $requirement, $matches, PREG_SET_ORDER))
+		if (!preg_match_all('/(?<!\d)(?:(>=|>|<=|<|!=|=|==|\\^|~)\\s*)?(\d+\\.\d+)(?:\\.\d+)?(?!\d)/', $requirement, $matches, PREG_SET_ORDER))
 		{
 			return null;
 		}

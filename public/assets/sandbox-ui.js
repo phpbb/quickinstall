@@ -13,7 +13,7 @@ function bindAjax() {
 		}
 
 		form.dataset.bound = '1';
-		form.addEventListener('submit', async (event) => {
+		form.addEventListener('submit', async(event) => {
 			event.preventDefault();
 			if (form.dataset.confirm && !window.confirm(form.dataset.confirm)) {
 				return;
