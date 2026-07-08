@@ -5,7 +5,13 @@ settings/*
 cache/*
 sources/*
 vendor/*
+tests/vendor/*
 build/*
+.qi/*
+customisations/*
 *~
 .idea
 node_modules
+/.agents
+/agent
+/skills-lock.json

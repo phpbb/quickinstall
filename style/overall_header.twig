@@ -41,6 +41,8 @@
 				{% include 'sidebar_settings.twig' %}
 			{% elseif S_DOCS %}
 				{% include 'sidebar_docs.twig' %}
+			{% elseif S_CLI %}
+				{% include 'sidebar_cli.twig' %}
 			{% elseif S_PHPINFO %}
 				{% include 'sidebar_phpinfo.twig' %}
 			{% endif %}

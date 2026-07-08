@@ -85,6 +85,74 @@ svg.bi {
 	vertical-align: -.125em;
 }
 
+#about-readme pre,
+#about-cli pre {
+	background-color: #f5f7fa;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: .375rem;
+	color: #29303d;
+	font-size: .875rem;
+	line-height: 1.55;
+	margin: 1rem 0;
+	padding: .875rem 1rem;
+	position: relative;
+}
+
+#about-readme pre.codeblock-bash,
+#about-cli pre.codeblock-bash {
+	background-color: #1f2933;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+	color: #d7e1ea;
+	padding: 1rem 1.25rem;
+}
+
+#about-readme pre code,
+#about-cli pre code {
+	color: inherit;
+	font-size: inherit;
+	white-space: pre;
+	word-break: normal;
+	word-wrap: normal;
+}
+
+#about-readme pre code::selection,
+#about-cli pre code::selection {
+	background-color: rgba(0, 155, 223, 0.35);
+}
+
+.qi-code-copy {
+	align-items: center;
+	display: flex;
+	height: 2rem;
+	justify-content: center;
+	opacity: 0;
+	padding: 0;
+	position: absolute;
+	right: .5rem;
+	top: .5rem;
+	transition: opacity .15s ease-in-out;
+	width: 2rem;
+	z-index: 2;
+}
+
+#about-readme pre:hover .qi-code-copy,
+#about-readme pre:focus-within .qi-code-copy,
+#about-cli pre:hover .qi-code-copy,
+#about-cli pre:focus-within .qi-code-copy {
+	opacity: .9;
+}
+
+.qi-code-copy:focus,
+.qi-code-copy:hover,
+.qi-code-copy.is-copied {
+	opacity: 1;
+}
+
+.qi-code-copy.is-copied {
+	color: #198754;
+}
+
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
 	body,
@@ -103,6 +171,19 @@ svg.bi {
 	.callout-info { border-left-color: #17a2b8; }
 	.callout-warning { border-left-color: #f39c12; }
 	.callout-danger { border-left-color: #e74c3c; }
+
+	#about-readme pre,
+	#about-cli pre {
+		background-color: #161d26;
+		border-color: rgba(255, 255, 255, 0.12);
+		color: var(--night-color);
+	}
+
+	#about-readme pre.codeblock-bash,
+	#about-cli pre.codeblock-bash {
+		background-color: #0c1117;
+		color: #d7e1ea;
+	}
 
 	.phpbb-logo-rm {
 		filter: var(--svg-filter-e1e1e1);

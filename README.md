@@ -23,7 +23,12 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 ## 🛠 Upgrading
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/) and extract it. 
 
-2. Copy everything into your existing QuickInstall directory **except for the 📁`boards/`, 📁`sources/` and 📁`settings/` directories**. 
+2. Copy everything into your existing QuickInstall directory **except for:**
+  - 📁`.qi/` (may be hidden by your operating system)
+  - 📁`boards/`
+  - 📁`customisations/`
+  - 📁`sources/`
+  - 📁`settings/`
 
 > If you are upgrading from QuickInstall 1.1.8 (or older) you MUST review and re-save your old Profile settings.
 
@@ -49,6 +54,32 @@ phpBB boards require a web server running PHP and one of the following database 
 | 3.2.0 - 3.2.1  | 5.4.7 - 7.1.x | 3.23+  | 5.1+    | 8.3+       | SQLite 3.6.15+ | Server 2000+ |
 | 3.1.x          | 5.4.7 - 5.6.x | 3.23+  | 5.1+    | 8.3+       | SQLite 2 or 3  | Server 2000+ |
 | 3.0.x          | 5.4.7 - 5.6.x | 3.23+  | -       | 7.x        | SQLite 2       | Server 2000  |
+
+## QuickInstall CLI
+
+QuickInstall now includes a Docker-based CLI for creating local phpBB test boards. It writes generated state to `.qi/` and leaves the legacy web UI unchanged. The QuickInstall CLI requires PHP 8.0 or newer for the `php bin/qi` command.
+
+```bash
+php bin/qi init
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:start test
+```
+
+The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.
+
+Downloaded extensions can be unzipped into `customisations/` and mounted into boards:
+
+```bash
+php bin/qi ext:mount test customisations/vendor/extname
+```
+
+Downloaded styles can be unzipped into `customisations/` and mounted into boards:
+
+```bash
+php bin/qi style:mount test customisations/stylename
+```
+
+See the complete [QuickInstall CLI docs](index.php?page=cli).
 
 ## 🐞 Support
 You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support) forum.

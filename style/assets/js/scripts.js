@@ -143,6 +143,46 @@
 			});
 		}
 
+		// Copy rendered documentation code blocks
+		for (const $block of $$('#about-readme pre.codeblock-bash, #about-cli pre.codeblock-bash')) {
+			const $code = $('code', $block);
+			if (!$code || $('[data-qi-copy-code]', $block)) {
+				continue;
+			}
+
+			const $button = document.createElement('button');
+			$button.type = 'button';
+			$button.className = 'qi-code-copy btn btn-sm btn-light';
+			$button.setAttribute('data-qi-copy-code', '');
+			$button.setAttribute('aria-label', 'Copy code');
+			$button.setAttribute('title', 'Copy code');
+			$button.innerHTML = copyIcon('clipboard');
+
+			$button.addEventListener('click', () => {
+				copyText($code.textContent).then(() => {
+					$button.classList.add('is-copied');
+					$button.setAttribute('aria-label', 'Copied');
+					$button.setAttribute('title', 'Copied');
+					$button.innerHTML = copyIcon('check2');
+
+					window.setTimeout(() => {
+						$button.classList.remove('is-copied');
+						$button.setAttribute('aria-label', 'Copy code');
+						$button.setAttribute('title', 'Copy code');
+						$button.innerHTML = copyIcon('clipboard');
+					}, 1500);
+				}).catch(error => {
+					console.error(error);
+					$button.classList.remove('is-copied');
+					$button.setAttribute('aria-label', 'Copy failed');
+					$button.setAttribute('title', 'Copy failed');
+					$button.innerHTML = copyIcon('exclamation-triangle');
+				});
+			});
+
+			$block.appendChild($button);
+		}
+
 		// Search filter for PHP info table
 		const $phpinfo = $('#phpinfo-filter');
 		if ($phpinfo) {
@@ -232,5 +272,28 @@
 	// Select the first matching element, context is optional
 	function $(selector, context) {
 		return (context || document).querySelector(selector);
+	}
+
+	function copyIcon(icon) {
+		return '<svg class="bi" width="16" height="16" fill="currentColor" aria-hidden="true"><use xlink:href="style/assets/img/bootstrap-icons.svg#' + icon + '"/></svg>';
+	}
+
+	function copyText(text) {
+		if (navigator.clipboard && window.isSecureContext) {
+			return navigator.clipboard.writeText(text);
+		}
+
+		const $textarea = document.createElement('textarea');
+		$textarea.value = text;
+		$textarea.setAttribute('readonly', '');
+		$textarea.style.position = 'fixed';
+		$textarea.style.top = '-1000px';
+		document.body.appendChild($textarea);
+		$textarea.select();
+
+		const copied = document.execCommand('copy');
+		document.body.removeChild($textarea);
+
+		return copied ? Promise.resolve() : Promise.reject(new Error('Fallback clipboard copy failed.'));
 	}
 })(document, window);

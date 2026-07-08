@@ -1,0 +1,39 @@
+name: CLI tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  phpunit:
+    name: PHPUnit PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Validate test Composer config
+        working-directory: tests
+        run: COMPOSER=composer.cli-tests.json composer validate --no-check-publish --strict
+
+      - name: Install test dependencies
+        working-directory: tests
+        run: COMPOSER=composer.cli-tests.json composer install --no-interaction --prefer-dist
+
+      - name: Run PHPUnit
+        run: tests/vendor/bin/phpunit -c phpunit.xml.dist
+
+      - name: Lint CLI entrypoint
+        run: php -l bin/qi

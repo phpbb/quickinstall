@@ -1,5 +1,18 @@
 {% include 'overall_header.twig' %}
 
+<div id="main-notice" class="alert alert-primary">
+	<div class="row">
+		<div class="col-auto align-self-start lh-1">
+			<svg class="bi text-primary" width="24" height="24" fill="currentColor">
+				<use xlink:href="{{ QI_ROOT_PATH }}style/assets/img/bootstrap-icons.svg#terminal-fill"/>
+			</svg>
+		</div>
+		<div class="col ps-1">
+			{{ lang('QUICKINSTALL_CLI_NOTICE') }} <a href="{{ U_DOCS }}#readme-quickinstall-cli">{{ lang('LEARN_MORE') }}</a>
+		</div>
+	</div>
+</div>
+
 <h1>{{ lang('CREATE_BOARD') }}</h1>
 
 <div id="main-alert" class="alert alert-danger d-none" role="alert">
