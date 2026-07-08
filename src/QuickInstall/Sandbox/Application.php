@@ -103,6 +103,15 @@ class Application
 				case 'ui:start':
 					return $this->uiStart($argv);
 
+				case 'ui:stop':
+					return $this->uiStop();
+
+				case 'ui:restart':
+					return $this->uiRestart($argv);
+
+				case 'ui:status':
+					return $this->uiStatus();
+
 				default:
 					$this->writeError("Unknown command: $command\n\n");
 					$this->help();
@@ -567,6 +576,204 @@ class Application
 	private function uiStart(array $args): int
 	{
 		$cli = CommandLine::parse($args);
+		[$host, $port] = $this->uiOptions($cli);
+		$state = $this->readUiState();
+		if ($this->isUiStateRunning($state))
+		{
+			echo "QuickInstall sandbox UI is already running: {$state['url']}\n";
+			return 0;
+		}
+		if ($this->isPortOpen($host, $port))
+		{
+			throw new RuntimeException("Port $port is already in use on $host. Run qi ui:status for tracked UI details, or choose another port with --port.");
+		}
+
+		$this->project->init();
+		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
+		$token = bin2hex(random_bytes(24));
+		$url = "http://{$host}:{$port}/?token={$token}";
+		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
+		$logPath = $this->uiLogPath();
+		putenv('QI_SANDBOX_UI_TOKEN=' . $token);
+		$pid = $this->startDetachedProcess($command, dirname(__DIR__, 3), $logPath);
+		$state = [
+			'pid' => $pid,
+			'host' => $host,
+			'port' => $port,
+			'url' => $url,
+			'token' => $token,
+			'log' => $logPath,
+			'started_at' => gmdate('c'),
+		];
+		try
+		{
+			$this->waitForUiStart($state);
+		}
+		catch (RuntimeException $e)
+		{
+			$this->terminateProcess($pid);
+			throw $e;
+		}
+		$this->writeUiState($state);
+
+		echo "QuickInstall sandbox UI started: $url\n";
+		echo "PID: $pid\n";
+		echo "Log: $logPath\n";
+		echo "Stop it with: php bin/qi ui:stop\n";
+
+		return 0;
+	}
+
+	private function startDetachedProcess(array $command, string $cwd, string $logPath): int
+	{
+		if (PHP_OS_FAMILY === 'Windows')
+		{
+			return $this->startWindowsDetachedProcess($command, $cwd, $logPath);
+		}
+
+		return $this->startUnixDetachedProcess($command, $cwd, $logPath);
+	}
+
+	private function startUnixDetachedProcess(array $command, string $cwd, string $logPath): int
+	{
+		$pidFile = $this->project->workspacePath('runtime/ui.pid');
+		$shellCommand = 'cd ' . escapeshellarg($cwd)
+			. ' && (QI_SANDBOX_UI_TOKEN=' . escapeshellarg((string) getenv('QI_SANDBOX_UI_TOKEN'))
+			. ' nohup ' . implode(' ', array_map('escapeshellarg', $command))
+			. ' >> ' . escapeshellarg($logPath) . ' 2>&1 < /dev/null & echo $! > ' . escapeshellarg($pidFile) . ')';
+		$result = $this->captureProcess(['/bin/sh', '-c', $shellCommand], $cwd);
+		$pid = is_file($pidFile) ? (int) trim((string) file_get_contents($pidFile)) : 0;
+		if (is_file($pidFile))
+		{
+			unlink($pidFile);
+		}
+		if ($result['exit_code'] !== 0 || $pid <= 0)
+		{
+			throw new RuntimeException('Unable to start QuickInstall sandbox UI server.');
+		}
+
+		return $pid;
+	}
+
+	private function startWindowsDetachedProcess(array $command, string $cwd, string $logPath): int
+	{
+		$arguments = array_slice($command, 1);
+		$argumentList = '@(' . implode(',', array_map([$this, 'powerShellString'], $arguments)) . ')';
+		$errorLog = $logPath . '.err';
+		$script = '$env:QI_SANDBOX_UI_TOKEN = ' . $this->powerShellString((string) getenv('QI_SANDBOX_UI_TOKEN')) . '; '
+			. '$p = Start-Process -FilePath ' . $this->powerShellString($command[0])
+			. ' -ArgumentList ' . $argumentList
+			. ' -WorkingDirectory ' . $this->powerShellString($cwd)
+			. ' -RedirectStandardOutput ' . $this->powerShellString($logPath)
+			. ' -RedirectStandardError ' . $this->powerShellString($errorLog)
+			. ' -WindowStyle Hidden -PassThru; '
+			. 'Write-Output $p.Id';
+		$result = $this->captureProcess(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $script], $cwd);
+		$pid = (int) trim($result['output']);
+		if ($result['exit_code'] !== 0 || $pid <= 0)
+		{
+			throw new RuntimeException('Unable to start QuickInstall sandbox UI server. PowerShell is required on Windows.');
+		}
+
+		return $pid;
+	}
+
+	private function captureProcess(array $command, string $cwd): array
+	{
+		$descriptor = [
+			0 => ['pipe', 'r'],
+			1 => ['pipe', 'w'],
+			2 => ['pipe', 'w'],
+		];
+		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		if (!is_resource($process))
+		{
+			return ['exit_code' => 1, 'output' => ''];
+		}
+
+		fclose($pipes[0]);
+		$output = stream_get_contents($pipes[1]) ?: '';
+		$error = stream_get_contents($pipes[2]) ?: '';
+		fclose($pipes[1]);
+		fclose($pipes[2]);
+
+		return [
+			'exit_code' => proc_close($process),
+			'output' => $output . $error,
+		];
+	}
+
+	private function powerShellString(string $value): string
+	{
+		return "'" . str_replace("'", "''", $value) . "'";
+	}
+
+	private function uiStop(): int
+	{
+		$state = $this->readUiState();
+		if (!$state)
+		{
+			echo "QuickInstall sandbox UI is not tracked as running.\n";
+			return 0;
+		}
+
+		$pid = (int) ($state['pid'] ?? 0);
+		if ($pid > 0 && $this->terminateProcess($pid))
+		{
+			$this->waitForUiStop($state);
+			echo "Stopped QuickInstall sandbox UI";
+			if (!empty($state['url']))
+			{
+				echo ": {$state['url']}";
+			}
+			echo "\n";
+		}
+		else
+		{
+			echo "QuickInstall sandbox UI process was not running";
+			if ($pid > 0)
+			{
+				echo " (PID $pid)";
+			}
+			echo "\n";
+		}
+
+		$this->deleteUiState();
+		return 0;
+	}
+
+	private function uiRestart(array $args): int
+	{
+		$this->uiStop();
+		return $this->uiStart($args);
+	}
+
+	private function uiStatus(): int
+	{
+		$state = $this->readUiState();
+		if ($this->isUiStateRunning($state))
+		{
+			echo "QuickInstall sandbox UI is running\n";
+			echo "URL: {$state['url']}\n";
+			echo "PID: {$state['pid']}\n";
+			echo "Log: {$state['log']}\n";
+			return 0;
+		}
+
+		if ($state)
+		{
+			echo "QuickInstall sandbox UI is not running, but stale state exists.\n";
+			echo "Last URL: " . ($state['url'] ?? '(unknown)') . "\n";
+			echo "Run: php bin/qi ui:stop\n";
+			return 1;
+		}
+
+		echo "QuickInstall sandbox UI is not running.\n";
+		return 0;
+	}
+
+	private function uiOptions(CommandLine $cli): array
+	{
 		$host = $cli->option('host', '127.0.0.1');
 		$port = (int) $cli->option('port', '8079');
 		if (!in_array($host, ['127.0.0.1', 'localhost', '::1'], true))
@@ -578,17 +785,137 @@ class Application
 			throw new InvalidArgumentException('--port must be between 1 and 65535.');
 		}
 
-		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
-		$token = bin2hex(random_bytes(24));
-		putenv('QI_SANDBOX_UI_TOKEN=' . $token);
-		$url = "http://{$host}:{$port}/?token={$token}";
-		echo "QuickInstall sandbox UI: $url\n";
-		echo "Press Ctrl-C to stop the local UI server.\n";
-		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
-		$process = new ProcessRunner(new StreamOutput());
-		$process->run($command);
+		return [$host, $port];
+	}
 
-		return 0;
+	private function readUiState(): array
+	{
+		return $this->project->readJson('runtime/ui.json', []);
+	}
+
+	private function writeUiState(array $state): void
+	{
+		$this->project->writeJson('runtime/ui.json', $state);
+	}
+
+	private function deleteUiState(): void
+	{
+		$path = $this->project->workspacePath('runtime/ui.json');
+		if (is_file($path))
+		{
+			unlink($path);
+		}
+	}
+
+	private function uiLogPath(): string
+	{
+		$this->project->init();
+		return $this->project->workspacePath('runtime/ui.log');
+	}
+
+	private function isUiStateRunning(array $state): bool
+	{
+		if (!$state)
+		{
+			return false;
+		}
+
+		$pid = (int) ($state['pid'] ?? 0);
+		if ($pid <= 0 || !$this->isProcessRunning($pid))
+		{
+			return false;
+		}
+
+		return $this->isPortOpen((string) ($state['host'] ?? '127.0.0.1'), (int) ($state['port'] ?? 0));
+	}
+
+	private function isPortOpen(string $host, int $port): bool
+	{
+		if ($port < 1)
+		{
+			return false;
+		}
+		$target = $host === 'localhost' ? '127.0.0.1' : $host;
+		$socket = @fsockopen($target, $port, $errno, $errstr, 0.2);
+		if (!is_resource($socket))
+		{
+			return false;
+		}
+
+		fclose($socket);
+		return true;
+	}
+
+	private function terminateProcess(int $pid): bool
+	{
+		if ($pid <= 0)
+		{
+			return false;
+		}
+		if (PHP_OS_FAMILY === 'Windows')
+		{
+			$result = (new ProcessRunner(new BufferedOutput()))->capture(['taskkill', '/PID', (string) $pid, '/T', '/F']);
+			return $result['exit_code'] === 0;
+		}
+		if (function_exists('posix_kill') && @posix_kill($pid, 0))
+		{
+			return @posix_kill($pid, 15);
+		}
+
+		$result = (new ProcessRunner(new BufferedOutput()))->capture(['kill', (string) $pid]);
+		return $result['exit_code'] === 0;
+	}
+
+	private function isProcessRunning(int $pid): bool
+	{
+		if ($pid <= 0)
+		{
+			return false;
+		}
+		if (PHP_OS_FAMILY === 'Windows')
+		{
+			$result = (new ProcessRunner(new BufferedOutput()))->capture(['tasklist', '/FI', 'PID eq ' . $pid, '/NH']);
+			return $result['exit_code'] === 0 && strpos($result['output'], (string) $pid) !== false;
+		}
+		if (function_exists('posix_kill'))
+		{
+			return @posix_kill($pid, 0);
+		}
+
+		$result = (new ProcessRunner(new BufferedOutput()))->capture(['kill', '-0', (string) $pid]);
+		return $result['exit_code'] === 0;
+	}
+
+	private function waitForUiStart(array $state): void
+	{
+		$host = (string) ($state['host'] ?? '127.0.0.1');
+		$port = (int) ($state['port'] ?? 0);
+		$deadline = microtime(true) + 3;
+		while (microtime(true) < $deadline)
+		{
+			if ($this->isPortOpen($host, $port))
+			{
+				return;
+			}
+			usleep(100000);
+		}
+
+		throw new RuntimeException('QuickInstall sandbox UI server did not become available. Check the UI log for details: ' . ($state['log'] ?? '(unknown)'));
+	}
+
+	private function waitForUiStop(array $state): void
+	{
+		$host = (string) ($state['host'] ?? '127.0.0.1');
+		$port = (int) ($state['port'] ?? 0);
+		$deadline = microtime(true) + 3;
+		while (microtime(true) < $deadline)
+		{
+			if (!$this->isPortOpen($host, $port))
+			{
+				return;
+			}
+			usleep(100000);
+		}
 	}
 
 	private function extList(array $args): int
@@ -1013,7 +1340,7 @@ class Application
 					'title' => 'ui:start',
 					'usage' => 'ui:start [--host 127.0.0.1] [--port 8079]',
 					'summary' => 'Start the local sandbox admin UI.',
-					'description' => 'Starts PHP built-in server on a loopback address and serves a minimal admin UI backed by the sandbox services.',
+					'description' => 'Starts PHP built-in server in the background on a loopback address and serves a minimal admin UI backed by the sandbox services.',
 					'options' => [
 						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
 						'--port PORT' => 'Local UI port. Default: 8079.',
@@ -1021,6 +1348,37 @@ class Application
 					'examples' => [
 						'ui:start',
 						'ui:start --port 8088',
+					],
+				],
+				'ui:stop' => [
+					'title' => 'ui:stop',
+					'usage' => 'ui:stop',
+					'summary' => 'Stop the tracked local sandbox admin UI.',
+					'description' => 'Stops the background UI server that was started with ui:start and removes its runtime state file.',
+					'examples' => [
+						'ui:stop',
+					],
+				],
+				'ui:restart' => [
+					'title' => 'ui:restart',
+					'usage' => 'ui:restart [--host 127.0.0.1] [--port 8079]',
+					'summary' => 'Restart the local sandbox admin UI.',
+					'description' => 'Stops the tracked UI server if present, then starts a fresh tokenized UI server.',
+					'options' => [
+						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
+						'--port PORT' => 'Local UI port. Default: 8079.',
+					],
+					'examples' => [
+						'ui:restart',
+					],
+				],
+				'ui:status' => [
+					'title' => 'ui:status',
+					'usage' => 'ui:status',
+					'summary' => 'Show whether the local sandbox admin UI is running.',
+					'description' => 'Reads the tracked UI runtime state and checks whether the configured local UI port responds.',
+					'examples' => [
+						'ui:status',
 					],
 				],
 			],

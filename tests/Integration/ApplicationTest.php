@@ -133,6 +133,30 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('built-in server', $result['output']);
 	}
 
+	public function testUiLifecycleCommandsAreExposed(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'help']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('ui:start', $result['output']);
+		self::assertStringContainsString('ui:stop', $result['output']);
+		self::assertStringContainsString('ui:restart', $result['output']);
+		self::assertStringContainsString('ui:status', $result['output']);
+	}
+
+	public function testUiStatusAndStopHandleNoTrackedServer(): void
+	{
+		$root = $this->createTempProjectRoot();
+
+		$status = $this->runApplication($root, ['qi', 'ui:status']);
+		$stop = $this->runApplication($root, ['qi', 'ui:stop']);
+
+		self::assertSame(0, $status['exit_code']);
+		self::assertStringContainsString('not running', $status['output']);
+		self::assertSame(0, $stop['exit_code']);
+		self::assertStringContainsString('not tracked as running', $stop['output']);
+	}
+
 	public function testUiStartRejectsNonLocalHostBeforeStartingServer(): void
 	{
 		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'ui:start', '--host', '0.0.0.0']);
