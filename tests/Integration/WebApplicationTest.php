@@ -37,6 +37,7 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
+		$this->addDownloadedSource($project, '3.3.14');
 		$project->appendBoard([
 			'name' => 'demo',
 			'phpbb' => '3.3.14',
@@ -62,6 +63,7 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('Mount style', $html);
 		self::assertStringContainsString('board_start', $html);
 		self::assertStringContainsString('board_seed', $html);
+		self::assertStringContainsString('source_remove', $html);
 		self::assertStringContainsString('data-ajax', $html);
 		self::assertStringContainsString('activity-log', $html);
 	}
@@ -91,6 +93,26 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('activity-log', $data['html']);
 	}
 
+	public function testAjaxSourceRemoveDeletesSource(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$this->addDownloadedSource($project, '3.3.14');
+
+		$json = $this->runWebApplication($root, [
+			'action' => 'source_remove',
+			'source' => '3.3.14',
+		], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertTrue($data['ok']);
+		self::assertSame('Removed source: 3.3.14', $data['notice']);
+		self::assertSame([], $project->readJson('sources.json', []));
+		self::assertStringNotContainsString('value="3.3.14"', $data['html']);
+	}
+
 	private function runWebApplication(string $root, array $post = [], bool $ajax = false): string
 	{
 		$_SERVER['REQUEST_METHOD'] = $post ? 'POST' : 'GET';
@@ -105,5 +127,27 @@ class WebApplicationTest extends TestCase
 		ob_start();
 		(new Application($root))->run();
 		return (string) ob_get_clean();
+	}
+
+	private function addDownloadedSource(Project $project, string $key): void
+	{
+		$sourcePath = $project->sourcePath($key);
+		mkdir($sourcePath, 0775, true);
+		file_put_contents($sourcePath . '/common.php', '<?php');
+		$project->writeJson('sources.json', [
+			$key => [
+				'version' => $key,
+				'source_key' => $key,
+				'constraint' => $key,
+				'branch' => '3.3',
+				'phpbb_branch' => '3.3',
+				'php' => '8.1',
+				'status' => 'supported',
+				'type' => 'composer',
+				'package' => 'phpbb/phpbb',
+				'url' => null,
+				'path' => $sourcePath,
+			],
+		]);
 	}
 }
