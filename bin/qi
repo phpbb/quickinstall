@@ -9,6 +9,10 @@ if (PHP_VERSION_ID < 80000)
 }
 
 require __DIR__ . '/../src/QuickInstall/Sandbox/Application.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/Output.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/StreamOutput.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/BufferedOutput.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/ProcessRunner.php';
 require __DIR__ . '/../src/QuickInstall/Sandbox/CommandLine.php';
 require __DIR__ . '/../src/QuickInstall/Sandbox/Project.php';
 require __DIR__ . '/../src/QuickInstall/Sandbox/VersionMatrix.php';

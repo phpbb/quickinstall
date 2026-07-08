@@ -16,21 +16,25 @@ use RuntimeException;
 class BoardRunner
 {
 	private Project $project;
+	private Output $output;
+	private ProcessRunner $processRunner;
 
-	public function __construct(Project $project)
+	public function __construct(Project $project, ?Output $output = null, ?ProcessRunner $processRunner = null)
 	{
 		$this->project = $project;
+		$this->output = $output ?: new BufferedOutput();
+		$this->processRunner = $processRunner ?: new ProcessRunner($this->output);
 	}
 
 	public function start(string $name): void
 	{
 		$board = $this->project->board($name);
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'up', '--build', '-d', '--force-recreate', '--remove-orphans', 'web']);
-		echo "Waiting for phpBB install to finish...\n";
+		$this->output->write("Waiting for phpBB install to finish...\n");
 		$this->waitUntilInstalled($name);
 		if (!empty($board['debug']))
 		{
-			echo "Enabling phpBB debug config...\n";
+			$this->output->write("Enabling phpBB debug config...\n");
 			$this->enableDebug($name);
 		}
 		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
@@ -141,7 +145,7 @@ class BoardRunner
 		$marker = $this->seedMarker($name, $preset);
 		if (file_exists($marker))
 		{
-			echo "Populate preset already applied: $preset\n";
+			$this->output->write("Populate preset already applied: $preset\n");
 			return;
 		}
 
@@ -289,7 +293,7 @@ class BoardRunner
 			return;
 		}
 
-		echo "Waiting for board URL...\n";
+		$this->output->write("Waiting for board URL...\n");
 		$deadline = time() + 30;
 		while (time() <= $deadline)
 		{
@@ -302,8 +306,8 @@ class BoardRunner
 			usleep(500000);
 		}
 
-		echo "Warning: board container started, but $url was not reachable from the host after 30 seconds.\n";
-		echo "Try opening it again in a few seconds, or run: docker compose -f " . $this->project->composePath($name) . " logs web\n";
+		$this->output->write("Warning: board container started, but $url was not reachable from the host after 30 seconds.\n");
+		$this->output->write("Try opening it again in a few seconds, or run: docker compose -f " . $this->project->composePath($name) . " logs web\n");
 	}
 
 	protected function httpStatus(string $url): int
@@ -347,7 +351,7 @@ class BoardRunner
 		$writer = new SeederWriter($this->project);
 		$script = $writer->write($name);
 
-		echo "Running seed preset: $preset\n";
+		$this->output->write("Running seed preset: $preset\n");
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $script, 'web:/tmp/qi_seed.php']);
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
 	}
@@ -373,50 +377,12 @@ class BoardRunner
 
 	protected function run(array $command): void
 	{
-		echo '$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n";
-
-		$descriptor = [
-			0 => ['file', '/dev/null', 'r'],
-			1 => defined('STDOUT') ? constant('STDOUT') : ['file', 'php://output', 'w'],
-			2 => defined('STDERR') ? constant('STDERR') : ['file', 'php://stderr', 'w'],
-		];
-
-		$process = proc_open($command, $descriptor, $pipes);
-		if (!is_resource($process))
-		{
-			throw new RuntimeException('Unable to start command: ' . $command[0]);
-		}
-
-		$status = proc_close($process);
-		if ($status !== 0)
-		{
-			throw new RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command, $status));
-		}
+		$this->processRunner->run($command);
 	}
 
 	protected function capture(array $command): array
 	{
-		$descriptor = [
-			0 => ['file', '/dev/null', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['pipe', 'w'],
-		];
-
-		$process = proc_open($command, $descriptor, $pipes);
-		if (!is_resource($process))
-		{
-			return ['exit_code' => 1, 'output' => ''];
-		}
-
-		$output = stream_get_contents($pipes[1]) ?: '';
-		$error = stream_get_contents($pipes[2]) ?: '';
-		fclose($pipes[1]);
-		fclose($pipes[2]);
-
-		return [
-			'exit_code' => proc_close($process),
-			'output' => $output . $error,
-		];
+		return $this->processRunner->capture($command);
 	}
 
 	protected function lines(string $output): array
@@ -426,18 +392,4 @@ class BoardRunner
 		}));
 	}
 
-	protected function commandHint(array $command, int $status): string
-	{
-		if ($status === 124 && in_array('timeout', $command, true))
-		{
-			return "\nThe operation timed out. For seeding, try a smaller preset or use mariadb/mysql/postgres instead of sqlite.";
-		}
-
-		if (($command[0] ?? '') === 'docker')
-		{
-			return "\nCheck that Docker Desktop is running and that the docker command works in this terminal.";
-		}
-
-		return '';
-	}
 }

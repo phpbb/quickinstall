@@ -16,10 +16,14 @@ use RuntimeException;
 class SourceProvider
 {
 	private Project $project;
+	private Output $output;
+	private ProcessRunner $processRunner;
 
-	public function __construct(Project $project)
+	public function __construct(Project $project, ?Output $output = null, ?ProcessRunner $processRunner = null)
 	{
 		$this->project = $project;
+		$this->output = $output ?: new BufferedOutput();
+		$this->processRunner = $processRunner ?: new ProcessRunner($this->output);
 	}
 
 	public function add(string $version, string $type, ?string $url, bool $allowExternal = false): array
@@ -86,7 +90,7 @@ class SourceProvider
 
 		if (!isset($sources[$selection['source_key']]))
 		{
-			echo "Registering phpBB source: $version\n";
+			$this->output->write("Registering phpBB source: $version\n");
 			$sources[$selection['source_key']] = $this->add($version, 'composer', null);
 		}
 
@@ -94,7 +98,7 @@ class SourceProvider
 		$source = $this->withSelectionDefaults($source, $selection);
 		if (!file_exists($source['path'] . '/common.php'))
 		{
-			echo "Fetching phpBB source: $version\n";
+			$this->output->write("Fetching phpBB source: $version\n");
 			$this->fetch($source);
 		}
 		$source = $this->withInstalledSourceMetadata($source, $selection['php']);
@@ -112,7 +116,7 @@ class SourceProvider
 		];
 		if (!file_exists($source['path'] . '/common.php'))
 		{
-			echo "Fetching phpBB source: {$source['source_key']}\n";
+			$this->output->write("Fetching phpBB source: {$source['source_key']}\n");
 			$this->fetch($source);
 		}
 
@@ -134,7 +138,7 @@ class SourceProvider
 
 		if (!isset($sources[$selection['source_key']]))
 		{
-			echo "Resolving phpBB source: $version\n";
+			$this->output->write("Resolving phpBB source: $version\n");
 		}
 
 		$resolvedVersion = null;
@@ -169,7 +173,7 @@ class SourceProvider
 			$tempSource['constraint'] = $resolvedVersion;
 		}
 
-		echo "Fetching phpBB source: $version\n";
+		$this->output->write("Fetching phpBB source: $version\n");
 		try
 		{
 			$this->fetch($tempSource);
@@ -286,7 +290,7 @@ class SourceProvider
 				return;
 			}
 
-			echo "Removing incomplete source path: $path\n";
+			$this->output->write("Removing incomplete source path: $path\n");
 			$this->project->deleteTree($path);
 		}
 
@@ -559,49 +563,23 @@ class SourceProvider
 
 	protected function run(array $command, string $cwd): void
 	{
-		echo '$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n";
-
-		$descriptor = [
-			0 => ['file', '/dev/null', 'r'],
-			1 => defined('STDOUT') ? constant('STDOUT') : ['file', 'php://output', 'w'],
-			2 => defined('STDERR') ? constant('STDERR') : ['file', 'php://stderr', 'w'],
-		];
-
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
-		if (!is_resource($process))
+		try
 		{
-			throw new RuntimeException('Unable to start command: ' . $command[0]);
+			$this->processRunner->run($command, $cwd);
 		}
-
-		$status = proc_close($process);
-		if ($status !== 0)
+		catch (RuntimeException $e)
 		{
-			throw new RuntimeException("Command failed with exit code $status: {$command[0]}" . $this->commandHint($command));
+			throw new RuntimeException($e->getMessage() . $this->commandHint($command), 0, $e);
 		}
 	}
 
 	protected function capture(array $command, string $cwd): array
 	{
-		$descriptor = [
-			0 => ['file', '/dev/null', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['pipe', 'w'],
-		];
-
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
-		if (!is_resource($process))
-		{
-			return ['status' => 1, 'output' => ''];
-		}
-
-		$output = stream_get_contents($pipes[1]);
-		stream_get_contents($pipes[2]);
-		fclose($pipes[1]);
-		fclose($pipes[2]);
+		$result = $this->processRunner->capture($command, $cwd);
 
 		return [
-			'status' => proc_close($process),
-			'output' => (string) $output,
+			'status' => $result['exit_code'],
+			'output' => $result['output'],
 		];
 	}
 

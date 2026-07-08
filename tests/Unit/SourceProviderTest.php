@@ -103,8 +103,11 @@ class SourceProviderTest extends TestCase
 			],
 		];
 
+		ob_start();
 		$source = $provider->ensure('3.3');
+		$output = ob_get_clean();
 
+		self::assertSame('', $output);
 		self::assertSame('3.3.15', $source['source_key']);
 		self::assertSame('3.3.15', $source['constraint']);
 	}
