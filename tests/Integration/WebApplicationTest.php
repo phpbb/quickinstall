@@ -66,6 +66,9 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('source_remove', $html);
 		self::assertStringContainsString('data-ajax', $html);
 		self::assertStringContainsString('activity-log', $html);
+		self::assertStringContainsString('/assets/sandbox-ui.css', $html);
+		self::assertStringContainsString('/assets/sandbox-ui.js', $html);
+		self::assertStringNotContainsString('<style>', $html);
 	}
 
 	public function testInitPostCreatesWorkspace(): void
