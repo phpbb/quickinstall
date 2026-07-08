@@ -22,7 +22,7 @@ class Application
 	public function __construct(string $root, $stderr = null, $stdin = null)
 	{
 		$this->project = new Project($root);
-		$this->stderr = $stderr ?: STDERR;
+		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'w'));
 		$this->stdin = $stdin ?: (defined('STDIN') ? STDIN : null);
 	}
 
@@ -99,6 +99,9 @@ class Application
 
 				case 'style:list':
 					return $this->styleList($argv);
+
+				case 'ui:start':
+					return $this->uiStart($argv);
 
 				default:
 					$this->writeError("Unknown command: $command\n\n");
@@ -538,13 +541,7 @@ class Application
 
 	private function refreshBoardIfRunning(string $board): void
 	{
-		$runner = new BoardRunner($this->project, $this->sandboxOutput());
-		(new DockerComposeWriter($this->project))->write($board, $this->runtimeConfig($this->project->board($board)));
-		if ($runner->status($board) === 'running')
-		{
-			$runner->recreateWeb($board);
-			$runner->purgeCache($board);
-		}
+		(new BoardRefreshService($this->project))->refreshIfRunning($board);
 	}
 
 	private function runtimeConfig(array $board): array
@@ -565,6 +562,30 @@ class Application
 			'extensions' => [],
 			'styles' => [],
 		];
+	}
+
+	private function uiStart(array $args): int
+	{
+		$cli = CommandLine::parse($args);
+		$host = $cli->option('host', '127.0.0.1');
+		$port = (int) $cli->option('port', '8079');
+		if (!in_array($host, ['127.0.0.1', 'localhost', '::1'], true))
+		{
+			throw new InvalidArgumentException('ui:start only supports local loopback hosts: 127.0.0.1, localhost, or ::1.');
+		}
+		if ($port < 1 || $port > 65535)
+		{
+			throw new InvalidArgumentException('--port must be between 1 and 65535.');
+		}
+
+		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
+		echo "QuickInstall sandbox UI: http://{$host}:{$port}/\n";
+		echo "Press Ctrl-C to stop the local UI server.\n";
+		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
+		$process = new ProcessRunner(new StreamOutput());
+		$process->run($command);
+
+		return 0;
 	}
 
 	private function extList(array $args): int
@@ -981,6 +1002,22 @@ class Application
 					],
 					'examples' => [
 						'style:list demo',
+					],
+				],
+			],
+			'UI commands' => [
+				'ui:start' => [
+					'title' => 'ui:start',
+					'usage' => 'ui:start [--host 127.0.0.1] [--port 8079]',
+					'summary' => 'Start the local sandbox admin UI.',
+					'description' => 'Starts PHP built-in server on a loopback address and serves a minimal admin UI backed by the sandbox services.',
+					'options' => [
+						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
+						'--port PORT' => 'Local UI port. Default: 8079.',
+					],
+					'examples' => [
+						'ui:start',
+						'ui:start --port 8088',
 					],
 				],
 			],

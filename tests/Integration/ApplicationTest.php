@@ -123,6 +123,25 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('Use --reset or --replace, not both.', $result['stderr']);
 	}
 
+	public function testUiStartHelpIsExposed(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'ui:start', '--help']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('Usage:', $result['output']);
+		self::assertStringContainsString('qi ui:start', $result['output']);
+		self::assertStringContainsString('built-in server', $result['output']);
+	}
+
+	public function testUiStartRejectsNonLocalHostBeforeStartingServer(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'ui:start', '--host', '0.0.0.0']);
+
+		self::assertSame(1, $result['exit_code']);
+		self::assertSame('', $result['output']);
+		self::assertStringContainsString('local loopback hosts', $result['stderr']);
+	}
+
 	public function testUnknownCommandReturnsFailureAndHelp(): void
 	{
 		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'nope']);

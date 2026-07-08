@@ -24,6 +24,7 @@ require __DIR__ . '/../src/QuickInstall/Sandbox/BoardRunner.php';
 require __DIR__ . '/../src/QuickInstall/Sandbox/SeederWriter.php';
 require __DIR__ . '/../src/QuickInstall/Sandbox/ExtensionManager.php';
 require __DIR__ . '/../src/QuickInstall/Sandbox/StyleManager.php';
+require __DIR__ . '/../src/QuickInstall/Sandbox/BoardRefreshService.php';
 
 use QuickInstall\Sandbox\Application;
 
