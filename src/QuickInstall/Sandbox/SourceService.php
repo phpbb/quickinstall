@@ -15,10 +15,12 @@ use InvalidArgumentException;
 class SourceService
 {
 	private Project $project;
+	private ?Output $output;
 
-	public function __construct(Project $project)
+	public function __construct(Project $project, ?Output $output = null)
 	{
 		$this->project = $project;
+		$this->output = $output;
 	}
 
 	public function list(): array
@@ -40,7 +42,7 @@ class SourceService
 	public function fetch(string $version, bool $git = false, ?string $url = null, bool $allowExternal = false): array
 	{
 		$this->project->init();
-		$provider = new SourceProvider($this->project);
+		$provider = new SourceProvider($this->project, $this->output);
 		if ($git)
 		{
 			$provider->add($version, 'git', $url, $allowExternal);

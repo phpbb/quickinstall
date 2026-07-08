@@ -16,10 +16,12 @@ use RuntimeException;
 class BoardService
 {
 	private Project $project;
+	private ?Output $output;
 
-	public function __construct(Project $project)
+	public function __construct(Project $project, ?Output $output = null)
 	{
 		$this->project = $project;
+		$this->output = $output;
 	}
 
 	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none', bool $debug = false, bool $replace = false): array
@@ -153,12 +155,12 @@ class BoardService
 
 	protected function createBoardRunner(): BoardRunner
 	{
-		return new BoardRunner($this->project);
+		return new BoardRunner($this->project, $this->output);
 	}
 
 	protected function createSourceProvider(): SourceProvider
 	{
-		return new SourceProvider($this->project);
+		return new SourceProvider($this->project, $this->output);
 	}
 
 	protected function createDockerComposeWriter(): DockerComposeWriter

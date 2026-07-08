@@ -128,7 +128,7 @@ class Application
 
 	private function sourceList(): int
 	{
-		$sources = (new SourceService($this->project))->list();
+		$sources = (new SourceService($this->project, $this->sandboxOutput()))->list();
 
 		if (!$sources)
 		{
@@ -163,7 +163,7 @@ class Application
 			throw new InvalidArgumentException('Usage: qi source:remove <version|source> [--force]');
 		}
 
-		$removed = (new SourceService($this->project))->remove($version, $cli->has('force'));
+		$removed = (new SourceService($this->project, $this->sandboxOutput()))->remove($version, $cli->has('force'));
 		echo "Removed source: {$removed['source']['source_key']}\n";
 		if (!empty($removed['used_by']))
 		{
@@ -175,7 +175,7 @@ class Application
 
 	private function sourcePrune(): int
 	{
-		$removed = (new SourceService($this->project))->prune();
+		$removed = (new SourceService($this->project, $this->sandboxOutput()))->prune();
 		if (!$removed)
 		{
 			echo "No unused sources to prune\n";
@@ -199,7 +199,7 @@ class Application
 			throw new InvalidArgumentException('Usage: qi source:fetch <version|branch> [--git] [--url URL] [--allow-external]');
 		}
 
-		$record = (new SourceService($this->project))->fetch($version, $cli->has('git'), $cli->option('url'), $cli->has('allow-external'));
+		$record = (new SourceService($this->project, $this->sandboxOutput()))->fetch($version, $cli->has('git'), $cli->option('url'), $cli->has('allow-external'));
 
 		echo "Fetched phpBB source: {$record['path']}\n";
 		return 0;
@@ -217,7 +217,7 @@ class Application
 					$row['resolves_to'],
 					$row['notes'],
 				];
-			}, (new SourceService($this->project))->supportedVersions())
+			}, (new SourceService($this->project, $this->sandboxOutput()))->supportedVersions())
 		);
 
 		return 0;
@@ -240,7 +240,7 @@ class Application
 		$debug = $cli->has('debug');
 		$this->validateBoardCreateOptions($db, $port, $populate);
 
-		$created = (new BoardService($this->project))->create($name, $version, $db, $port, $populate, $debug, $cli->has('replace'));
+		$created = (new BoardService($this->project, $this->sandboxOutput()))->create($name, $version, $db, $port, $populate, $debug, $cli->has('replace'));
 		$paths = $created['paths'];
 
 		echo "Created board scaffold: $name\n";
@@ -266,7 +266,7 @@ class Application
 
 	private function boardList(): int
 	{
-		$boards = (new BoardService($this->project))->list();
+		$boards = (new BoardService($this->project, $this->sandboxOutput()))->list();
 		if (!$boards)
 		{
 			echo "No boards created\n";
@@ -408,7 +408,7 @@ class Application
 	private function boardStart(array $args): int
 	{
 		$name = $this->boardName($args, 'Usage: qi board:start <name>');
-		$board = (new BoardService($this->project))->start($name);
+		$board = (new BoardService($this->project, $this->sandboxOutput()))->start($name);
 		echo "Started board: $name\n";
 		echo "URL: {$board['url']}\n";
 		return 0;
@@ -417,7 +417,7 @@ class Application
 	private function boardStop(array $args): int
 	{
 		$name = $this->boardName($args, 'Usage: qi board:stop <name>');
-		(new BoardService($this->project))->stop($name);
+		(new BoardService($this->project, $this->sandboxOutput()))->stop($name);
 		echo "Stopped board: $name\n";
 		return 0;
 	}
@@ -425,7 +425,7 @@ class Application
 	private function boardDestroy(array $args): int
 	{
 		$name = $this->boardName($args, 'Usage: qi board:destroy <name>');
-		(new BoardService($this->project))->destroy($name);
+		(new BoardService($this->project, $this->sandboxOutput()))->destroy($name);
 		echo "Destroyed board: $name\n";
 		return 0;
 	}
@@ -452,7 +452,7 @@ class Application
 		}
 		$action = $cli->has('reset') ? 'reset' : ($cli->has('replace') ? 'replace' : 'seed');
 
-		(new BoardService($this->project))->seed($name, $preset, $seed, $action);
+		(new BoardService($this->project, $this->sandboxOutput()))->seed($name, $preset, $seed, $action);
 		echo ucfirst($action) . " completed for board: $name\n";
 		return 0;
 	}
@@ -538,7 +538,7 @@ class Application
 
 	private function refreshBoardIfRunning(string $board): void
 	{
-		$runner = new BoardRunner($this->project);
+		$runner = new BoardRunner($this->project, $this->sandboxOutput());
 		(new DockerComposeWriter($this->project))->write($board, $this->runtimeConfig($this->project->board($board)));
 		if ($runner->status($board) === 'running')
 		{
@@ -675,6 +675,12 @@ class Application
 	private function writeError(string $message): void
 	{
 		fwrite($this->stderr, $message);
+	}
+
+	private function sandboxOutput(): Output
+	{
+		$stdout = defined('STDOUT') && defined('STDERR') && $this->stderr === STDERR ? STDOUT : fopen('php://output', 'w');
+		return new StreamOutput($stdout, $this->stderr);
 	}
 
 	private function mountResources(string $type, object $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int

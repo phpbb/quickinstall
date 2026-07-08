@@ -142,8 +142,11 @@ class BoardRunnerTest extends TestCase
 		file_put_contents($boardPath . '/config.php', "<?php\n// @define('DEBUG_CONTAINER', true);\n?>\n");
 		$runner = new TestBoardRunner($project);
 
+		ob_start();
 		$runner->start('demo');
+		$output = ob_get_clean();
 
+		self::assertSame('', $output);
 		self::assertSame(['up', '--build', '-d', '--force-recreate', '--remove-orphans', 'web'], array_slice($runner->runs[0], -6));
 		self::assertSame(['demo'], $runner->installedWaits);
 		self::assertSame([['demo', 'tiny']], $runner->seedIfNeededRuns);
