@@ -36,9 +36,11 @@ class Application
 	public function run(): void
 	{
 		$this->assertLocalRequest();
+		$this->assertUiToken();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST')
 		{
+			$this->assertTrustedPost();
 			$this->handlePost();
 			if ($this->isAjax())
 			{
@@ -61,6 +63,50 @@ class Application
 			echo 'QuickInstall sandbox UI is local-only.';
 			exit;
 		}
+	}
+
+	private function assertUiToken(): void
+	{
+		$token = $this->uiToken();
+		if ($token === '')
+		{
+			return;
+		}
+
+		$provided = $_SERVER['REQUEST_METHOD'] === 'POST'
+			? (string) ($_POST['qi_token'] ?? '')
+			: (string) ($_GET['token'] ?? '');
+		if (!hash_equals($token, $provided))
+		{
+			http_response_code(403);
+			echo 'QuickInstall sandbox UI token is missing or invalid. Restart with `php bin/qi ui:start` and open the printed URL.';
+			exit;
+		}
+	}
+
+	private function assertTrustedPost(): void
+	{
+		foreach (['HTTP_ORIGIN', 'HTTP_REFERER'] as $header)
+		{
+			$value = (string) ($_SERVER[$header] ?? '');
+			if ($value === '')
+			{
+				continue;
+			}
+
+			$host = parse_url($value, PHP_URL_HOST);
+			if (!is_string($host) || !in_array(strtolower($host), ['127.0.0.1', 'localhost', '::1'], true))
+			{
+				http_response_code(403);
+				echo 'QuickInstall sandbox UI only accepts local form submissions.';
+				exit;
+			}
+		}
+	}
+
+	private function uiToken(): string
+	{
+		return (string) getenv('QI_SANDBOX_UI_TOKEN');
 	}
 
 	private function handlePost(): void
@@ -260,6 +306,7 @@ class Application
 		}
 		echo $this->renderTemplate('layout.php', [
 			'dashboard' => $this->renderTemplate('dashboard.php', $this->viewData()),
+			'csrfToken' => $this->uiToken(),
 		]);
 	}
 
@@ -313,6 +360,7 @@ class Application
 			'notice' => $this->notice,
 			'error' => $this->error,
 			'output' => $this->output->all(),
+			'csrfToken' => $this->uiToken(),
 			'metrics' => [
 				['label' => 'Boards', 'value' => (string) count($boards), 'detail' => $running . ' running', 'description' => 'Runtime definitions'],
 				['label' => 'Sources', 'value' => (string) count($sources), 'detail' => count(array_filter($sources, static function ($source) {

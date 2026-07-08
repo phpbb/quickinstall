@@ -119,10 +119,7 @@ services:
     ports:
       - "127.0.0.1:{$config['port']}:80"
     volumes:
-      - {$this->yamlString($sourcePath . ':/opt/phpbb-source:ro')}
-      - {$this->yamlString($boardPath . ':/var/www/html')}
-{$extensionVolumes}{$styleVolumes}      - ./install-config.yml:/opt/quickinstall/install-config.yml:ro
-      - ./entrypoint.sh:/opt/quickinstall/entrypoint.sh:ro
+{$this->bindVolume($sourcePath, '/opt/phpbb-source', true)}{$this->bindVolume($boardPath, '/var/www/html')}{$extensionVolumes}{$styleVolumes}{$this->bindVolume('./install-config.yml', '/opt/quickinstall/install-config.yml', true)}{$this->bindVolume('./entrypoint.sh', '/opt/quickinstall/entrypoint.sh', true)}
     entrypoint: ["/bin/sh", "/opt/quickinstall/entrypoint.sh"]
     depends_on:
       db:
@@ -153,7 +150,7 @@ YAML;
 			}
 
 			$target = '/var/www/html/ext/' . $name;
-			$volumes .= '      - ' . $this->yamlString($source . ':' . $target) . "\n";
+			$volumes .= $this->bindVolume($source, $target);
 		}
 
 		return $volumes;
@@ -176,10 +173,23 @@ YAML;
 			}
 
 			$target = '/var/www/html/styles/' . $name;
-			$volumes .= '      - ' . $this->yamlString($source . ':' . $target) . "\n";
+			$volumes .= $this->bindVolume($source, $target);
 		}
 
 		return $volumes;
+	}
+
+	private function bindVolume(string $source, string $target, bool $readOnly = false): string
+	{
+		$volume = "      - type: bind\n";
+		$volume .= "        source: {$this->yamlString($source)}\n";
+		$volume .= "        target: {$this->yamlString($target)}\n";
+		if ($readOnly)
+		{
+			$volume .= "        read_only: true\n";
+		}
+
+		return $volume;
 	}
 
 	private function yamlString(string $value): string
@@ -273,7 +283,7 @@ SH;
       POSTGRES_USER: phpbb
       POSTGRES_PASSWORD: phpbb
     volumes:
-      - {$this->yamlString($dbPath . ':/var/lib/postgresql/data')}
+{$this->bindVolume($dbPath, '/var/lib/postgresql/data')}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U phpbb -d phpbb"]
       interval: 5s
@@ -297,8 +307,6 @@ YAML;
 				$command = '';
 				break;
 		}
-		$dbVolume = $this->yamlString($dbPath . ':/var/lib/mysql');
-
 		return <<<YAML
   db:
     image: $image
@@ -308,7 +316,7 @@ YAML;
       MYSQL_PASSWORD: phpbb
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - $dbVolume
+{$this->bindVolume($dbPath, '/var/lib/mysql')}
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot"]
       interval: 5s

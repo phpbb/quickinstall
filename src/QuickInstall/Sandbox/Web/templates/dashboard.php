@@ -57,16 +57,19 @@
 				<div class="actions compact">
 					<a class="button secondary" href="<?= $this->e($board['url'] ?? '') ?>" target="_blank" rel="noreferrer">Open</a>
 					<form method="post" data-ajax>
+						<?php require __DIR__ . '/csrf.php'; ?>
 						<input type="hidden" name="action" value="board_start">
 						<input type="hidden" name="name" value="<?= $this->e($name) ?>">
 						<button class="primary">Start</button>
 					</form>
 					<form method="post" data-ajax>
+						<?php require __DIR__ . '/csrf.php'; ?>
 						<input type="hidden" name="action" value="board_stop">
 						<input type="hidden" name="name" value="<?= $this->e($name) ?>">
 						<button class="secondary">Stop</button>
 					</form>
 					<form method="post" data-ajax data-confirm="<?= $this->e('Destroy board ' . $name . '? This removes its files, database, containers, and local image.') ?>">
+						<?php require __DIR__ . '/csrf.php'; ?>
 						<input type="hidden" name="action" value="board_destroy">
 						<input type="hidden" name="name" value="<?= $this->e($name) ?>">
 						<button class="danger">Destroy</button>
@@ -74,6 +77,7 @@
 				</div>
 				<div class="subsection-title">Seed content</div>
 				<form method="post" class="seed-form" data-ajax>
+					<?php require __DIR__ . '/csrf.php'; ?>
 					<input type="hidden" name="action" value="board_seed">
 					<input type="hidden" name="name" value="<?= $this->e($name) ?>">
 					<label class="field"><span>Preset</span><select name="preset"><?php foreach ($presetOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
@@ -90,6 +94,7 @@
 							<?php endif; ?>
 							<?php foreach ($mountGroup[2] as $item): ?>
 								<form method="post" class="row" data-ajax>
+									<?php require __DIR__ . '/csrf.php'; ?>
 									<span><strong><?= $this->e($item['name']) ?></strong><small><?= $this->e($item['mode']) ?></small></span>
 									<input type="hidden" name="action" value="<?= $this->e($mountGroup[1]) ?>">
 									<input type="hidden" name="board" value="<?= $this->e($name) ?>">
@@ -114,6 +119,7 @@
 		</div>
 	</div>
 	<form method="post" class="card settings-form" data-ajax>
+		<?php require __DIR__ . '/csrf.php'; ?>
 		<input type="hidden" name="action" value="board_create">
 		<label class="field"><span>Name</span><input name="name" value="demo"></label>
 		<label class="field"><span>phpBB</span><input name="phpbb" value="latest" list="phpbb-list"></label>
@@ -138,6 +144,7 @@
 	<div class="split">
 		<?php foreach ([['ext_mount', 'Mount extension'], ['style_mount', 'Mount style']] as $mountForm): ?>
 			<form method="post" class="card settings-form stack-form" data-ajax>
+				<?php require __DIR__ . '/csrf.php'; ?>
 				<h3><?= $this->e($mountForm[1]) ?></h3>
 				<input type="hidden" name="action" value="<?= $this->e($mountForm[0]) ?>">
 				<label class="field"><span>Board</span><select name="board"><?php foreach ($boards as $board): ?><option value="<?= $this->e($board['name']) ?>"><?= $this->e($board['name']) ?></option><?php endforeach; ?></select></label>
@@ -160,6 +167,7 @@
 		</div>
 	</div>
 	<form method="post" class="card settings-form compact-form" data-ajax>
+		<?php require __DIR__ . '/csrf.php'; ?>
 		<input type="hidden" name="action" value="source_fetch">
 		<label class="field"><span>Version or branch</span><input name="version" value="latest"></label>
 		<label class="field"><span>Git URL</span><input name="url" value=""></label>
@@ -191,6 +199,7 @@
 							<td><?= $this->e($source['path'] ?? '') ?></td>
 							<td>
 								<form method="post" class="source-remove" data-ajax data-confirm="<?= $this->e($confirm) ?>">
+									<?php require __DIR__ . '/csrf.php'; ?>
 									<input type="hidden" name="action" value="source_remove">
 									<input type="hidden" name="source" value="<?= $this->e($sourceKey) ?>">
 									<?php if ($usedBy): ?><input type="hidden" name="force" value="1"><?php endif; ?>

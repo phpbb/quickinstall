@@ -579,7 +579,10 @@ class Application
 		}
 
 		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
-		echo "QuickInstall sandbox UI: http://{$host}:{$port}/\n";
+		$token = bin2hex(random_bytes(24));
+		putenv('QI_SANDBOX_UI_TOKEN=' . $token);
+		$url = "http://{$host}:{$port}/?token={$token}";
+		echo "QuickInstall sandbox UI: $url\n";
 		echo "Press Ctrl-C to stop the local UI server.\n";
 		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
 		$process = new ProcessRunner(new StreamOutput());

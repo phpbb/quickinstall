@@ -549,12 +549,33 @@ class SourceProvider
 
 	protected function isCommandAvailable(string $command): bool
 	{
+		$extensions = [''];
+		if (PHP_OS_FAMILY === 'Windows')
+		{
+			$extensions = array_merge($extensions, array_filter(array_map('strtolower', explode(';', (string) getenv('PATHEXT')))));
+			if (!in_array('.bat', $extensions, true))
+			{
+				$extensions[] = '.bat';
+			}
+			if (!in_array('.cmd', $extensions, true))
+			{
+				$extensions[] = '.cmd';
+			}
+			if (!in_array('.exe', $extensions, true))
+			{
+				$extensions[] = '.exe';
+			}
+		}
+
 		foreach (explode(PATH_SEPARATOR, (string) getenv('PATH')) as $path)
 		{
-			$candidate = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $command;
-			if (is_file($candidate) && is_executable($candidate))
+			foreach ($extensions as $extension)
 			{
-				return true;
+				$candidate = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $command . $extension;
+				if (is_file($candidate) && (PHP_OS_FAMILY === 'Windows' || is_executable($candidate)))
+				{
+					return true;
+				}
 			}
 		}
 

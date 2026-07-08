@@ -33,6 +33,7 @@
 					<p class="lede">Manage disposable phpBB boards backed by the same Docker services as the CLI.</p>
 				</div>
 				<form method="post" data-ajax>
+					<?php require __DIR__ . '/csrf.php'; ?>
 					<input type="hidden" name="action" value="init">
 					<button class="primary">Init workspace</button>
 				</form>
