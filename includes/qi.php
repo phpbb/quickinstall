@@ -162,8 +162,13 @@ class qi
 		return isset($user->lang[$key]);
 	}
 
-	public static function render_markdown($doc_body, $anchor_prefix = '')
+	public static function render_markdown($doc_body, $anchor_prefix = '', array $link_rewrites = array())
 	{
+		if (!empty($link_rewrites))
+		{
+			$doc_body = self::rewrite_markdown_links($doc_body, $link_rewrites);
+		}
+
 		if ($anchor_prefix !== '')
 		{
 			$doc_body = self::add_markdown_anchors($doc_body, $anchor_prefix);
@@ -182,6 +187,20 @@ class qi
 			['<table class="table table-sm table-striped">', '<blockquote class="callout callout-warning">', '<h2 class="border-bottom pt-3 pb-2">'],
 			$doc_body
 		);
+	}
+
+	private static function rewrite_markdown_links($doc_body, array $link_rewrites)
+	{
+		return preg_replace_callback('/\]\(([^)\s]+)\)/', function ($matches) use ($link_rewrites) {
+			$url = $matches[1];
+
+			if (!isset($link_rewrites[$url]))
+			{
+				return $matches[0];
+			}
+
+			return '](' . $link_rewrites[$url] . ')';
+		}, $doc_body);
 	}
 
 	public static function get_markdown_anchors($doc_body, $prefix)

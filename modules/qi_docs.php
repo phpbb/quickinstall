@@ -20,7 +20,9 @@ class qi_docs
 		$doc_file = $quickinstall_path . 'README.md';
 		if (file_exists($doc_file))
 		{
-			$doc_body = qi::render_markdown(file_get_contents($doc_file), 'readme');
+			$doc_body = qi::render_markdown(file_get_contents($doc_file), 'readme', array(
+				'docs/sandbox-cli.md' => 'index.php?page=cli',
+			));
 			$template->assign_var('DOC_BODY', $doc_body);
 		}
 
