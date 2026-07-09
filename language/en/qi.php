@@ -138,7 +138,6 @@ $lang = array_merge($lang, array(
 	'DIR_EXISTS'		=> 'The directory &quot;<strong>%s</strong>&quot; already exists.',
 	'DIR_FILE_SETTINGS'	=> 'Directories and Files',
 	'CLI_DOCS'			=> 'QuickInstall CLI',
-	'CLI_DOCS_SHORT'	=> 'CLI',
 	'DOCS_LONG'			=> 'Documentation',
 	'DOCS_SHORT'		=> 'Docs',
 	'DOWNLOAD'			=> 'Download',

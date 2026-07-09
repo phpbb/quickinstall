@@ -122,7 +122,7 @@
 - [Change] Bootstrap framework now managed as an NPM library, located in the new `develop` folder. Contributors can use NPM commands to update, customise, compile, and deploy Bootstrap to QI (see README).
 - [Change] Migrated QI’s templating framework to Twig. All QI HTML files now use Twig syntax. Contributors can use Composer commands to update Twig, located in the `vendor` directory.
 - [Change] Dropped support for installing AutoMOD into 3.0.x boards from QuickInstall. AutoMOD can still be installed manually for 3.0.x boards.
-- [Change] Dropped the *subsilver2 only* option from the 'Install additional styles' setting.
+- [Change] Dropped the *subsilver2-only* option from the 'Install additional styles' setting.
 - [Change] Added a `DEBUG` constant to `qi_constants.php`. Contributors can uncomment it while developing QI to disable template caching.
 - [Fix] Fixed an issue with the migration-schema generator that blocked QI from working with phpBB 4.0.0-dev.
 - [Fix] Fixed some issues with language vars not working on error pages.
@@ -137,7 +137,7 @@
 - [Fix] Fixed compatibility issues with phpBB 3.3.0-b2.
 - [Fix] Fixed compatibility issues with phpBB 4.0.0-a1-dev.
 - [Fix] Fixed compatibility issues with SQLite and phpBB 3.2 (or newer).
-- [Fix] Fixed the config.php files, so they have the relevant DEBUG related definitions for a given phpBB board version.
+- [Fix] Fixed the config.php files, so they have the relevant DEBUG-related definitions for a given phpBB board version.
 - [Change] Added badge-styling to the phpBB board version number displayed next to the board name in the QI sidebar.
 
 ## Version 1.3.5
@@ -201,7 +201,7 @@
 - [Fix] A Fix for UTF-8 characters `$error_msg`
 - [Fix] Issue #45 Fix compatibility for installing phpBB 3.1.5 boards.
 - [Change] Sort boards in a natural order (10 > 9).
-- [Change] Added a scroll bar to the boards list.
+- [Change] Added a scroll bar to the board list.
 
 ## Version 1.2.1
 - [Fix] Bug in the routine to purge the cache.
@@ -230,7 +230,7 @@
 - [Change] Removed CHUNK_POST, CHUNK_TOPIC, and CHUNK_USER constants. They have been in the settings for a while
 - [Feature] Added better error reporting and handling to more places.
 - [Feature] Don't show the select menu for alternative environments if the `phpBB3_alt` folder is empty.
-- [Feature] Show the board version in the boards list.
+- [Feature] Show the board version in the board list.
 - [Feature] Make sure cache_dir, boards_dir, and boards_url end with a slash (/)
 - [Feature] Now all available styles can be installed. In both 3.0.x and 3.1.x.
 - [Feature] Any style can be set as the default style.
@@ -250,10 +250,10 @@
 - [Fix] Ticket #63320 all left/right mentions in CSS need a ".rtl" equivalent that specifies the other direction.
 - [Fix] Ticket #63308 Combining language strings doesn't work in all languages.
 - [Fix] Ticket #EXTTOOLS-649 QI did not delete the DB when deleting phpBB 3.1 boards.
-- [Fix] Ticket #EXTTOOLS-650 QI did not populate migrations table.
+- [Fix] Ticket #EXTTOOLS-650 QI did not populate the migration table.
 - [Fix] Ticket #EXTTOOLS-621 Always check that the default language is available before installation.
 - [Fix] The button to see the configuration if the `settings` directory was not visible.
-- [Change] Removed the cache usage. The `cache` directory is for now used to store file based databases.
+- [Change] Removed the cache usage. The `cache` directory is for now used to store file-based databases.
 - [Change] Had `load_tplcompile` in several places, one should be enough.
 - [Change] No need to add session and `$user` to only store language keys. Changed `$user->lang[]` to `qi::lang()`.
 - [Change] Removed "powered by phpBB" from the footer. That would not be true anymore.
@@ -338,7 +338,7 @@
 - [Feature] Added confirmation to the delete button. Don't show it if there are no boards to delete.
 - [Feature] Added save/reset buttons after each section on the settings page. For convenience.
 - [Feature] Added anchors and internal links to the settings tab.
-- [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkboxes default state.
+- [Feature] Config settings for "Drop database if it exists" and "Delete files if they exist" checkbox default state.
 - [Feature] A setting for the confirmation alert when deleting boards and profiles. To show that confirmation alert or not.
 - [Feature] A setting for default "Alternate environment" now that profiles exist.
 - [Feature] Added an option to not save passwords and/or admin/db-user names. They will be required when creating a board.
