@@ -150,7 +150,13 @@ class BoardService
 			throw new InvalidArgumentException('SQLite boards do not support fixture seeding. Use --reset to remove partial seed data, or use mariadb, mysql, or postgres for seeded boards.');
 		}
 
-		$this->createBoardRunner()->seed($name, $preset, $seed, $action);
+		$runner = $this->createBoardRunner();
+		if ($runner->status($name) !== 'running')
+		{
+			throw new RuntimeException('Board must be running before seeding. Start it first.');
+		}
+
+		$runner->seed($name, $preset, $seed, $action);
 	}
 
 	protected function createBoardRunner(): BoardRunner
