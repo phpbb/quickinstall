@@ -223,7 +223,11 @@ button:disabled { opacity: .65; cursor: wait; }
 .metric small { display: block; margin-top: 2px; color: var(--text); font-weight: 600; }
 .metric em { display: block; margin-top: 8px; color: var(--subtle); font-size: 12px; font-style: normal; }
 
-.toast-stack { display: grid; gap: 8px; padding: 16px 32px 0; }
+.toast-stack {
+	display: grid;
+	gap: 8px;
+	padding: 16px 32px 0;
+}
 .notice,
 .error {
 	padding: 10px 12px;
@@ -233,6 +237,20 @@ button:disabled { opacity: .65; cursor: wait; }
 }
 .notice { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
 .error { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+.action-result {
+	margin: 0 0 16px;
+	transition: opacity .18s ease, transform .18s ease, margin .18s ease, padding .18s ease, border-width .18s ease;
+}
+.board .action-result { margin: 12px 16px 0; }
+.action-result.is-dismissing {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	border-width: 0;
+	opacity: 0;
+	transform: translateY(-4px);
+}
 
 .section { padding: 24px 32px 0; }
 .section-head {
@@ -263,6 +281,7 @@ button:disabled { opacity: .65; cursor: wait; }
 	white-space: nowrap;
 	max-width: 260px;
 }
+.card-head .url a { color: var(--accent); font-weight: 600; }
 .badge {
 	display: inline-flex;
 	align-items: center;
@@ -352,10 +371,25 @@ button:disabled { opacity: .65; cursor: wait; }
 .settings-form h3 { grid-column: 1 / -1; }
 .compact-form { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .stack-form { grid-template-columns: 1fr 1fr; }
+.stack-form .source-field { grid-column: 1 / -1; }
 .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .form-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; padding-top: 4px; }
 .field { display: grid; gap: 6px; color: var(--text); font-weight: 600; }
 .field span { font-size: 13px; }
+.field small {
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.35;
+}
+.field code {
+	padding: 1px 4px;
+	border-radius: 4px;
+	background: var(--row);
+	color: var(--text);
+	font-family: ui-monospace, SFMono-Regular, SFMono, Consolas, "Liberation Mono", Menlo, monospace;
+	font-size: 12px;
+}
 .field input,
 .field select {
 	width: 100%;

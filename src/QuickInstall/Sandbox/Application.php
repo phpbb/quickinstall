@@ -590,18 +590,15 @@ class Application
 
 		$this->project->init();
 		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
-		$token = bin2hex(random_bytes(24));
-		$url = "http://{$host}:{$port}/?token={$token}";
+		$url = "http://{$host}:{$port}/";
 		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
 		$logPath = $this->uiLogPath();
-		putenv('QI_SANDBOX_UI_TOKEN=' . $token);
 		$pid = $this->startDetachedProcess($command, dirname(__DIR__, 3), $logPath);
 		$state = [
 			'pid' => $pid,
 			'host' => $host,
 			'port' => $port,
 			'url' => $url,
-			'token' => $token,
 			'log' => $logPath,
 			'started_at' => gmdate('c'),
 		];
@@ -638,8 +635,7 @@ class Application
 	{
 		$pidFile = $this->project->workspacePath('runtime/ui.pid');
 		$shellCommand = 'cd ' . escapeshellarg($cwd)
-			. ' && (QI_SANDBOX_UI_TOKEN=' . escapeshellarg((string) getenv('QI_SANDBOX_UI_TOKEN'))
-			. ' nohup ' . implode(' ', array_map('escapeshellarg', $command))
+			. ' && (nohup ' . implode(' ', array_map('escapeshellarg', $command))
 			. ' >> ' . escapeshellarg($logPath) . ' 2>&1 < /dev/null & echo $! > ' . escapeshellarg($pidFile) . ')';
 		$result = $this->captureProcess(['/bin/sh', '-c', $shellCommand], $cwd);
 		$pid = is_file($pidFile) ? (int) trim((string) file_get_contents($pidFile)) : 0;
@@ -660,8 +656,7 @@ class Application
 		$arguments = array_slice($command, 1);
 		$argumentList = '@(' . implode(',', array_map([$this, 'powerShellString'], $arguments)) . ')';
 		$errorLog = $logPath . '.err';
-		$script = '$env:QI_SANDBOX_UI_TOKEN = ' . $this->powerShellString((string) getenv('QI_SANDBOX_UI_TOKEN')) . '; '
-			. '$p = Start-Process -FilePath ' . $this->powerShellString($command[0])
+		$script = '$p = Start-Process -FilePath ' . $this->powerShellString($command[0])
 			. ' -ArgumentList ' . $argumentList
 			. ' -WorkingDirectory ' . $this->powerShellString($cwd)
 			. ' -RedirectStandardOutput ' . $this->powerShellString($logPath)
@@ -1362,7 +1357,7 @@ class Application
 					'title' => 'ui:restart',
 					'usage' => 'ui:restart [--host 127.0.0.1] [--port 8079]',
 					'summary' => 'Restart the local sandbox admin UI.',
-					'description' => 'Stops the tracked UI server if present, then starts a fresh tokenized UI server.',
+					'description' => 'Stops the tracked UI server if present, then starts a fresh local UI server.',
 					'options' => [
 						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
 						'--port PORT' => 'Local UI port. Default: 8079.',

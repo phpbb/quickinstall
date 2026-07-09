@@ -10,7 +10,7 @@
 </section>
 
 <?php if ($notice !== '' || $error !== ''): ?>
-	<section class="toast-stack">
+	<section class="toast-stack" role="status" aria-live="polite">
 		<?php if ($notice !== ''): ?>
 			<p class="notice"><?= $this->e($notice) ?></p>
 		<?php endif; ?>
@@ -23,7 +23,6 @@
 <section class="section" id="boards">
 	<div class="section-head">
 		<div>
-			<p class="eyebrow">Runtime</p>
 			<h2>Boards</h2>
 			<p>Start, stop, seed, and inspect local Docker-backed phpBB installs.</p>
 		</div>
@@ -39,12 +38,19 @@
 			<?php
 			$name = (string) $board['name'];
 			$status = (string) ($board['status'] ?? 'unknown');
+			$url = (string) ($board['url'] ?? '');
 			?>
-			<article class="board card">
+			<article class="board card" data-board="<?= $this->e($name) ?>">
 				<div class="card-head">
 					<div>
 						<h3><?= $this->e($name) ?></h3>
-						<p class="url"><?= $this->e($board['url'] ?? '') ?></p>
+						<p class="url">
+							<?php if ($status === 'running' && $url !== ''): ?>
+								<a href="<?= $this->e($url) ?>" target="_blank" rel="noreferrer"><?= $this->e($url) ?></a>
+							<?php else: ?>
+								<?= $this->e($url) ?>
+							<?php endif; ?>
+						</p>
 					</div>
 					<span class="badge status-<?= $this->e($status) ?>"><?= $this->e($status) ?></span>
 				</div>
@@ -80,9 +86,9 @@
 					<?php require __DIR__ . '/csrf.php'; ?>
 					<input type="hidden" name="action" value="board_seed">
 					<input type="hidden" name="name" value="<?= $this->e($name) ?>">
-					<label class="field"><span>Preset</span><select name="preset"><?php foreach ($presetOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
-					<label class="field"><span>Seed</span><input name="seed" value="1"></label>
-					<label class="field"><span>Action</span><select name="seed_action"><?php foreach ($seedActionOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
+					<label class="field" title="Preset controls how much sample content is generated."><span>Preset</span><select name="preset"><?php foreach ($presetOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
+					<label class="field" title="Numeric seed for repeatable generated content. Use the same seed to reproduce the same data."><span>Seed</span><input name="seed" value="1"></label>
+					<label class="field" title="Seed adds content, replace swaps generated content, and reset clears generated content."><span>Action</span><select name="seed_action"><?php foreach ($seedActionOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
 					<button class="secondary">Run seed</button>
 				</form>
 				<div class="mounted-grid">
@@ -113,7 +119,6 @@
 <section class="section" id="create">
 	<div class="section-head">
 		<div>
-			<p class="eyebrow">Provision</p>
 			<h2>Create board</h2>
 			<p>Choose the phpBB source, runtime, port, and optional seed preset.</p>
 		</div>
@@ -121,14 +126,14 @@
 	<form method="post" class="card settings-form" data-ajax>
 		<?php require __DIR__ . '/csrf.php'; ?>
 		<input type="hidden" name="action" value="board_create">
-		<label class="field"><span>Name</span><input name="name" value="demo"></label>
-		<label class="field"><span>phpBB</span><input name="phpbb" value="latest" list="phpbb-list"></label>
+		<label class="field" title="Board name used for workspace files, Docker services, and URLs. Use letters, numbers, dots, hyphens, or underscores."><span>Name</span><input name="name" value="demo"></label>
+		<label class="field" title="phpBB selector to fetch or reuse. Supported examples include latest, 3.3, 3.2, 4.0.x, and master."><span>phpBB</span><input name="phpbb" value="latest" list="phpbb-list"></label>
 		<datalist id="phpbb-list"><?php foreach ($versionOptions as $option): ?><option value="<?= $this->e($option) ?>"><?php endforeach; ?></datalist>
-		<label class="field"><span>DB</span><select name="db"><?php foreach ($dbOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
-		<label class="field"><span>Port</span><input name="port" value="8080"></label>
-		<label class="field"><span>Populate</span><select name="populate"><?php foreach ($populateOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
-		<label class="toggle"><input type="checkbox" name="debug" value="1"><span></span><strong>Debug</strong></label>
-		<label class="toggle"><input type="checkbox" name="replace" value="1"><span></span><strong>Replace existing</strong></label>
+		<label class="field" title="Database engine for the board containers. SQLite supports unseeded boards only."><span>DB</span><select name="db"><?php foreach ($dbOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
+		<label class="field" title="Local host port for opening the board in your browser. Pick an unused port."><span>Port</span><input name="port" value="8080"></label>
+		<label class="field" title="Optional content preset applied when the board is first installed."><span>Populate</span><select name="populate"><?php foreach ($populateOptions as $option): ?><option value="<?= $this->e($option) ?>"><?= $this->e($option) ?></option><?php endforeach; ?></select></label>
+		<label class="toggle" title="Enable phpBB debug settings after installation."><input type="checkbox" name="debug" value="1"><span></span><strong>Debug</strong></label>
+		<label class="toggle" title="Destroy and recreate an existing board with the same name."><input type="checkbox" name="replace" value="1"><span></span><strong>Replace existing</strong></label>
 		<div class="form-actions"><button class="primary">Create board</button></div>
 	</form>
 </section>
@@ -136,7 +141,6 @@
 <section class="section" id="customisations">
 	<div class="section-head">
 		<div>
-			<p class="eyebrow">Mounts</p>
 			<h2>Customisations</h2>
 			<p>Bind or copy local extension and style work into a board.</p>
 		</div>
@@ -147,11 +151,15 @@
 				<?php require __DIR__ . '/csrf.php'; ?>
 				<h3><?= $this->e($mountForm[1]) ?></h3>
 				<input type="hidden" name="action" value="<?= $this->e($mountForm[0]) ?>">
-				<label class="field"><span>Board</span><select name="board"><?php foreach ($boards as $board): ?><option value="<?= $this->e($board['name']) ?>"><?= $this->e($board['name']) ?></option><?php endforeach; ?></select></label>
-				<label class="field"><span>Path under customisations/</span><input name="source" value=""></label>
-				<label class="toggle"><input type="checkbox" name="copy" value="1"><span></span><strong>Copy</strong></label>
-				<label class="toggle"><input type="checkbox" name="recursive" value="1"><span></span><strong>Recursive</strong></label>
-				<label class="toggle"><input type="checkbox" name="allow_external" value="1"><span></span><strong>Allow external path</strong></label>
+				<label class="field" title="Board that should receive this extension or style mount."><span>Board</span><select name="board"><?php foreach ($boards as $board): ?><option value="<?= $this->e($board['name']) ?>"><?= $this->e($board['name']) ?></option><?php endforeach; ?></select></label>
+				<label class="field source-field" title="Use a path inside customisations by default. Enable external paths to use an absolute path elsewhere on disk.">
+					<span>Path</span>
+					<input name="source" value="">
+					<small>Relative to <code>customisations/</code>, or a full path when external paths are allowed.</small>
+				</label>
+				<label class="toggle" title="Copy files into the board instead of bind mounting them from the source path."><input type="checkbox" name="copy" value="1"><span></span><strong>Copy</strong></label>
+				<label class="toggle" title="Discover and mount each extension or style found below the source path. Cannot be combined with copy mode."><input type="checkbox" name="recursive" value="1"><span></span><strong>Recursive</strong></label>
+				<label class="toggle" title="Allow the path field to point outside the customisations directory."><input type="checkbox" name="allow_external" value="1"><span></span><strong>Allow external path</strong></label>
 				<div class="form-actions"><button class="primary">Mount</button></div>
 			</form>
 		<?php endforeach; ?>
@@ -161,7 +169,6 @@
 <section class="section" id="sources">
 	<div class="section-head">
 		<div>
-			<p class="eyebrow">Source cache</p>
 			<h2>Sources</h2>
 			<p>Fetch and inspect phpBB sources used by boards.</p>
 		</div>
@@ -169,10 +176,10 @@
 	<form method="post" class="card settings-form compact-form" data-ajax>
 		<?php require __DIR__ . '/csrf.php'; ?>
 		<input type="hidden" name="action" value="source_fetch">
-		<label class="field"><span>Version or branch</span><input name="version" value="latest"></label>
-		<label class="field"><span>Git URL</span><input name="url" value=""></label>
-		<label class="toggle"><input type="checkbox" name="git" value="1"><span></span><strong>Git source</strong></label>
-		<label class="toggle"><input type="checkbox" name="allow_external" value="1"><span></span><strong>Allow external URL</strong></label>
+		<label class="field" title="phpBB selector to download or register, such as latest, 3.3, 3.2, master, or a branch name."><span>Version or branch</span><input name="version" value="latest"></label>
+		<label class="field" title="Optional Git repository URL when fetching a Git source. Leave blank to use the default phpBB repository."><span>Git URL</span><input name="url" value=""></label>
+		<label class="toggle" title="Fetch this source from Git instead of Composer packages."><input type="checkbox" name="git" value="1"><span></span><strong>Git source</strong></label>
+		<label class="toggle" title="Allow a Git URL outside the default trusted phpBB source URL."><input type="checkbox" name="allow_external" value="1"><span></span><strong>Allow external URL</strong></label>
 		<div class="form-actions"><button class="primary">Fetch source</button></div>
 	</form>
 	<?php if (!$sources): ?>
@@ -217,7 +224,6 @@
 <section class="section" id="activity">
 	<div class="section-head">
 		<div>
-			<p class="eyebrow">Command output</p>
 			<h2>Activity log</h2>
 			<p>Docker, Composer, and seed output from the latest action.</p>
 		</div>

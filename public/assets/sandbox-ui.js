@@ -19,6 +19,7 @@ function bindAjax() {
 				return;
 			}
 
+			const context = actionContext(form);
 			const submitter = event.submitter;
 			const original = submitter ? submitter.textContent : '';
 			if (submitter) {
@@ -38,6 +39,7 @@ function bindAjax() {
 				const data = await response.json();
 				dashboard.innerHTML = data.html;
 				bindAjax();
+				showActionResult(data, context);
 				scrollLog();
 			} catch (error) {
 				alert('Request failed: ' + error.message);
@@ -64,6 +66,62 @@ function bindAjax() {
 			}
 		});
 	});
+}
+
+function actionContext(form) {
+	const formData = new FormData(form);
+	const section = form.closest('section');
+	const board = form.closest('[data-board]');
+
+	return {
+		action: formData.get('action') || '',
+		board: board ? board.dataset.board : '',
+		section: section ? section.id : '',
+	};
+}
+
+function showActionResult(data, context) {
+	const globalToast = dashboard.querySelector('.toast-stack');
+	if (globalToast) {
+		globalToast.remove();
+	}
+
+	const message = data.error || data.notice || '';
+	if (!message) {
+		return;
+	}
+
+	const result = document.createElement('div');
+	result.className = 'action-result ' + (data.error ? 'error' : 'notice');
+	result.setAttribute('role', data.error ? 'alert' : 'status');
+	result.textContent = message;
+
+	let target = null;
+	if (context.board) {
+		target = dashboard.querySelector('[data-board="' + cssEscape(context.board) + '"] .card-head');
+	}
+	if (!target && context.section) {
+		target = dashboard.querySelector('#' + cssEscape(context.section) + ' .section-head');
+	}
+	if (!target) {
+		target = dashboard.querySelector('.status-strip');
+	}
+
+	if (target) {
+		target.insertAdjacentElement('afterend', result);
+		window.setTimeout(() => {
+			result.classList.add('is-dismissing');
+			window.setTimeout(() => result.remove(), 180);
+		}, data.error ? 9000 : 5000);
+	}
+}
+
+function cssEscape(value) {
+	if (window.CSS && CSS.escape) {
+		return CSS.escape(value);
+	}
+
+	return String(value).replace(/["\\]/g, '\\$&');
 }
 
 function scrollLog() {

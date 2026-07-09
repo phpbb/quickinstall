@@ -68,6 +68,11 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('activity-log', $html);
 		self::assertStringContainsString('/assets/sandbox-ui.css', $html);
 		self::assertStringContainsString('/assets/sandbox-ui.js', $html);
+		self::assertStringContainsString('<option value="3.3.x">', $html);
+		self::assertStringContainsString('title="phpBB selector to fetch or reuse.', $html);
+		self::assertStringContainsString('title="Allow the path field to point outside the customisations directory.', $html);
+		self::assertStringContainsString('Relative to <code>customisations/</code>', $html);
+		self::assertStringNotContainsString('<option value="3.0.x">', $html);
 		self::assertStringNotContainsString('<style>', $html);
 	}
 
@@ -75,18 +80,19 @@ class WebApplicationTest extends TestCase
 	{
 		$root = $this->createTempProjectRoot();
 
-		$html = $this->runWebApplication($root, ['action' => 'init']);
+		$html = $this->runWebApplicationWithCsrf($root, ['action' => 'init']);
 
 		self::assertDirectoryExists($root . '/.qi');
 		self::assertFileExists($root . '/.qi/boards.json');
 		self::assertStringContainsString('Workspace initialized.', $html);
+		self::assertStringContainsString('class="toast-stack" role="status" aria-live="polite"', $html);
 	}
 
 	public function testAjaxPostReturnsDashboardJson(): void
 	{
 		$root = $this->createTempProjectRoot();
 
-		$json = $this->runWebApplication($root, ['action' => 'init'], true);
+		$json = $this->runWebApplicationWithCsrf($root, ['action' => 'init'], true);
 		$data = json_decode($json, true);
 
 		self::assertIsArray($data);
@@ -103,7 +109,7 @@ class WebApplicationTest extends TestCase
 		$project->init();
 		$this->addDownloadedSource($project, '3.3.14');
 
-		$json = $this->runWebApplication($root, [
+		$json = $this->runWebApplicationWithCsrf($root, [
 			'action' => 'source_remove',
 			'source' => '3.3.14',
 		], true);
@@ -116,21 +122,34 @@ class WebApplicationTest extends TestCase
 		self::assertStringNotContainsString('value="3.3.14"', $data['html']);
 	}
 
-	public function testTokenProtectedGetRequiresToken(): void
+	public function testRenderShowsFullSourcePaths(): void
 	{
 		$root = $this->createTempProjectRoot();
-		$script = $this->tokenScript($root, 'GET', [], [], 'secret');
+		$project = new Project($root);
+		$project->init();
+		$this->addDownloadedSource($project, '3.3.14');
+
+		$html = $this->runWebApplication($root);
+
+		self::assertStringContainsString($root . '/.qi/sources/phpbb-3.3.14', $html);
+	}
+
+	public function testPostRejectsMissingCsrfToken(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$script = $this->csrfScript($root, ['action' => 'init'], [], 'secret');
 
 		$result = $this->runPhpScript($script);
 
 		self::assertSame(0, $result['exit_code']);
-		self::assertStringContainsString('sandbox UI token is missing or invalid', $result['output']);
+		self::assertStringContainsString('form token is missing or invalid', $result['output']);
+		self::assertDirectoryDoesNotExist($root . '/.qi');
 	}
 
-	public function testTokenProtectedPostAcceptsMatchingToken(): void
+	public function testCsrfProtectedPostAcceptsMatchingToken(): void
 	{
 		$root = $this->createTempProjectRoot();
-		$script = $this->tokenScript($root, 'POST', ['action' => 'init', 'qi_token' => 'secret'], [], 'secret');
+		$script = $this->csrfScript($root, ['action' => 'init', 'qi_csrf_token' => 'secret'], [], 'secret');
 
 		$result = $this->runPhpScript($script);
 
@@ -139,16 +158,33 @@ class WebApplicationTest extends TestCase
 		self::assertFileExists($root . '/.qi/boards.json');
 	}
 
-	public function testTokenProtectedPostRejectsNonLocalOrigin(): void
+	public function testCsrfProtectedPostRejectsNonLocalOrigin(): void
 	{
 		$root = $this->createTempProjectRoot();
-		$script = $this->tokenScript($root, 'POST', ['action' => 'init', 'qi_token' => 'secret'], ['HTTP_ORIGIN' => 'https://example.com'], 'secret');
+		$script = $this->csrfScript($root, ['action' => 'init', 'qi_csrf_token' => 'secret'], ['HTTP_ORIGIN' => 'https://example.com'], 'secret');
 
 		$result = $this->runPhpScript($script);
 
 		self::assertSame(0, $result['exit_code']);
 		self::assertStringContainsString('only accepts local form submissions', $result['output']);
 		self::assertDirectoryDoesNotExist($root . '/.qi');
+	}
+
+	private function runWebApplicationWithCsrf(string $root, array $post = [], bool $ajax = false): string
+	{
+		$post['qi_csrf_token'] = $this->csrfTokenFromRender($root);
+		return $this->runWebApplication($root, $post, $ajax);
+	}
+
+	private function csrfTokenFromRender(string $root): string
+	{
+		$html = $this->runWebApplication($root);
+		if (!preg_match('/name="qi_csrf_token" value="([^"]+)"/', $html, $matches))
+		{
+			throw new \RuntimeException('Unable to find CSRF token in web UI render.');
+		}
+
+		return html_entity_decode($matches[1], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	}
 
 	private function runWebApplication(string $root, array $post = [], bool $ajax = false): string
@@ -167,15 +203,17 @@ class WebApplicationTest extends TestCase
 		return (string) ob_get_clean();
 	}
 
-	private function tokenScript(string $root, string $method, array $post, array $server, string $token): string
+	private function csrfScript(string $root, array $post, array $server, string $token): string
 	{
-		$script = $this->createTempProjectRoot() . '/web-token-test.php';
+		$script = $this->createTempProjectRoot() . '/web-csrf-test.php';
 		$server += [
-			'REQUEST_METHOD' => $method,
+			'REQUEST_METHOD' => 'POST',
 			'REMOTE_ADDR' => '127.0.0.1',
 		];
 		file_put_contents($script, "<?php\n"
-			. "putenv('QI_SANDBOX_UI_TOKEN=' . " . var_export($token, true) . ");\n"
+			. "session_save_path(__DIR__);\n"
+			. "session_start();\n"
+			. '$_SESSION[\'qi_csrf_token\'] = ' . var_export($token, true) . ";\n"
 			. '$_SERVER = ' . var_export($server, true) . ";\n"
 			. '$_POST = ' . var_export($post, true) . ";\n"
 			. '$_GET = [];' . "\n"

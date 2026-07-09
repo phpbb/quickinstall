@@ -26,6 +26,7 @@ class Application
 	private BufferedOutput $output;
 	private string $notice = '';
 	private string $error = '';
+	private static string $cliCsrfToken = '';
 
 	public function __construct(string $root)
 	{
@@ -36,11 +37,12 @@ class Application
 	public function run(): void
 	{
 		$this->assertLocalRequest();
-		$this->assertUiToken();
+		$csrfToken = $this->csrfToken();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST')
 		{
 			$this->assertTrustedPost();
+			$this->assertCsrfToken($csrfToken);
 			$this->handlePost();
 			if ($this->isAjax())
 			{
@@ -65,25 +67,6 @@ class Application
 		}
 	}
 
-	private function assertUiToken(): void
-	{
-		$token = $this->uiToken();
-		if ($token === '')
-		{
-			return;
-		}
-
-		$provided = $_SERVER['REQUEST_METHOD'] === 'POST'
-			? (string) ($_POST['qi_token'] ?? '')
-			: (string) ($_GET['token'] ?? '');
-		if (!hash_equals($token, $provided))
-		{
-			http_response_code(403);
-			echo 'QuickInstall sandbox UI token is missing or invalid. Restart with `php bin/qi ui:start` and open the printed URL.';
-			exit;
-		}
-	}
-
 	private function assertTrustedPost(): void
 	{
 		foreach (['HTTP_ORIGIN', 'HTTP_REFERER'] as $header)
@@ -104,9 +87,40 @@ class Application
 		}
 	}
 
-	private function uiToken(): string
+	private function assertCsrfToken(string $token): void
 	{
-		return (string) getenv('QI_SANDBOX_UI_TOKEN');
+		$provided = (string) ($_POST['qi_csrf_token'] ?? '');
+		if ($provided === '' || !hash_equals($token, $provided))
+		{
+			http_response_code(403);
+			echo 'QuickInstall sandbox UI form token is missing or invalid. Refresh the page and try again.';
+			exit;
+		}
+	}
+
+	private function csrfToken(): string
+	{
+		if (PHP_SAPI === 'cli' && session_status() === PHP_SESSION_NONE && headers_sent())
+		{
+			if (self::$cliCsrfToken === '')
+			{
+				self::$cliCsrfToken = bin2hex(random_bytes(24));
+			}
+
+			return self::$cliCsrfToken;
+		}
+
+		if (session_status() === PHP_SESSION_NONE)
+		{
+			session_start();
+		}
+
+		if (empty($_SESSION['qi_csrf_token']) || !is_string($_SESSION['qi_csrf_token']))
+		{
+			$_SESSION['qi_csrf_token'] = bin2hex(random_bytes(24));
+		}
+
+		return $_SESSION['qi_csrf_token'];
 	}
 
 	private function handlePost(): void
@@ -306,7 +320,7 @@ class Application
 		}
 		echo $this->renderTemplate('layout.php', [
 			'dashboard' => $this->renderTemplate('dashboard.php', $this->viewData()),
-			'csrfToken' => $this->uiToken(),
+			'csrfToken' => $this->csrfToken(),
 		]);
 	}
 
@@ -355,12 +369,11 @@ class Application
 			$board['mounted_styles'] = $styles->list($name);
 			$viewBoards[] = $board;
 		}
-
 		return [
 			'notice' => $this->notice,
 			'error' => $this->error,
 			'output' => $this->output->all(),
-			'csrfToken' => $this->uiToken(),
+			'csrfToken' => $this->csrfToken(),
 			'metrics' => [
 				['label' => 'Boards', 'value' => (string) count($boards), 'detail' => $running . ' running', 'description' => 'Runtime definitions'],
 				['label' => 'Sources', 'value' => (string) count($sources), 'detail' => count(array_filter($sources, static function ($source) {
@@ -371,12 +384,35 @@ class Application
 			],
 			'boards' => $viewBoards,
 			'sources' => $sources,
-			'versionOptions' => ['latest', '3.3', '3.3.x', '3.2', '3.2.x', '4.0.x', 'master'],
+			'versionOptions' => $this->versionOptions($versions),
 			'dbOptions' => ['mariadb', 'mysql', 'postgres', 'sqlite'],
 			'populateOptions' => ['none', 'tiny', 'extension-dev', 'load-test', 'random'],
 			'presetOptions' => ['tiny', 'extension-dev', 'load-test', 'random'],
 			'seedActionOptions' => ['seed', 'replace', 'reset'],
 		];
+	}
+
+	private function versionOptions(array $versions): array
+	{
+		$options = [];
+		foreach ($versions as $version)
+		{
+			if (($version['status'] ?? '') === 'unsupported')
+			{
+				continue;
+			}
+
+			foreach (preg_split('/\s*\/\s*/', (string) ($version['selector'] ?? '')) ?: [] as $selector)
+			{
+				$selector = trim($selector);
+				if ($selector !== '' && !str_contains($selector, ' '))
+				{
+					$options[] = $selector;
+				}
+			}
+		}
+
+		return array_values(array_unique($options));
 	}
 
 	private function renderTemplate(string $template, array $data = []): string

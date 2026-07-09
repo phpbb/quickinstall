@@ -28,7 +28,6 @@
 		<main class="main">
 			<header class="topbar">
 				<div>
-					<p class="eyebrow">Local admin UI</p>
 					<h1>Sandbox workspace</h1>
 					<p class="lede">Manage disposable phpBB boards backed by the same Docker services as the CLI.</p>
 				</div>
