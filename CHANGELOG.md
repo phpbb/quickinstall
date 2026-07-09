@@ -1,5 +1,10 @@
 # QuickInstall Changelog
 
+## Version 1.7.0
+
+- [Feature] QuickInstall CLI – A brand new Docker-based command-line-interface tool for creating local phpBB test boards.
+- [Change] Updated Docs to allow for section headers to be used as anchor-links and for code to be rendered as code-blocks.
+
 ## Version 1.6.16
 - [Feature] Added a simple database connection test button to the Database section in Profiles.
 - [Fix] Fixed an issue where phpBB 4 installs would fail if hyphens (and other potential special characters) were used for the board/database name.
