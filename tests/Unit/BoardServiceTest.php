@@ -92,6 +92,7 @@ class BoardServiceTest extends TestCase
 		$project = $this->projectWithSource('3.3.14');
 		$project->appendBoard(['name' => 'demo', 'db' => 'mariadb']);
 		$runner = new ServiceTestBoardRunner($project);
+		$runner->statuses['demo'] = 'running';
 		$service = new TestBoardService($project, $runner);
 
 		self::assertSame('demo', $service->start('demo')['name']);
@@ -105,6 +106,19 @@ class BoardServiceTest extends TestCase
 		self::assertSame(['demo'], $runner->destroyed);
 	}
 
+	public function testSeedRequiresRunningBoard(): void
+	{
+		$project = $this->projectWithSource('3.3.14');
+		$project->appendBoard(['name' => 'demo', 'db' => 'mariadb']);
+		$runner = new ServiceTestBoardRunner($project);
+		$runner->statuses['demo'] = 'stopped';
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Board must be running before seeding. Start it first.');
+
+		(new TestBoardService($project, $runner))->seed('demo', 'tiny', 1, 'seed');
+	}
+
 	/**
 	 * @dataProvider sqliteSeedActionProvider
 	 */
@@ -113,6 +127,7 @@ class BoardServiceTest extends TestCase
 		$project = $this->projectWithSource('3.3.14');
 		$project->appendBoard(['name' => 'demo', 'db' => 'sqlite']);
 		$runner = new ServiceTestBoardRunner($project);
+		$runner->statuses['demo'] = 'running';
 
 		if (!$allowed)
 		{
