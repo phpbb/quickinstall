@@ -23,12 +23,14 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 ## 🛠 Upgrading
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/) and extract it. 
 
-2. Copy everything into your existing QuickInstall directory **except for:**
-  - 📁`.qi/` (may be hidden by your operating system)
-  - 📁`boards/`
-  - 📁`customisations/`
-  - 📁`sources/`
-  - 📁`settings/`
+2. Copy everything into your existing QuickInstall directory. Keep existing copies of these folders; copy them if missing:
+   - 📁`.qi/` (may be hidden by your operating system)
+   - 📁`boards/`
+   - 📁`customisations/`
+   - 📁`sources/`
+   - 📁`settings/`
+
+> If you are upgrading from QuickInstall 1.6.16 (or older) you will need to copy the new 📁`customisations/` folder.
 
 > If you are upgrading from QuickInstall 1.1.8 (or older) you MUST review and re-save your old Profile settings.
 
