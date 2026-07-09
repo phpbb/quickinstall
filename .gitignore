@@ -8,7 +8,6 @@ vendor/*
 tests/vendor/*
 build/*
 .qi/*
-customisations/*
 *~
 .idea
 node_modules
