@@ -24,8 +24,9 @@ Create your first board:
 
 ```bash
 php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
-php bin/qi board:start demo
 ```
+
+When creation finishes, QuickInstall asks whether to start the board.
 
 Open:
 
@@ -39,7 +40,7 @@ Admin login:
 admin / password
 ```
 
-That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, and prepares the board. `board:start` starts the board containers with Docker Compose, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
+That is the normal workflow. `board:create` downloads the requested phpBB source if needed, writes Docker config, prepares the board, and offers to start it. Starting a board starts the containers with Docker Compose, installs phpBB, applies the selected seed preset once, and waits until the board URL responds before printing the final URL.
 
 If you ever need help with commands, run:
 
@@ -53,41 +54,42 @@ Create a small empty board:
 
 ```bash
 php bin/qi board:create clean --phpbb 3.3 --db mariadb --port 8081 --populate none
-php bin/qi board:start clean
 ```
 
 Create a board with extension-development fixtures:
 
 ```bash
 php bin/qi board:create extdev --phpbb 3.3.17 --db mariadb --port 8082 --populate extension-dev
-php bin/qi board:start extdev
 ```
 
 Create a board with phpBB debug output enabled:
 
 ```bash
 php bin/qi board:create debug --phpbb 3.3 --db mariadb --port 8085 --populate extension-dev --debug
-php bin/qi board:start debug
 ```
 
 Create an older supported phpBB 3.2 board:
 
 ```bash
 php bin/qi board:create old --phpbb 3.2 --db mariadb --port 8083 --populate tiny
-php bin/qi board:start old
 ```
 
 Create an experimental master branch board:
 
 ```bash
 php bin/qi board:create alpha --phpbb master --db mariadb --port 8084 --populate tiny
-php bin/qi board:start alpha
 ```
 
 List boards (shows all created boards and their statuses):
 
 ```bash
 php bin/qi board:list
+```
+
+Start a board:
+
+```bash
+php bin/qi board:start demo
 ```
 
 Stop or remove a board:
@@ -375,10 +377,9 @@ docker compose -f .qi/runtime/demo/compose.yml logs db
 
 #### Reset a board completely
 
-Use this when a board's files, database, or generated Docker runtime are no longer worth repairing. Destroying a board removes its generated state, so create and start it again afterward.
+Use this when a board's files, database, or generated Docker runtime are no longer worth repairing. Destroying a board removes its generated state, so create it again afterward.
 
 ```bash
 php bin/qi board:destroy demo
 php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
-php bin/qi board:start demo
 ```
