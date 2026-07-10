@@ -173,7 +173,7 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
-		$project->writeJson('update-check.json', [
+		$project->writeJson('cache/update-check.json', [
 			'checked_at' => time(),
 			'current_version' => '1.7.0',
 			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/download'],

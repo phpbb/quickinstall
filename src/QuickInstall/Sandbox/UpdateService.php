@@ -15,7 +15,7 @@ use RuntimeException;
 class UpdateService
 {
 	private const ENDPOINT = 'https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/version_check';
-	private const CACHE_FILE = 'update-check.json';
+	private const CACHE_FILE = 'cache/update-check.json';
 	private const SUCCESS_TTL = 86400;
 	private const ERROR_TTL = 3600;
 	private const TIMEOUT = 3;
@@ -181,6 +181,13 @@ class UpdateService
 		if (!is_dir($this->project->workspacePath()))
 		{
 			return;
+		}
+
+		// Existing workspaces may predate .qi/cache.
+		$cacheDir = dirname($this->project->workspacePath(self::CACHE_FILE));
+		if (!is_dir($cacheDir) && !mkdir($cacheDir, 0775, true) && !is_dir($cacheDir))
+		{
+			throw new RuntimeException("Unable to create update cache directory: $cacheDir");
 		}
 
 		$this->project->writeJson(self::CACHE_FILE, $data);

@@ -24,6 +24,7 @@ class ProjectTest extends TestCase
 		self::assertDirectoryExists($root . '/customisations');
 		self::assertDirectoryExists($root . '/.qi/sources');
 		self::assertDirectoryExists($root . '/.qi/boards');
+		self::assertDirectoryExists($root . '/.qi/cache');
 		self::assertSame([], $project->readJson('sources.json', ['unexpected']));
 		self::assertSame([], $project->init());
 	}

@@ -39,7 +39,7 @@ class Project
 			$created[] = 'customisations drop zone';
 		}
 
-		foreach (['', '/sources', '/boards', '/runtime', '/db'] as $dir)
+		foreach (['', '/sources', '/boards', '/runtime', '/db', '/cache'] as $dir)
 		{
 			$path = $this->workspace . $dir;
 			if (!is_dir($path) && !mkdir($path, 0775, true) && !is_dir($path))

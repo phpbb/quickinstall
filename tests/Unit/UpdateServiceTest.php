@@ -29,7 +29,7 @@ class UpdateServiceTest extends TestCase
 
 		self::assertSame('1.8.0', $update['current']);
 		self::assertSame('https://example.com/download', $update['download']);
-		self::assertFileExists($root . '/.qi/update-check.json');
+		self::assertFileExists($root . '/.qi/cache/update-check.json');
 	}
 
 	public function testFreshCacheAvoidsEndpointFetch(): void
@@ -37,7 +37,7 @@ class UpdateServiceTest extends TestCase
 		$root = $this->projectRoot('1.7.0');
 		$project = new Project($root);
 		$project->init();
-		$project->writeJson('update-check.json', [
+		$project->writeJson('cache/update-check.json', [
 			'checked_at' => time(),
 			'current_version' => '1.7.0',
 			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/cached'],
@@ -57,7 +57,7 @@ class UpdateServiceTest extends TestCase
 		$project->init();
 
 		$update = (new UpdateService($project, $root . '/missing-version-file.json'))->getUpdate();
-		$cache = $project->readJson('update-check.json', []);
+		$cache = $project->readJson('cache/update-check.json', []);
 
 		self::assertNull($update);
 		self::assertSame(null, $cache['update']);
