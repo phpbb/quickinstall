@@ -64,7 +64,7 @@ class Application
 		if (!in_array($remote, ['127.0.0.1', '::1'], true))
 		{
 			http_response_code(403);
-			echo 'QuickInstall sandbox UI is local-only.';
+			echo 'QuickInstall UI is local-only.';
 			exit;
 		}
 	}
@@ -83,7 +83,7 @@ class Application
 			if (!is_string($host) || !in_array(strtolower($host), ['127.0.0.1', 'localhost', '::1'], true))
 			{
 				http_response_code(403);
-				echo 'QuickInstall sandbox UI only accepts local form submissions.';
+				echo 'QuickInstall UI only accepts local form submissions.';
 				exit;
 			}
 		}
@@ -95,7 +95,7 @@ class Application
 		if ($provided === '' || !hash_equals($token, $provided))
 		{
 			http_response_code(403);
-			echo 'QuickInstall sandbox UI form token is missing or invalid. Refresh the page and try again.';
+			echo 'QuickInstall UI form token is missing or invalid. Refresh the page and try again.';
 			exit;
 		}
 	}

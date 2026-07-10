@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>QuickInstall Sandbox</title>
+	<title>QuickInstall Dashboard</title>
 	<link rel="stylesheet" href="/assets/sandbox-ui.css">
 	<script src="/assets/sandbox-ui.js" defer></script>
 </head>
@@ -14,10 +14,10 @@
 				<span class="brand-mark">QI</span>
 				<div>
 					<strong>QuickInstall</strong>
-					<small>Docker sandbox</small>
+					<small>phpBB on Docker</small>
 				</div>
 			</div>
-			<nav aria-label="Sandbox navigation">
+			<nav aria-label="QuickInstall navigation">
 				<a href="#boards">Boards</a>
 				<a href="#create">Create board</a>
 				<a href="#customisations">Customisations</a>
@@ -28,7 +28,7 @@
 		<main class="main">
 			<header class="topbar">
 				<div>
-					<h1>Sandbox workspace</h1>
+					<h1>QuickInstall dashboard</h1>
 					<p class="lede">Manage disposable phpBB boards backed by the same Docker services as the CLI.</p>
 				</div>
 				<form method="post" data-ajax>
@@ -44,7 +44,7 @@
 	</div>
 	<div class="busy" id="busy" role="status" aria-live="polite">
 		<div class="spinner"></div>
-		<span>Processing sandbox action...</span>
+		<span>Processing QuickInstall action...</span>
 	</div>
 </body>
 </html>

@@ -56,7 +56,9 @@ class WebApplicationTest extends TestCase
 
 		$html = $this->runWebApplication($root);
 
-		self::assertStringContainsString('QuickInstall Sandbox', $html);
+		self::assertStringContainsString('QuickInstall Dashboard', $html);
+		self::assertStringContainsString('QuickInstall dashboard', $html);
+		self::assertStringContainsString('phpBB on Docker', $html);
 		self::assertStringContainsString('Create board', $html);
 		self::assertStringContainsString('Sources', $html);
 		self::assertStringContainsString('Mount extension', $html);
@@ -207,7 +209,7 @@ class WebApplicationTest extends TestCase
 		$result = $this->runPhpScript($script);
 
 		self::assertSame(0, $result['exit_code']);
-		self::assertStringContainsString('form token is missing or invalid', $result['output']);
+		self::assertStringContainsString('QuickInstall UI form token is missing or invalid', $result['output']);
 		self::assertDirectoryDoesNotExist($root . '/.qi');
 	}
 
@@ -231,7 +233,7 @@ class WebApplicationTest extends TestCase
 		$result = $this->runPhpScript($script);
 
 		self::assertSame(0, $result['exit_code']);
-		self::assertStringContainsString('only accepts local form submissions', $result['output']);
+		self::assertStringContainsString('QuickInstall UI only accepts local form submissions', $result['output']);
 		self::assertDirectoryDoesNotExist($root . '/.qi');
 	}
 

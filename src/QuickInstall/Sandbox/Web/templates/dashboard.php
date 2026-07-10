@@ -245,7 +245,7 @@
 		<button type="button" class="secondary" data-clear-log>Clear</button>
 	</div>
 	<div class="terminal">
-		<div class="terminal-bar"><span></span><span></span><span></span><strong>quickinstall sandbox</strong></div>
+		<div class="terminal-bar"><span></span><span></span><span></span><strong>quickinstall</strong></div>
 		<div class="progress" aria-hidden="true"><span></span></div>
 		<pre class="activity-log" id="activity-log" tabindex="0"><?= $output === '' ? 'No command output yet.' : $this->e($output) ?></pre>
 	</div>
