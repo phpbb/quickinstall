@@ -230,8 +230,23 @@ class Application
 		}
 		catch (InvalidArgumentException | RuntimeException $e)
 		{
-			$this->error = $e->getMessage();
+			$this->error = $this->friendlyError($e->getMessage());
 		}
+	}
+
+	private function friendlyError(string $message): string
+	{
+		if ($this->isDockerConnectivityError($message))
+		{
+			return 'Check that Docker Desktop is running and that the docker command works in this terminal.';
+		}
+
+		return $message;
+	}
+
+	private function isDockerConnectivityError(string $message): bool
+	{
+		return (bool) preg_match('/Cannot connect to the Docker daemon|failed to connect to the docker API|daemon is running|docker\.sock|Docker Desktop/i', $message);
 	}
 
 	private function mountCustomisation(string $type, object $manager): void

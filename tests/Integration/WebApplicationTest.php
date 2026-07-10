@@ -188,6 +188,17 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('data-dismiss-update', $html);
 	}
 
+	public function testDockerConnectivityErrorsAreFriendlyForWebUi(): void
+	{
+		$application = new Application($this->createTempProjectRoot());
+		$method = new \ReflectionMethod(Application::class, 'friendlyError');
+		$method->setAccessible(true);
+
+		$message = $method->invoke($application, "Command failed with exit code 1: docker\nCommand output:\nunable to get image 'mariadb:10.11': failed to connect to the docker API at unix:///Users/matt/.docker/run/docker.sock; check if the path is correct and if the daemon is running");
+
+		self::assertSame('Check that Docker Desktop is running and that the docker command works in this terminal.', $message);
+	}
+
 	public function testPostRejectsMissingCsrfToken(): void
 	{
 		$root = $this->createTempProjectRoot();
