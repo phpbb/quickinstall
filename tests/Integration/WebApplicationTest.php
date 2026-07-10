@@ -122,6 +122,40 @@ class WebApplicationTest extends TestCase
 		self::assertStringNotContainsString('value="3.3.14"', $data['html']);
 	}
 
+	public function testAjaxExtensionMountReturnsJsonError(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$this->addDownloadedSource($project, '3.3.14');
+		$project->appendBoard([
+			'name' => 'demo',
+			'phpbb' => '3.3.14',
+			'phpbb_source' => '3.3.14',
+			'phpbb_branch' => '3.3',
+			'php' => '8.1',
+			'db' => 'mariadb',
+			'port' => 8081,
+			'url' => 'http://localhost:8081/',
+			'path' => $project->boardPath('demo'),
+			'populate' => 'none',
+			'debug' => false,
+			'extensions' => [],
+			'styles' => [],
+		]);
+
+		$json = $this->runWebApplicationWithCsrf($root, [
+			'action' => 'ext_mount',
+			'board' => 'demo',
+			'source' => 'customisations/missing-extension',
+		], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertFalse($data['ok']);
+		self::assertStringContainsString('Extension path must be under customisations/', $data['error']);
+	}
+
 	public function testRenderShowsFullSourcePaths(): void
 	{
 		$root = $this->createTempProjectRoot();

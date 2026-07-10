@@ -24,3 +24,5 @@ require_once __DIR__ . '/SeederWriter.php';
 require_once __DIR__ . '/ExtensionManager.php';
 require_once __DIR__ . '/StyleManager.php';
 require_once __DIR__ . '/BoardRefreshService.php';
+require_once __DIR__ . '/CustomisationMountService.php';
+require_once __DIR__ . '/UiServerService.php';

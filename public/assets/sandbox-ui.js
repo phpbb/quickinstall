@@ -98,10 +98,11 @@ function showActionResult(data, context) {
 
 	let target = null;
 	if (context.board) {
-		target = dashboard.querySelector('[data-board="' + cssEscape(context.board) + '"] .card-head');
+		target = boardHeader(context.board);
 	}
 	if (!target && context.section) {
-		target = dashboard.querySelector('#' + cssEscape(context.section) + ' .section-head');
+		const section = document.getElementById(context.section);
+		target = section ? section.querySelector('.section-head') : null;
 	}
 	if (!target) {
 		target = dashboard.querySelector('.status-strip');
@@ -116,12 +117,15 @@ function showActionResult(data, context) {
 	}
 }
 
-function cssEscape(value) {
-	if (window.CSS && CSS.escape) {
-		return CSS.escape(value);
+function boardHeader(name) {
+	const boards = dashboard.querySelectorAll('[data-board]');
+	for (const board of boards) {
+		if (board.dataset.board === name) {
+			return board.querySelector('.card-head');
+		}
 	}
 
-	return String(value).replace(/["\\]/g, '\\$&');
+	return null;
 }
 
 function scrollLog() {

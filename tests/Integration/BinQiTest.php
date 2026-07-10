@@ -26,4 +26,22 @@ class BinQiTest extends TestCase
 		self::assertSame('', $result['stdout']);
 		self::assertStringContainsString('--port must be between 1 and 65535.', $result['stderr']);
 	}
+
+	public function testUiStatusSmokeTestLoadsUiServerService(): void
+	{
+		$result = $this->runCli(['ui:status']);
+
+		self::assertContains($result['exit_code'], [0, 1]);
+		self::assertStringContainsString('QuickInstall sandbox UI', $result['stdout']);
+		self::assertSame('', $result['stderr']);
+	}
+
+	public function testExtMountSmokeTestLoadsCustomisationMountService(): void
+	{
+		$result = $this->runCli(['ext:mount', 'missing-board', 'customisations/missing-extension']);
+
+		self::assertSame(1, $result['exit_code']);
+		self::assertSame('', $result['stdout']);
+		self::assertStringContainsString('Unknown board: missing-board', $result['stderr']);
+	}
 }

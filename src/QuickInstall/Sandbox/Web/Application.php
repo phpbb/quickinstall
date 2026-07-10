@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use QuickInstall\Sandbox\BoardRefreshService;
 use QuickInstall\Sandbox\BoardService;
 use QuickInstall\Sandbox\BufferedOutput;
+use QuickInstall\Sandbox\CustomisationMountService;
 use QuickInstall\Sandbox\ExtensionManager;
 use QuickInstall\Sandbox\Project;
 use QuickInstall\Sandbox\SourceService;
@@ -236,29 +237,28 @@ class Application
 	{
 		$board = $this->required('board');
 		$source = $this->required('source');
-		if ($this->checked('copy') && $this->checked('recursive'))
+		$copy = $this->checked('copy');
+		$recursive = $this->checked('recursive');
+		$allowExternal = $this->checked('allow_external');
+		if ($copy && $recursive)
 		{
 			throw new InvalidArgumentException('Recursive mount cannot be combined with copy mode.');
 		}
 
-		if ($this->checked('recursive'))
+		$result = (new CustomisationMountService($this->project, $this->output))->mount($manager, $board, $source, $copy, $recursive, $allowExternal);
+		if ($result['recursive'])
 		{
-			$mounted = 0;
-			foreach ($manager->discover($source, $this->checked('allow_external')) as $path)
+			$count = count($result['mounted']);
+			if ($result['errors'])
 			{
-				$manager->mount($board, $path, false, $this->checked('allow_external'));
-				$mounted++;
+				$this->error = "Mounted {$count} {$type}(s) on $board. Skipped " . count($result['errors']) . " {$type}(s): " . implode('; ', $result['errors']);
+				return;
 			}
-			if ($mounted > 0)
-			{
-				(new BoardRefreshService($this->project, $this->output))->refreshIfRunning($board);
-			}
-			$this->notice = "Mounted {$mounted} {$type}(s) on $board";
+			$this->notice = "Mounted {$count} {$type}(s) on $board";
 			return;
 		}
 
-		$mounted = $manager->mount($board, $source, $this->checked('copy'), $this->checked('allow_external'));
-		(new BoardRefreshService($this->project, $this->output))->refreshIfRunning($board);
+		$mounted = $result['mounted'][0];
 		$this->notice = "Mounted {$type}: {$mounted['name']}";
 	}
 

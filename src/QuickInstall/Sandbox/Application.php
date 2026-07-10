@@ -553,169 +553,38 @@ class Application
 		(new BoardRefreshService($this->project))->refreshIfRunning($board);
 	}
 
-	private function runtimeConfig(array $board): array
-	{
-		if (empty($board['port']) && !empty($board['url']))
-		{
-			$port = parse_url($board['url'], PHP_URL_PORT);
-			$board['port'] = $port ?: 80;
-		}
-
-		return $board + [
-			'admin_name' => 'admin',
-			'admin_pass' => 'password',
-			'admin_email' => 'admin@example.test',
-			'board_email' => 'board@example.test',
-			'populate' => 'none',
-			'debug' => false,
-			'extensions' => [],
-			'styles' => [],
-		];
-	}
-
 	private function uiStart(array $args): int
 	{
 		$cli = CommandLine::parse($args);
 		[$host, $port] = $this->uiOptions($cli);
-		$state = $this->readUiState();
-		if ($this->isUiStateRunning($state))
+		$result = (new UiServerService($this->project))->start($host, $port);
+		$state = $result['state'];
+		if ($result['status'] === 'already_running')
 		{
 			echo "QuickInstall sandbox UI is already running: {$state['url']}\n";
 			return 0;
 		}
-		if ($this->isPortOpen($host, $port))
-		{
-			throw new RuntimeException("Port $port is already in use on $host. Run qi ui:status for tracked UI details, or choose another port with --port.");
-		}
 
-		$this->project->init();
-		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
-		$url = "http://{$host}:{$port}/";
-		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
-		$logPath = $this->uiLogPath();
-		$pid = $this->startDetachedProcess($command, dirname(__DIR__, 3), $logPath);
-		$state = [
-			'pid' => $pid,
-			'host' => $host,
-			'port' => $port,
-			'url' => $url,
-			'log' => $logPath,
-			'started_at' => gmdate('c'),
-		];
-		try
-		{
-			$this->waitForUiStart($state);
-		}
-		catch (RuntimeException $e)
-		{
-			$this->terminateProcess($pid);
-			throw $e;
-		}
-		$this->writeUiState($state);
-
-		echo "QuickInstall sandbox UI started: $url\n";
-		echo "PID: $pid\n";
-		echo "Log: $logPath\n";
+		echo "QuickInstall sandbox UI started: {$state['url']}\n";
+		echo "PID: {$state['pid']}\n";
+		echo "Log: {$state['log']}\n";
 		echo "Stop it with: php bin/qi ui:stop\n";
 
 		return 0;
 	}
 
-	private function startDetachedProcess(array $command, string $cwd, string $logPath): int
-	{
-		if (PHP_OS_FAMILY === 'Windows')
-		{
-			return $this->startWindowsDetachedProcess($command, $cwd, $logPath);
-		}
-
-		return $this->startUnixDetachedProcess($command, $cwd, $logPath);
-	}
-
-	private function startUnixDetachedProcess(array $command, string $cwd, string $logPath): int
-	{
-		$pidFile = $this->project->workspacePath('runtime/ui.pid');
-		$shellCommand = 'cd ' . escapeshellarg($cwd)
-			. ' && (nohup ' . implode(' ', array_map('escapeshellarg', $command))
-			. ' >> ' . escapeshellarg($logPath) . ' 2>&1 < /dev/null & echo $! > ' . escapeshellarg($pidFile) . ')';
-		$result = $this->captureProcess(['/bin/sh', '-c', $shellCommand], $cwd);
-		$pid = is_file($pidFile) ? (int) trim((string) file_get_contents($pidFile)) : 0;
-		if (is_file($pidFile))
-		{
-			unlink($pidFile);
-		}
-		if ($result['exit_code'] !== 0 || $pid <= 0)
-		{
-			throw new RuntimeException('Unable to start QuickInstall sandbox UI server.');
-		}
-
-		return $pid;
-	}
-
-	private function startWindowsDetachedProcess(array $command, string $cwd, string $logPath): int
-	{
-		$arguments = array_slice($command, 1);
-		$argumentList = '@(' . implode(',', array_map([$this, 'powerShellString'], $arguments)) . ')';
-		$errorLog = $logPath . '.err';
-		$script = '$p = Start-Process -FilePath ' . $this->powerShellString($command[0])
-			. ' -ArgumentList ' . $argumentList
-			. ' -WorkingDirectory ' . $this->powerShellString($cwd)
-			. ' -RedirectStandardOutput ' . $this->powerShellString($logPath)
-			. ' -RedirectStandardError ' . $this->powerShellString($errorLog)
-			. ' -WindowStyle Hidden -PassThru; '
-			. 'Write-Output $p.Id';
-		$result = $this->captureProcess(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $script], $cwd);
-		$pid = (int) trim($result['output']);
-		if ($result['exit_code'] !== 0 || $pid <= 0)
-		{
-			throw new RuntimeException('Unable to start QuickInstall sandbox UI server. PowerShell is required on Windows.');
-		}
-
-		return $pid;
-	}
-
-	private function captureProcess(array $command, string $cwd): array
-	{
-		$descriptor = [
-			0 => ['pipe', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['pipe', 'w'],
-		];
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
-		if (!is_resource($process))
-		{
-			return ['exit_code' => 1, 'output' => ''];
-		}
-
-		fclose($pipes[0]);
-		$output = stream_get_contents($pipes[1]) ?: '';
-		$error = stream_get_contents($pipes[2]) ?: '';
-		fclose($pipes[1]);
-		fclose($pipes[2]);
-
-		return [
-			'exit_code' => proc_close($process),
-			'output' => $output . $error,
-		];
-	}
-
-	private function powerShellString(string $value): string
-	{
-		return "'" . str_replace("'", "''", $value) . "'";
-	}
-
 	private function uiStop(): int
 	{
-		$state = $this->readUiState();
-		if (!$state)
+		$result = (new UiServerService($this->project))->stop();
+		$state = $result['state'];
+		if ($result['status'] === 'not_tracked')
 		{
 			echo "QuickInstall sandbox UI is not tracked as running.\n";
 			return 0;
 		}
 
-		$pid = (int) ($state['pid'] ?? 0);
-		if ($pid > 0 && $this->terminateProcess($pid))
+		if ($result['status'] === 'stopped')
 		{
-			$this->waitForUiStop($state);
 			echo "Stopped QuickInstall sandbox UI";
 			if (!empty($state['url']))
 			{
@@ -725,6 +594,7 @@ class Application
 		else
 		{
 			echo "QuickInstall sandbox UI process was not running";
+			$pid = (int) ($state['pid'] ?? 0);
 			if ($pid > 0)
 			{
 				echo " (PID $pid)";
@@ -732,7 +602,6 @@ class Application
 		}
 		echo "\n";
 
-		$this->deleteUiState();
 		return 0;
 	}
 
@@ -744,8 +613,9 @@ class Application
 
 	private function uiStatus(): int
 	{
-		$state = $this->readUiState();
-		if ($this->isUiStateRunning($state))
+		$result = (new UiServerService($this->project))->status();
+		$state = $result['state'];
+		if ($result['status'] === 'running')
 		{
 			echo "QuickInstall sandbox UI is running\n";
 			echo "URL: {$state['url']}\n";
@@ -754,7 +624,7 @@ class Application
 			return 0;
 		}
 
-		if ($state)
+		if ($result['status'] === 'stale')
 		{
 			echo "QuickInstall sandbox UI is not running, but stale state exists.\n";
 			echo "Last URL: " . ($state['url'] ?? '(unknown)') . "\n";
@@ -780,136 +650,6 @@ class Application
 		}
 
 		return [$host, $port];
-	}
-
-	private function readUiState(): array
-	{
-		return $this->project->readJson('runtime/ui.json', []);
-	}
-
-	private function writeUiState(array $state): void
-	{
-		$this->project->writeJson('runtime/ui.json', $state);
-	}
-
-	private function deleteUiState(): void
-	{
-		$path = $this->project->workspacePath('runtime/ui.json');
-		if (is_file($path))
-		{
-			unlink($path);
-		}
-	}
-
-	private function uiLogPath(): string
-	{
-		$this->project->init();
-		return $this->project->workspacePath('runtime/ui.log');
-	}
-
-	private function isUiStateRunning(array $state): bool
-	{
-		if (!$state)
-		{
-			return false;
-		}
-
-		$pid = (int) ($state['pid'] ?? 0);
-		if ($pid <= 0 || !$this->isProcessRunning($pid))
-		{
-			return false;
-		}
-
-		return $this->isPortOpen((string) ($state['host'] ?? '127.0.0.1'), (int) ($state['port'] ?? 0));
-	}
-
-	private function isPortOpen(string $host, int $port): bool
-	{
-		if ($port < 1)
-		{
-			return false;
-		}
-		$target = $host === 'localhost' ? '127.0.0.1' : $host;
-		$socket = @fsockopen($target, $port, $errno, $errstr, 0.2);
-		if (!is_resource($socket))
-		{
-			return false;
-		}
-
-		fclose($socket);
-		return true;
-	}
-
-	private function terminateProcess(int $pid): bool
-	{
-		if ($pid <= 0)
-		{
-			return false;
-		}
-		if (PHP_OS_FAMILY === 'Windows')
-		{
-			$result = (new ProcessRunner(new BufferedOutput()))->capture(['taskkill', '/PID', (string) $pid, '/T', '/F']);
-			return $result['exit_code'] === 0;
-		}
-		if (function_exists('posix_kill') && @posix_kill($pid, 0))
-		{
-			return @posix_kill($pid, 15);
-		}
-
-		$result = (new ProcessRunner(new BufferedOutput()))->capture(['kill', (string) $pid]);
-		return $result['exit_code'] === 0;
-	}
-
-	private function isProcessRunning(int $pid): bool
-	{
-		if ($pid <= 0)
-		{
-			return false;
-		}
-		if (PHP_OS_FAMILY === 'Windows')
-		{
-			$result = (new ProcessRunner(new BufferedOutput()))->capture(['tasklist', '/FI', 'PID eq ' . $pid, '/NH']);
-			return $result['exit_code'] === 0 && str_contains($result['output'], (string) $pid);
-		}
-		if (function_exists('posix_kill'))
-		{
-			return @posix_kill($pid, 0);
-		}
-
-		$result = (new ProcessRunner(new BufferedOutput()))->capture(['kill', '-0', (string) $pid]);
-		return $result['exit_code'] === 0;
-	}
-
-	private function waitForUiStart(array $state): void
-	{
-		$host = (string) ($state['host'] ?? '127.0.0.1');
-		$port = (int) ($state['port'] ?? 0);
-		$deadline = microtime(true) + 3;
-		while (microtime(true) < $deadline)
-		{
-			if ($this->isPortOpen($host, $port))
-			{
-				return;
-			}
-			usleep(100000);
-		}
-
-		throw new RuntimeException('QuickInstall sandbox UI server did not become available. Check the UI log for details: ' . ($state['log'] ?? '(unknown)'));
-	}
-
-	private function waitForUiStop(array $state): void
-	{
-		$host = (string) ($state['host'] ?? '127.0.0.1');
-		$port = (int) ($state['port'] ?? 0);
-		$deadline = microtime(true) + 3;
-		while (microtime(true) < $deadline)
-		{
-			if (!$this->isPortOpen($host, $port))
-			{
-				return;
-			}
-			usleep(100000);
-		}
 	}
 
 	private function extList(array $args): int
@@ -1030,33 +770,15 @@ class Application
 
 	private function mountResources(string $type, object $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int
 	{
-		if ($recursive)
-		{
-			$this->project->board($board);
-			$mounted = [];
-			$errors = [];
-			foreach ($manager->discover($source, $allowExternal) as $path)
-			{
-				try
-				{
-					$mounted[] = $manager->mount($board, $path, false, $allowExternal);
-				}
-				catch (RuntimeException | InvalidArgumentException $e)
-				{
-					$errors[] = "$path: " . $e->getMessage();
-				}
-			}
+		$result = (new CustomisationMountService($this->project))->mount($manager, $board, $source, $copy, $recursive, $allowExternal);
 
-			if ($mounted)
-			{
-				$this->refreshBoardIfRunning($board);
-			}
-			$this->printBulkMountResult($type, $board, $mounted, $errors);
-			return $errors ? 1 : 0;
+		if ($result['recursive'])
+		{
+			$this->printBulkMountResult($type, $board, $result['mounted'], $result['errors']);
+			return $result['errors'] ? 1 : 0;
 		}
 
-		$mounted = $manager->mount($board, $source, $copy, $allowExternal);
-		$this->refreshBoardIfRunning($board);
+		$mounted = $result['mounted'][0];
 		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
 		echo "Source: {$mounted['source']}\n";
 		echo "Target: {$mounted['target']}\n";
