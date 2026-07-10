@@ -40,6 +40,7 @@ class UiServerService
 		$url = "http://{$host}:{$port}/";
 		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
 		$logPath = $this->logPath();
+		$this->resetLog($logPath);
 		$pid = $this->startDetachedProcess($command, dirname(__DIR__, 3), $logPath);
 		$state = [
 			'pid' => $pid,
@@ -211,6 +212,15 @@ class UiServerService
 	{
 		$this->project->init();
 		return $this->project->workspacePath('runtime/ui.log');
+	}
+
+	private function resetLog(string $logPath): void
+	{
+		// Keep only current UI server session output.
+		if (file_put_contents($logPath, '') === false)
+		{
+			throw new RuntimeException("Unable to reset UI log: $logPath");
+		}
 	}
 
 	private function isStateRunning(array $state): bool
