@@ -37,6 +37,8 @@ class SeederWriter
 		return <<<'PHP'
 <?php
 
+ini_set('memory_limit', '512M');
+
 $preset = $argv[1] ?? 'extension-dev';
 $seed = (int) ($argv[2] ?? 1);
 $action = $argv[3] ?? 'seed';
@@ -578,6 +580,16 @@ function qi_seed_posts(array $forum_ids, array $authors, int $topics, int $repli
 			$reply_data = qi_seed_post_data($forum_id, $topic_id, $subject, sprintf('Seeded reply %d for topic %d.', $reply, $topic_id_hint));
 			$reply_poll = [];
 			submit_post('reply', $reply_subject, '', POST_NORMAL, $reply_poll, $reply_data, true, true);
+		}
+
+		// Heavy presets need periodic cleanup inside long-lived CLI process.
+		if ($topic % 5 === 0)
+		{
+			qi_seed_clear_caches();
+			if (function_exists('gc_collect_cycles'))
+			{
+				gc_collect_cycles();
+			}
 		}
 	}
 

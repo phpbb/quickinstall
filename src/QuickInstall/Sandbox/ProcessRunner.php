@@ -24,10 +24,11 @@ class ProcessRunner
 	public function run(array $command, ?string $cwd = null): void
 	{
 		$this->output->write('$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n");
-		$result = $this->output instanceof StreamOutput ? $this->runWithStreamOutput($command, $cwd) : $this->execute($command, true, $cwd);
+		$streamOutput = $this->output instanceof StreamOutput;
+		$result = $streamOutput ? $this->runWithStreamOutput($command, $cwd) : $this->execute($command, true, $cwd);
 		if ($result['exit_code'] !== 0)
 		{
-			throw new RuntimeException("Command failed with exit code {$result['exit_code']}: {$command[0]}" . $this->commandHint($command, $result['exit_code']));
+			throw new RuntimeException("Command failed with exit code {$result['exit_code']}: {$command[0]}" . $this->failureDetails($command, $result, !$streamOutput));
 		}
 	}
 
@@ -96,6 +97,14 @@ class ProcessRunner
 		];
 	}
 
+	private function failureDetails(array $command, array $result, bool $includeOutputSummary = true): string
+	{
+		$details = $includeOutputSummary ? $this->outputSummary((string) ($result['output'] ?? '')) : '';
+		$hint = $this->commandHint($command, (int) $result['exit_code'], (string) ($result['output'] ?? ''));
+
+		return $details . $hint;
+	}
+
 	private function runWithStreamOutput(array $command, ?string $cwd): array
 	{
 		$descriptor = [
@@ -116,14 +125,30 @@ class ProcessRunner
 		];
 	}
 
-	private function commandHint(array $command, int $status): string
+	private function outputSummary(string $output): string
+	{
+		$output = trim($output);
+		if ($output === '')
+		{
+			return '';
+		}
+
+		$lines = preg_split('/\R/', $output) ?: [];
+		$lines = array_slice(array_values(array_filter($lines, static function ($line) {
+			return trim($line) !== '';
+		})), -8);
+
+		return "\nCommand output:\n" . implode("\n", $lines);
+	}
+
+	private function commandHint(array $command, int $status, string $output): string
 	{
 		if ($status === 124 && in_array('timeout', $command, true))
 		{
 			return "\nThe operation timed out. For seeding, try a smaller preset or use mariadb/mysql/postgres instead of sqlite.";
 		}
 
-		if (($command[0] ?? '') === 'docker')
+		if (($command[0] ?? '') === 'docker' && ($output === '' || preg_match('/Cannot connect to the Docker daemon|docker daemon|Docker Desktop/i', $output)))
 		{
 			return "\nCheck that Docker Desktop is running and that the docker command works in this terminal.";
 		}

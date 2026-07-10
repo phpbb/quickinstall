@@ -23,5 +23,7 @@ class SeederWriterTest extends TestCase
 		self::assertFileExists($path);
 		self::assertStringContainsString('$presets = [', file_get_contents($path));
 		self::assertStringContainsString('qi_seed_reset', file_get_contents($path));
+		self::assertStringContainsString("ini_set('memory_limit', '512M');", file_get_contents($path));
+		self::assertStringContainsString('gc_collect_cycles', file_get_contents($path));
 	}
 }
