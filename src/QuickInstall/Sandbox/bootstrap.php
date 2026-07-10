@@ -15,6 +15,7 @@ require_once __DIR__ . '/ProcessRunner.php';
 require_once __DIR__ . '/CommandLine.php';
 require_once __DIR__ . '/Project.php';
 require_once __DIR__ . '/VersionMatrix.php';
+require_once __DIR__ . '/UpdateService.php';
 require_once __DIR__ . '/SourceProvider.php';
 require_once __DIR__ . '/SourceService.php';
 require_once __DIR__ . '/BoardService.php';

@@ -19,6 +19,7 @@ use QuickInstall\Sandbox\ExtensionManager;
 use QuickInstall\Sandbox\Project;
 use QuickInstall\Sandbox\SourceService;
 use QuickInstall\Sandbox\StyleManager;
+use QuickInstall\Sandbox\UpdateService;
 use RuntimeException;
 
 class Application
@@ -374,6 +375,7 @@ class Application
 			'error' => $this->error,
 			'output' => $this->output->all(),
 			'csrfToken' => $this->csrfToken(),
+			'update' => (new UpdateService($this->project))->getUpdate(),
 			'metrics' => [
 				['label' => 'Boards', 'value' => (string) count($boards), 'detail' => $running . ' running', 'description' => 'Runtime definitions'],
 				['label' => 'Sources', 'value' => (string) count($sources), 'detail' => count(array_filter($sources, static function ($source) {

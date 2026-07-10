@@ -168,6 +168,26 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString($root . '/.qi/sources/phpbb-3.3.14', $html);
 	}
 
+	public function testRenderShowsCachedUpdateBanner(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$project->writeJson('update-check.json', [
+			'checked_at' => time(),
+			'current_version' => '1.7.0',
+			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/download'],
+			'error' => null,
+		]);
+
+		$html = $this->runWebApplication($root);
+
+		self::assertStringContainsString('class="update-banner"', $html);
+		self::assertStringContainsString('QuickInstall 1.8.0 available', $html);
+		self::assertStringContainsString('href="https://example.com/download"', $html);
+		self::assertStringContainsString('data-dismiss-update', $html);
+	}
+
 	public function testPostRejectsMissingCsrfToken(): void
 	{
 		$root = $this->createTempProjectRoot();

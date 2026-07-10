@@ -229,7 +229,8 @@ button:disabled { opacity: .65; cursor: wait; }
 	padding: 16px 32px 0;
 }
 .notice,
-.error {
+.error,
+.update-banner {
 	padding: 10px 12px;
 	border: 1px solid;
 	border-radius: var(--radius);
@@ -237,6 +238,29 @@ button:disabled { opacity: .65; cursor: wait; }
 }
 .notice { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
 .error { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+.update-banner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin: 16px 32px 0;
+	border-color: var(--warning);
+	background: var(--warning-bg);
+	color: var(--text);
+}
+.update-banner strong,
+.update-banner span { display: block; }
+.update-banner span {
+	margin-top: 2px;
+	color: var(--muted);
+	font-size: 13px;
+}
+.update-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
 .action-result {
 	margin: 0 0 16px;
 	transition: opacity .18s ease, transform .18s ease, margin .18s ease, padding .18s ease, border-width .18s ease;
@@ -568,6 +592,12 @@ tr:last-child td { border-bottom: 0; }
 	.section,
 	.status-strip,
 	.toast-stack { padding-left: 20px; padding-right: 20px; }
+	.update-banner {
+		align-items: flex-start;
+		flex-direction: column;
+		margin-left: 20px;
+		margin-right: 20px;
+	}
 	.board-grid { grid-template-columns: 1fr; }
 	.settings-form,
 	.compact-form,

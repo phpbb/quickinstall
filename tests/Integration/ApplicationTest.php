@@ -55,6 +55,24 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('No sources registered', $result['output']);
 	}
 
+	public function testCachedUpdatePrintsPassiveCliNotice(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$project->writeJson('update-check.json', [
+			'checked_at' => time(),
+			'current_version' => '1.7.0',
+			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/download'],
+			'error' => null,
+		]);
+
+		$result = $this->runApplication($root, ['qi', 'source:list']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('QuickInstall 1.8.0 available: https://example.com/download', $result['output']);
+	}
+
 	public function testPhpbbListPrintsSupportedSelectors(): void
 	{
 		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'phpbb:list']);

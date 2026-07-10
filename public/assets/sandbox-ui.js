@@ -7,6 +7,8 @@ function setProcessing(active) {
 }
 
 function bindAjax() {
+	bindUpdateBanner();
+
 	document.querySelectorAll('form[data-ajax]').forEach((form) => {
 		if (form.dataset.bound) {
 			return;
@@ -65,6 +67,33 @@ function bindAjax() {
 				log.textContent = 'No command output yet.';
 			}
 		});
+	});
+}
+
+function bindUpdateBanner() {
+	const banner = dashboard.querySelector('[data-update-version]');
+	if (!banner) {
+		return;
+	}
+
+	const version = banner.dataset.updateVersion || '';
+	const key = 'qi.dismissedUpdate.' + version;
+	if (version && localStorage.getItem(key) === '1') {
+		banner.remove();
+		return;
+	}
+
+	const dismiss = banner.querySelector('[data-dismiss-update]');
+	if (!dismiss || dismiss.dataset.bound) {
+		return;
+	}
+
+	dismiss.dataset.bound = '1';
+	dismiss.addEventListener('click', () => {
+		if (version) {
+			localStorage.setItem(key, '1');
+		}
+		banner.remove();
 	});
 }
 

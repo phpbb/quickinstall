@@ -123,6 +123,10 @@ class Application
 			$this->writeError($e->getMessage() . "\n");
 			return 1;
 		}
+		finally
+		{
+			$this->printUpdateNotice($command, $argv);
+		}
 	}
 
 	private function init(): int
@@ -760,6 +764,27 @@ class Application
 	private function writeError(string $message): void
 	{
 		fwrite($this->stderr, $message);
+	}
+
+	private function printUpdateNotice(string $command, array $args): void
+	{
+		if (in_array($command, ['help', '--help', '-h'], true) || in_array('--help', $args, true) || in_array('-h', $args, true))
+		{
+			return;
+		}
+
+		$update = (new UpdateService($this->project))->getUpdate();
+		if ($update === null)
+		{
+			return;
+		}
+
+		echo "\nQuickInstall {$update['current']} available";
+		if (!empty($update['download']))
+		{
+			echo ": {$update['download']}";
+		}
+		echo "\n";
 	}
 
 	private function sandboxOutput(): Output

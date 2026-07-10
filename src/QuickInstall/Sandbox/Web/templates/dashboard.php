@@ -1,3 +1,18 @@
+<?php if (!empty($update)): ?>
+	<section class="update-banner" role="status" aria-live="polite" data-update-version="<?= $this->e($update['current']) ?>">
+		<div>
+			<strong>QuickInstall <?= $this->e($update['current']) ?> available</strong>
+			<span>Download the latest release from phpBB.</span>
+		</div>
+		<div class="update-actions">
+			<?php if (!empty($update['download'])): ?>
+				<a class="button primary" href="<?= $this->e($update['download']) ?>" target="_blank" rel="noreferrer">Download</a>
+			<?php endif; ?>
+			<button type="button" class="secondary" data-dismiss-update>Dismiss</button>
+		</div>
+	</section>
+<?php endif; ?>
+
 <section class="status-strip" aria-label="Workspace summary">
 	<?php foreach ($metrics as $metric): ?>
 		<article class="metric">
