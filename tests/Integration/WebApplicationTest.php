@@ -58,7 +58,7 @@ class WebApplicationTest extends TestCase
 
 		self::assertStringContainsString('QuickInstall Dashboard', $html);
 		self::assertStringContainsString('QuickInstall dashboard', $html);
-		self::assertStringContainsString('phpBB on Docker', $html);
+		self::assertStringContainsString('QuickInstall on Docker', $html);
 		self::assertStringContainsString('Create board', $html);
 		self::assertStringContainsString('Sources', $html);
 		self::assertStringContainsString('Mount extension', $html);

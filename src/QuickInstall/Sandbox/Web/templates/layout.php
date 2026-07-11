@@ -12,9 +12,9 @@
 		<aside class="sidebar">
 			<div class="brand">
 				<span class="brand-mark">QI</span>
-				<div>
-					<strong>QuickInstall</strong>
-					<small>phpBB on Docker</small>
+				<div class="brand-lockup">
+					<span class="brand-logo" role="img" aria-label="phpBB"></span>
+					<small>QuickInstall on Docker</small>
 				</div>
 			</div>
 			<nav aria-label="QuickInstall navigation">

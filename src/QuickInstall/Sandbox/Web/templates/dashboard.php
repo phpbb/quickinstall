@@ -146,9 +146,9 @@
 		<datalist id="phpbb-list"><?php foreach ($versionOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?php endforeach; ?></datalist>
 		<label class="field" title="Database engine for the board containers. SQLite supports unseeded boards only."><span>DB</span><select name="db"><?php foreach ($dbOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?= $this->escape($option) ?></option><?php endforeach; ?></select></label>
 		<label class="field" title="Local host port for opening the board in your browser. Pick an unused port."><span>Port</span><input name="port" value="8080"></label>
-		<label class="toggle" title="Enable phpBB debug settings after installation."><input type="checkbox" name="debug" value="1"><span></span><strong>Debug</strong></label>
-		<label class="toggle" title="Destroy and recreate an existing board with the same name."><input type="checkbox" name="replace" value="1"><span></span><strong>Replace existing</strong></label>
 		<label class="field" title="Optional content preset applied when the board is first installed."><span>Populate</span><select name="populate"><?php foreach ($populateOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?= $this->escape($option) ?></option><?php endforeach; ?></select></label>
+		<label class="toggle" title="Enable phpBB debug settings after installation."><input type="checkbox" name="debug" value="1"><span></span>Debug</label>
+		<label class="toggle" title="Destroy and recreate an existing board with the same name."><input type="checkbox" name="replace" value="1"><span></span>Replace existing</label>
 		<div class="form-actions"><button class="primary">Create board</button></div>
 	</form>
 </section>
@@ -172,9 +172,9 @@
 					<input name="source" value="">
 					<small>Relative to <code>customisations/</code>, or a full path when external paths are allowed.</small>
 				</label>
-				<label class="toggle" title="Copy files into the board instead of bind mounting them from the source path."><input type="checkbox" name="copy" value="1"><span></span><strong>Copy</strong></label>
-				<label class="toggle" title="Discover and mount each extension or style found below the source path. Cannot be combined with copy mode."><input type="checkbox" name="recursive" value="1"><span></span><strong>Recursive</strong></label>
-				<label class="toggle" title="Allow the path field to point outside the customisations directory."><input type="checkbox" name="allow_external" value="1"><span></span><strong>Allow external path</strong></label>
+				<label class="toggle" title="Copy files into the board instead of bind mounting them from the source path."><input type="checkbox" name="copy" value="1"><span></span>Copy</label>
+				<label class="toggle" title="Discover and mount each extension or style found below the source path. Cannot be combined with copy mode."><input type="checkbox" name="recursive" value="1"><span></span>Recursive</label>
+				<label class="toggle" title="Allow the path field to point outside the customisations directory."><input type="checkbox" name="allow_external" value="1"><span></span>Allow external path</label>
 				<div class="form-actions"><button class="primary">Mount</button></div>
 			</form>
 		<?php endforeach; ?>
@@ -193,8 +193,8 @@
 		<input type="hidden" name="action" value="source_fetch">
 		<label class="field" title="phpBB selector to download or register, such as latest, 3.3, 3.2, master, or a branch name."><span>Version or branch</span><input name="version" value="latest"></label>
 		<label class="field" title="Optional Git repository URL when fetching a Git source. Leave blank to use the default phpBB repository."><span>Git URL</span><input name="url" value=""></label>
-		<label class="toggle" title="Fetch this source from Git instead of Composer packages."><input type="checkbox" name="git" value="1"><span></span><strong>Git source</strong></label>
-		<label class="toggle" title="Allow a Git URL outside the default trusted phpBB source URL."><input type="checkbox" name="allow_external" value="1"><span></span><strong>Allow external URL</strong></label>
+		<label class="toggle" title="Fetch this source from Git instead of Composer packages."><input type="checkbox" name="git" value="1"><span></span>Git source</label>
+		<label class="toggle" title="Allow a Git URL outside the default trusted phpBB source URL."><input type="checkbox" name="allow_external" value="1"><span></span>Allow external URL</label>
 		<div class="form-actions"><button class="primary">Fetch source</button></div>
 	</form>
 	<?php if (!$sources): ?>

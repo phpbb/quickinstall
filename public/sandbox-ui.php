@@ -16,6 +16,7 @@ if (PHP_SAPI === 'cli-server' && $file !== false && str_starts_with($file, __DIR
 	$contentTypes = [
 		'css' => 'text/css; charset=utf-8',
 		'js' => 'application/javascript; charset=utf-8',
+		'svg' => 'image/svg+xml; charset=utf-8',
 	];
 	if (isset($contentTypes[$extension]))
 	{
