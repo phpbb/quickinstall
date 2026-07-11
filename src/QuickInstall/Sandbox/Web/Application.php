@@ -474,7 +474,7 @@ class Application
 		return (string) ob_get_clean();
 	}
 
-	private function e($value): string
+	private function escape($value): string
 	{
 		return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 	}
