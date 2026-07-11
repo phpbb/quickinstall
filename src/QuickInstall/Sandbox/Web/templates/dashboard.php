@@ -1,3 +1,21 @@
+<?php
+/**
+ * @var \QuickInstall\Sandbox\Web\Application $this
+ * @var string $notice
+ * @var string $error
+ * @var string $output
+ * @var string $csrfToken
+ * @var array|null $update
+ * @var array $metrics
+ * @var array $boards
+ * @var array $sources
+ * @var array $versionOptions
+ * @var array $dbOptions
+ * @var array $populateOptions
+ * @var array $presetOptions
+ * @var array $seedActionOptions
+ */
+?>
 <?php if (!empty($update)): ?>
 	<section class="update-banner" role="status" aria-live="polite" data-update-version="<?= $this->escape($update['current']) ?>">
 		<div>

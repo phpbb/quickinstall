@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var \QuickInstall\Sandbox\Web\Application $this
+ * @var string $dashboard
+ * @var string $csrfToken
+ * @var string $quickInstallVersion
+ */
+?>
 <!doctype html>
 <html lang="en">
 <head>

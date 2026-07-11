@@ -48,6 +48,18 @@ If you ever need help with commands, run:
 php bin/qi help
 ```
 
+If you prefer a browser workflow, start the local sandbox UI:
+
+```bash
+php bin/qi ui:start
+```
+
+Then open the URL printed by the command:
+
+```text
+http://127.0.0.1:8079/
+```
+
 ## Common Recipes
 
 Create a small empty board:
@@ -331,6 +343,49 @@ Fetched sources live under:
 .qi/sources/phpbb-<source>
 ```
 
+## Web UI
+
+QuickInstall includes a local browser UI for the same sandbox workflows exposed by the CLI. It is served by PHP's built-in web server and backed by the same `.qi/` project state.
+
+Start the UI:
+
+```bash
+php bin/qi ui:start
+```
+
+The default URL is:
+
+```text
+http://127.0.0.1:8079/
+```
+
+Use a different local port:
+
+```bash
+php bin/qi ui:start --port 8088
+```
+
+Check or stop the tracked UI server:
+
+```bash
+php bin/qi ui:status
+php bin/qi ui:stop
+```
+
+Restart it:
+
+```bash
+php bin/qi ui:restart
+```
+
+Supported UI server hosts are loopback-only:
+
+```bash
+php bin/qi ui:start --host 127.0.0.1
+php bin/qi ui:start --host localhost
+php bin/qi ui:start --host ::1
+```
+
 ## Where Files Go
 
 Generated state:
@@ -341,6 +396,9 @@ Generated state:
 | `.qi/runtime/<name>`   | Docker Compose, Dockerfile, installer config |
 | `.qi/db/<name>`        | Database files                               |
 | `.qi/sources/<source>` | Downloaded phpBB source                      |
+| `.qi/runtime/ui.json`  | Tracked web UI server state                  |
+| `.qi/runtime/ui.log`   | Web UI server log                            |
+| `.qi/cache/`           | Cached update-check metadata                 |
 
 User-managed drop zone:
 
@@ -355,6 +413,9 @@ customisations/
 - `board:create` rejects ports already registered to another board or already in use on the host.
 - `ext:mount` and `style:mount` only use `customisations/` unless `--allow-external` is used.
 - Custom Git source URLs require `--allow-external`; only use trusted forks.
+- The web UI server only accepts loopback hosts (`127.0.0.1`, `localhost`, or `::1`) and rejects non-local requests.
+- `ui:start` refuses ports already in use on the selected loopback host.
+- Web UI form submissions use CSRF tokens and only accept local origins or referrers.
 
 ## Troubleshooting
 
@@ -383,3 +444,26 @@ Use this when a board's files, database, or generated Docker runtime are no long
 php bin/qi board:destroy demo
 php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
 ```
+
+#### Web UI will not start
+
+Check the tracked status:
+
+```bash
+php bin/qi ui:status
+```
+
+If the status is stale, clear the old state and start again:
+
+```bash
+php bin/qi ui:stop
+php bin/qi ui:start
+```
+
+If the selected port is already in use, choose a different local port:
+
+```bash
+php bin/qi ui:start --port 8088
+```
+
+The UI server log is written to `.qi/runtime/ui.log`.
