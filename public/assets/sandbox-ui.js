@@ -138,7 +138,11 @@ function showActionResult(data, context) {
 	}
 
 	if (target) {
-		target.insertAdjacentElement('afterend', result);
+		if (target.classList.contains('status-strip')) {
+			target.insertAdjacentElement('beforebegin', result);
+		} else {
+			target.insertAdjacentElement('afterend', result);
+		}
 		window.setTimeout(() => {
 			result.classList.add('is-dismissing');
 			window.setTimeout(() => result.remove(), 180);

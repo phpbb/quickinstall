@@ -265,6 +265,7 @@ button:disabled { opacity: .65; cursor: wait; }
 	margin: 0 0 16px;
 	transition: opacity .18s ease, transform .18s ease, margin .18s ease, padding .18s ease, border-width .18s ease;
 }
+.content > .action-result { margin: 16px 32px 0; }
 .board .action-result { margin: 12px 16px 0; }
 .action-result.is-dismissing {
 	margin-top: 0;
@@ -428,7 +429,7 @@ button:disabled { opacity: .65; cursor: wait; }
 	font-family: inherit;
 }
 .field input[name=source],
-td:last-child {
+.path-cell {
 	font-family: ui-monospace, SFMono-Regular, SFMono, Consolas, "Liberation Mono", Menlo, monospace;
 	font-size: 12px;
 }
@@ -469,23 +470,28 @@ td:last-child {
 .toggle input:focus-visible + span { box-shadow: var(--focus); }
 
 .table-wrap {
-	overflow: auto;
 	border: 1px solid var(--border-muted);
 	border-radius: var(--radius);
 	background: var(--panel);
 }
-table { width: 100%; min-width: 920px; border-collapse: collapse; }
+table {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
 th,
 td {
 	padding: 9px 12px;
 	border-bottom: 1px solid var(--border-muted);
 	text-align: left;
 	vertical-align: top;
+	overflow-wrap: anywhere;
 }
 th { background: var(--row); color: var(--muted); font-size: 12px; font-weight: 600; }
 tr:hover td { background: var(--table-hover); }
 tr:last-child td { border-bottom: 0; }
-.actions-column { width: 1%; white-space: nowrap; }
+.path-column { width: 36%; }
+.actions-column { width: 96px; white-space: nowrap; }
 .source-remove { display: flex; justify-content: flex-end; }
 .empty {
 	display: grid;
@@ -592,6 +598,10 @@ tr:last-child td { border-bottom: 0; }
 	.section,
 	.status-strip,
 	.toast-stack { padding-left: 20px; padding-right: 20px; }
+	.content > .action-result {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
 	.update-banner {
 		align-items: flex-start;
 		flex-direction: column;

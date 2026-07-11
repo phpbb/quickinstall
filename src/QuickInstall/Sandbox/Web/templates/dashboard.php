@@ -202,7 +202,7 @@
 	<?php else: ?>
 		<div class="table-wrap">
 			<table>
-				<thead><tr><th>Source</th><th>Version</th><th>Status</th><th>Downloaded</th><th>Used by</th><th>Path</th><th class="actions-column">Actions</th></tr></thead>
+				<thead><tr><th>Source</th><th>Version</th><th>Status</th><th>Downloaded</th><th>Used by</th><th class="path-column">Path</th><th class="actions-column">Actions</th></tr></thead>
 				<tbody>
 					<?php foreach ($sources as $source): ?>
 						<?php
@@ -218,7 +218,7 @@
 							<td><?= $this->e($source['status'] ?? '-') ?></td>
 							<td><?= !empty($source['downloaded']) ? 'yes' : 'no' ?></td>
 							<td><?= $this->e($usedBy ? implode(', ', $usedBy) : '-') ?></td>
-							<td><?= $this->e($source['path'] ?? '') ?></td>
+							<td class="path-cell"><?= $this->e($source['display_path'] ?? $source['path'] ?? '') ?></td>
 							<td>
 								<form method="post" class="source-remove" data-ajax data-confirm="<?= $this->e($confirm) ?>">
 									<?php require __DIR__ . '/csrf.php'; ?>

@@ -158,7 +158,7 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('Extension path must be under customisations/', $data['error']);
 	}
 
-	public function testRenderShowsFullSourcePaths(): void
+	public function testRenderShowsProjectRelativeSourcePaths(): void
 	{
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
@@ -167,7 +167,8 @@ class WebApplicationTest extends TestCase
 
 		$html = $this->runWebApplication($root);
 
-		self::assertStringContainsString($root . '/.qi/sources/phpbb-3.3.14', $html);
+		self::assertStringContainsString('/' . basename($root) . '/.qi/sources/phpbb-3.3.14', $html);
+		self::assertStringNotContainsString($root . '/.qi/sources/phpbb-3.3.14', $html);
 	}
 
 	public function testRenderShowsCachedUpdateBanner(): void

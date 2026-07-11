@@ -385,6 +385,14 @@ class Application
 			$board['mounted_styles'] = $styles->list($name);
 			$viewBoards[] = $board;
 		}
+
+		$viewSources = [];
+		foreach ($sources as $source)
+		{
+			$source['display_path'] = $this->displayPath((string) ($source['path'] ?? ''));
+			$viewSources[] = $source;
+		}
+
 		return [
 			'notice' => $this->notice,
 			'error' => $this->error,
@@ -400,7 +408,7 @@ class Application
 				['label' => 'Styles', 'value' => (string) $mountedStyles, 'detail' => 'mounted', 'description' => 'Board mounts'],
 			],
 			'boards' => $viewBoards,
-			'sources' => $sources,
+			'sources' => $viewSources,
 			'versionOptions' => $this->versionOptions($versions),
 			'dbOptions' => ['mariadb', 'mysql', 'postgres', 'sqlite'],
 			'populateOptions' => ['none', 'tiny', 'extension-dev', 'load-test', 'random'],
@@ -430,6 +438,26 @@ class Application
 		}
 
 		return array_values(array_unique($options));
+	}
+
+	private function displayPath(string $path): string
+	{
+		if ($path === '')
+		{
+			return '';
+		}
+
+		$root = rtrim($this->project->rootPath(), '/');
+		if ($path === $root)
+		{
+			return '/' . basename($root);
+		}
+		if (str_starts_with($path, $root . '/'))
+		{
+			return '/' . basename($root) . substr($path, strlen($root));
+		}
+
+		return $path;
 	}
 
 	private function renderTemplate(string $template, array $data = []): string
