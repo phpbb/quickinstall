@@ -140,6 +140,18 @@ class BoardRunnerTest extends TestCase
 		self::assertSame(['php', '-d', 'memory_limit=512M', '/tmp/qi_seed.php', 'load-test', '1', 'replace'], array_slice($runner->runs[1], -7));
 	}
 
+	public function testServiceStateChecksStoppedContainers(): void
+	{
+		[$project] = $this->projectWithBoard();
+		$runner = new TestBoardRunner($project);
+		$runner->captures = [
+			['exit_code' => 0, 'output' => '{"State":"exited"}'],
+		];
+
+		self::assertSame('exited', $runner->serviceStateForTest('demo', 'web'));
+		self::assertContains('-a', $runner->capturedCommands[0]);
+	}
+
 	public function testStartRunsDockerWaitsEnablesDebugSeedsAndChecksHttp(): void
 	{
 		[$project] = $this->projectWithBoard([
@@ -248,6 +260,7 @@ class TestBoardRunner extends BoardRunner
 	public array $httpWaits = [];
 	public array $seedRuns = [];
 	public array $seedIfNeededRuns = [];
+	public array $capturedCommands = [];
 
 	protected function run(array $command): void
 	{
@@ -256,7 +269,13 @@ class TestBoardRunner extends BoardRunner
 
 	protected function capture(array $command): array
 	{
+		$this->capturedCommands[] = $command;
 		return array_shift($this->captures) ?: ['exit_code' => 0, 'output' => ''];
+	}
+
+	public function serviceStateForTest(string $name, string $service): string
+	{
+		return $this->serviceState($name, $service);
 	}
 
 	protected function waitUntilInstalled(string $name): void

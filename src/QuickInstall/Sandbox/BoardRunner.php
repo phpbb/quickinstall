@@ -331,7 +331,7 @@ class BoardRunner
 
 	protected function serviceState(string $name, string $service): string
 	{
-		$result = $this->capture(['docker', 'compose', '-f', $this->project->composePath($name), 'ps', $service, '--format', 'json']);
+		$result = $this->capture(['docker', 'compose', '-f', $this->project->composePath($name), 'ps', '-a', $service, '--format', 'json']);
 		if ($result['exit_code'] !== 0 || trim($result['output']) === '')
 		{
 			return '';

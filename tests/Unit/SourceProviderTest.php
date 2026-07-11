@@ -53,6 +53,41 @@ class SourceProviderTest extends TestCase
 		self::assertSame('^8.1', $source['php_requirement']);
 	}
 
+	public function testEnsureRegisteredGitSourceDetectsPhpbbVersionRuntime(): void
+	{
+		$project = $this->project();
+		$this->addDownloadedSource($project, 'topic-123', '>=5.5.9', [
+			'version' => 'topic/123',
+			'source_key' => 'topic-123',
+			'branch' => 'topic/123',
+			'phpbb_branch' => 'custom',
+			'status' => 'experimental',
+			'type' => 'git',
+			'url' => 'https://example.test/phpbb.git',
+		], '3.3.0');
+
+		$source = (new TestSourceProvider($project))->ensure('topic-123');
+
+		self::assertSame('3.3.0', $source['detected_phpbb_version']);
+		self::assertSame('3.3', $source['phpbb_branch']);
+		self::assertSame('7.4', $source['php']);
+		self::assertSame('7.4', $project->readJson('sources.json', [])['topic-123']['php']);
+	}
+
+	public function testEnsureRegisteredGitSourceRequiresDetectedPhpbbVersion(): void
+	{
+		$project = $this->project();
+		$this->addDownloadedSource($project, 'unknown-branch', '>=7.4', [
+			'type' => 'git',
+			'url' => 'https://example.test/phpbb.git',
+		]);
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Unable to determine phpBB version from Git source');
+
+		(new TestSourceProvider($project))->ensure('unknown-branch');
+	}
+
 	public function testFetchComposerBuildsCreateProjectCommand(): void
 	{
 		$project = $this->project();
@@ -89,6 +124,27 @@ class SourceProviderTest extends TestCase
 		self::assertFileDoesNotExist($path . '/phpBB/common.php');
 		self::assertSame('git', $provider->runs[0]['command'][0]);
 		self::assertSame(['composer-bin', 'install', '--no-interaction', '--ignore-platform-reqs'], $provider->runs[1]['command']);
+	}
+
+	public function testAddGitSourceAcceptsCloneUrlEndingInGit(): void
+	{
+		$project = $this->project();
+
+		$source = (new TestSourceProvider($project))->add('topic/123', 'git', 'https://example.test/phpbb.git', true);
+
+		self::assertSame('topic-123', $source['source_key']);
+		self::assertSame('https://example.test/phpbb.git', $source['url']);
+		self::assertSame('https://example.test/phpbb.git', $project->readJson('sources.json', [])['topic-123']['url']);
+	}
+
+	public function testAddGitSourceRejectsNonCloneUrl(): void
+	{
+		$project = $this->project();
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('ending in .git');
+
+		(new TestSourceProvider($project))->add('topic/123', 'git', 'https://example.test/phpbb/', true);
 	}
 
 	public function testEnsureFloatingComposerReusesExistingResolvedSource(): void
@@ -132,12 +188,17 @@ class SourceProviderTest extends TestCase
 		return $project;
 	}
 
-	private function addDownloadedSource(Project $project, string $key, string $phpRequirement = '>=7.4', array $overrides = []): void
+	private function addDownloadedSource(Project $project, string $key, string $phpRequirement = '>=7.4', array $overrides = [], ?string $phpbbVersion = null): void
 	{
 		$sourcePath = $project->sourcePath($key);
 		mkdir($sourcePath, 0775, true);
 		file_put_contents($sourcePath . '/common.php', '<?php');
 		file_put_contents($sourcePath . '/composer.json', json_encode(['require' => ['php' => $phpRequirement]]));
+		if ($phpbbVersion !== null)
+		{
+			mkdir($sourcePath . '/install', 0775, true);
+			file_put_contents($sourcePath . '/install/phpbbcli.php', "<?php\ndefine('PHPBB_VERSION', '$phpbbVersion');\n");
+		}
 		$sources = $project->readJson('sources.json', []);
 		$sources[$key] = $overrides + [
 			'version' => $key,

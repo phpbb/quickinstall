@@ -52,6 +52,29 @@ class BoardServiceTest extends TestCase
 		self::assertSame(['demo'], $runner->destroyed);
 	}
 
+	public function testCreateCanUseRegisteredCustomSourceKey(): void
+	{
+		$project = $this->projectWithSource('topic-123');
+		$sources = $project->readJson('sources.json', []);
+		$sources['topic-123']['version'] = 'topic/123';
+		$sources['topic-123']['branch'] = 'topic/123';
+		$sources['topic-123']['phpbb_branch'] = 'custom';
+		$sources['topic-123']['status'] = 'experimental';
+		$sources['topic-123']['type'] = 'git';
+		$sources['topic-123']['url'] = 'https://example.test/phpbb.git';
+		unset($sources['topic-123']['php']);
+		$project->writeJson('sources.json', $sources);
+		mkdir($sources['topic-123']['path'] . '/install', 0775, true);
+		file_put_contents($sources['topic-123']['path'] . '/install/phpbbcli.php', "<?php\ndefine('PHPBB_VERSION', '3.3.0');\n");
+
+		$result = (new TestBoardService($project))->create('demo', 'topic-123', 'mariadb', 8090);
+
+		self::assertSame('topic/123', $result['board']['phpbb']);
+		self::assertSame('topic-123', $result['board']['phpbb_source']);
+		self::assertSame('3.3', $result['board']['phpbb_branch']);
+		self::assertSame('7.4', $result['board']['php']);
+	}
+
 	public function testCreateRejectsUsedPortAndHostPort(): void
 	{
 		$project = $this->projectWithSource('3.3.14');

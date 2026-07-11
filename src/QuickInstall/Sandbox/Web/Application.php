@@ -413,7 +413,7 @@ class Application
 			],
 			'boards' => $viewBoards,
 			'sources' => $viewSources,
-			'versionOptions' => $this->versionOptions($versions),
+			'versionOptions' => $this->versionOptions($versions, $sources),
 			'dbOptions' => ['mariadb', 'mysql', 'postgres', 'sqlite'],
 			'populateOptions' => ['none', 'tiny', 'extension-dev', 'load-test', 'random'],
 			'presetOptions' => ['tiny', 'extension-dev', 'load-test', 'random'],
@@ -421,7 +421,7 @@ class Application
 		];
 	}
 
-	private function versionOptions(array $versions): array
+	private function versionOptions(array $versions, array $sources = []): array
 	{
 		$options = [];
 		foreach ($versions as $version)
@@ -438,6 +438,15 @@ class Application
 				{
 					$options[] = $selector;
 				}
+			}
+		}
+
+		foreach ($sources as $source)
+		{
+			$sourceKey = trim((string) ($source['source_key'] ?? ''));
+			if ($sourceKey !== '')
+			{
+				$options[] = $sourceKey;
 			}
 		}
 

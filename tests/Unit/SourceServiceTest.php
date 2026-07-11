@@ -108,6 +108,36 @@ class SourceServiceTest extends TestCase
 		(new SourceProvider($project))->add('master', 'git', 'https://example.test/phpbb.git');
 	}
 
+	public function testFetchGitEnsuresRegisteredSourceKey(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$provider = new ServiceTestSourceProvider($project);
+
+		$source = (new TestSourceService($project, $provider))->fetch('topic/123', true, 'https://example.test/phpbb.git', true);
+
+		self::assertSame('topic-123', $source['source_key']);
+		self::assertSame('topic-123', $provider->ensured[0]);
+	}
+
+	public function testFetchGitRollsBackRegistryWhenEnsureFails(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$provider = new FailingServiceTestSourceProvider($project);
+
+		try
+		{
+			(new TestSourceService($project, $provider))->fetch('missing_branch', true, 'https://example.test/phpbb.git', true);
+			self::fail('Expected fetch failure.');
+		}
+		catch (\RuntimeException $e)
+		{
+			self::assertSame('clone failed', $e->getMessage());
+		}
+
+		self::assertSame([], $project->readJson('sources.json', ['unexpected']));
+		self::assertDirectoryDoesNotExist($project->sourcePath('missing_branch'));
+	}
+
 	public function testSupportedVersionsReturnsVersionMatrix(): void
 	{
 		$versions = (new SourceService(new Project($this->createTempProjectRoot())))->supportedVersions();
@@ -141,5 +171,53 @@ class SourceServiceTest extends TestCase
 		$project->writeJson('sources.json', $sources);
 
 		return $sourcePath;
+	}
+}
+
+class TestSourceService extends SourceService
+{
+	private SourceProvider $provider;
+
+	public function __construct(Project $project, SourceProvider $provider)
+	{
+		parent::__construct($project);
+		$this->provider = $provider;
+	}
+
+	protected function createSourceProvider(): SourceProvider
+	{
+		return $this->provider;
+	}
+}
+
+class ServiceTestSourceProvider extends SourceProvider
+{
+	public array $ensured = [];
+
+	public function ensure(string $version): array
+	{
+		$this->ensured[] = $version;
+		return [
+			'version' => 'topic/123',
+			'source_key' => $version,
+		];
+	}
+}
+
+class FailingServiceTestSourceProvider extends SourceProvider
+{
+	private Project $project;
+
+	public function __construct(Project $project)
+	{
+		parent::__construct($project);
+		$this->project = $project;
+	}
+
+	public function ensure(string $version): array
+	{
+		mkdir($this->project->sourcePath($version), 0775, true);
+		file_put_contents($this->project->sourcePath($version) . '/partial.txt', 'partial');
+		throw new \RuntimeException('clone failed');
 	}
 }

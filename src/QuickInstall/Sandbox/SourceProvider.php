@@ -34,6 +34,10 @@ class SourceProvider
 		}
 		$selection = (new VersionMatrix())->resolve($version, $type === 'git');
 		$url = $url ?: ($type === 'git' ? 'https://github.com/phpbb/phpbb.git' : null);
+		if ($type === 'git')
+		{
+			$this->validateGitUrl((string) $url);
+		}
 		if ($type === 'git' && !$allowExternal && $url !== 'https://github.com/phpbb/phpbb.git')
 		{
 			throw new InvalidArgumentException('Custom Git source URLs can run Composer code on your host. Use --allow-external only for trusted phpBB forks.');
@@ -64,6 +68,14 @@ class SourceProvider
 		}
 
 		return $record;
+	}
+
+	private function validateGitUrl(string $url): void
+	{
+		if (!str_ends_with($url, '.git'))
+		{
+			throw new InvalidArgumentException('Git URL must point to a repository clone URL ending in .git.');
+		}
 	}
 
 	public function ensure(string $version): array
@@ -112,7 +124,6 @@ class SourceProvider
 	{
 		$source += [
 			'path' => $this->project->sourcePath($source['source_key']),
-			'php'  => '8.1',
 		];
 		if (!file_exists($source['path'] . '/common.php'))
 		{
@@ -120,7 +131,7 @@ class SourceProvider
 			$this->fetch($source);
 		}
 
-		$source = $this->withInstalledSourceMetadata($source, $source['php']);
+		$source = $this->withInstalledSourceMetadata($source, $source['php'] ?? null);
 		$sources = $this->project->readJson('sources.json', []);
 		$sources[$source['source_key']] = $source;
 		$this->project->writeJson('sources.json', $sources);
@@ -397,23 +408,72 @@ class SourceProvider
 
 	protected function installedPhpbbVersion(string $path): string
 	{
-		$phpbbCli = $path . '/install/phpbbcli.php';
-		if (is_file($phpbbCli) && preg_match("/define\\('PHPBB_VERSION',\\s*'([^']+)'\\)/", (string) file_get_contents($phpbbCli), $matches))
+		$version = $this->detectedPhpbbVersion($path);
+		if ($version !== null)
 		{
-			return $matches[1];
+			return $version;
 		}
 
 		throw new RuntimeException("Unable to determine phpBB version from source: $path");
 	}
 
-	protected function withInstalledSourceMetadata(array $source, string $defaultPhp): array
+	protected function withInstalledSourceMetadata(array $source, ?string $defaultPhp): array
 	{
+		$detectedVersion = $this->detectedPhpbbVersion($source['path'] ?? '');
+		if ($detectedVersion !== null)
+		{
+			$source = $this->withDetectedPhpbbMetadata($source, $detectedVersion);
+			$defaultPhp = $source['php'] ?? null;
+			if (($source['type'] ?? '') === 'git' && ($defaultPhp === null || $defaultPhp === ''))
+			{
+				throw new RuntimeException("Unable to determine PHP runtime from phpBB version for Git source: {$source['path']}");
+			}
+		}
+		else if (($source['type'] ?? '') === 'git')
+		{
+			throw new RuntimeException("Unable to determine phpBB version from Git source: {$source['path']}");
+		}
+
 		$requirement = $this->phpRequirement($source['path'] ?? '');
 		if ($requirement !== null)
 		{
 			$source['php_requirement'] = $requirement;
 			$source['php'] = $this->runtimeForRequirement($defaultPhp, $requirement);
 		}
+
+		return $source;
+	}
+
+	protected function detectedPhpbbVersion(string $path): ?string
+	{
+		$phpbbCli = $path . '/install/phpbbcli.php';
+		if (is_file($phpbbCli) && preg_match("/define\\('PHPBB_VERSION',\\s*'([^']+)'\\)/", (string) file_get_contents($phpbbCli), $matches))
+		{
+			return $matches[1];
+		}
+
+		return null;
+	}
+
+	protected function withDetectedPhpbbMetadata(array $source, string $detectedVersion): array
+	{
+		$source['detected_phpbb_version'] = $detectedVersion;
+		if (!preg_match('/^(\d+\.\d+\.\d+)/', $detectedVersion, $matches))
+		{
+			return $source;
+		}
+
+		try
+		{
+			$selection = (new VersionMatrix())->resolve($matches[1]);
+		}
+		catch (InvalidArgumentException $e)
+		{
+			return $source;
+		}
+
+		$source['phpbb_branch'] = $selection['phpbb_branch'];
+		$source['php'] = $selection['php'];
 
 		return $source;
 	}
@@ -435,9 +495,13 @@ class SourceProvider
 		return $data['require']['php'];
 	}
 
-	protected function runtimeForRequirement(string $defaultPhp, string $requirement): string
+	protected function runtimeForRequirement(?string $defaultPhp, string $requirement): ?string
 	{
 		$minimum = $this->minimumPhpFromRequirement($requirement);
+		if ($defaultPhp === null || $defaultPhp === '')
+		{
+			return $minimum;
+		}
 		if ($minimum === null || version_compare($defaultPhp, $minimum, '>='))
 		{
 			return $defaultPhp;

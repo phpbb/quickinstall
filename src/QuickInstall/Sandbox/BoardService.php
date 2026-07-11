@@ -27,7 +27,7 @@ class BoardService
 	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none', bool $debug = false, bool $replace = false): array
 	{
 		$this->project->init();
-		$selection = (new VersionMatrix())->resolve($version);
+		$selection = $this->resolveSourceSelection($version);
 		$boards = $this->project->boards();
 		if (isset($boards[$name]))
 		{
@@ -53,6 +53,11 @@ class BoardService
 		}
 
 		$source = $this->createSourceProvider()->ensure($version);
+		$php = $source['php'] ?? $selection['php'] ?? null;
+		if ($php === null || $php === '')
+		{
+			throw new RuntimeException("Unable to determine PHP runtime for source: {$source['source_key']}");
+		}
 
 		$boardDir = $this->project->boardPath($name);
 		if (!is_dir($boardDir) && !mkdir($boardDir, 0775, true) && !is_dir($boardDir))
@@ -63,7 +68,7 @@ class BoardService
 		$config = [
 			'phpbb' => $source['version'],
 			'phpbb_source' => $source['source_key'],
-			'php' => $source['php'] ?? $selection['php'],
+			'php' => $php,
 			'db' => $db,
 			'port' => $port,
 			'populate' => $populate,
@@ -82,7 +87,7 @@ class BoardService
 			'phpbb' => $source['version'],
 			'phpbb_source' => $source['source_key'],
 			'phpbb_branch' => $source['phpbb_branch'],
-			'php' => $source['php'] ?? $selection['php'],
+			'php' => $php,
 			'db' => $db,
 			'port' => $port,
 			'url' => "http://localhost:$port/",
@@ -97,6 +102,24 @@ class BoardService
 		$this->project->appendBoard($board);
 
 		return ['board' => $board, 'paths' => $paths];
+	}
+
+	private function resolveSourceSelection(string $version): array
+	{
+		try
+		{
+			return (new VersionMatrix())->resolve($version);
+		}
+		catch (InvalidArgumentException $e)
+		{
+			$sources = $this->project->readJson('sources.json', []);
+			if (!isset($sources[$version]))
+			{
+				throw $e;
+			}
+
+			return $sources[$version];
+		}
 	}
 
 	protected function isPortInUse(int $port): bool

@@ -78,6 +78,31 @@ class WebApplicationTest extends TestCase
 		self::assertStringNotContainsString('<style>', $html);
 	}
 
+	public function testRenderShowsRegisteredSourceOptions(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$sources = $project->readJson('sources.json', []);
+		$sources['ticket-1234'] = [
+			'version' => 'ticket/1234',
+			'source_key' => 'ticket-1234',
+			'branch' => 'ticket/1234',
+			'phpbb_branch' => '3.3',
+			'php' => '7.4',
+			'status' => 'experimental',
+			'type' => 'git',
+			'url' => 'https://example.test/phpbb.git',
+			'path' => $project->sourcePath('ticket-1234'),
+			'detected_phpbb_version' => '3.3.0',
+		];
+		$project->writeJson('sources.json', $sources);
+
+		$html = $this->runWebApplication($root);
+
+		self::assertStringContainsString('<option value="ticket-1234">', $html);
+	}
+
 	public function testInitPostCreatesWorkspace(): void
 	{
 		$root = $this->createTempProjectRoot();

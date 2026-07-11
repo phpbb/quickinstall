@@ -11,6 +11,7 @@
 namespace QuickInstall\Sandbox;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 class SourceService
 {
@@ -42,13 +43,55 @@ class SourceService
 	public function fetch(string $version, bool $git = false, ?string $url = null, bool $allowExternal = false): array
 	{
 		$this->project->init();
-		$provider = new SourceProvider($this->project, $this->output);
+		$provider = $this->createSourceProvider();
 		if ($git)
 		{
-			$provider->add($version, 'git', $url, $allowExternal);
+			$previousSources = $this->project->readJson('sources.json', []);
+			$source = $provider->add($version, 'git', $url, $allowExternal);
+			try
+			{
+				return $provider->ensure($source['source_key']);
+			}
+			catch (RuntimeException|InvalidArgumentException $e)
+			{
+				$this->rollbackFailedGitFetch($source, $previousSources);
+				throw $e;
+			}
 		}
 
 		return $provider->ensure($version);
+	}
+
+	private function rollbackFailedGitFetch(array $source, array $previousSources): void
+	{
+		$sourceKey = (string) ($source['source_key'] ?? '');
+		if ($sourceKey === '')
+		{
+			return;
+		}
+
+		$sources = $this->project->readJson('sources.json', []);
+		if (isset($previousSources[$sourceKey]))
+		{
+			$sources[$sourceKey] = $previousSources[$sourceKey];
+		}
+		else
+		{
+			unset($sources[$sourceKey]);
+		}
+		$this->project->writeJson('sources.json', $sources);
+
+		$path = (string) ($source['path'] ?? '');
+		$previousPath = (string) ($previousSources[$sourceKey]['path'] ?? '');
+		if ($path !== '' && $path !== $previousPath && (file_exists($path) || is_link($path)))
+		{
+			$this->project->deleteTree($path);
+		}
+	}
+
+	protected function createSourceProvider(): SourceProvider
+	{
+		return new SourceProvider($this->project, $this->output);
 	}
 
 	public function supportedVersions(): array
