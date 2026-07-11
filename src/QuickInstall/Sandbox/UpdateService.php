@@ -22,6 +22,7 @@ class UpdateService
 
 	private Project $project;
 	private ?string $endpoint;
+	private ?string $currentVersion = null;
 
 	public function __construct(Project $project, ?string $endpoint = null)
 	{
@@ -72,6 +73,11 @@ class UpdateService
 
 	public function currentVersion(): string
 	{
+		if ($this->currentVersion !== null)
+		{
+			return $this->currentVersion;
+		}
+
 		$composerPath = $this->project->rootPath('composer.json');
 		if (!is_file($composerPath))
 		{
@@ -84,7 +90,9 @@ class UpdateService
 			throw new RuntimeException('Unable to read QuickInstall version.');
 		}
 
-		return (string) $data['version'];
+		$this->currentVersion = (string) $data['version'];
+
+		return $this->currentVersion;
 	}
 
 	private function safeCurrentVersion(): string

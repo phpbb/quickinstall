@@ -334,9 +334,12 @@ class Application
 		{
 			header('Content-Type: text/html; charset=utf-8');
 		}
+		$updates = new UpdateService($this->project);
+
 		echo $this->renderTemplate('layout.php', [
-			'dashboard' => $this->renderTemplate('dashboard.php', $this->viewData()),
+			'dashboard' => $this->renderTemplate('dashboard.php', $this->viewData($updates)),
 			'csrfToken' => $this->csrfToken(),
+			'quickInstallVersion' => $updates->currentVersion(),
 		]);
 	}
 
@@ -358,8 +361,9 @@ class Application
 		], JSON_UNESCAPED_SLASHES);
 	}
 
-	private function viewData(): array
+	private function viewData(?UpdateService $updates = null): array
 	{
+		$updates = $updates ?: new UpdateService($this->project);
 		$boards = (new BoardService($this->project, $this->output))->list();
 		$sources = (new SourceService($this->project))->list();
 		$versions = (new SourceService($this->project))->supportedVersions();
@@ -398,7 +402,7 @@ class Application
 			'error' => $this->error,
 			'output' => $this->output->all(),
 			'csrfToken' => $this->csrfToken(),
-			'update' => (new UpdateService($this->project))->getUpdate(),
+			'update' => $updates->getUpdate(),
 			'metrics' => [
 				['label' => 'Boards', 'value' => (string) count($boards), 'detail' => $running . ' running', 'description' => 'Runtime definitions'],
 				['label' => 'Sources', 'value' => (string) count($sources), 'detail' => count(array_filter($sources, static function ($source) {

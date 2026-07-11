@@ -40,6 +40,12 @@
 			<div id="dashboard" class="content">
 				<?= $dashboard ?>
 			</div>
+			<footer class="footer">
+				<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/" target="_blank" rel="noreferrer">phpBB<small><sup>&reg;</sup></small> QuickInstall <?= $this->escape($quickInstallVersion) ?></a>
+				<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support" target="_blank" rel="noreferrer">Support</a>
+				<a href="https://github.com/phpbb/quickinstall/issues" target="_blank" rel="noreferrer">Issues</a>
+				<a href="https://www.phpbb.com/" target="_blank" rel="noreferrer">&copy; phpBB Limited</a>
+			</footer>
 		</main>
 	</div>
 	<div class="busy" id="busy" role="status" aria-live="polite">
