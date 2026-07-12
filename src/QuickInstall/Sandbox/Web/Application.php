@@ -45,17 +45,55 @@ class Application
 		{
 			$this->assertTrustedPost();
 			$this->assertCsrfToken($csrfToken);
-			$this->handlePost();
 			if ($this->isAjax())
 			{
-				$this->renderJson();
+				$this->handleAjaxPost();
 				return;
 			}
+			$this->handlePost();
 		}
 
 		$this->notice = $this->notice ?: (string) ($_GET['notice'] ?? '');
 		$this->error = $this->error ?: (string) ($_GET['error'] ?? '');
 		$this->render();
+	}
+
+	private function handleAjaxPost(): void
+	{
+		$previousDisplayErrors = ini_set('display_errors', '0');
+		ob_start();
+		set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
+			if (!(error_reporting() & $severity))
+			{
+				return false;
+			}
+
+			throw new \ErrorException($message, 0, $severity, $file, $line);
+		});
+
+		try
+		{
+			$this->handlePost();
+		}
+		catch (\Throwable $e)
+		{
+			$this->error = $this->friendlyError($e->getMessage());
+		}
+		finally
+		{
+			restore_error_handler();
+			$unexpectedOutput = trim((string) ob_get_clean());
+			if ($previousDisplayErrors !== false)
+			{
+				ini_set('display_errors', $previousDisplayErrors);
+			}
+			if ($unexpectedOutput !== '')
+			{
+				$this->output->error(trim(strip_tags($unexpectedOutput)) . "\n");
+			}
+		}
+
+		$this->renderJson();
 	}
 
 	private function assertLocalRequest(): void
@@ -129,6 +167,7 @@ class Application
 	{
 		try
 		{
+			$this->disableExecutionTimeLimit();
 			$action = (string) ($_POST['action'] ?? '');
 			switch ($action)
 			{
@@ -231,6 +270,24 @@ class Application
 		catch (InvalidArgumentException | RuntimeException $e)
 		{
 			$this->error = $this->friendlyError($e->getMessage());
+		}
+	}
+
+	private function disableExecutionTimeLimit(): void
+	{
+		if ((int) ini_get('max_execution_time') === 0)
+		{
+			return;
+		}
+
+		if (function_exists('set_time_limit') && @set_time_limit(0))
+		{
+			return;
+		}
+		@ini_set('max_execution_time', '0');
+		if ((int) ini_get('max_execution_time') !== 0)
+		{
+			throw new RuntimeException('QuickInstall could not disable the PHP execution time limit for this action. Allow set_time_limit or set max_execution_time=0 for the sandbox UI.');
 		}
 	}
 
@@ -345,20 +402,52 @@ class Application
 
 	private function renderJson(): void
 	{
+		$previousDisplayErrors = ini_set('display_errors', '0');
+		ob_start();
+		set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
+			if (!(error_reporting() & $severity))
+			{
+				return false;
+			}
+			throw new \ErrorException($message, 0, $severity, $file, $line);
+		});
+
+		try
+		{
+			$html = $this->renderTemplate('dashboard.php', $this->viewData());
+			$json = json_encode([
+				'ok' => $this->error === '',
+				'notice' => $this->notice,
+				'error' => $this->error,
+				'output' => $this->output->all(),
+				'html' => $html,
+			], JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+		}
+		catch (\Throwable $e)
+		{
+			$json = json_encode([
+				'ok' => false,
+				'notice' => '',
+				'error' => $this->friendlyError($e->getMessage()),
+				'output' => $this->output->all(),
+				'html' => '',
+			], JSON_UNESCAPED_SLASHES) ?: '{"ok":false,"error":"Unable to encode QuickInstall response."}';
+		}
+		finally
+		{
+			restore_error_handler();
+			ob_end_clean();
+			if ($previousDisplayErrors !== false)
+			{
+				ini_set('display_errors', $previousDisplayErrors);
+			}
+		}
+
 		if (!headers_sent())
 		{
 			header('Content-Type: application/json; charset=utf-8');
 		}
-
-		$html = $this->renderTemplate('dashboard.php', $this->viewData());
-
-		echo json_encode([
-			'ok' => $this->error === '',
-			'notice' => $this->notice,
-			'error' => $this->error,
-			'output' => $this->output->all(),
-			'html' => $html,
-		], JSON_UNESCAPED_SLASHES);
+		echo $json;
 	}
 
 	private function viewData(?UpdateService $updates = null): array

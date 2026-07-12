@@ -129,6 +129,22 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('activity-log', $data['html']);
 	}
 
+	public function testAjaxResponseRemainsJsonWhenDashboardRenderingFails(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$token = $this->csrfTokenFromRender($root);
+		$project->writeJson('boards.json', ['broken' => 'not a board record']);
+
+		$json = $this->runWebApplication($root, ['action' => 'unknown', 'qi_csrf_token' => $token], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertFalse($data['ok']);
+		self::assertStringNotContainsString('<br', $json);
+	}
+
 	public function testAjaxSourceRemoveDeletesSource(): void
 	{
 		$root = $this->createTempProjectRoot();

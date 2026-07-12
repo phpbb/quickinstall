@@ -213,9 +213,10 @@ class SourceProvider
 			{
 				$this->project->deleteTree($actualPath);
 			}
-			if (!rename($tempSource['path'], $actualPath))
+			error_clear_last();
+			if (!@rename($tempSource['path'], $actualPath))
 			{
-				throw new RuntimeException("Unable to move source into place: $actualPath");
+				throw new RuntimeException("Unable to move source into place: $actualPath" . $this->lastFilesystemError());
 			}
 		}
 
@@ -326,7 +327,11 @@ class SourceProvider
 
 		if (is_dir($path))
 		{
-			rmdir($path);
+			error_clear_last();
+			if (!@rmdir($path) && is_dir($path))
+			{
+				throw new RuntimeException("Unable to remove empty source directory: $path" . $this->lastFilesystemError());
+			}
 		}
 
 		$command = $this->composerCommand([
@@ -363,9 +368,10 @@ class SourceProvider
 		{
 			$this->project->deleteTree($temporaryAppRoot);
 		}
-		if (!rename($appRoot, $temporaryAppRoot))
+		error_clear_last();
+		if (!@rename($appRoot, $temporaryAppRoot))
 		{
-			throw new RuntimeException("Unable to prepare Git source root: $appRoot");
+			throw new RuntimeException("Unable to prepare Git source root: $appRoot" . $this->lastFilesystemError());
 		}
 
 		foreach (scandir($path) ?: [] as $item)
@@ -391,9 +397,10 @@ class SourceProvider
 			{
 				throw new RuntimeException("Unable to normalize Git source. Target already exists: $target");
 			}
-			if (!rename($source, $target))
+			error_clear_last();
+			if (!@rename($source, $target))
 			{
-				throw new RuntimeException("Unable to move Git source file into place: $source");
+				throw new RuntimeException("Unable to move Git source file into place: $source" . $this->lastFilesystemError());
 			}
 		}
 
@@ -404,6 +411,13 @@ class SourceProvider
 	{
 		$files = scandir($path);
 		return $files !== false && count(array_diff($files, ['.', '..'])) > 0;
+	}
+
+	private function lastFilesystemError(): string
+	{
+		$error = error_get_last();
+		$message = is_array($error) ? trim((string) ($error['message'] ?? '')) : '';
+		return $message !== '' ? ": $message" : '';
 	}
 
 	protected function installedPhpbbVersion(string $path): string

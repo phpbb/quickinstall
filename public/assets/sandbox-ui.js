@@ -38,7 +38,18 @@ function bindAjax() {
 					},
 					body: new FormData(form),
 				});
-				const data = await response.json();
+				const responseText = await response.text();
+				let data;
+				try {
+					data = JSON.parse(responseText);
+				} catch (error) {
+					const detail = responseText
+						.replace(/<[^>]*>/g, ' ')
+						.replace(/\s+/g, ' ')
+						.trim()
+						.slice(0, 500);
+					throw new Error(detail || 'QuickInstall returned an invalid response. Check the UI error log.');
+				}
 				dashboard.innerHTML = data.html;
 				bindAjax();
 				showActionResult(data, context);
