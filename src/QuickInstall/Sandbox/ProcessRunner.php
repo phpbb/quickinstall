@@ -42,6 +42,11 @@ class ProcessRunner
 	private function execute(array $command, bool $stream, ?string $cwd): array
 	{
 		$command = $this->platformCommand($command);
+		if ($this->osFamily === 'Windows')
+		{
+			return $this->executeWithFiles($command, $stream, $cwd);
+		}
+
 		$descriptor = [
 			0 => ['pipe', 'r'],
 			1 => ['pipe', 'w'],
@@ -112,6 +117,50 @@ class ProcessRunner
 		];
 	}
 
+	private function executeWithFiles(array $command, bool $stream, ?string $cwd): array
+	{
+		$stdoutPath = tempnam(sys_get_temp_dir(), 'qi-process-out-');
+		$stderrPath = tempnam(sys_get_temp_dir(), 'qi-process-err-');
+		if ($stdoutPath === false || $stderrPath === false)
+		{
+			if ($stdoutPath !== false)
+			{
+				@unlink($stdoutPath);
+			}
+			if ($stderrPath !== false)
+			{
+				@unlink($stderrPath);
+			}
+			return ['exit_code' => 1, 'output' => 'Unable to create temporary process output files.'];
+		}
+
+		$descriptor = [
+			0 => ['file', $this->nullDevice(), 'r'],
+			1 => ['file', $stdoutPath, 'w'],
+			2 => ['file', $stderrPath, 'w'],
+		];
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
+		if (!is_resource($process))
+		{
+			@unlink($stdoutPath);
+			@unlink($stderrPath);
+			return ['exit_code' => 1, 'output' => ''];
+		}
+
+		$exitCode = proc_close($process);
+		$stdout = (string) @file_get_contents($stdoutPath);
+		$stderr = (string) @file_get_contents($stderrPath);
+		@unlink($stdoutPath);
+		@unlink($stderrPath);
+		if ($stream)
+		{
+			$this->output->write($stdout);
+			$this->output->error($stderr);
+		}
+
+		return ['exit_code' => $exitCode, 'output' => $stdout . $stderr];
+	}
+
 	private function failureDetails(array $command, array $result, bool $includeOutputSummary = true): string
 	{
 		$details = $includeOutputSummary ? $this->outputSummary((string) ($result['output'] ?? '')) : '';
@@ -124,7 +173,7 @@ class ProcessRunner
 	{
 		$command = $this->platformCommand($command);
 		$descriptor = [
-			0 => ['file', $this->osFamily === 'Windows' ? 'NUL' : '/dev/null', 'r'],
+			0 => ['file', $this->nullDevice(), 'r'],
 			1 => $this->output->stdout(),
 			2 => $this->output->stderr(),
 		];
@@ -156,6 +205,11 @@ class ProcessRunner
 
 		$commandLine = implode(' ', array_map([$this, 'escapeWindowsBatchArgument'], $command));
 		return [getenv('COMSPEC') ?: 'cmd.exe', '/D', '/S', '/C', '"' . $commandLine . '"'];
+	}
+
+	private function nullDevice(): string
+	{
+		return $this->osFamily === 'Windows' && PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null';
 	}
 
 	private function escapeWindowsBatchArgument(string $argument): string

@@ -10,6 +10,19 @@ use RuntimeException;
 
 class ProcessRunnerTest extends TestCase
 {
+	public function testWindowsCaptureUsesFilesWithoutPipeDeadlock(): void
+	{
+		$runner = new ProcessRunner(new BufferedOutput(), 'Windows');
+		$script = 'fwrite(STDOUT, str_repeat("o", 200000)); fwrite(STDERR, str_repeat("e", 200000));';
+
+		$result = $runner->capture([PHP_BINARY, '-r', $script]);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertSame(400000, strlen($result['output']));
+		self::assertStringStartsWith('oooo', $result['output']);
+		self::assertStringEndsWith('eeee', $result['output']);
+	}
+
 	public function testMissingCommandFailsWithoutPhpWarning(): void
 	{
 		$warnings = [];
