@@ -74,10 +74,9 @@ php bin/qi init
 php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
 ```
 
-The examples use `php bin/qi`, which works on every supported operating system when PHP is in `PATH`. Windows users can alternatively use the supplied PowerShell or Command Prompt launchers:
+The examples use `php bin/qi`, which works on every supported operating system when PHP is in `PATH`. Windows users can alternatively use the supplied Command Prompt launcher from either Command Prompt or PowerShell:
 
 ```powershell
-.\bin\qi.ps1 board:list
 .\bin\qi.cmd board:list
 ```
 

@@ -67,14 +67,13 @@ php bin/qi doctor
 php bin/qi help
 ```
 
-On Windows, also smoke-test both supplied launchers:
+On Windows, also smoke-test the supplied launcher from PowerShell or Command Prompt:
 
 ```powershell
-.\bin\qi.ps1 help
 .\bin\qi.cmd help
 ```
 
-Windows-specific changes should cover drive-letter paths, paths containing spaces, Command Prompt and PowerShell execution, and the `ui:start`/`ui:status`/`ui:stop` lifecycle. GitHub Actions runs the PHPUnit suite and launcher smoke tests on native Windows.
+Windows-specific changes should cover drive-letter paths, paths containing spaces, Command Prompt and PowerShell execution, and the `ui:start`/`ui:status`/`ui:stop` lifecycle. GitHub Actions runs the PHPUnit suite and launcher smoke test on native Windows.
 
 ## :computer: Make something great
 

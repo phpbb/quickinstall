@@ -72,7 +72,3 @@ jobs:
       - name: Smoke test CMD launcher
         shell: cmd
         run: bin\qi.cmd help
-
-      - name: Smoke test PowerShell launcher
-        shell: pwsh
-        run: .\bin\qi.ps1 help

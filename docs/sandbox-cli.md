@@ -70,10 +70,10 @@ php bin/qi <command>
 
 It works on macOS, Linux, and Windows when PHP is available in `PATH`.
 
-Native Windows launchers are also included. From PowerShell:
+Windows also includes a `qi.cmd` launcher. From PowerShell:
 
 ```powershell
-.\bin\qi.ps1 <command>
+.\bin\qi.cmd <command>
 ```
 
 From Command Prompt:
@@ -248,7 +248,7 @@ php bin/qi ext:mount demo /path/to/vendor/extname --allow-external
 On Windows, quote external paths containing spaces:
 
 ```powershell
-.\bin\qi.ps1 ext:mount demo "C:\Path\To\My Extensions\vendor\extname" --allow-external
+.\bin\qi.cmd ext:mount demo "C:\Path\To\My Extensions\vendor\extname" --allow-external
 ```
 
 ## Styles
@@ -301,7 +301,7 @@ php bin/qi style:mount demo /path/to/stylename --allow-external
 On Windows, quote external paths containing spaces:
 
 ```powershell
-.\bin\qi.ps1 style:mount demo "C:\Path\To\My Styles\stylename" --allow-external
+.\bin\qi.cmd style:mount demo "C:\Path\To\My Styles\stylename" --allow-external
 ```
 
 ## Supported phpBB Versions
@@ -464,21 +464,21 @@ If QuickInstall is not working as expected, start with the environment check:
 php bin/qi doctor
 ```
 
-Every check should report `OK`; failures include the detected problem. On Windows, use `.\bin\qi.ps1 doctor` or `bin\qi.cmd doctor`.
+Every check should report `OK`; failures include the detected problem. On Windows, use `.\bin\qi.cmd doctor` from PowerShell or `bin\qi.cmd doctor` from Command Prompt.
 
 #### Command is not found on Windows
 
-Run QuickInstall from the project root with one of the supplied launchers:
+Run QuickInstall from the project root with the supplied Windows launcher:
 
 ```powershell
-.\bin\qi.ps1 help
+.\bin\qi.cmd help
 ```
 
 ```batch
 bin\qi.cmd help
 ```
 
-If either launcher reports that QuickInstall requires PHP, install PHP 8 or newer and add the directory containing `php.exe` to the Windows `PATH`. Open a new terminal and run `php --version` to confirm it is available.
+If the launcher reports that QuickInstall requires PHP, install PHP 8 or newer and add the directory containing `php.exe` to the Windows `PATH`. Open a new terminal and run `php --version` to confirm it is available.
 
 #### Docker command fails
 
