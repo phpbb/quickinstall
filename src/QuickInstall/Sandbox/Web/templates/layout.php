@@ -22,7 +22,7 @@
 				<span class="brand-mark">QI</span>
 				<div class="brand-lockup">
 					<span class="brand-logo" role="img" aria-label="phpBB"></span>
-					<small>QuickInstall on Docker</small>
+					<small>QuickInstall + Docker</small>
 				</div>
 			</div>
 			<nav aria-label="QuickInstall navigation">
@@ -50,6 +50,7 @@
 			</div>
 			<footer class="footer">
 				<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/" target="_blank" rel="noreferrer">phpBB<small><sup>&reg;</sup></small> QuickInstall <?= $this->escape($quickInstallVersion) ?></a>
+				<a href="https://github.com/phpbb/quickinstall/blob/master/docs/sandbox-cli.md" target="_blank" rel="noreferrer">Docs</a>
 				<a href="https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/support" target="_blank" rel="noreferrer">Support</a>
 				<a href="https://github.com/phpbb/quickinstall/issues" target="_blank" rel="noreferrer">Issues</a>
 				<a href="https://www.phpbb.com/" target="_blank" rel="noreferrer">&copy; phpBB Limited</a>

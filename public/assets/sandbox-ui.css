@@ -184,7 +184,7 @@ button:disabled { opacity: .65; cursor: wait; }
 	border-radius: var(--radius);
 	background: var(--sidebar-brand-bg);
 	color: var(--sidebar-brand-text);
-	font-size: 12px;
+	font-size: 16px;
 	font-weight: 700;
 	letter-spacing: .04em;
 }
