@@ -49,6 +49,9 @@ class Application
 				case 'init':
 					return $this->init();
 
+				case 'doctor':
+					return $this->doctor();
+
 				case 'source:list':
 					return $this->sourceList();
 
@@ -390,10 +393,29 @@ class Application
 
 		if (defined('STDIN') && $this->stdin === STDIN)
 		{
+			if (function_exists('stream_isatty'))
+			{
+				return stream_isatty(STDIN);
+			}
 			return !function_exists('posix_isatty') || posix_isatty(STDIN);
 		}
 
 		return true;
+	}
+
+	private function doctor(): int
+	{
+		$checks = (new DoctorService($this->project))->checks();
+		$failed = false;
+		echo "QuickInstall requirements\n";
+		foreach ($checks as $check)
+		{
+			$status = $check['ok'] ? 'OK' : 'FAIL';
+			echo "[$status] {$check['name']}: {$check['detail']}\n";
+			$failed = $failed || !$check['ok'];
+		}
+
+		return $failed ? 1 : 0;
 	}
 
 	private function style(string $text, string $code): string
@@ -416,6 +438,14 @@ class Application
 		if (function_exists('posix_isatty') && defined('STDOUT'))
 		{
 			return posix_isatty(STDOUT);
+		}
+		if (function_exists('stream_isatty') && defined('STDOUT') && !stream_isatty(STDOUT))
+		{
+			return false;
+		}
+		if (PHP_OS_FAMILY === 'Windows' && function_exists('sapi_windows_vt100_support') && defined('STDOUT'))
+		{
+			return sapi_windows_vt100_support(STDOUT);
 		}
 
 		return PHP_SAPI === 'cli';
@@ -897,6 +927,17 @@ class Application
 	private function helpCommands(): array
 	{
 		return [
+			'Setup commands' => [
+				'doctor' => [
+					'title' => 'doctor',
+					'usage' => 'doctor',
+					'summary' => 'Check local PHP, Docker, Git, and Composer requirements.',
+					'description' => 'Checks that required host tools are available, Docker Desktop is running, Docker Compose works, and Docker is using Linux containers.',
+					'examples' => [
+						'doctor',
+					],
+				],
+			],
 			'Board commands' => [
 				'board:create' => [
 					'title' => 'board:create',

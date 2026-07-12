@@ -229,7 +229,7 @@ class ExtensionManager
 	{
 		if (is_file($path . '/composer.json'))
 		{
-			$found[] = $path;
+			$found[] = realpath($path) ?: $path;
 			return;
 		}
 

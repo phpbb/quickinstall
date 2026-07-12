@@ -99,7 +99,11 @@ svg.bi {
 }
 
 #about-readme pre.codeblock-bash,
-#about-cli pre.codeblock-bash {
+#about-readme pre.codeblock-powershell,
+#about-readme pre.codeblock-batch,
+#about-cli pre.codeblock-bash,
+#about-cli pre.codeblock-powershell,
+#about-cli pre.codeblock-batch {
 	background-color: #1f2933;
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -180,7 +184,11 @@ svg.bi {
 	}
 
 	#about-readme pre.codeblock-bash,
-	#about-cli pre.codeblock-bash {
+	#about-readme pre.codeblock-powershell,
+	#about-readme pre.codeblock-batch,
+	#about-cli pre.codeblock-bash,
+	#about-cli pre.codeblock-powershell,
+	#about-cli pre.codeblock-batch {
 		background-color: #0c1117;
 		color: #d7e1ea;
 	}

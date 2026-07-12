@@ -17,10 +17,12 @@ class Project
 {
 	private string $root;
 	private string $workspace;
+	private string $osFamily;
 
-	public function __construct(string $root)
+	public function __construct(string $root, ?string $osFamily = null)
 	{
-		$this->root = rtrim($root, '/');
+		$this->osFamily = $osFamily ?: PHP_OS_FAMILY;
+		$this->root = rtrim($this->normalizeAbsolutePath($root, false), '/');
 		$this->workspace = $this->root . '/.qi';
 	}
 
@@ -264,28 +266,54 @@ class Project
 	public function isPathUnder(string $path, string $parent): bool
 	{
 		$parent = realpath($parent);
-		return $parent !== false && ($path === $parent || str_starts_with($path, $parent . '/'));
+		if ($parent === false)
+		{
+			return false;
+		}
+
+		$path = $this->comparablePath($this->normalizeAbsolutePath($path));
+		$parent = $this->comparablePath($this->normalizeAbsolutePath($parent));
+		return $path === $parent || str_starts_with($path, rtrim($parent, '/') . '/');
 	}
 
 	private function assertWorkspacePath(string $path): void
 	{
-		$path = $this->normalizeAbsolutePath($path);
-		$workspace = $this->normalizeAbsolutePath($this->workspace);
+		$path = $this->comparablePath($this->normalizeAbsolutePath($path));
+		$workspace = $this->comparablePath($this->normalizeAbsolutePath($this->workspace));
 		if ($path !== $workspace && !str_starts_with($path, $workspace . '/'))
 		{
 			throw new RuntimeException("Refusing to delete path outside QuickInstall workspace: $path");
 		}
 	}
 
-	private function normalizeAbsolutePath(string $path): string
+	private function normalizeAbsolutePath(string $path, bool $resolveRelative = true): string
 	{
 		if ($path === '')
 		{
-			return $this->root;
+			return isset($this->root) ? $this->root : '';
 		}
-		if ($path[0] !== '/')
+
+		$path = str_replace('\\', '/', $path);
+		if ($resolveRelative && !$this->isAbsolutePath($path))
 		{
 			$path = $this->rootPath($path);
+		}
+
+		$prefix = '';
+		if (preg_match('/^[A-Za-z]:/', $path, $matches))
+		{
+			$prefix = strtoupper($matches[0]);
+			$path = substr($path, 2);
+		}
+		else if (str_starts_with($path, '//'))
+		{
+			$prefix = '//';
+			$path = substr($path, 2);
+		}
+		else if (str_starts_with($path, '/'))
+		{
+			$prefix = '/';
+			$path = substr($path, 1);
 		}
 
 		$parts = [];
@@ -297,13 +325,41 @@ class Project
 			}
 			if ($part === '..')
 			{
-				array_pop($parts);
+				if ($parts)
+				{
+					array_pop($parts);
+				}
 				continue;
 			}
 			$parts[] = $part;
 		}
 
-		return '/' . implode('/', $parts);
+		$normalized = implode('/', $parts);
+		if ($prefix === '/')
+		{
+			return '/' . $normalized;
+		}
+		if ($prefix === '//')
+		{
+			return '//' . $normalized;
+		}
+		if ($prefix !== '')
+		{
+			return $prefix . '/' . $normalized;
+		}
+
+		return $normalized;
+	}
+
+	private function isAbsolutePath(string $path): bool
+	{
+		return str_starts_with($path, '/') || (bool) preg_match('/^[A-Za-z]:\//', $path);
+	}
+
+	private function comparablePath(string $path): string
+	{
+		$path = rtrim($path, '/');
+		return $this->osFamily === 'Windows' ? strtolower($path) : $path;
 	}
 
 	public function assertName(string $name, string $label): void

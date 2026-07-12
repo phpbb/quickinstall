@@ -597,9 +597,10 @@ class SourceProvider
 
 	protected function composerCommand(array $arguments): array
 	{
-		if ($this->isCommandAvailable('composer'))
+		$composer = $this->findCommand('composer');
+		if ($composer !== null)
 		{
-			return array_merge(['composer'], $arguments);
+			return array_merge([$composer], $arguments);
 		}
 
 		$phar = $this->project->rootPath('composer.phar');
@@ -612,6 +613,11 @@ class SourceProvider
 	}
 
 	protected function isCommandAvailable(string $command): bool
+	{
+		return $this->findCommand($command) !== null;
+	}
+
+	protected function findCommand(string $command): ?string
 	{
 		$extensions = [''];
 		if (PHP_OS_FAMILY === 'Windows')
@@ -638,12 +644,12 @@ class SourceProvider
 				$candidate = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $command . $extension;
 				if (is_file($candidate) && (PHP_OS_FAMILY === 'Windows' || is_executable($candidate)))
 				{
-					return true;
+					return $candidate;
 				}
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	protected function run(array $command, string $cwd): void

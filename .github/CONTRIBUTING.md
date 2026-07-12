@@ -50,6 +50,32 @@ $ tests/vendor/bin/phpunit -c phpunit.xml.dist
 
 The CLI test dependencies install into `tests/vendor/`, leaving the main application `vendor/` directory unchanged.
 
+On Windows PowerShell, set the Composer config and run the same suite with:
+
+```powershell
+Set-Location tests
+$env:COMPOSER = 'composer.cli-tests.json'
+composer install
+Set-Location ..
+php tests/vendor/bin/phpunit -c phpunit.xml.dist
+```
+
+Sandbox CLI or web UI changes must remain compatible with macOS, Linux, and native Windows. Before submitting such changes, run:
+
+```bash
+php bin/qi doctor
+php bin/qi help
+```
+
+On Windows, also smoke-test both supplied launchers:
+
+```powershell
+.\bin\qi.ps1 help
+.\bin\qi.cmd help
+```
+
+Windows-specific changes should cover drive-letter paths, paths containing spaces, Command Prompt and PowerShell execution, and the `ui:start`/`ui:status`/`ui:stop` lifecycle. GitHub Actions runs the PHPUnit suite and launcher smoke tests on native Windows.
+
 ## :computer: Make something great
 
 1. Create a new branch in your repository before doing any work. It should be based off the `develop` branch:

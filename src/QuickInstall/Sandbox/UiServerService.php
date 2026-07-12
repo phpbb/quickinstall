@@ -48,6 +48,7 @@ class UiServerService
 			'port' => $port,
 			'url' => $url,
 			'log' => $logPath,
+			'error_log' => PHP_OS_FAMILY === 'Windows' ? $logPath . '.err' : $logPath,
 			'started_at' => gmdate('c'),
 		];
 		try
@@ -140,6 +141,7 @@ class UiServerService
 	private function startWindowsDetachedProcess(array $command, string $cwd, string $logPath): int
 	{
 		$arguments = array_slice($command, 1);
+		$arguments = array_map([$this, 'quoteWindowsProcessArgument'], $arguments);
 		$argumentList = '@(' . implode(',', array_map([$this, 'powerShellString'], $arguments)) . ')';
 		$errorLog = $logPath . '.err';
 		$script = '$p = Start-Process -FilePath ' . $this->powerShellString($command[0])
@@ -159,29 +161,45 @@ class UiServerService
 		return $pid;
 	}
 
+	private function quoteWindowsProcessArgument(string $value): string
+	{
+		// Start-Process flattens ArgumentList into one command line. Preserve each
+		// argument, including router paths containing spaces, with CRT-style quoting.
+		$value = preg_replace('/(\\\\*)"/', '$1$1\\"', $value) ?? $value;
+		$value = preg_replace('/(\\\\+)$/', '$1$1', $value) ?? $value;
+		return '"' . $value . '"';
+	}
+
 	private function captureProcess(array $command, string $cwd): array
 	{
+		$this->project->init();
+		$runtimeDir = $this->project->workspacePath('runtime');
+		$stdoutPath = tempnam($runtimeDir, 'process-out-');
+		$stderrPath = tempnam($runtimeDir, 'process-err-');
+		if ($stdoutPath === false || $stderrPath === false)
+		{
+			throw new RuntimeException('Unable to create temporary UI process output files.');
+		}
+
 		$descriptor = [
-			0 => ['pipe', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['pipe', 'w'],
+			0 => ['file', PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null', 'r'],
+			1 => ['file', $stdoutPath, 'w'],
+			2 => ['file', $stderrPath, 'w'],
 		];
 		$process = proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
+			@unlink($stdoutPath);
+			@unlink($stderrPath);
 			return ['exit_code' => 1, 'output' => ''];
 		}
 
-		fclose($pipes[0]);
-		$output = stream_get_contents($pipes[1]) ?: '';
-		$error = stream_get_contents($pipes[2]) ?: '';
-		fclose($pipes[1]);
-		fclose($pipes[2]);
+		$exitCode = proc_close($process);
+		$output = (string) @file_get_contents($stdoutPath) . (string) @file_get_contents($stderrPath);
+		@unlink($stdoutPath);
+		@unlink($stderrPath);
 
-		return [
-			'exit_code' => proc_close($process),
-			'output' => $output . $error,
-		];
+		return ['exit_code' => $exitCode, 'output' => $output];
 	}
 
 	private function powerShellString(string $value): string
@@ -220,6 +238,11 @@ class UiServerService
 		if (file_put_contents($logPath, '') === false)
 		{
 			throw new RuntimeException("Unable to reset UI log: $logPath");
+		}
+		$errorLog = $logPath . '.err';
+		if (PHP_OS_FAMILY === 'Windows' && file_put_contents($errorLog, '') === false)
+		{
+			throw new RuntimeException("Unable to reset UI error log: $errorLog");
 		}
 	}
 
@@ -310,7 +333,12 @@ class UiServerService
 			usleep(100000);
 		}
 
-		throw new RuntimeException('QuickInstall sandbox UI server did not become available. Check the UI log for details: ' . ($state['log'] ?? '(unknown)'));
+		$logs = (string) ($state['log'] ?? '(unknown)');
+		if (!empty($state['error_log']) && $state['error_log'] !== $state['log'])
+		{
+			$logs .= ' and ' . $state['error_log'];
+		}
+		throw new RuntimeException('QuickInstall sandbox UI server did not become available. Check the UI logs for details: ' . $logs);
 	}
 
 	private function waitForStop(array $state): void

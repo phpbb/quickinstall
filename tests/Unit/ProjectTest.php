@@ -12,6 +12,29 @@ class ProjectTest extends TestCase
 {
 	use TempProjectTrait;
 
+	public function testNormalizesWindowsDriveAndUncPaths(): void
+	{
+		$driveProject = new Project('c:\\Projects\\QuickInstall\\', 'Windows');
+		$uncProject = new Project('\\\\server\\share\\QuickInstall', 'Windows');
+
+		self::assertSame('C:/Projects/QuickInstall/.qi', $driveProject->workspacePath());
+		self::assertSame('//server/share/QuickInstall/bin/qi', $uncProject->rootPath('bin/qi'));
+	}
+
+	public function testWindowsPathContainmentIsSeparatorAndCaseInsensitive(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root, 'Windows');
+		$project->init();
+		$inside = $project->customisationsPath() . '/Vendor/Extension';
+		mkdir($inside, 0775, true);
+
+		self::assertTrue($project->isPathUnder(
+			str_replace('/', '\\', strtoupper((string) realpath($inside))),
+			$project->customisationsPath()
+		));
+	}
+
 	public function testInitCreatesWorkspaceAndDefaults(): void
 	{
 		$root = $this->createTempProjectRoot();

@@ -10,6 +10,31 @@ use RuntimeException;
 
 class ProcessRunnerTest extends TestCase
 {
+	public function testWindowsBatchCommandsUseCmdExe(): void
+	{
+		$runner = new ProcessRunner(new BufferedOutput(), 'Windows');
+		$method = new \ReflectionMethod(ProcessRunner::class, 'platformCommand');
+		$method->setAccessible(true);
+
+		$command = $method->invoke($runner, ['C:\\Program Files\\Composer\\composer.bat', 'show', 'vendor/package']);
+
+		self::assertSame(['/D', '/S', '/C'], array_slice($command, 1, 3));
+		self::assertStringEndsWith('cmd.exe', strtolower($command[0]));
+		self::assertStringContainsString('"C:\\Program Files\\Composer\\composer.bat"', $command[4]);
+		self::assertStringContainsString('"vendor/package"', $command[4]);
+	}
+
+	public function testWindowsBatchCommandsPreserveLiteralPercentSigns(): void
+	{
+		$runner = new ProcessRunner(new BufferedOutput(), 'Windows');
+		$method = new \ReflectionMethod(ProcessRunner::class, 'platformCommand');
+		$method->setAccessible(true);
+
+		$command = $method->invoke($runner, ['composer.cmd', 'show', 'value%20with%20escapes']);
+
+		self::assertStringContainsString('value%%20with%%20escapes', $command[4]);
+	}
+
 	public function testFailureIncludesCommandOutput(): void
 	{
 		$runner = new ProcessRunner(new BufferedOutput());

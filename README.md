@@ -39,10 +39,10 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 ##### Browsers
 QuickInstall is designed to run on all modern browsers. Please don't use old stuff anymore...seriously.
 
-|  |  |  |  |  |  |
-|-|-|-|-|-|-|
-| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+ | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+ | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 12+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 40+ |
-| Mobile: | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari-ios/safari-ios_32x32.png) 12+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/android-webview/android-webview_32x32.png) 6+ |  |  |  |
+|          |                                                                                                         |                                                                                                                      |                                                                                                    |                                                                                              |                                                                                                 |
+|----------|---------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| Desktop: | ![Chrome](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/chrome/chrome_32x32.png) 60+      | ![Firefox](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/firefox/firefox_32x32.png) 60+                | ![Safari](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari/safari_32x32.png) 12+ | ![Edge](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/edge/edge_32x32.png) 80+ | ![Opera](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/opera/opera_32x32.png) 40+ |
+| Mobile:  | ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/safari-ios/safari-ios_32x32.png) 12+ | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/69.0.4/android-webview/android-webview_32x32.png) 6+ |                                                                                                    |                                                                                              |                                                                                                 |
 
 ##### phpBB Requirements
 phpBB boards require a web server running PHP and one of the following database management systems.
@@ -59,11 +59,26 @@ phpBB boards require a web server running PHP and one of the following database 
 
 ## QuickInstall CLI
 
-QuickInstall now includes a Docker-based CLI for creating local phpBB test boards. It writes generated state to `.qi/` and leaves the legacy web UI unchanged. The QuickInstall CLI requires PHP 8.0 or newer for the `php bin/qi` command.
+QuickInstall now includes a cross-platform, Docker-based CLI and local sandbox web UI for creating phpBB test boards. They work on macOS, Linux, and native Windows and write generated state to `.qi/` without changing the legacy web application.
+
+Sandbox requirements:
+
+- Docker Desktop, installed and running
+- PHP 8.0 or newer for the CLI command
+- Git when using Git sources
+
+Create your first new board:
 
 ```bash
 php bin/qi init
 php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+```
+
+The examples use `php bin/qi`, which works on every supported operating system when PHP is in `PATH`. Windows users can alternatively use the supplied PowerShell or Command Prompt launchers:
+
+```powershell
+.\bin\qi.ps1 board:list
+.\bin\qi.cmd board:list
 ```
 
 The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.

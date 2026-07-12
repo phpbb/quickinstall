@@ -18,6 +18,14 @@ class BinQiTest extends TestCase
 		self::assertSame('', $result['stderr']);
 	}
 
+	public function testHelpIncludesDoctorCommand(): void
+	{
+		$result = $this->runCli(['help', 'doctor']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('Checks that required host tools are available', $result['stdout']);
+	}
+
 	public function testInvalidBoardCreateSmokeTestDoesNotRequireWorkspaceMutation(): void
 	{
 		$result = $this->runCli(['board:create', 'demo', '--port', '70000']);

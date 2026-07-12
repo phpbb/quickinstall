@@ -180,7 +180,7 @@ class StyleManager
 	{
 		if ($this->isStylePath($path))
 		{
-			$found[] = $path;
+			$found[] = realpath($path) ?: $path;
 			return;
 		}
 

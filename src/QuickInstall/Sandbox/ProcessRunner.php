@@ -15,10 +15,12 @@ use RuntimeException;
 class ProcessRunner
 {
 	private Output $output;
+	private string $osFamily;
 
-	public function __construct(?Output $output = null)
+	public function __construct(?Output $output = null, ?string $osFamily = null)
 	{
 		$this->output = $output ?: new BufferedOutput();
+		$this->osFamily = $osFamily ?: PHP_OS_FAMILY;
 	}
 
 	public function run(array $command, ?string $cwd = null): void
@@ -39,6 +41,7 @@ class ProcessRunner
 
 	private function execute(array $command, bool $stream, ?string $cwd): array
 	{
+		$command = $this->platformCommand($command);
 		$descriptor = [
 			0 => ['pipe', 'r'],
 			1 => ['pipe', 'w'],
@@ -59,8 +62,16 @@ class ProcessRunner
 
 		$output = '';
 		$open = [1 => true, 2 => true];
+		$processExitCode = null;
 		while ($open[1] || $open[2])
 		{
+			$status = proc_get_status($process);
+			$processRunning = (bool) ($status['running'] ?? false);
+			if (!$processRunning && isset($status['exitcode']) && $status['exitcode'] >= 0)
+			{
+				$processExitCode = (int) $status['exitcode'];
+			}
+
 			foreach ([1, 2] as $index)
 			{
 				if (!$open[$index])
@@ -78,7 +89,10 @@ class ProcessRunner
 					}
 				}
 
-				if (feof($pipes[$index]))
+				// Windows anonymous pipes do not always report EOF promptly after the
+				// child exits. Once proc_get_status confirms exit, the final read above
+				// has drained the pipe and it is safe to close it.
+				if (feof($pipes[$index]) || !$processRunning)
 				{
 					fclose($pipes[$index]);
 					$open[$index] = false;
@@ -91,8 +105,9 @@ class ProcessRunner
 			}
 		}
 
+		$closeExitCode = proc_close($process);
 		return [
-			'exit_code' => proc_close($process),
+			'exit_code' => $processExitCode ?? $closeExitCode,
 			'output' => $output,
 		];
 	}
@@ -107,8 +122,9 @@ class ProcessRunner
 
 	private function runWithStreamOutput(array $command, ?string $cwd): array
 	{
+		$command = $this->platformCommand($command);
 		$descriptor = [
-			0 => ['file', '/dev/null', 'r'],
+			0 => ['file', $this->osFamily === 'Windows' ? 'NUL' : '/dev/null', 'r'],
 			1 => $this->output->stdout(),
 			2 => $this->output->stderr(),
 		];
@@ -123,6 +139,32 @@ class ProcessRunner
 			'exit_code' => proc_close($process),
 			'output' => '',
 		];
+	}
+
+	private function platformCommand(array $command): array
+	{
+		if ($this->osFamily !== 'Windows' || !$command)
+		{
+			return $command;
+		}
+
+		$executable = strtolower((string) $command[0]);
+		if (!str_ends_with($executable, '.bat') && !str_ends_with($executable, '.cmd'))
+		{
+			return $command;
+		}
+
+		$commandLine = implode(' ', array_map([$this, 'escapeWindowsBatchArgument'], $command));
+		return [getenv('COMSPEC') ?: 'cmd.exe', '/D', '/S', '/C', '"' . $commandLine . '"'];
+	}
+
+	private function escapeWindowsBatchArgument(string $argument): string
+	{
+		// cmd.exe expands percent variables even inside quotes. Doubling percent signs
+		// preserves URL escapes and other literal arguments passed to batch wrappers.
+		$argument = str_replace('%', '%%', $argument);
+		$argument = str_replace('"', '\\"', $argument);
+		return '"' . $argument . '"';
 	}
 
 	private function outputSummary(string $output): string

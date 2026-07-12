@@ -60,6 +60,32 @@ Then open the URL printed by the command:
 http://127.0.0.1:8079/
 ```
 
+## Commands by OS
+
+The examples in this guide use the portable command form:
+
+```bash
+php bin/qi <command>
+```
+
+It works on macOS, Linux, and Windows when PHP is available in `PATH`.
+
+Native Windows launchers are also included. From PowerShell:
+
+```powershell
+.\bin\qi.ps1 <command>
+```
+
+From Command Prompt:
+
+```batch
+bin\qi.cmd <command>
+```
+
+Arguments and options are identical with every launcher. Run commands from the QuickInstall project root. Windows drive-letter paths, UNC paths, backslashes, spaces, and case-insensitive filesystem paths are supported.
+
+Docker Desktop on Windows must use its WSL 2 or Hyper-V Linux-container backend rather than Windows containers.
+
 ## Common Recipes
 
 Create a small empty board:
@@ -219,6 +245,12 @@ By default, extension sources must live under `customisations/`. To mount a trus
 php bin/qi ext:mount demo /path/to/vendor/extname --allow-external
 ```
 
+On Windows, quote external paths containing spaces:
+
+```powershell
+.\bin\qi.ps1 ext:mount demo "C:\Path\To\My Extensions\vendor\extname" --allow-external
+```
+
 ## Styles
 
 Put downloaded styles under `customisations/`:
@@ -264,6 +296,12 @@ By default, style sources must live under `customisations/`. To mount a trusted 
 
 ```bash
 php bin/qi style:mount demo /path/to/stylename --allow-external
+```
+
+On Windows, quote external paths containing spaces:
+
+```powershell
+.\bin\qi.ps1 style:mount demo "C:\Path\To\My Styles\stylename" --allow-external
 ```
 
 ## Supported phpBB Versions
@@ -345,7 +383,7 @@ Fetched sources live under:
 
 ## Web UI
 
-QuickInstall includes a local browser UI for the same sandbox workflows exposed by the CLI. It is served by PHP's built-in web server and backed by the same `.qi/` project state.
+QuickInstall includes a local browser UI for the same sandbox workflows exposed by the CLI. It is served by PHP's built-in web server and backed by the same `.qi/` project state. The UI server can be started, checked, restarted, and stopped on macOS, Linux, or native Windows.
 
 Start the UI:
 
@@ -390,15 +428,16 @@ php bin/qi ui:start --host ::1
 
 Generated state:
 
-| Path                   | Contents                                     |
-|------------------------|----------------------------------------------|
-| `.qi/boards/<name>`    | Installed phpBB board files                  |
-| `.qi/runtime/<name>`   | Docker Compose, Dockerfile, installer config |
-| `.qi/db/<name>`        | Database files                               |
-| `.qi/sources/<source>` | Downloaded phpBB source                      |
-| `.qi/runtime/ui.json`  | Tracked web UI server state                  |
-| `.qi/runtime/ui.log`   | Web UI server log                            |
-| `.qi/cache/`           | Cached update-check metadata                 |
+| Path                     | Contents                                     |
+|--------------------------|----------------------------------------------|
+| `.qi/boards/<name>`      | Installed phpBB board files                  |
+| `.qi/runtime/<name>`     | Docker Compose, Dockerfile, installer config |
+| `.qi/db/<name>`          | Database files                               |
+| `.qi/sources/<source>`   | Downloaded phpBB source                      |
+| `.qi/runtime/ui.json`    | Tracked web UI server state                  |
+| `.qi/runtime/ui.log`     | Web UI server output log                     |
+| `.qi/runtime/ui.log.err` | Windows web UI server error log              |
+| `.qi/cache/`             | Cached update-check metadata                 |
 
 User-managed drop zone:
 
@@ -419,9 +458,33 @@ customisations/
 
 ## Troubleshooting
 
+If QuickInstall is not working as expected, start with the environment check:
+
+```bash
+php bin/qi doctor
+```
+
+Every check should report `OK`; failures include the detected problem. On Windows, use `.\bin\qi.ps1 doctor` or `bin\qi.cmd doctor`.
+
+#### Command is not found on Windows
+
+Run QuickInstall from the project root with one of the supplied launchers:
+
+```powershell
+.\bin\qi.ps1 help
+```
+
+```batch
+bin\qi.cmd help
+```
+
+If either launcher reports that `php` is not recognized, install PHP 8 or newer and add its directory to the Windows `PATH`. Open a new terminal and run `php --version` to confirm it is available.
+
 #### Docker command fails
 
 Check that Docker Desktop is running and that the docker command works in this terminal.
+
+On Windows, also confirm Docker Desktop is using Linux containers. `php bin/qi doctor` reports `Linux containers: OK` when configured correctly.
 
 #### Composer command fails
 
@@ -466,4 +529,4 @@ If the selected port is already in use, choose a different local port:
 php bin/qi ui:start --port 8088
 ```
 
-The UI server log is written to `.qi/runtime/ui.log`.
+The UI server output log is written to `.qi/runtime/ui.log`. On Windows, PHP server errors are written to `.qi/runtime/ui.log.err`.
