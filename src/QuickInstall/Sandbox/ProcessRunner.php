@@ -48,7 +48,7 @@ class ProcessRunner
 			2 => ['pipe', 'w'],
 		];
 
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
 			return ['exit_code' => 1, 'output' => ''];
@@ -129,7 +129,7 @@ class ProcessRunner
 			2 => $this->output->stderr(),
 		];
 
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
 			return ['exit_code' => 1, 'output' => ''];

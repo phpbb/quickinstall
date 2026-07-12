@@ -10,6 +10,29 @@ use RuntimeException;
 
 class ProcessRunnerTest extends TestCase
 {
+	public function testMissingCommandFailsWithoutPhpWarning(): void
+	{
+		$warnings = [];
+		set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+			if (error_reporting() & $severity)
+			{
+				$warnings[] = $message;
+			}
+			return true;
+		});
+		try
+		{
+			$result = (new ProcessRunner(new BufferedOutput()))->capture(['quickinstall-command-that-does-not-exist']);
+		}
+		finally
+		{
+			restore_error_handler();
+		}
+
+		self::assertNotSame(0, $result['exit_code']);
+		self::assertSame([], $warnings);
+	}
+
 	public function testWindowsBatchCommandsUseCmdExe(): void
 	{
 		$runner = new ProcessRunner(new BufferedOutput(), 'Windows');

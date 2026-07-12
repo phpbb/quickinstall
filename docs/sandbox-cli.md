@@ -478,7 +478,7 @@ Run QuickInstall from the project root with one of the supplied launchers:
 bin\qi.cmd help
 ```
 
-If either launcher reports that `php` is not recognized, install PHP 8 or newer and add its directory to the Windows `PATH`. Open a new terminal and run `php --version` to confirm it is available.
+If either launcher reports that QuickInstall requires PHP, install PHP 8 or newer and add the directory containing `php.exe` to the Windows `PATH`. Open a new terminal and run `php --version` to confirm it is available.
 
 #### Docker command fails
 

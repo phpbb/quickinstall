@@ -44,7 +44,15 @@ class DoctorService
 
 		$git = $this->capture(['git', '--version']);
 		$checks[] = $this->check('Git', $git['exit_code'] === 0, $this->detail($git, 'not available'));
-		$checks[] = $this->check('Composer', $this->composerAvailable(), $this->composerDetail());
+		if (is_file($this->project->rootPath('composer.phar')))
+		{
+			$checks[] = $this->check('Composer', true, 'bundled composer.phar');
+		}
+		else
+		{
+			$composer = $this->capture(['composer', '--version']);
+			$checks[] = $this->check('Composer', $composer['exit_code'] === 0, $this->detail($composer, 'not available'));
+		}
 
 		return $checks;
 	}
@@ -59,25 +67,6 @@ class DoctorService
 		{
 			return ['exit_code' => 1, 'output' => $e->getMessage()];
 		}
-	}
-
-	private function composerAvailable(): bool
-	{
-		if (is_file($this->project->rootPath('composer.phar')))
-		{
-			return true;
-		}
-		return $this->capture(['composer', '--version'])['exit_code'] === 0;
-	}
-
-	private function composerDetail(): string
-	{
-		if (is_file($this->project->rootPath('composer.phar')))
-		{
-			return 'bundled composer.phar';
-		}
-		$result = $this->capture(['composer', '--version']);
-		return $result['exit_code'] === 0 ? $this->detail($result, 'from PATH') : $this->detail($result, 'not available');
 	}
 
 	private function check(string $name, bool $ok, string $detail): array

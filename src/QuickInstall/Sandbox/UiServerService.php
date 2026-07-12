@@ -186,7 +186,7 @@ class UiServerService
 			1 => ['file', $stdoutPath, 'w'],
 			2 => ['file', $stderrPath, 'w'],
 		];
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
 			@unlink($stdoutPath);
