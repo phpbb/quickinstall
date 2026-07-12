@@ -458,27 +458,29 @@ customisations/
 
 ## Troubleshooting
 
-If QuickInstall is not working as expected, start with the environment check:
+If QuickInstall starts but a command is not working as expected, run the environment check from the project root:
 
 ```bash
 php bin/qi doctor
 ```
 
-Every check should report `OK`; failures include the detected problem. On Windows, use `.\bin\qi.cmd doctor` from PowerShell or `bin\qi.cmd doctor` from Command Prompt.
-
-#### Command is not found on Windows
-
-Run QuickInstall from the project root with the supplied Windows launcher:
+On Windows PowerShell, you can use the Windows launcher instead:
 
 ```powershell
-.\bin\qi.cmd help
+.\bin\qi.cmd doctor
 ```
 
-```batch
-bin\qi.cmd help
+Every check should report `OK`; failures identify the missing or unavailable requirement.
+
+#### QuickInstall does not start on Windows
+
+First, check whether PHP is available:
+
+```powershell
+php --version
 ```
 
-If the launcher reports that QuickInstall requires PHP, install PHP 8 or newer and add the directory containing `php.exe` to the Windows `PATH`. Open a new terminal and run `php --version` to confirm it is available.
+If Windows does not recognize `php`, install PHP 8 or newer and add the directory containing `php.exe` to the Windows `PATH`. Open a new terminal, confirm `php --version` works, then run `.\bin\qi.cmd doctor` again.
 
 #### Docker command fails
 
