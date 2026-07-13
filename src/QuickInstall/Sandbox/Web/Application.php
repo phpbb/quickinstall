@@ -287,7 +287,7 @@ class Application
 		@ini_set('max_execution_time', '0');
 		if ((int) ini_get('max_execution_time') !== 0)
 		{
-			throw new RuntimeException('QuickInstall could not disable the PHP execution time limit for this action. Allow set_time_limit or set max_execution_time=0 for the sandbox UI.');
+			throw new RuntimeException('QuickInstall could not disable the PHP execution time limit for this action. Allow set_time_limit or set max_execution_time=0 for the Dashboard UI.');
 		}
 	}
 

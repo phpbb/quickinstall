@@ -48,7 +48,7 @@ If you ever need help with commands, run:
 php bin/qi help
 ```
 
-If you prefer a browser workflow, start the local sandbox UI:
+If you prefer a browser workflow, start the QuickInstall Dashboard UI:
 
 ```bash
 php bin/qi ui:start
@@ -381,9 +381,9 @@ Fetched sources live under:
 .qi/sources/phpbb-<source>
 ```
 
-## Web UI
+## Dashboard UI
 
-QuickInstall includes a local browser UI for the same sandbox workflows exposed by the CLI. It is served by PHP's built-in web server and backed by the same `.qi/` project state. The UI server can be started, checked, restarted, and stopped on macOS, Linux, or native Windows.
+The QuickInstall Dashboard UI provides a local browser interface for the same workflows exposed by the CLI. It is served by PHP's built-in web server and backed by the same `.qi/` workspace. The Dashboard UI can be started, checked, restarted, and stopped on macOS, Linux, or native Windows.
 
 Start the UI:
 
@@ -403,7 +403,7 @@ Use a different local port:
 php bin/qi ui:start --port 8088
 ```
 
-Check or stop the tracked UI server:
+Check or stop the tracked Dashboard UI server:
 
 ```bash
 php bin/qi ui:status
@@ -416,7 +416,7 @@ Restart it:
 php bin/qi ui:restart
 ```
 
-Supported UI server hosts are loopback-only:
+Supported Dashboard UI server hosts are loopback-only:
 
 ```bash
 php bin/qi ui:start --host 127.0.0.1
@@ -434,9 +434,9 @@ Generated state:
 | `.qi/runtime/<name>`     | Docker Compose, Dockerfile, installer config |
 | `.qi/db/<name>`          | Database files                               |
 | `.qi/sources/<source>`   | Downloaded phpBB source                      |
-| `.qi/runtime/ui.json`    | Tracked web UI server state                  |
-| `.qi/runtime/ui.log`     | Web UI server output log                     |
-| `.qi/runtime/ui.log.err` | Windows web UI server error log              |
+| `.qi/runtime/ui.json`    | Tracked Dashboard UI server state            |
+| `.qi/runtime/ui.log`     | Dashboard UI server output log               |
+| `.qi/runtime/ui.log.err` | Windows Dashboard UI server error log        |
 | `.qi/cache/`             | Cached update-check metadata                 |
 
 User-managed drop zone:
@@ -452,9 +452,9 @@ customisations/
 - `board:create` rejects ports already registered to another board or already in use on the host.
 - `ext:mount` and `style:mount` only use `customisations/` unless `--allow-external` is used.
 - Custom Git source URLs require `--allow-external`; only use trusted forks.
-- The web UI server only accepts loopback hosts (`127.0.0.1`, `localhost`, or `::1`) and rejects non-local requests.
+- The Dashboard UI server only accepts loopback hosts (`127.0.0.1`, `localhost`, or `::1`) and rejects non-local requests.
 - `ui:start` refuses ports already in use on the selected loopback host.
-- Web UI form submissions use CSRF tokens and only accept local origins or referrers.
+- Dashboard UI form submissions use CSRF tokens and only accept local origins or referrers.
 
 ## Troubleshooting
 
@@ -510,7 +510,7 @@ php bin/qi board:destroy demo
 php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
 ```
 
-#### Web UI will not start
+#### Dashboard UI will not start
 
 Check the tracked status:
 
@@ -531,4 +531,4 @@ If the selected port is already in use, choose a different local port:
 php bin/qi ui:start --port 8088
 ```
 
-The UI server output log is written to `.qi/runtime/ui.log`. On Windows, PHP server errors are written to `.qi/runtime/ui.log.err`.
+The Dashboard UI server output log is written to `.qi/runtime/ui.log`. On Windows, PHP server errors are written to `.qi/runtime/ui.log.err`.

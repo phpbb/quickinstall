@@ -595,11 +595,11 @@ class Application
 		$state = $result['state'];
 		if ($result['status'] === 'already_running')
 		{
-			echo "QuickInstall sandbox UI is already running: {$state['url']}\n";
+			echo "QuickInstall Dashboard UI is already running: {$state['url']}\n";
 			return 0;
 		}
 
-		echo "QuickInstall sandbox UI started: {$state['url']}\n";
+		echo "QuickInstall Dashboard UI started: {$state['url']}\n";
 		echo "PID: {$state['pid']}\n";
 		echo "Log: {$state['log']}\n";
 		echo "Stop it with: php bin/qi ui:stop\n";
@@ -613,13 +613,13 @@ class Application
 		$state = $result['state'];
 		if ($result['status'] === 'not_tracked')
 		{
-			echo "QuickInstall sandbox UI is not tracked as running.\n";
+			echo "QuickInstall Dashboard UI is not tracked as running.\n";
 			return 0;
 		}
 
 		if ($result['status'] === 'stopped')
 		{
-			echo "Stopped QuickInstall sandbox UI";
+			echo "Stopped QuickInstall Dashboard UI";
 			if (!empty($state['url']))
 			{
 				echo ": {$state['url']}";
@@ -627,7 +627,7 @@ class Application
 		}
 		else
 		{
-			echo "QuickInstall sandbox UI process was not running";
+			echo "QuickInstall Dashboard UI process was not running";
 			$pid = (int) ($state['pid'] ?? 0);
 			if ($pid > 0)
 			{
@@ -651,7 +651,7 @@ class Application
 		$state = $result['state'];
 		if ($result['status'] === 'running')
 		{
-			echo "QuickInstall sandbox UI is running\n";
+			echo "QuickInstall Dashboard UI is running\n";
 			echo "URL: {$state['url']}\n";
 			echo "PID: {$state['pid']}\n";
 			echo "Log: {$state['log']}\n";
@@ -660,13 +660,13 @@ class Application
 
 		if ($result['status'] === 'stale')
 		{
-			echo "QuickInstall sandbox UI is not running, but stale state exists.\n";
+			echo "QuickInstall Dashboard UI is not running, but stale state exists.\n";
 			echo "Last URL: " . ($state['url'] ?? '(unknown)') . "\n";
 			echo "Run: php bin/qi ui:stop\n";
 			return 1;
 		}
 
-		echo "QuickInstall sandbox UI is not running.\n";
+		echo "QuickInstall Dashboard UI is not running.\n";
 		return 0;
 	}
 
@@ -1121,8 +1121,8 @@ class Application
 				'ui:start' => [
 					'title' => 'ui:start',
 					'usage' => 'ui:start [--host 127.0.0.1] [--port 8079]',
-					'summary' => 'Start the local sandbox admin UI.',
-					'description' => 'Starts PHP built-in server in the background on a loopback address and serves a minimal admin UI backed by the sandbox services.',
+					'summary' => 'Start the local QuickInstall Dashboard UI.',
+					'description' => 'Starts PHP built-in server in the background on a loopback address and serves the QuickInstall Dashboard UI.',
 					'options' => [
 						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
 						'--port PORT' => 'Local UI port. Default: 8079.',
@@ -1135,8 +1135,8 @@ class Application
 				'ui:stop' => [
 					'title' => 'ui:stop',
 					'usage' => 'ui:stop',
-					'summary' => 'Stop the tracked local sandbox admin UI.',
-					'description' => 'Stops the background UI server that was started with ui:start and removes its runtime state file.',
+					'summary' => 'Stop the tracked QuickInstall Dashboard UI.',
+					'description' => 'Stops the background Dashboard UI server that was started with ui:start and removes its runtime state file.',
 					'examples' => [
 						'ui:stop',
 					],
@@ -1144,8 +1144,8 @@ class Application
 				'ui:restart' => [
 					'title' => 'ui:restart',
 					'usage' => 'ui:restart [--host 127.0.0.1] [--port 8079]',
-					'summary' => 'Restart the local sandbox admin UI.',
-					'description' => 'Stops the tracked UI server if present, then starts a fresh local UI server.',
+					'summary' => 'Restart the local QuickInstall Dashboard UI.',
+					'description' => 'Stops the tracked Dashboard UI server if present, then starts a fresh local Dashboard UI server.',
 					'options' => [
 						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
 						'--port PORT' => 'Local UI port. Default: 8079.',
@@ -1157,7 +1157,7 @@ class Application
 				'ui:status' => [
 					'title' => 'ui:status',
 					'usage' => 'ui:status',
-					'summary' => 'Show whether the local sandbox admin UI is running.',
+					'summary' => 'Show whether the QuickInstall Dashboard UI is running.',
 					'description' => 'Reads the tracked UI runtime state and checks whether the configured local UI port responds.',
 					'examples' => [
 						'ui:status',

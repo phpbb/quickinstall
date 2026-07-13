@@ -36,7 +36,7 @@
 		<main class="main">
 			<header class="topbar">
 				<div>
-					<h1>QuickInstall dashboard</h1>
+					<h1>QuickInstall Dashboard</h1>
 					<p class="lede">Manage disposable phpBB boards backed by the same Docker services as the CLI.</p>
 				</div>
 				<form method="post" data-ajax>

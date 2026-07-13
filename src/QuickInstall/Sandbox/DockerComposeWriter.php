@@ -70,7 +70,7 @@ installer:
   board:
     lang: en
     name: $boardName
-    description: "QuickInstall sandbox"
+    description: "QuickInstall test board"
   database:
     dbms: $dbms
     dbhost: "$dbhost"

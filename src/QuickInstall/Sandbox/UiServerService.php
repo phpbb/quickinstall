@@ -132,7 +132,7 @@ class UiServerService
 		}
 		if ($result['exit_code'] !== 0 || $pid <= 0)
 		{
-			throw new RuntimeException('Unable to start QuickInstall sandbox UI server.');
+			throw new RuntimeException('Unable to start QuickInstall Dashboard UI server.');
 		}
 
 		return $pid;
@@ -155,7 +155,7 @@ class UiServerService
 		$pid = (int) trim($result['output']);
 		if ($result['exit_code'] !== 0 || $pid <= 0)
 		{
-			throw new RuntimeException('Unable to start QuickInstall sandbox UI server. PowerShell is required on Windows.');
+			throw new RuntimeException('Unable to start QuickInstall Dashboard UI server. PowerShell is required on Windows.');
 		}
 
 		return $pid;
@@ -338,7 +338,7 @@ class UiServerService
 		{
 			$logs .= ' and ' . $state['error_log'];
 		}
-		throw new RuntimeException('QuickInstall sandbox UI server did not become available. Check the UI logs for details: ' . $logs);
+		throw new RuntimeException('QuickInstall Dashboard UI server did not become available. Check the Dashboard UI logs for details: ' . $logs);
 	}
 
 	private function waitForStop(array $state): void

@@ -60,7 +60,7 @@ Set-Location ..
 php tests/vendor/bin/phpunit -c phpunit.xml.dist
 ```
 
-Sandbox CLI or web UI changes must remain compatible with macOS, Linux, and native Windows. Before submitting such changes, run:
+CLI or Dashboard UI changes must remain compatible with macOS, Linux, and native Windows. Before submitting such changes, run:
 
 ```bash
 php bin/qi doctor

@@ -59,9 +59,9 @@ phpBB boards require a web server running PHP and one of the following database 
 
 ## QuickInstall CLI
 
-QuickInstall now includes a cross-platform, Docker-based CLI and local sandbox web UI for creating phpBB test boards. They work on macOS, Linux, and native Windows and write generated state to `.qi/` without changing the legacy web application.
+QuickInstall now includes a cross-platform, Docker-based CLI and local Dashboard UI for creating phpBB test boards. They work on macOS, Linux, and native Windows and write generated state to `.qi/` without changing the legacy web application.
 
-Sandbox requirements:
+Requirements:
 
 - Docker Desktop, installed and running
 - PHP 8.0 or newer for the CLI command
@@ -70,29 +70,18 @@ Sandbox requirements:
 Create your first new board:
 
 ```bash
-php bin/qi init
 php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
-```
-
-The examples use `php bin/qi`, which works on every supported operating system when PHP is in `PATH`. Windows users can alternatively use the supplied Command Prompt launcher from either Command Prompt or PowerShell:
-
-```powershell
-.\bin\qi.cmd board:list
 ```
 
 The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.
 
-Downloaded extensions can be unzipped into `customisations/` and mounted into boards:
+If you prefer a browser workflow, start the QuickInstall Dashboard UI:
 
 ```bash
-php bin/qi ext:mount test customisations/vendor/extname
+php bin/qi ui:start
 ```
 
-Downloaded styles can be unzipped into `customisations/` and mounted into boards:
-
-```bash
-php bin/qi style:mount test customisations/stylename
-```
+The examples use `php bin/qi`, which works on every supported operating system when PHP is in `PATH`. Windows users can alternatively use `.\bin\qi.cmd` from either Command Prompt or PowerShell.
 
 See the complete [QuickInstall CLI docs](docs/sandbox-cli.md).
 

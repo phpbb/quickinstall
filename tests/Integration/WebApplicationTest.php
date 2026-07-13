@@ -57,7 +57,6 @@ class WebApplicationTest extends TestCase
 		$html = $this->runWebApplication($root);
 
 		self::assertStringContainsString('QuickInstall Dashboard', $html);
-		self::assertStringContainsString('QuickInstall dashboard', $html);
 		self::assertStringContainsString('QuickInstall + Docker', $html);
 		self::assertStringContainsString('Create board', $html);
 		self::assertStringContainsString('Sources', $html);

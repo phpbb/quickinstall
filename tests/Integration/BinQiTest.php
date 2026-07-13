@@ -40,7 +40,7 @@ class BinQiTest extends TestCase
 		$result = $this->runCli(['ui:status']);
 
 		self::assertContains($result['exit_code'], [0, 1]);
-		self::assertStringContainsString('QuickInstall sandbox UI', $result['stdout']);
+		self::assertStringContainsString('QuickInstall Dashboard UI', $result['stdout']);
 		self::assertSame('', $result['stderr']);
 	}
 
