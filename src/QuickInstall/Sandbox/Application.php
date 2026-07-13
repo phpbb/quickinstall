@@ -152,6 +152,7 @@ class Application
 			'init', 'source:fetch', 'source:remove', 'source:prune',
 			'board:create', 'board:start', 'board:stop', 'board:destroy', 'board:seed',
 			'ext:mount', 'ext:unmount', 'style:mount', 'style:unmount',
+			'ui:start', 'ui:stop', 'ui:restart',
 		], true);
 	}
 

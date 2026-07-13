@@ -162,6 +162,18 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('ui:status', $result['output']);
 	}
 
+	public function testUiLifecycleMutationsUseWorkspaceLock(): void
+	{
+		$application = new Application($this->createTempProjectRoot());
+		$method = new \ReflectionMethod(Application::class, 'mutatesWorkspace');
+		$method->setAccessible(true);
+
+		self::assertTrue($method->invoke($application, 'ui:start'));
+		self::assertTrue($method->invoke($application, 'ui:stop'));
+		self::assertTrue($method->invoke($application, 'ui:restart'));
+		self::assertFalse($method->invoke($application, 'ui:status'));
+	}
+
 	public function testUiStatusAndStopHandleNoTrackedServer(): void
 	{
 		$root = $this->createTempProjectRoot();
