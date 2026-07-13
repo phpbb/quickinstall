@@ -60,6 +60,52 @@ class ProjectTest extends TestCase
 		(new Project($this->createTempProjectRoot()))->boardPath('../outside');
 	}
 
+	/**
+	 * @dataProvider dangerousNameProvider
+	 */
+	public function testRejectsNamesThatResolveToParentDirectories(string $name): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+
+		$this->expectException(InvalidArgumentException::class);
+		$project->boardPath($name);
+	}
+
+	public function dangerousNameProvider(): array
+	{
+		return [['.'], ['..']];
+	}
+
+	public function testRejectsWindowsDeviceNames(): void
+	{
+		$project = new Project('C:\\Projects\\QuickInstall', 'Windows');
+
+		$this->expectException(InvalidArgumentException::class);
+		$project->boardPath('NUL');
+	}
+
+	public function testMalformedJsonStateIsReported(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		file_put_contents($project->workspacePath('boards.json'), '{broken');
+
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Invalid JSON state file');
+		$project->boards();
+	}
+
+	public function testBoardRegistryRejectsNamesThatDifferOnlyByCase(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		$project->appendBoard(['name' => 'demo']);
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('Board names are case-insensitive');
+		$project->appendBoard(['name' => 'Demo']);
+	}
+
 	public function testDeleteTreeRefusesPathOutsideWorkspace(): void
 	{
 		$root = $this->createTempProjectRoot();

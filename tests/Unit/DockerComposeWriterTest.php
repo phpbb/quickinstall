@@ -182,4 +182,17 @@ class DockerComposeWriterTest extends TestCase
 
 		return [$project, (new DockerComposeWriter($project))->write($name, $this->config($overrides))];
 	}
+
+	public function testGeneratedRuntimeFilesAlwaysUseUnixLineEndings(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$writer = new DockerComposeWriter($project);
+		$method = new \ReflectionMethod(DockerComposeWriter::class, 'writeFile');
+		$method->setAccessible(true);
+		$path = $project->rootPath('entrypoint.sh');
+
+		$method->invoke($writer, $path, "set -eu\r\necho ready\r\n");
+
+		self::assertSame("set -eu\necho ready\n", file_get_contents($path));
+	}
 }

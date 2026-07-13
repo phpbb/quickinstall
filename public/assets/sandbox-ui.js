@@ -50,8 +50,13 @@ function bindAjax() {
 						.slice(0, 500);
 					throw new Error(detail || 'QuickInstall returned an invalid response. Check the UI error log.');
 				}
-				dashboard.innerHTML = data.html;
-				bindAjax();
+				if (!data || typeof data !== 'object') {
+					throw new Error('QuickInstall returned an invalid response object.');
+				}
+				if (typeof data.html === 'string' && data.html !== '') {
+					dashboard.innerHTML = data.html;
+					bindAjax();
+				}
 				showActionResult(data, context);
 				scrollLog();
 			} catch (error) {

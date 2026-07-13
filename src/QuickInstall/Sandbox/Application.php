@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use InvalidArgumentException;
 use RuntimeException;
+use Throwable;
 
 class Application
 {
@@ -36,8 +37,13 @@ class Application
 			return 0;
 		}
 
+		$operationLock = null;
 		try
 		{
+			if ($this->mutatesWorkspace($command))
+			{
+				$operationLock = $this->project->lockOperations();
+			}
 			switch ($command)
 			{
 				case 'help':
@@ -128,8 +134,25 @@ class Application
 		}
 		finally
 		{
-			$this->printUpdateNotice($command, $argv);
+			$this->project->unlockOperations($operationLock);
+			try
+			{
+				$this->printUpdateNotice($command, $argv);
+			}
+			catch (Throwable $e)
+			{
+				// Update notifications must never change command success or failure.
+			}
 		}
+	}
+
+	private function mutatesWorkspace(string $command): bool
+	{
+		return in_array($command, [
+			'init', 'source:fetch', 'source:remove', 'source:prune',
+			'board:create', 'board:start', 'board:stop', 'board:destroy', 'board:seed',
+			'ext:mount', 'ext:unmount', 'style:mount', 'style:unmount',
+		], true);
 	}
 
 	private function init(): int

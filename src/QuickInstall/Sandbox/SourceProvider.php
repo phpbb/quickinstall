@@ -44,6 +44,13 @@ class SourceProvider
 		}
 
 		$sources = $this->project->readJson('sources.json', []);
+		foreach (array_keys($sources) as $registeredKey)
+		{
+			if ($this->project->namesEqual((string) $registeredKey, (string) $selection['source_key']) && (string) $registeredKey !== (string) $selection['source_key'])
+			{
+				throw new InvalidArgumentException("Source already exists with different letter case: $registeredKey");
+			}
+		}
 		$record = [
 			'version' => $selection['version'],
 			'source_key' => $selection['source_key'],
@@ -75,6 +82,10 @@ class SourceProvider
 		if (!str_ends_with($url, '.git'))
 		{
 			throw new InvalidArgumentException('Git URL must point to a repository clone URL ending in .git.');
+		}
+		if (parse_url($url, PHP_URL_USER) !== null || parse_url($url, PHP_URL_PASS) !== null)
+		{
+			throw new InvalidArgumentException('Git URLs must not contain credentials. Use SSH or a credential manager so secrets are not stored or logged.');
 		}
 	}
 

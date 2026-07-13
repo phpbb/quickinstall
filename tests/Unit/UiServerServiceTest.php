@@ -45,6 +45,46 @@ class UiServerServiceTest extends TestCase
 		self::assertSame('"C:\\Program Files\\QuickInstall\\public\\sandbox-ui.php"', $method->invoke($service, 'C:\\Program Files\\QuickInstall\\public\\sandbox-ui.php'));
 	}
 
+	public function testUiServerCommandMatcherAcceptsQuotedWindowsServerFlag(): void
+	{
+		$service = new UiServerService(new Project($this->createTempProjectRoot()));
+		$method = new \ReflectionMethod(UiServerService::class, 'commandMatchesRouter');
+		$method->setAccessible(true);
+		$router = 'C:\\Program Files\\QuickInstall\\public\\sandbox-ui.php';
+		$command = '"C:\\Program Files\\PHP\\php.exe" "-S" "127.0.0.1:8079" "' . $router . '"';
+
+		self::assertTrue($method->invoke($service, $command, $router));
+	}
+
+	public function testIpv6LoopbackUsesBracketedServerAddressAndUrlHost(): void
+	{
+		$service = new UiServerService(new Project($this->createTempProjectRoot()));
+		$serverAddress = new \ReflectionMethod(UiServerService::class, 'serverAddress');
+		$urlHost = new \ReflectionMethod(UiServerService::class, 'urlHost');
+		$serverAddress->setAccessible(true);
+		$urlHost->setAccessible(true);
+
+		self::assertSame('[::1]:8079', $serverAddress->invoke($service, '::1', 8079));
+		self::assertSame('[::1]', $urlHost->invoke($service, '::1'));
+	}
+
+	public function testStopDoesNotKillUnrelatedReusedPid(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		$project->writeJson('runtime/ui.json', [
+			'pid' => getmypid(),
+			'host' => '127.0.0.1',
+			'port' => 8079,
+			'router' => '/definitely/not/quickinstall-router.php',
+		]);
+
+		$result = (new UiServerService($project))->stop();
+
+		self::assertSame('not_running', $result['status']);
+		self::assertFileDoesNotExist($project->workspacePath('runtime/ui.json'));
+	}
+
 	public function testResetLogTruncatesExistingUiLog(): void
 	{
 		$root = $this->createTempProjectRoot();

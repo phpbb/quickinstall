@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox\Web;
 
+use ErrorException;
 use InvalidArgumentException;
 use QuickInstall\Sandbox\BoardRefreshService;
 use QuickInstall\Sandbox\BoardService;
@@ -21,6 +22,7 @@ use QuickInstall\Sandbox\SourceService;
 use QuickInstall\Sandbox\StyleManager;
 use QuickInstall\Sandbox\UpdateService;
 use RuntimeException;
+use Throwable;
 
 class Application
 {
@@ -68,14 +70,14 @@ class Application
 				return false;
 			}
 
-			throw new \ErrorException($message, 0, $severity, $file, $line);
+			throw new ErrorException($message, 0, $severity, $file, $line);
 		});
 
 		try
 		{
 			$this->handlePost();
 		}
-		catch (\Throwable $e)
+		catch (Throwable $e)
 		{
 			$this->error = $this->friendlyError($e->getMessage());
 		}
@@ -165,8 +167,10 @@ class Application
 
 	private function handlePost(): void
 	{
+		$operationLock = null;
 		try
 		{
+			$operationLock = $this->project->lockOperations();
 			$this->disableExecutionTimeLimit();
 			$action = (string) ($_POST['action'] ?? '');
 			switch ($action)
@@ -270,6 +274,10 @@ class Application
 		catch (InvalidArgumentException | RuntimeException $e)
 		{
 			$this->error = $this->friendlyError($e->getMessage());
+		}
+		finally
+		{
+			$this->project->unlockOperations($operationLock);
 		}
 	}
 
@@ -409,7 +417,7 @@ class Application
 			{
 				return false;
 			}
-			throw new \ErrorException($message, 0, $severity, $file, $line);
+			throw new ErrorException($message, 0, $severity, $file, $line);
 		});
 
 		try
@@ -421,17 +429,17 @@ class Application
 				'error' => $this->error,
 				'output' => $this->output->all(),
 				'html' => $html,
-			], JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+			], JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR);
 		}
-		catch (\Throwable $e)
+		catch (Throwable $e)
 		{
 			$json = json_encode([
 				'ok' => false,
 				'notice' => '',
 				'error' => $this->friendlyError($e->getMessage()),
 				'output' => $this->output->all(),
-				'html' => '',
-			], JSON_UNESCAPED_SLASHES) ?: '{"ok":false,"error":"Unable to encode QuickInstall response."}';
+				'html' => null,
+			], JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE) ?: '{"ok":false,"notice":"","error":"Unable to encode QuickInstall response.","output":"","html":null}';
 		}
 		finally
 		{

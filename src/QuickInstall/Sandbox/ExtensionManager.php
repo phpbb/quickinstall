@@ -219,7 +219,11 @@ class ExtensionManager
 
 	private function assertExtensionName(string $name): void
 	{
-		if (!preg_match('/^[a-z0-9_.-]+\/[a-z0-9_.-]+$/', $name))
+		$parts = explode('/', $name, 2);
+		if (!preg_match('/^[a-z0-9_.-]+\/[a-z0-9_.-]+$/', $name)
+			|| count($parts) !== 2
+			|| in_array($parts[0], ['.', '..'], true)
+			|| in_array($parts[1], ['.', '..'], true))
 		{
 			throw new InvalidArgumentException("Invalid extension name: $name");
 		}

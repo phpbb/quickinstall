@@ -37,8 +37,8 @@ class UiServerService
 
 		$this->project->init();
 		$router = dirname(__DIR__, 3) . '/public/sandbox-ui.php';
-		$url = "http://{$host}:{$port}/";
-		$command = [PHP_BINARY, '-S', $host . ':' . $port, $router];
+		$url = 'http://' . $this->urlHost($host) . ':' . $port . '/';
+		$command = [PHP_BINARY, '-S', $this->serverAddress($host, $port), $router];
 		$logPath = $this->logPath();
 		$this->resetLog($logPath);
 		$pid = $this->startDetachedProcess($command, dirname(__DIR__, 3), $logPath);
@@ -49,6 +49,7 @@ class UiServerService
 			'url' => $url,
 			'log' => $logPath,
 			'error_log' => PHP_OS_FAMILY === 'Windows' ? $logPath . '.err' : $logPath,
+			'router' => $router,
 			'started_at' => gmdate('c'),
 		];
 		try
@@ -74,7 +75,7 @@ class UiServerService
 		}
 
 		$pid = (int) ($state['pid'] ?? 0);
-		if ($pid > 0 && $this->terminateProcess($pid))
+		if ($pid > 0 && $this->processMatchesState($pid, $state) && $this->terminateProcess($pid))
 		{
 			$this->waitForStop($state);
 			$this->deleteState();
@@ -254,7 +255,7 @@ class UiServerService
 		}
 
 		$pid = (int) ($state['pid'] ?? 0);
-		if ($pid <= 0 || !$this->isProcessRunning($pid))
+		if ($pid <= 0 || !$this->processMatchesState($pid, $state))
 		{
 			return false;
 		}
@@ -268,8 +269,7 @@ class UiServerService
 		{
 			return false;
 		}
-		$target = $host === 'localhost' ? '127.0.0.1' : $host;
-		$socket = @fsockopen($target, $port, $errno, $errstr, 0.2);
+		$socket = @fsockopen($host, $port, $errno, $errstr, 0.2);
 		if (!is_resource($socket))
 		{
 			return false;
@@ -317,6 +317,58 @@ class UiServerService
 
 		$result = $this->processRunner->capture(['kill', '-0', (string) $pid]);
 		return $result['exit_code'] === 0;
+	}
+
+	private function processMatchesState(int $pid, array $state): bool
+	{
+		if (!$this->isProcessRunning($pid))
+		{
+			return false;
+		}
+
+		$router = (string) ($state['router'] ?? dirname(__DIR__, 3) . '/public/sandbox-ui.php');
+		if (PHP_OS_FAMILY === 'Windows')
+		{
+			$script = '(Get-CimInstance Win32_Process -Filter ' . $this->powerShellString('ProcessId = ' . $pid) . ').CommandLine';
+			$result = $this->processRunner->capture(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', $script]);
+		}
+		else
+		{
+			$result = $this->processRunner->capture(['ps', '-p', (string) $pid, '-o', 'command=']);
+		}
+
+		if ($result['exit_code'] !== 0)
+		{
+			return false;
+		}
+
+		return $this->commandMatchesRouter((string) $result['output'], $router);
+	}
+
+	private function commandMatchesRouter(string $command, string $router): bool
+	{
+		$command = $this->comparableCommand($command);
+		$router = $this->comparableCommand($router);
+		return $command !== ''
+			&& $router !== ''
+			&& str_contains($command, $router)
+			&& (bool) preg_match('/(?:^|\s)["\']?-S["\']?(?=\s|$)/i', $command);
+	}
+
+	private function comparableCommand(string $value): string
+	{
+		$value = str_replace('\\', '/', trim($value));
+		return PHP_OS_FAMILY === 'Windows' ? strtolower($value) : $value;
+	}
+
+	private function serverAddress(string $host, int $port): string
+	{
+		return ($host === '::1' ? '[::1]' : $host) . ':' . $port;
+	}
+
+	private function urlHost(string $host): string
+	{
+		return $host === '::1' ? '[::1]' : $host;
 	}
 
 	private function waitForStart(array $state): void

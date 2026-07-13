@@ -147,6 +147,27 @@ class SourceProviderTest extends TestCase
 		(new TestSourceProvider($project))->add('topic/123', 'git', 'https://example.test/phpbb/', true);
 	}
 
+	public function testAddGitSourceRejectsUrlCredentials(): void
+	{
+		$project = $this->project();
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('must not contain credentials');
+		(new TestSourceProvider($project))->add('topic/123', 'git', 'https://token:secret@example.test/phpbb.git', true);
+	}
+
+	public function testRejectsSourceKeysThatDifferOnlyByCase(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		$provider = new TestSourceProvider($project);
+		$provider->add('Feature', 'git', 'https://example.test/phpbb.git', true);
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('different letter case');
+		$provider->add('feature', 'git', 'https://example.test/phpbb.git', true);
+	}
+
 	public function testEnsureFloatingComposerReusesExistingResolvedSource(): void
 	{
 		$project = $this->project();

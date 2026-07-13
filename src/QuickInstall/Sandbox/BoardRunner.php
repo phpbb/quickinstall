@@ -54,16 +54,33 @@ class BoardRunner
 	public function destroy(string $name): void
 	{
 		$this->project->board($name);
-		$compose = $this->project->composePath($name);
-		if (file_exists($compose))
-		{
-			$this->run(['docker', 'compose', '-f', $compose, 'down', '--volumes', '--remove-orphans', '--rmi', 'local']);
-		}
+		$this->removeContainers($name, true);
 
 		$this->project->deleteTree($this->project->boardPath($name));
 		$this->project->deleteTree($this->project->runtimePath($name));
 		$this->project->deleteTree($this->project->dbPath($name));
 		$this->project->removeBoard($name);
+	}
+
+	public function prepareReplacement(string $name): void
+	{
+		$this->project->board($name);
+		$this->removeContainers($name, false);
+	}
+
+	private function removeContainers(string $name, bool $removeImage): void
+	{
+		$compose = $this->project->composePath($name);
+		if (file_exists($compose))
+		{
+			$command = ['docker', 'compose', '-f', $compose, 'down', '--volumes', '--remove-orphans'];
+			if ($removeImage)
+			{
+				$command[] = '--rmi';
+				$command[] = 'local';
+			}
+			$this->run($command);
+		}
 	}
 
 	public function status(string $name): string
@@ -193,7 +210,7 @@ class BoardRunner
 			$contents = $this->setConfigDefine($contents, 'PHPBB_DISPLAY_LOAD_TIME', "@define('PHPBB_DISPLAY_LOAD_TIME', true);");
 		}
 
-		file_put_contents($configPath, $contents);
+		$this->writeFile($configPath, $contents, 'board config');
 	}
 
 	protected function enableYamlDebug(string $boardPath): void
@@ -241,7 +258,7 @@ class BoardRunner
 			$contents = rtrim($contents) . "\n\nparameters:\n" . implode("\n", $lines) . "\n";
 		}
 
-		file_put_contents($configPath, $contents);
+		$this->writeFile($configPath, $contents, 'board debug config');
 	}
 
 	protected function setConfigDefine(string $contents, string $name, string $line): string
@@ -364,15 +381,24 @@ class BoardRunner
 	protected function deleteSeedMarker(string $name, string $preset): void
 	{
 		$marker = $this->seedMarker($name, $preset);
-		if (file_exists($marker))
+		if (file_exists($marker) && !unlink($marker))
 		{
-			unlink($marker);
+			throw new RuntimeException("Unable to delete seed marker: $marker");
 		}
 	}
 
 	protected function writeSeedMarker(string $name, string $preset): void
 	{
-		file_put_contents($this->seedMarker($name, $preset), gmdate('c') . "\n");
+		$marker = $this->seedMarker($name, $preset);
+		$this->writeFile($marker, gmdate('c') . "\n", 'seed marker');
+	}
+
+	private function writeFile(string $path, string $contents, string $label): void
+	{
+		if (file_put_contents($path, $contents, LOCK_EX) !== strlen($contents))
+		{
+			throw new RuntimeException("Unable to write $label: $path");
+		}
 	}
 
 	protected function run(array $command): void

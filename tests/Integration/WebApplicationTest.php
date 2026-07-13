@@ -141,7 +141,28 @@ class WebApplicationTest extends TestCase
 
 		self::assertIsArray($data);
 		self::assertFalse($data['ok']);
+		self::assertNull($data['html']);
 		self::assertStringNotContainsString('<br', $json);
+	}
+
+	public function testJsonResponseSubstitutesInvalidUtf8CommandOutput(): void
+	{
+		$application = new Application($this->createTempProjectRoot());
+		$outputProperty = new \ReflectionProperty(Application::class, 'output');
+		$outputProperty->setAccessible(true);
+		$outputProperty->getValue($application)->write("invalid-\xB1-output");
+		$renderJson = new \ReflectionMethod(Application::class, 'renderJson');
+		$renderJson->setAccessible(true);
+
+		ob_start();
+		$renderJson->invoke($application);
+		$json = (string) ob_get_clean();
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertStringContainsString('invalid-', $data['output']);
+		self::assertStringContainsString('-output', $data['output']);
+		self::assertStringContainsString('status-strip', $data['html']);
 	}
 
 	public function testAjaxSourceRemoveDeletesSource(): void

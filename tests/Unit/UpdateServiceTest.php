@@ -79,6 +79,22 @@ class UpdateServiceTest extends TestCase
 		self::assertDirectoryDoesNotExist($root . '/.qi');
 	}
 
+	public function testUnsafeDownloadSchemeIsRemoved(): void
+	{
+		$root = $this->projectRoot('1.7.0');
+		$project = new Project($root);
+		$project->init();
+		$endpoint = $this->versionEndpoint([
+			'stable' => [
+				['current' => '1.8.0', 'download' => 'javascript:alert(1)'],
+			],
+		]);
+
+		$update = (new UpdateService($project, $endpoint))->getUpdate();
+
+		self::assertSame('', $update['download']);
+	}
+
 	private function projectRoot(string $version): string
 	{
 		$root = $this->createTempProjectRoot();

@@ -10,6 +10,26 @@ use RuntimeException;
 
 class ProcessRunnerTest extends TestCase
 {
+	public function testProcessTimeoutReturnsStandardTimeoutStatus(): void
+	{
+		$runner = new ProcessRunner(new BufferedOutput(), PHP_OS_FAMILY, 0.05);
+
+		$result = $runner->capture([PHP_BINARY, '-r', 'usleep(500000);']);
+
+		self::assertSame(124, $result['exit_code']);
+		self::assertStringContainsString('Command timed out after', $result['output']);
+	}
+
+	public function testDisplayedCommandRedactsUrlCredentials(): void
+	{
+		$output = new BufferedOutput();
+		$runner = new ProcessRunner($output);
+
+		$runner->run([PHP_BINARY, '-r', '', 'https://token:secret@example.test/repo.git']);
+
+		self::assertStringContainsString('https://***@example.test/repo.git', $output->all());
+		self::assertStringNotContainsString('token:secret', $output->all());
+	}
 	public function testWindowsCaptureUsesFilesWithoutPipeDeadlock(): void
 	{
 		$runner = new ProcessRunner(new BufferedOutput(), 'Windows');

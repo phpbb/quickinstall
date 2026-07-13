@@ -34,13 +34,13 @@ class DockerComposeWriter
 		$dockerfile = $runtimeDir . '/Dockerfile';
 		$entrypoint = $runtimeDir . '/entrypoint.sh';
 
-		file_put_contents($installConfig, $this->installConfig($name, $config));
-		file_put_contents($compose, $this->compose($name, $config));
-		file_put_contents($dockerfile, $this->dockerfile($config));
-		file_put_contents($entrypoint, $this->entrypoint());
-		if (PHP_OS_FAMILY !== 'Windows')
+		$this->writeFile($installConfig, $this->installConfig($name, $config));
+		$this->writeFile($compose, $this->compose($name, $config));
+		$this->writeFile($dockerfile, $this->dockerfile($config));
+		$this->writeFile($entrypoint, $this->entrypoint());
+		if ((PHP_OS_FAMILY !== 'Windows') && !chmod($entrypoint, 0755))
 		{
-			chmod($entrypoint, 0755);
+			throw new RuntimeException("Unable to make entrypoint executable: $entrypoint");
 		}
 
 		return [
@@ -49,6 +49,15 @@ class DockerComposeWriter
 			'dockerfile' => $dockerfile,
 			'entrypoint' => $entrypoint,
 		];
+	}
+
+	private function writeFile(string $path, string $contents): void
+	{
+		$contents = str_replace(["\r\n", "\r"], "\n", $contents);
+		if (file_put_contents($path, $contents, LOCK_EX) !== strlen($contents))
+		{
+			throw new RuntimeException("Unable to write runtime file: $path");
+		}
 	}
 
 	private function installConfig(string $name, array $config): string

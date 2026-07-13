@@ -34,6 +34,13 @@ class StyleManager
 		$name = $this->styleName($sourcePath);
 		$target = $this->project->boardPath($board) . '/styles/' . $name;
 		$styles = $boardConfig['styles'] ?? [];
+		foreach (array_keys($styles) as $mountedName)
+		{
+			if ($this->project->namesEqual((string) $mountedName, $name) && (string) $mountedName !== $name)
+			{
+				throw new InvalidArgumentException("Style is already mounted with different letter case: $mountedName");
+			}
+		}
 
 		if (file_exists($target) || is_link($target))
 		{

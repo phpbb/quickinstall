@@ -11,6 +11,7 @@
 namespace QuickInstall\Sandbox;
 
 use InvalidArgumentException;
+use JsonException;
 use RuntimeException;
 
 class Project
@@ -30,7 +31,7 @@ class Project
 	{
 		$created = [];
 		$customisationsPath = $this->customisationsPath();
-		$workspaceExists = is_dir($this->workspace);
+		$workspaceExists = is_file($this->workspace . '/sources.json') || is_file($this->workspace . '/boards.json');
 		if (!is_dir($customisationsPath))
 		{
 			if (!mkdir($customisationsPath, 0775, true) && !is_dir($customisationsPath))
@@ -82,6 +83,36 @@ class Project
 		return $this->rootPath('customisations');
 	}
 
+	public function lockOperations()
+	{
+		if (!is_dir($this->workspace) && !mkdir($this->workspace, 0775, true) && !is_dir($this->workspace))
+		{
+			throw new RuntimeException("Unable to create QuickInstall workspace: {$this->workspace}");
+		}
+
+		$path = $this->workspacePath('operation.lock');
+		$lock = fopen($path, 'c+b');
+		if (!is_resource($lock) || !flock($lock, LOCK_EX))
+		{
+			if (is_resource($lock))
+			{
+				fclose($lock);
+			}
+			throw new RuntimeException("Unable to lock QuickInstall workspace: $path");
+		}
+
+		return $lock;
+	}
+
+	public function unlockOperations($lock): void
+	{
+		if (is_resource($lock))
+		{
+			flock($lock, LOCK_UN);
+			fclose($lock);
+		}
+	}
+
 	public function boardPath(string $name): string
 	{
 		$this->assertName($name, 'board');
@@ -102,24 +133,147 @@ class Project
 			return $default;
 		}
 
-		$data = json_decode((string) file_get_contents($path), true);
-		return is_array($data) ? $data : $default;
+		return $this->withJsonLock($path, LOCK_SH, static function () use ($path): array {
+			$contents = file_get_contents($path);
+			if ($contents === false)
+			{
+				throw new RuntimeException("Unable to read $path");
+			}
+
+			try
+			{
+				$data = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+			}
+			catch (JsonException $e)
+			{
+				throw new RuntimeException("Invalid JSON state file: $path", 0, $e);
+			}
+
+			if (!is_array($data))
+			{
+				throw new RuntimeException("JSON state file must contain an object or array: $path");
+			}
+
+			return $data;
+		});
 	}
 
 	public function writeJson(string $file, array $data): void
 	{
 		$path = $this->workspacePath($file);
-		$encoded = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
-		if (file_put_contents($path, $encoded) === false)
+		try
 		{
-			throw new RuntimeException("Unable to write $path");
+			$encoded = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n";
 		}
+		catch (JsonException $e)
+		{
+			throw new RuntimeException("Unable to encode JSON state for $path", 0, $e);
+		}
+
+		$this->withJsonLock($path, LOCK_EX, function () use ($path, $encoded): void {
+			$directory = dirname($path);
+			if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory))
+			{
+				throw new RuntimeException("Unable to create JSON state directory: $directory");
+			}
+
+			$temp = tempnam($directory, '.' . basename($path) . '.tmp-');
+			if ($temp === false)
+			{
+				throw new RuntimeException("Unable to create temporary JSON state file for $path");
+			}
+
+			try
+			{
+				if (file_put_contents($temp, $encoded, LOCK_EX) !== strlen($encoded))
+				{
+					throw new RuntimeException("Unable to write temporary JSON state file for $path");
+				}
+				$this->replaceFile($temp, $path);
+			}
+			finally
+			{
+				if (is_file($temp))
+				{
+					@unlink($temp);
+				}
+			}
+		});
+	}
+
+	private function withJsonLock(string $path, int $operation, callable $callback)
+	{
+		$lockPath = $path . '.lock';
+		$directory = dirname($lockPath);
+		if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory))
+		{
+			throw new RuntimeException("Unable to create JSON lock directory: $directory");
+		}
+
+		$lock = fopen($lockPath, 'c+b');
+		if (!is_resource($lock))
+		{
+			throw new RuntimeException("Unable to open JSON lock file: $lockPath");
+		}
+
+		try
+		{
+			if (!flock($lock, $operation))
+			{
+				throw new RuntimeException("Unable to lock JSON state file: $path");
+			}
+
+			return $callback();
+		}
+		finally
+		{
+			flock($lock, LOCK_UN);
+			fclose($lock);
+		}
+	}
+
+	private function replaceFile(string $temp, string $path): void
+	{
+		if (@rename($temp, $path))
+		{
+			return;
+		}
+
+		if ($this->osFamily !== 'Windows' || !is_file($path))
+		{
+			throw new RuntimeException("Unable to replace JSON state file: $path");
+		}
+
+		$backup = $path . '.replace-backup';
+		@unlink($backup);
+		if (!@rename($path, $backup))
+		{
+			throw new RuntimeException("Unable to prepare JSON state replacement: $path");
+		}
+
+		if (@rename($temp, $path))
+		{
+			@unlink($backup);
+			return;
+		}
+
+		@rename($backup, $path);
+		throw new RuntimeException("Unable to replace JSON state file: $path");
 	}
 
 	public function appendBoard(array $board): void
 	{
+		$name = (string) ($board['name'] ?? '');
+		$this->assertName($name, 'board');
 		$boards = $this->readJson('boards.json', []);
-		$boards[$board['name']] = $board;
+		foreach (array_keys($boards) as $registeredName)
+		{
+			if ($registeredName !== $name && $this->namesEqual((string) $registeredName, $name))
+			{
+				throw new InvalidArgumentException("Board already exists: $registeredName. Board names are case-insensitive.");
+			}
+		}
+		$boards[$name] = $board;
 		$this->writeJson('boards.json', $boards);
 	}
 
@@ -290,7 +444,7 @@ class Project
 	{
 		if ($path === '')
 		{
-			return isset($this->root) ? $this->root : '';
+			return $this->root ?? '';
 		}
 
 		$path = str_replace('\\', '/', $path);
@@ -364,9 +518,18 @@ class Project
 
 	public function assertName(string $name, string $label): void
 	{
-		if (!preg_match('/^[A-Za-z0-9._-]+$/', $name))
+		$reservedWindowsName = (bool) preg_match('/^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i', $name);
+		if (!preg_match('/^[A-Za-z0-9._-]+$/', $name)
+			|| $name === '.'
+			|| $name === '..'
+			|| ($this->osFamily === 'Windows' && ($reservedWindowsName || str_ends_with($name, '.'))))
 		{
 			throw new InvalidArgumentException("Invalid $label: $name");
 		}
+	}
+
+	public function namesEqual(string $left, string $right): bool
+	{
+		return strcasecmp($left, $right) === 0;
 	}
 }

@@ -11,6 +11,7 @@
 namespace QuickInstall\Sandbox;
 
 use RuntimeException;
+use Throwable;
 
 class UpdateService
 {
@@ -58,15 +59,22 @@ class UpdateService
 
 			return $update;
 		}
-		catch (RuntimeException $e)
+		catch (Throwable $e)
 		{
 			// Cache failures briefly to avoid repeated slow checks.
-			$this->writeCache([
-				'checked_at' => time(),
-				'current_version' => $this->safeCurrentVersion(),
-				'update' => null,
-				'error' => $e->getMessage(),
-			]);
+			try
+			{
+				$this->writeCache([
+					'checked_at' => time(),
+					'current_version' => $this->safeCurrentVersion(),
+					'update' => null,
+					'error' => $e->getMessage(),
+				]);
+			}
+			catch (Throwable $cacheError)
+			{
+				// Update checks and their cache are always best-effort.
+			}
 			return null;
 		}
 	}
@@ -107,7 +115,7 @@ class UpdateService
 		}
 	}
 
-	private function cachedUpdate()
+	private function cachedUpdate(): array|bool|null
 	{
 		$cache = $this->readCache();
 		if (!$cache)
@@ -127,7 +135,7 @@ class UpdateService
 			return false;
 		}
 
-		return is_array($cache['update'] ?? null) ? $cache['update'] : null;
+		return is_array($cache['update'] ?? null) ? $this->sanitizeUpdate($cache['update']) : null;
 	}
 
 	private function fetchVersionData(): array
@@ -168,14 +176,28 @@ class UpdateService
 			}
 			if (version_compare((string) $update['current'], $currentVersion, '>'))
 			{
-				$updates[] = [
+				$updates[] = $this->sanitizeUpdate([
 					'current' => (string) $update['current'],
 					'download' => (string) ($update['download'] ?? ''),
-				];
+				]);
 			}
 		}
 
 		return $updates ? array_pop($updates) : null;
+	}
+
+	private function sanitizeUpdate(array $update): array
+	{
+		$download = (string) ($update['download'] ?? '');
+		if ($download !== '' && (filter_var($download, FILTER_VALIDATE_URL) === false || strtolower((string) parse_url($download, PHP_URL_SCHEME)) !== 'https'))
+		{
+			$download = '';
+		}
+
+		return [
+			'current' => (string) ($update['current'] ?? ''),
+			'download' => $download,
+		];
 	}
 
 	private function readCache(): ?array

@@ -16,16 +16,19 @@ class ProcessRunner
 {
 	private Output $output;
 	private string $osFamily;
+	private float $timeoutSeconds;
 
-	public function __construct(?Output $output = null, ?string $osFamily = null)
+	public function __construct(?Output $output = null, ?string $osFamily = null, float $timeoutSeconds = 900.0)
 	{
 		$this->output = $output ?: new BufferedOutput();
 		$this->osFamily = $osFamily ?: PHP_OS_FAMILY;
+		$this->timeoutSeconds = $timeoutSeconds;
 	}
 
 	public function run(array $command, ?string $cwd = null): void
 	{
-		$this->output->write('$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n");
+		$displayCommand = array_map([$this, 'redactArgument'], $command);
+		$this->output->write('$ ' . implode(' ', array_map('escapeshellarg', $displayCommand)) . "\n");
 		$streamOutput = $this->output instanceof StreamOutput;
 		$result = $streamOutput ? $this->runWithStreamOutput($command, $cwd) : $this->execute($command, true, $cwd);
 		if ($result['exit_code'] !== 0)
@@ -68,10 +71,18 @@ class ProcessRunner
 		$output = '';
 		$open = [1 => true, 2 => true];
 		$processExitCode = null;
+		$timedOut = false;
+		$deadline = microtime(true) + $this->timeoutSeconds;
 		while ($open[1] || $open[2])
 		{
 			$status = proc_get_status($process);
 			$processRunning = (bool) ($status['running'] ?? false);
+			if ($processRunning && microtime(true) >= $deadline)
+			{
+				$this->terminateProcess($process, $status);
+				$timedOut = true;
+				$processRunning = false;
+			}
 			if (!$processRunning && isset($status['exitcode']) && $status['exitcode'] >= 0)
 			{
 				$processExitCode = (int) $status['exitcode'];
@@ -111,8 +122,12 @@ class ProcessRunner
 		}
 
 		$closeExitCode = proc_close($process);
+		if ($timedOut)
+		{
+			$output .= "\nCommand timed out after " . $this->timeoutLabel() . ".";
+		}
 		return [
-			'exit_code' => $processExitCode ?? $closeExitCode,
+			'exit_code' => $timedOut ? 124 : ($processExitCode ?? $closeExitCode),
 			'output' => $output,
 		];
 	}
@@ -147,7 +162,27 @@ class ProcessRunner
 			return ['exit_code' => 1, 'output' => ''];
 		}
 
-		$exitCode = proc_close($process);
+		$timedOut = false;
+		$deadline = microtime(true) + $this->timeoutSeconds;
+		while (true)
+		{
+			$status = proc_get_status($process);
+			if (!($status['running'] ?? false))
+			{
+				$processExitCode = isset($status['exitcode']) && $status['exitcode'] >= 0 ? (int) $status['exitcode'] : null;
+				break;
+			}
+			if (microtime(true) >= $deadline)
+			{
+				$this->terminateProcess($process, $status);
+				$timedOut = true;
+				$processExitCode = null;
+				break;
+			}
+			usleep(10000);
+		}
+		$closeExitCode = proc_close($process);
+		$exitCode = $timedOut ? 124 : ($processExitCode ?? $closeExitCode);
 		$stdout = (string) @file_get_contents($stdoutPath);
 		$stderr = (string) @file_get_contents($stderrPath);
 		@unlink($stdoutPath);
@@ -156,6 +191,15 @@ class ProcessRunner
 		{
 			$this->output->write($stdout);
 			$this->output->error($stderr);
+		}
+		if ($timedOut)
+		{
+			$timeout = "\nCommand timed out after " . $this->timeoutLabel() . ".";
+			$stderr .= $timeout;
+			if ($stream)
+			{
+				$this->output->error($timeout);
+			}
 		}
 
 		return ['exit_code' => $exitCode, 'output' => $stdout . $stderr];
@@ -184,10 +228,66 @@ class ProcessRunner
 			return ['exit_code' => 1, 'output' => ''];
 		}
 
+		$timedOut = false;
+		$processExitCode = null;
+		$deadline = microtime(true) + $this->timeoutSeconds;
+		while (true)
+		{
+			$status = proc_get_status($process);
+			if (!($status['running'] ?? false))
+			{
+				$processExitCode = isset($status['exitcode']) && $status['exitcode'] >= 0 ? (int) $status['exitcode'] : null;
+				break;
+			}
+			if (microtime(true) >= $deadline)
+			{
+				$this->terminateProcess($process, $status);
+				$this->output->error("\nCommand timed out after " . $this->timeoutLabel() . ".\n");
+				$timedOut = true;
+				break;
+			}
+			usleep(10000);
+		}
+		$closeExitCode = proc_close($process);
+
 		return [
-			'exit_code' => proc_close($process),
+			'exit_code' => $timedOut ? 124 : ($processExitCode ?? $closeExitCode),
 			'output' => '',
 		];
+	}
+
+	private function terminateProcess($process, array $status): void
+	{
+		$pid = (int) ($status['pid'] ?? 0);
+		if ($this->osFamily === 'Windows' && PHP_OS_FAMILY === 'Windows' && $pid > 0)
+		{
+			$descriptor = [
+				0 => ['file', 'NUL', 'r'],
+				1 => ['file', 'NUL', 'w'],
+				2 => ['file', 'NUL', 'w'],
+			];
+			$killer = @proc_open(['taskkill', '/PID', (string) $pid, '/T', '/F'], $descriptor, $pipes);
+			if (is_resource($killer))
+			{
+				proc_close($killer);
+			}
+			return;
+		}
+
+		@proc_terminate($process, 15);
+		usleep(100000);
+		$status = proc_get_status($process);
+		if ($status['running'] ?? false)
+		{
+			@proc_terminate($process, 9);
+		}
+	}
+
+	private function timeoutLabel(): string
+	{
+		return $this->timeoutSeconds >= 60
+			? rtrim(rtrim(number_format($this->timeoutSeconds / 60, 2, '.', ''), '0'), '.') . ' minutes'
+			: rtrim(rtrim(number_format($this->timeoutSeconds, 2, '.', ''), '0'), '.') . ' seconds';
 	}
 
 	private function platformCommand(array $command): array
@@ -235,6 +335,11 @@ class ProcessRunner
 		})), -8);
 
 		return "\nCommand output:\n" . implode("\n", $lines);
+	}
+
+	private function redactArgument(string $argument): string
+	{
+		return preg_replace('#^([a-z][a-z0-9+.-]*://)([^/@\s]+)@#i', '$1***@', $argument) ?? $argument;
 	}
 
 	private function commandHint(array $command, int $status, string $output): string
