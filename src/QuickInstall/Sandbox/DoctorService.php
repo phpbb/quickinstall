@@ -40,8 +40,8 @@ class DoctorService
 				filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN),
 				filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN) ? 'allow_url_fopen enabled' : 'enable allow_url_fopen=On in php.ini'
 			),
-			$this->check('Process execution', function_exists('proc_open'), function_exists('proc_open') ? 'available' : 'proc_open is disabled'),
-			$this->check('Network sockets', function_exists('fsockopen'), function_exists('fsockopen') ? 'available' : 'fsockopen is disabled'),
+			$this->check('Process execution', is_callable('proc_open'), is_callable('proc_open') ? 'available' : 'proc_open is disabled'),
+			$this->check('Network sockets', is_callable('fsockopen'), is_callable('fsockopen') ? 'available' : 'fsockopen is disabled'),
 			$this->check('Project writable', $projectWritable, $projectWritable ? $this->project->rootPath() : 'QuickInstall project directory is not writable'),
 		];
 
