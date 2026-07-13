@@ -431,11 +431,13 @@ class Application
 	{
 		$checks = (new DoctorService($this->project))->checks();
 		$failed = false;
-		echo "QuickInstall requirements\n";
+		echo $this->style('QuickInstall requirements', '1') . "\n";
 		foreach ($checks as $check)
 		{
-			$status = $check['ok'] ? 'OK' : 'FAIL';
-			echo "[$status] {$check['name']}: {$check['detail']}\n";
+			$status = $check['ok']
+				? $this->style("\u{2714}", '1;32')
+				: $this->style('!', '1;31');
+			echo "$status {$check['name']}: {$check['detail']}\n";
 			$failed = $failed || !$check['ok'];
 		}
 
@@ -469,7 +471,7 @@ class Application
 		}
 		if (PHP_OS_FAMILY === 'Windows' && function_exists('sapi_windows_vt100_support') && defined('STDOUT'))
 		{
-			return sapi_windows_vt100_support(STDOUT);
+			return sapi_windows_vt100_support(STDOUT, true);
 		}
 
 		return PHP_SAPI === 'cli';
@@ -874,22 +876,22 @@ class Application
 			return;
 		}
 
-		echo "QuickInstall CLI\n";
+		echo $this->style('QuickInstall CLI', '1') . "\n";
 		echo "Create disposable local phpBB boards with Docker.\n\n";
-		echo "Usage:\n";
-		echo "  qi <command> [arguments] [options]\n";
-		echo "  qi help [command]\n\n";
-		echo "Common workflow:\n";
-		echo "  qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev\n";
-		echo "  qi board:start demo\n\n";
+		echo $this->style('Usage:', '1;33') . "\n";
+		echo '  ' . $this->style('qi <command> [arguments] [options]', '1;36') . "\n";
+		echo '  ' . $this->style('qi help [command]', '1;36') . "\n\n";
+		echo $this->style('Common workflow:', '1;33') . "\n";
+		echo '  ' . $this->style('qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev', '1;36') . "\n";
+		echo '  ' . $this->style('qi board:start demo', '1;36') . "\n\n";
 
 		foreach ($commands as $group => $items)
 		{
-			echo "$group:\n";
+			echo $this->style("$group:", '1;33') . "\n";
 			$width = max(array_map('strlen', array_keys($items)));
 			foreach ($items as $name => $help)
 			{
-				echo '  ' . str_pad($name, $width) . '  ' . $help['summary'] . "\n";
+				echo '  ' . $this->style(str_pad($name, $width), '1;36') . '  ' . $help['summary'] . "\n";
 			}
 			echo "\n";
 		}
@@ -908,27 +910,27 @@ class Application
 			}
 
 			$help = $items[$command];
-			echo "{$help['title']}\n\n";
-			echo "Usage:\n";
-			echo "  qi {$help['usage']}\n\n";
-			echo "Description:\n";
+			echo $this->style($help['title'], '1') . "\n\n";
+			echo $this->style('Usage:', '1;33') . "\n";
+			echo '  ' . $this->style("qi {$help['usage']}", '1;36') . "\n\n";
+			echo $this->style('Description:', '1;33') . "\n";
 			echo "  {$help['description']}\n";
 			if (!empty($help['arguments']))
 			{
-				echo "\nArguments:\n";
+				echo "\n" . $this->style('Arguments:', '1;33') . "\n";
 				$this->printHelpRows($help['arguments']);
 			}
 			if (!empty($help['options']))
 			{
-				echo "\nOptions:\n";
+				echo "\n" . $this->style('Options:', '1;33') . "\n";
 				$this->printHelpRows($help['options']);
 			}
 			if (!empty($help['examples']))
 			{
-				echo "\nExamples:\n";
+				echo "\n" . $this->style('Examples:', '1;33') . "\n";
 				foreach ($help['examples'] as $example)
 				{
-					echo "  qi $example\n";
+					echo '  ' . $this->style("qi $example", '1;36') . "\n";
 				}
 			}
 			echo "\n";
@@ -944,7 +946,7 @@ class Application
 		$width = max(array_map('strlen', array_keys($rows)));
 		foreach ($rows as $name => $description)
 		{
-			echo '  ' . str_pad($name, $width) . '  ' . $description . "\n";
+			echo '  ' . $this->style(str_pad($name, $width), '1;36') . '  ' . $description . "\n";
 		}
 	}
 
