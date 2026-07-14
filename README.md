@@ -90,6 +90,8 @@ You can receive support at the [phpBB3 QuickInstall Discussion/Support](https://
 
 Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickinstall/issues). Even reports for small bugs are welcome to help make QuickInstall even better than it is now.
 
+[![CLI tests](https://github.com/phpbb/quickinstall/actions/workflows/cli-tests.yml/badge.svg)](https://github.com/phpbb/quickinstall/actions/workflows/cli-tests.yml)
+
 ## 👋 Contributing
 Feel free to contribute to this project. Please read our [Contributing Guidelines](https://github.com/phpbb/quickinstall/blob/master/.github/CONTRIBUTING.md) before submitting Pull Requests with any bug fixes or feature enhancements to this repository.
 
