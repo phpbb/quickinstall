@@ -48,6 +48,44 @@ If you ever need help with commands, run:
 php bin/qi help
 ```
 
+If you prefer a browser workflow, start the QuickInstall Dashboard UI:
+
+```bash
+php bin/qi ui:start
+```
+
+Then open the URL printed by the command:
+
+```text
+http://127.0.0.1:8079/
+```
+
+## Commands by OS
+
+The examples in this guide use the portable command form:
+
+```bash
+php bin/qi <command>
+```
+
+It works on macOS, Linux, and Windows when PHP is available in `PATH`.
+
+Windows also includes a `qi.cmd` launcher. From PowerShell:
+
+```powershell
+.\bin\qi.cmd <command>
+```
+
+From Command Prompt:
+
+```batch
+bin\qi.cmd <command>
+```
+
+Arguments and options are identical with every launcher. Run commands from the QuickInstall project root. Windows drive-letter paths, UNC paths, backslashes, spaces, and case-insensitive filesystem paths are supported.
+
+Docker Desktop on Windows must use its WSL 2 or Hyper-V Linux-container backend rather than Windows containers.
+
 ## Common Recipes
 
 Create a small empty board:
@@ -207,6 +245,12 @@ By default, extension sources must live under `customisations/`. To mount a trus
 php bin/qi ext:mount demo /path/to/vendor/extname --allow-external
 ```
 
+On Windows, quote external paths containing spaces:
+
+```powershell
+.\bin\qi.cmd ext:mount demo "C:\Path\To\My Extensions\vendor\extname" --allow-external
+```
+
 ## Styles
 
 Put downloaded styles under `customisations/`:
@@ -252,6 +296,12 @@ By default, style sources must live under `customisations/`. To mount a trusted 
 
 ```bash
 php bin/qi style:mount demo /path/to/stylename --allow-external
+```
+
+On Windows, quote external paths containing spaces:
+
+```powershell
+.\bin\qi.cmd style:mount demo "C:\Path\To\My Styles\stylename" --allow-external
 ```
 
 ## Supported phpBB Versions
@@ -331,16 +381,63 @@ Fetched sources live under:
 .qi/sources/phpbb-<source>
 ```
 
+## Dashboard UI
+
+The QuickInstall Dashboard UI provides a local browser interface for the same workflows exposed by the CLI. It is served by PHP's built-in web server and backed by the same `.qi/` workspace. The Dashboard UI can be started, checked, restarted, and stopped on macOS, Linux, or native Windows.
+
+Start the UI:
+
+```bash
+php bin/qi ui:start
+```
+
+The default URL is:
+
+```text
+http://127.0.0.1:8079/
+```
+
+Use a different local port:
+
+```bash
+php bin/qi ui:start --port 8088
+```
+
+Check or stop the tracked Dashboard UI server:
+
+```bash
+php bin/qi ui:status
+php bin/qi ui:stop
+```
+
+Restart it:
+
+```bash
+php bin/qi ui:restart
+```
+
+Supported Dashboard UI server hosts are loopback-only:
+
+```bash
+php bin/qi ui:start --host 127.0.0.1
+php bin/qi ui:start --host localhost
+php bin/qi ui:start --host ::1
+```
+
 ## Where Files Go
 
 Generated state:
 
-| Path                   | Contents                                     |
-|------------------------|----------------------------------------------|
-| `.qi/boards/<name>`    | Installed phpBB board files                  |
-| `.qi/runtime/<name>`   | Docker Compose, Dockerfile, installer config |
-| `.qi/db/<name>`        | Database files                               |
-| `.qi/sources/<source>` | Downloaded phpBB source                      |
+| Path                     | Contents                                     |
+|--------------------------|----------------------------------------------|
+| `.qi/boards/<name>`      | Installed phpBB board files                  |
+| `.qi/runtime/<name>`     | Docker Compose, Dockerfile, installer config |
+| `.qi/db/<name>`          | Database files                               |
+| `.qi/sources/<source>`   | Downloaded phpBB source                      |
+| `.qi/runtime/ui.json`    | Tracked Dashboard UI server state            |
+| `.qi/runtime/ui.log`     | Dashboard UI server output log               |
+| `.qi/runtime/ui.log.err` | Windows Dashboard UI server error log        |
+| `.qi/cache/`             | Cached update-check metadata                 |
 
 User-managed drop zone:
 
@@ -355,12 +452,41 @@ customisations/
 - `board:create` rejects ports already registered to another board or already in use on the host.
 - `ext:mount` and `style:mount` only use `customisations/` unless `--allow-external` is used.
 - Custom Git source URLs require `--allow-external`; only use trusted forks.
+- The Dashboard UI server only accepts loopback hosts (`127.0.0.1`, `localhost`, or `::1`) and rejects non-local requests.
+- `ui:start` refuses ports already in use on the selected loopback host.
+- Dashboard UI form submissions use CSRF tokens and only accept local origins or referrers.
 
 ## Troubleshooting
+
+If QuickInstall starts but a command is not working as expected, run the environment check from the project root:
+
+```bash
+php bin/qi doctor
+```
+
+On Windows PowerShell, you can use the Windows launcher instead:
+
+```powershell
+.\bin\qi.cmd doctor
+```
+
+Every check should report `OK`; failures identify the missing or unavailable requirement.
+
+#### QuickInstall does not start on Windows
+
+First, check whether PHP is available:
+
+```powershell
+php --version
+```
+
+If Windows does not recognize `php`, install PHP 8 or newer and add the directory containing `php.exe` to the Windows `PATH`. Open a new terminal, confirm `php --version` works, then run `.\bin\qi.cmd doctor` again.
 
 #### Docker command fails
 
 Check that Docker Desktop is running and that the docker command works in this terminal.
+
+On Windows, also confirm Docker Desktop is using Linux containers. `php bin/qi doctor` reports `Linux containers: OK` when configured correctly.
 
 #### Composer command fails
 
@@ -383,3 +509,26 @@ Use this when a board's files, database, or generated Docker runtime are no long
 php bin/qi board:destroy demo
 php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate none
 ```
+
+#### Dashboard UI will not start
+
+Check the tracked status:
+
+```bash
+php bin/qi ui:status
+```
+
+If the status is stale, clear the old state and start again:
+
+```bash
+php bin/qi ui:stop
+php bin/qi ui:start
+```
+
+If the selected port is already in use, choose a different local port:
+
+```bash
+php bin/qi ui:start --port 8088
+```
+
+The Dashboard UI server output log is written to `.qi/runtime/ui.log`. On Windows, PHP server errors are written to `.qi/runtime/ui.log.err`.

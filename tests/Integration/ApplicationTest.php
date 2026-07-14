@@ -55,6 +55,24 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('No sources registered', $result['output']);
 	}
 
+	public function testCachedUpdatePrintsPassiveCliNotice(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root);
+		$project->init();
+		$project->writeJson('cache/update-check.json', [
+			'checked_at' => time(),
+			'current_version' => '1.7.0',
+			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/download'],
+			'error' => null,
+		]);
+
+		$result = $this->runApplication($root, ['qi', 'source:list']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('QuickInstall 1.8.0 available: https://example.com/download', $result['output']);
+	}
+
 	public function testPhpbbListPrintsSupportedSelectors(): void
 	{
 		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'phpbb:list']);
@@ -121,6 +139,61 @@ class ApplicationTest extends TestCase
 		self::assertSame(1, $result['exit_code']);
 		self::assertSame('', $result['output']);
 		self::assertStringContainsString('Use --reset or --replace, not both.', $result['stderr']);
+	}
+
+	public function testUiStartHelpIsExposed(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'ui:start', '--help']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('Usage:', $result['output']);
+		self::assertStringContainsString('qi ui:start', $result['output']);
+		self::assertStringContainsString('built-in server', $result['output']);
+	}
+
+	public function testUiLifecycleCommandsAreExposed(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'help']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('ui:start', $result['output']);
+		self::assertStringContainsString('ui:stop', $result['output']);
+		self::assertStringContainsString('ui:restart', $result['output']);
+		self::assertStringContainsString('ui:status', $result['output']);
+	}
+
+	public function testUiLifecycleMutationsUseWorkspaceLock(): void
+	{
+		$application = new Application($this->createTempProjectRoot());
+		$method = new \ReflectionMethod(Application::class, 'mutatesWorkspace');
+		$method->setAccessible(true);
+
+		self::assertTrue($method->invoke($application, 'ui:start'));
+		self::assertTrue($method->invoke($application, 'ui:stop'));
+		self::assertTrue($method->invoke($application, 'ui:restart'));
+		self::assertFalse($method->invoke($application, 'ui:status'));
+	}
+
+	public function testUiStatusAndStopHandleNoTrackedServer(): void
+	{
+		$root = $this->createTempProjectRoot();
+
+		$status = $this->runApplication($root, ['qi', 'ui:status']);
+		$stop = $this->runApplication($root, ['qi', 'ui:stop']);
+
+		self::assertSame(0, $status['exit_code']);
+		self::assertStringContainsString('not running', $status['output']);
+		self::assertSame(0, $stop['exit_code']);
+		self::assertStringContainsString('not tracked as running', $stop['output']);
+	}
+
+	public function testUiStartRejectsNonLocalHostBeforeStartingServer(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'ui:start', '--host', '0.0.0.0']);
+
+		self::assertSame(1, $result['exit_code']);
+		self::assertSame('', $result['output']);
+		self::assertStringContainsString('local loopback hosts', $result['stderr']);
 	}
 
 	public function testUnknownCommandReturnsFailureAndHelp(): void

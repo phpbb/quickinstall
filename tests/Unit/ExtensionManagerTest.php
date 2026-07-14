@@ -109,6 +109,24 @@ class ExtensionManagerTest extends TestCase
 		(new ExtensionManager($project))->mount('demo', $source);
 	}
 
+	/**
+	 * @dataProvider traversalPackageProvider
+	 */
+	public function testRejectsTraversalComponentsInComposerName(string $package): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->extension($root, $package, 'customisations/traversal-source');
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid extension name');
+		(new ExtensionManager($project))->mount('demo', $source, true);
+	}
+
+	public function traversalPackageProvider(): array
+	{
+		return [['../escape'], ['vendor/..'], ['./escape'], ['vendor/.']];
+	}
+
 	public function testRejectsExternalSourceUnlessAllowed(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');

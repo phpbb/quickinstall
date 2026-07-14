@@ -12,6 +12,29 @@ class ProjectTest extends TestCase
 {
 	use TempProjectTrait;
 
+	public function testNormalizesWindowsDriveAndUncPaths(): void
+	{
+		$driveProject = new Project('c:\\Projects\\QuickInstall\\', 'Windows');
+		$uncProject = new Project('\\\\server\\share\\QuickInstall', 'Windows');
+
+		self::assertSame('C:/Projects/QuickInstall/.qi', $driveProject->workspacePath());
+		self::assertSame('//server/share/QuickInstall/bin/qi', $uncProject->rootPath('bin/qi'));
+	}
+
+	public function testWindowsPathContainmentIsSeparatorAndCaseInsensitive(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$project = new Project($root, 'Windows');
+		$project->init();
+		$inside = $project->customisationsPath() . '/Vendor/Extension';
+		mkdir($inside, 0775, true);
+
+		self::assertTrue($project->isPathUnder(
+			str_replace('/', '\\', strtoupper((string) realpath($inside))),
+			$project->customisationsPath()
+		));
+	}
+
 	public function testInitCreatesWorkspaceAndDefaults(): void
 	{
 		$root = $this->createTempProjectRoot();
@@ -24,6 +47,7 @@ class ProjectTest extends TestCase
 		self::assertDirectoryExists($root . '/customisations');
 		self::assertDirectoryExists($root . '/.qi/sources');
 		self::assertDirectoryExists($root . '/.qi/boards');
+		self::assertDirectoryExists($root . '/.qi/cache');
 		self::assertSame([], $project->readJson('sources.json', ['unexpected']));
 		self::assertSame([], $project->init());
 	}
@@ -34,6 +58,52 @@ class ProjectTest extends TestCase
 		$this->expectExceptionMessage('Invalid board');
 
 		(new Project($this->createTempProjectRoot()))->boardPath('../outside');
+	}
+
+	/**
+	 * @dataProvider dangerousNameProvider
+	 */
+	public function testRejectsNamesThatResolveToParentDirectories(string $name): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+
+		$this->expectException(InvalidArgumentException::class);
+		$project->boardPath($name);
+	}
+
+	public function dangerousNameProvider(): array
+	{
+		return [['.'], ['..']];
+	}
+
+	public function testRejectsWindowsDeviceNames(): void
+	{
+		$project = new Project('C:\\Projects\\QuickInstall', 'Windows');
+
+		$this->expectException(InvalidArgumentException::class);
+		$project->boardPath('NUL');
+	}
+
+	public function testMalformedJsonStateIsReported(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		file_put_contents($project->workspacePath('boards.json'), '{broken');
+
+		$this->expectException(RuntimeException::class);
+		$this->expectExceptionMessage('Invalid JSON state file');
+		$project->boards();
+	}
+
+	public function testBoardRegistryRejectsNamesThatDifferOnlyByCase(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		$project->appendBoard(['name' => 'demo']);
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('Board names are case-insensitive');
+		$project->appendBoard(['name' => 'Demo']);
 	}
 
 	public function testDeleteTreeRefusesPathOutsideWorkspace(): void

@@ -1,5 +1,6 @@
 {
   "license": "GPL-2.0-only",
+  "private": true,
   "dependencies": {
     "autoprefixer": "^10.4.2",
     "bootstrap": "5.1.3",

@@ -15,19 +15,25 @@ use RuntimeException;
 class ProcessRunner
 {
 	private Output $output;
+	private string $osFamily;
+	private float $timeoutSeconds;
 
-	public function __construct(?Output $output = null)
+	public function __construct(?Output $output = null, ?string $osFamily = null, float $timeoutSeconds = 900.0)
 	{
 		$this->output = $output ?: new BufferedOutput();
+		$this->osFamily = $osFamily ?: PHP_OS_FAMILY;
+		$this->timeoutSeconds = $timeoutSeconds;
 	}
 
 	public function run(array $command, ?string $cwd = null): void
 	{
-		$this->output->write('$ ' . implode(' ', array_map('escapeshellarg', $command)) . "\n");
-		$result = $this->output instanceof StreamOutput ? $this->runWithStreamOutput($command, $cwd) : $this->execute($command, true, $cwd);
+		$displayCommand = array_map([$this, 'redactArgument'], $command);
+		$this->output->write('$ ' . implode(' ', array_map('escapeshellarg', $displayCommand)) . "\n");
+		$streamOutput = $this->output instanceof StreamOutput;
+		$result = $streamOutput ? $this->runWithStreamOutput($command, $cwd) : $this->execute($command, true, $cwd);
 		if ($result['exit_code'] !== 0)
 		{
-			throw new RuntimeException("Command failed with exit code {$result['exit_code']}: {$command[0]}" . $this->commandHint($command, $result['exit_code']));
+			throw new RuntimeException("Command failed with exit code {$result['exit_code']}: {$command[0]}" . $this->failureDetails($command, $result, !$streamOutput));
 		}
 	}
 
@@ -38,13 +44,19 @@ class ProcessRunner
 
 	private function execute(array $command, bool $stream, ?string $cwd): array
 	{
+		$command = $this->platformCommand($command);
+		if ($this->osFamily === 'Windows')
+		{
+			return $this->executeWithFiles($command, $stream, $cwd);
+		}
+
 		$descriptor = [
 			0 => ['pipe', 'r'],
 			1 => ['pipe', 'w'],
 			2 => ['pipe', 'w'],
 		];
 
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
 			return ['exit_code' => 1, 'output' => ''];
@@ -58,8 +70,24 @@ class ProcessRunner
 
 		$output = '';
 		$open = [1 => true, 2 => true];
+		$processExitCode = null;
+		$timedOut = false;
+		$deadline = microtime(true) + $this->timeoutSeconds;
 		while ($open[1] || $open[2])
 		{
+			$status = proc_get_status($process);
+			$processRunning = (bool) ($status['running'] ?? false);
+			if ($processRunning && microtime(true) >= $deadline)
+			{
+				$this->terminateProcess($process, $status);
+				$timedOut = true;
+				$processRunning = false;
+			}
+			if (!$processRunning && isset($status['exitcode']) && $status['exitcode'] >= 0)
+			{
+				$processExitCode = (int) $status['exitcode'];
+			}
+
 			foreach ([1, 2] as $index)
 			{
 				if (!$open[$index])
@@ -77,7 +105,10 @@ class ProcessRunner
 					}
 				}
 
-				if (feof($pipes[$index]))
+				// Windows anonymous pipes do not always report EOF promptly after the
+				// child exits. Once proc_get_status confirms exit, the final read above
+				// has drained the pipe and it is safe to close it.
+				if (feof($pipes[$index]) || !$processRunning)
 				{
 					fclose($pipes[$index]);
 					$open[$index] = false;
@@ -90,40 +121,235 @@ class ProcessRunner
 			}
 		}
 
+		$closeExitCode = proc_close($process);
+		if ($timedOut)
+		{
+			$output .= "\nCommand timed out after " . $this->timeoutLabel() . ".";
+		}
 		return [
-			'exit_code' => proc_close($process),
+			'exit_code' => $timedOut ? 124 : ($processExitCode ?? $closeExitCode),
 			'output' => $output,
 		];
 	}
 
+	private function executeWithFiles(array $command, bool $stream, ?string $cwd): array
+	{
+		$stdoutPath = tempnam(sys_get_temp_dir(), 'qi-process-out-');
+		$stderrPath = tempnam(sys_get_temp_dir(), 'qi-process-err-');
+		if ($stdoutPath === false || $stderrPath === false)
+		{
+			if ($stdoutPath !== false)
+			{
+				@unlink($stdoutPath);
+			}
+			if ($stderrPath !== false)
+			{
+				@unlink($stderrPath);
+			}
+			return ['exit_code' => 1, 'output' => 'Unable to create temporary process output files.'];
+		}
+
+		$descriptor = [
+			0 => ['file', $this->nullDevice(), 'r'],
+			1 => ['file', $stdoutPath, 'w'],
+			2 => ['file', $stderrPath, 'w'],
+		];
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
+		if (!is_resource($process))
+		{
+			@unlink($stdoutPath);
+			@unlink($stderrPath);
+			return ['exit_code' => 1, 'output' => ''];
+		}
+
+		$timedOut = false;
+		$deadline = microtime(true) + $this->timeoutSeconds;
+		while (true)
+		{
+			$status = proc_get_status($process);
+			if (!($status['running'] ?? false))
+			{
+				$processExitCode = isset($status['exitcode']) && $status['exitcode'] >= 0 ? (int) $status['exitcode'] : null;
+				break;
+			}
+			if (microtime(true) >= $deadline)
+			{
+				$this->terminateProcess($process, $status);
+				$timedOut = true;
+				$processExitCode = null;
+				break;
+			}
+			usleep(10000);
+		}
+		$closeExitCode = proc_close($process);
+		$exitCode = $timedOut ? 124 : ($processExitCode ?? $closeExitCode);
+		$stdout = (string) @file_get_contents($stdoutPath);
+		$stderr = (string) @file_get_contents($stderrPath);
+		@unlink($stdoutPath);
+		@unlink($stderrPath);
+		if ($stream)
+		{
+			$this->output->write($stdout);
+			$this->output->error($stderr);
+		}
+		if ($timedOut)
+		{
+			$timeout = "\nCommand timed out after " . $this->timeoutLabel() . ".";
+			$stderr .= $timeout;
+			if ($stream)
+			{
+				$this->output->error($timeout);
+			}
+		}
+
+		return ['exit_code' => $exitCode, 'output' => $stdout . $stderr];
+	}
+
+	private function failureDetails(array $command, array $result, bool $includeOutputSummary = true): string
+	{
+		$details = $includeOutputSummary ? $this->outputSummary((string) ($result['output'] ?? '')) : '';
+		$hint = $this->commandHint($command, (int) $result['exit_code'], (string) ($result['output'] ?? ''));
+
+		return $details . $hint;
+	}
+
 	private function runWithStreamOutput(array $command, ?string $cwd): array
 	{
+		$command = $this->platformCommand($command);
 		$descriptor = [
-			0 => ['file', '/dev/null', 'r'],
+			0 => ['file', $this->nullDevice(), 'r'],
 			1 => $this->output->stdout(),
 			2 => $this->output->stderr(),
 		];
 
-		$process = proc_open($command, $descriptor, $pipes, $cwd);
+		$process = @proc_open($command, $descriptor, $pipes, $cwd);
 		if (!is_resource($process))
 		{
 			return ['exit_code' => 1, 'output' => ''];
 		}
 
+		$timedOut = false;
+		$processExitCode = null;
+		$deadline = microtime(true) + $this->timeoutSeconds;
+		while (true)
+		{
+			$status = proc_get_status($process);
+			if (!($status['running'] ?? false))
+			{
+				$processExitCode = isset($status['exitcode']) && $status['exitcode'] >= 0 ? (int) $status['exitcode'] : null;
+				break;
+			}
+			if (microtime(true) >= $deadline)
+			{
+				$this->terminateProcess($process, $status);
+				$this->output->error("\nCommand timed out after " . $this->timeoutLabel() . ".\n");
+				$timedOut = true;
+				break;
+			}
+			usleep(10000);
+		}
+		$closeExitCode = proc_close($process);
+
 		return [
-			'exit_code' => proc_close($process),
+			'exit_code' => $timedOut ? 124 : ($processExitCode ?? $closeExitCode),
 			'output' => '',
 		];
 	}
 
-	private function commandHint(array $command, int $status): string
+	private function terminateProcess($process, array $status): void
+	{
+		$pid = (int) ($status['pid'] ?? 0);
+		if ($this->osFamily === 'Windows' && PHP_OS_FAMILY === 'Windows' && $pid > 0)
+		{
+			$descriptor = [
+				0 => ['file', 'NUL', 'r'],
+				1 => ['file', 'NUL', 'w'],
+				2 => ['file', 'NUL', 'w'],
+			];
+			$killer = @proc_open(['taskkill', '/PID', (string) $pid, '/T', '/F'], $descriptor, $pipes);
+			if (is_resource($killer))
+			{
+				proc_close($killer);
+			}
+			return;
+		}
+
+		@proc_terminate($process, 15);
+		usleep(100000);
+		$status = proc_get_status($process);
+		if ($status['running'] ?? false)
+		{
+			@proc_terminate($process, 9);
+		}
+	}
+
+	private function timeoutLabel(): string
+	{
+		return $this->timeoutSeconds >= 60
+			? rtrim(rtrim(number_format($this->timeoutSeconds / 60, 2, '.', ''), '0'), '.') . ' minutes'
+			: rtrim(rtrim(number_format($this->timeoutSeconds, 2, '.', ''), '0'), '.') . ' seconds';
+	}
+
+	private function platformCommand(array $command): array
+	{
+		if ($this->osFamily !== 'Windows' || !$command)
+		{
+			return $command;
+		}
+
+		$executable = strtolower((string) $command[0]);
+		if (!str_ends_with($executable, '.bat') && !str_ends_with($executable, '.cmd'))
+		{
+			return $command;
+		}
+
+		$commandLine = implode(' ', array_map([$this, 'escapeWindowsBatchArgument'], $command));
+		return [getenv('COMSPEC') ?: 'cmd.exe', '/D', '/S', '/C', '"' . $commandLine . '"'];
+	}
+
+	private function nullDevice(): string
+	{
+		return $this->osFamily === 'Windows' && PHP_OS_FAMILY === 'Windows' ? 'NUL' : '/dev/null';
+	}
+
+	private function escapeWindowsBatchArgument(string $argument): string
+	{
+		// cmd.exe expands percent variables even inside quotes. Doubling percent signs
+		// preserves URL escapes and other literal arguments passed to batch wrappers.
+		$argument = str_replace('%', '%%', $argument);
+		$argument = str_replace('"', '\\"', $argument);
+		return '"' . $argument . '"';
+	}
+
+	private function outputSummary(string $output): string
+	{
+		$output = trim($output);
+		if ($output === '')
+		{
+			return '';
+		}
+
+		$lines = preg_split('/\R/', $output) ?: [];
+		$lines = array_slice(array_values(array_filter($lines, static function ($line) {
+			return trim($line) !== '';
+		})), -8);
+
+		return "\nCommand output:\n" . implode("\n", $lines);
+	}
+
+	private function redactArgument(string $argument): string
+	{
+		return preg_replace('#^([a-z][a-z0-9+.-]*://)([^/@\s]+)@#i', '$1***@', $argument) ?? $argument;
+	}
+
+	private function commandHint(array $command, int $status, string $output): string
 	{
 		if ($status === 124 && in_array('timeout', $command, true))
 		{
 			return "\nThe operation timed out. For seeding, try a smaller preset or use mariadb/mysql/postgres instead of sqlite.";
 		}
 
-		if (($command[0] ?? '') === 'docker')
+		if (($command[0] ?? '') === 'docker' && ($output === '' || preg_match('/Cannot connect to the Docker daemon|docker daemon|Docker Desktop/i', $output)))
 		{
 			return "\nCheck that Docker Desktop is running and that the docker command works in this terminal.";
 		}

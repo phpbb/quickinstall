@@ -35,7 +35,7 @@ class VersionMatrixTest extends TestCase
 	/**
 	 * @dataProvider gitSelectorProvider
 	 */
-	public function testGitSelectorUsesBranchAsSourceKey(string $selector, string $sourceKey, string $branch, string $phpbbBranch, string $php): void
+	public function testGitSelectorUsesBranchAsSourceKey(string $selector, string $sourceKey, string $branch, string $phpbbBranch, ?string $php): void
 	{
 		$selection = (new VersionMatrix())->resolve($selector, true);
 
@@ -52,6 +52,9 @@ class VersionMatrixTest extends TestCase
 			'latest' => ['latest', ['source_key' => '3.3', 'constraint' => '3.3.*', 'php' => '8.1']],
 			'3.3 shorthand' => ['3.3', ['source_key' => '3.3', 'constraint' => '3.3.*', 'phpbb_branch' => '3.3']],
 			'3.3.x shorthand' => ['3.3.x', ['source_key' => '3.3', 'constraint' => '3.3.*', 'php' => '8.1']],
+			'exact 3.3.0 release' => ['3.3.0', ['source_key' => '3.3.0', 'constraint' => '3.3.0', 'php' => '7.4']],
+			'exact 3.3.4 release' => ['3.3.4', ['source_key' => '3.3.4', 'constraint' => '3.3.4', 'php' => '7.4']],
+			'exact 3.3.5 release' => ['3.3.5', ['source_key' => '3.3.5', 'constraint' => '3.3.5', 'php' => '8.1']],
 			'exact 3.3 release' => ['3.3.14', ['source_key' => '3.3.14', 'constraint' => '3.3.14', 'php' => '8.1']],
 			'3.2 shorthand' => ['3.2', ['source_key' => '3.2', 'constraint' => '3.2.*', 'php' => '7.1']],
 			'exact 3.2 release' => ['3.2.11', ['source_key' => '3.2.11', 'constraint' => '3.2.11', 'php' => '7.1']],
@@ -76,7 +79,7 @@ class VersionMatrixTest extends TestCase
 	public function gitSelectorProvider(): array
 	{
 		return [
-			'feature branch' => ['feature/foo', 'feature-foo', 'feature/foo', 'custom', '8.1'],
+			'feature branch' => ['feature/foo', 'feature-foo', 'feature/foo', 'custom', null],
 			'master' => ['master', 'master', 'master', '4.0', '8.2'],
 			'main' => ['main', 'main', 'main', '4.0', '8.2'],
 			'exact 4.0 git tag' => ['4.0.0', '4.0.0', '4.0.0', '4.0', '8.2'],

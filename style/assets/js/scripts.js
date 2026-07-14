@@ -144,7 +144,15 @@
 		}
 
 		// Copy rendered documentation code blocks
-		for (const $block of $$('#about-readme pre.codeblock-bash, #about-cli pre.codeblock-bash')) {
+		const commandBlocks = [
+			'#about-readme pre.codeblock-bash',
+			'#about-readme pre.codeblock-powershell',
+			'#about-readme pre.codeblock-batch',
+			'#about-cli pre.codeblock-bash',
+			'#about-cli pre.codeblock-powershell',
+			'#about-cli pre.codeblock-batch',
+		].join(', ');
+		for (const $block of $$(commandBlocks)) {
 			const $code = $('code', $block);
 			if (!$code || $('[data-qi-copy-code]', $block)) {
 				continue;

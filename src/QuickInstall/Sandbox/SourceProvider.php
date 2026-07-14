@@ -34,12 +34,23 @@ class SourceProvider
 		}
 		$selection = (new VersionMatrix())->resolve($version, $type === 'git');
 		$url = $url ?: ($type === 'git' ? 'https://github.com/phpbb/phpbb.git' : null);
+		if ($type === 'git')
+		{
+			$this->validateGitUrl((string) $url);
+		}
 		if ($type === 'git' && !$allowExternal && $url !== 'https://github.com/phpbb/phpbb.git')
 		{
 			throw new InvalidArgumentException('Custom Git source URLs can run Composer code on your host. Use --allow-external only for trusted phpBB forks.');
 		}
 
 		$sources = $this->project->readJson('sources.json', []);
+		foreach (array_keys($sources) as $registeredKey)
+		{
+			if ($this->project->namesEqual((string) $registeredKey, (string) $selection['source_key']) && (string) $registeredKey !== (string) $selection['source_key'])
+			{
+				throw new InvalidArgumentException("Source already exists with different letter case: $registeredKey");
+			}
+		}
 		$record = [
 			'version' => $selection['version'],
 			'source_key' => $selection['source_key'],
@@ -64,6 +75,18 @@ class SourceProvider
 		}
 
 		return $record;
+	}
+
+	private function validateGitUrl(string $url): void
+	{
+		if (!str_ends_with($url, '.git'))
+		{
+			throw new InvalidArgumentException('Git URL must point to a repository clone URL ending in .git.');
+		}
+		if (parse_url($url, PHP_URL_USER) !== null || parse_url($url, PHP_URL_PASS) !== null)
+		{
+			throw new InvalidArgumentException('Git URLs must not contain credentials. Use SSH or a credential manager so secrets are not stored or logged.');
+		}
 	}
 
 	public function ensure(string $version): array
@@ -112,7 +135,6 @@ class SourceProvider
 	{
 		$source += [
 			'path' => $this->project->sourcePath($source['source_key']),
-			'php'  => '8.1',
 		];
 		if (!file_exists($source['path'] . '/common.php'))
 		{
@@ -120,7 +142,7 @@ class SourceProvider
 			$this->fetch($source);
 		}
 
-		$source = $this->withInstalledSourceMetadata($source, $source['php']);
+		$source = $this->withInstalledSourceMetadata($source, $source['php'] ?? null);
 		$sources = $this->project->readJson('sources.json', []);
 		$sources[$source['source_key']] = $source;
 		$this->project->writeJson('sources.json', $sources);
@@ -202,9 +224,10 @@ class SourceProvider
 			{
 				$this->project->deleteTree($actualPath);
 			}
-			if (!rename($tempSource['path'], $actualPath))
+			error_clear_last();
+			if (!@rename($tempSource['path'], $actualPath))
 			{
-				throw new RuntimeException("Unable to move source into place: $actualPath");
+				throw new RuntimeException("Unable to move source into place: $actualPath" . $this->lastFilesystemError());
 			}
 		}
 
@@ -315,7 +338,11 @@ class SourceProvider
 
 		if (is_dir($path))
 		{
-			rmdir($path);
+			error_clear_last();
+			if (!@rmdir($path) && is_dir($path))
+			{
+				throw new RuntimeException("Unable to remove empty source directory: $path" . $this->lastFilesystemError());
+			}
 		}
 
 		$command = $this->composerCommand([
@@ -352,9 +379,10 @@ class SourceProvider
 		{
 			$this->project->deleteTree($temporaryAppRoot);
 		}
-		if (!rename($appRoot, $temporaryAppRoot))
+		error_clear_last();
+		if (!@rename($appRoot, $temporaryAppRoot))
 		{
-			throw new RuntimeException("Unable to prepare Git source root: $appRoot");
+			throw new RuntimeException("Unable to prepare Git source root: $appRoot" . $this->lastFilesystemError());
 		}
 
 		foreach (scandir($path) ?: [] as $item)
@@ -380,9 +408,10 @@ class SourceProvider
 			{
 				throw new RuntimeException("Unable to normalize Git source. Target already exists: $target");
 			}
-			if (!rename($source, $target))
+			error_clear_last();
+			if (!@rename($source, $target))
 			{
-				throw new RuntimeException("Unable to move Git source file into place: $source");
+				throw new RuntimeException("Unable to move Git source file into place: $source" . $this->lastFilesystemError());
 			}
 		}
 
@@ -395,7 +424,52 @@ class SourceProvider
 		return $files !== false && count(array_diff($files, ['.', '..'])) > 0;
 	}
 
+	private function lastFilesystemError(): string
+	{
+		$error = error_get_last();
+		$message = is_array($error) ? trim((string) ($error['message'] ?? '')) : '';
+		return $message !== '' ? ": $message" : '';
+	}
+
 	protected function installedPhpbbVersion(string $path): string
+	{
+		$version = $this->detectedPhpbbVersion($path);
+		if ($version !== null)
+		{
+			return $version;
+		}
+
+		throw new RuntimeException("Unable to determine phpBB version from source: $path");
+	}
+
+	protected function withInstalledSourceMetadata(array $source, ?string $defaultPhp): array
+	{
+		$detectedVersion = $this->detectedPhpbbVersion($source['path'] ?? '');
+		if ($detectedVersion !== null)
+		{
+			$source = $this->withDetectedPhpbbMetadata($source, $detectedVersion);
+			$defaultPhp = $source['php'] ?? null;
+			if (($source['type'] ?? '') === 'git' && ($defaultPhp === null || $defaultPhp === ''))
+			{
+				throw new RuntimeException("Unable to determine PHP runtime from phpBB version for Git source: {$source['path']}");
+			}
+		}
+		else if (($source['type'] ?? '') === 'git')
+		{
+			throw new RuntimeException("Unable to determine phpBB version from Git source: {$source['path']}");
+		}
+
+		$requirement = $this->phpRequirement($source['path'] ?? '');
+		if ($requirement !== null)
+		{
+			$source['php_requirement'] = $requirement;
+			$source['php'] = $this->runtimeForRequirement($defaultPhp, $requirement);
+		}
+
+		return $source;
+	}
+
+	protected function detectedPhpbbVersion(string $path): ?string
 	{
 		$phpbbCli = $path . '/install/phpbbcli.php';
 		if (is_file($phpbbCli) && preg_match("/define\\('PHPBB_VERSION',\\s*'([^']+)'\\)/", (string) file_get_contents($phpbbCli), $matches))
@@ -403,17 +477,28 @@ class SourceProvider
 			return $matches[1];
 		}
 
-		throw new RuntimeException("Unable to determine phpBB version from source: $path");
+		return null;
 	}
 
-	protected function withInstalledSourceMetadata(array $source, string $defaultPhp): array
+	protected function withDetectedPhpbbMetadata(array $source, string $detectedVersion): array
 	{
-		$requirement = $this->phpRequirement($source['path'] ?? '');
-		if ($requirement !== null)
+		$source['detected_phpbb_version'] = $detectedVersion;
+		if (!preg_match('/^(\d+\.\d+\.\d+)/', $detectedVersion, $matches))
 		{
-			$source['php_requirement'] = $requirement;
-			$source['php'] = $this->runtimeForRequirement($defaultPhp, $requirement);
+			return $source;
 		}
+
+		try
+		{
+			$selection = (new VersionMatrix())->resolve($matches[1]);
+		}
+		catch (InvalidArgumentException $e)
+		{
+			return $source;
+		}
+
+		$source['phpbb_branch'] = $selection['phpbb_branch'];
+		$source['php'] = $selection['php'];
 
 		return $source;
 	}
@@ -435,9 +520,13 @@ class SourceProvider
 		return $data['require']['php'];
 	}
 
-	protected function runtimeForRequirement(string $defaultPhp, string $requirement): string
+	protected function runtimeForRequirement(?string $defaultPhp, string $requirement): ?string
 	{
 		$minimum = $this->minimumPhpFromRequirement($requirement);
+		if ($defaultPhp === null || $defaultPhp === '')
+		{
+			return $minimum;
+		}
 		if ($minimum === null || version_compare($defaultPhp, $minimum, '>='))
 		{
 			return $defaultPhp;
@@ -448,7 +537,7 @@ class SourceProvider
 
 	protected function minimumPhpFromRequirement(string $requirement): ?string
 	{
-		if (!preg_match_all('/(?<![0-9])(?:(>=|>|<=|<|!=|=|==|\\^|~)\\s*)?([0-9]+\\.[0-9]+)(?:\\.[0-9]+)?(?![0-9])/', $requirement, $matches, PREG_SET_ORDER))
+		if (!preg_match_all('/(?<!\d)(?:(>=|>|<=|<|!=|=|==|\\^|~)\\s*)?(\d+\\.\d+)(?:\\.\d+)?(?!\d)/', $requirement, $matches, PREG_SET_ORDER))
 		{
 			return null;
 		}
@@ -533,9 +622,10 @@ class SourceProvider
 
 	protected function composerCommand(array $arguments): array
 	{
-		if ($this->isCommandAvailable('composer'))
+		$composer = $this->findCommand('composer');
+		if ($composer !== null)
 		{
-			return array_merge(['composer'], $arguments);
+			return array_merge([$composer], $arguments);
 		}
 
 		$phar = $this->project->rootPath('composer.phar');
@@ -549,16 +639,42 @@ class SourceProvider
 
 	protected function isCommandAvailable(string $command): bool
 	{
-		foreach (explode(PATH_SEPARATOR, (string) getenv('PATH')) as $path)
+		return $this->findCommand($command) !== null;
+	}
+
+	protected function findCommand(string $command): ?string
+	{
+		$extensions = [''];
+		if (PHP_OS_FAMILY === 'Windows')
 		{
-			$candidate = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $command;
-			if (is_file($candidate) && is_executable($candidate))
+			$extensions = array_merge($extensions, array_filter(array_map('strtolower', explode(';', (string) getenv('PATHEXT')))));
+			if (!in_array('.bat', $extensions, true))
 			{
-				return true;
+				$extensions[] = '.bat';
+			}
+			if (!in_array('.cmd', $extensions, true))
+			{
+				$extensions[] = '.cmd';
+			}
+			if (!in_array('.exe', $extensions, true))
+			{
+				$extensions[] = '.exe';
 			}
 		}
 
-		return false;
+		foreach (explode(PATH_SEPARATOR, (string) getenv('PATH')) as $path)
+		{
+			foreach ($extensions as $extension)
+			{
+				$candidate = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $command . $extension;
+				if (is_file($candidate) && (PHP_OS_FAMILY === 'Windows' || is_executable($candidate)))
+				{
+					return $candidate;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	protected function run(array $command, string $cwd): void

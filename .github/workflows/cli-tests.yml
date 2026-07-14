@@ -37,3 +37,38 @@ jobs:
 
       - name: Lint CLI entrypoint
         run: php -l bin/qi
+
+  windows:
+    name: Windows PHP 8.3
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Validate test Composer config
+        working-directory: tests
+        env:
+          COMPOSER: composer.cli-tests.json
+        run: composer validate --no-check-publish --strict
+
+      - name: Install test dependencies
+        working-directory: tests
+        env:
+          COMPOSER: composer.cli-tests.json
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPUnit
+        timeout-minutes: 10
+        shell: cmd
+        run: php tests/vendor/bin/phpunit -c phpunit.xml.dist
+
+      - name: Smoke test CMD launcher
+        shell: cmd
+        run: bin\qi.cmd help

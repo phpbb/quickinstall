@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use QuickInstall\Sandbox\BoardRunner;
 use QuickInstall\Sandbox\BoardService;
+use QuickInstall\Sandbox\DockerComposeWriter;
 use QuickInstall\Sandbox\Project;
 use QuickInstall\Tests\Support\TempProjectTrait;
 
@@ -41,7 +42,17 @@ class BoardServiceTest extends TestCase
 		(new TestBoardService($project))->create('demo', '3.3.14', 'mariadb', 8090);
 	}
 
-	public function testCreateWithReplaceDestroysExistingBoardFirst(): void
+	public function testRejectsBoardNamesThatDifferOnlyByCase(): void
+	{
+		$project = $this->projectWithSource('3.3.14');
+		$project->appendBoard(['name' => 'Demo', 'port' => 8090]);
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('case-insensitive');
+		(new TestBoardService($project))->create('demo', '3.3.14', 'mariadb', 8091);
+	}
+
+	public function testCreateWithReplacePreservesExistingBoardUntilReplacementIsReady(): void
 	{
 		$project = $this->projectWithSource('3.3.14');
 		$project->appendBoard(['name' => 'demo', 'port' => 8090]);
@@ -49,7 +60,53 @@ class BoardServiceTest extends TestCase
 
 		(new TestBoardService($project, $runner))->create('demo', '3.3.14', 'mariadb', 8090, 'none', false, true);
 
-		self::assertSame(['demo'], $runner->destroyed);
+		self::assertSame(['demo'], $runner->preparedForReplacement);
+	}
+
+	public function testFailedReplacementRestoresExistingBoardFiles(): void
+	{
+		$project = $this->projectWithSource('3.3.14');
+		$project->appendBoard(['name' => 'demo', 'port' => 8090]);
+		mkdir($project->boardPath('demo'), 0775, true);
+		file_put_contents($project->boardPath('demo') . '/existing.txt', 'preserved');
+		$runner = new ServiceTestBoardRunner($project);
+		$writer = new FailingDockerComposeWriter($project);
+
+		try
+		{
+			(new TestBoardService($project, $runner, false, $writer))->create('demo', '3.3.14', 'mariadb', 8090, 'none', false, true);
+			self::fail('Expected replacement failure.');
+		}
+		catch (\RuntimeException $e)
+		{
+			self::assertSame('replacement write failed', $e->getMessage());
+		}
+
+		self::assertSame('preserved', file_get_contents($project->boardPath('demo') . '/existing.txt'));
+		self::assertSame(8090, $project->board('demo')['port']);
+	}
+
+	public function testCreateCanUseRegisteredCustomSourceKey(): void
+	{
+		$project = $this->projectWithSource('topic-123');
+		$sources = $project->readJson('sources.json', []);
+		$sources['topic-123']['version'] = 'topic/123';
+		$sources['topic-123']['branch'] = 'topic/123';
+		$sources['topic-123']['phpbb_branch'] = 'custom';
+		$sources['topic-123']['status'] = 'experimental';
+		$sources['topic-123']['type'] = 'git';
+		$sources['topic-123']['url'] = 'https://example.test/phpbb.git';
+		unset($sources['topic-123']['php']);
+		$project->writeJson('sources.json', $sources);
+		mkdir($sources['topic-123']['path'] . '/install', 0775, true);
+		file_put_contents($sources['topic-123']['path'] . '/install/phpbbcli.php', "<?php\ndefine('PHPBB_VERSION', '3.3.0');\n");
+
+		$result = (new TestBoardService($project))->create('demo', 'topic-123', 'mariadb', 8090);
+
+		self::assertSame('topic/123', $result['board']['phpbb']);
+		self::assertSame('topic-123', $result['board']['phpbb_source']);
+		self::assertSame('3.3', $result['board']['phpbb_branch']);
+		self::assertSame('7.4', $result['board']['php']);
 	}
 
 	public function testCreateRejectsUsedPortAndHostPort(): void
@@ -152,9 +209,9 @@ class BoardServiceTest extends TestCase
 		];
 	}
 
-	private function projectWithSource(string $version): Project
+	private function projectWithSource(string $version, ?string $osFamily = null): Project
 	{
-		$project = new Project($this->createTempProjectRoot());
+		$project = new Project($this->createTempProjectRoot(), $osFamily);
 		$project->init();
 		$sourcePath = $project->sourcePath($version);
 		mkdir($sourcePath, 0775, true);
@@ -183,12 +240,14 @@ class TestBoardService extends BoardService
 {
 	private ?ServiceTestBoardRunner $runner;
 	private bool $portInUse;
+	private ?DockerComposeWriter $writer;
 
-	public function __construct(Project $project, ?ServiceTestBoardRunner $runner = null, bool $portInUse = false)
+	public function __construct(Project $project, ?ServiceTestBoardRunner $runner = null, bool $portInUse = false, ?DockerComposeWriter $writer = null)
 	{
 		parent::__construct($project);
 		$this->runner = $runner;
 		$this->portInUse = $portInUse;
+		$this->writer = $writer;
 	}
 
 	protected function isPortInUse(int $port): bool
@@ -200,6 +259,19 @@ class TestBoardService extends BoardService
 	{
 		return $this->runner ?? parent::createBoardRunner();
 	}
+
+	protected function createDockerComposeWriter(): DockerComposeWriter
+	{
+		return $this->writer ?? parent::createDockerComposeWriter();
+	}
+}
+
+class FailingDockerComposeWriter extends DockerComposeWriter
+{
+	public function write(string $name, array $config): array
+	{
+		throw new \RuntimeException('replacement write failed');
+	}
 }
 
 class ServiceTestBoardRunner extends BoardRunner
@@ -208,6 +280,7 @@ class ServiceTestBoardRunner extends BoardRunner
 	public array $started = [];
 	public array $stopped = [];
 	public array $destroyed = [];
+	public array $preparedForReplacement = [];
 	public array $seeded = [];
 
 	public function start(string $name): void
@@ -223,6 +296,11 @@ class ServiceTestBoardRunner extends BoardRunner
 	public function destroy(string $name): void
 	{
 		$this->destroyed[] = $name;
+	}
+
+	public function prepareReplacement(string $name): void
+	{
+		$this->preparedForReplacement[] = $name;
 	}
 
 	public function status(string $name): string

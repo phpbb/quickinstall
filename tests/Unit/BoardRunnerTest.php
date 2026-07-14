@@ -129,6 +129,29 @@ class BoardRunnerTest extends TestCase
 		self::assertSame(['demo', 'tiny', 3, 'replace'], $runner->seedRuns[1]);
 	}
 
+	public function testRunSeederRaisesPhpMemoryLimit(): void
+	{
+		[$project] = $this->projectWithBoard();
+		mkdir($project->runtimePath('demo'), 0775, true);
+		$runner = new CommandCapturingBoardRunner($project);
+
+		$runner->runSeederForTest('demo', 'load-test', 1, 'replace');
+
+		self::assertSame(['php', '-d', 'memory_limit=512M', '/tmp/qi_seed.php', 'load-test', '1', 'replace'], array_slice($runner->runs[1], -7));
+	}
+
+	public function testServiceStateChecksStoppedContainers(): void
+	{
+		[$project] = $this->projectWithBoard();
+		$runner = new TestBoardRunner($project);
+		$runner->captures = [
+			['exit_code' => 0, 'output' => '{"State":"exited"}'],
+		];
+
+		self::assertSame('exited', $runner->serviceStateForTest('demo', 'web'));
+		self::assertContains('-a', $runner->capturedCommands[0]);
+	}
+
 	public function testStartRunsDockerWaitsEnablesDebugSeedsAndChecksHttp(): void
 	{
 		[$project] = $this->projectWithBoard([
@@ -214,6 +237,21 @@ class BoardRunnerTest extends TestCase
 	}
 }
 
+class CommandCapturingBoardRunner extends BoardRunner
+{
+	public array $runs = [];
+
+	public function runSeederForTest(string $name, string $preset, int $seed, string $action): void
+	{
+		$this->runSeeder($name, $preset, $seed, $action);
+	}
+
+	protected function run(array $command): void
+	{
+		$this->runs[] = $command;
+	}
+}
+
 class TestBoardRunner extends BoardRunner
 {
 	public array $runs = [];
@@ -222,6 +260,7 @@ class TestBoardRunner extends BoardRunner
 	public array $httpWaits = [];
 	public array $seedRuns = [];
 	public array $seedIfNeededRuns = [];
+	public array $capturedCommands = [];
 
 	protected function run(array $command): void
 	{
@@ -230,7 +269,13 @@ class TestBoardRunner extends BoardRunner
 
 	protected function capture(array $command): array
 	{
+		$this->capturedCommands[] = $command;
 		return array_shift($this->captures) ?: ['exit_code' => 0, 'output' => ''];
+	}
+
+	public function serviceStateForTest(string $name, string $service): string
+	{
+		return $this->serviceState($name, $service);
 	}
 
 	protected function waitUntilInstalled(string $name): void

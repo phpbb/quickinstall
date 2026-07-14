@@ -17,8 +17,8 @@ class StreamOutput implements Output
 
 	public function __construct($stdout = null, $stderr = null)
 	{
-		$this->stdout = $stdout ?: (defined('STDOUT') ? STDOUT : fopen('php://output', 'w'));
-		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'w'));
+		$this->stdout = $stdout ?: (defined('STDOUT') ? STDOUT : fopen('php://output', 'wb'));
+		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'wb'));
 	}
 
 	public function write(string $message): void

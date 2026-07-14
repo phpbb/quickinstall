@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use InvalidArgumentException;
 use RuntimeException;
+use Throwable;
 
 class Application
 {
@@ -22,7 +23,7 @@ class Application
 	public function __construct(string $root, $stderr = null, $stdin = null)
 	{
 		$this->project = new Project($root);
-		$this->stderr = $stderr ?: STDERR;
+		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'wb'));
 		$this->stdin = $stdin ?: (defined('STDIN') ? STDIN : null);
 	}
 
@@ -36,8 +37,13 @@ class Application
 			return 0;
 		}
 
+		$operationLock = null;
 		try
 		{
+			if ($this->mutatesWorkspace($command))
+			{
+				$operationLock = $this->project->lockOperations();
+			}
 			switch ($command)
 			{
 				case 'help':
@@ -48,6 +54,9 @@ class Application
 
 				case 'init':
 					return $this->init();
+
+				case 'doctor':
+					return $this->doctor();
 
 				case 'source:list':
 					return $this->sourceList();
@@ -100,6 +109,18 @@ class Application
 				case 'style:list':
 					return $this->styleList($argv);
 
+				case 'ui:start':
+					return $this->uiStart($argv);
+
+				case 'ui:stop':
+					return $this->uiStop();
+
+				case 'ui:restart':
+					return $this->uiRestart($argv);
+
+				case 'ui:status':
+					return $this->uiStatus();
+
 				default:
 					$this->writeError("Unknown command: $command\n\n");
 					$this->help();
@@ -111,6 +132,28 @@ class Application
 			$this->writeError($e->getMessage() . "\n");
 			return 1;
 		}
+		finally
+		{
+			$this->project->unlockOperations($operationLock);
+			try
+			{
+				$this->printUpdateNotice($command, $argv);
+			}
+			catch (Throwable $e)
+			{
+				// Update notifications must never change command success or failure.
+			}
+		}
+	}
+
+	private function mutatesWorkspace(string $command): bool
+	{
+		return in_array($command, [
+			'init', 'source:fetch', 'source:remove', 'source:prune',
+			'board:create', 'board:start', 'board:stop', 'board:destroy', 'board:seed',
+			'ext:mount', 'ext:unmount', 'style:mount', 'style:unmount',
+			'ui:start', 'ui:stop', 'ui:restart',
+		], true);
 	}
 
 	private function init(): int
@@ -374,10 +417,31 @@ class Application
 
 		if (defined('STDIN') && $this->stdin === STDIN)
 		{
+			if (function_exists('stream_isatty'))
+			{
+				return stream_isatty(STDIN);
+			}
 			return !function_exists('posix_isatty') || posix_isatty(STDIN);
 		}
 
 		return true;
+	}
+
+	private function doctor(): int
+	{
+		$checks = (new DoctorService($this->project))->checks();
+		$failed = false;
+		echo $this->style('QuickInstall requirements', '1') . "\n";
+		foreach ($checks as $check)
+		{
+			$status = $check['ok']
+				? $this->style("\u{2714}", '1;32')
+				: $this->style('!', '1;31');
+			echo "$status {$check['name']}: {$check['detail']}\n";
+			$failed = $failed || !$check['ok'];
+		}
+
+		return $failed ? 1 : 0;
 	}
 
 	private function style(string $text, string $code): string
@@ -400,6 +464,14 @@ class Application
 		if (function_exists('posix_isatty') && defined('STDOUT'))
 		{
 			return posix_isatty(STDOUT);
+		}
+		if (function_exists('stream_isatty') && defined('STDOUT') && !stream_isatty(STDOUT))
+		{
+			return false;
+		}
+		if (PHP_OS_FAMILY === 'Windows' && function_exists('sapi_windows_vt100_support') && defined('STDOUT'))
+		{
+			return sapi_windows_vt100_support(STDOUT, true);
 		}
 
 		return PHP_SAPI === 'cli';
@@ -538,33 +610,106 @@ class Application
 
 	private function refreshBoardIfRunning(string $board): void
 	{
-		$runner = new BoardRunner($this->project, $this->sandboxOutput());
-		(new DockerComposeWriter($this->project))->write($board, $this->runtimeConfig($this->project->board($board)));
-		if ($runner->status($board) === 'running')
-		{
-			$runner->recreateWeb($board);
-			$runner->purgeCache($board);
-		}
+		(new BoardRefreshService($this->project))->refreshIfRunning($board);
 	}
 
-	private function runtimeConfig(array $board): array
+	private function uiStart(array $args): int
 	{
-		if (empty($board['port']) && !empty($board['url']))
+		$cli = CommandLine::parse($args);
+		[$host, $port] = $this->uiOptions($cli);
+		$result = (new UiServerService($this->project))->start($host, $port);
+		$state = $result['state'];
+		if ($result['status'] === 'already_running')
 		{
-			$port = parse_url($board['url'], PHP_URL_PORT);
-			$board['port'] = $port ?: 80;
+			echo "QuickInstall Dashboard UI is already running: {$state['url']}\n";
+			return 0;
 		}
 
-		return $board + [
-			'admin_name' => 'admin',
-			'admin_pass' => 'password',
-			'admin_email' => 'admin@example.test',
-			'board_email' => 'board@example.test',
-			'populate' => 'none',
-			'debug' => false,
-			'extensions' => [],
-			'styles' => [],
-		];
+		echo "QuickInstall Dashboard UI started: {$state['url']}\n";
+		echo "PID: {$state['pid']}\n";
+		echo "Log: {$state['log']}\n";
+		echo "Stop it with: php bin/qi ui:stop\n";
+
+		return 0;
+	}
+
+	private function uiStop(): int
+	{
+		$result = (new UiServerService($this->project))->stop();
+		$state = $result['state'];
+		if ($result['status'] === 'not_tracked')
+		{
+			echo "QuickInstall Dashboard UI is not tracked as running.\n";
+			return 0;
+		}
+
+		if ($result['status'] === 'stopped')
+		{
+			echo "Stopped QuickInstall Dashboard UI";
+			if (!empty($state['url']))
+			{
+				echo ": {$state['url']}";
+			}
+		}
+		else
+		{
+			echo "QuickInstall Dashboard UI process was not running";
+			$pid = (int) ($state['pid'] ?? 0);
+			if ($pid > 0)
+			{
+				echo " (PID $pid)";
+			}
+		}
+		echo "\n";
+
+		return 0;
+	}
+
+	private function uiRestart(array $args): int
+	{
+		$this->uiStop();
+		return $this->uiStart($args);
+	}
+
+	private function uiStatus(): int
+	{
+		$result = (new UiServerService($this->project))->status();
+		$state = $result['state'];
+		if ($result['status'] === 'running')
+		{
+			echo "QuickInstall Dashboard UI is running\n";
+			echo "URL: {$state['url']}\n";
+			echo "PID: {$state['pid']}\n";
+			echo "Log: {$state['log']}\n";
+			return 0;
+		}
+
+		if ($result['status'] === 'stale')
+		{
+			echo "QuickInstall Dashboard UI is not running, but stale state exists.\n";
+			echo "Last URL: " . ($state['url'] ?? '(unknown)') . "\n";
+			echo "Run: php bin/qi ui:stop\n";
+			return 1;
+		}
+
+		echo "QuickInstall Dashboard UI is not running.\n";
+		return 0;
+	}
+
+	private function uiOptions(CommandLine $cli): array
+	{
+		$host = $cli->option('host', '127.0.0.1');
+		$port = (int) $cli->option('port', '8079');
+		if (!in_array($host, ['127.0.0.1', 'localhost', '::1'], true))
+		{
+			throw new InvalidArgumentException('ui:start only supports local loopback hosts: 127.0.0.1, localhost, or ::1.');
+		}
+		if ($port < 1 || $port > 65535)
+		{
+			throw new InvalidArgumentException('--port must be between 1 and 65535.');
+		}
+
+		return [$host, $port];
 	}
 
 	private function extList(array $args): int
@@ -677,41 +822,44 @@ class Application
 		fwrite($this->stderr, $message);
 	}
 
+	private function printUpdateNotice(string $command, array $args): void
+	{
+		if (in_array($command, ['help', '--help', '-h'], true) || in_array('--help', $args, true) || in_array('-h', $args, true))
+		{
+			return;
+		}
+
+		$update = (new UpdateService($this->project))->getUpdate();
+		if ($update === null)
+		{
+			return;
+		}
+
+		echo "\nQuickInstall {$update['current']} available";
+		if (!empty($update['download']))
+		{
+			echo ": {$update['download']}";
+		}
+		echo "\n";
+	}
+
 	private function sandboxOutput(): Output
 	{
-		$stdout = defined('STDOUT') && defined('STDERR') && $this->stderr === STDERR ? STDOUT : fopen('php://output', 'w');
+		$stdout = defined('STDOUT') && defined('STDERR') && $this->stderr === STDERR ? STDOUT : fopen('php://output', 'wb');
 		return new StreamOutput($stdout, $this->stderr);
 	}
 
 	private function mountResources(string $type, object $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int
 	{
-		if ($recursive)
-		{
-			$this->project->board($board);
-			$mounted = [];
-			$errors = [];
-			foreach ($manager->discover($source, $allowExternal) as $path)
-			{
-				try
-				{
-					$mounted[] = $manager->mount($board, $path, false, $allowExternal);
-				}
-				catch (RuntimeException | InvalidArgumentException $e)
-				{
-					$errors[] = "$path: " . $e->getMessage();
-				}
-			}
+		$result = (new CustomisationMountService($this->project))->mount($manager, $board, $source, $copy, $recursive, $allowExternal);
 
-			if ($mounted)
-			{
-				$this->refreshBoardIfRunning($board);
-			}
-			$this->printBulkMountResult($type, $board, $mounted, $errors);
-			return $errors ? 1 : 0;
+		if ($result['recursive'])
+		{
+			$this->printBulkMountResult($type, $board, $result['mounted'], $result['errors']);
+			return $result['errors'] ? 1 : 0;
 		}
 
-		$mounted = $manager->mount($board, $source, $copy, $allowExternal);
-		$this->refreshBoardIfRunning($board);
+		$mounted = $result['mounted'][0];
 		echo "Mounted {$mounted['name']} on $board ({$mounted['mode']})\n";
 		echo "Source: {$mounted['source']}\n";
 		echo "Target: {$mounted['target']}\n";
@@ -728,22 +876,22 @@ class Application
 			return;
 		}
 
-		echo "QuickInstall CLI\n";
+		echo $this->style('QuickInstall CLI', '1') . "\n";
 		echo "Create disposable local phpBB boards with Docker.\n\n";
-		echo "Usage:\n";
-		echo "  qi <command> [arguments] [options]\n";
-		echo "  qi help [command]\n\n";
-		echo "Common workflow:\n";
-		echo "  qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev\n";
-		echo "  qi board:start demo\n\n";
+		echo $this->style('Usage:', '1;33') . "\n";
+		echo '  ' . $this->style('qi <command> [arguments] [options]', '1;36') . "\n";
+		echo '  ' . $this->style('qi help [command]', '1;36') . "\n\n";
+		echo $this->style('Common workflow:', '1;33') . "\n";
+		echo '  ' . $this->style('qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev', '1;36') . "\n";
+		echo '  ' . $this->style('qi board:start demo', '1;36') . "\n\n";
 
 		foreach ($commands as $group => $items)
 		{
-			echo "$group:\n";
+			echo $this->style("$group:", '1;33') . "\n";
 			$width = max(array_map('strlen', array_keys($items)));
 			foreach ($items as $name => $help)
 			{
-				echo '  ' . str_pad($name, $width) . '  ' . $help['summary'] . "\n";
+				echo '  ' . $this->style(str_pad($name, $width), '1;36') . '  ' . $help['summary'] . "\n";
 			}
 			echo "\n";
 		}
@@ -762,27 +910,27 @@ class Application
 			}
 
 			$help = $items[$command];
-			echo "{$help['title']}\n\n";
-			echo "Usage:\n";
-			echo "  qi {$help['usage']}\n\n";
-			echo "Description:\n";
+			echo $this->style($help['title'], '1') . "\n\n";
+			echo $this->style('Usage:', '1;33') . "\n";
+			echo '  ' . $this->style("qi {$help['usage']}", '1;36') . "\n\n";
+			echo $this->style('Description:', '1;33') . "\n";
 			echo "  {$help['description']}\n";
 			if (!empty($help['arguments']))
 			{
-				echo "\nArguments:\n";
+				echo "\n" . $this->style('Arguments:', '1;33') . "\n";
 				$this->printHelpRows($help['arguments']);
 			}
 			if (!empty($help['options']))
 			{
-				echo "\nOptions:\n";
+				echo "\n" . $this->style('Options:', '1;33') . "\n";
 				$this->printHelpRows($help['options']);
 			}
 			if (!empty($help['examples']))
 			{
-				echo "\nExamples:\n";
+				echo "\n" . $this->style('Examples:', '1;33') . "\n";
 				foreach ($help['examples'] as $example)
 				{
-					echo "  qi $example\n";
+					echo '  ' . $this->style("qi $example", '1;36') . "\n";
 				}
 			}
 			echo "\n";
@@ -798,13 +946,24 @@ class Application
 		$width = max(array_map('strlen', array_keys($rows)));
 		foreach ($rows as $name => $description)
 		{
-			echo '  ' . str_pad($name, $width) . '  ' . $description . "\n";
+			echo '  ' . $this->style(str_pad($name, $width), '1;36') . '  ' . $description . "\n";
 		}
 	}
 
 	private function helpCommands(): array
 	{
 		return [
+			'Setup commands' => [
+				'doctor' => [
+					'title' => 'doctor',
+					'usage' => 'doctor',
+					'summary' => 'Check local PHP, Docker, Git, and Composer requirements.',
+					'description' => 'Checks that required host tools are available, Docker Desktop is running, Docker Compose works, and Docker is using Linux containers.',
+					'examples' => [
+						'doctor',
+					],
+				],
+			],
 			'Board commands' => [
 				'board:create' => [
 					'title' => 'board:create',
@@ -981,6 +1140,53 @@ class Application
 					],
 					'examples' => [
 						'style:list demo',
+					],
+				],
+			],
+			'UI commands' => [
+				'ui:start' => [
+					'title' => 'ui:start',
+					'usage' => 'ui:start [--host 127.0.0.1] [--port 8079]',
+					'summary' => 'Start the local QuickInstall Dashboard UI.',
+					'description' => 'Starts PHP built-in server in the background on a loopback address and serves the QuickInstall Dashboard UI.',
+					'options' => [
+						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
+						'--port PORT' => 'Local UI port. Default: 8079.',
+					],
+					'examples' => [
+						'ui:start',
+						'ui:start --port 8088',
+					],
+				],
+				'ui:stop' => [
+					'title' => 'ui:stop',
+					'usage' => 'ui:stop',
+					'summary' => 'Stop the tracked QuickInstall Dashboard UI.',
+					'description' => 'Stops the background Dashboard UI server that was started with ui:start and removes its runtime state file.',
+					'examples' => [
+						'ui:stop',
+					],
+				],
+				'ui:restart' => [
+					'title' => 'ui:restart',
+					'usage' => 'ui:restart [--host 127.0.0.1] [--port 8079]',
+					'summary' => 'Restart the local QuickInstall Dashboard UI.',
+					'description' => 'Stops the tracked Dashboard UI server if present, then starts a fresh local Dashboard UI server.',
+					'options' => [
+						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
+						'--port PORT' => 'Local UI port. Default: 8079.',
+					],
+					'examples' => [
+						'ui:restart',
+					],
+				],
+				'ui:status' => [
+					'title' => 'ui:status',
+					'usage' => 'ui:status',
+					'summary' => 'Show whether the QuickInstall Dashboard UI is running.',
+					'description' => 'Reads the tracked UI runtime state and checks whether the configured local UI port responds.',
+					'examples' => [
+						'ui:status',
 					],
 				],
 			],

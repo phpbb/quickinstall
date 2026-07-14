@@ -32,7 +32,6 @@
 		<delete file="${dir}/.gitattributes" />
 		<delete file="${dir}/build.xml" />
 		<delete file="${dir}/composer.lock" />
-		<delete file="${dir}/composer.phar" />
 		<delete file="${dir}/package.json" />
 		<delete file="${dir}/package-lock.json" />
 		<delete file="${dir}/phpunit.xml.dist" />
