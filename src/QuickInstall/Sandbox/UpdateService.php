@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use RuntimeException;
 use Throwable;
 
+/** Performs a cached, best-effort check for newer QuickInstall releases. */
 class UpdateService
 {
 	private const ENDPOINT = 'https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/version_check';

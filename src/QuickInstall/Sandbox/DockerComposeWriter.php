@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use RuntimeException;
 
+/** Generates the complete Docker runtime scaffold for one board. */
 class DockerComposeWriter
 {
 	private Project $project;
@@ -21,6 +22,7 @@ class DockerComposeWriter
 		$this->project = $project;
 	}
 
+	/** Writes compose, image, entrypoint, and installer files for one board. */
 	public function write(string $name, array $config): array
 	{
 		$runtimeDir = $this->project->workspacePath('runtime/' . $name);
@@ -53,6 +55,7 @@ class DockerComposeWriter
 
 	private function writeFile(string $path, string $contents): void
 	{
+		// Containers execute these files as Linux files even when generated on Windows.
 		$contents = str_replace(["\r\n", "\r"], "\n", $contents);
 		if (file_put_contents($path, $contents, LOCK_EX) !== strlen($contents))
 		{
@@ -129,6 +132,7 @@ services:
         PHP_VERSION: "{$config['php']}"
     working_dir: /var/www/html
     ports:
+      # Boards are intentionally unavailable to other network devices.
       - "127.0.0.1:{$config['port']}:80"
     volumes:
 {$this->bindVolume($sourcePath, '/opt/phpbb-source', true)}{$this->bindVolume($boardPath, '/var/www/html')}{$extensionVolumes}{$styleVolumes}{$this->bindVolume('./install-config.yml', '/opt/quickinstall/install-config.yml', true)}{$this->bindVolume('./entrypoint.sh', '/opt/quickinstall/entrypoint.sh', true)}

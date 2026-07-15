@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox;
 
+/** Parses positional arguments, long options, and boolean flags. */
 class CommandLine
 {
 	private array $args = [];

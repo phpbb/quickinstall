@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use RuntimeException;
 
+/** Writes the phpBB-aware fixture script executed inside board containers. */
 class SeederWriter
 {
 	private Project $project;

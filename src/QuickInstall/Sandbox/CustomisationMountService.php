@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use InvalidArgumentException;
 use RuntimeException;
 
+/** Coordinates single or recursive extension/style mounts and board refreshes. */
 class CustomisationMountService
 {
 	private Project $project;
@@ -24,6 +25,7 @@ class CustomisationMountService
 		$this->output = $output;
 	}
 
+	/** Returns mounted items and per-item errors; recursive mounts are best effort. */
 	public function mount(object $manager, string $board, string $source, bool $copy = false, bool $recursive = false, bool $allowExternal = false): array
 	{
 		if ($recursive)

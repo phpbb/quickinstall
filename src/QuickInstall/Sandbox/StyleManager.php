@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use InvalidArgumentException;
 use RuntimeException;
 
+/** Discovers, copies, binds, lists, and removes phpBB styles. */
 class StyleManager
 {
 	private Project $project;
@@ -22,6 +23,7 @@ class StyleManager
 		$this->project = $project;
 	}
 
+	/** Mounts one style using its validated source directory name. */
 	public function mount(string $board, string $source, bool $copy = false, bool $allowExternal = false): array
 	{
 		$boardConfig = $this->project->board($board);
@@ -96,6 +98,7 @@ class StyleManager
 		return $found;
 	}
 
+	/** Removes copied files or registry state for a bind mount. */
 	public function unmount(string $board, string $name): string
 	{
 		$boardConfig = $this->project->board($board);

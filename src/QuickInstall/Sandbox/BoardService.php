@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Throwable;
 
+/** Owns board definitions and coordinates source, runtime, and Docker services. */
 class BoardService
 {
 	private Project $project;
@@ -25,6 +26,10 @@ class BoardService
 		$this->output = $output;
 	}
 
+	/**
+	 * Creates a board definition and runtime scaffold without starting Docker.
+	 * Existing state is restored if a replacement fails.
+	 */
 	public function create(string $name, string $version = 'latest', string $db = 'mariadb', int $port = 8080, string $populate = 'none', bool $debug = false, bool $replace = false): array
 	{
 		$this->project->init();
@@ -66,6 +71,8 @@ class BoardService
 			throw new InvalidArgumentException("Port $port is already in use on this host.");
 		}
 
+		// Resolve and fetch first; a failed download must not disturb a board
+		// that is being replaced.
 		$source = $this->createSourceProvider()->ensure($version);
 		$php = $source['php'] ?? $selection['php'] ?? null;
 		if ($php === null || $php === '')
@@ -91,6 +98,7 @@ class BoardService
 		$backups = [];
 		if ($existingName !== null)
 		{
+			// Rename existing state aside so any later failure can restore it.
 			$this->createBoardRunner()->prepareReplacement($name);
 			$backups = $this->backupBoardState($name);
 		}

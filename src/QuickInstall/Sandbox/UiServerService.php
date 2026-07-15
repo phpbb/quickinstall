@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use RuntimeException;
 
+/** Starts, verifies, tracks, and stops the loopback Dashboard PHP server. */
 class UiServerService
 {
 	private Project $project;
@@ -23,6 +24,7 @@ class UiServerService
 		$this->processRunner = $processRunner ?: new ProcessRunner(new BufferedOutput());
 	}
 
+	/** Starts a detached loopback server and records state only after it responds. */
 	public function start(string $host, int $port): array
 	{
 		$state = $this->readState();
@@ -66,6 +68,7 @@ class UiServerService
 		return ['status' => 'started', 'state' => $state];
 	}
 
+	/** Stops only the process whose command line matches the recorded UI server. */
 	public function stop(): array
 	{
 		$state = $this->readState();
@@ -94,6 +97,7 @@ class UiServerService
 		return ['stop' => $stopped, 'start' => $started];
 	}
 
+	/** Distinguishes a live server, stale state, and no tracked server. */
 	public function status(): array
 	{
 		$state = $this->readState();
@@ -326,6 +330,8 @@ class UiServerService
 			return false;
 		}
 
+		// A PID may be reused after an unclean exit. Match the router and -S flag
+		// before status or stop treats that process as ours.
 		$router = (string) ($state['router'] ?? dirname(__DIR__, 3) . '/public/sandbox-ui.php');
 		if (PHP_OS_FAMILY === 'Windows')
 		{

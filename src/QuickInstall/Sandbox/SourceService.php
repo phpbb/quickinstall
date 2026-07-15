@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use InvalidArgumentException;
 use RuntimeException;
 
+/** Provides source registry operations and protects sources used by boards. */
 class SourceService
 {
 	private Project $project;

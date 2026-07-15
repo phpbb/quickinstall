@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use RuntimeException;
 
+/** Runs portable subprocesses with streaming, timeouts, and safe diagnostics. */
 class ProcessRunner
 {
 	private Output $output;
@@ -25,6 +26,7 @@ class ProcessRunner
 		$this->timeoutSeconds = $timeoutSeconds;
 	}
 
+	/** Streams a command and throws when it fails or times out. */
 	public function run(array $command, ?string $cwd = null): void
 	{
 		$displayCommand = array_map([$this, 'redactArgument'], $command);
@@ -37,6 +39,7 @@ class ProcessRunner
 		}
 	}
 
+	/** Returns an exit code and combined output without throwing for command failure. */
 	public function capture(array $command, ?string $cwd = null): array
 	{
 		return $this->execute($command, false, $cwd);
@@ -134,6 +137,8 @@ class ProcessRunner
 
 	private function executeWithFiles(array $command, bool $stream, ?string $cwd): array
 	{
+		// Windows pipe reads can block after a child exits. Files make polling
+		// and timeout enforcement deterministic for long Composer/Docker jobs.
 		$stdoutPath = tempnam(sys_get_temp_dir(), 'qi-process-out-');
 		$stderrPath = tempnam(sys_get_temp_dir(), 'qi-process-err-');
 		if ($stdoutPath === false || $stderrPath === false)
