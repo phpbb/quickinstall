@@ -440,8 +440,8 @@ class Application
 		foreach ($checks as $check)
 		{
 			$status = $check['ok']
-				? $this->style("\u{2714}", '1;32')
-				: $this->style('!', '1;31');
+				? $this->style('[OK]', '1;32')
+				: $this->style('[FAIL]', '1;31');
 			echo "$status {$check['name']}: {$check['detail']}\n";
 			$failed = $failed || !$check['ok'];
 		}
