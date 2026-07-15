@@ -30,8 +30,6 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
    - 📁`sources/`
    - 📁`settings/`
 
-> If you are upgrading from QuickInstall 1.6.16 (or older) you will need to copy the new 📁`customisations/` folder.
-
 > If you are upgrading from QuickInstall 1.1.8 (or older) you MUST review and re-save your old Profile settings.
 
 ## 💻 Requirements
