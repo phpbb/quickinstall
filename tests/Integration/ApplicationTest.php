@@ -5,6 +5,7 @@ namespace QuickInstall\Tests\Integration;
 use PHPUnit\Framework\TestCase;
 use QuickInstall\Sandbox\Application;
 use QuickInstall\Sandbox\Project;
+use QuickInstall\Sandbox\UpdateService;
 use QuickInstall\Tests\Support\ApplicationRunnerTrait;
 use QuickInstall\Tests\Support\TempProjectTrait;
 
@@ -60,17 +61,19 @@ class ApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
+		$currentVersion = (new UpdateService($project))->currentVersion();
+		$availableVersion = $this->newerVersionThan($currentVersion);
 		$project->writeJson('cache/update-check.json', [
 			'checked_at' => time(),
-			'current_version' => '1.7.0',
-			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/download'],
+			'current_version' => $currentVersion,
+			'update' => ['current' => $availableVersion, 'download' => 'https://example.com/download'],
 			'error' => null,
 		]);
 
 		$result = $this->runApplication($root, ['qi', 'source:list']);
 
 		self::assertSame(0, $result['exit_code']);
-		self::assertStringContainsString('QuickInstall 1.8.0 available: https://example.com/download', $result['output']);
+		self::assertStringContainsString("QuickInstall $availableVersion available: https://example.com/download", $result['output']);
 	}
 
 	public function testPhpbbListPrintsSupportedSelectors(): void

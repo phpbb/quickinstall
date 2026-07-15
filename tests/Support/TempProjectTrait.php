@@ -18,6 +18,16 @@ trait TempProjectTrait
 		return $root;
 	}
 
+	protected function newerVersionThan(string $version): string
+	{
+		if (!preg_match('/^(\d+)/', $version, $matches))
+		{
+			throw new \RuntimeException("Unable to derive a future version from: $version");
+		}
+
+		return ((int) $matches[1] + 1) . '.0.0';
+	}
+
 	protected function tearDown(): void
 	{
 		foreach (array_reverse($this->temporaryPaths) as $path)
