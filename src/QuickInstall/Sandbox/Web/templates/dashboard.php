@@ -163,7 +163,7 @@
 		<label class="field" title="phpBB selector to fetch or reuse. Supported examples include latest, 3.3, 3.2, 4.0.x, and master."><span>phpBB</span><input name="phpbb" value="latest" list="phpbb-list"></label>
 		<datalist id="phpbb-list"><?php foreach ($versionOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?php endforeach; ?></datalist>
 		<label class="field" title="Database engine for the board containers. SQLite supports unseeded boards only."><span>DB</span><select name="db"><?php foreach ($dbOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?= $this->escape($option) ?></option><?php endforeach; ?></select></label>
-		<label class="field" title="Local host port for opening the board in your browser. Pick an unused port."><span>Port</span><input name="port" value="8080"></label>
+		<label class="field" title="Local host port for opening the board in your browser. Pick an unused port."><span>Web port</span><input name="port" value="8080"></label>
 		<label class="field" title="Optional content preset applied when the board is first installed."><span>Populate</span><select name="populate"><?php foreach ($populateOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?= $this->escape($option) ?></option><?php endforeach; ?></select></label>
 		<label class="toggle" title="Enable phpBB debug settings after installation."><input type="checkbox" name="debug" value="1"><span></span>Debug</label>
 		<label class="toggle" title="Destroy and recreate an existing board with the same name."><input type="checkbox" name="replace" value="1"><span></span>Replace existing</label>
