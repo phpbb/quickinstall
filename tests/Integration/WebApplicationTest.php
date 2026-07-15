@@ -114,7 +114,7 @@ class WebApplicationTest extends TestCase
 		self::assertSame('', $data['notice']);
 		self::assertStringContainsString('Doctor found', $data['error']);
 		self::assertStringContainsString('View the Activity Log below for details.', $data['error']);
-		self::assertStringContainsString('[FAIL] Docker daemon', $data['output']);
+		self::assertStringContainsString('[FAIL] Git: not available', $data['output']);
 		self::assertStringContainsString('<p class="error">', $data['html']);
 	}
 
