@@ -39,11 +39,18 @@
 					<h1>QuickInstall Dashboard</h1>
 					<p class="lede">Manage disposable phpBB boards backed by the same Docker services as the CLI.</p>
 				</div>
-				<form method="post" data-ajax>
-					<?php require __DIR__ . '/csrf.php'; ?>
-					<input type="hidden" name="action" value="init">
-					<button class="primary">Init workspace</button>
-				</form>
+				<div class="actions">
+					<form method="post" data-ajax>
+						<?php require __DIR__ . '/csrf.php'; ?>
+						<input type="hidden" name="action" value="doctor">
+						<button class="secondary">Run Doctor</button>
+					</form>
+					<form method="post" data-ajax>
+						<?php require __DIR__ . '/csrf.php'; ?>
+						<input type="hidden" name="action" value="init">
+						<button class="primary">Init workspace</button>
+					</form>
+				</div>
 			</header>
 			<div id="dashboard" class="content">
 				<?= $dashboard ?>

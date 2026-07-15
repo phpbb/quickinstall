@@ -28,7 +28,7 @@ class DoctorService
 		$projectWritable = $this->projectWritable();
 		$checks = [
 			$this->check('PHP 8+', PHP_VERSION_ID >= 80000, PHP_VERSION),
-			$this->check('PHP CLI', PHP_SAPI === 'cli', PHP_SAPI),
+			$this->check('PHP CLI', in_array(PHP_SAPI, ['cli', 'cli-server'], true), PHP_SAPI),
 			$this->check('PHP configuration', true, $iniPath !== false ? $iniPath : 'no php.ini loaded; using built-in defaults'),
 			$this->extensionCheck('JSON', 'json'),
 			$this->extensionCheck('OpenSSL', 'openssl', 'extension=openssl'),

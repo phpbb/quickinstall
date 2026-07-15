@@ -60,6 +60,7 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('QuickInstall Dashboard', $html);
 		self::assertStringContainsString('QuickInstall + Docker', $html);
 		self::assertStringContainsString('Create board', $html);
+		self::assertStringContainsString('Run Doctor', $html);
 		self::assertStringContainsString('Sources', $html);
 		self::assertStringContainsString('Mount extension', $html);
 		self::assertStringContainsString('Mount style', $html);
@@ -76,6 +77,45 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('Relative to <code>customisations/</code>', $html);
 		self::assertStringNotContainsString('<option value="3.0.x">', $html);
 		self::assertStringNotContainsString('<style>', $html);
+	}
+
+	public function testDoctorPostShowsResultsAndActivityOutput(): void
+	{
+		$root = $this->createTempProjectRoot();
+
+		$json = $this->runWebApplicationWithCsrf($root, ['action' => 'doctor'], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertStringContainsString('Doctor found', $data['notice'] ?: $data['error']);
+		self::assertStringContainsString('QuickInstall requirements', $data['output']);
+		self::assertStringContainsString('[OK] PHP 8+', $data['output']);
+		self::assertStringNotContainsString('doctor-results', $data['html']);
+	}
+
+	public function testDoctorFailureUsesErrorToastAndPointsToActivityLog(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$path = getenv('PATH');
+		putenv('PATH=/path-that-does-not-exist');
+
+		try
+		{
+			$json = $this->runWebApplicationWithCsrf($root, ['action' => 'doctor'], true);
+		}
+		finally
+		{
+			$path === false ? putenv('PATH') : putenv("PATH=$path");
+		}
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertFalse($data['ok']);
+		self::assertSame('', $data['notice']);
+		self::assertStringContainsString('Doctor found', $data['error']);
+		self::assertStringContainsString('View the Activity Log below for details.', $data['error']);
+		self::assertStringContainsString('[FAIL] Docker daemon', $data['output']);
+		self::assertStringContainsString('<p class="error">', $data['html']);
 	}
 
 	public function testRenderShowsRegisteredSourceOptions(): void
