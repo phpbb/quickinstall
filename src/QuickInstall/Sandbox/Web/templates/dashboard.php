@@ -56,7 +56,7 @@
 <section class="section" id="boards">
 	<div class="section-head">
 		<div>
-			<h2>Boards</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-boards"></use></svg>Boards</h2>
 			<p>Start, stop, seed, and inspect local Docker-backed phpBB installs.</p>
 		</div>
 	</div>
@@ -152,7 +152,7 @@
 <section class="section" id="create">
 	<div class="section-head">
 		<div>
-			<h2>Create board</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-create"></use></svg>Create board</h2>
 			<p>Choose the phpBB source, runtime, port, and optional seed preset.</p>
 		</div>
 	</div>
@@ -174,7 +174,7 @@
 <section class="section" id="customisations">
 	<div class="section-head">
 		<div>
-			<h2>Customisations</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-customisations"></use></svg>Customisations</h2>
 			<p>Bind or copy local extension and style work into a board.</p>
 		</div>
 	</div>
@@ -202,7 +202,7 @@
 <section class="section" id="sources">
 	<div class="section-head">
 		<div>
-			<h2>Sources</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-sources"></use></svg>Sources</h2>
 			<p>Fetch and inspect phpBB sources used by boards.</p>
 		</div>
 	</div>
@@ -257,7 +257,7 @@
 <section class="section" id="activity">
 	<div class="section-head">
 		<div>
-			<h2>Activity log</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-activity"></use></svg>Activity log</h2>
 			<p>Docker, Composer, and seed output from the latest action.</p>
 		</div>
 		<button type="button" class="secondary" data-clear-log>Clear</button>

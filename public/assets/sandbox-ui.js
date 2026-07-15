@@ -23,7 +23,7 @@ function bindAjax() {
 
 			const context = actionContext(form);
 			const submitter = event.submitter;
-			const original = submitter ? submitter.textContent : '';
+			const original = submitter ? submitter.innerHTML : '';
 			if (submitter) {
 				submitter.disabled = true;
 				submitter.textContent = 'Working...';
@@ -65,7 +65,7 @@ function bindAjax() {
 				setProcessing(false);
 				if (submitter) {
 					submitter.disabled = false;
-					submitter.textContent = original;
+					submitter.innerHTML = original;
 				}
 			}
 		});

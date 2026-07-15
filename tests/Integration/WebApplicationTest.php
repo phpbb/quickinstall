@@ -61,6 +61,9 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('QuickInstall + Docker', $html);
 		self::assertStringContainsString('Create board', $html);
 		self::assertStringContainsString('Run Doctor', $html);
+		self::assertStringContainsString('id="icon-boards"', $html);
+		self::assertStringContainsString('href="#icon-activity"', $html);
+		self::assertStringContainsString('class="icon" aria-hidden="true"', $html);
 		self::assertStringContainsString('Sources', $html);
 		self::assertStringContainsString('Mount extension', $html);
 		self::assertStringContainsString('Mount style', $html);

@@ -202,13 +202,26 @@ button:disabled { opacity: .65; cursor: wait; }
 .brand-lockup small { color: var(--sidebar-muted); font-size: 12px; }
 .sidebar nav { display: grid; gap: 2px; }
 .sidebar a {
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 9px;
 	padding: 7px 10px;
 	border-radius: var(--radius);
 	color: var(--sidebar-text);
 	font-weight: 500;
 }
 .sidebar a:hover { background: var(--sidebar-hover); text-decoration: none; }
+.icon-sprite { display: none; }
+.icon {
+	flex: 0 0 auto;
+	width: 18px;
+	height: 18px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
 .main { min-width: 0; }
 .topbar {
 	display: flex;
@@ -314,6 +327,8 @@ button:disabled { opacity: .65; cursor: wait; }
 	margin-bottom: 16px;
 }
 .section-head p:not(.eyebrow) { margin-top: 4px; color: var(--muted); max-width: 760px; }
+.section-head h2 { display: flex; align-items: center; gap: 8px; }
+.section-head h2 .icon { color: var(--accent); }
 .board-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
 .board { padding: 0; }
 .card-head {
