@@ -12,6 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use InvalidArgumentException;
 
+/** Maps friendly phpBB selectors to source constraints and PHP runtimes. */
 class VersionMatrix
 {
 	public function list(): array

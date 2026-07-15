@@ -24,6 +24,7 @@ use QuickInstall\Sandbox\UpdateService;
 use RuntimeException;
 use Throwable;
 
+/** Loopback-only Dashboard controller and AJAX response boundary. */
 class Application
 {
 	private Project $project;
@@ -38,6 +39,7 @@ class Application
 		$this->output = new BufferedOutput();
 	}
 
+	/** Validates the request, dispatches an action, and renders HTML or JSON. */
 	public function run(): void
 	{
 		$this->assertLocalRequest();
@@ -62,6 +64,8 @@ class Application
 
 	private function handleAjaxPost(): void
 	{
+		// Warnings and accidental output would corrupt JSON. Convert warnings to
+		// exceptions and capture all output before building the response envelope.
 		$previousDisplayErrors = ini_set('display_errors', '0');
 		ob_start();
 		set_error_handler(static function (int $severity, string $message, string $file, int $line): bool {
@@ -170,6 +174,7 @@ class Application
 		$operationLock = null;
 		try
 		{
+			// Uses the same lock as mutating CLI commands.
 			$operationLock = $this->project->lockOperations();
 			$this->disableExecutionTimeLimit();
 			$action = (string) ($_POST['action'] ?? '');

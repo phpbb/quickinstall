@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use InvalidArgumentException;
 use RuntimeException;
 
+/** Executes Docker lifecycle, install, debug, and seed operations for a board. */
 class BoardRunner
 {
 	private Project $project;
@@ -26,6 +27,7 @@ class BoardRunner
 		$this->processRunner = $processRunner ?: new ProcessRunner($this->output);
 	}
 
+	/** Starts containers, completes first install, applies options, and waits for HTTP. */
 	public function start(string $name): void
 	{
 		$board = $this->project->board($name);
@@ -51,6 +53,7 @@ class BoardRunner
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'stop']);
 	}
 
+	/** Removes Docker resources before deleting all persisted board state. */
 	public function destroy(string $name): void
 	{
 		$this->project->board($name);
@@ -83,6 +86,7 @@ class BoardRunner
 		}
 	}
 
+	/** Returns missing, stopped, partial, running, or error. */
 	public function status(string $name): string
 	{
 		$compose = $this->project->composePath($name);
@@ -159,6 +163,7 @@ class BoardRunner
 			return;
 		}
 
+		// The host marker makes automatic population idempotent across restarts.
 		$marker = $this->seedMarker($name, $preset);
 		if (file_exists($marker))
 		{

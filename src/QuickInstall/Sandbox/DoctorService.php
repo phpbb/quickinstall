@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox;
 
+/** Reports host requirements without changing project or system state. */
 class DoctorService
 {
 	private Project $project;

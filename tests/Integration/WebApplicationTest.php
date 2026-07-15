@@ -4,6 +4,7 @@ namespace QuickInstall\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
 use QuickInstall\Sandbox\Project;
+use QuickInstall\Sandbox\UpdateService;
 use QuickInstall\Sandbox\Web\Application;
 use QuickInstall\Tests\Support\TempProjectTrait;
 
@@ -237,17 +238,19 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
+		$currentVersion = (new UpdateService($project))->currentVersion();
+		$availableVersion = $this->newerVersionThan($currentVersion);
 		$project->writeJson('cache/update-check.json', [
 			'checked_at' => time(),
-			'current_version' => '1.7.0',
-			'update' => ['current' => '1.8.0', 'download' => 'https://example.com/download'],
+			'current_version' => $currentVersion,
+			'update' => ['current' => $availableVersion, 'download' => 'https://example.com/download'],
 			'error' => null,
 		]);
 
 		$html = $this->runWebApplication($root);
 
 		self::assertStringContainsString('class="update-banner"', $html);
-		self::assertStringContainsString('QuickInstall 1.8.0 available', $html);
+		self::assertStringContainsString("QuickInstall $availableVersion available", $html);
 		self::assertStringContainsString('href="https://example.com/download"', $html);
 		self::assertStringContainsString('data-dismiss-update', $html);
 	}

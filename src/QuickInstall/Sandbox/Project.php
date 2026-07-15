@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
 
+/** Guards all project paths, workspace state, locks, and filesystem operations. */
 class Project
 {
 	private string $root;
@@ -83,6 +84,7 @@ class Project
 		return $this->rootPath('customisations');
 	}
 
+	/** Acquires the process-wide workspace mutation lock. */
 	public function lockOperations()
 	{
 		if (!is_dir($this->workspace) && !mkdir($this->workspace, 0775, true) && !is_dir($this->workspace))
@@ -90,6 +92,8 @@ class Project
 			throw new RuntimeException("Unable to create QuickInstall workspace: {$this->workspace}");
 		}
 
+		// Keep the file after unlocking. Removing it can let contenders lock
+		// different filesystem entries and both enter the critical section.
 		$path = $this->workspacePath('operation.lock');
 		$lock = fopen($path, 'c+b');
 		if (!is_resource($lock) || !flock($lock, LOCK_EX))
@@ -125,6 +129,7 @@ class Project
 		return $this->workspacePath('sources/phpbb-' . $version);
 	}
 
+	/** Reads validated JSON while holding the registry's shared lock. */
 	public function readJson(string $file, array $default): array
 	{
 		$path = $this->workspacePath($file);
@@ -158,6 +163,7 @@ class Project
 		});
 	}
 
+	/** Atomically replaces JSON while holding the registry's exclusive lock. */
 	public function writeJson(string $file, array $data): void
 	{
 		$path = $this->workspacePath($file);
@@ -177,6 +183,7 @@ class Project
 				throw new RuntimeException("Unable to create JSON state directory: $directory");
 			}
 
+			// Publish a complete temporary file so readers never see partial JSON.
 			$temp = tempnam($directory, '.' . basename($path) . '.tmp-');
 			if ($temp === false)
 			{
@@ -244,6 +251,8 @@ class Project
 			throw new RuntimeException("Unable to replace JSON state file: $path");
 		}
 
+		// Windows cannot rename over an existing destination. Preserve the old
+		// state until the replacement has been installed successfully.
 		$backup = $path . '.replace-backup';
 		@unlink($backup);
 		if (!@rename($path, $backup))
@@ -317,12 +326,14 @@ class Project
 		return $this->workspacePath('db/' . $name);
 	}
 
+	/** Recursively deletes only paths contained by the `.qi` workspace. */
 	public function deleteTree(string $path): void
 	{
 		if (!file_exists($path) && !is_link($path))
 		{
 			return;
 		}
+		// Every recursive delete passes through the workspace containment guard.
 		$this->assertWorkspacePath($path);
 
 		if (is_file($path) || is_link($path))
@@ -397,6 +408,7 @@ class Project
 		}
 	}
 
+	/** Resolves user paths and rejects escapes from the trusted drop zone by default. */
 	public function resolveDropZonePath(string $path, string $basePath, bool $allowExternal, string $error): string
 	{
 		$candidates = [
@@ -405,6 +417,7 @@ class Project
 			$basePath . '/' . ltrim($path, '/'),
 		];
 
+		// realpath resolves traversal and symlinks before the containment check.
 		foreach ($candidates as $candidate)
 		{
 			$real = realpath($candidate);

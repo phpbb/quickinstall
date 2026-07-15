@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox;
 
+/** Writes service and subprocess messages to separate output streams. */
 class StreamOutput implements Output
 {
 	private $stdout;

@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Throwable;
 
+/** CLI command dispatcher and presentation layer. */
 class Application
 {
 	private Project $project;
@@ -40,6 +41,8 @@ class Application
 		$operationLock = null;
 		try
 		{
+			// CLI and Dashboard mutations share one lock so their multi-file work
+			// cannot interleave. Read-only commands deliberately remain concurrent.
 			if ($this->mutatesWorkspace($command))
 			{
 				$operationLock = $this->project->lockOperations();

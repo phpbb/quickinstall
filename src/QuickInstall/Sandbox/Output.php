@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox;
 
+/** Minimal output boundary shared by CLI, Dashboard, and subprocess services. */
 interface Output
 {
 	public function write(string $message): void;

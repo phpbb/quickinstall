@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use InvalidArgumentException;
 use RuntimeException;
 
+/** Discovers, copies, binds, lists, and removes phpBB extensions. */
 class ExtensionManager
 {
 	private Project $project;
@@ -22,6 +23,7 @@ class ExtensionManager
 		$this->project = $project;
 	}
 
+	/** Mounts one extension; its canonical name comes from composer.json. */
 	public function mount(string $board, string $source, bool $copy = false, bool $allowExternal = false): array
 	{
 		$boardConfig = $this->project->board($board);
@@ -90,6 +92,7 @@ class ExtensionManager
 		return $found;
 	}
 
+	/** Removes copied files or registry state for a bind mount. */
 	public function unmount(string $board, string $name): string
 	{
 		$boardConfig = $this->project->board($board);

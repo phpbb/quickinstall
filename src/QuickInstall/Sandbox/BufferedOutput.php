@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox;
 
+/** Captures subprocess output for Dashboard responses and tests. */
 class BufferedOutput implements Output
 {
 	private string $output = '';

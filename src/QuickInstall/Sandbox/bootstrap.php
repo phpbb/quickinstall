@@ -8,6 +8,7 @@
  *
  */
 
+// Keep the CLI self-contained before Composer dependencies are available.
 require_once __DIR__ . '/Output.php';
 require_once __DIR__ . '/StreamOutput.php';
 require_once __DIR__ . '/BufferedOutput.php';

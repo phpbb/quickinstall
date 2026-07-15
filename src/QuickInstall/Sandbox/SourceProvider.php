@@ -13,6 +13,7 @@ namespace QuickInstall\Sandbox;
 use InvalidArgumentException;
 use RuntimeException;
 
+/** Resolves, downloads, validates, and registers Composer or Git phpBB sources. */
 class SourceProvider
 {
 	private Project $project;
@@ -26,6 +27,7 @@ class SourceProvider
 		$this->processRunner = $processRunner ?: new ProcessRunner($this->output);
 	}
 
+	/** Registers source metadata; downloading is deferred unless resolution is floating. */
 	public function add(string $version, string $type, ?string $url, bool $allowExternal = false): array
 	{
 		if (!in_array($type, ['composer', 'git'], true))
@@ -89,6 +91,7 @@ class SourceProvider
 		}
 	}
 
+	/** Returns a downloaded exact source, fetching and updating metadata as needed. */
 	public function ensure(string $version): array
 	{
 		$sources = $this->project->readJson('sources.json', []);
@@ -152,6 +155,8 @@ class SourceProvider
 
 	protected function ensureFloating(string $version, array $selection): array
 	{
+		// Friendly selectors such as latest and 3.3.* resolve to an immutable
+		// version record so future resolution cannot silently alter a board.
 		$sources = $this->project->readJson('sources.json', []);
 		$source = $this->withSelectionDefaults($sources[$selection['source_key']] ?? [], $selection);
 		$source['type'] = $source['type'] ?? 'composer';
@@ -297,6 +302,7 @@ class SourceProvider
 		];
 	}
 
+	/** Downloads into a temporary sibling and publishes only a complete source tree. */
 	public function fetch(array $source): void
 	{
 		$path = $source['path'];

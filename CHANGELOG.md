@@ -1,5 +1,12 @@
 # QuickInstall Changelog
 
+## Version 1.8.0-dev
+
+- [Feature] Added a new local “Dashboard UI” (browser-based) workflow for the QuickInstall CLI.
+- [Feature] Added new QI update available notifications in the CLI and Dashboard UI.
+- [Feature] Added a new `doctor` command to diagnose host requirements.
+- [Change] Improved workspace safety and Windows compatibility.
+
 ## Version 1.7.0
 
 - [Feature] QuickInstall CLI – A brand new Docker-based command-line-interface tool for creating local phpBB test boards.

@@ -10,6 +10,7 @@
 
 namespace QuickInstall\Sandbox;
 
+/** Regenerates runtime files and recreates a board only when it is running. */
 class BoardRefreshService
 {
 	private Project $project;
