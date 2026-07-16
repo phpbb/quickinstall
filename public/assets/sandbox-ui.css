@@ -515,6 +515,12 @@ button:disabled { opacity: .65; cursor: wait; }
 	border-radius: var(--radius);
 	background: var(--panel);
 }
+#sources .joined-form { border-radius: var(--radius) var(--radius) 0 0; }
+#sources .joined-form + .table-wrap,
+#sources .joined-form + .empty {
+	border-top: 0;
+	border-radius: 0 0 var(--radius) var(--radius);
+}
 table {
 	width: 100%;
 	table-layout: fixed;

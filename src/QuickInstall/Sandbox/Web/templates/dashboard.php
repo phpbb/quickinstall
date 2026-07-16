@@ -206,7 +206,7 @@
 			<p>Fetch and inspect phpBB sources used by boards.</p>
 		</div>
 	</div>
-	<form method="post" class="card settings-form compact-form" data-ajax>
+	<form method="post" class="card settings-form compact-form joined-form" data-ajax>
 		<?php require __DIR__ . '/csrf.php'; ?>
 		<input type="hidden" name="action" value="source_fetch">
 		<label class="field" title="phpBB selector to download or register, such as latest, 3.3, 3.2, master, or a branch name."><span>Version or branch</span><input name="version" value="latest"></label>
