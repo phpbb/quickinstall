@@ -982,17 +982,6 @@ class Application
 	private function helpCommands(): array
 	{
 		return [
-			'Setup commands' => [
-				'doctor' => [
-					'title' => 'doctor',
-					'usage' => 'doctor',
-					'summary' => 'Check local PHP, Docker, Git, and Composer requirements.',
-					'description' => 'Checks that required host tools are available, Docker Desktop is running, Docker Compose works, and Docker is using Linux containers.',
-					'examples' => [
-						'doctor',
-					],
-				],
-			],
 			'Board commands' => [
 				'board:create' => [
 					'title' => 'board:create',
@@ -1294,6 +1283,15 @@ class Application
 					'description' => 'Initializes QuickInstall local state folders. Other commands also initialize the workspace when needed.',
 					'examples' => [
 						'init',
+					],
+				],
+				'doctor' => [
+					'title' => 'doctor',
+					'usage' => 'doctor',
+					'summary' => 'Check local PHP, Docker, Git, and Composer requirements.',
+					'description' => 'Checks that required host tools are available, Docker Desktop is running, Docker Compose works, and Docker is using Linux containers.',
+					'examples' => [
+						'doctor',
 					],
 				],
 			],
