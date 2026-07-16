@@ -258,13 +258,13 @@
 	<div class="section-head">
 		<div>
 			<h2><svg class="icon" aria-hidden="true"><use href="#icon-activity"></use></svg>Activity log</h2>
-			<p>Docker, Composer, and seed output from the latest action.</p>
+			<p>Queued and completed actions from this browser session.</p>
 		</div>
 		<button type="button" class="secondary" data-clear-log>Clear</button>
 	</div>
 	<div class="terminal">
 		<div class="terminal-bar"><span></span><span></span><span></span><strong>quickinstall</strong></div>
 		<div class="progress" aria-hidden="true"><span></span></div>
-		<pre class="activity-log" id="activity-log" tabindex="0"><?= $output === '' ? 'No command output yet.' : $this->escape($output) ?></pre>
+		<pre class="activity-log" id="activity-log" tabindex="0"><?= $output === '' ? 'No actions recorded yet.' : $this->escape($output) ?></pre>
 	</div>
 </section>

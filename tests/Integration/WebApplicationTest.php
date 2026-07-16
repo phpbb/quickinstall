@@ -105,6 +105,10 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('const active = pendingActions.size > 0;', $javascript);
 		self::assertStringContainsString('syncPendingActions();', $javascript);
 		self::assertStringContainsString('pendingActions.delete(actionId);', $javascript);
+		self::assertStringContainsString('const activityEntries = [];', $javascript);
+		self::assertStringContainsString('const maxActivityEntries = 50;', $javascript);
+		self::assertStringContainsString('completeActivityEntry(actionId, data);', $javascript);
+		self::assertStringContainsString('entry.status = runningAssigned ? \'queued\' : \'running\';', $javascript);
 	}
 
 	public function testDoctorFailureUsesErrorToastAndPointsToActivityLog(): void

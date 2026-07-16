@@ -1,6 +1,8 @@
 const dashboard = document.getElementById('dashboard');
 const busy = document.getElementById('busy');
 const pendingActions = new Map();
+const activityEntries = [];
+const maxActivityEntries = 50;
 let nextActionId = 1;
 
 function updateProcessingState() {
@@ -33,6 +35,88 @@ function syncPendingActions() {
 	});
 
 	updateProcessingState();
+	updateActivityStates();
+}
+
+function actionLabel(context) {
+	const action = context.action.replaceAll('_', ' ').replace(/^./, (character) => character.toUpperCase());
+	const target = context.board || context.name || context.source;
+	return target ? action + ' — ' + target : action;
+}
+
+function addActivityEntry(actionId, context) {
+	activityEntries.push({
+		id: actionId,
+		context,
+		status: 'queued',
+		submittedAt: new Date(),
+		completedAt: null,
+		message: '',
+		output: '',
+	});
+	trimActivityEntries();
+}
+
+function completeActivityEntry(actionId, data) {
+	const entry = activityEntries.find((candidate) => candidate.id === actionId);
+	if (!entry) {
+		return;
+	}
+
+	entry.status = data.error ? 'error' : 'success';
+	entry.completedAt = new Date();
+	entry.message = data.error || data.notice || '';
+	entry.output = data.output || '';
+	trimActivityEntries();
+	renderActivityLog();
+}
+
+function updateActivityStates() {
+	let runningAssigned = false;
+	activityEntries.forEach((entry) => {
+		if (!pendingActions.has(entry.id) || entry.status === 'success' || entry.status === 'error') {
+			return;
+		}
+
+		entry.status = runningAssigned ? 'queued' : 'running';
+		runningAssigned = true;
+	});
+	renderActivityLog();
+}
+
+function trimActivityEntries() {
+	while (activityEntries.length > maxActivityEntries) {
+		const completedIndex = activityEntries.findIndex((entry) => !pendingActions.has(entry.id));
+		if (completedIndex === -1) {
+			return;
+		}
+		activityEntries.splice(completedIndex, 1);
+	}
+}
+
+function renderActivityLog() {
+	const log = document.getElementById('activity-log');
+	if (!log) {
+		return;
+	}
+
+	if (activityEntries.length === 0) {
+		log.textContent = 'No actions recorded yet.';
+		return;
+	}
+
+	log.textContent = activityEntries.map((entry) => {
+		const timestamp = (entry.completedAt || entry.submittedAt).toLocaleTimeString();
+		const lines = [ '[' + timestamp + '] ' + entry.status.toUpperCase() + '  ' + actionLabel(entry.context) ];
+		if (entry.message) {
+			lines.push(entry.message);
+		}
+		if (entry.output.trim()) {
+			lines.push(entry.output.trimEnd());
+		}
+		return lines.join('\n');
+	}).join('\n\n');
+	log.scrollTop = log.scrollHeight;
 }
 
 function bindAjax() {
@@ -55,6 +139,7 @@ function bindAjax() {
 			const original = submitter ? submitter.innerHTML : '';
 			const actionId = nextActionId++;
 			pendingActions.set(actionId, { context, submitter, original });
+			addActivityEntry(actionId, context);
 
 			syncPendingActions();
 			try {
@@ -80,6 +165,7 @@ function bindAjax() {
 				if (!data || typeof data !== 'object') {
 					throw new Error('QuickInstall returned an invalid response object.');
 				}
+				completeActivityEntry(actionId, data);
 				if (typeof data.html === 'string' && data.html !== '') {
 					dashboard.innerHTML = data.html;
 					bindAjax();
@@ -88,6 +174,7 @@ function bindAjax() {
 				showActionResult(data, context);
 				scrollLog();
 			} catch (error) {
+				completeActivityEntry(actionId, { error: 'Request failed: ' + error.message, output: '' });
 				alert('Request failed: ' + error.message);
 			} finally {
 				const pending = pendingActions.get(actionId);
@@ -108,12 +195,16 @@ function bindAjax() {
 
 		button.dataset.bound = '1';
 		button.addEventListener('click', () => {
-			const log = document.getElementById('activity-log');
-			if (log) {
-				log.textContent = 'No command output yet.';
+			for (let index = activityEntries.length - 1; index >= 0; index--) {
+				if (!pendingActions.has(activityEntries[index].id)) {
+					activityEntries.splice(index, 1);
+				}
 			}
+			renderActivityLog();
 		});
 	});
+
+	renderActivityLog();
 }
 
 function bindUpdateBanner() {
