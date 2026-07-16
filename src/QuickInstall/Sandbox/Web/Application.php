@@ -16,6 +16,7 @@ use QuickInstall\Sandbox\BoardRefreshService;
 use QuickInstall\Sandbox\BoardService;
 use QuickInstall\Sandbox\BufferedOutput;
 use QuickInstall\Sandbox\CustomisationMountService;
+use QuickInstall\Sandbox\DoctorService;
 use QuickInstall\Sandbox\ExtensionManager;
 use QuickInstall\Sandbox\Project;
 use QuickInstall\Sandbox\SourceService;
@@ -185,6 +186,10 @@ class Application
 					$this->notice = $created ? 'Workspace initialized.' : 'Workspace already initialized.';
 				break;
 
+				case 'doctor':
+					$this->runDoctor();
+				break;
+
 				case 'source_fetch':
 					$version = $this->required('version');
 					(new SourceService($this->project, $this->output))->fetch($version, $this->checked('git'), $this->optional('url'), $this->checked('allow_external'));
@@ -284,6 +289,27 @@ class Application
 		{
 			$this->project->unlockOperations($operationLock);
 		}
+	}
+
+	private function runDoctor(): void
+	{
+		$checks = (new DoctorService($this->project))->checks();
+		$failed = 0;
+		$this->output->write("QuickInstall requirements\n");
+		foreach ($checks as $check)
+		{
+			$status = $check['ok'] ? '[OK]' : '[FAIL]';
+			$this->output->write("$status {$check['name']}: {$check['detail']}\n");
+			$failed += $check['ok'] ? 0 : 1;
+		}
+
+		if ($failed === 0)
+		{
+			$this->notice = 'Doctor found no requirement problems.';
+			return;
+		}
+
+		$this->error = "Doctor found $failed requirement " . ($failed === 1 ? 'problem.' : 'problems.') . ' View the Activity Log below for details.';
 	}
 
 	private function disableExecutionTimeLimit(): void

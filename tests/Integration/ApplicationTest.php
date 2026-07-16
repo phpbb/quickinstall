@@ -152,6 +152,16 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('Usage:', $result['output']);
 		self::assertStringContainsString('qi ui:start', $result['output']);
 		self::assertStringContainsString('built-in server', $result['output']);
+		self::assertStringContainsString('--no-open', $result['output']);
+	}
+
+	public function testBoardStartHelpDocumentsBrowserOptOut(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'board:start', '--help']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('qi board:start <name> [--no-open]', $result['output']);
+		self::assertStringContainsString('default browser', $result['output']);
 	}
 
 	public function testUiLifecycleCommandsAreExposed(): void

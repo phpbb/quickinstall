@@ -54,7 +54,7 @@ If you prefer a browser workflow, start the QuickInstall Dashboard UI:
 php bin/qi ui:start
 ```
 
-Then open the URL printed by the command:
+QuickInstall opens the Dashboard in your default browser. If that fails, open the URL printed by the command:
 
 ```text
 http://127.0.0.1:8079/
@@ -391,10 +391,16 @@ Start the UI:
 php bin/qi ui:start
 ```
 
-The default URL is:
+QuickInstall opens the Dashboard in your default browser after the local server is ready. The default URL is:
 
 ```text
 http://127.0.0.1:8079/
+```
+
+To start it without opening a browser:
+
+```bash
+php bin/qi ui:start --no-open
 ```
 
 Use a different local port:
@@ -415,6 +421,8 @@ Restart it:
 ```bash
 php bin/qi ui:restart
 ```
+
+`ui:restart` also opens the Dashboard when the new server is ready. Pass `--no-open` to either `ui:start` or `ui:restart` when running headlessly or when you want to open the printed URL yourself.
 
 Supported Dashboard UI server hosts are loopback-only:
 

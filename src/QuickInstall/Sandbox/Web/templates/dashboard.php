@@ -56,7 +56,7 @@
 <section class="section" id="boards">
 	<div class="section-head">
 		<div>
-			<h2>Boards</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-boards"></use></svg>Boards</h2>
 			<p>Start, stop, seed, and inspect local Docker-backed phpBB installs.</p>
 		</div>
 	</div>
@@ -152,7 +152,7 @@
 <section class="section" id="create">
 	<div class="section-head">
 		<div>
-			<h2>Create board</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-create"></use></svg>Create board</h2>
 			<p>Choose the phpBB source, runtime, port, and optional seed preset.</p>
 		</div>
 	</div>
@@ -163,7 +163,7 @@
 		<label class="field" title="phpBB selector to fetch or reuse. Supported examples include latest, 3.3, 3.2, 4.0.x, and master."><span>phpBB</span><input name="phpbb" value="latest" list="phpbb-list"></label>
 		<datalist id="phpbb-list"><?php foreach ($versionOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?php endforeach; ?></datalist>
 		<label class="field" title="Database engine for the board containers. SQLite supports unseeded boards only."><span>DB</span><select name="db"><?php foreach ($dbOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?= $this->escape($option) ?></option><?php endforeach; ?></select></label>
-		<label class="field" title="Local host port for opening the board in your browser. Pick an unused port."><span>Port</span><input name="port" value="8080"></label>
+		<label class="field" title="Local host port for opening the board in your browser. Pick an unused port."><span>Web port</span><input name="port" value="8080"></label>
 		<label class="field" title="Optional content preset applied when the board is first installed."><span>Populate</span><select name="populate"><?php foreach ($populateOptions as $option): ?><option value="<?= $this->escape($option) ?>"><?= $this->escape($option) ?></option><?php endforeach; ?></select></label>
 		<label class="toggle" title="Enable phpBB debug settings after installation."><input type="checkbox" name="debug" value="1"><span></span>Debug</label>
 		<label class="toggle" title="Destroy and recreate an existing board with the same name."><input type="checkbox" name="replace" value="1"><span></span>Replace existing</label>
@@ -174,7 +174,7 @@
 <section class="section" id="customisations">
 	<div class="section-head">
 		<div>
-			<h2>Customisations</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-customisations"></use></svg>Customisations</h2>
 			<p>Bind or copy local extension and style work into a board.</p>
 		</div>
 	</div>
@@ -202,11 +202,11 @@
 <section class="section" id="sources">
 	<div class="section-head">
 		<div>
-			<h2>Sources</h2>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-sources"></use></svg>Sources</h2>
 			<p>Fetch and inspect phpBB sources used by boards.</p>
 		</div>
 	</div>
-	<form method="post" class="card settings-form compact-form" data-ajax>
+	<form method="post" class="card settings-form compact-form joined-form" data-ajax>
 		<?php require __DIR__ . '/csrf.php'; ?>
 		<input type="hidden" name="action" value="source_fetch">
 		<label class="field" title="phpBB selector to download or register, such as latest, 3.3, 3.2, master, or a branch name."><span>Version or branch</span><input name="version" value="latest"></label>
@@ -257,14 +257,14 @@
 <section class="section" id="activity">
 	<div class="section-head">
 		<div>
-			<h2>Activity log</h2>
-			<p>Docker, Composer, and seed output from the latest action.</p>
+			<h2><svg class="icon" aria-hidden="true"><use href="#icon-activity"></use></svg>Activity log</h2>
+			<p>Queued and completed actions from this browser session.</p>
 		</div>
 		<button type="button" class="secondary" data-clear-log>Clear</button>
 	</div>
 	<div class="terminal">
 		<div class="terminal-bar"><span></span><span></span><span></span><strong>quickinstall</strong></div>
 		<div class="progress" aria-hidden="true"><span></span></div>
-		<pre class="activity-log" id="activity-log" tabindex="0"><?= $output === '' ? 'No command output yet.' : $this->escape($output) ?></pre>
+		<pre class="activity-log" id="activity-log" tabindex="0"><?= $output === '' ? 'No actions recorded yet.' : $this->escape($output) ?></pre>
 	</div>
 </section>

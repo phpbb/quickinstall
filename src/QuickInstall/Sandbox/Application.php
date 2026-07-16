@@ -18,12 +18,14 @@ use Throwable;
 class Application
 {
 	private Project $project;
+	private BrowserLauncher $browserLauncher;
 	private $stderr;
 	private $stdin;
 
-	public function __construct(string $root, $stderr = null, $stdin = null)
+	public function __construct(string $root, $stderr = null, $stdin = null, ?BrowserLauncher $browserLauncher = null)
 	{
 		$this->project = new Project($root);
+		$this->browserLauncher = $browserLauncher ?: new BrowserLauncher();
 		$this->stderr = $stderr ?: (defined('STDERR') ? STDERR : fopen('php://stderr', 'wb'));
 		$this->stdin = $stdin ?: (defined('STDIN') ? STDIN : null);
 	}
@@ -438,8 +440,8 @@ class Application
 		foreach ($checks as $check)
 		{
 			$status = $check['ok']
-				? $this->style("\u{2714}", '1;32')
-				: $this->style('!', '1;31');
+				? $this->style('[OK]', '1;32')
+				: $this->style('[FAIL]', '1;31');
 			echo "$status {$check['name']}: {$check['detail']}\n";
 			$failed = $failed || !$check['ok'];
 		}
@@ -482,10 +484,16 @@ class Application
 
 	private function boardStart(array $args): int
 	{
-		$name = $this->boardName($args, 'Usage: qi board:start <name>');
+		$cli = CommandLine::parse($args);
+		$name = $cli->argument(0);
+		if ($name === null)
+		{
+			throw new InvalidArgumentException('Usage: qi board:start <name> [--no-open]');
+		}
 		$board = (new BoardService($this->project, $this->sandboxOutput()))->start($name);
 		echo "Started board: $name\n";
 		echo "URL: {$board['url']}\n";
+		$this->openBrowser($board['url'], $cli);
 		return 0;
 	}
 
@@ -625,6 +633,7 @@ class Application
 		if ($result['status'] === 'already_running')
 		{
 			echo "QuickInstall Dashboard UI is already running: {$state['url']}\n";
+			$this->openBrowser($state['url'], $cli);
 			return 0;
 		}
 
@@ -632,8 +641,25 @@ class Application
 		echo "PID: {$state['pid']}\n";
 		echo "Log: {$state['log']}\n";
 		echo "Stop it with: php bin/qi ui:stop\n";
+		$this->openBrowser($state['url'], $cli);
 
 		return 0;
+	}
+
+	private function openBrowser(string $url, CommandLine $cli): void
+	{
+		if ($cli->has('no-open'))
+		{
+			return;
+		}
+
+		if ($this->browserLauncher->open($url))
+		{
+			echo "Opened in your default browser.\n";
+			return;
+		}
+
+		$this->writeError("Unable to open the default browser. Open this URL manually: $url\n");
 	}
 
 	private function uiStop(): int
@@ -991,11 +1017,14 @@ class Application
 				],
 				'board:start' => [
 					'title' => 'board:start',
-					'usage' => 'board:start <name>',
+					'usage' => 'board:start <name> [--no-open]',
 					'summary' => 'Start the board containers and install the board if needed.',
 					'description' => 'Starts the board containers with Docker Compose, runs phpBB install on first start, applies the configured populate preset once, and waits for the board URL to respond. Docker must already be running.',
 					'arguments' => [
 						'<name>' => 'Required board name.',
+					],
+					'options' => [
+						'--no-open' => 'Do not open the board URL in the default browser.',
 					],
 					'examples' => [
 						'board:start demo',
@@ -1149,12 +1178,13 @@ class Application
 			'UI commands' => [
 				'ui:start' => [
 					'title' => 'ui:start',
-					'usage' => 'ui:start [--host 127.0.0.1] [--port 8079]',
+					'usage' => 'ui:start [--host 127.0.0.1] [--port 8079] [--no-open]',
 					'summary' => 'Start the local QuickInstall Dashboard UI.',
 					'description' => 'Starts PHP built-in server in the background on a loopback address and serves the QuickInstall Dashboard UI.',
 					'options' => [
 						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
 						'--port PORT' => 'Local UI port. Default: 8079.',
+						'--no-open' => 'Do not open the Dashboard URL in the default browser.',
 					],
 					'examples' => [
 						'ui:start',
@@ -1172,12 +1202,13 @@ class Application
 				],
 				'ui:restart' => [
 					'title' => 'ui:restart',
-					'usage' => 'ui:restart [--host 127.0.0.1] [--port 8079]',
+					'usage' => 'ui:restart [--host 127.0.0.1] [--port 8079] [--no-open]',
 					'summary' => 'Restart the local QuickInstall Dashboard UI.',
 					'description' => 'Stops the tracked Dashboard UI server if present, then starts a fresh local Dashboard UI server.',
 					'options' => [
 						'--host HOST' => 'Loopback host. One of: 127.0.0.1, localhost, ::1. Default: 127.0.0.1.',
 						'--port PORT' => 'Local UI port. Default: 8079.',
+						'--no-open' => 'Do not open the Dashboard URL in the default browser.',
 					],
 					'examples' => [
 						'ui:restart',
