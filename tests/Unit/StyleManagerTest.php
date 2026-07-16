@@ -69,6 +69,22 @@ class StyleManagerTest extends TestCase
 		self::assertSame([], $manager->list('demo'));
 	}
 
+	public function testRemountPreservesRegisteredBindTarget(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->style($root, 'bound', 'customisations/styles/bound');
+		$manager = new StyleManager($project);
+		$manager->mount('demo', $source);
+		$target = $project->boardPath('demo') . '/styles/bound';
+		mkdir($target, 0775, true);
+		file_put_contents($target . '/mountpoint.txt', 'preserve');
+
+		$mounted = $manager->mount('demo', $source);
+
+		self::assertSame('bind', $mounted['mode']);
+		self::assertFileExists($target . '/mountpoint.txt');
+	}
+
 	public function testCleanupStaleTargetRemovesStyleDirectoryAndParents(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');

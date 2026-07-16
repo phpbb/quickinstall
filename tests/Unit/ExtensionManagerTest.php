@@ -69,6 +69,22 @@ class ExtensionManagerTest extends TestCase
 		self::assertSame([], $manager->list('demo'));
 	}
 
+	public function testRemountPreservesRegisteredBindTarget(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->extension($root, 'vendor/bound', 'customisations/vendor/bound');
+		$manager = new ExtensionManager($project);
+		$manager->mount('demo', $source);
+		$target = $project->boardPath('demo') . '/ext/vendor/bound';
+		mkdir($target, 0775, true);
+		file_put_contents($target . '/mountpoint.txt', 'preserve');
+
+		$mounted = $manager->mount('demo', $source);
+
+		self::assertSame('bind', $mounted['mode']);
+		self::assertFileExists($target . '/mountpoint.txt');
+	}
+
 	public function testListDiscoversCopiedExtensionWithoutMetadata(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');

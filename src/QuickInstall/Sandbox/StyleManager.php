@@ -46,17 +46,17 @@ class StyleManager
 
 		if (file_exists($target) || is_link($target))
 		{
-			if (!$copy && (is_link($target) || !$this->isStylePath($target)))
-			{
-				$this->project->deleteTree($target);
-			}
-			else if (!$copy && isset($styles[$name]) && ($styles[$name]['mode'] ?? '') === 'bind')
+			if (!$copy && isset($styles[$name]) && ($styles[$name]['mode'] ?? '') === 'bind')
 			{
 				$styles[$name] = ['mode' => 'bind', 'source' => $sourcePath];
 				$boardConfig['styles'] = $styles;
 				$this->project->appendBoard($boardConfig);
 
 				return ['name' => $name, 'source' => $sourcePath, 'target' => '/var/www/html/styles/' . $name, 'mode' => 'bind'];
+			}
+			else if (!$copy && (is_link($target) || !$this->isStylePath($target)))
+			{
+				$this->project->deleteTree($target);
 			}
 			else
 			{

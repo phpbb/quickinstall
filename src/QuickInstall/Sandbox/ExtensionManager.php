@@ -40,17 +40,17 @@ class ExtensionManager
 
 		if (file_exists($target) || is_link($target))
 		{
-			if (!$copy && (is_link($target) || !is_file($target . '/composer.json')))
-			{
-				$this->project->deleteTree($target);
-			}
-			else if (!$copy && isset($extensions[$name]) && ($extensions[$name]['mode'] ?? '') === 'bind')
+			if (!$copy && isset($extensions[$name]) && ($extensions[$name]['mode'] ?? '') === 'bind')
 			{
 				$extensions[$name] = ['mode' => 'bind', 'source' => $sourcePath];
 				$boardConfig['extensions'] = $extensions;
 				$this->project->appendBoard($boardConfig);
 
 				return ['name' => $name, 'source' => $sourcePath, 'target' => '/var/www/html/ext/' . $name, 'mode' => 'bind'];
+			}
+			else if (!$copy && (is_link($target) || !is_file($target . '/composer.json')))
+			{
+				$this->project->deleteTree($target);
 			}
 			else
 			{
