@@ -608,6 +608,7 @@ tr:last-child td { border-bottom: 0; }
 }
 .footer > * + *:before {
 	content: "/";
+	display: inline-block;
 	margin-right: 12px;
 	color: var(--subtle);
 	font-weight: 400;
