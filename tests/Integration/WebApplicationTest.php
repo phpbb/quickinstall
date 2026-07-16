@@ -96,6 +96,17 @@ class WebApplicationTest extends TestCase
 		self::assertStringNotContainsString('doctor-results', $data['html']);
 	}
 
+	public function testDashboardJavascriptTracksConcurrentActions(): void
+	{
+		$javascript = file_get_contents(dirname(__DIR__, 2) . '/public/assets/sandbox-ui.js');
+
+		self::assertIsString($javascript);
+		self::assertStringContainsString('const pendingActions = new Map();', $javascript);
+		self::assertStringContainsString('const active = pendingActions.size > 0;', $javascript);
+		self::assertStringContainsString('syncPendingActions();', $javascript);
+		self::assertStringContainsString('pendingActions.delete(actionId);', $javascript);
+	}
+
 	public function testDoctorFailureUsesErrorToastAndPointsToActivityLog(): void
 	{
 		$root = $this->createTempProjectRoot();

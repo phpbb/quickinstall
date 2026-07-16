@@ -1,9 +1,38 @@
 const dashboard = document.getElementById('dashboard');
 const busy = document.getElementById('busy');
+const pendingActions = new Map();
+let nextActionId = 1;
 
-function setProcessing(active) {
+function updateProcessingState() {
+	const active = pendingActions.size > 0;
 	busy.classList.toggle('is-active', active);
 	document.documentElement.classList.toggle('is-processing', active);
+}
+
+function sameAction(left, right) {
+	return left.action === right.action
+		&& left.board === right.board
+		&& left.section === right.section
+		&& left.name === right.name
+		&& left.source === right.source;
+}
+
+/** Reapplies pending state after AJAX replaces dashboard markup. */
+function syncPendingActions() {
+	pendingActions.forEach((pending) => {
+		const form = Array.from(dashboard.querySelectorAll('form[data-ajax]'))
+			.find((candidate) => sameAction(actionContext(candidate), pending.context));
+		const submitter = form ? form.querySelector('button[type="submit"], button:not([type]), input[type="submit"]') : null;
+		if (!submitter) {
+			return;
+		}
+
+		pending.submitter = submitter;
+		submitter.disabled = true;
+		submitter.textContent = 'Working...';
+	});
+
+	updateProcessingState();
 }
 
 function bindAjax() {
@@ -24,12 +53,10 @@ function bindAjax() {
 			const context = actionContext(form);
 			const submitter = event.submitter;
 			const original = submitter ? submitter.innerHTML : '';
-			if (submitter) {
-				submitter.disabled = true;
-				submitter.textContent = 'Working...';
-			}
+			const actionId = nextActionId++;
+			pendingActions.set(actionId, { context, submitter, original });
 
-			setProcessing(true);
+			syncPendingActions();
 			try {
 				const response = await fetch(location.href, {
 					method: 'POST',
@@ -56,17 +83,20 @@ function bindAjax() {
 				if (typeof data.html === 'string' && data.html !== '') {
 					dashboard.innerHTML = data.html;
 					bindAjax();
+					syncPendingActions();
 				}
 				showActionResult(data, context);
 				scrollLog();
 			} catch (error) {
 				alert('Request failed: ' + error.message);
 			} finally {
-				setProcessing(false);
-				if (submitter) {
-					submitter.disabled = false;
-					submitter.innerHTML = original;
+				const pending = pendingActions.get(actionId);
+				pendingActions.delete(actionId);
+				if (pending && pending.submitter) {
+					pending.submitter.disabled = false;
+					pending.submitter.innerHTML = pending.original;
 				}
+				syncPendingActions();
 			}
 		});
 	});
@@ -121,7 +151,9 @@ function actionContext(form) {
 	return {
 		action: formData.get('action') || '',
 		board: board ? board.dataset.board : '',
+		name: formData.get('name') || '',
 		section: section ? section.id : '',
+		source: formData.get('source') || '',
 	};
 }
 
