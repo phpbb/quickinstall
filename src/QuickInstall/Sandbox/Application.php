@@ -611,9 +611,7 @@ class Application
 		}
 
 		$extensions = new ExtensionManager($this->project);
-		$target = $extensions->unmount($board, $name);
-		$this->refreshBoardIfRunning($board);
-		$extensions->cleanupStaleTarget($board, $name);
+		$target = (new CustomisationUnmountService($this->project))->extension($extensions, $board, $name);
 		echo "Unmounted $name from $board\n";
 		echo "Removed: $target\n";
 		return 0;
@@ -794,9 +792,7 @@ class Application
 		}
 
 		$styles = new StyleManager($this->project);
-		$target = $styles->unmount($board, $name);
-		$this->refreshBoardIfRunning($board);
-		$styles->cleanupStaleTarget($board, $name);
+		$target = (new CustomisationUnmountService($this->project))->style($styles, $board, $name);
 		echo "Unmounted $name from $board\n";
 		echo "Removed: $target\n";
 		return 0;
@@ -878,7 +874,7 @@ class Application
 		return new StreamOutput($stdout, $this->stderr);
 	}
 
-	private function mountResources(string $type, object $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int
+	private function mountResources(string $type, CustomisationManagerInterface $manager, string $board, string $source, bool $copy, bool $recursive, bool $allowExternal): int
 	{
 		$result = (new CustomisationMountService($this->project))->mount($manager, $board, $source, $copy, $recursive, $allowExternal);
 
@@ -1096,7 +1092,7 @@ class Application
 					'title' => 'ext:unmount',
 					'usage' => 'ext:unmount <board> <vendor/extension>',
 					'summary' => 'Remove a mounted extension from a board.',
-					'description' => 'Removes the extension mount or copied extension files, refreshes the board if running, and clears stale targets.',
+					'description' => 'Disables and purges the extension from phpBB before removing its mount or copied files. Installed boards must be running.',
 					'arguments' => [
 						'<board>' => 'Required board name.',
 						'<vendor/extension>' => 'Extension name from composer.json, such as phpbb/foo.',
@@ -1142,7 +1138,7 @@ class Application
 					'title' => 'style:unmount',
 					'usage' => 'style:unmount <board> <style>',
 					'summary' => 'Remove a mounted style from a board.',
-					'description' => 'Removes the style mount or copied style files, refreshes the board if running, and clears stale targets.',
+					'description' => 'Uninstalls the style from phpBB before removing its mount or copied files. Installed boards must be running.',
 					'arguments' => [
 						'<board>' => 'Required board name.',
 						'<style>' => 'Style folder name.',

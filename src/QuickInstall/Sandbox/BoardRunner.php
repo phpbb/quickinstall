@@ -150,6 +150,28 @@ class BoardRunner
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'sh', '-lc', 'php bin/phpbbcli.php cache:purge']);
 	}
 
+	/** Disables and permanently purges an extension before its files disappear. */
+	public function uninstallExtension(string $board, string $name): void
+	{
+		$command = ['docker', 'compose', '-f', $this->project->composePath($board), 'exec', '-T', 'web', 'php', 'bin/phpbbcli.php'];
+		$result = $this->capture(array_merge($command, ['extension:disable', $name]));
+		if (!in_array($result['exit_code'], [0, 2], true))
+		{
+			throw new RuntimeException("Unable to disable extension before unmount: $name\n" . trim($result['output']));
+		}
+
+		$this->run(array_merge($command, ['extension:purge', $name]));
+	}
+
+	/** Runs phpBB-aware style cleanup before its files disappear. */
+	public function uninstallStyle(string $board, string $name): void
+	{
+		$script = (new StyleUninstallerWriter($this->project))->write($board);
+		$compose = $this->project->composePath($board);
+		$this->run(['docker', 'compose', '-f', $compose, 'cp', $script, 'web:/tmp/qi_style_uninstall.php']);
+		$this->run(['docker', 'compose', '-f', $compose, 'exec', '-T', 'web', 'php', '/tmp/qi_style_uninstall.php', $name]);
+	}
+
 	public function recreateWeb(string $name): void
 	{
 		$this->project->board($name);

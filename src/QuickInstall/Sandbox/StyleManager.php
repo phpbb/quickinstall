@@ -14,7 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /** Discovers, copies, binds, lists, and removes phpBB styles. */
-class StyleManager
+class StyleManager implements CustomisationManagerInterface
 {
 	private Project $project;
 

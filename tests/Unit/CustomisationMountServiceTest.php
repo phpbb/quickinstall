@@ -5,6 +5,7 @@ namespace QuickInstall\Tests\Unit;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use QuickInstall\Sandbox\CustomisationMountService;
+use QuickInstall\Sandbox\CustomisationManagerInterface;
 use QuickInstall\Sandbox\Project;
 use QuickInstall\Tests\Support\TempProjectTrait;
 
@@ -42,7 +43,7 @@ class CustomisationMountServiceTest extends TestCase
 	}
 }
 
-class TestCustomisationManager
+class TestCustomisationManager implements CustomisationManagerInterface
 {
 	public array $mounted = [];
 
@@ -60,5 +61,14 @@ class TestCustomisationManager
 		}
 
 		return ['name' => 'good', 'mode' => 'bind', 'source' => $source, 'target' => '/target/good'];
+	}
+
+	public function unmount(string $board, string $name): string
+	{
+		return '/target/' . $name;
+	}
+
+	public function cleanupStaleTarget(string $board, string $name): void
+	{
 	}
 }

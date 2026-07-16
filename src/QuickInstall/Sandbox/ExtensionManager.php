@@ -14,7 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /** Discovers, copies, binds, lists, and removes phpBB extensions. */
-class ExtensionManager
+class ExtensionManager implements CustomisationManagerInterface
 {
 	private Project $project;
 
