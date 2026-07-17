@@ -147,7 +147,13 @@ class StyleManager implements CustomisationManagerInterface
 			];
 		}
 
-		return array_values($mounted);
+		$mounted = array_values($mounted);
+		usort($mounted, static function (array $left, array $right): int {
+			$comparison = strcasecmp((string) $left['name'], (string) $right['name']);
+			return $comparison !== 0 ? $comparison : strcmp((string) $left['name'], (string) $right['name']);
+		});
+
+		return $mounted;
 	}
 
 	private function resolvePath(string $path, bool $allowExternal): string

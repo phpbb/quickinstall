@@ -144,7 +144,7 @@ class ExtensionManager implements CustomisationManagerInterface
 		$extPath = $this->project->boardPath($board) . '/ext';
 		if (!is_dir($extPath))
 		{
-			return array_values($mounted);
+			return $this->sortMounted($mounted);
 		}
 
 		foreach (scandir($extPath) ?: [] as $vendor)
@@ -187,7 +187,18 @@ class ExtensionManager implements CustomisationManagerInterface
 			}
 		}
 
-		return array_values($mounted);
+		return $this->sortMounted($mounted);
+	}
+
+	private function sortMounted(array $mounted): array
+	{
+		$mounted = array_values($mounted);
+		usort($mounted, static function (array $left, array $right): int {
+			$comparison = strcasecmp((string) $left['name'], (string) $right['name']);
+			return $comparison !== 0 ? $comparison : strcmp((string) $left['name'], (string) $right['name']);
+		});
+
+		return $mounted;
 	}
 
 	private function resolvePath(string $path, bool $allowExternal): string

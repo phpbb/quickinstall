@@ -28,6 +28,16 @@ class ExtensionManagerTest extends TestCase
 		self::assertSame($source, $list[0]['source']);
 	}
 
+	public function testListSortsExtensionsByName(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$manager = new ExtensionManager($project);
+		$manager->mount('demo', $this->extension($root, 'vendor/zulu', 'customisations/vendor/zulu'));
+		$manager->mount('demo', $this->extension($root, 'vendor/alpha', 'customisations/vendor/alpha'));
+
+		self::assertSame(['vendor/alpha', 'vendor/zulu'], array_column($manager->list('demo'), 'name'));
+	}
+
 	public function testCopyMountCopiesFilesIntoBoard(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');

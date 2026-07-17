@@ -28,6 +28,16 @@ class StyleManagerTest extends TestCase
 		self::assertSame($source, $list[0]['source']);
 	}
 
+	public function testListSortsStylesByName(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$manager = new StyleManager($project);
+		$manager->mount('demo', $this->style($root, 'Zulu', 'customisations/styles/Zulu'));
+		$manager->mount('demo', $this->style($root, 'alpha', 'customisations/styles/alpha'));
+
+		self::assertSame(['alpha', 'Zulu'], array_column($manager->list('demo'), 'name'));
+	}
+
 	public function testCopyMountCopiesFilesIntoBoard(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');
