@@ -153,6 +153,19 @@ button:disabled { opacity: .65; cursor: wait; }
 .secondary { background: var(--button-bg); color: var(--text); }
 .danger { background: var(--panel); color: var(--danger); border-color: var(--danger-border); }
 .danger:hover { background: var(--danger-bg); }
+.button-small {
+	min-height: 28px;
+	padding: 3px 10px;
+	font-size: 13px;
+}
+
+@media (pointer: coarse) {
+	.button-small {
+		min-height: 32px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}
 
 .app {
 	display: grid;

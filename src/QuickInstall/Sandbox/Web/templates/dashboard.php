@@ -140,7 +140,7 @@
 										<input type="hidden" name="action" value="<?= $this->escape($mountGroup[1]) ?>">
 										<input type="hidden" name="board" value="<?= $this->escape($name) ?>">
 										<input type="hidden" name="name" value="<?= $this->escape($item['name']) ?>">
-										<button class="secondary">Unmount</button>
+										<button class="secondary button-small">Unmount</button>
 									</form>
 								<?php endforeach; ?>
 							</div>
@@ -249,7 +249,7 @@
 									<input type="hidden" name="action" value="source_remove">
 									<input type="hidden" name="source" value="<?= $this->escape($sourceKey) ?>">
 									<?php if ($usedBy): ?><input type="hidden" name="force" value="1"><?php endif; ?>
-									<button class="danger">Remove</button>
+									<button class="danger button-small">Remove</button>
 								</form>
 							</td>
 						</tr>
