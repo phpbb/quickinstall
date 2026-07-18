@@ -11,41 +11,48 @@
 
 ## :fork_and_knife: Fork and Clone
 
-First steps include creating your own repository of QuickInstall, and getting a copy of it onto your computer:
+The first steps include creating your own repository of QuickInstall and getting a copy of it onto your computer:
 
 1. On GitHub, Fork your own copy of `phpbb/quickinstall` to your account.
 
 2. Create a local clone of your fork:
-```
-$ git clone git://github.com/<my_github_name>/quickinstall.git
+```bash
+git clone https://github.com/YOUR-USERNAME/quickinstall.git
 ```
 
 ## :gear: Gear up for development
 
 Assuming you have a local web development server up and running and know how to use a command line terminal application:
 
-1. From QI's root directory, run the following command to install QI's dependencies:
-```
-$ php composer.phar install
+From QI's root directory, run the following command to install QI's dependencies:
+```bash
+php composer.phar install
 ```
 
-2. Open QuickInstall in a browser on your local web server (e.g., `https://localhost/quickinstall`).
+Open QuickInstall in a browser on your local web server (e.g., `https://localhost/quickinstall`).
 
-> Optional: QuickInstall uses the Bootstrap framework which is compiled via NPM. To update or customise QuickInstall's Bootstrap files you must:
-> - Have [Node JS](https://nodejs.org/) installed.
-> - Run `$ npm install` to install its node dependencies.
+> Optional: QuickInstall uses the Bootstrap framework, which is compiled via NPM. To update or customise QuickInstall's Bootstrap files, you must:
+> - Have [Node.js](https://nodejs.org/) installed.
+> - Run `npm install` to install its node dependencies.
 > - Edit the `scss/qi_bootstrap.scss` file to customise Bootstrap variables.
-> - Run `$ npm run all` to compile and deploy new Bootstrap CSS/JS files to QuickInstall.
+> - Run `npm run all` to compile and deploy new Bootstrap CSS/JS files to QuickInstall.
 
 ### CLI tests
 
-The new CLI test suite uses an isolated Composer config so it can require PHPUnit without changing QuickInstall's legacy runtime dependency constraints.
+The new CLI test suite uses an isolated Composer config, so it can require PHPUnit without changing QuickInstall's legacy runtime dependency constraints.
 
+To initially set up the test environment on your local web server:
+
+```bash
+cd tests
+COMPOSER=composer.cli-tests.json composer install
+cd ..
 ```
-$ cd tests
-$ COMPOSER=composer.cli-tests.json composer install
-$ cd ..
-$ tests/vendor/bin/phpunit -c phpunit.xml.dist
+
+Run the test suite:
+
+```bash
+tests/vendor/bin/phpunit -c phpunit.xml.dist
 ```
 
 The CLI test dependencies install into `tests/vendor/`, leaving the main application `vendor/` directory unchanged.
@@ -53,42 +60,29 @@ The CLI test dependencies install into `tests/vendor/`, leaving the main applica
 On Windows PowerShell, set the Composer config and run the same suite with:
 
 ```powershell
+# Initialise the test environment
 Set-Location tests
 $env:COMPOSER = 'composer.cli-tests.json'
 composer install
 Set-Location ..
+
+# Run the test suite
 php tests/vendor/bin/phpunit -c phpunit.xml.dist
 ```
 
-CLI or Dashboard UI changes must remain compatible with macOS, Linux, and native Windows. Before submitting such changes, run:
-
-```bash
-php bin/qi doctor
-php bin/qi help
-```
-
-On Windows, also smoke-test the supplied launcher from PowerShell or Command Prompt:
-
-```powershell
-.\bin\qi.cmd help
-```
-
-Windows-specific changes should cover drive-letter paths, paths containing spaces, Command Prompt and PowerShell execution, and the `ui:start`/`ui:status`/`ui:stop` lifecycle. GitHub Actions runs the PHPUnit suite and launcher smoke test on native Windows.
-
 ## :computer: Make something great
 
-1. Create a new branch in your repository before doing any work. It should be based off the `develop` branch:
-```
-$ git checkout -b myNewbranch origin/develop
-```
-
-2. Do work on your branch, commit your changes and push it to your repository:
-```
-$ git commit -a -m "My new feature or bug fixes"
-
-$ git push origin myNewbranch
+Create a new branch in your repository before doing any work. It should be based off the `develop` branch:
+```bash
+git checkout -b myNewbranch origin/develop
 ```
 
+Do work on your branch, commit your changes and push it to your repository:
+```bash
+git commit -a -m "My new feature or bug fixes"
+
+git push origin myNewbranch
+```
 
 ## :tophat: Submit a Pull Request
 
@@ -96,10 +90,9 @@ $ git push origin myNewbranch
 
 2. Click the Pull Request button.
 
-
 ## :thumbsup: Collaborate
 
 Be prepared for:
 - Constructive criticism of your code changes.
-- phpBB team members, or the community at large may request changes to your code (repeat [step 2 from here](#computer-make-something-great)).
+- phpBB team members or the community at large may request changes to your code.
 - That feeling when your Pull Request is accepted and merged. :sunglasses:

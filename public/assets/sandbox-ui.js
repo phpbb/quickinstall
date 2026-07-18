@@ -121,6 +121,7 @@ function renderActivityLog() {
 
 function bindAjax() {
 	bindUpdateBanner();
+	bindMountedLists();
 
 	document.querySelectorAll('form[data-ajax]').forEach((form) => {
 		if (form.dataset.bound) {
@@ -205,6 +206,26 @@ function bindAjax() {
 	});
 
 	renderActivityLog();
+}
+
+function bindMountedLists() {
+	document.querySelectorAll('[data-mounted-toggle]').forEach((button) => {
+		if (button.dataset.bound) {
+			return;
+		}
+
+		button.dataset.bound = '1';
+		button.addEventListener('click', () => {
+			const mounted = button.closest('.mounted');
+			const extras = mounted ? mounted.querySelectorAll('[data-mounted-extra]') : [];
+			const expanded = button.getAttribute('aria-expanded') === 'true';
+			extras.forEach((item) => {
+				item.hidden = expanded;
+			});
+			button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+			button.textContent = expanded ? button.dataset.moreLabel : 'Show less';
+		});
+	});
 }
 
 function bindUpdateBanner() {

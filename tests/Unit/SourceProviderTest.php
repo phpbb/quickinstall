@@ -137,6 +137,20 @@ class SourceProviderTest extends TestCase
 		self::assertSame('https://example.test/phpbb.git', $project->readJson('sources.json', [])['topic-123']['url']);
 	}
 
+	public function testFloatingComposerRefreshesWhenDetectedVersionIsUnchanged(): void
+	{
+		$project = $this->project();
+		$provider = new RefreshingSourceProvider($project);
+
+		$first = $provider->ensure('master');
+		$second = $provider->ensure('master');
+
+		self::assertSame('4.0.0-a3-dev', $first['source_key']);
+		self::assertSame('4.0.0-a3-dev', $second['source_key']);
+		self::assertSame('refresh-2', file_get_contents($second['path'] . '/refresh.txt'));
+		self::assertCount(1, $project->readJson('sources.json', []));
+	}
+
 	public function testAddGitSourceRejectsNonCloneUrl(): void
 	{
 		$project = $this->project();
@@ -187,6 +201,21 @@ class SourceProviderTest extends TestCase
 		self::assertSame('', $output);
 		self::assertSame('3.3.15', $source['source_key']);
 		self::assertSame('3.3.15', $source['constraint']);
+	}
+
+	public function testFloatingStableSelectorDownloadsNewResolvedVersion(): void
+	{
+		$project = $this->project();
+		$provider = new AdvancingReleaseSourceProvider($project, ['3.3.17', '3.3.18']);
+
+		$first = $provider->ensure('3.3');
+		$second = $provider->ensure('3.3');
+
+		self::assertSame('3.3.17', $first['source_key']);
+		self::assertSame('3.3.18', $second['source_key']);
+		self::assertSame(2, $provider->fetches);
+		self::assertFileExists($project->sourcePath('3.3.17') . '/common.php');
+		self::assertFileExists($project->sourcePath('3.3.18') . '/common.php');
 	}
 
 	public function phpRequirementProvider(): array
@@ -264,5 +293,47 @@ class TestSourceProvider extends SourceProvider
 	protected function capture(array $command, string $cwd): array
 	{
 		return array_shift($this->captures) ?: ['status' => 1, 'output' => ''];
+	}
+}
+
+class RefreshingSourceProvider extends SourceProvider
+{
+	private int $refresh = 0;
+
+	public function fetch(array $source): void
+	{
+		$this->refresh++;
+		mkdir($source['path'] . '/install', 0775, true);
+		file_put_contents($source['path'] . '/common.php', '<?php');
+		file_put_contents($source['path'] . '/composer.json', json_encode(['require' => ['php' => '^8.2']]));
+		file_put_contents($source['path'] . '/install/phpbbcli.php', "<?php\ndefine('PHPBB_VERSION', '4.0.0-a3-dev');\n");
+		file_put_contents($source['path'] . '/refresh.txt', 'refresh-' . $this->refresh);
+	}
+}
+
+class AdvancingReleaseSourceProvider extends SourceProvider
+{
+	private array $versions;
+	public int $fetches = 0;
+
+	public function __construct(Project $project, array $versions)
+	{
+		parent::__construct($project);
+		$this->versions = $versions;
+	}
+
+	protected function latestComposerVersion(string $constraint): ?string
+	{
+		return array_shift($this->versions);
+	}
+
+	public function fetch(array $source): void
+	{
+		$this->fetches++;
+		$version = $source['constraint'];
+		mkdir($source['path'] . '/install', 0775, true);
+		file_put_contents($source['path'] . '/common.php', '<?php');
+		file_put_contents($source['path'] . '/composer.json', json_encode(['require' => ['php' => '^8.1']]));
+		file_put_contents($source['path'] . '/install/phpbbcli.php', "<?php\ndefine('PHPBB_VERSION', '$version');\n");
 	}
 }

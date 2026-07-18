@@ -1,9 +1,9 @@
 # <img class="phpbb-logo-rm" height="48" width="146" src="style/assets/img/logo_medium_cosmos.svg" alt="phpBB"> QuickInstall
 
-QuickInstall is a tool we built to support the community of phpBB extension developers (and previously MOD authors). It simplifies and accelerates the process of creating and configuring local phpBB3 forum installations. These boards can then be used to safely install, develop and test extensions in isolation without having to worry about external conflicts.
+QuickInstall is a tool we built to support the community of phpBB extension developers (and previously MOD authors). It simplifies and speeds up the process of creating and configuring local phpBB3 forum installations. These boards can then be used to safely install, develop, and test extensions in isolation without having to worry about external conflicts.
 
 > ##### ⚠️ QuickInstall is not intended for use on a live production website.
-> QuickInstall stores all board and database passwords in a plain text file. They are hidden in the user interface, but can be read by anyone with access to the QuickInstall directory. Therefore, if you do use QuickInstall on a public server, you do so at your own risk and must protect access to the directory where it resides from unauthorised users. No support is provided for QuickInstall other than local use.
+> QuickInstall stores all board and database passwords in a plain text file. They are hidden in the user interface but can be read by anyone with access to the QuickInstall directory. Therefore, if you do use QuickInstall on a public server, you do so at your own risk and must protect access to the directory where it resides from unauthorised users. No support is provided for QuickInstall other than local use.
 
 ## 📦 Installation
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/).
@@ -24,13 +24,13 @@ QuickInstall is a tool we built to support the community of phpBB extension deve
 1. Get the latest version of [QuickInstall](https://www.phpbb.com/customise/db/official_tool/phpbb3_quickinstall/) and extract it. 
 
 2. Copy everything into your existing QuickInstall directory. Keep existing copies of these folders; copy them if missing:
-   - 📁`.qi/` (may be hidden by your operating system)
+   - 📁`.qi/` (might be hidden by your operating system)
    - 📁`boards/`
    - 📁`customisations/`
    - 📁`sources/`
    - 📁`settings/`
 
-> If you are upgrading from QuickInstall 1.1.8 (or older) you MUST review and re-save your old Profile settings.
+> If you are upgrading from QuickInstall 1.1.8 (or older), you MUST review and re-save your old Profile settings.
 
 ## 💻 Requirements
 
@@ -94,13 +94,14 @@ Please report all bugs to our [Issues Tracker](https://github.com/phpbb/quickins
 Feel free to contribute to this project. Please read our [Contributing Guidelines](https://github.com/phpbb/quickinstall/blob/master/.github/CONTRIBUTING.md) before submitting Pull Requests with any bug fixes or feature enhancements to this repository.
 
 ## 💖 Credits
-The project is maintained by the phpBB Extensions Team.
+This project is maintained by the phpBB Customisations Team.
 - Credits go to the phpBB team, especially the development team which created such a wonderful piece of software.
 - Originally created by Igor “igorw” Wiedler in the summer of 2007.
 - Maintained by Jari “tumba25” Kanerva from March 2010 to March 2015.
+- Maintained by Matt “MattF” Friedman since 2016.
 - Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD.
 - Thanks to the beta testers!
-- Thanks to the phpBB community including phpBB.com, startrekguide.com and phpBBModders.net!
+- Thanks to the phpBB community including phpBB.com, startrekguide.com, and phpBBModders.net!
 
 ## 📜 License
 phpBB QuickInstall is distributed under the terms of the [GNU General Public License 2 (GPL)](license.txt).

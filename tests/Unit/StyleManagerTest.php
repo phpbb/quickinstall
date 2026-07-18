@@ -28,6 +28,16 @@ class StyleManagerTest extends TestCase
 		self::assertSame($source, $list[0]['source']);
 	}
 
+	public function testListSortsStylesByName(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$manager = new StyleManager($project);
+		$manager->mount('demo', $this->style($root, 'Zulu', 'customisations/styles/Zulu'));
+		$manager->mount('demo', $this->style($root, 'alpha', 'customisations/styles/alpha'));
+
+		self::assertSame(['alpha', 'Zulu'], array_column($manager->list('demo'), 'name'));
+	}
+
 	public function testCopyMountCopiesFilesIntoBoard(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');
@@ -67,6 +77,22 @@ class StyleManagerTest extends TestCase
 		self::assertSame('/var/www/html/styles/bound', $removed);
 		self::assertDirectoryExists($source);
 		self::assertSame([], $manager->list('demo'));
+	}
+
+	public function testRemountPreservesRegisteredBindTarget(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->style($root, 'bound', 'customisations/styles/bound');
+		$manager = new StyleManager($project);
+		$manager->mount('demo', $source);
+		$target = $project->boardPath('demo') . '/styles/bound';
+		mkdir($target, 0775, true);
+		file_put_contents($target . '/mountpoint.txt', 'preserve');
+
+		$mounted = $manager->mount('demo', $source);
+
+		self::assertSame('bind', $mounted['mode']);
+		self::assertFileExists($target . '/mountpoint.txt');
 	}
 
 	public function testCleanupStaleTargetRemovesStyleDirectoryAndParents(): void

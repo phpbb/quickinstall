@@ -16,6 +16,8 @@ use QuickInstall\Sandbox\BoardRefreshService;
 use QuickInstall\Sandbox\BoardService;
 use QuickInstall\Sandbox\BufferedOutput;
 use QuickInstall\Sandbox\CustomisationMountService;
+use QuickInstall\Sandbox\CustomisationManagerInterface;
+use QuickInstall\Sandbox\CustomisationUnmountService;
 use QuickInstall\Sandbox\DoctorService;
 use QuickInstall\Sandbox\ExtensionManager;
 use QuickInstall\Sandbox\Project;
@@ -257,9 +259,7 @@ class Application
 					$board = $this->required('board');
 					$name = $this->required('name');
 					$extensions = new ExtensionManager($this->project);
-					$extensions->unmount($board, $name);
-					(new BoardRefreshService($this->project, $this->output))->refreshIfRunning($board);
-					$extensions->cleanupStaleTarget($board, $name);
+					(new CustomisationUnmountService($this->project, $this->output))->extension($extensions, $board, $name);
 					$this->notice = "Unmounted extension: $name";
 				break;
 
@@ -271,9 +271,7 @@ class Application
 					$board = $this->required('board');
 					$name = $this->required('name');
 					$styles = new StyleManager($this->project);
-					$styles->unmount($board, $name);
-					(new BoardRefreshService($this->project, $this->output))->refreshIfRunning($board);
-					$styles->cleanupStaleTarget($board, $name);
+					(new CustomisationUnmountService($this->project, $this->output))->style($styles, $board, $name);
 					$this->notice = "Unmounted style: $name";
 				break;
 
@@ -345,7 +343,7 @@ class Application
 		return (bool) preg_match('/Cannot connect to the Docker daemon|failed to connect to the docker API|daemon is running|docker\.sock|Docker Desktop/i', $message);
 	}
 
-	private function mountCustomisation(string $type, object $manager): void
+	private function mountCustomisation(string $type, CustomisationManagerInterface $manager): void
 	{
 		$board = $this->required('board');
 		$source = $this->required('source');

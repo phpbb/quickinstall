@@ -79,6 +79,30 @@ class BoardRunnerTest extends TestCase
 		self::assertSame(['up', '-d', '--force-recreate', 'web'], array_slice($runner->runs[2], -4));
 	}
 
+	public function testUninstallExtensionDisablesThenPurges(): void
+	{
+		[$project] = $this->projectWithBoard();
+		$runner = new TestBoardRunner($project);
+		$runner->captures = [['exit_code' => 2, 'output' => 'already disabled']];
+
+		$runner->uninstallExtension('demo', 'vendor/demo');
+
+		self::assertSame(['extension:disable', 'vendor/demo'], array_slice($runner->capturedCommands[0], -2));
+		self::assertSame(['extension:purge', 'vendor/demo'], array_slice($runner->runs[0], -2));
+	}
+
+	public function testUninstallStyleCopiesAndRunsPhpbbCleanupScript(): void
+	{
+		[$project] = $this->projectWithBoard();
+		$runner = new TestBoardRunner($project);
+
+		$runner->uninstallStyle('demo', 'custom');
+
+		self::assertSame('web:/tmp/qi_style_uninstall.php', end($runner->runs[0]));
+		self::assertSame(['php', '/tmp/qi_style_uninstall.php', 'custom'], array_slice($runner->runs[1], -3));
+		self::assertFileExists($project->runtimePath('demo') . '/style-uninstall.php');
+	}
+
 	public function testDestroyRunsComposeDownAndRemovesBoardData(): void
 	{
 		[$project] = $this->projectWithBoard();

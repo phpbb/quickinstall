@@ -26,7 +26,7 @@ class CustomisationMountService
 	}
 
 	/** Returns mounted items and per-item errors; recursive mounts are best effort. */
-	public function mount(object $manager, string $board, string $source, bool $copy = false, bool $recursive = false, bool $allowExternal = false): array
+	public function mount(CustomisationManagerInterface $manager, string $board, string $source, bool $copy = false, bool $recursive = false, bool $allowExternal = false): array
 	{
 		if ($recursive)
 		{
@@ -39,7 +39,7 @@ class CustomisationMountService
 		return ['mounted' => $mounted, 'errors' => [], 'recursive' => false];
 	}
 
-	private function mountRecursive(object $manager, string $board, string $source, bool $allowExternal): array
+	private function mountRecursive(CustomisationManagerInterface $manager, string $board, string $source, bool $allowExternal): array
 	{
 		$this->project->board($board);
 		$mounted = [];

@@ -14,7 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /** Discovers, copies, binds, lists, and removes phpBB styles. */
-class StyleManager
+class StyleManager implements CustomisationManagerInterface
 {
 	private Project $project;
 
@@ -46,17 +46,17 @@ class StyleManager
 
 		if (file_exists($target) || is_link($target))
 		{
-			if (!$copy && (is_link($target) || !$this->isStylePath($target)))
-			{
-				$this->project->deleteTree($target);
-			}
-			else if (!$copy && isset($styles[$name]) && ($styles[$name]['mode'] ?? '') === 'bind')
+			if (!$copy && isset($styles[$name]) && ($styles[$name]['mode'] ?? '') === 'bind')
 			{
 				$styles[$name] = ['mode' => 'bind', 'source' => $sourcePath];
 				$boardConfig['styles'] = $styles;
 				$this->project->appendBoard($boardConfig);
 
 				return ['name' => $name, 'source' => $sourcePath, 'target' => '/var/www/html/styles/' . $name, 'mode' => 'bind'];
+			}
+			else if (!$copy && (is_link($target) || !$this->isStylePath($target)))
+			{
+				$this->project->deleteTree($target);
 			}
 			else
 			{
@@ -147,7 +147,13 @@ class StyleManager
 			];
 		}
 
-		return array_values($mounted);
+		$mounted = array_values($mounted);
+		usort($mounted, static function (array $left, array $right): int {
+			$comparison = strcasecmp((string) $left['name'], (string) $right['name']);
+			return $comparison !== 0 ? $comparison : strcmp((string) $left['name'], (string) $right['name']);
+		});
+
+		return $mounted;
 	}
 
 	private function resolvePath(string $path, bool $allowExternal): string

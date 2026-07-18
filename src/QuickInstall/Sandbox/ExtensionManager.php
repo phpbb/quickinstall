@@ -14,7 +14,7 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /** Discovers, copies, binds, lists, and removes phpBB extensions. */
-class ExtensionManager
+class ExtensionManager implements CustomisationManagerInterface
 {
 	private Project $project;
 
@@ -40,17 +40,17 @@ class ExtensionManager
 
 		if (file_exists($target) || is_link($target))
 		{
-			if (!$copy && (is_link($target) || !is_file($target . '/composer.json')))
-			{
-				$this->project->deleteTree($target);
-			}
-			else if (!$copy && isset($extensions[$name]) && ($extensions[$name]['mode'] ?? '') === 'bind')
+			if (!$copy && isset($extensions[$name]) && ($extensions[$name]['mode'] ?? '') === 'bind')
 			{
 				$extensions[$name] = ['mode' => 'bind', 'source' => $sourcePath];
 				$boardConfig['extensions'] = $extensions;
 				$this->project->appendBoard($boardConfig);
 
 				return ['name' => $name, 'source' => $sourcePath, 'target' => '/var/www/html/ext/' . $name, 'mode' => 'bind'];
+			}
+			else if (!$copy && (is_link($target) || !is_file($target . '/composer.json')))
+			{
+				$this->project->deleteTree($target);
 			}
 			else
 			{
@@ -144,7 +144,7 @@ class ExtensionManager
 		$extPath = $this->project->boardPath($board) . '/ext';
 		if (!is_dir($extPath))
 		{
-			return array_values($mounted);
+			return $this->sortMounted($mounted);
 		}
 
 		foreach (scandir($extPath) ?: [] as $vendor)
@@ -187,7 +187,18 @@ class ExtensionManager
 			}
 		}
 
-		return array_values($mounted);
+		return $this->sortMounted($mounted);
+	}
+
+	private function sortMounted(array $mounted): array
+	{
+		$mounted = array_values($mounted);
+		usort($mounted, static function (array $left, array $right): int {
+			$comparison = strcasecmp((string) $left['name'], (string) $right['name']);
+			return $comparison !== 0 ? $comparison : strcmp((string) $left['name'], (string) $right['name']);
+		});
+
+		return $mounted;
 	}
 
 	private function resolvePath(string $path, bool $allowExternal): string

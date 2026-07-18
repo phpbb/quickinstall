@@ -216,25 +216,10 @@ class SourceProvider
 		}
 
 		$actualVersion = $this->installedPhpbbVersion($tempSource['path']);
+		$refreshExisting = $selection['constraint'] === 'dev-master';
 		$actualKey = $this->sourceKey($actualVersion);
 		$actualPath = $this->project->sourcePath($actualKey);
-
-		if (is_dir($actualPath) && file_exists($actualPath . '/common.php'))
-		{
-			$this->project->deleteTree($tempSource['path']);
-		}
-		else
-		{
-			if (file_exists($actualPath) || is_link($actualPath))
-			{
-				$this->project->deleteTree($actualPath);
-			}
-			error_clear_last();
-			if (!@rename($tempSource['path'], $actualPath))
-			{
-				throw new RuntimeException("Unable to move source into place: $actualPath" . $this->lastFilesystemError());
-			}
-		}
+		$this->publishSource($tempSource['path'], $actualPath, $refreshExisting);
 
 		$sources = $this->project->readJson('sources.json', []);
 		$record = $this->recordForResolvedSource($source, $selection, $version, $actualVersion, $actualKey, $actualPath);
@@ -248,6 +233,41 @@ class SourceProvider
 
 		$this->project->writeJson('sources.json', $sources);
 		return $record;
+	}
+
+	/** Publishes a complete source tree, preserving the previous tree on failure. */
+	protected function publishSource(string $temporaryPath, string $actualPath, bool $replace): void
+	{
+		if (!$replace && is_dir($actualPath) && file_exists($actualPath . '/common.php'))
+		{
+			$this->project->deleteTree($temporaryPath);
+			return;
+		}
+
+		$backupPath = null;
+		if (file_exists($actualPath) || is_link($actualPath))
+		{
+			$backupPath = $actualPath . '-old-' . str_replace('.', '', uniqid('', true));
+			if (!@rename($actualPath, $backupPath))
+			{
+				throw new RuntimeException("Unable to preserve existing source: $actualPath" . $this->lastFilesystemError());
+			}
+		}
+
+		error_clear_last();
+		if (!@rename($temporaryPath, $actualPath))
+		{
+			if ($backupPath !== null)
+			{
+				@rename($backupPath, $actualPath);
+			}
+			throw new RuntimeException("Unable to move source into place: $actualPath" . $this->lastFilesystemError());
+		}
+
+		if ($backupPath !== null)
+		{
+			$this->project->deleteTree($backupPath);
+		}
 	}
 
 	protected function removeUnusedFloatingSource(array &$sources, string $sourceKey, string $resolvedPath): bool

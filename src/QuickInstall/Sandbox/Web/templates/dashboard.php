@@ -126,21 +126,27 @@
 				</form>
 				<div class="mounted-grid">
 					<?php foreach ([['Extensions', 'ext_unmount', $board['mounted_extensions']], ['Styles', 'style_unmount', $board['mounted_styles']]] as $mountGroup): ?>
+						<?php $mountCount = count($mountGroup[2]); ?>
 						<div class="mounted">
-							<h4><?= $this->escape($mountGroup[0]) ?></h4>
-							<?php if (!$mountGroup[2]): ?>
-								<p class="muted">None mounted</p>
+							<h4><span><?= $this->escape($mountGroup[0]) ?></span><span class="mounted-count"><?= $mountCount ?></span></h4>
+							<div class="mounted-list">
+								<?php if (!$mountGroup[2]): ?>
+									<p class="muted">None mounted</p>
+								<?php endif; ?>
+								<?php foreach ($mountGroup[2] as $index => $item): ?>
+									<form method="post" class="row" data-ajax<?= $index >= 3 ? ' data-mounted-extra hidden' : '' ?>>
+										<?php require __DIR__ . '/csrf.php'; ?>
+										<span><strong><?= $this->escape($item['name']) ?></strong><small><?= $this->escape($item['mode']) ?></small></span>
+										<input type="hidden" name="action" value="<?= $this->escape($mountGroup[1]) ?>">
+										<input type="hidden" name="board" value="<?= $this->escape($name) ?>">
+										<input type="hidden" name="name" value="<?= $this->escape($item['name']) ?>">
+										<button class="secondary button-small">Unmount</button>
+									</form>
+								<?php endforeach; ?>
+							</div>
+							<?php if ($mountCount > 3): ?>
+								<button type="button" class="mounted-toggle" data-mounted-toggle data-more-label="Show <?= $mountCount - 3 ?> more" aria-expanded="false">Show <?= $mountCount - 3 ?> more</button>
 							<?php endif; ?>
-							<?php foreach ($mountGroup[2] as $item): ?>
-								<form method="post" class="row" data-ajax>
-									<?php require __DIR__ . '/csrf.php'; ?>
-									<span><strong><?= $this->escape($item['name']) ?></strong><small><?= $this->escape($item['mode']) ?></small></span>
-									<input type="hidden" name="action" value="<?= $this->escape($mountGroup[1]) ?>">
-									<input type="hidden" name="board" value="<?= $this->escape($name) ?>">
-									<input type="hidden" name="name" value="<?= $this->escape($item['name']) ?>">
-									<button class="secondary">Unmount</button>
-								</form>
-							<?php endforeach; ?>
 						</div>
 					<?php endforeach; ?>
 				</div>
@@ -243,7 +249,7 @@
 									<input type="hidden" name="action" value="source_remove">
 									<input type="hidden" name="source" value="<?= $this->escape($sourceKey) ?>">
 									<?php if ($usedBy): ?><input type="hidden" name="force" value="1"><?php endif; ?>
-									<button class="danger">Remove</button>
+									<button class="danger button-small">Remove</button>
 								</form>
 							</td>
 						</tr>

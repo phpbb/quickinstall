@@ -153,6 +153,19 @@ button:disabled { opacity: .65; cursor: wait; }
 .secondary { background: var(--button-bg); color: var(--text); }
 .danger { background: var(--panel); color: var(--danger); border-color: var(--danger-border); }
 .danger:hover { background: var(--danger-bg); }
+.button-small {
+	min-height: 28px;
+	padding: 3px 10px;
+	font-size: 13px;
+}
+
+@media (pointer: coarse) {
+	.button-small {
+		min-height: 32px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}
 
 .app {
 	display: grid;
@@ -330,7 +343,11 @@ button:disabled { opacity: .65; cursor: wait; }
 .section-head h2 { display: flex; align-items: center; gap: 8px; }
 .section-head h2 .icon { color: var(--accent); }
 .board-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
-.board { padding: 0; }
+.board {
+	container-name: board-card;
+	container-type: inline-size;
+	padding: 0;
+}
 .card-head {
 	display: flex;
 	justify-content: space-between;
@@ -403,11 +420,40 @@ button:disabled { opacity: .65; cursor: wait; }
 .mounted { padding: 14px 16px; }
 .mounted + .mounted { border-left: 1px solid var(--border-muted); }
 .mounted h4 {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
 	margin-bottom: 8px;
 	color: var(--muted);
 	font-size: 12px;
 	text-transform: uppercase;
 	letter-spacing: .04em;
+}
+.mounted-count {
+	min-width: 22px;
+	padding: 1px 6px;
+	border-radius: 999px;
+	background: var(--button-bg);
+	color: var(--text);
+	font-size: 11px;
+	line-height: 18px;
+	text-align: center;
+}
+.mounted-list .row[hidden] { display: none; }
+.mounted-toggle {
+	min-height: 0;
+	margin-top: 4px;
+	padding: 4px 0;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+	color: var(--accent);
+	font-size: 12px;
+}
+.mounted-toggle:hover {
+	background: transparent;
+	text-decoration: underline;
 }
 .row {
 	display: flex;
@@ -427,6 +473,14 @@ button:disabled { opacity: .65; cursor: wait; }
 	white-space: nowrap;
 }
 .row small { color: var(--subtle); font-size: 12px; }
+
+@container board-card (max-width: 560px) {
+	.mounted-grid { grid-template-columns: 1fr; }
+	.mounted + .mounted {
+		border-top: 1px solid var(--border-muted);
+		border-left: 0;
+	}
+}
 
 .settings-form {
 	display: grid;

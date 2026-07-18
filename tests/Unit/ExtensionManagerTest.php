@@ -28,6 +28,16 @@ class ExtensionManagerTest extends TestCase
 		self::assertSame($source, $list[0]['source']);
 	}
 
+	public function testListSortsExtensionsByName(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$manager = new ExtensionManager($project);
+		$manager->mount('demo', $this->extension($root, 'vendor/zulu', 'customisations/vendor/zulu'));
+		$manager->mount('demo', $this->extension($root, 'vendor/alpha', 'customisations/vendor/alpha'));
+
+		self::assertSame(['vendor/alpha', 'vendor/zulu'], array_column($manager->list('demo'), 'name'));
+	}
+
 	public function testCopyMountCopiesFilesIntoBoard(): void
 	{
 		[$project, $root] = $this->projectWithBoard('demo');
@@ -67,6 +77,22 @@ class ExtensionManagerTest extends TestCase
 		self::assertSame('/var/www/html/ext/vendor/bound', $removed);
 		self::assertDirectoryExists($source);
 		self::assertSame([], $manager->list('demo'));
+	}
+
+	public function testRemountPreservesRegisteredBindTarget(): void
+	{
+		[$project, $root] = $this->projectWithBoard('demo');
+		$source = $this->extension($root, 'vendor/bound', 'customisations/vendor/bound');
+		$manager = new ExtensionManager($project);
+		$manager->mount('demo', $source);
+		$target = $project->boardPath('demo') . '/ext/vendor/bound';
+		mkdir($target, 0775, true);
+		file_put_contents($target . '/mountpoint.txt', 'preserve');
+
+		$mounted = $manager->mount('demo', $source);
+
+		self::assertSame('bind', $mounted['mode']);
+		self::assertFileExists($target . '/mountpoint.txt');
 	}
 
 	public function testListDiscoversCopiedExtensionWithoutMetadata(): void

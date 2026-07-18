@@ -51,7 +51,12 @@ class WebApplicationTest extends TestCase
 			'path' => $project->boardPath('demo'),
 			'populate' => 'none',
 			'debug' => false,
-			'extensions' => [],
+			'extensions' => [
+				'vendor/one' => ['mode' => 'bind', 'source' => '/tmp/one'],
+				'vendor/two' => ['mode' => 'bind', 'source' => '/tmp/two'],
+				'vendor/three' => ['mode' => 'bind', 'source' => '/tmp/three'],
+				'vendor/four' => ['mode' => 'bind', 'source' => '/tmp/four'],
+			],
 			'styles' => [],
 		]);
 
@@ -67,6 +72,9 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('Sources', $html);
 		self::assertStringContainsString('Mount extension', $html);
 		self::assertStringContainsString('Mount style', $html);
+		self::assertStringContainsString('<span class="mounted-count">4</span>', $html);
+		self::assertSame(1, substr_count($html, 'data-mounted-extra hidden'));
+		self::assertStringContainsString('data-more-label="Show 1 more"', $html);
 		self::assertStringContainsString('board_start', $html);
 		self::assertStringContainsString('board_seed', $html);
 		self::assertStringContainsString('source_remove', $html);
@@ -109,6 +117,18 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('const maxActivityEntries = 50;', $javascript);
 		self::assertStringContainsString('completeActivityEntry(actionId, data);', $javascript);
 		self::assertStringContainsString('entry.status = runningAssigned ? \'queued\' : \'running\';', $javascript);
+		self::assertStringContainsString("document.querySelectorAll('[data-mounted-toggle]')", $javascript);
+		self::assertStringContainsString("button.textContent = expanded ? button.dataset.moreLabel : 'Show less';", $javascript);
+	}
+
+	public function testNarrowBoardCardsStackMountedLists(): void
+	{
+		$css = file_get_contents(dirname(__DIR__, 2) . '/public/assets/sandbox-ui.css');
+
+		self::assertIsString($css);
+		self::assertStringContainsString('container-name: board-card;', $css);
+		self::assertStringContainsString('@container board-card (max-width: 560px)', $css);
+		self::assertMatchesRegularExpression('/@container board-card.+?\.mounted-grid \{ grid-template-columns: 1fr; \}/s', $css);
 	}
 
 	public function testDoctorFailureUsesErrorToastAndPointsToActivityLog(): void
