@@ -121,6 +121,16 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString("button.textContent = expanded ? button.dataset.moreLabel : 'Show less';", $javascript);
 	}
 
+	public function testNarrowBoardCardsStackMountedLists(): void
+	{
+		$css = file_get_contents(dirname(__DIR__, 2) . '/public/assets/sandbox-ui.css');
+
+		self::assertIsString($css);
+		self::assertStringContainsString('container-name: board-card;', $css);
+		self::assertStringContainsString('@container board-card (max-width: 560px)', $css);
+		self::assertMatchesRegularExpression('/@container board-card.+?\.mounted-grid \{ grid-template-columns: 1fr; \}/s', $css);
+	}
+
 	public function testDoctorFailureUsesErrorToastAndPointsToActivityLog(): void
 	{
 		$root = $this->createTempProjectRoot();

@@ -343,7 +343,11 @@ button:disabled { opacity: .65; cursor: wait; }
 .section-head h2 { display: flex; align-items: center; gap: 8px; }
 .section-head h2 .icon { color: var(--accent); }
 .board-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
-.board { padding: 0; }
+.board {
+	container-name: board-card;
+	container-type: inline-size;
+	padding: 0;
+}
 .card-head {
 	display: flex;
 	justify-content: space-between;
@@ -469,6 +473,14 @@ button:disabled { opacity: .65; cursor: wait; }
 	white-space: nowrap;
 }
 .row small { color: var(--subtle); font-size: 12px; }
+
+@container board-card (max-width: 560px) {
+	.mounted-grid { grid-template-columns: 1fr; }
+	.mounted + .mounted {
+		border-top: 1px solid var(--border-muted);
+		border-left: 0;
+	}
+}
 
 .settings-form {
 	display: grid;
