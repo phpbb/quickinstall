@@ -119,6 +119,10 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('entry.status = runningAssigned ? \'queued\' : \'running\';', $javascript);
 		self::assertStringContainsString("document.querySelectorAll('[data-mounted-toggle]')", $javascript);
 		self::assertStringContainsString("button.textContent = expanded ? button.dataset.moreLabel : 'Show less';", $javascript);
+		self::assertStringContainsString('const formSnapshot = snapshotForm(form);', $javascript);
+		self::assertStringContainsString('if (data.error) {', $javascript);
+		self::assertStringContainsString('restoreForm(context, formSnapshot);', $javascript);
+		self::assertStringContainsString("control.type === 'checkbox' || control.type === 'radio'", $javascript);
 	}
 
 	public function testNarrowBoardCardsStackMountedLists(): void
