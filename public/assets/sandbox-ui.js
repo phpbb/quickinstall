@@ -19,6 +19,63 @@ function sameAction(left, right) {
 		&& left.source === right.source;
 }
 
+/** Captures user-editable controls before dashboard markup is replaced. */
+function snapshotForm(form) {
+	const occurrences = new Map();
+	return Array.from(form.elements).flatMap((control) => {
+		if (!control.name || ['hidden', 'submit', 'button', 'reset', 'file'].includes(control.type)) {
+			return [];
+		}
+
+		const occurrence = occurrences.get(control.name) || 0;
+		occurrences.set(control.name, occurrence + 1);
+		return [{
+			name: control.name,
+			occurrence,
+			value: control.value,
+			checked: control.checked,
+			selected: control.options ? Array.from(control.options).filter((option) => option.selected).map((option) => option.value) : null,
+		}];
+	});
+}
+
+/** Finds the regenerated form without relying on mutable field values. */
+function actionForm(context) {
+	const candidates = Array.from(dashboard.querySelectorAll('form[data-ajax]')).filter((form) => {
+		const candidate = actionContext(form);
+		return candidate.action === context.action
+			&& candidate.board === context.board
+			&& candidate.section === context.section;
+	});
+
+	return candidates.find((form) => sameAction(actionContext(form), context)) || (candidates.length === 1 ? candidates[0] : null);
+}
+
+/** Restores submitted values after an error response regenerates the dashboard. */
+function restoreForm(context, snapshot) {
+	const form = actionForm(context);
+	if (!form) {
+		return;
+	}
+
+	for (const saved of snapshot) {
+		const controls = Array.from(form.elements).filter((control) => control.name === saved.name);
+		const control = controls[saved.occurrence];
+		if (!control) {
+			continue;
+		}
+		if (saved.selected !== null) {
+			for (const option of control.options) {
+				option.selected = saved.selected.includes(option.value);
+			}
+		} else if (control.type === 'checkbox' || control.type === 'radio') {
+			control.checked = saved.checked;
+		} else {
+			control.value = saved.value;
+		}
+	}
+}
+
 /** Reapplies pending state after AJAX replaces dashboard markup. */
 function syncPendingActions() {
 	pendingActions.forEach((pending) => {
@@ -136,6 +193,7 @@ function bindAjax() {
 			}
 
 			const context = actionContext(form);
+			const formSnapshot = snapshotForm(form);
 			const submitter = event.submitter;
 			const original = submitter ? submitter.innerHTML : '';
 			const actionId = nextActionId++;
@@ -170,6 +228,9 @@ function bindAjax() {
 				if (typeof data.html === 'string' && data.html !== '') {
 					dashboard.innerHTML = data.html;
 					bindAjax();
+					if (data.error) {
+						restoreForm(context, formSnapshot);
+					}
 					syncPendingActions();
 				}
 				showActionResult(data, context);

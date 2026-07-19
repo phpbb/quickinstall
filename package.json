@@ -44,10 +44,6 @@
         6
       ],
       "block-spacing": "error",
-      "array-bracket-spacing": [
-        "error",
-        "always"
-      ],
       "multiline-comment-style": "error",
       "computed-property-spacing": "off",
       "space-in-parens": "off",
