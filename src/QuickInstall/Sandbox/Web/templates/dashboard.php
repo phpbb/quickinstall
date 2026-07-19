@@ -57,7 +57,7 @@
 	<div class="section-head">
 		<div>
 			<h2><svg class="icon" aria-hidden="true"><use href="#icon-boards"></use></svg>Boards</h2>
-			<p>Start, stop, seed, and inspect local Docker-backed phpBB installs.</p>
+			<p>Manage your local phpBB boards and add sample content.</p>
 		</div>
 	</div>
 	<?php if (!$boards): ?>
@@ -159,7 +159,7 @@
 	<div class="section-head">
 		<div>
 			<h2><svg class="icon" aria-hidden="true"><use href="#icon-create"></use></svg>Create board</h2>
-			<p>Choose the phpBB source, runtime, port, and optional seed preset.</p>
+			<p>Set up a new phpBB board for development or testing.</p>
 		</div>
 	</div>
 	<form method="post" class="card settings-form" data-ajax>
@@ -181,7 +181,7 @@
 	<div class="section-head">
 		<div>
 			<h2><svg class="icon" aria-hidden="true"><use href="#icon-customisations"></use></svg>Customisations</h2>
-			<p>Bind or copy local extension and style work into a board.</p>
+			<p>Add extensions and styles from your local projects.</p>
 		</div>
 	</div>
 	<div class="split">
@@ -209,7 +209,7 @@
 	<div class="section-head">
 		<div>
 			<h2><svg class="icon" aria-hidden="true"><use href="#icon-sources"></use></svg>Sources</h2>
-			<p>Fetch and inspect phpBB sources used by boards.</p>
+			<p>Manage the phpBB versions available for your boards.</p>
 		</div>
 	</div>
 	<form method="post" class="card settings-form compact-form joined-form" data-ajax>
@@ -264,7 +264,7 @@
 	<div class="section-head">
 		<div>
 			<h2><svg class="icon" aria-hidden="true"><use href="#icon-activity"></use></svg>Activity log</h2>
-			<p>Queued and completed actions from this browser session.</p>
+			<p>Review actions and results from this session.</p>
 		</div>
 		<button type="button" class="secondary" data-clear-log>Clear</button>
 	</div>
