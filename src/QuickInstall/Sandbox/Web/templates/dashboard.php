@@ -63,7 +63,7 @@
 	<?php if (!$boards): ?>
 		<div class="empty">
 			<strong>No boards created</strong>
-			<span>Create a board below to generate its compose runtime and workspace files.</span>
+			<span>Create boards below. When they are ready, they will appear here.</span>
 		</div>
 	<?php endif; ?>
 	<div class="board-grid">
@@ -222,7 +222,7 @@
 		<div class="form-actions"><button class="primary">Fetch source</button></div>
 	</form>
 	<?php if (!$sources): ?>
-		<div class="empty"><strong>No sources registered</strong><span>Fetching a source will populate the local .qi source cache.</span></div>
+		<div class="empty"><strong>No sources registered</strong><span>Fetch a phpBB source above. When it is downloaded, it will appear here.</span></div>
 	<?php else: ?>
 		<div class="table-wrap">
 			<table>
