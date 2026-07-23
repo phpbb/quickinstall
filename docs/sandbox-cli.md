@@ -86,6 +86,24 @@ Arguments and options are identical with every launcher. Run commands from the Q
 
 Docker Desktop on Windows must use its WSL 2 or Hyper-V Linux-container backend rather than Windows containers.
 
+### Optional PATH setup
+
+You can run QuickInstall from any directory by using an absolute path to `bin/qi` or `bin/qi.cmd`. CLI users may instead add the project's absolute `bin` directory to their user `PATH`.
+
+For bash or zsh on macOS and Linux, add this to your shell profile using **the real project path**:
+
+```
+export PATH="/path/to/quickinstall/bin:$PATH"
+```
+
+On Windows, add this through User Environment Variables using **the real project path**:
+
+```
+C:\path\to\quickinstall\bin
+```
+
+Open a new terminal afterward; `qi <command>` will then work from any directory. Update the `PATH` entry if you move QuickInstall.
+
 ## Common Recipes
 
 Create a small empty board:
@@ -496,7 +514,7 @@ On Windows, also confirm Docker Desktop is using Linux containers. `php bin/qi d
 
 #### Composer command fails
 
-QuickInstall uses composer from PATH first, then `composer.phar` from the project root. Restore `composer.phar` or install Composer if both are missing.
+QuickInstall uses composer from `PATH` first, then `composer.phar` from the project root. Restore `composer.phar` or install Composer if both are missing.
 
 #### View container logs
 
