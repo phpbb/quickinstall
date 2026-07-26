@@ -45,6 +45,7 @@ class BoardRefreshService
 			'admin_pass' => 'password',
 			'admin_email' => 'admin@example.test',
 			'board_email' => 'board@example.test',
+			'board_timezone' => 'UTC',
 			'populate' => 'none',
 			'debug' => false,
 			'extensions' => [],

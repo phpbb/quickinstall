@@ -22,7 +22,13 @@ class DockerComposeWriterTest extends TestCase
 		self::assertFileExists($paths['install_config']);
 		self::assertFileExists($paths['dockerfile']);
 		self::assertFileExists($paths['entrypoint']);
-		self::assertStringContainsString('apache2-foreground', file_get_contents($paths['entrypoint']));
+		$entrypoint = file_get_contents($paths['entrypoint']);
+		self::assertStringContainsString('apache2-foreground', $entrypoint);
+		self::assertStringContainsString('new DateTimeZone((string) getenv("QUICKINSTALL_BOARD_TIMEZONE"))', $entrypoint);
+		self::assertStringContainsString('config:set board_timezone "$QUICKINSTALL_BOARD_TIMEZONE"', $entrypoint);
+		self::assertStringContainsString('config:set board_timezone UTC', $entrypoint);
+		self::assertStringContainsString("is unsupported by this PHP runtime; using UTC.", $entrypoint);
+		self::assertStringContainsString('QUICKINSTALL_BOARD_TIMEZONE: "America/Los_Angeles"', file_get_contents($paths['compose']));
 
 		$output = file_get_contents($paths['compose']) . "\n" . file_get_contents($paths['install_config']) . "\n" . file_get_contents($paths['dockerfile']);
 		foreach ($expectedContains as $expected)
@@ -164,6 +170,7 @@ class DockerComposeWriterTest extends TestCase
 			'admin_pass' => 'password',
 			'admin_email' => 'admin@example.test',
 			'board_email' => 'board@example.test',
+			'board_timezone' => 'America/Los_Angeles',
 			'extensions' => [
 				'acme/demo' => ['mode' => 'bind', 'source' => '/tmp/acme-demo'],
 			],

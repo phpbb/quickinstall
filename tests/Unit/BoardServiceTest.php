@@ -27,8 +27,25 @@ class BoardServiceTest extends TestCase
 		self::assertSame(8090, $result['board']['port']);
 		self::assertSame('tiny', $result['board']['populate']);
 		self::assertTrue($result['board']['debug']);
+		self::assertSame('America/Los_Angeles', $result['board']['board_timezone']);
 		self::assertSame('demo', $project->boards()['demo']['name']);
 		self::assertFileExists($project->composePath('demo'));
+	}
+
+	public function testHostTimezoneUsesPhpCompatibleEnvironmentValue(): void
+	{
+		$previous = getenv('TZ');
+		putenv('TZ=US/Pacific');
+
+		try
+		{
+			$project = $this->projectWithSource('3.3.14');
+			self::assertSame('US/Pacific', (new HostTimezoneTestBoardService($project))->detectedHostTimezone());
+		}
+		finally
+		{
+			$previous === false ? putenv('TZ') : putenv('TZ=' . $previous);
+		}
 	}
 
 	public function testCreateRejectsDuplicateWithoutReplace(): void
@@ -236,6 +253,14 @@ class BoardServiceTest extends TestCase
 	}
 }
 
+class HostTimezoneTestBoardService extends BoardService
+{
+	public function detectedHostTimezone(): string
+	{
+		return $this->hostTimezone();
+	}
+}
+
 class TestBoardService extends BoardService
 {
 	private ?ServiceTestBoardRunner $runner;
@@ -253,6 +278,11 @@ class TestBoardService extends BoardService
 	protected function isPortInUse(int $port): bool
 	{
 		return $this->portInUse;
+	}
+
+	protected function hostTimezone(): string
+	{
+		return 'America/Los_Angeles';
 	}
 
 	protected function createBoardRunner(): BoardRunner

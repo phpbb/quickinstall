@@ -161,6 +161,8 @@ class BoardRunner
 		}
 
 		$this->run(array_merge($command, ['extension:purge', $name]));
+		// Drop compiled autoloaders while the extension files are still mounted.
+		$this->purgeCache($board);
 	}
 
 	/** Runs phpBB-aware style cleanup before its files disappear. */

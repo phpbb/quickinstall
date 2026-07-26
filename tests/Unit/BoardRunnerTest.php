@@ -79,7 +79,7 @@ class BoardRunnerTest extends TestCase
 		self::assertSame(['up', '-d', '--force-recreate', 'web'], array_slice($runner->runs[2], -4));
 	}
 
-	public function testUninstallExtensionDisablesThenPurges(): void
+	public function testUninstallExtensionDisablesPurgesAndClearsCache(): void
 	{
 		[$project] = $this->projectWithBoard();
 		$runner = new TestBoardRunner($project);
@@ -89,6 +89,7 @@ class BoardRunnerTest extends TestCase
 
 		self::assertSame(['extension:disable', 'vendor/demo'], array_slice($runner->capturedCommands[0], -2));
 		self::assertSame(['extension:purge', 'vendor/demo'], array_slice($runner->runs[0], -2));
+		self::assertSame('php bin/phpbbcli.php cache:purge', end($runner->runs[1]));
 	}
 
 	public function testUninstallStyleCopiesAndRunsPhpbbCleanupScript(): void
