@@ -92,6 +92,7 @@ class BoardService
 			'admin_pass' => 'password',
 			'admin_email' => 'admin@example.test',
 			'board_email' => 'board@example.test',
+			'board_timezone' => $this->hostTimezone(),
 			'extensions' => [],
 			'styles' => [],
 		];
@@ -124,6 +125,7 @@ class BoardService
 				'path' => $boardDir,
 				'populate' => $populate,
 				'debug' => $debug,
+				'board_timezone' => $config['board_timezone'],
 				'extensions' => [],
 				'styles' => [],
 				'created_at' => gmdate('c'),
@@ -140,6 +142,53 @@ class BoardService
 		$this->discardBoardBackups($backups);
 
 		return ['board' => $board, 'paths' => $paths];
+	}
+
+	/** Returns the host's PHP-supported timezone identifier, falling back to UTC. */
+	protected function hostTimezone(): string
+	{
+		$candidates = [];
+		$environment = getenv('TZ');
+		if (is_string($environment))
+		{
+			$candidates[] = ltrim(trim($environment), ':');
+		}
+
+		$localtime = realpath('/etc/localtime');
+		if (is_string($localtime) && preg_match('#/zoneinfo/(.+)$#', $localtime, $match))
+		{
+			$candidates[] = $match[1];
+		}
+
+		if (is_readable('/etc/timezone'))
+		{
+			$timezone = file_get_contents('/etc/timezone');
+			if (is_string($timezone))
+			{
+				$candidates[] = trim($timezone);
+			}
+		}
+
+		$candidates[] = date_default_timezone_get();
+		foreach ($candidates as $candidate)
+		{
+			if ($candidate === '')
+			{
+				continue;
+			}
+
+			try
+			{
+				// Match phpBB's own timezone validation semantics.
+				new \DateTimeZone($candidate);
+				return $candidate;
+			}
+			catch (\Exception $e)
+			{
+			}
+		}
+
+		return 'UTC';
 	}
 
 	private function backupBoardState(string $name): array

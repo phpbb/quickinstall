@@ -143,6 +143,7 @@ services:
     environment:
       QUICKINSTALL_PHPBB_VERSION: "{$config['phpbb']}"
       QUICKINSTALL_POPULATE: "{$config['populate']}"
+      QUICKINSTALL_BOARD_TIMEZONE: "{$config['board_timezone']}"
 
 $dbService
 
@@ -274,6 +275,12 @@ fi
 if [ ! -s /var/www/html/config.php ] && [ -f /var/www/html/install/phpbbcli.php ]; then
 	php /var/www/html/install/phpbbcli.php install /opt/quickinstall/install-config.yml
 	rm -rf /var/www/html/install
+	if php -r 'try { new DateTimeZone((string) getenv("QUICKINSTALL_BOARD_TIMEZONE")); } catch (Exception $e) { exit(1); }'; then
+		php /var/www/html/bin/phpbbcli.php config:set board_timezone "$QUICKINSTALL_BOARD_TIMEZONE"
+	else
+		echo "Host timezone '$QUICKINSTALL_BOARD_TIMEZONE' is unsupported by this PHP runtime; using UTC."
+		php /var/www/html/bin/phpbbcli.php config:set board_timezone UTC
+	fi
 	chown -R www-data:www-data /var/www/html
 fi
 
