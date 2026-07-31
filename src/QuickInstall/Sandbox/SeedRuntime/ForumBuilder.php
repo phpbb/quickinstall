@@ -33,7 +33,7 @@ class ForumBuilder extends BaseBuilder
 		$forums['lobby'] = $this->create([
 			'parent_id' => 0,
 			'forum_type' => FORUM_POST,
-			'forum_name' => $this->context->prefix . 'Lobby',
+			'forum_name' => $this->context->prefix . 'Lobby forum',
 			'forum_desc' => 'A regular forum with topics, replies, rules, and a mix of post types.',
 		], $acp, $defaultForum, 'forums');
 

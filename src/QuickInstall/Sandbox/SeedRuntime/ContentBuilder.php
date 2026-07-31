@@ -98,7 +98,7 @@ class ContentBuilder extends BaseBuilder
 
 		$sectionNames = [
 			'news' => 'News forum',
-			'lobby' => 'Lobby',
+			'lobby' => 'Lobby forum',
 			'read' => 'Read forum',
 			'unread' => 'Unread forum',
 			'parent' => 'Parent forum',
