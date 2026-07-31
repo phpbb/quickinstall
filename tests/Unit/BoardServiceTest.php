@@ -196,7 +196,7 @@ class BoardServiceTest extends TestCase
 	/**
 	 * @dataProvider sqliteSeedActionProvider
 	 */
-	public function testSqliteSeedActionRules(string $action, bool $allowed): void
+	public function testSqliteSeedActionRules(string $preset, string $action, bool $allowed): void
 	{
 		$project = $this->projectWithSource('3.3.14');
 		$project->appendBoard(['name' => 'demo', 'db' => 'sqlite']);
@@ -206,23 +206,26 @@ class BoardServiceTest extends TestCase
 		if (!$allowed)
 		{
 			$this->expectException(InvalidArgumentException::class);
-			$this->expectExceptionMessage('SQLite boards do not support fixture seeding');
+			$this->expectExceptionMessage('SQLite boards support tiny and development fixture presets only');
 		}
 
-		(new TestBoardService($project, $runner))->seed('demo', 'tiny', 1, $action);
+		(new TestBoardService($project, $runner))->seed('demo', $preset, 1, $action);
 
 		if ($allowed)
 		{
-			self::assertSame([['demo', 'tiny', 1, $action]], $runner->seeded);
+			self::assertSame([['demo', $preset, 1, $action]], $runner->seeded);
 		}
 	}
 
 	public function sqliteSeedActionProvider(): array
 	{
 		return [
-			'seed rejected' => ['seed', false],
-			'replace rejected' => ['replace', false],
-			'reset allowed' => ['reset', true],
+			'tiny seed allowed' => ['tiny', 'seed', true],
+			'development replace allowed' => ['development', 'replace', true],
+			'none seed rejected' => ['none', 'seed', false],
+			'load test seed rejected' => ['load-test', 'seed', false],
+			'random replace rejected' => ['random', 'replace', false],
+			'heavy reset allowed' => ['load-test', 'reset', true],
 		];
 	}
 

@@ -417,9 +417,9 @@ class Application
 		{
 			$this->validatePreset($populate);
 		}
-		if ($db === 'sqlite' && $populate !== 'none')
+		if ($db === 'sqlite' && !SeedPresetCatalog::supportsSqlitePopulate($populate))
 		{
-			throw new InvalidArgumentException('SQLite boards support populate none only.');
+			throw new InvalidArgumentException('SQLite boards support populate none, tiny, or development only.');
 		}
 	}
 

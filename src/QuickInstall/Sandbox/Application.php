@@ -577,9 +577,9 @@ class Application
 			$this->validatePreset($populate);
 		}
 
-		if ($db === 'sqlite' && $populate !== 'none')
+		if ($db === 'sqlite' && !SeedPresetCatalog::supportsSqlitePopulate($populate))
 		{
-			throw new InvalidArgumentException('SQLite boards currently support --populate none only. Use mariadb, mysql, or postgres for fixture seeding.');
+			throw new InvalidArgumentException('SQLite boards support --populate none, tiny, or development only. Use mariadb, mysql, or postgres for heavier fixture presets.');
 		}
 	}
 
@@ -1057,7 +1057,7 @@ class Application
 					'title' => 'board:seed',
 					'usage' => 'board:seed <name> [--preset tiny|development|load-test|random] [--seed N] [--reset|--replace]',
 					'summary' => 'Add, replace, or remove fixture content.',
-					'description' => 'Seeds repeatable phpBB development or load fixtures on an installed board. SQLite boards only support reset.',
+					'description' => 'Seeds repeatable phpBB development or load fixtures on an installed board. SQLite supports tiny and development presets.',
 					'arguments' => [
 						'<name>' => 'Required board name.',
 					],

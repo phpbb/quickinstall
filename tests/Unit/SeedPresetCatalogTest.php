@@ -24,6 +24,17 @@ class SeedPresetCatalogTest extends TestCase
 		self::assertStringContainsString('use development', SeedPresetCatalog::deprecationMessage());
 	}
 
+	public function testSqliteSupportsOnlyLightweightPresets(): void
+	{
+		self::assertTrue(SeedPresetCatalog::supportsSqlitePopulate('none'));
+		self::assertTrue(SeedPresetCatalog::supportsSqlitePopulate('tiny'));
+		self::assertTrue(SeedPresetCatalog::supportsSqliteSeed('development'));
+		self::assertFalse(SeedPresetCatalog::supportsSqliteSeed('none'));
+		self::assertFalse(SeedPresetCatalog::supportsSqliteSeed('extension-dev'));
+		self::assertFalse(SeedPresetCatalog::supportsSqliteSeed('load-test'));
+		self::assertFalse(SeedPresetCatalog::supportsSqliteSeed('random'));
+	}
+
 	public function testUnknownPresetListsOnlyVisibleChoices(): void
 	{
 		$this->expectException(InvalidArgumentException::class);

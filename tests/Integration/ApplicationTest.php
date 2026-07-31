@@ -105,6 +105,30 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('--db must be one of: mariadb, mysql, postgres, sqlite.', $result['stderr']);
 	}
 
+	public function testBoardCreateAllowsSupportedSqliteSeedPreset(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$this->addDownloadedSource($root, '3.3.14');
+
+		$result = $this->runApplication($root, [
+			'qi', 'board:create', 'demo', '--phpbb', '3.3.14', '--db', 'sqlite', '--populate', 'development',
+		], "n\n");
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertSame('sqlite', (new Project($root))->board('demo')['db']);
+		self::assertSame('development', (new Project($root))->board('demo')['populate']);
+	}
+
+	public function testBoardCreateRejectsHeavySqliteSeedPreset(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), [
+			'qi', 'board:create', 'demo', '--db', 'sqlite', '--populate', 'load-test',
+		]);
+
+		self::assertSame(1, $result['exit_code']);
+		self::assertStringContainsString('SQLite boards support --populate none, tiny, or development only.', $result['stderr']);
+	}
+
 	public function testBoardCreatePromptsToStartBoardAfterNextStep(): void
 	{
 		$root = $this->createTempProjectRoot();

@@ -228,15 +228,28 @@ class BoardRunnerTest extends TestCase
 		self::assertStringContainsString("@define('PHPBB_DISPLAY_LOAD_TIME', true);", file_get_contents($boardPath . '/config.php'));
 	}
 
-	public function testStartRejectsSqliteSeededBoards(): void
+	public function testStartAllowsSqliteDevelopmentSeededBoards(): void
 	{
 		[$project] = $this->projectWithBoard([
 			'db' => 'sqlite',
-			'populate' => 'tiny',
+			'populate' => 'development',
+		]);
+		$runner = new TestBoardRunner($project);
+
+		$runner->start('demo');
+
+		self::assertSame([['demo', 'development']], $runner->seedIfNeededRuns);
+	}
+
+	public function testStartRejectsHeavySqliteSeededBoards(): void
+	{
+		[$project] = $this->projectWithBoard([
+			'db' => 'sqlite',
+			'populate' => 'load-test',
 		]);
 
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('SQLite boards currently support populate:none only');
+		$this->expectExceptionMessage('SQLite boards support populate:none, tiny, or development only');
 
 		(new TestBoardRunner($project))->start('demo');
 	}

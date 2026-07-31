@@ -39,9 +39,9 @@ class BoardRunner
 			$this->output->write("Enabling phpBB debug config...\n");
 			$this->enableDebug($name);
 		}
-		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
+		if (($board['db'] ?? '') === 'sqlite' && !SeedPresetCatalog::supportsSqlitePopulate($board['populate'] ?? 'none'))
 		{
-			throw new RuntimeException('SQLite boards currently support populate:none only. Use mariadb, mysql, or postgres for seeded boards.');
+			throw new RuntimeException('SQLite boards support populate:none, tiny, or development only. Use mariadb, mysql, or postgres for heavier fixture presets.');
 		}
 		$this->seedIfNeeded($name, $board['populate'] ?? 'none');
 		$this->waitUntilHttpReady($name, $board['url'] ?? '');

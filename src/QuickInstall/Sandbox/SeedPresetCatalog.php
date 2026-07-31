@@ -32,6 +32,16 @@ class SeedPresetCatalog
 		return 'development';
 	}
 
+	public static function supportsSqlitePopulate(string $preset): bool
+	{
+		return $preset === 'none' || self::supportsSqliteSeed($preset);
+	}
+
+	public static function supportsSqliteSeed(string $preset): bool
+	{
+		return in_array($preset, ['tiny', 'development'], true);
+	}
+
 	public static function validate(string $preset): void
 	{
 		if (!in_array($preset, self::accepted(), true))

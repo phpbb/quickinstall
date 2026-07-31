@@ -192,7 +192,7 @@ Available presets:
 
 Every seeded preset is tracked by a preset-and-seed-specific manifest under the board's `store/` directory. This lets `--reset` and `--replace` remove only the database rows and physical files owned by that exact preset and seed. A missing manifest means there is no tracked seed data to remove.
 
-Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
+Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards support the `tiny` and `development` presets; use another database for the heavier `load-test` and `random` presets.
 
 You can seed again manually:
 
