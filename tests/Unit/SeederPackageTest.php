@@ -90,14 +90,15 @@ class SeederPackageTest extends TestCase
 		};
 		$user = (object) ['data' => []];
 		$root = $this->createTempProjectRoot() . '/';
+		$normalizedRoot = str_replace('\\', '/', $root);
 
 		$development = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 'development', 4);
 		$tiny = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 'tiny', 4);
 
 		self::assertSame('[QI 4] ', $development->prefix);
 		self::assertSame('[QI tiny 4] ', $tiny->prefix);
-		self::assertSame($root . 'store/qi-development-seed-4.json', $development->manifestPath());
-		self::assertSame($root . 'store/qi-tiny-seed-4.json', $tiny->manifestPath());
+		self::assertSame($normalizedRoot . 'store/qi-development-seed-4.json', $development->manifestPath());
+		self::assertSame($normalizedRoot . 'store/qi-tiny-seed-4.json', $tiny->manifestPath());
 		self::assertSame('tiny', $tiny->manifest['preset']);
 		self::assertSame(3, $tiny->manifest['version']);
 	}
@@ -172,10 +173,14 @@ class SeederPackageTest extends TestCase
 			}
 		};
 		$user = (object) ['data' => []];
-		$context = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 'development', 1);
+		$windowsRoot = str_replace('/', '\\', $root);
+		$context = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $windowsRoot, 'php', 'development', 1);
 
 		$context->writeFile('attachment', 'fixture.png', $path, 'fixture data');
+		$context->addFile(str_replace('/', '\\', $path));
 
+		self::assertSame(rtrim(str_replace('\\', '/', $root), '/') . '/', $context->root);
+		self::assertSame([str_replace('\\', '/', $path)], $context->manifest['files']);
 		self::assertSame('fixture data', file_get_contents($path));
 		self::assertSame([
 			[

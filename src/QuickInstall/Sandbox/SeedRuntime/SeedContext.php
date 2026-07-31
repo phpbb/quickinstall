@@ -36,7 +36,7 @@ class SeedContext
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->container = $container;
-		$this->root = rtrim($root, '/') . '/';
+		$this->root = rtrim(str_replace('\\', '/', $root), '/') . '/';
 		$this->phpEx = $phpEx;
 		$this->preset = $preset;
 		$this->seed = $seed;
