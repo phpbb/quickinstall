@@ -24,6 +24,8 @@ require_once __DIR__ . '/SourceService.php';
 require_once __DIR__ . '/BoardService.php';
 require_once __DIR__ . '/DockerComposeWriter.php';
 require_once __DIR__ . '/StyleUninstallerWriter.php';
+require_once __DIR__ . '/SeedPresetCatalog.php';
+require_once __DIR__ . '/DevelopmentSeederWriter.php';
 require_once __DIR__ . '/BoardRunner.php';
 require_once __DIR__ . '/SeederWriter.php';
 require_once __DIR__ . '/CustomisationManagerInterface.php';

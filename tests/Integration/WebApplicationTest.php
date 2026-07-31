@@ -86,6 +86,8 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('title="phpBB selector to fetch or reuse.', $html);
 		self::assertStringContainsString('title="Allow the path field to point outside the customisations directory.', $html);
 		self::assertStringContainsString('Relative to <code>customisations/</code>', $html);
+		self::assertStringContainsString('<option value="development">development</option>', $html);
+		self::assertStringNotContainsString('<option value="extension-dev">', $html);
 		self::assertStringNotContainsString('<option value="3.0.x">', $html);
 		self::assertStringNotContainsString('<style>', $html);
 	}

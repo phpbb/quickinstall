@@ -394,6 +394,16 @@ class BoardRunner
 
 	protected function runSeeder(string $name, string $preset, int $seed, string $action = 'seed'): void
 	{
+		if ($preset === 'development')
+		{
+			$package = (new DevelopmentSeederWriter($this->project))->write($name);
+			$this->output->write("Running seed preset: $preset\n");
+			$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'mkdir', '-p', '/tmp/qi-development-seed']);
+			$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $package . '/.', 'web:/tmp/qi-development-seed']);
+			$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '-d', 'memory_limit=512M', '/tmp/qi-development-seed/run.php', (string) $seed, $action]);
+			return;
+		}
+
 		$writer = new SeederWriter($this->project);
 		$script = $writer->write($name);
 

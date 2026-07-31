@@ -287,6 +287,10 @@ class Application
 		$populate = $cli->option('populate', 'none');
 		$debug = $cli->has('debug');
 		$this->validateBoardCreateOptions($db, $port, $populate);
+		if (SeedPresetCatalog::isDeprecated($populate))
+		{
+			echo 'Warning: ' . SeedPresetCatalog::deprecationMessage() . "\n";
+		}
 
 		$created = (new BoardService($this->project, $this->sandboxOutput()))->create($name, $version, $db, $port, $populate, $debug, $cli->has('replace'));
 		$paths = $created['paths'];
@@ -519,12 +523,16 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]');
+			throw new InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|development|load-test|random] [--seed N] [--reset|--replace]');
 		}
 
-		$preset = $cli->option('preset', 'extension-dev');
+		$preset = $cli->option('preset', SeedPresetCatalog::defaultSeed());
 		$seed = (int) $cli->option('seed', '1');
 		$this->validatePreset($preset);
+		if (SeedPresetCatalog::isDeprecated($preset))
+		{
+			echo 'Warning: ' . SeedPresetCatalog::deprecationMessage() . "\n";
+		}
 		if ($seed < 1)
 		{
 			throw new InvalidArgumentException('--seed must be a positive integer.');
@@ -577,10 +585,7 @@ class Application
 
 	private function validatePreset(string $preset): void
 	{
-		if (!in_array($preset, ['tiny', 'extension-dev', 'load-test', 'random'], true))
-		{
-			throw new InvalidArgumentException('Preset must be one of: tiny, extension-dev, load-test, random.');
-		}
+		SeedPresetCatalog::validate($preset);
 	}
 
 	private function extMount(array $args): int
@@ -907,7 +912,7 @@ class Application
 		echo '  ' . $this->style('qi <command> [arguments] [options]', '1;36') . "\n";
 		echo '  ' . $this->style('qi help [command]', '1;36') . "\n\n";
 		echo $this->style('Common workflow:', '1;33') . "\n";
-		echo '  ' . $this->style('qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev', '1;36') . "\n";
+		echo '  ' . $this->style('qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate development', '1;36') . "\n";
 		echo '  ' . $this->style('qi board:start demo', '1;36') . "\n\n";
 
 		foreach ($commands as $group => $items)
@@ -991,13 +996,13 @@ class Application
 						'--phpbb VERSION' => 'phpBB selector. Examples: latest, 3.3, 3.3.17, 3.2, master. Default: latest.',
 						'--db DB' => 'Database engine. One of: mariadb, mysql, postgres, sqlite. Default: mariadb.',
 						'--port PORT' => 'Local browser port. Default: 8080.',
-						'--populate PRESET' => 'Seed preset. One of: none, tiny, extension-dev, load-test, random. Default: none.',
+						'--populate PRESET' => 'Seed preset. One of: none, tiny, development, load-test, random. Default: none.',
 						'--debug' => 'Enable phpBB debug settings after install.',
 						'--replace' => 'Destroy an existing board with the same name before creating the new one.',
 					],
 					'examples' => [
 						'board:create demo --phpbb 3.3 --db mariadb --port 8081',
-						'board:create extdev --phpbb 3.3.17 --populate extension-dev --debug',
+						'board:create dev --phpbb 3.3.17 --populate development --debug',
 					],
 				],
 				'board:start' => [
@@ -1050,21 +1055,21 @@ class Application
 				],
 				'board:seed' => [
 					'title' => 'board:seed',
-					'usage' => 'board:seed <name> [--preset tiny|extension-dev|load-test|random] [--seed N] [--reset|--replace]',
+					'usage' => 'board:seed <name> [--preset tiny|development|load-test|random] [--seed N] [--reset|--replace]',
 					'summary' => 'Add, replace, or remove fixture content.',
-					'description' => 'Seeds categories, forums, users, topics, and replies on an installed board. SQLite boards only support reset.',
+					'description' => 'Seeds repeatable phpBB development or load fixtures on an installed board. SQLite boards only support reset.',
 					'arguments' => [
 						'<name>' => 'Required board name.',
 					],
 					'options' => [
-						'--preset PRESET' => 'Fixture preset. One of: tiny, extension-dev, load-test, random. Default: extension-dev.',
+						'--preset PRESET' => 'Fixture preset. One of: tiny, development, load-test, random. Default: development.',
 						'--seed N' => 'Positive random seed number for repeatable fixture shape. Default: 1.',
 						'--replace' => 'Remove existing QuickInstall seed data, then seed again.',
 						'--reset' => 'Remove existing QuickInstall seed data without adding new data.',
 					],
 					'examples' => [
-						'board:seed demo --preset extension-dev --seed 1',
-						'board:seed demo --preset extension-dev --replace',
+						'board:seed demo --preset development --seed 1',
+						'board:seed demo --preset development --replace',
 					],
 				],
 			],

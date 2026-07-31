@@ -33,6 +33,16 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('qi board:create <name>', $result['output']);
 	}
 
+	public function testSeedHelpShowsDevelopmentAndHidesDeprecatedPreset(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'board:seed', '--help']);
+
+		self::assertSame(0, $result['exit_code']);
+		self::assertStringContainsString('tiny|development|load-test|random', $result['output']);
+		self::assertStringContainsString('Default: development.', $result['output']);
+		self::assertStringNotContainsString('extension-dev', $result['output']);
+	}
+
 	public function testInitCreatesWorkspace(): void
 	{
 		$root = $this->createTempProjectRoot();

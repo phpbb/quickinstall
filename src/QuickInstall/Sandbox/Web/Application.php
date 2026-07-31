@@ -21,6 +21,7 @@ use QuickInstall\Sandbox\CustomisationUnmountService;
 use QuickInstall\Sandbox\DoctorService;
 use QuickInstall\Sandbox\ExtensionManager;
 use QuickInstall\Sandbox\Project;
+use QuickInstall\Sandbox\SeedPresetCatalog;
 use QuickInstall\Sandbox\SourceService;
 use QuickInstall\Sandbox\StyleManager;
 use QuickInstall\Sandbox\UpdateService;
@@ -216,6 +217,10 @@ class Application
 					$port = (int) ($this->optional('port') ?: '8080');
 					$populate = $this->optional('populate') ?: 'none';
 					$this->validateBoardCreateOptions($db, $port, $populate);
+					if (SeedPresetCatalog::isDeprecated($populate))
+					{
+						$this->output->write('Warning: ' . SeedPresetCatalog::deprecationMessage() . "\n");
+					}
 					(new BoardService($this->project, $this->output))->create($name, $version, $db, $port, $populate, $this->checked('debug'), $this->checked('replace'));
 					$this->notice = "Created board: $name";
 				break;
@@ -240,9 +245,13 @@ class Application
 
 				case 'board_seed':
 					$name = $this->required('name');
-					$preset = $this->optional('preset') ?: 'extension-dev';
+					$preset = $this->optional('preset') ?: SeedPresetCatalog::defaultSeed();
 					$seed = (int) ($this->optional('seed') ?: '1');
 					$this->validatePreset($preset);
+					if (SeedPresetCatalog::isDeprecated($preset))
+					{
+						$this->output->write('Warning: ' . SeedPresetCatalog::deprecationMessage() . "\n");
+					}
 					if ($seed < 1)
 					{
 						throw new InvalidArgumentException('Seed must be a positive integer.');
@@ -416,10 +425,7 @@ class Application
 
 	private function validatePreset(string $preset): void
 	{
-		if (!in_array($preset, ['tiny', 'extension-dev', 'load-test', 'random'], true))
-		{
-			throw new InvalidArgumentException('Preset must be one of: tiny, extension-dev, load-test, random.');
-		}
+		SeedPresetCatalog::validate($preset);
 	}
 
 	private function render(): void
@@ -541,8 +547,8 @@ class Application
 			'sources' => $viewSources,
 			'versionOptions' => $this->versionOptions($versions, $sources),
 			'dbOptions' => ['mariadb', 'mysql', 'postgres', 'sqlite'],
-			'populateOptions' => ['none', 'tiny', 'extension-dev', 'load-test', 'random'],
-			'presetOptions' => ['tiny', 'extension-dev', 'load-test', 'random'],
+			'populateOptions' => array_merge(['none'], SeedPresetCatalog::visible()),
+			'presetOptions' => SeedPresetCatalog::visible(),
 			'seedActionOptions' => ['seed', 'replace', 'reset'],
 		];
 	}
