@@ -56,6 +56,13 @@ class ContentBuilder extends BaseBuilder
 		$this->context->db->sql_query('UPDATE ' . TOPICS_TABLE . '
 			SET topic_status = ' . ITEM_LOCKED . '
 			WHERE topic_id = ' . $items['locked']['topic_id']);
+		$this->addModeratorLog(
+			$users['admin'],
+			$forums['lobby'],
+			$items['locked']['topic_id'],
+			'LOG_LOCK',
+			[$this->context->prefix . 'Locked topic']
+		);
 		$items['icon'] = $this->createTopic(
 			$forums['lobby'],
 			$users['regular_2'],
@@ -81,6 +88,13 @@ class ContentBuilder extends BaseBuilder
 			'topic_id' => $this->createMovedRedirect($forums['read'], $items['moved_target']['topic_id']),
 			'post_id' => 0,
 		];
+		$this->addModeratorLog(
+			$users['moderator'],
+			$forums['read'],
+			$items['moved_target']['topic_id'],
+			'LOG_MOVE',
+			[$this->forumName($forums['read']), $this->forumName($forums['lobby'])]
+		);
 
 		$sectionNames = [
 			'news' => 'News forum',
@@ -135,7 +149,8 @@ class ContentBuilder extends BaseBuilder
 		$bbcode = 'This reply shows several formatting options in one place.
 
 [b]Bold text[/b], [i]italic text[/i], [u]underlined text[/u], and [s]strikethrough text[/s].
-[color=#AA0000]Colored text[/color] and [size=150]larger text[/size].
+[color=red]Red text[/color], [color=#00AA00]green text[/color], and [color=blue]blue text[/color].
+[size=50]Smaller text[/size] and [size=150]larger text[/size].
 
 [quote="Sample user"]This quote also includes [url=https://www.phpbb.com/]a link[/url].[/quote]
 
@@ -146,13 +161,18 @@ class ContentBuilder extends BaseBuilder
 [list]
 [*]First item
 [*]Second item
+[list=a]
+[*]First alphabetical item
+[*]Second alphabetical item
+[/list]
+[/list]
+
 [list=1]
 [*]First numbered item
 [*]Second numbered item
 [/list]
-[/list]
 
-Common smileys: :) :D ;) :( :o :P :lol: :idea: :arrow:';
+Common smileys: :) :D ;) :( :o :? 8-) :lol: :x :P :oops: :cry: :evil: :twisted: :roll: :!: :idea: :arrow: :geek: :ugeek:';
 		$items['bbcode_reply'] = [
 			'topic_id' => $items['bbcode']['topic_id'],
 			'post_id' => $this->createReply(
@@ -169,14 +189,14 @@ Common smileys: :) :D ;) :( :o :P :lol: :idea: :arrow:';
 			$this->forums['lobby'],
 			$this->users['regular_2'],
 			'Deep quote nesting',
-			'This topic contains a reply with four quote levels so deeply nested quotes are easy to find.'
+			'This topic contains a reply with three quote levels so deeply nested quotes are easy to find.'
 		);
 		$this->createReply(
 			$items['quotes']['topic_id'],
 			$this->forums['lobby'],
 			$this->users['admin'],
 			'Deep quote nesting',
-			'[quote="User one"][quote="User two"][quote="User three"][quote="User four"]Innermost quote.[/quote]Third-level reply.[/quote]Second-level reply.[/quote]First-level reply.[/quote]This text appears after all four quote levels.',
+			'[quote="User one"][quote="User two"][quote="User three"]Innermost quote.[/quote]Second-level reply.[/quote]First-level reply.[/quote]This text appears after all three quote levels.',
 			'quotes'
 		);
 
@@ -191,7 +211,11 @@ Common smileys: :) :D ;) :( :o :P :lol: :idea: :arrow:';
 			$this->forums['lobby'],
 			$this->users['moderator_2'],
 			'Long content and overflow',
-			'https://example.test/events/summer-community-picnic/registration/this-is-an-intentionally-long-address-without-any-natural-break-points
+			'This unbroken word checks that long text wraps without stretching the page:
+SupercalifragilisticexpialidociousSupercalifragilisticexpialidociousSupercalifragilisticexpialidociousSupercalifragilisticexpialidocious
+
+This long address checks link wrapping:
+https://example.test/events/summer-community-picnic/registration/this-is-an-intentionally-long-address-without-any-natural-break-points
 
 [code]------------------------------------------------------------------------------------------------------------------------
 This line is intentionally wide and should remain readable without breaking the surrounding page.
@@ -465,6 +489,53 @@ This line is intentionally wide and should remain readable without breaking the 
 		}
 		$this->context->addId('topics', $id);
 		return $id;
+	}
+
+	private function addModeratorLog(
+		int $userId,
+		int $forumId,
+		int $topicId,
+		string $operation,
+		array $data
+	): void
+	{
+		$db = $this->context->db;
+		$result = $db->sql_query_limit('SELECT log_id FROM ' . LOG_TABLE . "
+			WHERE log_type = " . LOG_MOD . '
+				AND forum_id = ' . $forumId . '
+				AND topic_id = ' . $topicId . "
+				AND log_operation = '" . $db->sql_escape($operation) . "'",
+			1
+		);
+		$logId = (int) $db->sql_fetchfield('log_id');
+		$db->sql_freeresult($result);
+		if (!$logId)
+		{
+			$logId = (int) $this->context->container->get('log')->add(
+				'mod',
+				$userId,
+				'127.0.0.1',
+				$operation,
+				false,
+				array_merge(['forum_id' => $forumId, 'topic_id' => $topicId], $data)
+			);
+		}
+		if (!$logId)
+		{
+			throw new RuntimeException("Unable to create development moderator log: $operation");
+		}
+		$this->context->addId('logs', $logId);
+	}
+
+	private function forumName(int $forumId): string
+	{
+		$result = $this->context->db->sql_query_limit(
+			'SELECT forum_name FROM ' . FORUMS_TABLE . ' WHERE forum_id = ' . $forumId,
+			1
+		);
+		$name = (string) $this->context->db->sql_fetchfield('forum_name');
+		$this->context->db->sql_freeresult($result);
+		return $name;
 	}
 
 	private function firstIcon(): int

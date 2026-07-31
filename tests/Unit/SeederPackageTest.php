@@ -50,6 +50,14 @@ class SeederPackageTest extends TestCase
 		self::assertStringContainsString('This forum is marked as read', file_get_contents($path . '/ForumBuilder.php'));
 		self::assertStringContainsString('Announcement topic', file_get_contents($path . '/ContentBuilder.php'));
 		self::assertStringContainsString('Pagination topic', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString("'LOG_LOCK'", file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString("'LOG_MOVE'", file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString("addId('logs', \$logId)", file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString("ids('logs')", file_get_contents($path . '/Seeder.php'));
+		self::assertStringContainsString('[size=50]Smaller text[/size]', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString('[list=a]', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString('reply with three quote levels', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString('SupercalifragilisticexpialidociousSupercalifragilisticexpialidocious', file_get_contents($path . '/ContentBuilder.php'));
 		self::assertStringContainsString('Unread private message', file_get_contents($path . '/StateBuilder.php'));
 		self::assertStringContainsString("sprintf('[QI %d] '", file_get_contents($path . '/SeedContext.php'));
 		self::assertStringContainsString("defined('BANS_TABLE')", file_get_contents($path . '/SeedContext.php'));

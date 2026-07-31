@@ -174,8 +174,6 @@ php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate tin
 
 Fixture seeding populates a board with repeatable test data. The `development` preset favors meaningful phpBB states over raw volume; use `load-test` when topic and post volume is the primary goal.
 
-All presets use the same phpBB-aware runtime, preset-specific manifest, reset process, and compatibility adapters. Presets select different content plans rather than different seeding engines.
-
 Use `--populate <preset>` during `board:create`:
 
 ```bash
@@ -184,33 +182,13 @@ php bin/qi board:create demo --populate development
 
 Available presets:
 
-| Preset        | Description                                                                                           |
-|---------------|-------------------------------------------------------------------------------------------------------|
-| `none`        | No seed data                                                                                          |
-| `tiny`        | 3 users, 1 category, 2 forums, 2 topics, 2 replies per topic                                          |
-| `development` | 25 users, 4 categories, 12 new forums, 47 topic rows, 90 posts, and comprehensive development states |
-| `load-test`   | 100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic                                  |
-| `random`      | Random counts up to load-test size                                                                    |
-
-`extension-dev` is deprecated and hidden from CLI help and Dashboard selectors. Existing scripts and saved boards may continue using it; it retains its original 10-user, 6-forum, 25-topic behavior. New workflows should use `development`.
-
-### Development fixture coverage
-
-The `development` preset creates:
-
-- Compact `[QI N]` markers followed by plain-language labels, making each generated content type easy to find.
-- Exactly 25 generated users assigned across Registered Users, Global Moderators, and Administrators. Every generated user has a deterministic 80×80 avatar and parsed signature. Dedicated users exercise inactive, banned, and warned-account layouts.
-- Four categories and twelve new forums covering root-level, read, unread, locked, password-protected, private, empty, nested subforum, link redirect, rules text, and forum-icon states. Generated users and the protected forum both use `password`.
-- Normal, sticky, announcement, global announcement, locked, icon, and moved-redirect topics.
-- Plain-language, descriptive posts covering rich BBCode, smileys, lists, code blocks, deep quotes, long-content overflow, moderation, and multi-page topics.
-- Two polls: one active and unvoted, plus one with a deterministic six-user vote distribution.
-- A generated PNG attachment and generated ZIP attachment.
-- An open post report, an open private-message report, and two user warnings.
-- Nine clearly labeled private messages covering unread, read, sent, reported, and peer-to-peer states.
-- A bookmark, topic watch, forum watch, saved draft, and three unread notifications for the installed founder account.
-- Search indexing through the board's configured phpBB search backend.
-
-Avatars, the forum icon, the image attachment, and the ZIP archive are generated locally from the numeric seed. Seeding performs no asset downloads and bundles no third-party media.
+| Preset        | Description                                                                                                               |
+|---------------|---------------------------------------------------------------------------------------------------------------------------|
+| `none`        | No seed data                                                                                                              |
+| `tiny`        | 3 users, 1 category, 2 forums, 2 topics, 2 replies per topic                                                              |
+| `development` | 25 users, 12 forums, 90 posts, plus rich sample content and states ideal for developing and testing extensions and styles |
+| `load-test`   | 100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic                                                      |
+| `random`      | Random counts up to load-test size                                                                                        |
 
 Every seeded preset is tracked by a preset-and-seed-specific manifest under the board's `store/` directory. This lets `--reset` and `--replace` remove only the database rows and physical files owned by that exact preset and seed. A missing manifest means there is no tracked seed data to remove.
 

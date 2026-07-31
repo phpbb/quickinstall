@@ -83,6 +83,7 @@ class Seeder
 		$this->deleteByIds(REPORTS_TABLE, 'report_id', $this->context->ids('reports'));
 		$this->deleteByIds(DRAFTS_TABLE, 'draft_id', $this->context->ids('drafts'));
 		$this->deleteByIds(ATTACHMENTS_TABLE, 'attach_id', $this->context->ids('attachments'));
+		$this->deleteByIds(LOG_TABLE, 'log_id', $this->context->ids('logs'));
 
 		$messageIds = $this->context->ids('messages');
 		$this->deleteByIds(PRIVMSGS_TO_TABLE, 'msg_id', $messageIds);
