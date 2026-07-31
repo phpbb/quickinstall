@@ -101,6 +101,7 @@ This project is maintained by the phpBB Customisations Team.
 - Originally created by Igor “igorw” Wiedler in the summer of 2007.
 - Maintained by Jari “tumba25” Kanerva from March 2010 to March 2015.
 - Maintained by Matt “MattF” Friedman since 2016.
+- Thanks to Vinny for creating [phpBB Style Tester](https://github.com/vinny/phpbb-style-tester), which inspired QuickInstall's development seed preset.
 - Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD.
 - Thanks to the beta testers!
 - Thanks to the phpBB community including phpBB.com, startrekguide.com, and phpBBModders.net!
