@@ -162,10 +162,17 @@ class BoardRunnerTest extends TestCase
 
 		$runner->runSeederForTest('demo', 'load-test', 1, 'replace');
 
-		self::assertSame(['php', '-d', 'memory_limit=512M', '/tmp/qi_seed.php', 'load-test', '1', 'replace'], array_slice($runner->runs[1], -7));
+		self::assertCount(3, $runner->runs);
+		self::assertSame(['mkdir', '-p', '/tmp/qi-seed-runtime'], array_slice($runner->runs[0], -3));
+		self::assertStringEndsWith('/seed-runtime/.', $runner->runs[1][5]);
+		self::assertSame('web:/tmp/qi-seed-runtime', $runner->runs[1][6]);
+		self::assertSame(
+			['php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', 'load-test', '1', 'replace'],
+			array_slice($runner->runs[2], -7)
+		);
 	}
 
-	public function testDevelopmentSeederCopiesAndRunsModularPackage(): void
+	public function testDevelopmentPresetUsesSameSeederPackage(): void
 	{
 		[$project] = $this->projectWithBoard();
 		mkdir($project->runtimePath('demo'), 0775, true);
@@ -174,12 +181,12 @@ class BoardRunnerTest extends TestCase
 		$runner->runSeederForTest('demo', 'development', 4, 'replace');
 
 		self::assertCount(3, $runner->runs);
-		self::assertSame(['mkdir', '-p', '/tmp/qi-development-seed'], array_slice($runner->runs[0], -3));
-		self::assertStringEndsWith('/development-seed/.', $runner->runs[1][5]);
-		self::assertSame('web:/tmp/qi-development-seed', $runner->runs[1][6]);
+		self::assertSame(['mkdir', '-p', '/tmp/qi-seed-runtime'], array_slice($runner->runs[0], -3));
+		self::assertStringEndsWith('/seed-runtime/.', $runner->runs[1][5]);
+		self::assertSame('web:/tmp/qi-seed-runtime', $runner->runs[1][6]);
 		self::assertSame(
-			['php', '-d', 'memory_limit=512M', '/tmp/qi-development-seed/run.php', '4', 'replace'],
-			array_slice($runner->runs[2], -6)
+			['php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', 'development', '4', 'replace'],
+			array_slice($runner->runs[2], -7)
 		);
 	}
 

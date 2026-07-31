@@ -14,8 +14,14 @@ if (PHP_SAPI !== 'cli')
 	exit(1);
 }
 
-$seed = (int) ($argv[1] ?? 1);
-$action = $argv[2] ?? 'seed';
+$preset = (string) ($argv[1] ?? 'development');
+$seed = (int) ($argv[2] ?? 1);
+$action = $argv[3] ?? 'seed';
+if (!in_array($preset, ['tiny', 'development', 'extension-dev', 'load-test', 'random'], true))
+{
+	fwrite(STDERR, "Unknown seed preset: $preset\n");
+	exit(1);
+}
 if ($seed < 1)
 {
 	fwrite(STDERR, "Seed must be a positive integer.\n");
@@ -64,6 +70,8 @@ require_once __DIR__ . '/ForumBuilder.php';
 require_once __DIR__ . '/ContentBuilder.php';
 require_once __DIR__ . '/StateBuilder.php';
 require_once __DIR__ . '/DevelopmentSeeder.php';
+require_once __DIR__ . '/StandardSeeder.php';
+require_once __DIR__ . '/Seeder.php';
 
 try
 {
@@ -75,13 +83,14 @@ try
 		$phpbb_container,
 		$phpbb_root_path,
 		$phpEx,
+		$preset,
 		$seed
 	);
-	(new \QuickInstallSeed\DevelopmentSeeder($context))->run($action);
+	(new \QuickInstallSeed\Seeder($context))->run($action);
 	exit(0);
 }
 catch (\Throwable $exception)
 {
-	fwrite(STDERR, 'Development seed failed: ' . $exception->getMessage() . "\n");
+	fwrite(STDERR, 'Seed failed: ' . $exception->getMessage() . "\n");
 	exit(1);
 }

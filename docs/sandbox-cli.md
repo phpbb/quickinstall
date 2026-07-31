@@ -174,6 +174,8 @@ php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate tin
 
 Fixture seeding populates a board with repeatable test data. The `development` preset favors meaningful phpBB states over raw volume; use `load-test` when topic and post volume is the primary goal.
 
+All presets use the same phpBB-aware runtime, preset-specific manifest, reset process, and compatibility adapters. Presets select different content plans rather than different seeding engines.
+
 Use `--populate <preset>` during `board:create`:
 
 ```bash
@@ -210,7 +212,7 @@ The `development` preset creates:
 
 Avatars, the forum icon, the image attachment, and the ZIP archive are generated locally from the numeric seed. Seeding performs no asset downloads and bundles no third-party media.
 
-Development fixtures are tracked by a manifest under the board's `store/` directory. This lets `--reset` and `--replace` remove owned database rows and physical files. If the manifest is missing, QuickInstall falls back to its deterministic fixture prefixes.
+Every seeded preset is tracked by a preset-and-seed-specific manifest under the board's `store/` directory. This lets `--reset` and `--replace` remove only the database rows and physical files owned by that exact preset and seed. A missing manifest means there is no tracked seed data to remove.
 
 Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
 

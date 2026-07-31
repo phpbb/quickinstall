@@ -3,13 +3,13 @@
 namespace QuickInstall\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use QuickInstall\Sandbox\DevelopmentSeederWriter;
 use QuickInstall\Sandbox\Project;
+use QuickInstall\Sandbox\SeederWriter;
 use QuickInstall\Tests\Support\TempProjectTrait;
 
 require_once dirname(__DIR__, 2) . '/src/QuickInstall/Sandbox/SeedRuntime/SeedContext.php';
 
-class DevelopmentSeederWriterTest extends TestCase
+class SeederPackageTest extends TestCase
 {
 	use TempProjectTrait;
 
@@ -19,12 +19,14 @@ class DevelopmentSeederWriterTest extends TestCase
 		$project->init();
 		mkdir($project->runtimePath('demo'), 0775, true);
 
-		$path = (new DevelopmentSeederWriter($project))->write('demo');
+		$path = (new SeederWriter($project))->write('demo');
 
-		self::assertSame($project->runtimePath('demo') . '/development-seed', $path);
+		self::assertSame($project->runtimePath('demo') . '/seed-runtime', $path);
 		foreach ([
 			'run.php',
+			'Seeder.php',
 			'SeedContext.php',
+			'StandardSeeder.php',
 			'UserBuilder.php',
 			'ForumBuilder.php',
 			'ContentBuilder.php',
@@ -36,6 +38,11 @@ class DevelopmentSeederWriterTest extends TestCase
 		}
 		self::assertStringContainsString("'25 users'", file_get_contents($path . '/DevelopmentSeeder.php'));
 		self::assertStringContainsString("'90 posts'", file_get_contents($path . '/DevelopmentSeeder.php'));
+		self::assertStringContainsString("'tiny' =>", file_get_contents($path . '/StandardSeeder.php'));
+		self::assertStringContainsString("'extension-dev' =>", file_get_contents($path . '/StandardSeeder.php'));
+		self::assertStringContainsString("'load-test' =>", file_get_contents($path . '/StandardSeeder.php'));
+		self::assertStringContainsString("'random' =>", file_get_contents($path . '/StandardSeeder.php'));
+		self::assertStringContainsString('one manifest, reset, and finalization lifecycle', file_get_contents($path . '/Seeder.php'));
 		self::assertStringContainsString('AssetFactory::png(80, 80', file_get_contents($path . '/UserBuilder.php'));
 		self::assertStringContainsString("public const PASSWORD = 'password';", file_get_contents($path . '/SeedContext.php'));
 		self::assertStringContainsString('Password: password', file_get_contents($path . '/ForumBuilder.php'));
@@ -61,6 +68,28 @@ class DevelopmentSeederWriterTest extends TestCase
 		self::assertNotSame($first, $different);
 		self::assertSame("\x89PNG\r\n\x1a\n", substr($first, 0, 8));
 		self::assertGreaterThan(100, strlen($first));
+	}
+
+	public function testSeedContextUsesPresetSpecificIdentityAndManifest(): void
+	{
+		$container = new class {
+			public function has(string $name): bool
+			{
+				return false;
+			}
+		};
+		$user = (object) ['data' => []];
+		$root = $this->createTempProjectRoot() . '/';
+
+		$development = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 'development', 4);
+		$tiny = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 'tiny', 4);
+
+		self::assertSame('[QI 4] ', $development->prefix);
+		self::assertSame('[QI tiny 4] ', $tiny->prefix);
+		self::assertSame($root . 'store/qi-development-seed-4.json', $development->manifestPath());
+		self::assertSame($root . 'store/qi-tiny-seed-4.json', $tiny->manifestPath());
+		self::assertSame('tiny', $tiny->manifest['preset']);
+		self::assertSame(3, $tiny->manifest['version']);
 	}
 
 	public function testGeneratedZipContainsOnlyLocalFixtureFiles(): void
@@ -133,7 +162,7 @@ class DevelopmentSeederWriterTest extends TestCase
 			}
 		};
 		$user = (object) ['data' => []];
-		$context = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 1);
+		$context = new \QuickInstallSeed\SeedContext(null, $user, null, [], $container, $root, 'php', 'development', 1);
 
 		$context->writeFile('attachment', 'fixture.png', $path, 'fixture data');
 

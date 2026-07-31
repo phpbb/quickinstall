@@ -73,6 +73,8 @@ php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate dev
 
 The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.
 
+All fixture presets run through one phpBB-aware seeding runtime with shared manifests, reset behavior, generated-file tracking, and version compatibility.
+
 If you prefer a browser workflow, start the QuickInstall Dashboard UI:
 
 ```bash

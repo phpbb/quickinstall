@@ -23,12 +23,13 @@ class SeedContext
 	public $container;
 	public $root;
 	public $phpEx;
+	public $preset;
 	public $seed;
 	public $prefix;
 	public $manifest;
 	private $originalUser;
 
-	public function __construct($db, $user, $auth, $config, $container, string $root, string $phpEx, int $seed)
+	public function __construct($db, $user, $auth, $config, $container, string $root, string $phpEx, string $preset, int $seed)
 	{
 		$this->db = $db;
 		$this->user = $user;
@@ -37,19 +38,27 @@ class SeedContext
 		$this->container = $container;
 		$this->root = rtrim($root, '/') . '/';
 		$this->phpEx = $phpEx;
+		$this->preset = $preset;
 		$this->seed = $seed;
-		$this->prefix = sprintf('[QI %d] ', $seed);
+		$this->prefix = $preset === 'development'
+			? sprintf('[QI %d] ', $seed)
+			: sprintf('[QI %s %d] ', $preset, $seed);
+		$this->resetManifest();
+		$this->originalUser = $user->data;
+	}
+
+	public function resetManifest(): void
+	{
 		$this->manifest = [
-			'version' => 2,
-			'preset' => 'development',
-			'seed' => $seed,
+			'version' => 3,
+			'preset' => $this->preset,
+			'seed' => $this->seed,
 			'created_at' => gmdate('c'),
 			'ids' => [],
 			'files' => [],
 			'storage_files' => [],
 			'meta' => [],
 		];
-		$this->originalUser = $user->data;
 	}
 
 	public function status(string $message): void
@@ -60,7 +69,8 @@ class SeedContext
 
 	public function manifestPath(): string
 	{
-		return $this->root . 'store/qi-development-seed-' . $this->seed . '.json';
+		$preset = preg_replace('/[^A-Za-z0-9._-]/', '_', $this->preset);
+		return $this->root . 'store/qi-' . $preset . '-seed-' . $this->seed . '.json';
 	}
 
 	public function loadManifest(): bool
@@ -72,11 +82,11 @@ class SeedContext
 		}
 
 		$data = json_decode((string) file_get_contents($path), true);
-		if (!is_array($data) || ($data['preset'] ?? '') !== 'development' || (int) ($data['seed'] ?? 0) !== $this->seed)
+		if (!is_array($data) || ($data['preset'] ?? '') !== $this->preset || (int) ($data['seed'] ?? 0) !== $this->seed)
 		{
-			throw new RuntimeException("Invalid development seed manifest: $path");
+			throw new RuntimeException("Invalid seed manifest: $path");
 		}
-		$data['version'] = 2;
+		$data['version'] = 3;
 		$data['storage_files'] = $data['storage_files'] ?? [];
 		$this->manifest = $data;
 		return true;
@@ -94,7 +104,7 @@ class SeedContext
 		$json = json_encode($this->manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 		if ($json === false || file_put_contents($path, $json . "\n", LOCK_EX) === false)
 		{
-			throw new RuntimeException("Unable to write development seed manifest: $path");
+			throw new RuntimeException("Unable to write seed manifest: $path");
 		}
 	}
 
@@ -357,7 +367,7 @@ class SeedContext
 			}
 			if (is_file($path) && !unlink($path))
 			{
-				throw new RuntimeException("Unable to delete development seed file: $path");
+				throw new RuntimeException("Unable to delete seed file: $path");
 			}
 		}
 	}
