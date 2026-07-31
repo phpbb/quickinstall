@@ -16,8 +16,6 @@ class UserBuilder extends BaseBuilder
 {
 	public function seed(): array
 	{
-		$db = $this->context->db;
-		$passwords = $this->context->container->get('passwords.manager');
 		$registered = $this->requiredGroup('REGISTERED');
 		$administrators = $this->requiredGroup('ADMINISTRATORS');
 		$moderators = $this->requiredGroup('GLOBAL_MODERATORS');
@@ -26,36 +24,12 @@ class UserBuilder extends BaseBuilder
 		for ($index = 1; $index <= 25; $index++)
 		{
 			$username = sprintf('qi_dev_%d_user_%02d', $this->context->seed, $index);
-			$result = $db->sql_query_limit(
-				'SELECT user_id FROM ' . USERS_TABLE . "
-					WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'",
-				1
-			);
-			$userId = (int) $db->sql_fetchfield('user_id');
-			$db->sql_freeresult($result);
-
-			if (!$userId)
-			{
-				$userId = (int) user_add([
-					'username' => $username,
-					'user_password' => $passwords->hash(SeedContext::PASSWORD),
-					'user_email' => sprintf('%s@example.test', $username),
-					'group_id' => $registered,
-					'user_type' => USER_NORMAL,
-					'user_ip' => '127.0.0.1',
-					'user_lang' => 'en',
-				]);
-			}
-			if (!$userId)
-			{
-				throw new RuntimeException("Unable to create development user: $username");
-			}
+			$userId = $this->createUser($username, $registered);
 
 			$targetGroup = $index <= 2 ? $administrators : ($index <= 4 ? $moderators : $registered);
 			group_user_add($targetGroup, [$userId], false, false, true);
 			$this->applySignature($userId, $username);
 			$this->applyAvatar($userId, $index);
-			$this->context->addId('users', $userId);
 			$users[$index] = $userId;
 		}
 
@@ -77,6 +51,74 @@ class UserBuilder extends BaseBuilder
 		];
 		$this->context->setMeta('users', $roles);
 		return $roles;
+	}
+
+	public function seedVolume(int $count, bool $groups): array
+	{
+		$registered = $this->requiredGroup('REGISTERED');
+		$users = [];
+		$slug = str_replace('-', '_', $this->context->preset);
+		for ($index = 1; $index <= $count; $index++)
+		{
+			$users[] = $this->createUser(
+				sprintf('qi_%s_%d_user_%03d', $slug, $this->context->seed, $index),
+				$registered
+			);
+		}
+
+		$posters = $users;
+		if ($groups && count($users) >= 5)
+		{
+			$moderators = array_slice($users, 0, 2);
+			$newlyRegistered = array_slice($users, -2);
+			$moderatorGroup = $this->context->groupId('GLOBAL_MODERATORS');
+			$newUserGroup = $this->context->groupId('NEWLY_REGISTERED');
+			if ($moderatorGroup)
+			{
+				group_user_add($moderatorGroup, $moderators, false, false, true);
+			}
+			if ($newUserGroup)
+			{
+				group_user_add($newUserGroup, $newlyRegistered);
+			}
+			$excluded = array_fill_keys($newlyRegistered, true);
+			$posters = array_values(array_filter($users, static function ($userId) use ($excluded)
+			{
+				return !isset($excluded[$userId]);
+			}));
+		}
+
+		return $posters ?: $users;
+	}
+
+	private function createUser(string $username, int $registeredGroup): int
+	{
+		$db = $this->context->db;
+		$result = $db->sql_query_limit(
+			'SELECT user_id FROM ' . USERS_TABLE . "
+				WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'",
+			1
+		);
+		$userId = (int) $db->sql_fetchfield('user_id');
+		$db->sql_freeresult($result);
+		if (!$userId)
+		{
+			$userId = (int) user_add([
+				'username' => $username,
+				'user_password' => $this->context->container->get('passwords.manager')->hash(SeedContext::PASSWORD),
+				'user_email' => sprintf('%s@example.test', $username),
+				'group_id' => $registeredGroup,
+				'user_type' => USER_NORMAL,
+				'user_ip' => '127.0.0.1',
+				'user_lang' => 'en',
+			]);
+		}
+		if (!$userId)
+		{
+			throw new RuntimeException("Unable to create seed user: $username");
+		}
+		$this->context->addId('users', $userId);
+		return $userId;
 	}
 
 	private function requiredGroup(string $name): int

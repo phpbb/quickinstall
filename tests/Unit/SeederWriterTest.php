@@ -23,11 +23,11 @@ class SeederWriterTest extends TestCase
 		self::assertDirectoryExists($path);
 		self::assertFileExists($path . '/run.php');
 		self::assertFileExists($path . '/Seeder.php');
-		self::assertFileExists($path . '/StandardSeeder.php');
+		self::assertFileExists($path . '/VolumeSeeder.php');
 		self::assertFileExists($path . '/DevelopmentSeeder.php');
-		self::assertStringContainsString("'tiny' =>", file_get_contents($path . '/StandardSeeder.php'));
-		self::assertStringContainsString("'load-test' =>", file_get_contents($path . '/StandardSeeder.php'));
-		self::assertStringContainsString('gc_collect_cycles', file_get_contents($path . '/StandardSeeder.php'));
+		self::assertStringContainsString("'tiny' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString("'load-test' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString('gc_collect_cycles', file_get_contents($path . '/ContentBuilder.php'));
 		self::assertStringContainsString('class Seeder', file_get_contents($path . '/Seeder.php'));
 	}
 }

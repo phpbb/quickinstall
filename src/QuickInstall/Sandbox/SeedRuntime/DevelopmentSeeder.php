@@ -10,18 +10,9 @@
 
 namespace QuickInstallSeed;
 
-use RuntimeException;
-
 /** Builds and verifies the comprehensive development content plan. */
-class DevelopmentSeeder
+class DevelopmentSeeder extends SeedPlan
 {
-	private $context;
-
-	public function __construct(SeedContext $context)
-	{
-		$this->context = $context;
-	}
-
 	public function seed(): void
 	{
 		$this->context->status('Creating 25 development users and generated avatars...');
@@ -87,46 +78,8 @@ class DevelopmentSeeder
 			'announcement topic' => $this->topicStateCount('topic_type', POST_ANNOUNCE) >= 1,
 			'global announcement' => $this->topicStateCount('topic_type', POST_GLOBAL) >= 1,
 		];
-		$failed = [];
-		foreach ($checks as $label => $passed)
-		{
-			echo ($passed ? '[OK] ' : '[FAIL] ') . $label . "\n";
-			if (!$passed)
-			{
-				$failed[] = $label;
-			}
-		}
-		if ($failed)
-		{
-			throw new RuntimeException('Development seed verification failed: ' . implode(', ', $failed));
-		}
+		$this->assertChecks($checks, 'Development seed verification failed: ');
 		echo "Seeded development preset {$this->context->seed}: 25 users, 12 forums, 47 topic rows, 90 posts.\n";
-	}
-
-	private function existingIdCount(string $table, string $column, array $ids): int
-	{
-		if (!$ids)
-		{
-			return 0;
-		}
-		$result = $this->context->db->sql_query("SELECT COUNT($column) AS total FROM $table WHERE "
-			. $this->context->db->sql_in_set($column, $ids));
-		$count = (int) $this->context->db->sql_fetchfield('total');
-		$this->context->db->sql_freeresult($result);
-		return $count;
-	}
-
-	private function fieldCount(string $table, string $column, array $ids, string $condition): int
-	{
-		if (!$ids)
-		{
-			return 0;
-		}
-		$result = $this->context->db->sql_query("SELECT COUNT($column) AS total FROM $table WHERE "
-			. $this->context->db->sql_in_set($column, $ids) . " AND $condition");
-		$count = (int) $this->context->db->sql_fetchfield('total');
-		$this->context->db->sql_freeresult($result);
-		return $count;
 	}
 
 	private function topicStateCount(string $column, int $value): int
@@ -144,14 +97,6 @@ class DevelopmentSeeder
 		$this->context->db->sql_freeresult($result);
 		return $password !== ''
 			&& $this->context->container->get('passwords.manager')->check(SeedContext::PASSWORD, $password);
-	}
-
-	private function queryCount(string $table, string $where): int
-	{
-		$result = $this->context->db->sql_query("SELECT COUNT(*) AS total FROM $table WHERE $where");
-		$count = (int) $this->context->db->sql_fetchfield('total');
-		$this->context->db->sql_freeresult($result);
-		return $count;
 	}
 
 	private function existingFileCount(): int

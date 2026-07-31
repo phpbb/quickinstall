@@ -65,12 +65,13 @@ $user->data['is_registered'] = true;
 $auth->acl($user->data);
 
 require_once __DIR__ . '/SeedContext.php';
+require_once __DIR__ . '/SeedPlan.php';
 require_once __DIR__ . '/UserBuilder.php';
 require_once __DIR__ . '/ForumBuilder.php';
 require_once __DIR__ . '/ContentBuilder.php';
 require_once __DIR__ . '/StateBuilder.php';
 require_once __DIR__ . '/DevelopmentSeeder.php';
-require_once __DIR__ . '/StandardSeeder.php';
+require_once __DIR__ . '/VolumeSeeder.php';
 require_once __DIR__ . '/Seeder.php';
 
 try

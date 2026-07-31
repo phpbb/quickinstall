@@ -26,7 +26,8 @@ class SeederPackageTest extends TestCase
 			'run.php',
 			'Seeder.php',
 			'SeedContext.php',
-			'StandardSeeder.php',
+			'SeedPlan.php',
+			'VolumeSeeder.php',
 			'UserBuilder.php',
 			'ForumBuilder.php',
 			'ContentBuilder.php',
@@ -36,12 +37,13 @@ class SeederPackageTest extends TestCase
 		{
 			self::assertFileExists($path . '/' . $file);
 		}
+		self::assertFileDoesNotExist($path . '/StandardSeeder.php');
 		self::assertStringContainsString("'25 users'", file_get_contents($path . '/DevelopmentSeeder.php'));
 		self::assertStringContainsString("'90 posts'", file_get_contents($path . '/DevelopmentSeeder.php'));
-		self::assertStringContainsString("'tiny' =>", file_get_contents($path . '/StandardSeeder.php'));
-		self::assertStringContainsString("'extension-dev' =>", file_get_contents($path . '/StandardSeeder.php'));
-		self::assertStringContainsString("'load-test' =>", file_get_contents($path . '/StandardSeeder.php'));
-		self::assertStringContainsString("'random' =>", file_get_contents($path . '/StandardSeeder.php'));
+		self::assertStringContainsString("'tiny' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString("'extension-dev' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString("'load-test' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString("'random' =>", file_get_contents($path . '/VolumeSeeder.php'));
 		self::assertStringContainsString('one manifest, reset, and finalization lifecycle', file_get_contents($path . '/Seeder.php'));
 		self::assertStringContainsString('AssetFactory::png(80, 80', file_get_contents($path . '/UserBuilder.php'));
 		self::assertStringContainsString("public const PASSWORD = 'password';", file_get_contents($path . '/SeedContext.php'));

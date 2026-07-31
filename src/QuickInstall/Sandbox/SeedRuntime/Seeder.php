@@ -73,7 +73,7 @@ class Seeder
 		{
 			return new DevelopmentSeeder($this->context);
 		}
-		return new StandardSeeder($this->context);
+		return new VolumeSeeder($this->context);
 	}
 
 	private function reset(): void
