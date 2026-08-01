@@ -245,7 +245,7 @@ class Application
 
 				case 'board_seed':
 					$name = $this->required('name');
-					$preset = $this->optional('preset') ?: SeedPresetCatalog::defaultSeed();
+					$preset = $this->required('preset');
 					$seed = (int) ($this->optional('seed') ?: '1');
 					$this->validatePreset($preset);
 					if (SeedPresetCatalog::isDeprecated($preset))

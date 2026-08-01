@@ -31,6 +31,7 @@ class ApplicationTest extends TestCase
 		self::assertSame(0, $result['exit_code']);
 		self::assertStringContainsString('Usage:', $result['output']);
 		self::assertStringContainsString('qi board:create <name>', $result['output']);
+		self::assertStringContainsString('Default: none.', $result['output']);
 	}
 
 	public function testSeedHelpShowsDevelopmentAndHidesDeprecatedPreset(): void
@@ -39,7 +40,7 @@ class ApplicationTest extends TestCase
 
 		self::assertSame(0, $result['exit_code']);
 		self::assertStringContainsString('tiny|development|load-test|random', $result['output']);
-		self::assertStringContainsString('Default: development.', $result['output']);
+		self::assertStringContainsString('Required fixture preset.', $result['output']);
 		self::assertStringNotContainsString('extension-dev', $result['output']);
 	}
 
@@ -141,6 +142,7 @@ class ApplicationTest extends TestCase
 		self::assertStringContainsString('php bin/qi board:start demo', $result['output']);
 		self::assertStringContainsString('Run this command now? [Y/n]: ', $result['output']);
 		self::assertStringNotContainsString('Started board: demo', $result['output']);
+		self::assertSame('none', (new Project($root))->board('demo')['populate']);
 	}
 
 	public function testBoardCreateDefaultsStartPromptToYes(): void
@@ -171,11 +173,19 @@ class ApplicationTest extends TestCase
 			'url' => 'http://localhost:8081/',
 		]);
 
-		$result = $this->runApplication($root, ['qi', 'board:seed', 'demo', '--reset', '--replace']);
+		$result = $this->runApplication($root, ['qi', 'board:seed', 'demo', '--preset', 'development', '--reset', '--replace']);
 
 		self::assertSame(1, $result['exit_code']);
 		self::assertSame('', $result['output']);
 		self::assertStringContainsString('Use --reset or --replace, not both.', $result['stderr']);
+	}
+
+	public function testBoardSeedRequiresPreset(): void
+	{
+		$result = $this->runApplication($this->createTempProjectRoot(), ['qi', 'board:seed', 'demo']);
+
+		self::assertSame(1, $result['exit_code']);
+		self::assertStringContainsString('--preset is required.', $result['stderr']);
 	}
 
 	public function testUiStartHelpIsExposed(): void

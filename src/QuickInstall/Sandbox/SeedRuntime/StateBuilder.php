@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * QuickInstall development fixtures
+ * QuickInstall seed runtime
  *
  * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
  * @license       GNU General Public License, version 2 (GPL-2.0)
@@ -96,7 +96,7 @@ class StateBuilder extends BaseBuilder
 					'filetime' => time(),
 					'thumbnail' => 0,
 				]));
-				$attachmentId = (int) $db->sql_nextid();
+				$attachmentId = $this->lastInsertedId();
 			}
 			$this->context->addId('attachments', $attachmentId);
 		}
@@ -139,7 +139,7 @@ class StateBuilder extends BaseBuilder
 			'reported_post_enable_smilies' => $post['enable_smilies'],
 			'reported_post_enable_magic_url' => $post['enable_magic_url'],
 		]));
-		$reportId = (int) $db->sql_nextid();
+		$reportId = $this->lastInsertedId();
 		$this->context->addId('reports', $reportId);
 		$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reported = 1 WHERE post_id = ' . $postId);
 		$db->sql_query('UPDATE ' . TOPICS_TABLE . ' SET topic_reported = 1 WHERE topic_id = ' . (int) $post['topic_id']);
@@ -284,7 +284,7 @@ class StateBuilder extends BaseBuilder
 			'reported_post_enable_smilies' => $message['enable_smilies'],
 			'reported_post_enable_magic_url' => $message['enable_magic_url'],
 		]));
-		$reportId = (int) $db->sql_nextid();
+		$reportId = $this->lastInsertedId();
 		$this->context->addId('reports', $reportId);
 		$db->sql_query('UPDATE ' . PRIVMSGS_TABLE . ' SET message_reported = 1 WHERE msg_id = ' . $messageId);
 	}
@@ -338,7 +338,7 @@ class StateBuilder extends BaseBuilder
 				'draft_subject' => $subject,
 				'draft_message' => 'This draft has been saved but not posted.',
 			]));
-			$draftId = (int) $db->sql_nextid();
+			$draftId = $this->lastInsertedId();
 		}
 		$this->context->addId('drafts', $draftId);
 		$this->context->setMeta('ucp', ['user_id' => $userId, 'forum_id' => $forumId, 'topic_id' => $topicId]);
@@ -428,7 +428,7 @@ class StateBuilder extends BaseBuilder
 					'notification_time' => time(),
 					'notification_data' => serialize($definition['data']),
 				]));
-				$notificationId = (int) $db->sql_nextid();
+				$notificationId = $this->lastInsertedId();
 			}
 			$this->context->addId('notifications', $notificationId);
 		}
@@ -448,6 +448,7 @@ class StateBuilder extends BaseBuilder
 				throw new RuntimeException("Configured phpBB search backend is unavailable: $searchClass");
 			}
 			$error = false;
+			/** @noinspection PhpConditionAlreadyCheckedInspection */
 			$search = new $searchClass(
 				$error,
 				$this->context->root,
@@ -458,6 +459,7 @@ class StateBuilder extends BaseBuilder
 				$this->context->user,
 				$GLOBALS['phpbb_dispatcher']
 			);
+			/** @noinspection PhpConditionAlreadyCheckedInspection */
 			if ($error)
 			{
 				throw new RuntimeException("Configured phpBB search backend failed: $error");

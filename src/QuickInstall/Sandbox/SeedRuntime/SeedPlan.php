@@ -15,6 +15,10 @@ use RuntimeException;
 /** Provides shared context and verification helpers for preset plans. */
 abstract class SeedPlan
 {
+	/**
+	 * @var SeedContext
+	 * @noinspection PhpMissingFieldTypeInspection
+	 */
 	protected $context;
 
 	public function __construct(SeedContext $context)

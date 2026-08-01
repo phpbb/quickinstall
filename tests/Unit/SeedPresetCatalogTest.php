@@ -8,9 +8,8 @@ use QuickInstall\Sandbox\SeedPresetCatalog;
 
 class SeedPresetCatalogTest extends TestCase
 {
-	public function testDevelopmentIsVisibleAndDefault(): void
+	public function testDevelopmentIsVisible(): void
 	{
-		self::assertSame('development', SeedPresetCatalog::defaultSeed());
 		self::assertContains('development', SeedPresetCatalog::visible());
 		self::assertNotContains('extension-dev', SeedPresetCatalog::visible());
 	}

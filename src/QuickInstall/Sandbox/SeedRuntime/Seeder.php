@@ -15,6 +15,10 @@ use RuntimeException;
 /** Coordinates every preset through one manifest, reset, and finalization lifecycle. */
 class Seeder
 {
+	/**
+	 * @var SeedContext
+	 * @noinspection PhpMissingFieldTypeInspection
+	 */
 	private $context;
 
 	public function __construct(SeedContext $context)
@@ -67,6 +71,10 @@ class Seeder
 		$strategy->verify();
 	}
 
+	/**
+	 * @return DevelopmentSeeder|VolumeSeeder
+	 * @noinspection PhpMissingReturnTypeInspection
+	 */
 	private function strategy()
 	{
 		if ($this->context->preset === 'development')

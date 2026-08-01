@@ -523,10 +523,14 @@ class Application
 		$name = $cli->argument(0);
 		if ($name === null)
 		{
-			throw new InvalidArgumentException('Usage: qi board:seed <name> [--preset tiny|development|load-test|random] [--seed N] [--reset|--replace]');
+			throw new InvalidArgumentException('Usage: qi board:seed <name> --preset tiny|development|load-test|random [--seed N] [--reset|--replace]');
 		}
 
-		$preset = $cli->option('preset', SeedPresetCatalog::defaultSeed());
+		$preset = trim($cli->option('preset', ''));
+		if ($preset === '')
+		{
+			throw new InvalidArgumentException('--preset is required. Choose one of: ' . implode(', ', SeedPresetCatalog::visible()) . '.');
+		}
 		$seed = (int) $cli->option('seed', '1');
 		$this->validatePreset($preset);
 		if (SeedPresetCatalog::isDeprecated($preset))
@@ -1055,14 +1059,14 @@ class Application
 				],
 				'board:seed' => [
 					'title' => 'board:seed',
-					'usage' => 'board:seed <name> [--preset tiny|development|load-test|random] [--seed N] [--reset|--replace]',
+					'usage' => 'board:seed <name> --preset tiny|development|load-test|random [--seed N] [--reset|--replace]',
 					'summary' => 'Add, replace, or remove fixture content.',
 					'description' => 'Seeds repeatable phpBB development or load fixtures on an installed board. SQLite supports tiny and development presets.',
 					'arguments' => [
 						'<name>' => 'Required board name.',
 					],
 					'options' => [
-						'--preset PRESET' => 'Fixture preset. One of: tiny, development, load-test, random. Default: development.',
+						'--preset PRESET' => 'Required fixture preset. One of: tiny, development, load-test, random.',
 						'--seed N' => 'Positive random seed number for repeatable fixture shape. Default: 1.',
 						'--replace' => 'Remove existing QuickInstall seed data, then seed again.',
 						'--reset' => 'Remove existing QuickInstall seed data without adding new data.',

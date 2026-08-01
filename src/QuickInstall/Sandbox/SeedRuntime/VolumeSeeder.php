@@ -73,6 +73,7 @@ class VolumeSeeder extends SeedPlan
 			. $this->plural($expectedPosts, 'post', 'posts') . ".\n";
 	}
 
+	/** @noinspection RandomApiMigrationInspection */
 	private function resolveCounts(): array
 	{
 		$presets = [

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * QuickInstall development fixtures
+ * QuickInstall seed runtime
  *
  * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
  * @license       GNU General Public License, version 2 (GPL-2.0)
@@ -10,6 +10,7 @@
 
 namespace QuickInstallSeed;
 
+use acp_forums;
 use RuntimeException;
 
 class ForumBuilder extends BaseBuilder
@@ -28,7 +29,7 @@ class ForumBuilder extends BaseBuilder
 			throw new RuntimeException('Development preset requires an existing postable forum.');
 		}
 
-		$acp = new \acp_forums();
+		$acp = new acp_forums();
 		$forums = ['news' => $defaultForum];
 		$forums['lobby'] = $this->create([
 			'parent_id' => 0,
@@ -134,7 +135,7 @@ class ForumBuilder extends BaseBuilder
 			throw new RuntimeException('Seed preset requires an existing postable forum.');
 		}
 
-		$acp = new \acp_forums();
+		$acp = new acp_forums();
 		$forums = [];
 		for ($category = 1; $category <= $categoryCount; $category++)
 		{
@@ -170,7 +171,7 @@ class ForumBuilder extends BaseBuilder
 		return $id;
 	}
 
-	private function create(array $data, \acp_forums $acp, int $permissionSource, string $manifestType): int
+	private function create(array $data, acp_forums $acp, int $permissionSource, string $manifestType): int
 	{
 		$db = $this->context->db;
 		$result = $db->sql_query_limit(
@@ -236,7 +237,7 @@ class ForumBuilder extends BaseBuilder
 				throw new RuntimeException('Unable to create seed forum: ' . implode('; ', $errors));
 			}
 			$id = (int) $forumData['forum_id'];
-			copy_forum_permissions($permissionSource, $id);
+			copy_forum_permissions($permissionSource, [$id]);
 		}
 		$this->context->addId($manifestType, $id);
 		return $id;

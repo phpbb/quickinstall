@@ -1,22 +1,38 @@
 <?php
 /**
  *
- * QuickInstall development fixtures
+ * QuickInstall seed runtime
  *
  * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
  * @license       GNU General Public License, version 2 (GPL-2.0)
  *
+ * @noinspection PhpDefineCanBeReplacedWithConstInspection
  */
+
+use QuickInstallSeed\SeedContext;
+use QuickInstallSeed\Seeder;
 
 if (PHP_SAPI !== 'cli')
 {
-	fwrite(STDERR, "Development fixtures may only run from the CLI.\n");
+	fwrite(STDERR, "QuickInstall seed runtime may only run from the CLI.\n");
 	exit(1);
 }
 
-$preset = (string) ($argv[1] ?? 'development');
-$seed = (int) ($argv[2] ?? 1);
-$action = $argv[3] ?? 'seed';
+if (getenv('QUICKINSTALL_SEED_RUNTIME') !== '1')
+{
+	fwrite(STDERR, "QuickInstall seed runtime must be launched by QuickInstall.\n");
+	exit(1);
+}
+
+if (!isset($argv[1], $argv[2], $argv[3]))
+{
+	fwrite(STDERR, "Invalid QuickInstall seed runtime invocation: required arguments are missing.\n");
+	exit(1);
+}
+
+$preset = (string) $argv[1];
+$seed = (int) $argv[2];
+$action = (string) $argv[3];
 if (!in_array($preset, ['tiny', 'development', 'extension-dev', 'load-test', 'random'], true))
 {
 	fwrite(STDERR, "Unknown seed preset: $preset\n");
@@ -27,26 +43,30 @@ if ($seed < 1)
 	fwrite(STDERR, "Seed must be a positive integer.\n");
 	exit(1);
 }
+if (!in_array($action, ['seed', 'reset', 'replace'], true))
+{
+	fwrite(STDERR, "Unknown seed action: $action\n");
+	exit(1);
+}
 
 $phpbb_root_path = rtrim((string) getcwd(), '/') . '/';
 $phpEx = 'php';
 define('IN_PHPBB', true);
 
 require_once $phpbb_root_path . 'common.' . $phpEx;
+
+/** @var \phpbb\user $user */
+/** @var \phpbb\auth\auth $auth */
+/** @var \phpbb\config\config $config */
+/** @var \phpbb\db\driver\driver_interface $db */
+/** @var \Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container */
+
 require_once $phpbb_root_path . 'includes/functions_user.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_content.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_posting.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_admin.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_acp.' . $phpEx;
-
-$serverName = (string) ($config['server_name'] ?? '');
-if (!in_array($serverName, ['localhost', '127.0.0.1', '::1'], true)
-	&& !preg_match('/\.(test|local|dev|localhost)$/i', $serverName))
-{
-	fwrite(STDERR, "Development fixtures are restricted to local boards.\n");
-	exit(1);
-}
 
 $user->session_begin();
 $result = $db->sql_query_limit(
@@ -57,7 +77,7 @@ $founder = $db->sql_fetchrow($result);
 $db->sql_freeresult($result);
 if (!$founder)
 {
-	fwrite(STDERR, "Development fixtures require a founder account.\n");
+	fwrite(STDERR, "Seed runtime requires a founder account.\n");
 	exit(1);
 }
 $user->data = array_merge($user->data, $founder);
@@ -76,7 +96,7 @@ require_once __DIR__ . '/Seeder.php';
 
 try
 {
-	$context = new \QuickInstallSeed\SeedContext(
+	$context = new SeedContext(
 		$db,
 		$user,
 		$auth,
@@ -87,10 +107,10 @@ try
 		$preset,
 		$seed
 	);
-	(new \QuickInstallSeed\Seeder($context))->run($action);
+	(new Seeder($context))->run($action);
 	exit(0);
 }
-catch (\Throwable $exception)
+catch (Throwable $exception)
 {
 	fwrite(STDERR, 'Seed failed: ' . $exception->getMessage() . "\n");
 	exit(1);

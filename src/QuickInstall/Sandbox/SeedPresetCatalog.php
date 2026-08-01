@@ -12,7 +12,7 @@ namespace QuickInstall\Sandbox;
 
 use InvalidArgumentException;
 
-/** Defines accepted, visible, default, and deprecated fixture presets. */
+/** Defines accepted, visible, and deprecated fixture presets. */
 class SeedPresetCatalog
 {
 	/** @return string[] */
@@ -25,11 +25,6 @@ class SeedPresetCatalog
 	public static function visible(): array
 	{
 		return ['tiny', 'development', 'load-test', 'random'];
-	}
-
-	public static function defaultSeed(): string
-	{
-		return 'development';
 	}
 
 	public static function supportsSqlitePopulate(string $preset): bool

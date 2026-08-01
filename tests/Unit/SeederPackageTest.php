@@ -13,7 +13,7 @@ class SeederPackageTest extends TestCase
 {
 	use TempProjectTrait;
 
-	public function testWritesModularDevelopmentSeedPackage(): void
+	public function testWritesUnifiedSeederPackage(): void
 	{
 		$project = new Project($this->createTempProjectRoot());
 		$project->init();
@@ -37,6 +37,9 @@ class SeederPackageTest extends TestCase
 		{
 			self::assertFileExists($path . '/' . $file);
 		}
+		$run = file_get_contents($path . '/run.php');
+		self::assertStringContainsString("getenv('QUICKINSTALL_SEED_RUNTIME') !== '1'", $run);
+		self::assertStringContainsString('!isset($argv[1], $argv[2], $argv[3])', $run);
 		self::assertFileDoesNotExist($path . '/StandardSeeder.php');
 		self::assertStringContainsString("'25 users'", file_get_contents($path . '/DevelopmentSeeder.php'));
 		self::assertStringContainsString("'90 posts'", file_get_contents($path . '/DevelopmentSeeder.php'));
@@ -78,6 +81,30 @@ class SeederPackageTest extends TestCase
 		self::assertNotSame($first, $different);
 		self::assertSame("\x89PNG\r\n\x1a\n", substr($first, 0, 8));
 		self::assertGreaterThan(100, strlen($first));
+	}
+
+	public function testBuilderUsesAvailableLastInsertedIdMethod(): void
+	{
+		$modernDb = new class {
+			public function sql_last_inserted_id(): int
+			{
+				return 42;
+			}
+
+			public function sql_nextid(): int
+			{
+				throw new \RuntimeException('Deprecated method should not be called.');
+			}
+		};
+		$legacyDb = new class {
+			public function sql_nextid(): int
+			{
+				return 24;
+			}
+		};
+
+		self::assertSame(42, $this->lastInsertedId($modernDb));
+		self::assertSame(24, $this->lastInsertedId($legacyDb));
 	}
 
 	public function testSeedContextUsesPresetSpecificIdentityAndManifest(): void
@@ -195,5 +222,19 @@ class SeederPackageTest extends TestCase
 
 		self::assertFileDoesNotExist($path);
 		self::assertFalse($storage->exists('fixture.png'));
+	}
+
+	private function lastInsertedId($db): int
+	{
+		$context = new \QuickInstallSeed\SeedContext(null, (object) ['data' => []], null, [], null, '/', 'php', 'tiny', 1);
+		$context->db = $db;
+		$builder = new class($context) extends \QuickInstallSeed\BaseBuilder {
+			public function getLastInsertedId(): int
+			{
+				return $this->lastInsertedId();
+			}
+		};
+
+		return $builder->getLastInsertedId();
 	}
 }

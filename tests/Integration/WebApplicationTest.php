@@ -110,6 +110,20 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('SQLite boards support populate none, tiny, or development only.', $data['error']);
 	}
 
+	public function testBoardSeedRequiresPreset(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$json = $this->runWebApplicationWithCsrf($root, [
+			'action' => 'board_seed',
+			'name' => 'demo',
+			'seed' => '1',
+		], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertStringContainsString('preset is required.', $data['error']);
+	}
+
 	public function testDoctorPostShowsResultsAndActivityOutput(): void
 	{
 		$root = $this->createTempProjectRoot();

@@ -398,7 +398,7 @@ class BoardRunner
 		$this->output->write("Running seed preset: $preset\n");
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'mkdir', '-p', '/tmp/qi-seed-runtime']);
 		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $package . '/.', 'web:/tmp/qi-seed-runtime']);
-		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', $preset, (string) $seed, $action]);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', '-e', 'QUICKINSTALL_SEED_RUNTIME=1', 'web', 'timeout', '300', 'php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', $preset, (string) $seed, $action]);
 	}
 
 	protected function seedMarker(string $name, string $preset): string

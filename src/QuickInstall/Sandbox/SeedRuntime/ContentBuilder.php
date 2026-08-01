@@ -1,11 +1,12 @@
 <?php
 /**
  *
- * QuickInstall development fixtures
+ * QuickInstall seed runtime
  *
  * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
  * @license       GNU General Public License, version 2 (GPL-2.0)
  *
+ * @noinspection PhpMissingFieldTypeInspection
  */
 
 namespace QuickInstallSeed;
@@ -14,9 +15,16 @@ use RuntimeException;
 
 class ContentBuilder extends BaseBuilder
 {
+	/** @var array */
 	private $users;
+
+	/** @var array */
 	private $forums;
+
+	/** @var array */
 	private $posters;
+
+	/** @var int */
 	private $posterIndex = 0;
 
 	public function seed(array $users, array $forums): array
@@ -435,6 +443,8 @@ This line is intentionally wide and should remain readable without breaking the 
 	): int
 	{
 		$db = $this->context->db;
+		/** @noinspection PhpStrFunctionsInspection */
+		/** @noinspection StrStartsWithCanBeUsedInspection */
 		$suffix = strpos($key, 'page-') === 0 ? ' — reply ' . substr($key, 5) : '';
 		$subject = $this->context->prefix . 'Re: ' . $label . $suffix;
 		$result = $db->sql_query_limit(
@@ -525,7 +535,7 @@ This line is intentionally wide and should remain readable without breaking the 
 				'topic_moved_id' => $targetTopicId,
 				'topic_visibility' => ITEM_APPROVED,
 			]));
-			$id = (int) $db->sql_nextid();
+			$id = $this->lastInsertedId();
 		}
 		$this->context->addId('topics', $id);
 		return $id;

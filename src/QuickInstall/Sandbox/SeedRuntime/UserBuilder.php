@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * QuickInstall development fixtures
+ * QuickInstall seed runtime
  *
  * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
  * @license       GNU General Public License, version 2 (GPL-2.0)
@@ -219,7 +219,7 @@ class UserBuilder extends BaseBuilder
 				];
 			}
 			$db->sql_query('INSERT INTO ' . $table . ' ' . $db->sql_build_array('INSERT', $row));
-			$banId = (int) $db->sql_nextid();
+			$banId = $this->lastInsertedId();
 		}
 		$this->context->addId('bans', $banId);
 	}
@@ -243,7 +243,7 @@ class UserBuilder extends BaseBuilder
 					'log_id' => 0,
 					'warning_time' => time(),
 				]));
-				$warningId = (int) $db->sql_nextid();
+				$warningId = $this->lastInsertedId();
 				$db->sql_query('UPDATE ' . USERS_TABLE . '
 					SET user_warnings = user_warnings + 1,
 						user_last_warning = ' . time() . '

@@ -167,6 +167,10 @@ class BoardRunnerTest extends TestCase
 		self::assertStringEndsWith('/seed-runtime/.', $runner->runs[1][5]);
 		self::assertSame('web:/tmp/qi-seed-runtime', $runner->runs[1][6]);
 		self::assertSame(
+			['exec', '-T', '-e', 'QUICKINSTALL_SEED_RUNTIME=1', 'web'],
+			array_slice($runner->runs[2], 4, 5)
+		);
+		self::assertSame(
 			['php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', 'load-test', '1', 'replace'],
 			array_slice($runner->runs[2], -7)
 		);

@@ -1,32 +1,57 @@
 <?php
 /**
  *
- * QuickInstall development fixtures
+ * QuickInstall seed runtime
  *
  * @copyright (c) 2026 phpBB Limited <https://www.phpbb.com>
  * @license       GNU General Public License, version 2 (GPL-2.0)
  *
+ * @noinspection PhpMissingFieldTypeInspection
  */
 
 namespace QuickInstallSeed;
 
 use RuntimeException;
+use ZipArchive;
 
 class SeedContext
 {
 	public const PASSWORD = 'password';
 
+	/** @var \phpbb\db\driver\driver_interface */
 	public $db;
+
+	/** @var \phpbb\user */
 	public $user;
+
+	/** @var \phpbb\auth\auth */
 	public $auth;
+
+	/** @var \phpbb\config\config */
 	public $config;
+
+	/** @var \Symfony\Component\DependencyInjection\ContainerInterface */
 	public $container;
+
+	/** @var string */
 	public $root;
+
+	/** @var string */
 	public $phpEx;
+
+	/** @var string */
 	public $preset;
+
+	/** @var int */
 	public $seed;
+
+	/** @var string */
 	public $prefix;
+
+	/** @var array */
 	public $manifest;
+
+	/** @var array */
 	private $originalUser;
 
 	public function __construct($db, $user, $auth, $config, $container, string $root, string $phpEx, string $preset, int $seed)
@@ -130,6 +155,8 @@ class SeedContext
 	public function addFile(string $path): void
 	{
 		$path = str_replace('\\', '/', $path);
+		/** @noinspection PhpStrFunctionsInspection */
+		/** @noinspection StrStartsWithCanBeUsedInspection */
 		if (strpos($path, $this->root) !== 0)
 		{
 			throw new RuntimeException("Refusing to register seed file outside phpBB root: $path");
@@ -147,6 +174,7 @@ class SeedContext
 			if (!$storage->exists($relativePath))
 			{
 				$stream = fopen('php://temp', 'w+b');
+				/** @noinspection NotOptimalIfConditionsInspection */
 				if ($stream === false || fwrite($stream, $content) !== strlen($content) || rewind($stream) === false)
 				{
 					if (is_resource($stream))
@@ -191,6 +219,8 @@ class SeedContext
 			foreach ($paths as $storageName => $directory)
 			{
 				$prefix = $this->root . $directory . '/';
+				/** @noinspection PhpStrFunctionsInspection */
+				/** @noinspection StrStartsWithCanBeUsedInspection */
 				if (strpos($absolutePath, $prefix) !== 0)
 				{
 					continue;
@@ -361,6 +391,8 @@ class SeedContext
 		foreach (array_reverse($this->manifest['files'] ?? []) as $path)
 		{
 			$path = str_replace('\\', '/', (string) $path);
+			/** @noinspection PhpStrFunctionsInspection */
+			/** @noinspection StrStartsWithCanBeUsedInspection */
 			if (strpos($path, $this->root) !== 0)
 			{
 				continue;
@@ -375,6 +407,7 @@ class SeedContext
 
 abstract class BaseBuilder
 {
+	/** @var SeedContext */
 	protected $context;
 
 	public function __construct(SeedContext $context)
@@ -382,15 +415,16 @@ abstract class BaseBuilder
 		$this->context = $context;
 	}
 
-	protected function rowExists(string $table, string $column, int $id): bool
+	/** Returns the last inserted ID across supported phpBB DBAL versions. */
+	protected function lastInsertedId(): int
 	{
-		$result = $this->context->db->sql_query_limit(
-			"SELECT $column FROM $table WHERE $column = $id",
-			1
-		);
-		$exists = (bool) $this->context->db->sql_fetchrow($result);
-		$this->context->db->sql_freeresult($result);
-		return $exists;
+		if (method_exists($this->context->db, 'sql_last_inserted_id'))
+		{
+			return (int) $this->context->db->sql_last_inserted_id();
+		}
+
+		/** @noinspection PhpDeprecationInspection */
+		return (int) $this->context->db->sql_nextid();
 	}
 }
 
@@ -441,8 +475,8 @@ class AssetFactory
 			throw new RuntimeException('Unable to create temporary development ZIP.');
 		}
 
-		$zip = new \ZipArchive();
-		if ($zip->open($path, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true)
+		$zip = new ZipArchive();
+		if ($zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true)
 		{
 			unlink($path);
 			throw new RuntimeException('Unable to create development ZIP.');
