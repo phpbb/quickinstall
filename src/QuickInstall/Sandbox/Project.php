@@ -277,7 +277,7 @@ class Project
 		$boards = $this->readJson('boards.json', []);
 		foreach (array_keys($boards) as $registeredName)
 		{
-			if ($registeredName !== $name && $this->namesEqual((string) $registeredName, $name))
+			if ((string) $registeredName !== $name && $this->namesEqual((string) $registeredName, $name))
 			{
 				throw new InvalidArgumentException("Board already exists: $registeredName. Board names are case-insensitive.");
 			}

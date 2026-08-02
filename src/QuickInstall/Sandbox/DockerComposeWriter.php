@@ -39,7 +39,7 @@ class DockerComposeWriter
 		$this->writeFile($installConfig, $this->installConfig($name, $config));
 		$this->writeFile($compose, $this->compose($name, $config));
 		$this->writeFile($dockerfile, $this->dockerfile($config));
-		$this->writeFile($entrypoint, $this->entrypoint());
+		$this->writeFile($entrypoint, $this->entrypoint($config));
 		if ((PHP_OS_FAMILY !== 'Windows') && !chmod($entrypoint, 0755))
 		{
 			throw new RuntimeException("Unable to make entrypoint executable: $entrypoint");
@@ -253,9 +253,11 @@ DOCKERFILE;
 			. "    && ";
 	}
 
-	private function entrypoint(): string
+	private function entrypoint(array $config): string
 	{
-		return <<<'SH'
+		$ownershipCommand = $this->ownershipCommand($config);
+
+		$entrypoint = <<<'SH'
 set -eu
 
 if [ ! -f /var/www/html/common.php ]; then
@@ -265,7 +267,7 @@ if [ ! -f /var/www/html/common.php ]; then
 	fi
 
 	cp -R /opt/phpbb-source/. /var/www/html/
-	chown -R www-data:www-data /var/www/html
+	__QUICKINSTALL_OWNERSHIP_COMMAND__
 fi
 
 if [ -f /var/www/html/config.php ] && [ ! -s /var/www/html/config.php ]; then
@@ -281,11 +283,48 @@ if [ ! -s /var/www/html/config.php ] && [ -f /var/www/html/install/phpbbcli.php 
 		echo "Host timezone '$QUICKINSTALL_BOARD_TIMEZONE' is unsupported by this PHP runtime; using UTC."
 		php /var/www/html/bin/phpbbcli.php config:set board_timezone UTC
 	fi
-	chown -R www-data:www-data /var/www/html
+	__QUICKINSTALL_OWNERSHIP_COMMAND__
 fi
 
 apache2-foreground
 SH;
+
+		return str_replace('__QUICKINSTALL_OWNERSHIP_COMMAND__', $ownershipCommand, $entrypoint);
+	}
+
+	/** Builds an ownership command that does not enter host bind mounts. */
+	private function ownershipCommand(array $config): string
+	{
+		$mountTargets = [];
+		foreach (($config['extensions'] ?? []) as $name => $extension)
+		{
+			if (($extension['mode'] ?? '') === 'bind' && ($extension['source'] ?? '') !== '')
+			{
+				$mountTargets[] = '/var/www/html/ext/' . $name;
+			}
+		}
+		foreach (($config['styles'] ?? []) as $name => $style)
+		{
+			if (($style['mode'] ?? '') === 'bind' && ($style['source'] ?? '') !== '')
+			{
+				$mountTargets[] = '/var/www/html/styles/' . $name;
+			}
+		}
+
+		$command = 'find /var/www/html';
+		foreach ($mountTargets as $target)
+		{
+			$command .= " \\\n\t\t-path " . $this->shellString($target) . ' -prune -o';
+		}
+		$command .= " \\\n\t\t-exec chown www-data:www-data {} +";
+
+		return $command;
+	}
+
+	/** Quotes one string for the generated POSIX shell script. */
+	private function shellString(string $value): string
+	{
+		return "'" . str_replace("'", "'\"'\"'", $value) . "'";
 	}
 
 	private function databaseService(string $db, string $name, string $phpVersion): string

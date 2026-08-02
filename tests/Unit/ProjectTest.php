@@ -106,6 +106,25 @@ class ProjectTest extends TestCase
 		$project->appendBoard(['name' => 'Demo']);
 	}
 
+	public function testBoardRegistryUpdatesNumericName(): void
+	{
+		$project = new Project($this->createTempProjectRoot());
+		$project->init();
+		$project->appendBoard(['name' => '322', 'extensions' => []]);
+
+		$project->appendBoard([
+			'name' => '322',
+			'extensions' => [
+				'vse/abbc3' => ['mode' => 'bind', 'source' => '/tmp/abbc3'],
+			],
+		]);
+
+		self::assertSame(
+			['mode' => 'bind', 'source' => '/tmp/abbc3'],
+			$project->board('322')['extensions']['vse/abbc3']
+		);
+	}
+
 	public function testDeleteTreeRefusesPathOutsideWorkspace(): void
 	{
 		$root = $this->createTempProjectRoot();
