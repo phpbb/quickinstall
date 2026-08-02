@@ -157,6 +157,45 @@ class DockerComposeWriterTest extends TestCase
 		self::assertStringContainsString('    name: "demo"', $installConfig);
 	}
 
+	public function testEntrypointExcludesBindMountsFromOwnershipChanges(): void
+	{
+		[, $paths] = $this->writeBoard('demo', [
+			'extensions' => [
+				'acme/bound' => ['mode' => 'bind', 'source' => '/tmp/acme-bound'],
+				'acme/copied' => ['mode' => 'copy', 'source' => '/tmp/acme-copied'],
+				'acme/missing' => ['mode' => 'bind', 'source' => ''],
+			],
+			'styles' => [
+				'bound style' => ['mode' => 'bind', 'source' => '/tmp/bound-style'],
+				'copied' => ['mode' => 'copy', 'source' => '/tmp/copied-style'],
+			],
+		]);
+
+		$entrypoint = file_get_contents($paths['entrypoint']);
+
+		self::assertSame(2, substr_count($entrypoint, 'find /var/www/html'));
+		self::assertSame(2, substr_count($entrypoint, "-path '/var/www/html/ext/acme/bound' -prune -o"));
+		self::assertSame(2, substr_count($entrypoint, "-path '/var/www/html/styles/bound style' -prune -o"));
+		self::assertStringNotContainsString('/var/www/html/ext/acme/copied', $entrypoint);
+		self::assertStringNotContainsString('/var/www/html/ext/acme/missing', $entrypoint);
+		self::assertStringNotContainsString('/var/www/html/styles/copied', $entrypoint);
+		self::assertSame(2, substr_count($entrypoint, '-exec chown www-data:www-data {} +'));
+	}
+
+	public function testEntrypointQuotesBindMountTargetsForPosixShell(): void
+	{
+		[, $paths] = $this->writeBoard('demo', [
+			'styles' => [
+				"designer's style" => ['mode' => 'bind', 'source' => '/tmp/designer-style'],
+			],
+		]);
+
+		self::assertStringContainsString(
+			"-path '/var/www/html/styles/designer'\"'\"'s style' -prune -o",
+			file_get_contents($paths['entrypoint'])
+		);
+	}
+
 	private function config(array $overrides = []): array
 	{
 		return $overrides + [
