@@ -40,6 +40,7 @@ class SeederPackageTest extends TestCase
 		$run = file_get_contents($path . '/run.php');
 		self::assertStringContainsString("getenv('QUICKINSTALL_SEED_RUNTIME') !== '1'", $run);
 		self::assertStringContainsString('!isset($argv[1], $argv[2], $argv[3])', $run);
+		self::assertStringContainsString("'includes/message_parser.'", $run);
 		self::assertFileDoesNotExist($path . '/StandardSeeder.php');
 		self::assertStringContainsString("'25 users'", file_get_contents($path . '/DevelopmentSeeder.php'));
 		self::assertStringContainsString("'90 posts'", file_get_contents($path . '/DevelopmentSeeder.php'));
@@ -61,6 +62,11 @@ class SeederPackageTest extends TestCase
 		self::assertStringContainsString("ids('logs')", file_get_contents($path . '/Seeder.php'));
 		self::assertStringContainsString('[size=50]Smaller text[/size]', file_get_contents($path . '/ContentBuilder.php'));
 		self::assertStringContainsString('[list=a]', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString('new \\parse_message($message)', file_get_contents($path . '/SeedContext.php'));
+		self::assertStringContainsString('$this->parseMessage($message)', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString('$this->parseMessage($message)', file_get_contents($path . '/StateBuilder.php'));
+		self::assertStringContainsString("'bbcode_uid' => \$parser->bbcode_uid", file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString("'bbcode_uid' => \$parser->bbcode_uid", file_get_contents($path . '/StateBuilder.php'));
 		self::assertStringContainsString('reply with three quote levels', file_get_contents($path . '/ContentBuilder.php'));
 		self::assertStringContainsString('SupercalifragilisticexpialidociousSupercalifragilisticexpialidocious', file_get_contents($path . '/ContentBuilder.php'));
 		self::assertStringContainsString('Unread private message', file_get_contents($path . '/StateBuilder.php'));

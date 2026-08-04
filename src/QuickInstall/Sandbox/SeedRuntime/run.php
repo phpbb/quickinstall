@@ -63,6 +63,7 @@ require_once $phpbb_root_path . 'common.' . $phpEx;
 
 require_once $phpbb_root_path . 'includes/functions_user.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_content.' . $phpEx;
+require_once $phpbb_root_path . 'includes/message_parser.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_posting.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_admin.' . $phpEx;
 require_once $phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx;
