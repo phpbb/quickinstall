@@ -1,11 +1,18 @@
 # QuickInstall Changelog
 
-## Version 1.8.0-dev
+## Version 1.8.0
 
-- [Feature] Added a new local “Dashboard UI” (browser-based) workflow for the QuickInstall CLI.
-- [Feature] Added new QI update available notifications in the CLI and Dashboard UI.
-- [Feature] Added a new `doctor` command to diagnose host requirements.
-- [Change] Improved workspace safety and Windows compatibility.
+- [Feature] Added a local “Dashboard UI” (browser-based) workflow for the QuickInstall CLI. Start it with `php bin/qi ui:start`.
+- [Feature] Added a richer `development` seed preset for testing extensions and styles. The old `extension-dev` preset is now deprecated.
+- [Feature] Added `tiny` and `development` seed preset support for SQLite boards.
+- [Feature] Added update notifications to the CLI and Dashboard UI.
+- [Feature] Added a `doctor` command to check local requirements and help diagnose setup problems.
+- [Change] Seed replacement and reset now remove only content created by the selected preset and seed.
+- [Change] Added native Windows CLI support with a `qi.cmd` launcher and improved cross-platform path and command handling.
+- [Change] New boards now use the host's timezone, offer to start after creation, and open in the default browser when ready.
+- [Change] Extension and style unmounting now safely removes installed customisations from phpBB and refreshes the board cache.
+- [Fix] Improved workspace safety during simultaneous CLI and Dashboard actions, board replacement, and source downloads.
+- [Fix] Fixed stale source caches and several extension and style remounting issues.
 
 ## Version 1.7.0
 

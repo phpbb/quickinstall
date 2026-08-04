@@ -170,6 +170,16 @@ Or recreate it in one command:
 php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate tiny --replace
 ```
 
+Run a board's own `bin/phpbbcli.php` inside its `web` container from the QuickInstall project root:
+
+```bash
+docker compose -f .qi/runtime/demo/compose.yml exec web php bin/phpbbcli.php list
+docker compose -f .qi/runtime/demo/compose.yml exec web php bin/phpbbcli.php cache:purge
+docker compose -f .qi/runtime/demo/compose.yml exec web php bin/phpbbcli.php extension:show
+```
+
+Do not run `php bin/phpbbcli.php` directly from `.qi/boards/<name>`. The generated phpBB database configuration uses the Compose service hostname `db`, which resolves only inside the board's Docker network. Running inside `web` also uses the PHP version and extensions selected for that board.
+
 ## Fixture Presets
 
 Fixture seeding populates a board with repeatable test data. The `development` preset favors meaningful phpBB states over raw volume; use `load-test` when topic and post volume is the primary goal.
