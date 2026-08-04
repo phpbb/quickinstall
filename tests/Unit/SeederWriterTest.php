@@ -11,7 +11,7 @@ class SeederWriterTest extends TestCase
 {
 	use TempProjectTrait;
 
-	public function testWritesSeederScriptToRuntimeDirectory(): void
+	public function testWritesUnifiedSeederPackageToRuntimeDirectory(): void
 	{
 		$project = new Project($this->createTempProjectRoot());
 		$project->init();
@@ -19,11 +19,15 @@ class SeederWriterTest extends TestCase
 
 		$path = (new SeederWriter($project))->write('demo');
 
-		self::assertSame($project->runtimePath('demo') . '/seed.php', $path);
-		self::assertFileExists($path);
-		self::assertStringContainsString('$presets = [', file_get_contents($path));
-		self::assertStringContainsString('qi_seed_reset', file_get_contents($path));
-		self::assertStringContainsString("ini_set('memory_limit', '512M');", file_get_contents($path));
-		self::assertStringContainsString('gc_collect_cycles', file_get_contents($path));
+		self::assertSame($project->runtimePath('demo') . '/seed-runtime', $path);
+		self::assertDirectoryExists($path);
+		self::assertFileExists($path . '/run.php');
+		self::assertFileExists($path . '/Seeder.php');
+		self::assertFileExists($path . '/VolumeSeeder.php');
+		self::assertFileExists($path . '/DevelopmentSeeder.php');
+		self::assertStringContainsString("'tiny' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString("'load-test' =>", file_get_contents($path . '/VolumeSeeder.php'));
+		self::assertStringContainsString('gc_collect_cycles', file_get_contents($path . '/ContentBuilder.php'));
+		self::assertStringContainsString('class Seeder', file_get_contents($path . '/Seeder.php'));
 	}
 }

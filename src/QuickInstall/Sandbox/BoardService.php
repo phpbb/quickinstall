@@ -316,9 +316,11 @@ class BoardService
 	public function seed(string $name, string $preset, int $seed, string $action): void
 	{
 		$board = $this->project->board($name);
-		if (($board['db'] ?? '') === 'sqlite' && $action !== 'reset')
+		if (($board['db'] ?? '') === 'sqlite'
+			&& $action !== 'reset'
+			&& !SeedPresetCatalog::supportsSqliteSeed($preset))
 		{
-			throw new InvalidArgumentException('SQLite boards do not support fixture seeding. Use --reset to remove partial seed data, or use mariadb, mysql, or postgres for seeded boards.');
+			throw new InvalidArgumentException('SQLite boards support tiny and development fixture presets only. Use --reset to remove seed data, or use mariadb, mysql, or postgres for heavier presets.');
 		}
 
 		$runner = $this->createBoardRunner();

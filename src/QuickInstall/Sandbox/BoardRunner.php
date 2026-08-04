@@ -39,9 +39,9 @@ class BoardRunner
 			$this->output->write("Enabling phpBB debug config...\n");
 			$this->enableDebug($name);
 		}
-		if (($board['db'] ?? '') === 'sqlite' && ($board['populate'] ?? 'none') !== 'none')
+		if (($board['db'] ?? '') === 'sqlite' && !SeedPresetCatalog::supportsSqlitePopulate($board['populate'] ?? 'none'))
 		{
-			throw new RuntimeException('SQLite boards currently support populate:none only. Use mariadb, mysql, or postgres for seeded boards.');
+			throw new RuntimeException('SQLite boards support populate:none, tiny, or development only. Use mariadb, mysql, or postgres for heavier fixture presets.');
 		}
 		$this->seedIfNeeded($name, $board['populate'] ?? 'none');
 		$this->waitUntilHttpReady($name, $board['url'] ?? '');
@@ -394,12 +394,11 @@ class BoardRunner
 
 	protected function runSeeder(string $name, string $preset, int $seed, string $action = 'seed'): void
 	{
-		$writer = new SeederWriter($this->project);
-		$script = $writer->write($name);
-
+		$package = (new SeederWriter($this->project))->write($name);
 		$this->output->write("Running seed preset: $preset\n");
-		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $script, 'web:/tmp/qi_seed.php']);
-		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'timeout', '300', 'php', '-d', 'memory_limit=512M', '/tmp/qi_seed.php', $preset, (string) $seed, $action]);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', 'web', 'mkdir', '-p', '/tmp/qi-seed-runtime']);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'cp', $package . '/.', 'web:/tmp/qi-seed-runtime']);
+		$this->run(['docker', 'compose', '-f', $this->project->composePath($name), 'exec', '-T', '-e', 'QUICKINSTALL_SEED_RUNTIME=1', 'web', 'timeout', '300', 'php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', $preset, (string) $seed, $action]);
 	}
 
 	protected function seedMarker(string $name, string $preset): string

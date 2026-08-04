@@ -112,16 +112,16 @@ Create a small empty board:
 php bin/qi board:create clean --phpbb 3.3 --db mariadb --port 8081 --populate none
 ```
 
-Create a board with extension-development fixtures:
+Create a board with comprehensive development fixtures:
 
 ```bash
-php bin/qi board:create extdev --phpbb 3.3.17 --db mariadb --port 8082 --populate extension-dev
+php bin/qi board:create dev --phpbb 3.3.17 --db mariadb --port 8082 --populate development
 ```
 
 Create a board with phpBB debug output enabled:
 
 ```bash
-php bin/qi board:create debug --phpbb 3.3 --db mariadb --port 8085 --populate extension-dev --debug
+php bin/qi board:create debug --phpbb 3.3 --db mariadb --port 8085 --populate development --debug
 ```
 
 Create an older supported phpBB 3.2 board:
@@ -172,42 +172,44 @@ php bin/qi board:create demo --phpbb 3.3 --db mariadb --port 8081 --populate tin
 
 ## Fixture Presets
 
-Fixture seeding populates a board with categories, forums, users, topics, and replies. For non-tiny presets, it also adds a few seeded users to Global Moderators and Newly Registered Users. Newly registered users are kept at zero posts. It does not create custom groups, permission matrices, or attachments.
+Fixture seeding populates a board with repeatable test data. The `development` preset favors meaningful phpBB states over raw volume; use `load-test` when topic and post volume is the primary goal.
 
 Use `--populate <preset>` during `board:create`:
 
 ```bash
-php bin/qi board:create demo --populate extension-dev
+php bin/qi board:create demo --populate development
 ```
 
 Available presets:
 
-| Preset          | Description                                                          |
-|-----------------|----------------------------------------------------------------------|
-| `none`          | No seed data                                                         |
-| `tiny`          | 3 users, 1 category, 2 forums, 2 topics, 2 replies per topic         |
-| `extension-dev` | 10 users, 2 categories, 6 forums, 25 topics, 10 replies per topic    |
-| `load-test`     | 100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic |
-| `random`        | Random counts up to load-test size                                   |
+| Preset        | Description                                                                                                               |
+|---------------|---------------------------------------------------------------------------------------------------------------------------|
+| `none`        | No seed data                                                                                                              |
+| `tiny`        | 3 users, 1 category, 2 forums, 2 topics, 2 replies per topic                                                              |
+| `development` | 25 users, 12 forums, 90 posts, plus rich sample content and states ideal for developing and testing extensions and styles |
+| `load-test`   | 100 users, 4 categories, 20 forums, 100 topics, 20 replies per topic                                                      |
+| `random`      | Random counts up to load-test size                                                                                        |
 
-Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards currently support `--populate none` only; phpBB's posting and permission APIs can hold SQLite write locks too long for reliable fixture generation.
+Every seeded preset is tracked by a preset-and-seed-specific manifest under the board's `store/` directory. This lets `--reset` and `--replace` remove only the database rows and physical files owned by that exact preset and seed. A missing manifest means there is no tracked seed data to remove.
+
+Fixture seeding is supported for MariaDB, MySQL, and PostgreSQL boards. SQLite boards support the `tiny` and `development` presets; use another database for the heavier `load-test` and `random` presets.
 
 You can seed again manually:
 
 ```bash
-php bin/qi board:seed demo --preset extension-dev --seed 1
+php bin/qi board:seed demo --preset development --seed 1
 ```
 
 Replace seed data:
 
 ```bash
-php bin/qi board:seed demo --preset extension-dev --seed 1 --replace
+php bin/qi board:seed demo --preset development --seed 1 --replace
 ```
 
 Remove seed data:
 
 ```bash
-php bin/qi board:seed demo --preset extension-dev --seed 1 --reset
+php bin/qi board:seed demo --preset development --seed 1 --reset
 ```
 
 `--seed` is a repeatable random seed number. Use the same seed to get the same fixture shape.

@@ -162,7 +162,36 @@ class BoardRunnerTest extends TestCase
 
 		$runner->runSeederForTest('demo', 'load-test', 1, 'replace');
 
-		self::assertSame(['php', '-d', 'memory_limit=512M', '/tmp/qi_seed.php', 'load-test', '1', 'replace'], array_slice($runner->runs[1], -7));
+		self::assertCount(3, $runner->runs);
+		self::assertSame(['mkdir', '-p', '/tmp/qi-seed-runtime'], array_slice($runner->runs[0], -3));
+		self::assertStringEndsWith('/seed-runtime/.', $runner->runs[1][5]);
+		self::assertSame('web:/tmp/qi-seed-runtime', $runner->runs[1][6]);
+		self::assertSame(
+			['exec', '-T', '-e', 'QUICKINSTALL_SEED_RUNTIME=1', 'web'],
+			array_slice($runner->runs[2], 4, 5)
+		);
+		self::assertSame(
+			['php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', 'load-test', '1', 'replace'],
+			array_slice($runner->runs[2], -7)
+		);
+	}
+
+	public function testDevelopmentPresetUsesSameSeederPackage(): void
+	{
+		[$project] = $this->projectWithBoard();
+		mkdir($project->runtimePath('demo'), 0775, true);
+		$runner = new CommandCapturingBoardRunner($project);
+
+		$runner->runSeederForTest('demo', 'development', 4, 'replace');
+
+		self::assertCount(3, $runner->runs);
+		self::assertSame(['mkdir', '-p', '/tmp/qi-seed-runtime'], array_slice($runner->runs[0], -3));
+		self::assertStringEndsWith('/seed-runtime/.', $runner->runs[1][5]);
+		self::assertSame('web:/tmp/qi-seed-runtime', $runner->runs[1][6]);
+		self::assertSame(
+			['php', '-d', 'memory_limit=512M', '/tmp/qi-seed-runtime/run.php', 'development', '4', 'replace'],
+			array_slice($runner->runs[2], -7)
+		);
 	}
 
 	public function testServiceStateChecksStoppedContainers(): void
@@ -203,15 +232,28 @@ class BoardRunnerTest extends TestCase
 		self::assertStringContainsString("@define('PHPBB_DISPLAY_LOAD_TIME', true);", file_get_contents($boardPath . '/config.php'));
 	}
 
-	public function testStartRejectsSqliteSeededBoards(): void
+	public function testStartAllowsSqliteDevelopmentSeededBoards(): void
 	{
 		[$project] = $this->projectWithBoard([
 			'db' => 'sqlite',
-			'populate' => 'tiny',
+			'populate' => 'development',
+		]);
+		$runner = new TestBoardRunner($project);
+
+		$runner->start('demo');
+
+		self::assertSame([['demo', 'development']], $runner->seedIfNeededRuns);
+	}
+
+	public function testStartRejectsHeavySqliteSeededBoards(): void
+	{
+		[$project] = $this->projectWithBoard([
+			'db' => 'sqlite',
+			'populate' => 'load-test',
 		]);
 
 		$this->expectException(RuntimeException::class);
-		$this->expectExceptionMessage('SQLite boards currently support populate:none only');
+		$this->expectExceptionMessage('SQLite boards support populate:none, tiny, or development only');
 
 		(new TestBoardRunner($project))->start('demo');
 	}

@@ -84,10 +84,44 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('/assets/sandbox-ui.js', $html);
 		self::assertStringContainsString('<option value="3.3.x">', $html);
 		self::assertStringContainsString('title="phpBB selector to fetch or reuse.', $html);
+		self::assertStringContainsString('SQLite supports the tiny and development seed presets.', $html);
 		self::assertStringContainsString('title="Allow the path field to point outside the customisations directory.', $html);
 		self::assertStringContainsString('Relative to <code>customisations/</code>', $html);
+		self::assertStringContainsString('<option value="development">development</option>', $html);
+		self::assertStringNotContainsString('<option value="extension-dev">', $html);
 		self::assertStringNotContainsString('<option value="3.0.x">', $html);
 		self::assertStringNotContainsString('<style>', $html);
+	}
+
+	public function testBoardCreateRejectsHeavySqliteSeedPreset(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$json = $this->runWebApplicationWithCsrf($root, [
+			'action' => 'board_create',
+			'name' => 'demo',
+			'phpbb' => '3.3.14',
+			'db' => 'sqlite',
+			'port' => '8080',
+			'populate' => 'load-test',
+		], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertStringContainsString('SQLite boards support populate none, tiny, or development only.', $data['error']);
+	}
+
+	public function testBoardSeedRequiresPreset(): void
+	{
+		$root = $this->createTempProjectRoot();
+		$json = $this->runWebApplicationWithCsrf($root, [
+			'action' => 'board_seed',
+			'name' => 'demo',
+			'seed' => '1',
+		], true);
+		$data = json_decode($json, true);
+
+		self::assertIsArray($data);
+		self::assertStringContainsString('preset is required.', $data['error']);
 	}
 
 	public function testDoctorPostShowsResultsAndActivityOutput(): void

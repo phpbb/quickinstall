@@ -68,10 +68,12 @@ Requirements:
 Create your first new board:
 
 ```bash
-php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate extension-dev
+php bin/qi board:create test --phpbb 3.3 --db mariadb --port 8081 --populate development
 ```
 
 The QuickInstall CLI targets phpBB 3.2+ installer-based boards. phpBB 3.0/3.1 remain legacy-web-app territory and are not planned for the QuickInstall CLI.
+
+All fixture presets run through one phpBB-aware seeding runtime with shared manifests, reset behavior, generated-file tracking, and version compatibility.
 
 If you prefer a browser workflow, start the QuickInstall Dashboard UI:
 
@@ -99,6 +101,7 @@ This project is maintained by the phpBB Customisations Team.
 - Originally created by Igor “igorw” Wiedler in the summer of 2007.
 - Maintained by Jari “tumba25” Kanerva from March 2010 to March 2015.
 - Maintained by Matt “MattF” Friedman since 2016.
+- Thanks to Vinny for creating [phpBB Style Tester](https://github.com/vinny/phpbb-style-tester), which inspired QuickInstall's development seed preset.
 - Thanks to the phpBB.com MOD team (especially Josh, aka “A_Jelly_Doughnut”) for AutoMOD.
 - Thanks to the beta testers!
 - Thanks to the phpBB community including phpBB.com, startrekguide.com, and phpBBModders.net!
