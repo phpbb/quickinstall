@@ -477,9 +477,8 @@ This line is intentionally wide and should remain readable without breaking the 
 	private function postData(int $forumId, int $topicId, string $subject, string $message): array
 	{
 		$db = $this->context->db;
-		$uid = $bitfield = '';
-		$options = 7;
-		generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
+		$parser = $this->parseMessage($message);
+		$message = $parser->message;
 		$result = $db->sql_query_limit('SELECT forum_name FROM ' . FORUMS_TABLE . ' WHERE forum_id = ' . $forumId, 1);
 		$forumName = (string) $db->sql_fetchfield('forum_name');
 		$db->sql_freeresult($result);
@@ -497,8 +496,8 @@ This line is intentionally wide and should remain readable without breaking the 
 			'enable_sig' => true,
 			'message' => $message,
 			'message_md5' => md5($message),
-			'bbcode_bitfield' => $bitfield,
-			'bbcode_uid' => $uid,
+			'bbcode_bitfield' => $parser->bbcode_bitfield,
+			'bbcode_uid' => $parser->bbcode_uid,
 			'post_edit_locked' => 0,
 			'notify_set' => false,
 			'notify' => false,

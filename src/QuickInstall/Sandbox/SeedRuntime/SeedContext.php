@@ -415,6 +415,20 @@ abstract class BaseBuilder
 		$this->context = $context;
 	}
 
+	/** Parses user-authored content through phpBB's posting pipeline. */
+	protected function parseMessage(string $message)
+	{
+		$parser = new \parse_message($message);
+		// Keep phpBB's generated UID even with TextFormatter's empty legacy bitfield.
+		$parser->parse(true, true, true, true, true, true, true);
+		if ($parser->warn_msg)
+		{
+			throw new RuntimeException('Unable to parse seed message: ' . implode(' ', $parser->warn_msg));
+		}
+
+		return $parser;
+	}
+
 	/** Returns the last inserted ID across supported phpBB DBAL versions. */
 	protected function lastInsertedId(): int
 	{

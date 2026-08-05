@@ -207,9 +207,7 @@ class StateBuilder extends BaseBuilder
 		$db->sql_freeresult($result);
 		if (!$messageId)
 		{
-			$uid = $bitfield = '';
-			$options = 7;
-			generate_text_for_storage($message, $uid, $bitfield, $options, true, true, true);
+			$parser = $this->parseMessage($message);
 			$data = [
 				'address_list' => ['u' => [$recipientId => 'to']],
 				'from_user_id' => $authorId,
@@ -220,9 +218,9 @@ class StateBuilder extends BaseBuilder
 				'enable_smilies' => true,
 				'enable_urls' => true,
 				'icon_id' => 0,
-				'bbcode_uid' => $uid,
-				'bbcode_bitfield' => $bitfield,
-				'message' => $message,
+				'bbcode_uid' => $parser->bbcode_uid,
+				'bbcode_bitfield' => $parser->bbcode_bitfield,
+				'message' => $parser->message,
 			];
 			submit_pm('post', $subject, $data, true);
 			$messageId = (int) ($data['msg_id'] ?? 0);
