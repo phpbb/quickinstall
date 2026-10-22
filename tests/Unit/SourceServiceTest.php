@@ -15,15 +15,15 @@ class SourceServiceTest extends TestCase
 
 	public function testListsSourcesWithDownloadedAndUsageStatus(): void
 	{
-		[$project, $sourcePath] = $this->projectWithSource('3.3.14');
+		[$project, $sourcePath] = $this->projectWithSource('3.3.19');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb_source' => '3.3.14',
+			'phpbb_source' => '3.3.19',
 		]);
 
 		$list = (new SourceService($project))->list();
 
-		self::assertSame('3.3.14', $list[0]['source_key']);
+		self::assertSame('3.3.19', $list[0]['source_key']);
 		self::assertTrue($list[0]['downloaded']);
 		self::assertSame(['demo'], $list[0]['used_by']);
 		self::assertSame($sourcePath, $list[0]['path']);
@@ -31,16 +31,16 @@ class SourceServiceTest extends TestCase
 
 	public function testRemoveBlocksUsedSourceWithoutForce(): void
 	{
-		[$project] = $this->projectWithSource('3.3.14');
+		[$project] = $this->projectWithSource('3.3.19');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb_source' => '3.3.14',
+			'phpbb_source' => '3.3.19',
 		]);
 
 		$this->expectException(InvalidArgumentException::class);
-		$this->expectExceptionMessage('Source 3.3.14 is used by board(s): demo');
+		$this->expectExceptionMessage('Source 3.3.19 is used by board(s): demo');
 
-		(new SourceService($project))->remove('3.3.14');
+		(new SourceService($project))->remove('3.3.19');
 	}
 
 	public function testRemoveCanResolveSourceBySelectorAlias(): void
@@ -61,20 +61,20 @@ class SourceServiceTest extends TestCase
 		$project->init();
 
 		$this->expectException(InvalidArgumentException::class);
-		$this->expectExceptionMessage('Unknown source: 3.3.14');
+		$this->expectExceptionMessage('Unknown source: 3.3.19');
 
-		(new SourceService($project))->remove('3.3.14');
+		(new SourceService($project))->remove('3.3.19');
 	}
 
 	public function testRemoveWithForceDeletesRecordAndFiles(): void
 	{
-		[$project, $sourcePath] = $this->projectWithSource('3.3.14');
+		[$project, $sourcePath] = $this->projectWithSource('3.3.19');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb_source' => '3.3.14',
+			'phpbb_source' => '3.3.19',
 		]);
 
-		$result = (new SourceService($project))->remove('3.3.14', true);
+		$result = (new SourceService($project))->remove('3.3.19', true);
 
 		self::assertSame(['demo'], $result['used_by']);
 		self::assertDirectoryDoesNotExist($sourcePath);
@@ -83,16 +83,16 @@ class SourceServiceTest extends TestCase
 
 	public function testPruneRemovesOnlyUnusedSources(): void
 	{
-		[$project, $unusedPath] = $this->projectWithSource('3.3.14');
-		$usedPath = $this->addSource($project, '3.3.15');
+		[$project, $unusedPath] = $this->projectWithSource('3.3.18');
+		$usedPath = $this->addSource($project, '3.3.19');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb_source' => '3.3.15',
+			'phpbb_source' => '3.3.19',
 		]);
 
 		$removed = (new SourceService($project))->prune();
 
-		self::assertSame('3.3.14', $removed[0]['source_key']);
+		self::assertSame('3.3.18', $removed[0]['source_key']);
 		self::assertDirectoryDoesNotExist($unusedPath);
 		self::assertDirectoryExists($usedPath);
 	}

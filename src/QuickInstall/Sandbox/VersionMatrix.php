@@ -18,8 +18,8 @@ class VersionMatrix
 	public function list(): array
 	{
 		return [
-			['selector' => 'latest', 'resolves_to' => '3.3.*', 'status' => 'supported', 'php' => '8.1', 'notes' => 'Default supported stable line'],
-			['selector' => '3.3 / 3.3.x', 'resolves_to' => '3.3.* or exact tag', 'status' => 'supported', 'php' => '8.1', 'notes' => 'Recommended; exact 3.3.0-3.3.4 use PHP 7.4'],
+			['selector' => 'latest', 'resolves_to' => '3.3.*', 'status' => 'supported', 'php' => '8.2', 'notes' => 'Default supported stable line'],
+			['selector' => '3.3 / 3.3.x', 'resolves_to' => '3.3.* or exact tag', 'status' => 'supported', 'php' => '8.2', 'notes' => 'Recommended; exact 3.3.0-3.3.5 use PHP 7.4'],
 			['selector' => '3.2 / 3.2.x', 'resolves_to' => '3.2.* or exact tag', 'status' => 'supported', 'php' => '7.1', 'notes' => 'Legacy-modern'],
 			['selector' => '4.0.x / master', 'resolves_to' => 'exact tag or dev-master', 'status' => 'experimental', 'php' => '8.2', 'notes' => 'Installer may change upstream'],
 			['selector' => '3.0.x / 3.1.x', 'resolves_to' => '-', 'status' => 'unsupported', 'php' => '-', 'notes' => 'Use legacy web app'],
@@ -60,7 +60,7 @@ class VersionMatrix
 				'constraint' => '3.3.*',
 				'branch' => '3.3',
 				'phpbb_branch' => '3.3',
-				'php' => '8.1',
+				'php' => '8.2',
 				'status' => 'supported',
 			];
 		}
@@ -73,7 +73,7 @@ class VersionMatrix
 				'constraint' => '3.3.*',
 				'branch' => '3.3',
 				'phpbb_branch' => '3.3',
-				'php' => '8.1',
+				'php' => '8.2',
 				'status' => 'supported',
 			];
 		}
@@ -112,7 +112,7 @@ class VersionMatrix
 				'constraint' => $requested,
 				'branch' => '3.3',
 				'phpbb_branch' => '3.3',
-				'php' => version_compare($requested, '3.3.5', '<') ? '7.4' : '8.1',
+				'php' => version_compare($requested, '3.3.6', '<') ? '7.4' : '8.2',
 				'status' => 'supported',
 			];
 		}

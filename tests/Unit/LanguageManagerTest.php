@@ -152,9 +152,9 @@ class LanguageManagerTest extends TestCase
 		mkdir($project->boardPath('demo'), 0775, true);
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb' => '3.3.17',
-			'phpbb_source' => '3.3.17',
-			'php' => '8.1',
+			'phpbb' => '3.3.19',
+			'phpbb_source' => '3.3.19',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'port' => 8081,
 			'url' => 'http://localhost:8081/',

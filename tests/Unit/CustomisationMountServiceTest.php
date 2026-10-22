@@ -19,10 +19,10 @@ class CustomisationMountServiceTest extends TestCase
 		$project->init();
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb' => '3.3.14',
-			'phpbb_source' => '3.3.14',
+			'phpbb' => '3.3.19',
+			'phpbb_source' => '3.3.19',
 			'phpbb_branch' => '3.3',
-			'php' => '8.1',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'port' => 8081,
 			'url' => 'http://localhost:8081/',

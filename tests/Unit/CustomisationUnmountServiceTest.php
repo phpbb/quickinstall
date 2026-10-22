@@ -80,9 +80,9 @@ class CustomisationUnmountServiceTest extends \PHPUnit\Framework\TestCase
 		file_put_contents($project->boardPath('demo') . '/config.php', '<?php');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb' => '3.3.17',
-			'phpbb_source' => '3.3.17',
-			'php' => '8.1',
+			'phpbb' => '3.3.19',
+			'phpbb_source' => '3.3.19',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'port' => 8080,
 			'url' => 'http://localhost:8080/',

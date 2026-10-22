@@ -110,7 +110,8 @@ installer:
     server_name: $serverName
     server_port: {$config['port']}
     script_path: $scriptPath
-  extensions: []
+  # phpBB treats an empty list as "enable all available extensions".
+  extensions: ["__quickinstall_none__"]
 
 YAML;
 	}

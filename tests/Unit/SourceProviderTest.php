@@ -15,12 +15,13 @@ class SourceProviderTest extends TestCase
 	{
 		$project = $this->project();
 
-		$source = (new TestSourceProvider($project))->add('3.3.14', 'composer', null);
+		$source = (new TestSourceProvider($project))->add('3.3.19', 'composer', null);
 
-		self::assertSame('3.3.14', $source['source_key']);
+		self::assertSame('3.3.19', $source['source_key']);
 		self::assertSame('phpbb/phpbb', $source['package']);
+		self::assertSame('8.2', $source['php']);
 		self::assertNull($source['url']);
-		self::assertSame($source, $project->readJson('sources.json', [])['3.3.14']);
+		self::assertSame($source, $project->readJson('sources.json', [])['3.3.19']);
 	}
 
 	/**
@@ -29,13 +30,13 @@ class SourceProviderTest extends TestCase
 	public function testEnsureDownloadedSourceAddsPhpRequirementMetadata(string $requirement, string $expectedRuntime): void
 	{
 		$project = $this->project();
-		$this->addDownloadedSource($project, '3.3.14', $requirement);
+		$this->addDownloadedSource($project, '3.3.19', $requirement);
 
-		$source = (new TestSourceProvider($project))->ensure('3.3.14');
+		$source = (new TestSourceProvider($project))->ensure('3.3.19');
 
 		self::assertSame($requirement, $source['php_requirement']);
 		self::assertSame($expectedRuntime, $source['php']);
-		self::assertSame($expectedRuntime, $project->readJson('sources.json', [])['3.3.14']['php']);
+		self::assertSame($expectedRuntime, $project->readJson('sources.json', [])['3.3.19']['php']);
 	}
 
 	public function testEnsureRegisteredCustomSourceByKey(): void
@@ -95,15 +96,15 @@ class SourceProviderTest extends TestCase
 
 		$provider->fetch([
 			'type' => 'composer',
-			'constraint' => '3.3.14',
-			'path' => $project->sourcePath('3.3.14'),
+			'constraint' => '3.3.19',
+			'path' => $project->sourcePath('3.3.19'),
 		]);
 
 		self::assertSame('composer-bin', $provider->runs[0]['command'][0]);
 		self::assertContains('create-project', $provider->runs[0]['command']);
 		self::assertContains('phpbb/phpbb', $provider->runs[0]['command']);
-		self::assertContains('3.3.14', $provider->runs[0]['command']);
-		self::assertSame(dirname($project->sourcePath('3.3.14')), $provider->runs[0]['cwd']);
+		self::assertContains('3.3.19', $provider->runs[0]['command']);
+		self::assertSame(dirname($project->sourcePath('3.3.19')), $provider->runs[0]['cwd']);
 	}
 
 	public function testFetchComposerNormalizesLegacyPackageVersionsMetadata(): void
@@ -262,12 +263,12 @@ class SourceProviderTest extends TestCase
 	public function testEnsureFloatingComposerReusesExistingResolvedSource(): void
 	{
 		$project = $this->project();
-		$this->addDownloadedSource($project, '3.3.15');
+		$this->addDownloadedSource($project, '3.3.19');
 		$provider = new TestSourceProvider($project);
 		$provider->captures = [
 			[
 				'status' => 0,
-				'output' => json_encode(['versions' => ['3.3.14', '3.3.15', 'dev-master']]),
+				'output' => json_encode(['versions' => ['3.3.18', '3.3.19', 'dev-master']]),
 			],
 		];
 
@@ -276,34 +277,34 @@ class SourceProviderTest extends TestCase
 		$output = ob_get_clean();
 
 		self::assertSame('', $output);
-		self::assertSame('3.3.15', $source['source_key']);
-		self::assertSame('3.3.15', $source['constraint']);
+		self::assertSame('3.3.19', $source['source_key']);
+		self::assertSame('3.3.19', $source['constraint']);
 	}
 
 	public function testFloatingStableSelectorDownloadsNewResolvedVersion(): void
 	{
 		$project = $this->project();
-		$provider = new AdvancingReleaseSourceProvider($project, ['3.3.17', '3.3.18']);
+		$provider = new AdvancingReleaseSourceProvider($project, ['3.3.18', '3.3.19']);
 
 		$first = $provider->ensure('3.3');
 		$second = $provider->ensure('3.3');
 
-		self::assertSame('3.3.17', $first['source_key']);
-		self::assertSame('3.3.18', $second['source_key']);
+		self::assertSame('3.3.18', $first['source_key']);
+		self::assertSame('3.3.19', $second['source_key']);
 		self::assertSame(2, $provider->fetches);
-		self::assertFileExists($project->sourcePath('3.3.17') . '/common.php');
 		self::assertFileExists($project->sourcePath('3.3.18') . '/common.php');
+		self::assertFileExists($project->sourcePath('3.3.19') . '/common.php');
 	}
 
 	public function phpRequirementProvider(): array
 	{
 		return [
-			'default runtime satisfies lower minimum' => ['>=7.4', '8.1'],
-			'default runtime satisfies caret minimum' => ['^8.1', '8.1'],
+			'default runtime satisfies lower minimum' => ['>=7.4', '8.2'],
+			'default runtime satisfies caret minimum' => ['^8.1', '8.2'],
 			'higher minimum bumps runtime' => ['>=8.2', '8.2'],
-			'less-than constraint is ignored as minimum' => ['<8.0 || >=8.1', '8.1'],
-			'not-equal constraint is ignored as minimum' => ['!=8.2 >=8.0', '8.1'],
-			'malformed requirement keeps default' => ['dev-main', '8.1'],
+			'less-than constraint is ignored as minimum' => ['<8.0 || >=8.1', '8.2'],
+			'not-equal constraint is ignored as minimum' => ['!=8.2 >=8.0', '8.2'],
+			'malformed requirement keeps default' => ['dev-main', '8.2'],
 		];
 	}
 
@@ -333,7 +334,7 @@ class SourceProviderTest extends TestCase
 			'constraint' => $key,
 			'branch' => '3.3',
 			'phpbb_branch' => '3.3',
-			'php' => '8.1',
+			'php' => '8.2',
 			'status' => 'supported',
 			'type' => 'composer',
 			'package' => 'phpbb/phpbb',
