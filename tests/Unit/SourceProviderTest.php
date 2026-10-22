@@ -19,6 +19,7 @@ class SourceProviderTest extends TestCase
 
 		self::assertSame('3.3.14', $source['source_key']);
 		self::assertSame('phpbb/phpbb', $source['package']);
+		self::assertSame('8.2', $source['php']);
 		self::assertNull($source['url']);
 		self::assertSame($source, $project->readJson('sources.json', [])['3.3.14']);
 	}
@@ -298,12 +299,12 @@ class SourceProviderTest extends TestCase
 	public function phpRequirementProvider(): array
 	{
 		return [
-			'default runtime satisfies lower minimum' => ['>=7.4', '8.1'],
-			'default runtime satisfies caret minimum' => ['^8.1', '8.1'],
+			'default runtime satisfies lower minimum' => ['>=7.4', '8.2'],
+			'default runtime satisfies caret minimum' => ['^8.1', '8.2'],
 			'higher minimum bumps runtime' => ['>=8.2', '8.2'],
-			'less-than constraint is ignored as minimum' => ['<8.0 || >=8.1', '8.1'],
-			'not-equal constraint is ignored as minimum' => ['!=8.2 >=8.0', '8.1'],
-			'malformed requirement keeps default' => ['dev-main', '8.1'],
+			'less-than constraint is ignored as minimum' => ['<8.0 || >=8.1', '8.2'],
+			'not-equal constraint is ignored as minimum' => ['!=8.2 >=8.0', '8.2'],
+			'malformed requirement keeps default' => ['dev-main', '8.2'],
 		];
 	}
 
