@@ -184,18 +184,13 @@ YAML;
 		return $volumes;
 	}
 
-	/** Prevents stale sandbox responses and routes scoped URLs to phpBB. */
+	/** Routes a scoped board URL to phpBB's unchanged document root. */
 	private function apacheConfig(string $name, array $config): string
 	{
 		$serverName = $config['server_name'] ?? 'localhost';
-		$headers = <<<APACHE
-Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
-Header always set Expires "0"
-
-APACHE;
 		if (empty($config['scoped_path']))
 		{
-			return "ServerName $serverName\nLimitRequestFieldSize 65536\n" . $headers;
+			return "ServerName $serverName\nLimitRequestFieldSize 65536\n";
 		}
 
 		$path = '/' . $name;
@@ -203,7 +198,6 @@ APACHE;
 		return <<<APACHE
 ServerName $serverName
 LimitRequestFieldSize 65536
-$headers
 RedirectMatch 302 "^/$" "$path/"
 RedirectMatch 302 "^$pattern$" "$path/"
 Alias "$path/" "/var/www/html/"
@@ -294,7 +288,7 @@ RUN {$aptSourceSetup}apt-get update \\
     && apt-get install -y --no-install-recommends $packages \\
     && docker-php-ext-install mbstring zip \\
 {$sodiumInstall}    && $extensionInstall \\
-    && a2enmod rewrite headers \\
+    && a2enmod rewrite \\
     && for extension in $requiredExtensions; do php -m | grep -qi "^\${extension}$"; done \\
     && rm -rf /var/lib/apt/lists/*
 

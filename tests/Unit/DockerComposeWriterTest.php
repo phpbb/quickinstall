@@ -36,7 +36,6 @@ class DockerComposeWriterTest extends TestCase
 		self::assertStringContainsString('QUICKINSTALL_REWRITE_BASE: "/demo/"', file_get_contents($paths['compose']));
 		self::assertStringNotContainsString("\t", file_get_contents($paths['compose']));
 		self::assertStringContainsString('a2enmod rewrite', file_get_contents($paths['dockerfile']));
-		self::assertStringContainsString('a2enmod rewrite headers', file_get_contents($paths['dockerfile']));
 
 		$output = file_get_contents($paths['compose']) . "\n" . file_get_contents($paths['install_config']) . "\n" . file_get_contents($paths['dockerfile']);
 		foreach ($expectedContains as $expected)
@@ -194,7 +193,6 @@ class DockerComposeWriterTest extends TestCase
 		self::assertStringContainsString('server_name: "localhost"', file_get_contents($paths['install_config']));
 		self::assertStringContainsString('script_path: "/"', file_get_contents($paths['install_config']));
 		self::assertStringNotContainsString('Alias ', file_get_contents($paths['apache_config']));
-		self::assertStringContainsString('Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"', file_get_contents($paths['apache_config']));
 	}
 
 	public function testExistingPostgresConfigKeepsRootDataDirectory(): void
@@ -222,8 +220,6 @@ class DockerComposeWriterTest extends TestCase
 		self::assertStringContainsString('RedirectMatch 302 "^/demo$" "/demo/"', $apacheConfig);
 		self::assertStringContainsString('Alias "/demo/" "/var/www/html/"', $apacheConfig);
 		self::assertStringContainsString('LimitRequestFieldSize 65536', $apacheConfig);
-		self::assertStringContainsString('Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"', $apacheConfig);
-		self::assertStringContainsString('Header always set Expires "0"', $apacheConfig);
 		self::assertStringContainsString('target: "/etc/apache2/conf-enabled/quickinstall.conf"', file_get_contents($paths['compose']));
 		self::assertStringContainsString('source: "/tmp/de-language"', file_get_contents($paths['compose']));
 		self::assertStringContainsString('target: "/var/www/html/language/de"', file_get_contents($paths['compose']));
