@@ -118,10 +118,10 @@ class ApplicationTest extends TestCase
 	public function testBoardCreateAllowsSupportedSqliteSeedPreset(): void
 	{
 		$root = $this->createTempProjectRoot();
-		$this->addDownloadedSource($root, '3.3.14');
+		$this->addDownloadedSource($root, '3.3.19');
 
 		$result = $this->runApplication($root, [
-			'qi', 'board:create', 'demo', '--phpbb', '3.3.14', '--db', 'sqlite', '--populate', 'development',
+			'qi', 'board:create', 'demo', '--phpbb', '3.3.19', '--db', 'sqlite', '--populate', 'development',
 		], "n\n");
 
 		self::assertSame(0, $result['exit_code']);
@@ -142,9 +142,9 @@ class ApplicationTest extends TestCase
 	public function testBoardCreatePromptsToStartBoardAfterNextStep(): void
 	{
 		$root = $this->createTempProjectRoot();
-		$this->addDownloadedSource($root, '3.3.14');
+		$this->addDownloadedSource($root, '3.3.19');
 
-		$result = $this->runApplication($root, ['qi', 'board:create', 'demo', '--phpbb', '3.3.14', '--port', (string) $this->availablePort()], "n\n");
+		$result = $this->runApplication($root, ['qi', 'board:create', 'demo', '--phpbb', '3.3.19', '--port', (string) $this->availablePort()], "n\n");
 
 		self::assertSame(0, $result['exit_code']);
 		self::assertStringContainsString('NEXT:', $result['output']);
@@ -162,9 +162,9 @@ class ApplicationTest extends TestCase
 	public function testBoardCreateRepeatsStartPromptUntilYesOrNo(): void
 	{
 		$root = $this->createTempProjectRoot();
-		$this->addDownloadedSource($root, '3.3.14');
+		$this->addDownloadedSource($root, '3.3.19');
 
-		$result = $this->runApplication($root, ['qi', 'board:create', 'demo', '--phpbb', '3.3.14', '--port', (string) $this->availablePort()], "maybe\nn\n");
+		$result = $this->runApplication($root, ['qi', 'board:create', 'demo', '--phpbb', '3.3.19', '--port', (string) $this->availablePort()], "maybe\nn\n");
 
 		self::assertSame(0, $result['exit_code']);
 		self::assertMatchesRegularExpression('#URL after start: http://localhost:\d+/demo/#', $result['output']);
@@ -286,7 +286,7 @@ class ApplicationTest extends TestCase
 				'constraint' => $version,
 				'branch' => $version,
 				'phpbb_branch' => '3.3',
-				'php' => '8.1',
+				'php' => '8.2',
 				'status' => 'supported',
 				'type' => 'composer',
 				'package' => 'phpbb/phpbb',

@@ -82,7 +82,7 @@ class VersionMatrixTest extends TestCase
 			'exact 3.3.6 release' => ['3.3.6', ['source_key' => '3.3.6', 'constraint' => '3.3.6', 'php' => '8.2']],
 			'exact 3.3.9 release' => ['3.3.9', ['source_key' => '3.3.9', 'constraint' => '3.3.9', 'php' => '8.2']],
 			'exact 3.3.10 release' => ['3.3.10', ['source_key' => '3.3.10', 'constraint' => '3.3.10', 'php' => '8.2']],
-			'exact 3.3 release' => ['3.3.14', ['source_key' => '3.3.14', 'constraint' => '3.3.14', 'php' => '8.2']],
+			'exact 3.3 release' => ['3.3.19', ['source_key' => '3.3.19', 'constraint' => '3.3.19', 'php' => '8.2']],
 			'3.2 shorthand' => ['3.2', ['source_key' => '3.2', 'constraint' => '3.2.*', 'php' => '7.1']],
 			'exact 3.2 release' => ['3.2.11', ['source_key' => '3.2.11', 'constraint' => '3.2.11', 'php' => '7.1']],
 			'master' => ['master', ['source_key' => 'master', 'constraint' => 'dev-master', 'phpbb_branch' => '4.0']],

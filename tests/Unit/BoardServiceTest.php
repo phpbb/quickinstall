@@ -16,11 +16,11 @@ class BoardServiceTest extends TestCase
 
 	public function testCreateWritesBoardAndRuntimeConfig(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$runner = new ServiceTestBoardRunner($project);
 		$service = new TestBoardService($project, $runner);
 
-		$result = $service->create('demo', '3.3.14', 'postgres', 8090, 'tiny', true);
+		$result = $service->create('demo', '3.3.19', 'postgres', 8090, 'tiny', true);
 
 		self::assertSame('demo', $result['board']['name']);
 		self::assertSame('postgres', $result['board']['db']);
@@ -47,7 +47,7 @@ class BoardServiceTest extends TestCase
 
 		try
 		{
-			$project = $this->projectWithSource('3.3.14');
+			$project = $this->projectWithSource('3.3.19');
 			self::assertSame('US/Pacific', (new HostTimezoneTestBoardService($project))->detectedHostTimezone());
 		}
 		finally
@@ -58,39 +58,39 @@ class BoardServiceTest extends TestCase
 
 	public function testCreateRejectsDuplicateWithoutReplace(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo', 'port' => 8090]);
 
 		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage('Board already exists');
 
-		(new TestBoardService($project))->create('demo', '3.3.14', 'mariadb', 8090);
+		(new TestBoardService($project))->create('demo', '3.3.19', 'mariadb', 8090);
 	}
 
 	public function testRejectsBoardNamesThatDifferOnlyByCase(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'Demo', 'port' => 8090]);
 
 		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage('case-insensitive');
-		(new TestBoardService($project))->create('demo', '3.3.14', 'mariadb', 8091);
+		(new TestBoardService($project))->create('demo', '3.3.19', 'mariadb', 8091);
 	}
 
 	public function testCreateWithReplacePreservesExistingBoardUntilReplacementIsReady(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo', 'port' => 8090]);
 		$runner = new ServiceTestBoardRunner($project);
 
-		(new TestBoardService($project, $runner))->create('demo', '3.3.14', 'mariadb', 8090, 'none', false, true);
+		(new TestBoardService($project, $runner))->create('demo', '3.3.19', 'mariadb', 8090, 'none', false, true);
 
 		self::assertSame(['demo'], $runner->preparedForReplacement);
 	}
 
 	public function testFailedReplacementRestoresExistingBoardFiles(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo', 'port' => 8090]);
 		mkdir($project->boardPath('demo'), 0775, true);
 		file_put_contents($project->boardPath('demo') . '/existing.txt', 'preserved');
@@ -99,7 +99,7 @@ class BoardServiceTest extends TestCase
 
 		try
 		{
-			(new TestBoardService($project, $runner, false, $writer))->create('demo', '3.3.14', 'mariadb', 8090, 'none', false, true);
+			(new TestBoardService($project, $runner, false, $writer))->create('demo', '3.3.19', 'mariadb', 8090, 'none', false, true);
 			self::fail('Expected replacement failure.');
 		}
 		catch (\RuntimeException $e)
@@ -136,28 +136,28 @@ class BoardServiceTest extends TestCase
 
 	public function testCreateRejectsUsedPortAndHostPort(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'other', 'port' => 8090]);
 
 		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage('Port 8090 is already used by board: other');
 
-		(new TestBoardService($project))->create('demo', '3.3.14', 'mariadb', 8090);
+		(new TestBoardService($project))->create('demo', '3.3.19', 'mariadb', 8090);
 	}
 
 	public function testCreateRejectsHostPortInUse(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 
 		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage('Port 8090 is already in use on this host.');
 
-		(new TestBoardService($project, null, true))->create('demo', '3.3.14', 'mariadb', 8090);
+		(new TestBoardService($project, null, true))->create('demo', '3.3.19', 'mariadb', 8090);
 	}
 
 	public function testListAddsRunnerStatusAndDefaults(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo']);
 		$runner = new ServiceTestBoardRunner($project);
 		$runner->statuses['demo'] = 'running';
@@ -171,7 +171,7 @@ class BoardServiceTest extends TestCase
 
 	public function testStartStopDestroyAndSeedDelegateToRunner(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo', 'db' => 'mariadb']);
 		$runner = new ServiceTestBoardRunner($project);
 		$runner->statuses['demo'] = 'running';
@@ -190,7 +190,7 @@ class BoardServiceTest extends TestCase
 
 	public function testSeedRequiresRunningBoard(): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo', 'db' => 'mariadb']);
 		$runner = new ServiceTestBoardRunner($project);
 		$runner->statuses['demo'] = 'stopped';
@@ -206,7 +206,7 @@ class BoardServiceTest extends TestCase
 	 */
 	public function testSqliteSeedActionRules(string $preset, string $action, bool $allowed): void
 	{
-		$project = $this->projectWithSource('3.3.14');
+		$project = $this->projectWithSource('3.3.19');
 		$project->appendBoard(['name' => 'demo', 'db' => 'sqlite']);
 		$runner = new ServiceTestBoardRunner($project);
 		$runner->statuses['demo'] = 'running';
@@ -251,7 +251,7 @@ class BoardServiceTest extends TestCase
 				'constraint' => $version,
 				'branch' => '3.3',
 				'phpbb_branch' => '3.3',
-				'php' => '8.1',
+				'php' => '8.2',
 				'status' => 'supported',
 				'type' => 'composer',
 				'package' => 'phpbb/phpbb',

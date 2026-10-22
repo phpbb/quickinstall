@@ -38,13 +38,13 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
-		$this->addDownloadedSource($project, '3.3.14');
+		$this->addDownloadedSource($project, '3.3.19');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb' => '3.3.14',
-			'phpbb_source' => '3.3.14',
+			'phpbb' => '3.3.19',
+			'phpbb_source' => '3.3.19',
 			'phpbb_branch' => '3.3',
-			'php' => '8.1',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'port' => 8081,
 			'url' => 'http://localhost:8081/',
@@ -69,7 +69,7 @@ class WebApplicationTest extends TestCase
 		self::assertStringContainsString('QuickInstall Dashboard', $text);
 		self::assertStringContainsString('demo', $text);
 		self::assertStringContainsString('http://localhost:8081/', $text);
-		self::assertStringContainsString('3.3.14', $text);
+		self::assertStringContainsString('3.3.19', $text);
 		self::assertStringContainsString('vendor/one', $text);
 		self::assertStringContainsString('vendor/four', $text);
 	}
@@ -83,9 +83,9 @@ class WebApplicationTest extends TestCase
 		{
 			$project->appendBoard([
 				'name' => 'board-' . $index,
-				'phpbb' => '3.3.17',
-				'phpbb_source' => '3.3.17',
-				'php' => '8.1',
+				'phpbb' => '3.3.19',
+				'phpbb_source' => '3.3.19',
+				'php' => '8.2',
 				'db' => 'mariadb',
 				'port' => 8100 + $index,
 				'url' => 'http://localhost:' . (8100 + $index) . '/',
@@ -110,8 +110,8 @@ class WebApplicationTest extends TestCase
 	{
 		$html = $this->renderDashboard([[
 			'name' => 'demo',
-			'phpbb' => '3.3.17',
-			'php' => '8.1',
+			'phpbb' => '3.3.19',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'url' => 'http://localhost:8080/',
 			'populate' => 'none',
@@ -131,8 +131,8 @@ class WebApplicationTest extends TestCase
 	{
 		$board = [
 			'name' => 'demo',
-			'phpbb' => '3.3.17',
-			'php' => '8.1',
+			'phpbb' => '3.3.19',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'url' => 'http://localhost:8080/',
 			'populate' => 'none',
@@ -154,7 +154,7 @@ class WebApplicationTest extends TestCase
 		$json = $this->runWebApplicationWithCsrf($root, [
 			'action' => 'board_create',
 			'name' => 'demo',
-			'phpbb' => '3.3.14',
+			'phpbb' => '3.3.19',
 			'db' => 'sqlite',
 			'port' => '8080',
 			'populate' => 'load-test',
@@ -310,17 +310,17 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
-		$this->addDownloadedSource($project, '3.3.14');
+		$this->addDownloadedSource($project, '3.3.19');
 
 		$json = $this->runWebApplicationWithCsrf($root, [
 			'action' => 'source_remove',
-			'source' => '3.3.14',
+			'source' => '3.3.19',
 		], true);
 		$data = json_decode($json, true);
 
 		self::assertIsArray($data);
 		self::assertTrue($data['ok']);
-		self::assertSame('Removed source: 3.3.14', $data['notice']);
+		self::assertSame('Removed source: 3.3.19', $data['notice']);
 		self::assertSame([], $project->readJson('sources.json', []));
 	}
 
@@ -329,13 +329,13 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
-		$this->addDownloadedSource($project, '3.3.14');
+		$this->addDownloadedSource($project, '3.3.19');
 		$project->appendBoard([
 			'name' => 'demo',
-			'phpbb' => '3.3.14',
-			'phpbb_source' => '3.3.14',
+			'phpbb' => '3.3.19',
+			'phpbb_source' => '3.3.19',
 			'phpbb_branch' => '3.3',
-			'php' => '8.1',
+			'php' => '8.2',
 			'db' => 'mariadb',
 			'port' => 8081,
 			'url' => 'http://localhost:8081/',
@@ -379,13 +379,13 @@ class WebApplicationTest extends TestCase
 		$root = $this->createTempProjectRoot();
 		$project = new Project($root);
 		$project->init();
-		$this->addDownloadedSource($project, '3.3.14');
+		$this->addDownloadedSource($project, '3.3.19');
 
 		$html = $this->runWebApplication($root);
 		$text = $this->visibleText($html);
 
-		self::assertStringContainsString('/' . basename($root) . '/.qi/sources/phpbb-3.3.14', $text);
-		self::assertStringNotContainsString($root . '/.qi/sources/phpbb-3.3.14', $text);
+		self::assertStringContainsString('/' . basename($root) . '/.qi/sources/phpbb-3.3.19', $text);
+		self::assertStringNotContainsString($root . '/.qi/sources/phpbb-3.3.19', $text);
 	}
 
 	public function testRenderShowsCachedUpdateBanner(): void
@@ -576,7 +576,7 @@ class WebApplicationTest extends TestCase
 				'constraint' => $key,
 				'branch' => '3.3',
 				'phpbb_branch' => '3.3',
-				'php' => '8.1',
+				'php' => '8.2',
 				'status' => 'supported',
 				'type' => 'composer',
 				'package' => 'phpbb/phpbb',
