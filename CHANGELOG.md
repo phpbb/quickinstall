@@ -1,5 +1,10 @@
 # QuickInstall Changelog
 
+## Version 1.8.3
+
+- [Change] QI CLI - phpBB 3.3.6 and newer boards now use PHP 8.2 by default; phpBB 3.3.0 through 3.3.5 continue to use PHP 7.4.
+- [Fix] QI CLI - Prevented mounted extensions from being automatically enabled during phpBB installation.
+
 ## Version 1.8.2
 
 - [Feature] QI CLI and Dashboard UI - Added support for mounting, listing, and safely unmounting phpBB 3.x and 4.x language packs.
