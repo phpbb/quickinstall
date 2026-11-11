@@ -31,7 +31,7 @@ require("{$quickinstall_path}includes/qi_module.$phpEx");
 require("{$quickinstall_path}includes/twig.$phpEx");
 require("{$quickinstall_path}vendor/autoload.$phpEx");
 
-if (PHP_VERSION_ID >= 50400)
+if (PHP_VERSION_ID >= 50400 && PHP_VERSION_ID < 80000)
 {
 	// PHP 5.4 adds E_STRICT to E_ALL.
 	// Our utf8 normalizer triggers E_STRICT output on PHP 5.4.
@@ -39,7 +39,8 @@ if (PHP_VERSION_ID >= 50400)
 	// continuing to work on PHP 4.
 	// Therefore, in phpBB 3.0.x we disable E_STRICT on PHP 5.4+,
 	// while phpBB 3.1 will fix utf8 normalizer.
-	// E_STRICT is defined starting with PHP 5
+	// No E_STRICT notice is raised anymore since PHP 8.0,
+	// and the constant itself is deprecated as of PHP 8.4.
 	if (!defined('E_STRICT'))
 	{
 		define('E_STRICT', 2048);
