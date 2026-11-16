@@ -40,20 +40,61 @@ class BoardServiceTest extends TestCase
 		self::assertFileExists($project->composePath('demo'));
 	}
 
-	public function testHostTimezoneUsesPhpCompatibleEnvironmentValue(): void
+	/** @dataProvider hostTimezoneEnvironmentProvider */
+	public function testHostTimezoneUsesPhpCompatibleEnvironmentValue(string $environment, string $expected): void
 	{
 		$previous = getenv('TZ');
-		putenv('TZ=US/Pacific');
+		putenv('TZ=' . $environment);
 
 		try
 		{
 			$project = $this->projectWithSource('3.3.19');
-			self::assertSame('US/Pacific', (new HostTimezoneTestBoardService($project))->detectedHostTimezone());
+			self::assertSame($expected, (new HostTimezoneTestBoardService($project))->detectedHostTimezone());
 		}
 		finally
 		{
 			$previous === false ? putenv('TZ') : putenv('TZ=' . $previous);
 		}
+	}
+
+	public function hostTimezoneEnvironmentProvider(): array
+	{
+		return [
+			'canonical identifier' => ['America/Los_Angeles', 'America/Los_Angeles'],
+			'colon-prefixed identifier' => [':America/Los_Angeles', 'America/Los_Angeles'],
+		];
+	}
+
+	public function testHostTimezoneHandlesAliasAccordingToRuntimeSupport(): void
+	{
+		$expected = 'Europe/Paris';
+		try
+		{
+			new \DateTimeZone('US/Pacific');
+			$expected = 'US/Pacific';
+		}
+		catch (\Exception $e)
+		{
+		}
+
+		$service = new HostTimezoneTestBoardService($this->projectWithSource('3.3.19'), ['US/Pacific', 'Europe/Paris']);
+		self::assertSame($expected, $service->detectedHostTimezone());
+	}
+
+	/** @dataProvider hostTimezoneFallbackProvider */
+	public function testHostTimezoneFallsBackFromInvalidCandidates(array $candidates, string $expected): void
+	{
+		$service = new HostTimezoneTestBoardService($this->projectWithSource('3.3.19'), $candidates);
+		self::assertSame($expected, $service->detectedHostTimezone());
+	}
+
+	public function hostTimezoneFallbackProvider(): array
+	{
+		return [
+			'next valid candidate' => [['', 'Invalid/Timezone', 'Europe/Paris', 'America/Los_Angeles'], 'Europe/Paris'],
+			'no valid candidates' => [['', 'Invalid/Timezone'], 'UTC'],
+			'no candidates' => [[], 'UTC'],
+		];
 	}
 
 	public function testCreateRejectsDuplicateWithoutReplace(): void
@@ -266,9 +307,22 @@ class BoardServiceTest extends TestCase
 
 class HostTimezoneTestBoardService extends BoardService
 {
+	private ?array $timezoneCandidates;
+
+	public function __construct(Project $project, ?array $timezoneCandidates = null)
+	{
+		parent::__construct($project);
+		$this->timezoneCandidates = $timezoneCandidates;
+	}
+
 	public function detectedHostTimezone(): string
 	{
 		return $this->hostTimezone();
+	}
+
+	protected function hostTimezoneCandidates(): array
+	{
+		return $this->timezoneCandidates ?? parent::hostTimezoneCandidates();
 	}
 }
 
