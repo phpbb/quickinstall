@@ -159,6 +159,30 @@ class BoardService
 	/** Returns the host's PHP-supported timezone identifier, falling back to UTC. */
 	protected function hostTimezone(): string
 	{
+		foreach ($this->hostTimezoneCandidates() as $candidate)
+		{
+			if ($candidate === '')
+			{
+				continue;
+			}
+
+			try
+			{
+				// Match phpBB's own timezone validation semantics.
+				new \DateTimeZone($candidate);
+				return $candidate;
+			}
+			catch (\Exception $e)
+			{
+			}
+		}
+
+		return 'UTC';
+	}
+
+	/** Collects timezone candidates in host preference order. */
+	protected function hostTimezoneCandidates(): array
+	{
 		$candidates = [];
 		$environment = getenv('TZ');
 		if (is_string($environment))
@@ -182,25 +206,7 @@ class BoardService
 		}
 
 		$candidates[] = date_default_timezone_get();
-		foreach ($candidates as $candidate)
-		{
-			if ($candidate === '')
-			{
-				continue;
-			}
-
-			try
-			{
-				// Match phpBB's own timezone validation semantics.
-				new \DateTimeZone($candidate);
-				return $candidate;
-			}
-			catch (\Exception $e)
-			{
-			}
-		}
-
-		return 'UTC';
+		return $candidates;
 	}
 
 	private function backupBoardState(string $name): array
