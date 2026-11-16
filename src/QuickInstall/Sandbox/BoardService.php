@@ -160,7 +160,7 @@ class BoardService
 	protected function hostTimezone(): string
 	{
 		$candidates = [];
-		$environment = PHP_VERSION_ID >= 70100 ? getenv('TZ', true) : getenv('TZ');
+		$environment = getenv('TZ');
 		if (is_string($environment))
 		{
 			$candidates[] = ltrim(trim($environment), ':');
